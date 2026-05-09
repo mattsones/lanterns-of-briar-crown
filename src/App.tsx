@@ -1,57 +1,27 @@
 // @ts-nocheck
 import React, { useEffect, useMemo, useState } from "react";
 import { getBattleReward } from "./data/battleRewards";
-import { APPEARANCES, BASE_STATS, GENDERS, HERO_GROWTH_OPTIONS, HERO_XP_CURVE, RACES, STAT_ORDER } from "./data/character";
-import { COMPANION_OPTIONS, COMPANION_PROGRESSION } from "./data/companions";
+import { APPEARANCES, BASE_STATS, GENDERS, HERO_GROWTH_OPTIONS, RACES, STAT_ORDER } from "./data/character";
+import { COMPANION_OPTIONS } from "./data/companions";
 import { buildEncounterEnemies } from "./data/enemies";
-import { BATTLE_CONSUMABLES, ITEM_DB, SHOP_PRICES } from "./data/items";
+import { BATTLE_CONSUMABLES, ITEM_DB } from "./data/items";
 import { MAPS, TILE_META } from "./data/maps";
 import { RECIPE_DB } from "./data/recipes";
 import { SHOP_INVENTORIES } from "./data/shops";
 import { buildQuestJournal } from "./data/quests";
 import { SKILL_DB } from "./data/skills";
+import { tickCooldowns } from "./game/battle";
+import { getCompanionAbilityCards, getCompanionCommandHint } from "./game/companions";
+import { checkSummary, resolveRoll, resolveSkillCheck } from "./game/dice";
+import { titleCase } from "./game/format";
+import { canCraftRecipe, formatIngredients, gainItem, getBuyPrice, getEquippedCount, getInventorySections, getItemHighlights, getSellPrice, hasItem, itemFitsSlot, removeItem } from "./game/inventory";
+import { buildVisitedMap, getVisitedKey, isBlockedInteractionTile } from "./game/map";
+import { getCompanionGrowthPreview, getCompanionXpTarget, getHeroXpTarget } from "./game/progression";
+import { formatSaveTimestamp, parseCheckpointPayload, parseSaveSlotRecords, STORAGE_KEY, writeSaveSlotRecords } from "./game/save";
+import { buildCombatSkill, getEquippedSkillIds } from "./game/skills";
+import { buildDefaultCompanion, buildDefaultFlags, buildDefaultVisited, buildPlayer, normalizeCompanionData, normalizePlayerData } from "./game/state";
+import { addBonuses, formatBonuses, getDerivedStats } from "./game/stats";
 
-const STORAGE_KEY = "liams-game-prototype-v2";
-const SAVE_SLOTS_KEY = "liams-game-prototype-slots-v1";
-const SAVE_SLOT_COUNT = 10;
-
-function addBonuses(base, bonuses = {}) { const next = { ...base }; Object.entries(bonuses).forEach(([k, v]) => { next[k] = (next[k] || 0) + v; }); return next; }
-function titleCase(text) { return text.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()); }
-function getVisitedKey(x, y) { return `${x},${y}`; }
-function buildVisitedMap(regionId, centerX, centerY, radius = 1) { const map = MAPS[regionId].tiles; const next = {}; for (let y = centerY - radius; y <= centerY + radius; y++) for (let x = centerX - radius; x <= centerX + radius; x++) if (y >= 0 && y < map.length && x >= 0 && x < map[0].length) next[getVisitedKey(x, y)] = true; return next; }
-function buildDefaultVisited() { return Object.fromEntries(Object.keys(MAPS).map((id) => [id, id === "hearthhollow" ? buildVisitedMap(id, MAPS[id].start.x, MAPS[id].start.y) : {}])); }
-function getInitialInventory() { return { moonmint: 1, bubblecap: 1 }; }
-function getDefaultBattlePouch(inventory = {}) { const owned = ["healing_fizzpop", "trail_snack", "fizzberry_handpie", "bubbleburst_tonic"].filter((id) => (inventory[id] || 0) > 0); return { slot1: owned[0] || null, slot2: owned[1] || null }; }
-function buildPlayer({ name, gender, raceId, appearanceId }) { const race = RACES.find((r) => r.id === raceId) || RACES[0]; const baseStats = addBonuses(BASE_STATS, race.bonuses); const inventory = getInitialInventory(); return { name: name || "Liam", gender, raceId: race.id, appearanceId, level: 1, xp: 0, gold: 4, maxHp: 24 + baseStats.Vitality * 2, hp: 24 + baseStats.Vitality * 2, baseStats, inventory, equipment: { weapon: null, helm: null, cloak: null, trinket1: null, trinket2: null, armor: null }, battlePouch: getDefaultBattlePouch(inventory), checkpointLabel: "Home" }; }
-function buildDefaultCompanion() { return { recruited: false, id: null, name: "No Companion Yet", hp: 14, maxHp: 14, level: 1, xp: 0, command: "Attack Freely", buffed: false, style: null, icon: null, role: null, futurePath: null, futurePathOptions: null }; }
-function buildDefaultFlags() { return { metElder: false, elderGavePurse: false, smithStarterDiscountUsed: false, gotSmithGift: false, homeStashClaimed: false, openedChest: false, craftedPotion: false, gotPibbleTip: false, beatGateBattle: false, metNix: false, foundRuinNote: false, clearedWildBattle: false, reachedBramblecross: false, enteredBramblecross: false, metMayor: false, readBoard: false, boardQuestAccepted: false, boardQuestCompleted: false, marketDiscount: false, ennaBriefed: false, watchEvidenceRead: false, watchLedgerRead: false, watchMapRead: false, watchOrdersRead: false, gotDungeonLead: false, enteredRootCellar: false, openedCellarCache: false, readCellarSigil: false, readCellarMural: false, harvestedCellarFungus: false, beatCellarSkulk: false, beatCellarBoss: false, chapterOneClear: false, cellarEndChoice: null, chapterReported: false, studiedBriarCrown: false, rowanStatus: null, tildaStatus: null, mossStatus: null, companionChosen: false, companionChoice: null, helpedTraveler: false, searchedCart: false, cartRecoveredForAda: false, openedWildChest: false, pondForaged: false, usedShrine: false, sawShrine: false, foundShrineSecret: false, sawRoadCamp: false }; }
-function normalizePlayerData(player) { if (!player) return player; const equipment = { weapon: null, helm: null, cloak: null, trinket1: null, trinket2: null, armor: null, ...(player.equipment || {}) }; return { ...player, inventory: player.inventory || {}, equipment, battlePouch: { ...getDefaultBattlePouch(player.inventory || {}), ...(player.battlePouch || {}) } }; }
-function normalizeCompanionData(companion) { return { ...buildDefaultCompanion(), ...(companion || {}) }; }
-function getDerivedStats(player) { let stats = { ...(player?.baseStats || BASE_STATS) }; Object.values(player?.equipment || {}).forEach((itemId) => { if (ITEM_DB[itemId]?.bonuses) stats = addBonuses(stats, ITEM_DB[itemId].bonuses); }); return stats; }
-function hasItem(player, itemId, amount = 1) { return (player?.inventory?.[itemId] || 0) >= amount; }
-function gainItem(setPlayer, itemId, amount = 1) { setPlayer((prev) => ({ ...prev, inventory: { ...(prev.inventory || {}), [itemId]: (prev.inventory?.[itemId] || 0) + amount } })); }
-function removeItem(setPlayer, itemId, amount = 1) { setPlayer((prev) => ({ ...prev, inventory: { ...(prev.inventory || {}), [itemId]: Math.max(0, (prev.inventory?.[itemId] || 0) - amount) } })); }
-function getEquippedCount(player, itemId) { return Object.values(player?.equipment || {}).filter((id) => id === itemId).length; }
-function itemFitsSlot(item, slot) { if (!item?.slot) return false; if (slot.startsWith("trinket") && item.slot.startsWith("trinket")) return true; return item.slot === slot; }
-function getBuyPrice(itemId) { return SHOP_PRICES[itemId] || 0; }
-function getSellPrice(itemId) { return Math.max(1, Math.floor((getBuyPrice(itemId) || 4) / 2)); }
-function formatBonuses(bonuses = {}) { return Object.entries(bonuses).map(([stat, value]) => `${stat} +${value}`).join(" • "); }
-function getSkillBonus(stats, skill) { const statTotal = (skill.stats || []).reduce((sum, stat) => sum + (stats?.[stat] || 0), 0); return (skill.baseBonus || 0) + Math.floor(statTotal / (skill.divisor || 2)); }
-function getSkillNotation(skill, stats = BASE_STATS) { if (!skill) return ""; const cooldownText = skill.cooldown ? ` • Cooldown ${skill.cooldown}` : ""; if (skill.kind === "guardHeal") { const bonus = getSkillBonus(stats, skill); return `Heal ${skill.baseHeal + bonus} • Guard ${skill.baseGuard + bonus}${cooldownText}`; } return `${skill.count || 1}d${skill.sides || 6}+${getSkillBonus(stats, skill)}${cooldownText}`; }
-function buildCombatSkill(skillId, stats = BASE_STATS) { const skill = SKILL_DB[skillId]; if (!skill) return null; const computedBonus = getSkillBonus(stats, skill); return { ...skill, computedBonus, spec: skill.kind === "attack" ? { count: skill.count || 1, sides: skill.sides || 6, bonus: computedBonus } : null, description: `${getSkillNotation(skill, stats)} • ${skill.description}` }; }
-function getEquippedSkillIds(player) { return [...new Set(Object.values(player?.equipment || {}).flatMap((itemId) => ITEM_DB[itemId]?.skills || []))]; }
-function getItemHighlights(item) { const out = []; if (item?.bonuses) out.push(`Bonuses: ${formatBonuses(item.bonuses)}`); if (item?.skills?.length) item.skills.forEach((id) => { const skill = SKILL_DB[id]; if (skill) out.push(`Skill: ${skill.name} — ${getSkillNotation(skill)} • ${skill.description}`); else out.push(`Skill: ${id}`); }); if (item?.effectText) out.push(item.effectText); if (item?.rarity) out.push(`Rarity: ${item.rarity}`); return out; }
-function canCraftRecipe(player, recipe) { return Object.entries(recipe.ingredients).every(([id, qty]) => hasItem(player, id, qty)); }
-function formatIngredients(ingredients) { return Object.entries(ingredients).map(([id, qty]) => `${ITEM_DB[id]?.name || id} ×${qty}`).join(" • "); }
-function resolveRoll({ count, sides, bonus = 0 }) { const rolls = Array.from({ length: count }, () => Math.ceil(Math.random() * sides)); return { rolls, total: rolls.reduce((a, b) => a + b, 0) + bonus, notation: `${count}d${sides}${bonus > 0 ? `+${bonus}` : bonus < 0 ? bonus : ""}` }; }
-function resolveSkillCheck(stats, stat, dc) { const roll = Math.ceil(Math.random() * 20); const bonus = Math.floor((stats?.[stat] || 0) / 2); const total = roll + bonus; return { stat, dc, roll, bonus, total, success: total >= dc, label: `${stat} Check: ${roll}${bonus ? ` + ${bonus}` : ""} = ${total} vs ${dc}` }; }
-function checkSummary(check) { return `${check.success ? "Success" : "Complication"} — ${check.label}`; }
-function getHeroXpTarget(level = 1) { return HERO_XP_CURVE[level] ?? null; }
-function getCompanionXpTarget(companionId, level = 1) { return COMPANION_PROGRESSION[companionId]?.xpCurve?.[level] ?? null; }
-function getCompanionGrowthPreview(companionId) { return COMPANION_PROGRESSION[companionId]?.futurePaths || []; }
-function getInventorySections(player) { const sections = { equipment: [], consumables: [], other: [] }; Object.entries(player?.inventory || {}).filter(([, qty]) => qty > 0).forEach(([id, qty]) => { const item = ITEM_DB[id]; if (item?.slot) sections.equipment.push([id, qty]); else if (item?.type === "consumable" || BATTLE_CONSUMABLES[id]) sections.consumables.push([id, qty]); else sections.other.push([id, qty]); }); return sections; }
-function getCompanionCommandHint(companion) { if (!companion?.recruited) return ""; const hints = { guardian: "Rowan protects the party and steadies longer fights.", skirmisher: "Tilda disrupts enemies and creates openings.", sage: "Moss heals, wards, and quietly keeps everyone standing." }; return hints[companion.style] || "Your companion is ready to help."; }
-function getCompanionAbilityCards(companion) { const cards = { guardian: ["Shielding Step", "Linebreaker", "Steadying Support"], skirmisher: ["Quick Feint", "Spoil the Timing", "Pocket Tricks"], sage: ["Quiet Ward", "Field Mending", "Subtle Pressure"] }; return (cards[companion?.style] || []).map((name) => ({ name, description: `${companion.name} uses this role ability based on the current companion command.` })); }
 function getVillageNpcDialogue(tile, flags) {
   const lines = {
     baker: flags.metElder
@@ -71,14 +41,8 @@ function getMayorDialogue(flags) {
   if (!flags.gotDungeonLead) return "Mayor Anwen studies the watchhouse windows. \"Enna says your report turned scattered worries into a route case. Good. That means we're not losing our minds. Bad, because it means someone else is using theirs. Read what the town knows, then speak with Hollis.\"";
   return "Mayor Anwen nods toward the old cellar ways. \"If Hollis is sending you below, then Bramblecross is past pretending this is only paperwork. Go carefully. Towns are built on foundations, and foundations remember things.\"";
 }
-function parseCheckpointPayload() { try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : null; } catch { return null; } }
-function parseSaveSlotRecords() { try { const parsed = JSON.parse(localStorage.getItem(SAVE_SLOTS_KEY) || "[]"); return Array.from({ length: SAVE_SLOT_COUNT }, (_, i) => parsed.find((s) => s.id === i + 1) || { id: i + 1, name: "", updatedAt: null, payload: null }); } catch { return Array.from({ length: SAVE_SLOT_COUNT }, (_, i) => ({ id: i + 1, name: "", updatedAt: null, payload: null })); } }
-function writeSaveSlotRecords(slots) { localStorage.setItem(SAVE_SLOTS_KEY, JSON.stringify(slots)); }
-function formatSaveTimestamp(ts) { return ts ? new Date(ts).toLocaleString() : "Empty"; }
-function tickCooldowns(cooldowns = {}) { return Object.fromEntries(Object.entries(cooldowns).map(([id, value]) => [id, Math.max(0, (value || 0) - 1)]).filter(([, value]) => value > 0)); }
 function getAppearanceIcon(player) { return APPEARANCES.find((a) => a.id === player?.appearanceId)?.icon || "🧑"; }
 function getHeroAvatar(player) { return [getAppearanceIcon(player), player?.equipment?.helm ? "⛑️" : "", player?.equipment?.armor ? "🥋" : "", player?.equipment?.cloak ? "🧥" : "", player?.equipment?.weapon ? ITEM_DB[player.equipment.weapon]?.icon || "🗡️" : ""].filter(Boolean).join(" "); }
-function isBlockedInteractionTile(tile) { return ["home_door", "smith_door", "potion_door", "bram_inn_door", "market_door", "watch_door", "pond"].includes(tile); }
 function Button({ children, className = "", ...props }) { return <button className={`rounded-2xl border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-40 ${className}`} {...props}>{children}</button>; }
 function Panel({ title, children, right }) { return <div className="rounded-3xl border border-white/10 bg-slate-900/80 p-4 shadow-2xl backdrop-blur"><div className="mb-3 flex items-center justify-between gap-3"><h3 className="text-lg font-semibold text-white">{title}</h3>{right}</div>{children}</div>; }
 function Meter({ value, max, label, colorClass = "bg-emerald-400" }) { const pct = Math.max(0, Math.min(100, ((value || 0) / Math.max(1, max || 1)) * 100)); return <div><div className="mb-1 flex items-center justify-between text-xs text-white/70"><span>{label}</span><span>{value}/{max}</span></div><div className="h-3 rounded-full bg-white/10"><div className={`h-3 rounded-full ${colorClass}`} style={{ width: `${pct}%` }} /></div></div>; }
