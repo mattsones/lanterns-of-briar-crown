@@ -16,8 +16,18 @@ test("starts a new adventure and passes built-in QA checks", async ({ page }) =>
   await page.getByRole("button", { name: "Begin Chapter 1" }).click();
 
   await expect(page.getByText("Hearthhollow, Dawn")).toBeVisible();
+  await expect(page.getByText("has always known Hearthhollow")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Step into the morning" })).toBeVisible();
   await page.getByRole("button", { name: "Step into the morning" }).click();
   await expect(page.getByText("Goal: Speak with Elder Mira")).toBeVisible();
+
+  await page.getByRole("button", { name: "Save Slot" }).click();
+  await expect(page.getByText("Save Slots")).toBeVisible();
+  await page.getByRole("button", { name: "Close" }).click();
+
+  await page.getByRole("button", { name: "Load Slot" }).click();
+  await expect(page.getByText("Load Save Slot")).toBeVisible();
+  await page.getByRole("button", { name: "Close" }).click();
 
   await page.getByRole("button", { name: "Dev Tools" }).click();
   await page.getByRole("button", { name: "Run QA Checks" }).click();
