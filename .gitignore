@@ -9,3 +9,5 @@ yarn-error.log*
 pnpm-debug.log*
 *.local
 .vite-dev.*
+test-results/
+playwright-report/
