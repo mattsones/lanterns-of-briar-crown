@@ -1,8 +1,11 @@
 // @ts-nocheck
 import React, { useEffect, useMemo, useState } from "react";
+import { COMPANION_OPTIONS, COMPANION_PROGRESSION } from "./data/companions";
 import { BATTLE_CONSUMABLES, ITEM_DB, SHOP_PRICES } from "./data/items";
+import { MAPS, TILE_META } from "./data/maps";
 import { RECIPE_DB } from "./data/recipes";
 import { SHOP_INVENTORIES } from "./data/shops";
+import { buildQuestJournal } from "./data/quests";
 import { SKILL_DB } from "./data/skills";
 
 const STORAGE_KEY = "liams-game-prototype-v2";
@@ -38,91 +41,6 @@ const HERO_GROWTH_OPTIONS = [
   { id: "heart", name: "Heart", icon: "💛", bonuses: { Heart: 1, Charm: 1 }, description: "Lead with kindness, courage, and trust-building presence." },
   { id: "craft", name: "Craft", icon: "🛠️", bonuses: { Craft: 1, Grit: 1 }, description: "Improve practical skill, toughness, and hands-on problem solving." },
 ];
-
-const COMPANION_OPTIONS = {
-  rowan: { id: "rowan", name: "Rowan Reedshield", icon: "🛡️", role: "Guardian", style: "guardian", maxHp: 18, description: "Steady, protective, and serious about keeping ordinary people safe." },
-  tilda: { id: "tilda", name: "Tilda Quickstep", icon: "🎯", role: "Skirmisher", style: "skirmisher", maxHp: 14, description: "Fast-talking, quick-moving, and good at being where trouble is not." },
-  moss: { id: "moss", name: "Moss Fenmere", icon: "✨", role: "Sage", style: "sage", maxHp: 15, description: "Quiet, observant, and calm around old magic." },
-};
-
-const COMPANION_PROGRESSION = {
-  rowan: { xpCurve: [0, 40, 90], futurePaths: [{ id: "bulwark", name: "Bulwark", preview: "Leans into protection and holding the line." }, { id: "bannerguard", name: "Banner Guard", preview: "Adds stronger support and party recovery." }] },
-  tilda: { xpCurve: [0, 40, 90], futurePaths: [{ id: "duelist", name: "Duelist", preview: "Pushes sharper damage and tempo." }, { id: "trickrunner", name: "Trickrunner", preview: "Leans into disruption and clever utility." }] },
-  moss: { xpCurve: [0, 40, 90], futurePaths: [{ id: "wayhealer", name: "Wayhealer", preview: "Focuses on stronger healing." }, { id: "veilseer", name: "Veilseer", preview: "Leans into wards and subtle control." }] },
-};
-
-const MAPS = {
-  hearthhollow: {
-    name: "Hearthhollow", subtitle: "Home village", start: { x: 2, y: 4 },
-    tiles: [
-      ["tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree"],
-      ["tree", "home_building", "home_building", "home_building", "grass", "elder", "grass", "neighbor_building", "neighbor_building", "neighbor2_building", "neighbor2_building", "chest", "tree"],
-      ["tree", "home_building", "home_building", "home_building", "grass", "grass", "grass", "neighbor_building", "neighbor_building", "neighbor2_building", "neighbor2_building", "grass", "tree"],
-      ["tree", "grass", "home_door", "home_building", "grass", "grass", "grass", "baker", "grass", "farmer", "grass", "grass", "tree"],
-      ["tree", "tree", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "tree"],
-      ["tree", "potion_building", "potion_building", "potion_building", "grass", "grass", "grass", "smith_building", "smith_building", "smith_building", "grass", "grass", "tree"],
-      ["tree", "potion_building", "potion_building", "potion_building", "grass", "pibble", "grass", "smith_building", "smith_building", "smith_building", "grass", "grass", "tree"],
-      ["tree", "potion_building", "potion_door", "potion_building", "grass", "grass", "grass", "smith_building", "smith_door", "smith_building", "grass", "gate", "tree"],
-      ["tree", "grass", "grass", "grass", "tree", "grass", "grass", "weaver", "grass", "grass", "grass", "grass", "tree"],
-      ["tree", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "tree"],
-      ["tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree"],
-    ],
-  },
-  lanternRoad: {
-    name: "Lantern Road", subtitle: "The wilds beyond the gate", start: { x: 1, y: 4 },
-    tiles: [
-      ["tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree"],
-      ["tree", "grass", "grass", "camp", "grass", "grass", "grass", "grass", "grass", "grass", "chest2", "grass", "tree"],
-      ["tree", "grass", "tree", "grass", "road", "grass", "ranger", "grass", "tree", "grass", "grass", "grass", "tree"],
-      ["tree", "grass", "tree", "grass", "road", "grass", "grass", "ruins", "tree", "grass", "pond", "grass", "tree"],
-      ["tree", "return_gate", "road", "road", "road", "road", "road", "road", "road", "road", "road", "bramblecross", "tree"],
-      ["tree", "grass", "tree", "grass", "road", "grass", "grass", "cart", "tree", "grass", "shrine", "grass", "tree"],
-      ["tree", "wildbattle", "grass", "grass", "road", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "tree"],
-      ["tree", "grass", "grass", "grass", "grass", "grass", "traveler", "grass", "grass", "grass", "grass", "grass", "tree"],
-      ["tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree"],
-    ],
-  },
-  bramblecross: {
-    name: "Bramblecross", subtitle: "First real town hub", start: { x: 1, y: 5 },
-    tiles: [
-      ["tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree"],
-      ["tree", "grass", "bram_inn_building", "bram_inn_building", "bram_inn_building", "grass", "market_building", "market_building", "market_building", "grass", "board", "grass", "tree"],
-      ["tree", "grass", "bram_inn_building", "bram_inn_building", "bram_inn_building", "grass", "market_building", "market_building", "market_building", "grass", "merchant", "grass", "tree"],
-      ["tree", "grass", "bram_inn_building", "bram_inn_door", "bram_inn_building", "grass", "market_building", "market_door", "market_building", "grass", "mayor", "grass", "tree"],
-      ["tree", "grass", "grass", "grass", "grass", "grass", "road", "road", "road", "grass", "grass", "grass", "tree"],
-      ["tree", "town_gate", "road", "road", "road", "road", "road", "road", "road", "road", "road", "grass", "tree"],
-      ["tree", "grass", "watch_building", "watch_building", "watch_building", "grass", "captain", "grass", "cellar", "grass", "clerk", "grass", "tree"],
-      ["tree", "grass", "watch_building", "watch_door", "watch_building", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "tree"],
-      ["tree", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "tree"],
-      ["tree", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "tree"],
-      ["tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree"],
-    ],
-  },
-  rootCellar: {
-    name: "Old Root Cellar", subtitle: "First real dungeon", start: { x: 1, y: 1 },
-    tiles: [
-      ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-      ["wall", "stairs_up", "floor", "mural", "wall", "floor", "sigil", "floor", "floor", "cache3", "wall"],
-      ["wall", "floor", "wall", "floor", "wall", "floor", "wall", "wall", "wall", "floor", "wall"],
-      ["wall", "floor", "wall", "floor", "floor", "floor", "floor", "fungus", "wall", "floor", "wall"],
-      ["wall", "floor", "wall", "wall", "wall", "floor", "wall", "floor", "wall", "floor", "wall"],
-      ["wall", "floor", "floor", "floor", "wall", "floor", "wall", "floor", "skulk", "floor", "wall"],
-      ["wall", "water", "wall", "floor", "wall", "floor", "wall", "wall", "wall", "floor", "wall"],
-      ["wall", "floor", "floor", "floor", "floor", "floor", "floor", "boss", "exit_door", "wall", "wall"],
-      ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-    ],
-  },
-};
-
-function makeTile(icon, label, blocked, classes) { return { icon, label, blocked, classes }; }
-const TILE_META = {
-  tree: makeTile("🌲", "Tree", true, "bg-green-900/60"), grass: makeTile("", "Grass", false, "bg-green-600/70"), road: makeTile("·", "Road", false, "bg-amber-700/80"), hidden: makeTile("❓", "Unexplored", false, "bg-slate-950/95"),
-  floor: makeTile("", "Cellar Floor", false, "bg-stone-700/70"), wall: makeTile("", "Cellar Wall", true, "bg-stone-950/95"), water: makeTile("≈", "Flooded Channel", true, "bg-sky-800/80"), stairs_up: makeTile("↟", "Cellar Stairs", false, "bg-amber-500/80"), sigil: makeTile("✶", "Root Sigil", false, "bg-fuchsia-800/80"), mural: makeTile("🧱", "Route Mural", false, "bg-orange-900/80"), fungus: makeTile("🍄", "Glowcap Cluster", false, "bg-emerald-800/80"), cache3: makeTile("📦", "Cellar Cache", false, "bg-yellow-700/80"), skulk: makeTile("🦂", "Rustroot Skulk", false, "bg-red-800/80"), boss: makeTile("👹", "Cellar Guardian", false, "bg-red-950/90"), exit_door: makeTile("🚪", "Sealed Iron Door", false, "bg-slate-700/85"),
-  home_building: makeTile("🏠", "Home Exterior", true, "bg-amber-700/85"), home_door: makeTile("🚪", "Home Door", true, "bg-amber-500/90"), neighbor_building: makeTile("🏡", "Neighbor Cottage", true, "bg-orange-700/80"), neighbor2_building: makeTile("🏠", "Neighbor House", true, "bg-amber-800/80"), potion_building: makeTile("⚗️", "Potion Shed Exterior", true, "bg-cyan-700/85"), potion_door: makeTile("🚪", "Potion Shed Door", true, "bg-cyan-500/90"), smith_building: makeTile("🛠️", "Smithy Exterior", true, "bg-stone-700/85"), smith_door: makeTile("🚪", "Smithy Door", true, "bg-stone-500/90"), bram_inn_building: makeTile("🏨", "Bramblecross Inn Exterior", true, "bg-rose-700/85"), bram_inn_door: makeTile("🚪", "Bramblecross Inn Door", true, "bg-rose-500/90"), market_building: makeTile("🏪", "Willow Market Exterior", true, "bg-emerald-700/85"), market_door: makeTile("🚪", "Willow Market Door", true, "bg-emerald-500/90"), watch_building: makeTile("🏛️", "Watchhouse Exterior", true, "bg-slate-700/85"), watch_door: makeTile("🚪", "Watchhouse Door", true, "bg-slate-500/90"),
-  elder: makeTile("🧙", "Elder Mira", false, "bg-violet-600/70"), pibble: makeTile("🧰", "Pibble", false, "bg-rose-600/75"), baker: makeTile("🥖", "Nella the Baker", false, "bg-amber-600/80"), farmer: makeTile("🌾", "Toma Fielding", false, "bg-lime-700/80"), weaver: makeTile("🧵", "Miri of the Loom", false, "bg-pink-700/80"), gate: makeTile("🚪", "South Gate", false, "bg-slate-600/80"), chest: makeTile("📦", "Old Supply Chest", false, "bg-yellow-500/75"),
-  return_gate: makeTile("↩️", "Path to Hearthhollow", false, "bg-slate-600/80"), camp: makeTile("⛺", "Road Camp", false, "bg-orange-500/80"), ranger: makeTile("🏹", "Nix Fernwhistle", false, "bg-emerald-500/75"), ruins: makeTile("🗿", "Milestone Ruin", false, "bg-stone-500/80"), pond: makeTile("💧", "Pond", true, "bg-sky-500/80"), shrine: makeTile("✨", "Lantern Shrine", false, "bg-fuchsia-500/75"), wildbattle: makeTile("⚔️", "Trouble on the Road", false, "bg-red-600/80"), bramblecross: makeTile("🏘️", "Road to Bramblecross", false, "bg-indigo-600/80"), cart: makeTile("🛒", "Broken Cart", false, "bg-stone-700/80"), chest2: makeTile("📦", "Road Cache", false, "bg-yellow-500/75"), traveler: makeTile("🧳", "Road Traveler", false, "bg-orange-700/80"),
-  town_gate: makeTile("🏘️", "Bramblecross Gate", false, "bg-indigo-600/80"), board: makeTile("📜", "Notice Board", false, "bg-yellow-700/80"), mayor: makeTile("👑", "Mayor Anwen", false, "bg-fuchsia-700/80"), captain: makeTile("🛡️", "Captain Hollis", false, "bg-sky-700/80"), merchant: makeTile("🧺", "Ada Willowmarket", false, "bg-emerald-700/80"), clerk: makeTile("🗂️", "Watch Clerk Enna", false, "bg-slate-600/80"), cellar: makeTile("🕳️", "Old Root Cellar", false, "bg-stone-800/90"),
-};
 
 function addBonuses(base, bonuses = {}) { const next = { ...base }; Object.entries(bonuses).forEach(([k, v]) => { next[k] = (next[k] || 0) + v; }); return next; }
 function titleCase(text) { return text.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()); }
@@ -180,22 +98,6 @@ function getMayorDialogue(flags) {
   if (!flags.gotDungeonLead) return "Mayor Anwen studies the watchhouse windows. \"Enna says your report turned scattered worries into a route case. Good. That means we're not losing our minds. Bad, because it means someone else is using theirs. Read what the town knows, then speak with Hollis.\"";
   return "Mayor Anwen nods toward the old cellar ways. \"If Hollis is sending you below, then Bramblecross is past pretending this is only paperwork. Go carefully. Towns are built on foundations, and foundations remember things.\"";
 }
-function buildQuestJournal(flags, companion, region = "hearthhollow") { const mainSteps = [
-  { id: "elder", title: "Speak with Elder Mira", detail: "Hearthhollow has gone quiet, the courier is missing, and the south gate is in danger. Find out what Mira knows before leaving the village.", done: !!flags.metElder, active: !flags.metElder },
-  { id: "prepare", title: "Prepare for the road", detail: "Take your old hatchet from home, then visit Smith Orin with Mira's backing. Hearthhollow is afraid, but it will not send you out empty-handed.", done: !!flags.homeStashClaimed && !!flags.gotSmithGift, active: !!flags.metElder && (!flags.homeStashClaimed || !flags.gotSmithGift) },
-  { id: "boar", title: "Stop the Bramble Boar", detail: "The boar at the south gate is carrying Lio Brindle's courier satchel. Stop it before it reaches the village square.", done: !!flags.beatGateBattle, active: !!flags.metElder && !!flags.gotSmithGift && !flags.beatGateBattle },
-  { id: "lio", title: "Find What Happened to Lio Brindle", detail: flags.clearedWildBattle ? "The ambushers guarded the false orders like evidence, not treasure. Lio's trail points toward Bramblecross and whoever is controlling the old routes." : flags.foundRuinNote ? "A planted order at the milestone says: HOLD BRAMBLECROSS. DELAY NEWS. KEEP THE CROWN NERVOUS. Someone wanted travelers to discover fear in the shape of authority." : flags.gotPibbleTip ? "Pibble noticed the satchel strap was cut, not torn. The boar carried the evidence, but someone else removed it from the courier." : "Lio's satchel held a forged order and a lunch packet from Mara. He was expected in Hearthhollow before noon. Follow Lantern Road and find where the satchel was cut loose.", done: !!flags.reachedBramblecross, active: !!flags.beatGateBattle && !flags.reachedBramblecross },
-  { id: "enna", title: "Brief Enna at the Watchhouse", detail: "You have road-side evidence Bramblecross does not have yet: Lio's satchel, the planted order, and proof that the ambush was guarding a lie. Enna needs your report to complete the case wall.", done: !!flags.ennaBriefed, active: !!flags.reachedBramblecross && !flags.ennaBriefed },
-  { id: "casewall", title: "Study the Completed Case Wall", detail: "Enna has connected Hearthhollow, Lantern Road, missing cargo, false orders, and the old cellar reports. Study the wall before Hollis sends you below.", done: !!flags.watchEvidenceRead, active: !!flags.ennaBriefed && !flags.watchEvidenceRead },
-  { id: "hollis", title: "Speak with Captain Hollis", detail: "Hollis will not send anyone into the old cellar on courage alone. Show that you understand the pattern, then ask for the key.", done: !!flags.gotDungeonLead, active: !!flags.watchEvidenceRead && !!flags.readBoard && !flags.gotDungeonLead },
-  { id: "cellar", title: "Investigate the Old Root Cellar", detail: "The missing porters, Edden's broken testimony, and the false route orders all point beneath Bramblecross. Find what is using the old ways.", done: !!flags.chapterOneClear, active: !!flags.gotDungeonLead && !flags.chapterOneClear },
-  { id: "report", title: "Report Back to Hollis and Enna", detail: "You found Edden's blue watch cloth, the Briar Crown mark, the Warden Chain, and a command pointing toward Westroot. Bring the truth back to the watchhouse.", done: !!flags.chapterReported, active: !!flags.chapterOneClear && !flags.chapterReported },
-  { id: "chapter-end", title: "Chapter 1 Complete: The Road That Lied", detail: "The road was not simply dangerous. It was being lied about. Westroot is the next lead.", done: !!flags.chapterReported, active: !!flags.chapterReported },
-]; return { currentMain: mainSteps.find((s) => s.active) || mainSteps.find((s) => !s.done) || mainSteps.at(-1), mainSteps, sideQuests: [
-  { id: "ada", title: "Ada's Missing Spice Crate", visible: !!flags.readBoard || !!flags.boardQuestAccepted || !!flags.boardQuestCompleted, status: flags.boardQuestCompleted ? "Complete" : flags.boardQuestAccepted ? "Active" : "Available", done: !!flags.boardQuestCompleted, active: !!flags.boardQuestAccepted && !flags.boardQuestCompleted, detail: flags.boardQuestCompleted ? "Ada believes the thieves wanted her seal more than her spice. Willow-marked cargo may now be moving through Bramblecross under false trust." : flags.boardQuestAccepted ? (flags.cartRecoveredForAda ? "Return the proof to Ada Willowmarket." : "Ada says the missing crate had green Willow Market paint and a three-leaf spice seal. Find the broken cart on Lantern Road and look for proof.") : "Ada's notice is on the Bramblecross board." },
-  { id: "shrine", title: "Restore the Lantern Shrine", visible: !!flags.sawShrine || !!flags.usedShrine, status: flags.usedShrine ? "Complete" : "Discovered", done: !!flags.usedShrine, active: !flags.usedShrine && !!flags.sawShrine, detail: flags.usedShrine ? "The false mark is gone, and the old lantern signs remain. True road marks guide, warn, shelter, and remember." : "A false crown mark has been scratched over the old lantern road signs. The shrine says: A road is safest when truth walks it first." },
-  { id: "companion", title: "Choose a Traveling Companion", visible: !!flags.reachedBramblecross || !!companion?.recruited, status: companion?.recruited ? "Active" : "Available", done: false, active: !!companion?.recruited, detail: companion?.recruited ? `${companion.name} is traveling with you.` : "Visit the Bramblecross inn to recruit, swap, or dismiss companions." },
-].filter((q) => q.visible)}; }
 function parseCheckpointPayload() { try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : null; } catch { return null; } }
 function parseSaveSlotRecords() { try { const parsed = JSON.parse(localStorage.getItem(SAVE_SLOTS_KEY) || "[]"); return Array.from({ length: SAVE_SLOT_COUNT }, (_, i) => parsed.find((s) => s.id === i + 1) || { id: i + 1, name: "", updatedAt: null, payload: null }); } catch { return Array.from({ length: SAVE_SLOT_COUNT }, (_, i) => ({ id: i + 1, name: "", updatedAt: null, payload: null })); } }
 function writeSaveSlotRecords(slots) { localStorage.setItem(SAVE_SLOTS_KEY, JSON.stringify(slots)); }
