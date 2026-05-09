@@ -39,6 +39,12 @@ npm run dev
 npm run build
 ```
 
+## Smoke Playtest
+
+```bash
+npm run playtest:smoke
+```
+
 ## Project Docs
 
 Important project docs:

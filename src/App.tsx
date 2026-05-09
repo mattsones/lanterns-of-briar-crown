@@ -1,5 +1,9 @@
 // @ts-nocheck
 import React, { useEffect, useMemo, useState } from "react";
+import { BATTLE_CONSUMABLES, ITEM_DB, SHOP_PRICES } from "./data/items";
+import { RECIPE_DB } from "./data/recipes";
+import { SHOP_INVENTORIES } from "./data/shops";
+import { SKILL_DB } from "./data/skills";
 
 const STORAGE_KEY = "liams-game-prototype-v2";
 const SAVE_SLOTS_KEY = "liams-game-prototype-slots-v1";
@@ -34,54 +38,6 @@ const HERO_GROWTH_OPTIONS = [
   { id: "heart", name: "Heart", icon: "💛", bonuses: { Heart: 1, Charm: 1 }, description: "Lead with kindness, courage, and trust-building presence." },
   { id: "craft", name: "Craft", icon: "🛠️", bonuses: { Craft: 1, Grit: 1 }, description: "Improve practical skill, toughness, and hands-on problem solving." },
 ];
-
-const ITEM_DB = {
-  old_hatchet: { id: "old_hatchet", name: "Old Hatchet", rarity: "Common", slot: "weapon", description: "A familiar village hatchet that has split wood, trimmed roots, and somehow become yours.", bonuses: { Might: 1 }, skills: ["scrappy_chop"], icon: "🪓" },
-  turnipwood_blade: { id: "turnipwood_blade", name: "Turnipwood Blade", rarity: "Uncommon", slot: "weapon", description: "A surprisingly respectable sword carved from enchanted rootwood.", bonuses: { Might: 1, Precision: 1 }, skills: ["rootcut_lunge"], icon: "🗡️" },
-  pebbleknock_hammer: { id: "pebbleknock_hammer", name: "Pebbleknock Hammer", rarity: "Uncommon", slot: "weapon", description: "A squat hammer with an extremely satisfying thunk.", bonuses: { Might: 2, Grit: 1 }, skills: ["pebbleknock_slam"], icon: "🔨" },
-  kettle_helm: { id: "kettle_helm", name: "Apprentice Kettle Helm", rarity: "Common", slot: "helm", description: "Protective, practical, and a little soup-adjacent.", bonuses: { Guard: 1, Craft: 1 }, icon: "⛑️" },
-  briar_vest: { id: "briar_vest", name: "Briarweave Vest", rarity: "Uncommon", slot: "armor", description: "A roadwarden vest stitched with thorn-resistant lining.", bonuses: { Guard: 1, Vitality: 1 }, icon: "🥋" },
-  giggleleaf_cloak: { id: "giggleleaf_cloak", name: "Giggleleaf Cloak", rarity: "Uncommon", slot: "cloak", description: "A bright cloak that makes sneaking feel cheerful.", bonuses: { Agility: 1, Charm: 1 }, icon: "🍃" },
-  friendmaker_cloak: { id: "friendmaker_cloak", name: "Friendmaker Cloak", rarity: "Uncommon", slot: "cloak", description: "A bright cloak that makes helpful people trust you faster.", bonuses: { Charm: 1, Heart: 1 }, icon: "🧥" },
-  stormbell_charm: { id: "stormbell_charm", name: "Stormbell Charm", rarity: "Uncommon", slot: "trinket1", description: "A bell that crackles when you grin at danger.", bonuses: { Precision: 1, Will: 1 }, skills: ["spark_toss"], icon: "🔔" },
-  lantern_pin: { id: "lantern_pin", name: "Lantern Pin", rarity: "Uncommon", slot: "trinket2", description: "A polished pin worn by dependable roadwardens.", bonuses: { Will: 1, Heart: 1 }, skills: ["roadwarden_resolve"], icon: "📌" },
-  warden_chain: { id: "warden_chain", name: "Warden Chain", rarity: "Rare", slot: "trinket1", description: "A heavy chain-token pulled from the cellar guardian.", bonuses: { Guard: 1, Will: 1, Grit: 1 }, skills: ["rootbind"], icon: "⛓️" },
-  edden_cloth: { id: "edden_cloth", name: "Edden's Blue Watch Cloth", rarity: "Story", type: "story", description: "A torn strip of blue watch-runner cloth found beside the sealed iron door. Proof that Edden reached the old way below Bramblecross.", icon: "🧵" },
-  healing_fizzpop: { id: "healing_fizzpop", name: "Healing Fizzpop", rarity: "Crafted", type: "consumable", description: "Restores HP and turns your hair mint green for a while. Worth it.", effectText: "Use: Restore 10 HP", icon: "🧪" },
-  trail_snack: { id: "trail_snack", name: "Trail Snack", rarity: "Common", type: "consumable", description: "A crunchy pocket snack that restores a bit of HP.", effectText: "Use: Restore 6 HP", icon: "🥨" },
-  fizzberry_handpie: { id: "fizzberry_handpie", name: "Fizzberry Handpie", rarity: "Uncommon", type: "consumable", description: "A flaky pocket pie with suspiciously energetic berries inside.", effectText: "Use: Restore 8 HP", icon: "🥧" },
-  bubbleburst_tonic: { id: "bubbleburst_tonic", name: "Bubbleburst Tonic", rarity: "Crafted", type: "consumable", description: "A fizzy brew that pops loudly and heals a little.", effectText: "Use: Restore 4 HP", icon: "🫧" },
-  moonmint: { id: "moonmint", name: "Moonmint", rarity: "Common", type: "ingredient", description: "Cool, bright leaves used in cheerful tonics.", icon: "🌿" },
-  bubblecap: { id: "bubblecap", name: "Bubblecap Mushroom", rarity: "Common", type: "ingredient", description: "A mushroom that literally bubbles when squeezed.", icon: "🍄" },
-};
-
-const SKILL_DB = {
-  scrappy_chop: { id: "scrappy_chop", name: "Scrappy Chop", kind: "attack", count: 1, sides: 6, stats: ["Might"], baseBonus: 1, bonusVs: ["Briar", "Thorn", "Root"], description: "A familiar hatchet swing. +2 damage against thorn, briar, or root enemies." },
-  rootcut_lunge: { id: "rootcut_lunge", name: "Rootcut Lunge", kind: "attack", count: 1, sides: 8, stats: ["Precision"], baseBonus: 1, description: "A cleaner, more precise blade strike guided by footwork." },
-  pebbleknock_slam: { id: "pebbleknock_slam", name: "Pebbleknock Slam", kind: "attack", count: 1, sides: 10, stats: ["Might"], baseBonus: 0, guardBreak: true, description: "A heavy hammer blow that breaks the enemy's guard for this hit." },
-  spark_toss: { id: "spark_toss", name: "Spark Toss", kind: "attack", count: 1, sides: 6, stats: ["Will", "Precision"], divisor: 3, baseBonus: 1, pierce: true, description: "A crackling little bolt that ignores the usual enemy guard penalty." },
-  roadwarden_resolve: { id: "roadwarden_resolve", name: "Roadwarden's Resolve", kind: "guardHeal", stats: ["Heart", "Will"], divisor: 3, baseHeal: 3, baseGuard: 2, cooldown: 5, description: "Steady yourself with true-road courage: heal a little and gain guard. Cooldown: 5 turns." },
-  rootbind: { id: "rootbind", name: "Rootbind", kind: "attack", count: 1, sides: 8, stats: ["Will"], baseBonus: 1, weaken: true, description: "A chain-marked strike that weakens the enemy's next attack." },
-};
-
-const BATTLE_CONSUMABLES = {
-  healing_fizzpop: { name: "Healing Fizzpop", heal: 10, description: "A minty burst that restores a solid chunk of HP.", allyTarget: true },
-  trail_snack: { name: "Trail Snack", heal: 6, description: "A quick bite that patches you up in a pinch.", allyTarget: true },
-  fizzberry_handpie: { name: "Fizzberry Handpie", heal: 8, description: "A sturdier snack with enough sugar and courage for a fight.", allyTarget: true },
-  bubbleburst_tonic: { name: "Bubbleburst Tonic", heal: 4, description: "A fizzy quick-fix with unnecessary sound effects.", allyTarget: true },
-};
-
-const SHOP_PRICES = {
-  old_hatchet: 6, turnipwood_blade: 12, pebbleknock_hammer: 19, kettle_helm: 10, briar_vest: 16, giggleleaf_cloak: 17,
-  friendmaker_cloak: 14, stormbell_charm: 18, lantern_pin: 15, warden_chain: 26, healing_fizzpop: 7, trail_snack: 5,
-  fizzberry_handpie: 9, bubbleburst_tonic: 6, moonmint: 4, bubblecap: 4,
-};
-
-const RECIPE_DB = {
-  healing_fizzpop: { id: "healing_fizzpop", name: "Healing Fizzpop", resultId: "healing_fizzpop", resultQty: 1, ingredients: { moonmint: 1, bubblecap: 1 }, note: "Big heal, mint-green hair, excellent drama." },
-  trail_snack: { id: "trail_snack", name: "Minty Trail Mix", resultId: "trail_snack", resultQty: 1, ingredients: { moonmint: 2 }, note: "A quick snack for the road." },
-  bubbleburst_tonic: { id: "bubbleburst_tonic", name: "Bubbleburst Tonic", resultId: "bubbleburst_tonic", resultQty: 1, ingredients: { bubblecap: 2 }, note: "Small heal, huge fizz." },
-};
 
 const COMPANION_OPTIONS = {
   rowan: { id: "rowan", name: "Rowan Reedshield", icon: "🛡️", role: "Guardian", style: "guardian", maxHp: 18, description: "Steady, protective, and serious about keeping ordinary people safe." },
@@ -659,7 +615,7 @@ ${check.success ? "You brush dirt from the carved briar crown and the mark resol
       const missing = [...new Set(map.tiles.flat().filter((tile) => !TILE_META[tile]))];
       add(missing.length === 0, `${map.name} tiles have metadata`, missing.join(", ") || "All tile IDs are known.");
     });
-    const shopIds = ["turnipwood_blade", "pebbleknock_hammer", "kettle_helm", "briar_vest", "giggleleaf_cloak", "lantern_pin", "stormbell_charm", "trail_snack", "healing_fizzpop", "fizzberry_handpie", "moonmint", "bubblecap"];
+    const shopIds = [...new Set([...SHOP_INVENTORIES.smith, ...SHOP_INVENTORIES.market])];
     add(shopIds.every((id) => ITEM_DB[id]), "Shop item IDs exist", shopIds.filter((id) => !ITEM_DB[id]).join(", ") || "All shop items exist.");
     add(Object.values(RECIPE_DB).every((recipe) => ITEM_DB[recipe.resultId] && Object.keys(recipe.ingredients).every((id) => ITEM_DB[id])), "Recipe item IDs exist", "Crafting recipes reference known items.");
     add(Object.values(COMPANION_OPTIONS).every((option) => option.id && option.style && option.maxHp), "Companion definitions are complete", "All companion options include id, style, and HP.");
@@ -698,7 +654,7 @@ ${check.success ? "You brush dirt from the carved briar crown and the mark resol
   if (screen === "create") { const selectedRace = RACES.find((r) => r.id === createForm.raceId) || RACES[0]; const previewStats = addBonuses(BASE_STATS, selectedRace.bonuses); return <div className="min-h-screen bg-[radial-gradient(circle_at_top,#204a3d_0%,#0f172a_45%,#020617_100%)] p-6 text-white"><div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1.1fr_0.9fr]"><Panel title="Create Your Hero" right={<Button onClick={() => setScreen("title")}>Back</Button>}><div className="grid gap-4 md:grid-cols-2"><label className="text-sm"><div className="mb-1 text-white/70">Name</div><input className="w-full rounded-2xl border border-white/10 bg-black/20 px-3 py-2 text-white outline-none" value={createForm.name} onChange={(e) => setCreateForm((p) => ({ ...p, name: e.target.value }))} /></label><label className="text-sm"><div className="mb-1 text-white/70">Gender</div><select className="w-full rounded-2xl border border-white/10 bg-black/20 px-3 py-2 text-white outline-none" value={createForm.gender} onChange={(e) => setCreateForm((p) => ({ ...p, gender: e.target.value }))}>{GENDERS.map((g) => <option key={g} value={g} className="bg-slate-900">{g}</option>)}</select></label></div><div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">{RACES.map((r) => <button key={r.id} onClick={() => setCreateForm((p) => ({ ...p, raceId: r.id }))} className={`rounded-2xl border p-3 text-left ${createForm.raceId === r.id ? "border-emerald-400 bg-emerald-500/15" : "border-white/10 bg-white/5"}`}><div className="font-semibold">{r.name}</div><div className="mt-1 text-xs text-white/70">Trait: {r.trait}</div><div className="mt-2 text-xs text-white/80">{r.description}</div></button>)}</div><div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4">{APPEARANCES.map((a) => <button key={a.id} onClick={() => setCreateForm((p) => ({ ...p, appearanceId: a.id }))} className={`rounded-2xl border p-4 text-center ${createForm.appearanceId === a.id ? "border-sky-300 bg-sky-500/15" : "border-white/10 bg-white/5"}`}><div className="text-4xl">{a.icon}</div><div className="mt-2 text-sm">{a.name}</div></button>)}</div><Button className="mt-6 bg-emerald-500/30" onClick={startGame}>Begin Chapter 1</Button></Panel><Panel title="Preview"><div className="rounded-3xl border border-white/10 bg-black/20 p-5 text-center"><div className="text-6xl">{APPEARANCES.find((a) => a.id === createForm.appearanceId)?.icon}</div><div className="mt-3 text-2xl font-bold">{createForm.name || "Liam"}</div><div className="text-white/70">{selectedRace.name} • {createForm.gender}</div><div className="mt-2 text-emerald-300">Trait: {selectedRace.trait}</div></div><div className="mt-4 grid grid-cols-3 gap-2">{STAT_ORDER.map((stat) => <StatBadge key={stat} label={stat} value={previewStats[stat]} bonus={selectedRace.bonuses[stat] || 0} />)}</div></Panel></div></div>; }
 
   const exploredMap = visited[region] || {};
-  const activeShop = shopMode === "market" ? { title: "Willow Market", inventory: ["fizzberry_handpie", "trail_snack", "healing_fizzpop", "lantern_pin", "moonmint", "bubblecap"] } : { title: "Smith Orin's Shop", inventory: ["turnipwood_blade", "pebbleknock_hammer", "kettle_helm", "briar_vest", "giggleleaf_cloak", "lantern_pin", "stormbell_charm", "trail_snack", "healing_fizzpop"] };
+  const activeShop = shopMode === "market" ? { title: "Willow Market", inventory: SHOP_INVENTORIES.market } : { title: "Smith Orin's Shop", inventory: SHOP_INVENTORIES.smith };
 
   return <div className="min-h-screen bg-[radial-gradient(circle_at_top,#244436_0%,#0f172a_40%,#020617_100%)] p-4 text-white sm:p-6"><div className="mx-auto max-w-7xl"><div className="mb-4 flex flex-wrap items-center justify-between gap-3"><div><h1 className="text-3xl font-bold">Lanterns of Briar Crown</h1><div className="mt-1 text-sm text-white/70">Prototype slice • {currentRegionInfo.name} • {currentRegionInfo.subtitle}</div></div><div className="flex flex-wrap gap-2"><Button onClick={openSaveSlotModal}>Save Slot</Button><Button onClick={openLoadSlotModal}>Load Slot</Button><Button onClick={loadGame}>Load Checkpoint</Button><Button onClick={() => setScreen("title")}>Title</Button></div></div><div className="mb-4 rounded-3xl border border-amber-300/20 bg-amber-400/10 px-4 py-3 text-sm shadow-lg"><div className="font-semibold text-amber-200">Latest update</div><div className="mt-1 text-white/85">{toast || `You are standing on: ${currentTileLabel}.`}</div></div>{flags.chapterOneClear ? <div className="mb-4 rounded-3xl border border-emerald-300/20 bg-emerald-400/10 px-4 py-3 text-sm"><div className="font-semibold text-emerald-200">{flags.chapterReported ? "Chapter 1 complete: The Road That Lied" : "Root Cellar discovery complete"}</div><div>{flags.chapterReported ? "Bramblecross understands the shape of the threat. Westroot is the next lead." : "You found the deeper route. Bring what you discovered back to Hollis and Enna."}</div></div> : null}
     <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]"><Panel title={currentRegionInfo.name}><div className="mb-3 text-sm text-white/75">Goal: {questJournal.currentMain.title}</div><div className="grid justify-start gap-0.5 rounded-3xl bg-black/20 p-3" style={{ gridTemplateColumns: `repeat(${currentMap[0].length}, 2.25rem)` }}>{currentMap.flatMap((row, y) => row.map((rawTile, x) => { const tile = getStoryTile(rawTile, region); const isPlayer = position.x === x && position.y === y; const explored = !!exploredMap[getVisitedKey(x, y)] || isPlayer; const alwaysVisible = (region === "hearthhollow" || region === "bramblecross") && (tile.includes("building") || tile.includes("door") || tile === "tree"); const meta = explored || alwaysVisible ? TILE_META[tile] : TILE_META.hidden; return <button key={`${region}-${x}-${y}`} title={meta.label} onClick={() => { const d = Math.abs(position.x - x) + Math.abs(position.y - y); if (d === 1) { if (TILE_META[tile]?.blocked) { if (isBlockedInteractionTile(tile)) handleBlockedTileInteraction(tile); else bump(tile); } else { setPosition({ x, y }); revealArea(region, x, y); inspectTile(tile, { auto: true }); } } else if (d === 0) inspectTile(tile); }} className={`relative h-9 w-9 rounded-xl border border-black/10 text-sm shadow-inner ${meta.classes}`}><span>{meta.icon}</span>{isPlayer ? <div className="absolute inset-0 flex items-center justify-center rounded-xl border-2 border-yellow-300 bg-yellow-300/10 text-lg"><span>{getAppearanceIcon(player)}</span></div> : null}</button>; }))}</div><div className="mt-3 rounded-2xl bg-white/5 px-3 py-2 text-sm">You are standing on: {currentTileLabel}.</div><div className="mt-3 flex gap-2"><Button onClick={() => movePlayer(0, -1)}>↑</Button><Button onClick={() => movePlayer(-1, 0)}>←</Button><Button onClick={() => inspectTile(currentTile)}>Inspect</Button><Button onClick={() => movePlayer(1, 0)}>→</Button><Button onClick={() => movePlayer(0, 1)}>↓</Button></div></Panel>
