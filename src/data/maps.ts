@@ -1,6 +1,11 @@
+const bramblecrossTownMap = new URL("../../assets/maps/bramblecross-town-map-v01.png", import.meta.url).href;
+const hearthhollowMap = new URL("../../assets/maps/hearthhollow-gameplay-map-v03.png", import.meta.url).href;
+const lanternRoadMap = new URL("../../assets/maps/lantern-road-gameplay-map-v01.png", import.meta.url).href;
+const rootCellarMap = new URL("../../assets/maps/root-cellar-map-v01.png", import.meta.url).href;
+
 export const MAPS = {
   hearthhollow: {
-    name: "Hearthhollow", subtitle: "Home village", start: { x: 2, y: 4 },
+    name: "Hearthhollow", subtitle: "Home village", start: { x: 2, y: 4 }, backgroundImage: hearthhollowMap,
     tiles: [
       ["tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree"],
       ["tree", "home_building", "home_building", "home_building", "grass", "elder", "grass", "neighbor_building", "neighbor_building", "neighbor2_building", "neighbor2_building", "chest", "tree"],
@@ -16,7 +21,7 @@ export const MAPS = {
     ],
   },
   lanternRoad: {
-    name: "Lantern Road", subtitle: "The wilds beyond the gate", start: { x: 1, y: 4 },
+    name: "Lantern Road", subtitle: "The wilds beyond the gate", start: { x: 1, y: 4 }, backgroundImage: lanternRoadMap,
     tiles: [
       ["tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree"],
       ["tree", "grass", "grass", "camp", "grass", "grass", "grass", "grass", "grass", "grass", "chest2", "grass", "tree"],
@@ -30,7 +35,7 @@ export const MAPS = {
     ],
   },
   bramblecross: {
-    name: "Bramblecross", subtitle: "First real town hub", start: { x: 1, y: 5 },
+    name: "Bramblecross", subtitle: "First real town hub", start: { x: 1, y: 5 }, backgroundImage: bramblecrossTownMap,
     tiles: [
       ["tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree"],
       ["tree", "grass", "bram_inn_building", "bram_inn_building", "bram_inn_building", "grass", "market_building", "market_building", "market_building", "grass", "board", "grass", "tree"],
@@ -38,15 +43,15 @@ export const MAPS = {
       ["tree", "grass", "bram_inn_building", "bram_inn_door", "bram_inn_building", "grass", "market_building", "market_door", "market_building", "grass", "mayor", "grass", "tree"],
       ["tree", "grass", "grass", "grass", "grass", "grass", "road", "road", "road", "grass", "grass", "grass", "tree"],
       ["tree", "town_gate", "road", "road", "road", "road", "road", "road", "road", "road", "road", "grass", "tree"],
-      ["tree", "grass", "watch_building", "watch_building", "watch_building", "grass", "captain", "grass", "cellar", "grass", "clerk", "grass", "tree"],
-      ["tree", "grass", "watch_building", "watch_door", "watch_building", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "tree"],
+      ["tree", "grass", "watch_building", "watch_building", "watch_building", "captain", "grass", "grass", "cellar", "grass", "grass", "grass", "tree"],
+      ["tree", "grass", "watch_building", "watch_door", "watch_building", "clerk", "grass", "grass", "grass", "grass", "grass", "grass", "tree"],
       ["tree", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "tree"],
       ["tree", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "tree"],
       ["tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree"],
     ],
   },
   rootCellar: {
-    name: "Old Root Cellar", subtitle: "First real dungeon", start: { x: 1, y: 1 },
+    name: "Old Root Cellar", subtitle: "First real dungeon", start: { x: 1, y: 1 }, backgroundImage: rootCellarMap,
     tiles: [
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
       ["wall", "stairs_up", "floor", "mural", "wall", "floor", "sigil", "floor", "floor", "cache3", "wall"],

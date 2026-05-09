@@ -20,6 +20,10 @@ test("starts a new adventure and passes built-in QA checks", async ({ page }) =>
   await expect(page.getByRole("button", { name: "Step into the morning" })).toBeVisible();
   await page.getByRole("button", { name: "Step into the morning" }).click();
   await expect(page.getByText("Goal: Speak with Elder Mira")).toBeVisible();
+  await expect(page.getByTestId("map-background")).toBeVisible();
+  await expect(page.getByTestId("map-grid")).toBeVisible();
+  await page.getByRole("button", { name: "→" }).click();
+  await expect(page.getByTestId("map-grid")).toBeVisible();
 
   await page.getByRole("button", { name: "Save Slot" }).click();
   await expect(page.getByText("Save Slots")).toBeVisible();
