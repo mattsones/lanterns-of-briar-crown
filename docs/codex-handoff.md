@@ -130,3 +130,56 @@ Refactor later in this order:
 The game should feel like opening a hand-painted storybook where the map is playable.
 
 Mechanically, keep tile/grid movement for now. Visually, the future goal is painted map backgrounds with invisible grid movement and UI markers layered over the art.
+
+## Current Handoff - Painted Map Pass
+
+Last updated: 2026-05-10
+
+Branch: `codex/painted-map-handoff`
+
+### What Changed
+
+- Replaced the visible tile-button map board with a painted map stage in `src/components/MapStage.tsx`.
+- Added reusable visual map projection config in `src/data/mapVisuals.ts`.
+- Kept tile-based gameplay logic intact: movement, blocked cells, inspect prompts, doors, encounters, story flags, and keyboard/on-screen controls still use the existing grid rules.
+- Tuned Hearthhollow, Lantern Road, Bramblecross, and Old Root Cellar tile layouts so movement follows the painted artwork more naturally.
+- Added Dev Tools map debug mode. It is off during normal play and shows node centers, labels, states, and nav bounds when enabled.
+- Added portrait-backed NPC map tokens where portraits exist, with emoji fallbacks preserved.
+- Added fog-of-war exploration on all non-Hearthhollow maps. Hearthhollow stays visible because Liam knows his hometown.
+- Adjusted Bramblecross Inn companion portrait crops slightly downward.
+- Updated the smoke test to assert the painted map stage, hidden old grid, hero movement, save/load controls, Dev Tools, and built-in QA checks.
+
+### Verification Run
+
+Use these commands after pulling this branch on another machine:
+
+```bash
+npm install
+npm run build
+npm run test:rules
+npm run playtest:smoke
+```
+
+Latest local verification:
+
+- `npm.cmd run build` passed.
+- `npm.cmd run test:rules` passed.
+- `npm.cmd run playtest:smoke` passed.
+- Manual Playwright visual checks were run for Lantern Road, Bramblecross, Old Root Cellar, and the Bramblecross Inn portrait cards.
+
+### Known Follow-Ups
+
+- The Lantern Road artwork still has baked-in icons. Those should be removed from the source artwork so the game token layer is the single source for interactive markers.
+- Direct pixel inpainting is best done in ChatGPT image editing or another image editor, then the cleaned map exports can be dropped into `assets/maps/` and wired through `src/data/maps.ts`.
+- The current hero map token is still a styled placeholder using the selected appearance emoji. A proper hero portrait/token asset can replace it later.
+- If a future session needs a GitHub PR, install and authenticate GitHub CLI with `gh auth login`. This machine can push with `git`, but `gh` is not currently installed.
+
+### Handoff Rule
+
+For machine switching, finish each meaningful work session by:
+
+1. Updating this handoff section or adding a dated note.
+2. Running the relevant checks.
+3. Committing the scoped changes.
+4. Pushing the current branch to GitHub.
+5. Mentioning the branch name and latest commit in the final Codex response.
