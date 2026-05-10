@@ -150,6 +150,7 @@ Branch: merged into `main`
 - Updated the smoke test to assert the painted map stage, hidden old grid, hero movement, save/load controls, Dev Tools, and built-in QA checks.
 - Wired the cleaned Hearthhollow and Lantern Road map exports into production (`hearthhollow-gameplay-map-v04.png` and `lantern-road-gameplay-map-v02.png`).
 - Tuned the Old Root Cellar visual projection in `src/data/mapVisuals.ts` with Root Cellar-only node anchors so the hidden grid follows the painted corridors more closely. Bramblecross was intentionally left unchanged.
+- Strengthened fog-of-war in `src/components/MapStage.tsx` so unexplored map areas are fully hidden instead of faintly visible through a dark overlay.
 
 ### Verification Run
 
@@ -169,6 +170,7 @@ Latest local verification:
 - `npm.cmd run playtest:smoke` passed.
 - Manual Playwright visual checks were run for Lantern Road, Bramblecross, Old Root Cellar, and the Bramblecross Inn portrait cards.
 - 2026-05-10 Root Cellar alignment pass was checked with debug and normal Playwright screenshots after tuning map-specific node anchors.
+- 2026-05-10 stronger fog-of-war pass was checked with a normal Playwright screenshot before commit.
 
 ### Known Follow-Ups
 

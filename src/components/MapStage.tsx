@@ -147,7 +147,7 @@ export function MapStage({
               width="140"
               height="140"
             >
-              <feGaussianBlur stdDeviation="1.8" />
+              <feGaussianBlur stdDeviation="0.9" />
             </filter>
             <mask
               id={fogMaskId}
@@ -176,14 +176,6 @@ export function MapStage({
             width="100"
             height="100"
             fill="#020617"
-            opacity="0.76"
-            mask={`url(#${fogMaskId})`}
-          />
-          <rect
-            width="100"
-            height="100"
-            fill="#475569"
-            opacity="0.16"
             mask={`url(#${fogMaskId})`}
           />
         </svg>
