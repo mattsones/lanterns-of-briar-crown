@@ -3,7 +3,12 @@
 :root {
   color-scheme: dark;
   font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
     sans-serif;
   background: #020617;
   color: #f8fafc;
@@ -25,4 +30,209 @@ input,
 select,
 textarea {
   font: inherit;
+}
+
+.painted-map-stage {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 1.25rem;
+  background: #111827;
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 0.25),
+    0 1.25rem 3rem rgb(0 0 0 / 0.22);
+}
+
+.painted-map-image,
+.painted-map-fallback,
+.painted-map-vignette,
+.map-fog-layer,
+.map-node-layer,
+.map-token-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.painted-map-image {
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.painted-map-fallback {
+  z-index: 0;
+  background:
+    radial-gradient(circle at 50% 35%, rgb(245 158 11 / 0.22), transparent 34%),
+    linear-gradient(135deg, #244436, #111827 58%, #020617);
+}
+
+.painted-map-vignette {
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 50% 46%,
+      transparent 58%,
+      rgb(2 6 23 / 0.24) 100%
+    ),
+    linear-gradient(180deg, rgb(2 6 23 / 0.08), rgb(2 6 23 / 0.18));
+}
+
+.map-fog-layer {
+  z-index: 3;
+  pointer-events: none;
+}
+
+.map-node-layer {
+  z-index: 5;
+}
+
+.map-token-layer {
+  z-index: 8;
+  pointer-events: none;
+}
+
+.map-node-hitbox {
+  position: absolute;
+  width: clamp(1.75rem, 5.6%, 3rem);
+  aspect-ratio: 1;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: white;
+  opacity: 1;
+}
+
+.map-node-hitbox:disabled {
+  opacity: 1;
+}
+
+.map-node-hitbox.is-clickable {
+  cursor: pointer;
+}
+
+.map-node-hitbox.is-clickable:hover,
+.map-node-hitbox:focus-visible {
+  outline: 2px solid rgb(252 211 77 / 0.82);
+  outline-offset: 2px;
+  background: rgb(251 191 36 / 0.16);
+}
+
+.map-node-hitbox.is-debug {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(255 255 255 / 0.5);
+  background: rgb(15 23 42 / 0.56);
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.35);
+}
+
+.map-node-hitbox.is-debug.is-open {
+  background: rgb(16 185 129 / 0.42);
+}
+
+.map-node-hitbox.is-debug.is-blocked {
+  background: rgb(15 23 42 / 0.72);
+}
+
+.map-node-hitbox.is-debug.is-interaction,
+.map-node-hitbox.is-debug.is-interactable {
+  background: rgb(245 158 11 / 0.5);
+}
+
+.map-node-hitbox.is-debug.is-threat {
+  background: rgb(244 63 94 / 0.52);
+}
+
+.map-debug-label {
+  font-size: 0.58rem;
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.8);
+}
+
+.map-token,
+.map-hero-token {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 999px;
+  color: white;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.65);
+  transform: translate(-50%, -70%);
+}
+
+.map-token {
+  width: clamp(1.7rem, 5.3%, 2.8rem);
+  border: 2px solid rgb(255 255 255 / 0.78);
+  background: rgb(15 23 42 / 0.82);
+  box-shadow: 0 0.45rem 1rem rgb(0 0 0 / 0.28);
+}
+
+.map-token--action {
+  width: clamp(1.45rem, 4.3%, 2.25rem);
+  border-color: rgb(252 211 77 / 0.78);
+  background: rgb(120 53 15 / 0.74);
+}
+
+.map-token--threat {
+  border-color: rgb(253 164 175 / 0.86);
+  background: rgb(127 29 29 / 0.82);
+}
+
+.map-token img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.map-token-fallback {
+  font-size: 1.1rem;
+}
+
+.map-hero-token {
+  z-index: 12;
+  width: clamp(2rem, 6.2%, 3.25rem);
+  border: 3px solid rgb(253 224 71 / 0.95);
+  background:
+    radial-gradient(
+      circle at 42% 34%,
+      rgb(255 255 255 / 0.28),
+      transparent 34%
+    ),
+    rgb(15 23 42 / 0.9);
+  box-shadow:
+    0 0 0 3px rgb(15 23 42 / 0.62),
+    0 0.6rem 1.35rem rgb(0 0 0 / 0.34);
+  transition:
+    left 180ms ease,
+    top 180ms ease,
+    transform 180ms ease;
+}
+
+.map-hero-token span {
+  font-size: 1.35rem;
+}
+
+.map-debug-bounds {
+  position: absolute;
+  z-index: 6;
+  pointer-events: none;
+  border: 2px dashed rgb(125 211 252 / 0.9);
+  border-radius: 0.75rem;
+  box-shadow: inset 0 0 0 1px rgb(2 6 23 / 0.65);
+}
+
+img[alt^="Portrait of "] {
+  object-position: center 42%;
 }
