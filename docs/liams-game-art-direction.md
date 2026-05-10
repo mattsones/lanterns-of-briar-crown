@@ -622,8 +622,8 @@ These are the current first-pass art assets worth carrying forward into the repo
 
 ## Environments
 
-- `hearthhollow-map-concept-v03.png`
-- `lantern-road-map-concept-v01.png`
+- `hearthhollow-gameplay-map-v04.png`
+- `lantern-road-gameplay-map-v02.png`
 - `bramblecross-town-concept-v01.png`
 - `root-cellar-map-concept-v01.png`
 

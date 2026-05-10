@@ -1,6 +1,6 @@
 const bramblecrossTownMap = new URL("../../assets/maps/bramblecross-town-map-v01.png", import.meta.url).href;
-const hearthhollowMap = new URL("../../assets/maps/hearthhollow-gameplay-map-v03.png", import.meta.url).href;
-const lanternRoadMap = new URL("../../assets/maps/lantern-road-gameplay-map-v01.png", import.meta.url).href;
+const hearthhollowMap = new URL("../../assets/maps/hearthhollow-gameplay-map-v04.png", import.meta.url).href;
+const lanternRoadMap = new URL("../../assets/maps/lantern-road-gameplay-map-v02.png", import.meta.url).href;
 const rootCellarMap = new URL("../../assets/maps/root-cellar-map-v01.png", import.meta.url).href;
 
 export const MAPS = {

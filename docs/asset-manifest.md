@@ -49,8 +49,8 @@ Production-ready versions can later be copied into `assets/maps/`, `assets/portr
 
 | Asset | Suggested filename | Notes |
 |---|---|---|
-| Hearthhollow gameplay map concept | `hearthhollow-map-concept-v03.png` | Cozy village; simple south gate; no boar sign. |
-| Lantern Road gameplay map concept | `lantern-road-map-concept-v01.png` | Winding magical road; shrine, ruin, camp, cart, cache, ambush path. |
+| Hearthhollow gameplay map | `hearthhollow-gameplay-map-v04.png` | Current clean production map; icon-free version of the cozy village layout. |
+| Lantern Road gameplay map | `lantern-road-gameplay-map-v02.png` | Current clean production map; icon-free version of the winding road layout. |
 | Bramblecross town concept | `bramblecross-town-concept-v01.png` | Practical, square, guarded town layout. |
 | Root Cellar map concept | `root-cellar-map-concept-v01.png` | Strong layout; Warden visibly blocks sealed door. |
 
@@ -76,6 +76,8 @@ Production-ready versions can later be copied into `assets/maps/`, `assets/portr
 | First busier Chapter 1 key art | Too many lanterns/lights; useful style reference. |
 | First Hearthhollow concept map with baked-in labels | Nice concept, but too much text for gameplay map. |
 | Hearthhollow map with boar sign above gate | Rejected; south gate should not have permanent boar warning sign. |
+| Hearthhollow gameplay map v03 | Preserved as concept/reference; replaced in production by icon-free v04. |
+| Lantern Road gameplay map v01 | Preserved as concept/reference; replaced in production by icon-free v02. |
 | First Rowan human portrait | Too human/soft for defensive non-human companion. |
 | Rowan fox-person portrait | Good art, but fox-person was not one of the intended playable ancestries. Could be repurposed as a future roadside trickster NPC. |
 

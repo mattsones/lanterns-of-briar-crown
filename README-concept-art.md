@@ -29,8 +29,8 @@ assets/
 - `chapter-1-lantern-road-key-art-v02.png`
 
 ### Environments
-- `hearthhollow-gameplay-map-v03.png`
-- `lantern-road-gameplay-map-v01.png`
+- `hearthhollow-gameplay-map-v04.png`
+- `lantern-road-gameplay-map-v02.png`
 - `bramblecross-town-map-v01.png`
 - `root-cellar-map-v01.png`
 
@@ -50,6 +50,8 @@ A few earlier variants are included for reference:
 - busy first key art
 - first Hearthhollow concept with more text
 - Hearthhollow map with boar sign
+- Hearthhollow gameplay map v03 with baked-in icons
+- Lantern Road gameplay map v01 with baked-in icons
 - first Enna version
 - earlier Rowan human version
 - Rowan fox-person variant
