@@ -135,7 +135,7 @@ Mechanically, keep tile/grid movement for now. Visually, the future goal is pain
 
 Last updated: 2026-05-10
 
-Branch: `codex/painted-map-handoff`
+Branch: merged into `main`
 
 ### What Changed
 
@@ -148,6 +148,8 @@ Branch: `codex/painted-map-handoff`
 - Added fog-of-war exploration on all non-Hearthhollow maps. Hearthhollow stays visible because Liam knows his hometown.
 - Adjusted Bramblecross Inn companion portrait crops slightly downward.
 - Updated the smoke test to assert the painted map stage, hidden old grid, hero movement, save/load controls, Dev Tools, and built-in QA checks.
+- Wired the cleaned Hearthhollow and Lantern Road map exports into production (`hearthhollow-gameplay-map-v04.png` and `lantern-road-gameplay-map-v02.png`).
+- Tuned the Old Root Cellar visual projection in `src/data/mapVisuals.ts` with Root Cellar-only node anchors so the hidden grid follows the painted corridors more closely. Bramblecross was intentionally left unchanged.
 
 ### Verification Run
 
@@ -166,11 +168,12 @@ Latest local verification:
 - `npm.cmd run test:rules` passed.
 - `npm.cmd run playtest:smoke` passed.
 - Manual Playwright visual checks were run for Lantern Road, Bramblecross, Old Root Cellar, and the Bramblecross Inn portrait cards.
+- 2026-05-10 Root Cellar alignment pass was checked with debug and normal Playwright screenshots after tuning map-specific node anchors.
 
 ### Known Follow-Ups
 
-- The Lantern Road artwork still has baked-in icons. Those should be removed from the source artwork so the game token layer is the single source for interactive markers.
-- Direct pixel inpainting is best done in ChatGPT image editing or another image editor, then the cleaned map exports can be dropped into `assets/maps/` and wired through `src/data/maps.ts`.
+- Continue checking map alignment with Dev Tools > Show Map Debug after any map art replacement. Prefer map-specific `pointOverrides` in `src/data/mapVisuals.ts` before changing gameplay tile arrays.
+- Bramblecross currently lines up well enough; avoid changing its projection unless new art changes require it.
 - The current hero map token is still a styled placeholder using the selected appearance emoji. A proper hero portrait/token asset can replace it later.
 - If a future session needs a GitHub PR, install and authenticate GitHub CLI with `gh auth login`. This machine can push with `git`, but `gh` is not currently installed.
 
