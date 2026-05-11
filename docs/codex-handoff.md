@@ -179,6 +179,32 @@ Latest local verification:
 - The current hero map token is still a styled placeholder using the selected appearance emoji. A proper hero portrait/token asset can replace it later.
 - If a future session needs a GitHub PR, install and authenticate GitHub CLI with `gh auth login`. This machine can push with `git`, but `gh` is not currently installed.
 
+## Current Handoff - Root Cellar Navigation Graph Pass
+
+Last updated: 2026-05-11
+
+Branch: `main`
+
+### What Changed
+
+- Root Cellar movement now renders as a walkable-only navigation graph instead of showing every grid coordinate in debug.
+- Black-space filler nodes were removed from the visible/debug movement layer. The northeast void and lower-right dead space no longer present as usable route options.
+- Root Cellar graph nodes are smaller and hand-placed with `pointOverrides` in `src/data/mapVisuals.ts`.
+- Root Cellar fog reveal now follows graph distance instead of square grid radius, so disconnected rooms do not light up just because they are physically nearby.
+- Added lower central support nodes so the cache, fungus, skulk, and Warden approaches line up more naturally with the painted floor.
+- Strengthened fog on Lantern Road and Bramblecross slightly, and strengthened Root Cellar fog much more aggressively.
+- Added `docs/playtest-notes/root-cellar-navigation-graph.md` as the working guide for future dungeon node tuning.
+
+### Latest Verification
+
+```bash
+npm run build
+npm run test:rules
+npm run playtest:smoke
+```
+
+All three passed locally after this pass. Manual browser visual checks also confirmed 49 visible Root Cellar debug nodes, 0 blocked debug nodes, strong graph-aware fog at the cellar entrance, and a keyboard route to the Warden. The known Warden route is documented in `docs/playtest-notes/root-cellar-navigation-graph.md`.
+
 ### Handoff Rule
 
 For machine switching, finish each meaningful work session by:

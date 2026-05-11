@@ -106,8 +106,32 @@ test("starts a new adventure and passes built-in QA checks", async ({
     page.getByText("Companion definitions are complete"),
   ).toBeVisible();
   await expect(
-    page.getByText("Root Cellar upper spur restored without boss bypass"),
+    page.getByText("Root Cellar uses walkable-only graph nodes"),
   ).toBeVisible();
   await expect(page.locator("text=⚠")).toHaveCount(0);
+  await page.getByRole("button", { name: "Old Root Cellar" }).click();
+  for (const direction of [
+    "right",
+    "right",
+    "right",
+    "down",
+    "down",
+    "right",
+    "right",
+    "down",
+    "right",
+    "right",
+    "down",
+    "right",
+    "right",
+    "up",
+  ]) {
+    await page.getByTestId(`move-${direction}`).click();
+    await page.waitForTimeout(120);
+  }
+  await expect(page.getByText("Briar Knot Warden")).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Stand and fight." }),
+  ).toBeVisible();
   expect(runtimeErrors).toEqual([]);
 });

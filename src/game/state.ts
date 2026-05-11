@@ -77,6 +77,7 @@ export function buildDefaultFlags(): Flags {
     watchLedgerRead: false,
     watchMapRead: false,
     watchOrdersRead: false,
+    askedHollisAboutEdden: false,
     gotDungeonLead: false,
     enteredRootCellar: false,
     openedCellarCache: false,

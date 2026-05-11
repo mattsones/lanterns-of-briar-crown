@@ -1,5 +1,11 @@
 import { TILE_META } from "../data/maps";
-import { getMapNodePoint, getMapVisualConfig } from "../data/mapVisuals";
+import {
+  areMapNodesConnected,
+  getMapNodePoint,
+  getMapVisualConfig,
+  hasNavigationGraph,
+  isMapNavigationNode,
+} from "../data/mapVisuals";
 import { getDialoguePortrait } from "../data/portraits";
 import { getAppearanceIcon } from "../game/appearance";
 import { getVisitedKey, isBlockedInteractionTile } from "../game/map";
@@ -72,6 +78,7 @@ export function MapStage({
   const rows = map.length;
   const columns = map[0]?.length || 1;
   const hometownMap = region === "hearthhollow";
+  const usesNavigationGraph = hasNavigationGraph(region);
   const fogMaskId = `map-fog-${region}`;
   const fogBlurId = `${fogMaskId}-blur`;
 
@@ -83,8 +90,8 @@ export function MapStage({
       const explored = !!exploredMap[getVisitedKey(x, y)] || isPlayer;
       const visible = hometownMap || explored || debug;
       const meta = TILE_META[tile] || TILE_META.hidden;
-      const distance = Math.abs(position.x - x) + Math.abs(position.y - y);
-      const clickable = distance <= 1;
+      const clickable =
+        isPlayer || areMapNodesConnected(region, position, { x, y });
       const debugState = getDebugState(tile);
 
       return {
@@ -106,7 +113,16 @@ export function MapStage({
   const tokens = nodes.filter(
     (node) => node.visible && !node.isPlayer && MAP_TOKEN_CONFIG[node.tile],
   );
-  const fogNodes = nodes.filter((node) => node.explored);
+  const renderedNodes = usesNavigationGraph
+    ? nodes.filter(
+        (node) => node.isPlayer || isMapNavigationNode(region, node.x, node.y),
+      )
+    : nodes;
+  const fogNodes = renderedNodes.filter((node) => node.explored);
+  const renderedTokens = tokens.filter(
+    (node) =>
+      !usesNavigationGraph || isMapNavigationNode(region, node.x, node.y),
+  );
   const heroPoint = getMapNodePoint(
     region,
     position.x,
@@ -181,7 +197,7 @@ export function MapStage({
         </svg>
       ) : null}
       <div className="map-node-layer" aria-label="Map movement layer">
-        {nodes.map((node) => (
+        {renderedNodes.map((node) => (
           <button
             key={node.key}
             type="button"
@@ -194,7 +210,11 @@ export function MapStage({
             disabled={!node.clickable}
             onClick={() => onNodeClick(node.x, node.y, node.tile)}
             className={`map-node-hitbox ${node.clickable ? "is-clickable" : ""} ${debug ? "is-debug" : ""} is-${node.debugState}`}
-            style={{ left: `${node.point.x}%`, top: `${node.point.y}%` }}
+            style={{
+              left: `${node.point.x}%`,
+              top: `${node.point.y}%`,
+              width: visual.nodeHitboxSize,
+            }}
           >
             {debug ? (
               <span className="map-debug-label">
@@ -205,7 +225,7 @@ export function MapStage({
         ))}
       </div>
       <div className="map-token-layer" aria-hidden="true">
-        {tokens.map((node) => {
+        {renderedTokens.map((node) => {
           const config = MAP_TOKEN_CONFIG[node.tile];
           const portrait = getDialoguePortrait(
             config.portraitName || node.meta.label,

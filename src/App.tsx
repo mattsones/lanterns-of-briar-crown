@@ -24,6 +24,11 @@ import { COMPANION_OPTIONS } from "./data/companions";
 import { buildEncounterEnemies } from "./data/enemies";
 import { BATTLE_CONSUMABLES, ITEM_DB } from "./data/items";
 import { MAPS, TILE_META } from "./data/maps";
+import {
+  areMapNodesConnected,
+  getNavigationDestination,
+  getNavigationNodeKeys,
+} from "./data/mapVisuals";
 import { RECIPE_DB } from "./data/recipes";
 import { SHOP_INVENTORIES } from "./data/shops";
 import { buildQuestJournal } from "./data/quests";
@@ -460,8 +465,17 @@ export default function LiamsGamePrototype() {
       saveModalMode
     )
       return;
-    const nx = position.x + dx,
-      ny = position.y + dy;
+    const direction =
+      dx === 1 ? "right" : dx === -1 ? "left" : dy === 1 ? "down" : "up";
+    const graphDestination = getNavigationDestination(
+      region,
+      position.x,
+      position.y,
+      direction,
+    );
+    const nx = graphDestination?.x ?? position.x + dx;
+    const ny = graphDestination?.y ?? position.y + dy;
+    if (!graphDestination && region === "rootCellar") return;
     if (
       ny < 0 ||
       ny >= currentMap.length ||
@@ -765,7 +779,7 @@ export default function LiamsGamePrototype() {
         },
         {
           label: "Try to draw it away from town.",
-          effect: () =>
+          effect: () => {
             setDialogue({
               portrait: "🐗",
               name: "Bramble Boar",
@@ -783,7 +797,8 @@ export default function LiamsGamePrototype() {
                   effect: () => setDialogue(null),
                 },
               ],
-            }),
+            });
+          },
         },
       ],
     });
@@ -962,33 +977,46 @@ export default function LiamsGamePrototype() {
       ],
     });
   };
-  const openBoardDialogue = () =>
+  const openBoardDialogue = () => {
+    const boardText = flags.boardQuestCompleted
+      ? "The Bramblecross notice board is still crowded, but Ada's increasingly urgent spice-crate notice has been taken down. The cellar warnings and false route orders remain pinned for anyone with enough patience to read fear in official handwriting."
+      : flags.boardQuestAccepted
+        ? "The Bramblecross notice board still rustles with cellar warnings and copied route orders. Ada's crate notice is gone from the corner because it is already folded in your pack."
+        : flags.readBoard
+          ? "The Bramblecross notice board looks a little less like a paper storm now that you know which warnings matter. You have already noted the cellar reports and forged route order. Near the bottom, Ada Willowmarket's missing crate notice still waits in a cramped, increasingly angry hand."
+          : 'The Bramblecross notice board is crowded enough to look like a paper storm nailed to wood. One notice reports missing cellar porters. Another warns of odd knocking beneath the old root storage rooms. A third insists all road traffic should wait for "updated crown direction," but the seal is copied too cleanly, like someone traced authority without understanding it. Near the bottom, Ada Willowmarket has pinned a practical little note about a missing spice crate, written in an increasingly less practical hand.';
+    const boardChoices = [
+      {
+        label: flags.readBoard
+          ? "Review the cellar warning and forged route order."
+          : "Note the cellar warning and forged route order.",
+        effect: () => {
+          setFlags((f) => ({ ...f, readBoard: true }));
+          setDialogue(null);
+        },
+      },
+    ];
+    if (!flags.boardQuestAccepted && !flags.boardQuestCompleted) {
+      boardChoices.push({
+        label: "Take Ada's crate notice too.",
+        effect: () => {
+          setFlags((f) => ({
+            ...f,
+            readBoard: true,
+            boardQuestAccepted: true,
+          }));
+          setDialogue(null);
+          setToast("Ada's missing crate is now in your side quests.");
+        },
+      });
+    }
     setDialogue({
-      portrait: "📜",
       name: "Notice Board",
-      text: 'The Bramblecross notice board is crowded enough to look like a paper storm nailed to wood. One notice reports missing cellar porters. Another warns of odd knocking beneath the old root storage rooms. A third insists all road traffic should wait for "updated crown direction," but the seal is copied too cleanly, like someone traced authority without understanding it. Near the bottom, Ada Willowmarket has pinned a practical little note about a missing spice crate, written in an increasingly less practical hand.',
-      choices: [
-        {
-          label: "Note the cellar warning and forged route order.",
-          effect: () => {
-            setFlags((f) => ({ ...f, readBoard: true }));
-            setDialogue(null);
-          },
-        },
-        {
-          label: "Take Ada's crate notice too.",
-          effect: () => {
-            setFlags((f) => ({
-              ...f,
-              readBoard: true,
-              boardQuestAccepted: true,
-            }));
-            setDialogue(null);
-            setToast("Ada's missing crate is now in your side quests.");
-          },
-        },
-      ],
+      portrait: "📜",
+      text: boardText,
+      choices: boardChoices,
     });
+  };
   const openClerkDialogue = () => {
     if (flags.chapterOneClear && !flags.chapterReported)
       return openChapterReportDialogue();
@@ -1088,6 +1116,38 @@ export default function LiamsGamePrototype() {
         text: "Hollis nods toward the public square. “Read the notice board too. Enna's wall shows the pattern. The notices show what people are afraid of. Good investigators know the difference. The forged orders are not only moving carts. They are moving people.”",
         choices: [{ label: "Fair enough.", effect: () => setDialogue(null) }],
       });
+    if (flags.gotDungeonLead)
+      return setDialogue({
+        portrait: "🛡️",
+        name: "Captain Hollis",
+        text: 'Hollis keeps the cellar key ready on the desk. The questions are not gone, but the permission is settled. "You know what the wall shows," he says. "Go below when you are ready, and come back with truth instead of rumors."',
+        choices: [
+          {
+            label: "I'm heading to the Root Cellar.",
+            effect: () => setDialogue(null),
+          },
+        ],
+      });
+    if (flags.askedHollisAboutEdden)
+      return setDialogue({
+        portrait: "🛡️",
+        name: "Captain Hollis",
+        text: 'Hollis sees you return and rests one hand beside the key. He does not make you ask about Edden again. "You have the shape of it now: missing porters, altered routes, and a runner who came back speaking old road names. If you are ready, take the key and go carefully."',
+        choices: [
+          {
+            label: "I'll investigate the Root Cellar.",
+            effect: () => {
+              setFlags((f) => ({ ...f, gotDungeonLead: true }));
+              setDialogue(null);
+              setToast("Hollis authorizes the Root Cellar investigation.");
+            },
+          },
+          {
+            label: "I still need a moment.",
+            effect: () => setDialogue(null),
+          },
+        ],
+      });
     setDialogue({
       portrait: "🛡️",
       name: "Captain Hollis",
@@ -1103,7 +1163,8 @@ export default function LiamsGamePrototype() {
         },
         {
           label: "Tell me more about Edden first.",
-          effect: () =>
+          effect: () => {
+            setFlags((f) => ({ ...f, askedHollisAboutEdden: true }));
             setDialogue({
               portrait: "🛡️",
               name: "Captain Hollis",
@@ -1112,7 +1173,11 @@ export default function LiamsGamePrototype() {
                 {
                   label: "Then I'll bring back the truth.",
                   effect: () => {
-                    setFlags((f) => ({ ...f, gotDungeonLead: true }));
+                    setFlags((f) => ({
+                      ...f,
+                      askedHollisAboutEdden: true,
+                      gotDungeonLead: true,
+                    }));
                     setDialogue(null);
                     setToast(
                       "Hollis authorizes the Root Cellar investigation.",
@@ -1124,7 +1189,8 @@ export default function LiamsGamePrototype() {
                   effect: () => setDialogue(null),
                 },
               ],
-            }),
+            });
+          },
         },
       ],
     });
@@ -1998,8 +2064,9 @@ ${check.success ? "You brush dirt from the carved briar crown and the mark resol
   };
 
   const handleMapNodeClick = (x, y, tile) => {
-    const d = Math.abs(position.x - x) + Math.abs(position.y - y);
-    if (d === 1) {
+    const isCurrentNode = position.x === x && position.y === y;
+    const isConnectedNode = areMapNodesConnected(region, position, { x, y });
+    if (isConnectedNode) {
       if (TILE_META[tile]?.blocked) {
         if (isBlockedInteractionTile(tile)) handleBlockedTileInteraction(tile);
         else bump(tile);
@@ -2008,7 +2075,7 @@ ${check.success ? "You brush dirt from the carved briar crown and the mark resol
         revealArea(region, x, y);
         inspectTile(tile, { auto: true });
       }
-    } else if (d === 0) inspectTile(tile);
+    } else if (isCurrentNode) inspectTile(tile);
   };
 
   const startBattle = (enemies, rewardKey) => {
@@ -2542,11 +2609,27 @@ ${check.success ? "You brush dirt from the carved briar crown and the mark resol
       "Item-granted skills resolve",
       "Weapons and trinkets can add combat abilities.",
     );
+    const rootCellarNodeKeys = getNavigationNodeKeys("rootCellar");
+    const removedCellarFillerNodes = [
+      "1,2",
+      "8,1",
+      "9,1",
+      "8,2",
+      "9,2",
+      "8,7",
+    ];
+    const rootCellarGraphIsWalkable =
+      rootCellarNodeKeys.length > 0 &&
+      rootCellarNodeKeys.every((key) => {
+        const [x, y] = key.split(",").map(Number);
+        const tile = MAPS.rootCellar.tiles[y]?.[x];
+        return tile && !TILE_META[getStoryTile(tile, "rootCellar")]?.blocked;
+      }) &&
+      removedCellarFillerNodes.every((key) => !rootCellarNodeKeys.includes(key));
     add(
-      MAPS.rootCellar.tiles[2][9] === "floor" &&
-        MAPS.rootCellar.tiles[7][9] === "wall",
-      "Root Cellar upper spur restored without boss bypass",
-      "The northeast exploration path is open, but the sealed door still requires passing the Warden.",
+      rootCellarGraphIsWalkable,
+      "Root Cellar uses walkable-only graph nodes",
+      "The cellar debug overlay now omits black-space filler nodes and keeps movement on linked painted paths.",
     );
     add(
       typeof shouldSkipAutoInspect === "function",
