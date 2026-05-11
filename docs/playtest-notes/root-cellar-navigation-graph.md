@@ -29,12 +29,16 @@ This lets the game keep the existing `MAPS.rootCellar.tiles` contract for encoun
 ## Current Tuning
 
 - Removed filler movement nodes from black-space areas, especially the northeast void and lower-right dead space.
-- Added walkable support nodes around the lower central paths so the cache, fungus, skulk, and Warden approaches feel connected.
+- Removed the annotated off-path debug nodes around the mural room, central rock/mushroom edge, and Warden approach.
+- Added walkable support nodes around the lower central paths so the cache, fungus, skulk, and Warden approaches feel connected without cutting through black space.
+- The primary Warden route now follows the upper-right storage room corridor down to the lower-right approach instead of stepping through the removed mid-right nodes.
 - Tuned stronger fog on all non-Hearthhollow maps, with the Root Cellar strongest.
 - Verified a no-dialog route to the Warden using:
 
 ```text
-right, right, right, down, down, right, right, down, right, right, down, right, right, up
+right, right, right, right, right, right, right,
+down, down, down, down, down,
+right, right, up, up
 ```
 
 ## Verification

@@ -225,6 +225,29 @@ Branch: `main`
 - `npm run playtest:smoke` passed.
 - Manual browser check confirmed the hero starts on Grass, Nella is separate, and walking into the well opens the Village Well joke interaction instead of moving onto it.
 
+## Current Handoff - Root Cellar Annotation Follow-Up
+
+Last updated: 2026-05-11
+
+Branch: `main`
+
+### What Changed
+
+- Applied the second annotated Root Cellar pass: removed the red-marked off-path nodes in the mural room, central mushroom/rock edge, and Warden approach.
+- Nudged the blue-marked nodes in `src/data/mapVisuals.ts` so the visible graph sits tighter on painted stone paths.
+- Added a few green-marked support nodes at the central vertical path, lower central path, and post-Warden/door edge.
+- Updated the no-dialog Warden route in `tests/smoke.spec.ts` and `docs/playtest-notes/root-cellar-navigation-graph.md`.
+
+### Latest Verification
+
+```bash
+npm run build
+npm run test:rules
+npm run playtest:smoke
+```
+
+All three passed locally after this pass. Manual browser visual QA confirmed 44 visible Root Cellar debug nodes, 0 blocked debug nodes, and the revised keyboard route reaches the Briar Knot Warden.
+
 ### Handoff Rule
 
 For machine switching, finish each meaningful work session by:

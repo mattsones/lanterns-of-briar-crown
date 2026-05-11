@@ -2632,10 +2632,18 @@ ${check.success ? "You brush dirt from the carved briar crown and the mark resol
     const rootCellarNodeKeys = getNavigationNodeKeys("rootCellar");
     const removedCellarFillerNodes = [
       "1,2",
+      "1,3",
+      "2,3",
+      "3,6",
+      "4,3",
+      "5,3",
+      "5,4",
       "8,1",
       "9,1",
       "8,2",
       "9,2",
+      "8,4",
+      "8,5",
       "8,7",
     ];
     const rootCellarGraphIsWalkable =
