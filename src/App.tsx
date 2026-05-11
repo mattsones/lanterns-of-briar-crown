@@ -2536,10 +2536,18 @@ ${check.success ? "You brush dirt from the carved briar crown and the mark resol
     add(
       MAPS.hearthhollow.tiles[4][2] !== "baker" &&
         MAPS.hearthhollow.tiles[2][5] === "baker" &&
+        MAPS.hearthhollow.tiles[2][3] === "home_door" &&
+        MAPS.hearthhollow.tiles[6][1] === "potion_door" &&
+        MAPS.hearthhollow.tiles[6][11] === "chest" &&
+        MAPS.hearthhollow.tiles[5][10] === "tree" &&
+        MAPS.hearthhollow.tiles[5][11] === "tree" &&
         MAPS.hearthhollow.tiles[4][6] === "well" &&
+        MAPS.hearthhollow.tiles[9].every(
+          (tile, x) => x === 6 ? tile === "gate" : TILE_META[tile]?.blocked,
+        ) &&
         TILE_META.well?.blocked,
-      "Hearthhollow NPC and well placement is tuned",
-      "Nella no longer overlaps the start tile, and the village well blocks movement with its own interaction.",
+      "Hearthhollow placement tweaks are tuned",
+      "Doors, chest, blocked well, upper-right trees, and south-row gate boundary match the latest map pass.",
     );
     const shopIds = [
       ...new Set([...SHOP_INVENTORIES.smith, ...SHOP_INVENTORIES.market]),

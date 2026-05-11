@@ -91,7 +91,7 @@ test("starts a new adventure and passes built-in QA checks", async ({
     page.getByText("Lantern Road tiles have metadata"),
   ).toBeVisible();
   await expect(
-    page.getByText("Hearthhollow NPC and well placement is tuned"),
+    page.getByText("Hearthhollow placement tweaks are tuned"),
   ).toBeVisible();
   await expect(page.getByText("Bramblecross map is rectangular")).toBeVisible();
   await expect(

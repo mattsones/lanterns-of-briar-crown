@@ -69,6 +69,16 @@ test("progression and default map state stay compatible with chapter one", () =>
   expect(visited.lanternRoad).toEqual({});
   expect(MAPS.hearthhollow.tiles[4][2]).toBe("grass");
   expect(MAPS.hearthhollow.tiles[2][5]).toBe("baker");
+  expect(MAPS.hearthhollow.tiles[2][3]).toBe("home_door");
+  expect(MAPS.hearthhollow.tiles[6][1]).toBe("potion_door");
+  expect(MAPS.hearthhollow.tiles[6][11]).toBe("chest");
+  expect(MAPS.hearthhollow.tiles[5][10]).toBe("tree");
+  expect(MAPS.hearthhollow.tiles[5][11]).toBe("tree");
   expect(MAPS.hearthhollow.tiles[4][6]).toBe("well");
+  expect(
+    MAPS.hearthhollow.tiles[9].every((tile, x) =>
+      x === 6 ? tile === "gate" : TILE_META[tile]?.blocked,
+    ),
+  ).toBe(true);
   expect(TILE_META.well.blocked).toBe(true);
 });

@@ -248,6 +248,31 @@ npm run playtest:smoke
 
 All three passed locally after this pass. Manual browser visual QA confirmed 44 visible Root Cellar debug nodes, 0 blocked debug nodes, and the revised keyboard route reaches the Briar Knot Warden.
 
+## Current Handoff - Hearthhollow Placement Follow-Up
+
+Last updated: 2026-05-11
+
+Branch: `main`
+
+### What Changed
+
+- Moved the Hearthhollow home door from `2,3` to `3,2`.
+- Moved the potion hut door from `2,6` to `1,6`.
+- Moved the old supply chest from `11,5` to `11,6`.
+- Made Hearthhollow `10,5` and `11,5` unpassable.
+- Made all Hearthhollow `y=9` tiles unpassable except the gate at `6,9`.
+- Updated QA and rules coverage for these exact placements.
+
+### Latest Verification
+
+```bash
+npm run build
+npm run test:rules
+npm run playtest:smoke
+```
+
+All three passed locally after this pass. Manual browser QA confirmed the new home door, potion door, chest, south gate, and blocked south-row grass placements.
+
 ### Handoff Rule
 
 For machine switching, finish each meaningful work session by:
