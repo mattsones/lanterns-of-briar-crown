@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { resolveRoll, resolveSkillCheck } from "../src/game/dice";
+import { MAPS, TILE_META } from "../src/data/maps";
 import { gainItem, getDefaultBattlePouch, removeItem } from "../src/game/inventory";
 import { buildDefaultVisited, buildPlayer } from "../src/game/state";
 import { getHeroXpTarget } from "../src/game/progression";
@@ -66,4 +67,8 @@ test("progression and default map state stay compatible with chapter one", () =>
   const visited = buildDefaultVisited();
   expect(visited.hearthhollow[getVisitedKey(2, 4)]).toBe(true);
   expect(visited.lanternRoad).toEqual({});
+  expect(MAPS.hearthhollow.tiles[4][2]).toBe("grass");
+  expect(MAPS.hearthhollow.tiles[2][5]).toBe("baker");
+  expect(MAPS.hearthhollow.tiles[4][6]).toBe("well");
+  expect(TILE_META.well.blocked).toBe(true);
 });

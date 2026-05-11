@@ -67,5 +67,14 @@ export function buildDefaultVisited() {
 }
 
 export function isBlockedInteractionTile(tile: string) {
-  return ["home_door", "smith_door", "potion_door", "bram_inn_door", "market_door", "watch_door", "pond"].includes(tile);
+  return [
+    "home_door",
+    "smith_door",
+    "potion_door",
+    "bram_inn_door",
+    "market_door",
+    "watch_door",
+    "pond",
+    "well",
+  ].includes(tile);
 }

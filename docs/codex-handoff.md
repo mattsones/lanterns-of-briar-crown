@@ -205,6 +205,26 @@ npm run playtest:smoke
 
 All three passed locally after this pass. Manual browser visual checks also confirmed 49 visible Root Cellar debug nodes, 0 blocked debug nodes, strong graph-aware fog at the cellar entrance, and a keyboard route to the Warden. The known Warden route is documented in `docs/playtest-notes/root-cellar-navigation-graph.md`.
 
+## Current Handoff - Hearthhollow Polish
+
+Last updated: 2026-05-11
+
+Branch: `main`
+
+### What Changed
+
+- Moved Nella the Baker off the hero start tile at `2,4`; she now uses Hearthhollow tile `5,2`.
+- Changed Hearthhollow tile `6,4` into a blocked `well` landmark.
+- Added a small well interaction in `src/App.tsx` for players who try to walk onto it.
+- Added QA/smoke coverage so future map edits preserve the Nella/start/well placement.
+
+### Latest Verification
+
+- `npm run build` passed.
+- `npm run test:rules` passed.
+- `npm run playtest:smoke` passed.
+- Manual browser check confirmed the hero starts on Grass, Nella is separate, and walking into the well opens the Village Well joke interaction instead of moving onto it.
+
 ### Handoff Rule
 
 For machine switching, finish each meaningful work session by:

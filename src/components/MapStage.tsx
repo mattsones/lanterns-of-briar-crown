@@ -33,6 +33,7 @@ const MAP_TOKEN_CONFIG: Record<
   watch_door: { kind: "action" },
   gate: { kind: "action" },
   chest: { kind: "action" },
+  well: { kind: "action" },
   return_gate: { kind: "action" },
   camp: { kind: "action" },
   ruins: { kind: "action" },

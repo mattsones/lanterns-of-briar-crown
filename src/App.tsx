@@ -425,6 +425,18 @@ export default function LiamsGamePrototype() {
         "Enter the watchhouse? The windows glow with lamplight, maps, and the particular smell of ink being used urgently.",
         () => setInteriorScene("watchhouse"),
       );
+    if (tile === "well")
+      return setDialogue({
+        portrait: "🪣",
+        name: "Village Well",
+        text: "The village well sits exactly where wells like to sit: in everybody's way and somehow still very useful. You consider climbing onto the rim for a better view, but the well has the solemn confidence of a thing that has already watched three generations make that mistake.",
+        choices: [
+          {
+            label: "Respect local infrastructure.",
+            effect: () => setDialogue(null),
+          },
+        ],
+      });
     if (tile === "pond")
       return setDialogue({
         portrait: "💧",
@@ -2521,6 +2533,14 @@ ${check.success ? "You brush dirt from the carved briar crown and the mark resol
         missing.join(", ") || "All tile IDs are known.",
       );
     });
+    add(
+      MAPS.hearthhollow.tiles[4][2] !== "baker" &&
+        MAPS.hearthhollow.tiles[2][5] === "baker" &&
+        MAPS.hearthhollow.tiles[4][6] === "well" &&
+        TILE_META.well?.blocked,
+      "Hearthhollow NPC and well placement is tuned",
+      "Nella no longer overlaps the start tile, and the village well blocks movement with its own interaction.",
+    );
     const shopIds = [
       ...new Set([...SHOP_INVENTORIES.smith, ...SHOP_INVENTORIES.market]),
     ];
