@@ -369,6 +369,10 @@ export default function LiamsGamePrototype() {
             ? "That's a wall, not an entrance. Doors remain fashionable for a reason."
             : "That way is blocked.",
     );
+  const isLockedCellarExit = (tile) =>
+    region === "rootCellar" && tile === "exit_door" && !flags.beatCellarBoss;
+  const blockLockedCellarExit = () =>
+    setToast("The Briar Knot Warden blocks the sealed door.");
   const handleBlockedTileInteraction = (tile) => {
     if (tile === "home_door")
       return openEnterPrompt(
@@ -497,14 +501,19 @@ export default function LiamsGamePrototype() {
       return;
     const rawTile = currentMap[ny][nx];
     const tile = getStoryTile(rawTile);
+    if (isLockedCellarExit(tile)) {
+      blockLockedCellarExit();
+      return;
+    }
     if (TILE_META[tile]?.blocked) {
       if (isBlockedInteractionTile(tile)) handleBlockedTileInteraction(tile);
       else bump(tile);
       return;
     }
+    const previousPosition = { x: position.x, y: position.y };
     setPosition({ x: nx, y: ny });
     revealArea(region, nx, ny);
-    inspectTile(tile, { auto: true });
+    inspectTile(tile, { auto: true, previousPosition });
   };
 
   useEffect(() => {
@@ -1637,7 +1646,7 @@ ${check.success ? "The marks settle into meaning as you trace them: water here, 
     });
   };
 
-  const openSkulkDialogue = () =>
+  const openSkulkDialogue = (fallbackPosition) =>
     setDialogue({
       portrait: "🦂",
       name: "Rustroot Skulk",
@@ -1650,7 +1659,17 @@ ${check.success ? "The marks settle into meaning as you trace them: water here, 
             startBattle(buildEncounterEnemies("cellarSkulk"), "cellarSkulk");
           },
         },
-        { label: "Back away for now.", effect: () => setDialogue(null) },
+        {
+          label: "Back away for now.",
+          effect: () => {
+            if (fallbackPosition) {
+              setPosition(fallbackPosition);
+              revealArea("rootCellar", fallbackPosition.x, fallbackPosition.y);
+              setToast("You back away from the skulk.");
+            }
+            setDialogue(null);
+          },
+        },
       ],
     });
 
@@ -1667,7 +1686,15 @@ ${check.success ? "The marks settle into meaning as you trace them: water here, 
             startBattle(buildEncounterEnemies("cellarBoss"), "cellarBoss");
           },
         },
-        { label: "Fall back and prepare.", effect: () => setDialogue(null) },
+        {
+          label: "Fall back and prepare.",
+          effect: () => {
+            setPosition({ x: 9, y: 5 });
+            revealArea("rootCellar", 9, 5);
+            setDialogue(null);
+            setToast("You fall back from the Warden's reach.");
+          },
+        },
       ],
     });
 
@@ -2069,7 +2096,8 @@ ${check.success ? "You brush dirt from the carved briar crown and the mark resol
       if (tile === "mural") openRootMuralDialogue();
       if (tile === "fungus") openCellarFungusDialogue();
       if (tile === "cache3") openCellarCacheDialogue();
-      if (tile === "skulk" && !flags.beatCellarSkulk) openSkulkDialogue();
+      if (tile === "skulk" && !flags.beatCellarSkulk)
+        openSkulkDialogue(options.previousPosition);
       if (tile === "boss" && !flags.beatCellarBoss) openBossDialogue();
       if (tile === "exit_door") openExitDoorDialogue();
     }
@@ -2079,13 +2107,18 @@ ${check.success ? "You brush dirt from the carved briar crown and the mark resol
     const isCurrentNode = position.x === x && position.y === y;
     const isConnectedNode = areMapNodesConnected(region, position, { x, y });
     if (isConnectedNode) {
+      if (isLockedCellarExit(tile)) {
+        blockLockedCellarExit();
+        return;
+      }
       if (TILE_META[tile]?.blocked) {
         if (isBlockedInteractionTile(tile)) handleBlockedTileInteraction(tile);
         else bump(tile);
       } else {
+        const previousPosition = { x: position.x, y: position.y };
         setPosition({ x, y });
         revealArea(region, x, y);
-        inspectTile(tile, { auto: true });
+        inspectTile(tile, { auto: true, previousPosition });
       }
     } else if (isCurrentNode) inspectTile(tile);
   };
@@ -2646,13 +2679,13 @@ ${check.success ? "You brush dirt from the carved briar crown and the mark resol
       "4,3",
       "5,3",
       "5,4",
-      "8,1",
       "9,1",
       "8,2",
       "9,2",
       "8,4",
-      "8,5",
       "8,7",
+      "2,8",
+      "10,5",
     ];
     const rootCellarGraphIsWalkable =
       rootCellarNodeKeys.length > 0 &&

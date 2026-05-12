@@ -113,6 +113,16 @@ test("starts a new adventure and passes built-in QA checks", async ({
   ).toBeVisible();
   await expect(page.locator("text=⚠")).toHaveCount(0);
   await page.getByRole("button", { name: "Old Root Cellar" }).click();
+  const moveCellar = async (direction: string) => {
+    await page.getByTestId(`move-${direction}`).click();
+    const sigilChoice = page.getByRole("button", {
+      name: "Copy the sigil into your notes.",
+    });
+    if (await sigilChoice.isVisible().catch(() => false)) {
+      await sigilChoice.click();
+    }
+    await page.waitForTimeout(120);
+  };
   for (const direction of [
     "right",
     "right",
@@ -125,14 +135,13 @@ test("starts a new adventure and passes built-in QA checks", async ({
     "down",
     "down",
     "down",
-    "down",
+    "right",
     "right",
     "right",
     "up",
     "up",
   ]) {
-    await page.getByTestId(`move-${direction}`).click();
-    await page.waitForTimeout(120);
+    await moveCellar(direction);
   }
   await expect(page.getByText("Briar Knot Warden")).toBeVisible();
   await expect(
