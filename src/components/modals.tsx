@@ -10,6 +10,7 @@ import { checkSummary, resolveSkillCheck } from "../game/dice";
 import { canCraftRecipe, formatIngredients, gainItem, getBuyPrice, getItemHighlights, getSellPrice } from "../game/inventory";
 import { formatSaveTimestamp } from "../game/save";
 import { formatBonuses, getDerivedStats } from "../game/stats";
+import { appendChapter1CompanionReaction } from "../story/chapter1";
 import { Button, ChoiceButton, Meter } from "./ui";
 
 export function LevelUpModal({ player, target, choose }) {
@@ -129,9 +130,9 @@ ${scene.ask}`, choices: [
           <div className="rounded-3xl border border-fuchsia-300/20 bg-fuchsia-400/10 p-4"><div className="text-2xl">👑</div><div className="mt-2 font-semibold">False Crown?</div><div className="mt-1 text-xs text-white/60">Not a royal seal. Not random.</div></div>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
-          <Button className="justify-start text-left" onClick={() => { setFlags((f) => ({ ...f, watchEvidenceRead: true })); const check = resolveSkillCheck(getDerivedStats(player), "Wit", 10); setDialogue({ portrait: "🧷", name: "Evidence Board", text: `${checkSummary(check)}
+          <Button className="justify-start text-left" onClick={() => { setFlags((f) => ({ ...f, watchEvidenceRead: true })); const check = resolveSkillCheck(getDerivedStats(player), "Wit", 10); const boardText = `${checkSummary(check)}
 
-${check.success ? "The red string no longer runs from clue to clue. It runs from system to system: road signs, cargo marks, public notices, old cellars, and frightened people. The pattern is not theft or random monster trouble. It is misdirection built to make ordinary systems lie." : "The board is dense and crowded, but the big shape still emerges: road signs, cargo marks, public notices, and old cellars are all being used together. The pattern is misdirection."}`, choices: [{ label: "That pattern matters.", effect: () => setDialogue(null) }] }); }}>🧷 Study the completed evidence board</Button>
+${check.success ? "The red string no longer runs from clue to clue. It runs from system to system: road signs, cargo marks, public notices, old cellars, and frightened people. The pattern is not theft or random monster trouble. It is misdirection built to make ordinary systems lie." : "The board is dense and crowded, but the big shape still emerges: road signs, cargo marks, public notices, and old cellars are all being used together. The pattern is misdirection."}`; setDialogue({ portrait: "🧷", name: "Evidence Board", text: appendChapter1CompanionReaction(boardText, companion?.recruited ? companion.id : null, "caseWall"), choices: [{ label: "That pattern matters.", effect: () => setDialogue(null) }] }); }}>🧷 Study the completed evidence board</Button>
           <Button className="justify-start text-left" onClick={() => { setFlags((f) => ({ ...f, watchEvidenceRead: true, watchLedgerRead: true })); const check = resolveSkillCheck(getDerivedStats(player), "Wit", 10); setDialogue({ portrait: "📚", name: "Duty Ledger", text: `${checkSummary(check)}
 
 ${check.success ? "The missing porters were last assigned near the old root cellar. Someone altered the route notes afterward, turning an ordinary storage shift into a blind corner in the records. The changed handwriting is trying to imitate the clerk's shorthand, but the route marks are copied backward." : "The missing porters were last assigned near the old root cellar. Someone altered the route notes afterward, turning an ordinary storage shift into a blind corner in the records."}`, choices: [{ label: "Useful.", effect: () => setDialogue(null) }] }); }}>📚 Read the duty ledger</Button>

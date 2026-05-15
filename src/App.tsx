@@ -78,6 +78,11 @@ import {
   normalizePlayerData,
 } from "./game/state";
 import { addBonuses, formatBonuses, getDerivedStats } from "./game/stats";
+import {
+  CHAPTER_1_STORY,
+  appendChapter1CompanionReaction,
+  getChapter1CompanionReaction,
+} from "./story/chapter1";
 
 function getVillageNpcDialogue(tile, flags) {
   const lines = {
@@ -1698,31 +1703,63 @@ ${check.success ? "The marks settle into meaning as you trace them: water here, 
       ],
     });
 
+  const completeCellarDiscovery = (studiedBriarCrown = false) => {
+    gainItem(setPlayer, "warden_chain", 1);
+    gainItem(setPlayer, "edden_cloth", 1);
+    setFlags((f) => ({
+      ...f,
+      chapterOneClear: true,
+      studiedBriarCrown: studiedBriarCrown || f.studiedBriarCrown,
+      cellarEndChoice: "chain",
+    }));
+    setDialogue(null);
+    announce(CHAPTER_1_STORY.rootCellar.discoveryCompleteToast, [
+      { id: "warden_chain", qty: 1 },
+      { id: "edden_cloth", qty: 1 },
+    ]);
+  };
+
+  const getActiveCompanionReaction = (beat) =>
+    companion.recruited
+      ? getChapter1CompanionReaction(companion.id, beat)
+      : "";
+
+  const openCellarCompanionReaction = (beat, studiedBriarCrown = false) => {
+    const reaction = getActiveCompanionReaction(beat);
+    if (!reaction) return;
+    setDialogue({
+      portrait: companion.icon || "✨",
+      name: companion.name,
+      text: reaction,
+      choices: [
+        {
+          label: CHAPTER_1_STORY.rootCellar.takeProofLabel,
+          effect: () => completeCellarDiscovery(studiedBriarCrown),
+        },
+        { label: "Step back for now.", effect: () => setDialogue(null) },
+      ],
+    });
+  };
+
   const openExitDoorDialogue = () => {
     if (!flags.beatCellarBoss)
       return setDialogue({
         portrait: "🚪",
         name: "Sealed Iron Door",
-        text: `The iron door is chained from the inside. That is the first wrong thing. The chain is not there to keep travelers out. It is wrapped through the inner rings, pulled tight from the far side, and fastened with a lock so old its keyhole has gone green at the edges. Near the bottom hinge, someone has scratched three words into the rust with a shaking hand:
-
-THE OLD WAY LISTENS`,
+        text: CHAPTER_1_STORY.rootCellar.sealedDoorBeforeWarden,
         choices: [{ label: "Step back.", effect: () => setDialogue(null) }],
       });
     if (flags.chapterOneClear)
       return setDialogue({
         portrait: "🚪",
         name: "Sealed Iron Door",
-        text: "The sealed door waits in the dark. The Briar Crown mark still curls over older lantern lines, but now you know what it is trying to hide: the old roads are not gone. They are buried, interrupted, and still listening.",
+        text: CHAPTER_1_STORY.rootCellar.repeatAfterDiscovery,
         choices: [{ label: "Step back.", effect: () => setDialogue(null) }],
       });
     setDialogue({
       portrait: "🚪",
       name: "Sealed Iron Door",
-      text: `Behind the fallen warden, the sealed iron door waits. The chain that animated the Briar Knot Warden lies cracked across the floor. Between two broken links, you notice something that does not belong to the monster: a strip of blue watch-runner cloth, torn and dirty, tied around a lantern hook. Edden Vale was here. The door itself bears layers of marks. The newest is the false crown motif from the planted orders. Beneath that are older lantern route scratches, courier signs, cargo tally marks, and something stranger: a crown shape made not of gold points, but of curling briars. Under the briar crown, someone has carved a short route command:
-
-WESTROOT OPENED. LANTERN ROAD CONFUSED. WILLOW SEAL RECOVERED. COURIER UNACCOUNTED FOR.
-
-The forged orders were not the whole plan. They were cover. The stolen Willow seal was not a side theft. It was access. And Lio Brindle may not be dead on the road. He may have been moved through the old ways beneath it.`,
+      text: CHAPTER_1_STORY.rootCellar.sealedDoorAfterWarden,
       choices: [
         {
           label: "Study the Briar Crown mark.",
@@ -1734,67 +1771,107 @@ The forged orders were not the whole plan. They were cover. The stolen Willow se
               name: "Briar Crown Mark",
               text: `${checkSummary(check)}
 
-${check.success ? "You brush dirt from the carved briar crown and the mark resolves into something uglier than a symbol. It is not royal, though it wants to be mistaken for royalty at a glance. It twists the idea of a crown into a thorned thing: authority without care, command without responsibility, fear dressed up as order. Beside it, the lantern route marks look older and humbler. They were made to guide; this was carved to control. The Briar Crown mark has been carved over those older signs, but it has not erased them. Not yet." : "You brush dirt from the carved briar crown. The mark is not royal, though it wants to be mistaken for something royal at a glance. Beside it, the lantern route marks look older and humbler. The Briar Crown mark has been carved over those older signs, but it has not erased them. Not yet."}`,
+${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.rootCellar.briarCrownStudyFallback}`,
               choices: [
                 {
-                  label: "Take the Warden Chain and Edden's cloth.",
-                  effect: () => {
-                    gainItem(setPlayer, "warden_chain", 1);
-                    gainItem(setPlayer, "edden_cloth", 1);
-                    setFlags((f) => ({
-                      ...f,
-                      chapterOneClear: true,
-                      studiedBriarCrown: true,
-                      cellarEndChoice: "chain",
-                    }));
-                    setDialogue(null);
-                    announce(
-                      "Chapter 1 discovery complete. Report back to Hollis and Enna.",
-                      [
-                        { id: "warden_chain", qty: 1 },
-                        { id: "edden_cloth", qty: 1 },
-                      ],
-                    );
-                  },
+                  label: CHAPTER_1_STORY.rootCellar.takeProofLabel,
+                  effect: () => completeCellarDiscovery(true),
                 },
+                getActiveCompanionReaction("briarCrown")
+                  ? {
+                      label: `Hear ${companion.name}'s reaction.`,
+                      effect: () =>
+                        openCellarCompanionReaction("briarCrown", true),
+                    }
+                  : null,
+                getActiveCompanionReaction("sealedDoor")
+                  ? {
+                      label: `Ask ${companion.name} about the door.`,
+                      effect: () =>
+                        openCellarCompanionReaction("sealedDoor", true),
+                    }
+                  : null,
                 {
                   label: "Step back for now.",
                   effect: () => setDialogue(null),
                 },
-              ],
+              ].filter(Boolean),
             });
           },
         },
         {
-          label: "Take the Warden Chain and Edden's cloth.",
-          effect: () => {
-            gainItem(setPlayer, "warden_chain", 1);
-            gainItem(setPlayer, "edden_cloth", 1);
-            setFlags((f) => ({
-              ...f,
-              chapterOneClear: true,
-              cellarEndChoice: "chain",
-            }));
-            setDialogue(null);
-            announce(
-              "Chapter 1 discovery complete. Report back to Hollis and Enna.",
-              [
-                { id: "warden_chain", qty: 1 },
-                { id: "edden_cloth", qty: 1 },
-              ],
-            );
-          },
+          label: CHAPTER_1_STORY.rootCellar.takeProofLabel,
+          effect: () => completeCellarDiscovery(false),
         },
+        getActiveCompanionReaction("sealedDoor")
+          ? {
+              label: `Ask ${companion.name} about the door.`,
+              effect: () => openCellarCompanionReaction("sealedDoor", false),
+            }
+          : null,
         { label: "Step back for now.", effect: () => setDialogue(null) },
-      ],
+      ].filter(Boolean),
     });
   };
+
+  const completeChapterReport = (closingChoice) => {
+    setFlags((f) => ({
+      ...f,
+      chapterReported: true,
+      chapterClosingChoice: closingChoice,
+    }));
+    setDialogue({
+      portrait: "✨",
+      name: "Chapter 1 Complete: The Road That Lied",
+      text: CHAPTER_1_STORY.reportBack.closingNarration,
+      choices: [{ label: "Continue", effect: () => setDialogue(null) }],
+    });
+  };
+
+  const openWestrootLeadDialogue = () =>
+    setDialogue({
+      portrait: "🗺️",
+      name: "Westroot",
+      text: appendChapter1CompanionReaction(
+        CHAPTER_1_STORY.reportBack.westrootLead,
+        companion.recruited ? companion.id : null,
+        "reportBack",
+      ),
+      choices: CHAPTER_1_STORY.reportBack.closingChoices.map((label) => ({
+        label,
+        effect: () => completeChapterReport(label),
+      })),
+    });
+
+  const openChapterReportThreadsDialogue = () =>
+    setDialogue({
+      portrait: "🗂️",
+      name: "The Case Wall Changes",
+      messages: CHAPTER_1_STORY.reportBack.threadMessages,
+      choices: [
+        {
+          label: "Show them the Briar Crown mark.",
+          effect: () =>
+            setDialogue({
+              portrait: "👑",
+              name: "The Briar Crown",
+              text: CHAPTER_1_STORY.reportBack.briarCrownInterpretation,
+              choices: [
+                {
+                  label: "Ask about Westroot.",
+                  effect: openWestrootLeadDialogue,
+                },
+              ],
+            }),
+        },
+      ],
+    });
 
   const openChapterReportDialogue = () =>
     setDialogue({
       portrait: "🗂️",
       name: "Bramblecross Watchhouse",
-      text: "The watchhouse is quieter when you return. Not peaceful. Just quiet in the way a room becomes quiet when everyone inside realizes the bad news has finally found the door. Captain Hollis stands beside the case wall with Enna at his shoulder. Neither of them asks whether you found trouble. Your clothes answer first. Then the Warden Chain does. Then the strip of blue watch cloth in your hand. Hollis sees the cloth and forgets, for half a breath, how captains stand. “Edden's,” he says. You place the cloth on the desk beside the cracked lantern.",
+      text: CHAPTER_1_STORY.reportBack.opening,
       choices: [
         {
           label: "Tell them what the cellar revealed.",
@@ -1802,97 +1879,22 @@ ${check.success ? "You brush dirt from the carved briar crown and the mark resol
             setDialogue({
               portrait: "🗂️",
               name: "The Case Wall Changes",
-              messages: [
-                {
-                  speaker: player.name,
-                  side: "right",
-                  text: "Below Bramblecross, I found the root sigil, the old route mural, the Briar Knot Warden, and a sealed iron door.",
-                },
-                {
-                  speaker: player.name,
-                  side: "right",
-                  text: "The door said: WESTROOT OPENED. LANTERN ROAD CONFUSED. WILLOW SEAL RECOVERED. COURIER UNACCOUNTED FOR.",
-                },
-                {
-                  speaker: "Enna",
-                  side: "left",
-                  text: "Four pieces of machinery. Westroot opened: something west of here is active. Lantern Road confused: they did not close the road; they made people stop trusting it.",
-                },
-                {
-                  speaker: "Enna",
-                  side: "left",
-                  text: "Willow seal recovered: Ada was right. Her seal is access. Courier unaccounted for: not confirmed dead, not confirmed alive. Accounted for would mean they knew where he ended.",
-                },
-                {
-                  speaker: "Hollis",
-                  side: "left",
-                  text: "Lio Brindle carried truth toward Hearthhollow. Someone stopped him before it arrived.",
-                },
-                {
-                  speaker: "Enna",
-                  side: "left",
-                  text: "Then our next question is not only who forged the order. It is where the courier went after the satchel was cut loose.",
-                },
-              ],
+              messages: CHAPTER_1_STORY.reportBack.playerReportMessages(
+                player.name,
+              ),
               choices: [
                 {
-                  label: "Show them the Briar Crown mark.",
+                  label: "Edden reached the door. He left proof.",
                   effect: () =>
                     setDialogue({
-                      portrait: "👑",
-                      name: "The Briar Crown",
-                      text: "Enna draws the symbol slowly, leaving the lines unfinished at the tips. “Not a proper royal seal,” she says. “Not a noble house mark that I know. Too deliberate to be random. Too repeated to be decoration. Maybe a faction. Or a promise. Or a threat wearing a crown's shape. I do not want to name it too soon. Names can make guesses feel finished.” She pins the sketch above the other notes. “For now, we call it what it shows us: false authority growing over true roads.” Then Enna adds, almost to herself, “The shrine had the better saying. A road is safest when truth walks it first.”",
+                      portrait: "🛡️",
+                      name: "Captain Hollis",
+                      messages:
+                        CHAPTER_1_STORY.reportBack.hollisReceivesClothMessages,
                       choices: [
                         {
-                          label: "Ask about Westroot.",
-                          effect: () =>
-                            setDialogue({
-                              portrait: "🗺️",
-                              name: "Westroot",
-                              text: "Enna spreads a regional route map over the desk. “Westroot is not on the public posting maps anymore. Too old, too unreliable, too many cellars and storehouses built over the early paths. But couriers still use fragments of the old route language when roads fail.” She traces a line from Hearthhollow to Lantern Road, then to Bramblecross, then west into faded marks. “If the command says Westroot opened, and if Willow-sealed cargo is being used as cover, then something moved west after the road was confused. Maybe cargo. Maybe prisoners. Maybe Lio.” Hollis sets the cracked lantern beside the map. “Bramblecross cannot chase every shadow. But we can give you what Edden found, what Ada knows, and what the old roads still remember.”",
-                              choices: [
-                                {
-                                  label: "I'll follow Westroot.",
-                                  effect: () => {
-                                    setFlags((f) => ({
-                                      ...f,
-                                      chapterReported: true,
-                                    }));
-                                    setDialogue({
-                                      portrait: "✨",
-                                      name: "Chapter 1 Complete: The Road That Lied",
-                                      text: "That night, Bramblecross does not sleep easily. But it sleeps with one more truth than it had before. The road was not simply dangerous. It was being lied about. The cellar was not merely haunted. It was part of an older way. The missing courier was not forgotten. He was a question still burning. And somewhere beyond the sealed door, beneath root and stone and false command, a gold lantern had flickered once. Small, but not gone.",
-                                      choices: [
-                                        {
-                                          label: "Continue",
-                                          effect: () => setDialogue(null),
-                                        },
-                                      ],
-                                    });
-                                  },
-                                },
-                                {
-                                  label: "If Lio is alive, I'll find him.",
-                                  effect: () => {
-                                    setFlags((f) => ({
-                                      ...f,
-                                      chapterReported: true,
-                                    }));
-                                    setDialogue({
-                                      portrait: "✨",
-                                      name: "Chapter 1 Complete: The Road That Lied",
-                                      text: "That night, Bramblecross does not sleep easily. But it sleeps with one more truth than it had before. The missing courier was not forgotten. He was a question still burning. Westroot is the next lead.",
-                                      choices: [
-                                        {
-                                          label: "Continue",
-                                          effect: () => setDialogue(null),
-                                        },
-                                      ],
-                                    });
-                                  },
-                                },
-                              ],
-                            }),
+                          label: "Let Enna connect the threads.",
+                          effect: openChapterReportThreadsDialogue,
                         },
                       ],
                     }),

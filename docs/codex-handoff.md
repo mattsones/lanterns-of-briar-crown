@@ -314,3 +314,30 @@ For machine switching, finish each meaningful work session by:
 3. Committing the scoped changes.
 4. Pushing the current branch to GitHub.
 5. Mentioning the branch name and latest commit in the final Codex response.
+
+## Current Handoff - Chapter 1 Story Sync and Story Module
+
+Last updated: 2026-05-15
+
+Branch: `main`
+
+### What Changed
+
+- Added `src/story/chapter1.ts` as the first story-facing content module for Chapter 1.
+- Moved the richer Courier Satchel reward text into the story module and wired `src/data/battleRewards.ts` to use it.
+- Wired the richer sealed-door, Briar Crown, report-back, Hollis/Edden, Westroot, and closing narration beats from the story script into `src/App.tsx`.
+- Added the third Chapter 1 closing choice: "The Briar Crown won't get to bury this."
+- Added sparse companion reactions for the case wall, Briar Crown, sealed door, and report-back beats, sourced from the story module.
+- Appended the case-wall companion reaction through the Watchhouse evidence board flow in `src/components/modals.tsx`.
+- Added rules coverage so key story-script beats remain wired into game data.
+
+### Latest Verification
+
+```bash
+npm.cmd run build
+npm.cmd run test:rules
+npm.cmd run playtest:smoke
+git diff --check
+```
+
+All checks passed locally. `npm run build` was blocked by the Windows PowerShell execution policy for `npm.ps1`, so `npm.cmd` was used instead.

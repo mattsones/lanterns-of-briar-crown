@@ -6,6 +6,12 @@ import { buildDefaultVisited, buildPlayer } from "../src/game/state";
 import { getHeroXpTarget } from "../src/game/progression";
 import { getVisitedKey } from "../src/game/map";
 import { addBonuses } from "../src/game/stats";
+import { BATTLE_REWARDS } from "../src/data/battleRewards";
+import {
+  CHAPTER_1_STORY,
+  appendChapter1CompanionReaction,
+  getChapter1CompanionReaction,
+} from "../src/story/chapter1";
 
 test("dice helpers format notation and skill checks", () => {
   const originalRandom = Math.random;
@@ -81,4 +87,28 @@ test("progression and default map state stay compatible with chapter one", () =>
     ),
   ).toBe(true);
   expect(TILE_META.well.blocked).toBe(true);
+});
+
+test("chapter one story script beats stay wired into data", () => {
+  expect(BATTLE_REWARDS.boar.text).toBe(CHAPTER_1_STORY.battleRewards.boar.text);
+  expect(BATTLE_REWARDS.boar.text).toContain("pine pitch");
+  expect(BATTLE_REWARDS.boar.text).toContain(
+    "Whoever cut it loose did not want him arriving at all.",
+  );
+
+  expect(CHAPTER_1_STORY.reportBack.hollisReceivesClothMessages.map((m) => m.text)).toContain(
+    "He was hurt enough to be right.",
+  );
+  expect(CHAPTER_1_STORY.reportBack.closingChoices).toContain(
+    "The Briar Crown won't get to bury this.",
+  );
+  expect(CHAPTER_1_STORY.reportBack.threadMessages.some((m) =>
+    m.text.includes("not a side theft"),
+  )).toBe(true);
+
+  const tildaDoorReaction = getChapter1CompanionReaction("tilda", "sealedDoor");
+  expect(tildaDoorReaction).toContain("inventory people");
+  expect(
+    appendChapter1CompanionReaction("Base text", "rowan", "reportBack"),
+  ).toContain("One route at a time");
 });
