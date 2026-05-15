@@ -273,6 +273,38 @@ npm run playtest:smoke
 
 All three passed locally after this pass. Manual browser QA confirmed the new home door, potion door, chest, south gate, and blocked south-row grass placements.
 
+## Current Handoff - Root Cellar Movement Refinements
+
+Last updated: 2026-05-14
+
+Branch: `main`
+
+Code commit: `5ea4a4f` (`further root cellar movement refinements`)
+
+### What Changed
+
+- Refined the Old Root Cellar navigation graph and point overrides from the latest annotated map pass.
+- Removed movement between `2,5` and `2,6`; later removed movement between `1,6` and `2,6` too. Cellar node `2,6` is now only reachable from `2,7`.
+- Removed graph nodes `2,8` and `10,5`.
+- Added a top-right empty-room exploration spur at `7,1`/`8,1`.
+- Added an extra lower-right support node at `8,5` between `8,6` and `9,6`.
+- Tuned several node positions, including `1,5`, `1,6`, `1,7`, `2,1`, `2,5`, `2,6`, `3,2`, `4,1`, `4,5`, and `8,6`.
+- Locked the sealed door at `10,4` until the Briar Knot Warden is defeated, so players cannot back away from the Warden and slip around to the door.
+- Warden fallback now moves the player back to `9,5`.
+- Rustroot Skulk fallback now returns the player to the previous node that triggered the encounter.
+- Updated `tests/smoke.spec.ts` for the revised Warden route and Root Sigil stopover.
+- Updated `docs/playtest-notes/root-cellar-navigation-graph.md` with the latest route and editing constraints.
+
+### Latest Verification
+
+```bash
+npm run build
+npm run test:rules
+npm run playtest:smoke
+```
+
+All three passed locally on 2026-05-14 before the handoff documentation commit. Browser sanity checks confirmed that moving right from `1,6` no longer enters `2,6`, and backing away from the Rustroot Skulk returns to the prior node.
+
 ### Handoff Rule
 
 For machine switching, finish each meaningful work session by:

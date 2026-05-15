@@ -1,6 +1,6 @@
 # Root Cellar Navigation Graph
 
-Last updated: 2026-05-11
+Last updated: 2026-05-14
 
 ## Decision
 
@@ -32,14 +32,23 @@ This lets the game keep the existing `MAPS.rootCellar.tiles` contract for encoun
 - Removed the annotated off-path debug nodes around the mural room, central rock/mushroom edge, and Warden approach.
 - Added walkable support nodes around the lower central paths so the cache, fungus, skulk, and Warden approaches feel connected without cutting through black space.
 - The primary Warden route now follows the upper-right storage room corridor down to the lower-right approach instead of stepping through the removed mid-right nodes.
+- Added a top-right empty-room spur through `7,1` and `8,1`.
+- Removed `2,8` and `10,5` from the movement graph.
+- `2,6` is only reachable from `2,7`; there is no movement link from `2,5` or `1,6` into `2,6`.
+- The lower-right approach now routes through an added `8,5` support node between `8,6` and `9,6`.
+- The sealed door at `10,4` stays unreachable until the Briar Knot Warden is defeated. If the player falls back from the Warden, they are moved to `9,5`.
+- If the player backs away from the Rustroot Skulk, they return to the previous node that triggered the encounter.
 - Tuned stronger fog on all non-Hearthhollow maps, with the Root Cellar strongest.
-- Verified a no-dialog route to the Warden using:
+- Verified the current smoke-test route to the Warden using:
 
 ```text
 right, right, right, right, right, right, right,
-down, down, down, down, down,
-right, right, up, up
+down, down, down, down,
+right, right, right,
+up, up
 ```
+
+The smoke test handles the Root Sigil dialogue if that route crosses it.
 
 ## Verification
 
