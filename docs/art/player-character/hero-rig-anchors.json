@@ -1,0 +1,87 @@
+{
+  "project": "Liam's Game / Lanterns of Briar Crown",
+  "version": "v2-refined-anchors",
+  "canvas": {
+    "width": 1024,
+    "height": 1536,
+    "background": "transparent-style image"
+  },
+  "handednessNote": {
+    "mainHand": "character_right_hand",
+    "mainHandAppearsOn": "viewer_left",
+    "offHand": "character_left_hand",
+    "offHandAppearsOn": "viewer_right"
+  },
+  "usageNotes": [
+    "These anchors are intended to be the baseline for first-wave gear generation and compositing.",
+    "Preserve the shared vertical coordinate logic across all four rigs.",
+    "Do not force identical X coordinates for the hands across every rig; wider bodies naturally place the hands farther outward.",
+    "If a specific weapon, book, lantern, or shield needs a tiny per-item nudge later, prefer a small item-specific offset instead of changing the rig anchors."
+  ],
+  "rigs": {
+    "m_standard": {
+      "file": "art/characters/hero/rig-guides/rig_reference_m_standard.png",
+      "anchors": {
+        "helmetZoneCenter": { "x": 512, "y": 194 },
+        "eyeLineY": 253,
+        "shoulderLineY": 343,
+        "cloakOriginLeft": { "x": 444, "y": 364 },
+        "cloakOriginRight": { "x": 582, "y": 364 },
+        "chestCenter": { "x": 512, "y": 457 },
+        "trinketCenter": { "x": 488, "y": 432 },
+        "waistCenter": { "x": 512, "y": 612 },
+        "mainhandGrip": { "x": 327, "y": 797 },
+        "offhandGrip": { "x": 622, "y": 689 },
+        "feetBaselineY": 1387
+      }
+    },
+    "f_standard": {
+      "file": "art/characters/hero/rig-guides/rig_reference_f_standard.png",
+      "anchors": {
+        "helmetZoneCenter": { "x": 512, "y": 194 },
+        "eyeLineY": 254,
+        "shoulderLineY": 345,
+        "cloakOriginLeft": { "x": 438, "y": 366 },
+        "cloakOriginRight": { "x": 586, "y": 366 },
+        "chestCenter": { "x": 512, "y": 462 },
+        "trinketCenter": { "x": 490, "y": 438 },
+        "waistCenter": { "x": 512, "y": 617 },
+        "mainhandGrip": { "x": 337, "y": 798 },
+        "offhandGrip": { "x": 622, "y": 689 },
+        "feetBaselineY": 1390
+      }
+    },
+    "m_stocky": {
+      "file": "art/characters/hero/rig-guides/rig_reference_m_stocky.png",
+      "anchors": {
+        "helmetZoneCenter": { "x": 512, "y": 194 },
+        "eyeLineY": 254,
+        "shoulderLineY": 343,
+        "cloakOriginLeft": { "x": 424, "y": 367 },
+        "cloakOriginRight": { "x": 600, "y": 367 },
+        "chestCenter": { "x": 512, "y": 458 },
+        "trinketCenter": { "x": 486, "y": 433 },
+        "waistCenter": { "x": 512, "y": 616 },
+        "mainhandGrip": { "x": 289, "y": 805 },
+        "offhandGrip": { "x": 658, "y": 705 },
+        "feetBaselineY": 1390
+      }
+    },
+    "f_stocky": {
+      "file": "art/characters/hero/rig-guides/rig_reference_f_stocky.png",
+      "anchors": {
+        "helmetZoneCenter": { "x": 512, "y": 194 },
+        "eyeLineY": 254,
+        "shoulderLineY": 345,
+        "cloakOriginLeft": { "x": 432, "y": 367 },
+        "cloakOriginRight": { "x": 592, "y": 367 },
+        "chestCenter": { "x": 512, "y": 463 },
+        "trinketCenter": { "x": 490, "y": 438 },
+        "waistCenter": { "x": 512, "y": 618 },
+        "mainhandGrip": { "x": 340, "y": 798 },
+        "offhandGrip": { "x": 622, "y": 690 },
+        "feetBaselineY": 1390
+      }
+    }
+  }
+}

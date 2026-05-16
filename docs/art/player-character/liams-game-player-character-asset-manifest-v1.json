@@ -1,0 +1,113 @@
+{
+  "project": "Liam's Game / Lanterns of Briar Crown",
+  "assetSystem": "player-character-paper-doll",
+  "version": "v1",
+  "canvas": {
+    "width": 1200,
+    "height": 1800,
+    "format": "png",
+    "background": "transparent"
+  },
+  "pose": {
+    "bodyOrientation": "slight_3_4_front_facing",
+    "headOrientation": "directly_at_viewer",
+    "stance": "relaxed_ready",
+    "rightHand": "mainhand_weapon_anchor",
+    "leftHand": "offhand_anchor"
+  },
+  "rigs": [
+    {
+      "id": "m_standard",
+      "label": "Male Standard",
+      "races": ["human", "sylvan", "emberling", "tideborn", "cloudling", "moonmark"]
+    },
+    {
+      "id": "f_standard",
+      "label": "Female Standard",
+      "races": ["human", "sylvan", "emberling", "tideborn", "cloudling", "moonmark"]
+    },
+    {
+      "id": "m_stocky",
+      "label": "Male Stocky",
+      "races": ["stonekin", "mossback"]
+    },
+    {
+      "id": "f_stocky",
+      "label": "Female Stocky",
+      "races": ["stonekin", "mossback"]
+    }
+  ],
+  "slots": [
+    "base",
+    "torso",
+    "cloak",
+    "boots",
+    "gloves",
+    "head",
+    "mainhand",
+    "offhand",
+    "trinket",
+    "backgear",
+    "overlay"
+  ],
+  "styleTestBundle": [
+    {
+      "slot": "base",
+      "filename": "hero_base_human_m_standard.png",
+      "required": true
+    },
+    {
+      "slot": "torso",
+      "filename": "equip_torso_briarweave_vest_m_standard.png",
+      "required": true
+    },
+    {
+      "slot": "head",
+      "filename": "equip_head_apprentice_kettle_helm_m_standard.png",
+      "required": true
+    },
+    {
+      "slot": "cloak",
+      "filename": "equip_cloak_giggleleaf_cloak_m_standard.png",
+      "required": true
+    },
+    {
+      "slot": "boots",
+      "filename": "equip_boots_village_boots_m_standard.png",
+      "required": true
+    },
+    {
+      "slot": "mainhand",
+      "filename": "equip_mainhand_old_hatchet.png",
+      "required": true
+    },
+    {
+      "slot": "trinket",
+      "filename": "equip_trinket_lantern_pin_m_standard.png",
+      "required": true
+    },
+    {
+      "slot": "offhand",
+      "filename": "equip_offhand_small_shield.png",
+      "required": false
+    }
+  ],
+  "firstWaveBaseHeroes": [
+    "hero_base_human_m_standard.png",
+    "hero_base_human_f_standard.png",
+    "hero_base_stonekin_m_stocky.png",
+    "hero_base_stonekin_f_stocky.png",
+    "hero_base_sylvan_m_standard.png",
+    "hero_base_sylvan_f_standard.png",
+    "hero_base_emberling_m_standard.png",
+    "hero_base_emberling_f_standard.png",
+    "hero_base_tideborn_m_standard.png",
+    "hero_base_tideborn_f_standard.png",
+    "hero_base_cloudling_m_standard.png",
+    "hero_base_cloudling_f_standard.png",
+    "hero_base_mossback_m_stocky.png",
+    "hero_base_mossback_f_stocky.png",
+    "hero_base_moonmark_m_standard.png",
+    "hero_base_moonmark_f_standard.png"
+  ]
+}
