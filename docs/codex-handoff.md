@@ -375,3 +375,65 @@ node -e "<PNG header/alpha verification script>"
 ```
 
 All generated PNGs verified as 1024x1536 with an alpha channel. The six masks and two guide PNGs include transparent pixels and opaque mask/marker pixels. The proof sheet was visually inspected.
+
+## Current Handoff - m_standard Mask Refinement and Proof Prompts
+
+Last updated: 2026-05-15
+
+Branch: `main`
+
+### What Changed
+
+- Refined the generated `m_standard` mask paths from rough polygon-like regions into smoother editable SVG paths.
+- Tightened the boots mask after review showed one boot/foot alignment was not adequately covered and the lower mask shape had too much empty area.
+- Added `proof_sheet_by_slot.png` for a larger per-slot review sheet.
+- Added full-size single-slot proof overlays:
+  - `proof_torso.png`
+  - `proof_cloak_back.png`
+  - `proof_cloak_front.png`
+  - `proof_boots.png`
+  - `proof_head.png`
+  - `proof_trinket.png`
+  - `proof_mainhand_anchor.png`
+  - `proof_offhand_anchor.png`
+- Updated the mask README to explain the full-size proof overlays and the special review behavior for the behind-body `cloak_back` slot.
+- Added `docs/art/player-character/liams-game-paper-doll-proof-set-prompts.md` with ChatGPT-facing art generation directions for the first paper-doll proof equipment set.
+
+### Latest Verification
+
+```bash
+node scripts\generate_m_standard_masks.mjs
+node -e "<PNG header/alpha verification script>"
+```
+
+All generated PNGs verified with expected dimensions and alpha channels. `proof_boots.png`, `proof_torso.png`, and `proof_sheet_by_slot.png` were visually inspected after the refinement pass.
+
+## Current Handoff - m_standard Equipment Proof Loop
+
+Last updated: 2026-05-16
+
+Branch: `main`
+
+### What Changed
+
+- Added `art/characters/hero/equipment/m_standard/proof_set/` for generated paper-doll proof equipment assets.
+- Tested the first three generated equipment assets: boots, Briarweave Vest, and Old Hatchet.
+- Confirmed the original three generated assets were not usable as overlays because they were standalone object art and/or had fully opaque fake checkerboard backgrounds.
+- Iterated on Village Boots through multiple ChatGPT exports (`v2` through `v5`), then used Paint.NET-cleaned `v6` as the first technically valid transparent overlay.
+- Generated QA overlays for boot attempts against `rig_reference_m_standard.png`.
+- Produced deterministic split/scale/nudge variants (`fit_*`) and rotation-aware variants (`rotfit_*`) from the cleaned boot asset.
+- Marked the best current boot proof as a rotation candidate, not a final accepted production asset:
+  - `equip_boots_village_boots_m_standard_ROTATION_CANDIDATE.png`
+  - `qa_equip_boots_village_boots_m_standard_ROTATION_CANDIDATE_overlay.png`
+- Added `art/characters/hero/equipment/m_standard/proof_set/README.md` to explain the boot version history and the premature `ACCEPTED` filename.
+- Added `docs/art/player-character/liams-game-paper-doll-equipment-pipeline-notes.md` to capture the process lesson: AI is useful for painting source art, but fitting should be manual or deterministic.
+
+### Latest Verification
+
+```bash
+node scripts\generate_m_standard_masks.mjs
+node -e "<PNG header/alpha verification script>"
+git diff --check
+```
+
+The boot rotation candidate was visually inspected against the base rig. It is suitable as proof-of-pipeline evidence, but it is not final production equipment art.

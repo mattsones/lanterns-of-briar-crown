@@ -7,6 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "..");
 
 const CANVAS = { width: 1024, height: 1536 };
+const SLOT_PROOF_CANVAS = { width: 2048, height: 3072 };
 const RIG_ID = "m_standard";
 const SOURCE_RIG = "art/characters/hero/rig-guides/rig_reference_m_standard.png";
 const FALLBACK_SOURCE_RIG =
@@ -47,27 +48,18 @@ const MASKS = {
     purpose: "Torso clothing and armor overlays such as tunics, vests, and chest armor.",
     shapes: [
       {
-        kind: "polygon",
-        points: [
-          [424, 340],
-          [492, 318],
-          [560, 318],
-          [620, 344],
-          [650, 424],
-          [634, 540],
-          [602, 628],
-          [512, 646],
-          [416, 626],
-          [382, 542],
-          [374, 424],
-        ],
-      },
-      {
-        kind: "ellipse",
-        cx: 512,
-        cy: 556,
-        rx: 118,
-        ry: 102,
+        kind: "path",
+        d: [
+          "M 412 346",
+          "C 438 330, 476 322, 512 324",
+          "C 552 324, 590 336, 614 358",
+          "C 630 404, 636 474, 630 536",
+          "C 624 594, 604 626, 566 644",
+          "C 532 656, 490 656, 456 644",
+          "C 420 628, 396 596, 388 544",
+          "C 378 480, 386 400, 412 346",
+          "Z",
+        ].join(" "),
       },
     ],
   },
@@ -76,25 +68,19 @@ const MASKS = {
     purpose: "Back cloak or cape mass, rendered behind the base rig.",
     shapes: [
       {
-        kind: "polygon",
-        points: [
-          [420, 342],
-          [604, 342],
-          [690, 612],
-          [682, 1058],
-          [620, 1288],
-          [526, 1348],
-          [410, 1282],
-          [330, 1050],
-          [322, 620],
-        ],
-      },
-      {
-        kind: "ellipse",
-        cx: 512,
-        cy: 780,
-        rx: 190,
-        ry: 430,
+        kind: "path",
+        d: [
+          "M 406 348",
+          "C 372 456, 344 650, 344 862",
+          "C 344 1050, 380 1222, 444 1312",
+          "C 474 1354, 506 1376, 526 1384",
+          "C 554 1368, 594 1332, 626 1272",
+          "C 688 1152, 700 948, 684 748",
+          "C 670 564, 642 426, 612 348",
+          "C 580 364, 546 372, 512 372",
+          "C 478 372, 442 364, 406 348",
+          "Z",
+        ].join(" "),
       },
     ],
   },
@@ -103,27 +89,28 @@ const MASKS = {
     purpose: "Front cloak lapels and visible front drape, rendered over torso but under head/trinket.",
     shapes: [
       {
-        kind: "polygon",
-        points: [
-          [424, 348],
-          [474, 354],
-          [468, 622],
-          [426, 758],
-          [386, 706],
-          [394, 492],
-        ],
+        kind: "path",
+        d: [
+          "M 420 348",
+          "C 446 356, 468 378, 482 418",
+          "C 482 508, 474 610, 456 686",
+          "C 444 734, 424 774, 406 800",
+          "C 390 746, 386 648, 392 524",
+          "C 396 438, 406 374, 420 348",
+          "Z",
+        ].join(" "),
       },
       {
-        kind: "polygon",
-        points: [
-          [596, 352],
-          [640, 372],
-          [654, 510],
-          [636, 720],
-          [592, 774],
-          [552, 628],
-          [548, 360],
-        ],
+        kind: "path",
+        d: [
+          "M 594 350",
+          "C 616 366, 628 420, 632 500",
+          "C 638 626, 624 738, 590 800",
+          "C 568 754, 556 672, 552 594",
+          "C 548 506, 552 422, 564 388",
+          "C 572 368, 582 356, 594 350",
+          "Z",
+        ].join(" "),
       },
     ],
   },
@@ -132,30 +119,32 @@ const MASKS = {
     purpose: "Boots and shoes around the lower legs and planted feet.",
     shapes: [
       {
-        kind: "polygon",
-        points: [
-          [372, 1234],
-          [462, 1230],
-          [466, 1378],
-          [436, 1422],
-          [326, 1418],
-          [300, 1382],
-          [340, 1334],
-          [366, 1292],
-        ],
+        kind: "path",
+        d: [
+          "M 368 1078",
+          "C 390 1064, 430 1064, 450 1082",
+          "C 452 1138, 452 1214, 446 1266",
+          "C 450 1282, 464 1296, 470 1318",
+          "C 456 1346, 418 1360, 360 1356",
+          "C 318 1354, 298 1344, 300 1328",
+          "C 302 1310, 328 1300, 356 1288",
+          "C 366 1236, 360 1144, 368 1078",
+          "Z",
+        ].join(" "),
       },
       {
-        kind: "polygon",
-        points: [
-          [596, 1234],
-          [676, 1230],
-          [710, 1328],
-          [742, 1378],
-          [724, 1428],
-          [612, 1430],
-          [584, 1386],
-          [584, 1300],
-        ],
+        kind: "path",
+        d: [
+          "M 588 1078",
+          "C 610 1064, 650 1066, 670 1084",
+          "C 668 1148, 674 1220, 696 1278",
+          "C 716 1288, 734 1318, 738 1352",
+          "C 732 1378, 704 1390, 662 1384",
+          "C 622 1378, 592 1364, 588 1344",
+          "C 586 1322, 598 1302, 614 1288",
+          "C 600 1230, 584 1138, 588 1078",
+          "Z",
+        ].join(" "),
       },
     ],
   },
@@ -164,25 +153,16 @@ const MASKS = {
     purpose: "Headwear, helmets, hoods, hair-overlap checks, and upper head accessory coverage.",
     shapes: [
       {
-        kind: "ellipse",
-        cx: 512,
-        cy: 225,
-        rx: 110,
-        ry: 135,
-      },
-      {
-        kind: "polygon",
-        points: [
-          [420, 188],
-          [456, 112],
-          [518, 92],
-          [586, 126],
-          [628, 198],
-          [606, 326],
-          [552, 366],
-          [480, 360],
-          [434, 314],
-        ],
+        kind: "path",
+        d: [
+          "M 416 204",
+          "C 420 140, 464 98, 522 96",
+          "C 584 100, 626 146, 634 214",
+          "C 638 278, 606 330, 558 352",
+          "C 528 362, 492 358, 462 344",
+          "C 434 318, 416 270, 416 204",
+          "Z",
+        ].join(" "),
       },
     ],
   },
@@ -191,22 +171,15 @@ const MASKS = {
     purpose: "Visible chest trinkets such as pins, charms, chains, and small medallions.",
     shapes: [
       {
-        kind: "ellipse",
-        cx: 488,
-        cy: 432,
-        rx: 58,
-        ry: 62,
-      },
-      {
-        kind: "polygon",
-        points: [
-          [454, 386],
-          [526, 386],
-          [552, 438],
-          [518, 504],
-          [456, 498],
-          [426, 438],
-        ],
+        kind: "path",
+        d: [
+          "M 460 392",
+          "C 480 380, 508 382, 528 398",
+          "C 546 418, 546 450, 528 474",
+          "C 508 498, 470 496, 448 474",
+          "C 428 450, 434 412, 460 392",
+          "Z",
+        ].join(" "),
       },
     ],
   },
@@ -242,6 +215,11 @@ const PROOF_COLORS = {
   trinket: "#facc15",
 };
 
+const PROOF_OUTPUTS = [
+  ...Object.keys(MASKS).map((id) => `proof_${id}.png`),
+  ...Object.keys(GUIDES).map((id) => `proof_${id}.png`),
+];
+
 function esc(value) {
   return String(value)
     .replace(/&/g, "&amp;")
@@ -261,6 +239,9 @@ function shapeToSvg(shape, attrs) {
   if (shape.kind === "polygon") {
     return `<polygon points="${pointsAttr(shape.points)}" ${attr} />`;
   }
+  if (shape.kind === "path") {
+    return `<path d="${esc(shape.d)}" ${attr} />`;
+  }
   if (shape.kind === "ellipse") {
     return `<ellipse cx="${shape.cx}" cy="${shape.cy}" rx="${shape.rx}" ry="${shape.ry}" ${attr} />`;
   }
@@ -270,19 +251,19 @@ function shapeToSvg(shape, attrs) {
   throw new Error(`Unknown shape kind: ${shape.kind}`);
 }
 
-function svgDocument(content) {
+function svgDocument(content, canvas = CANVAS) {
   return `<!doctype html>
 <html>
 <head>
   <meta charset="utf-8" />
   <style>
-    html, body { margin: 0; width: ${CANVAS.width}px; height: ${CANVAS.height}px; background: transparent; overflow: hidden; }
-    svg { display: block; width: ${CANVAS.width}px; height: ${CANVAS.height}px; }
+    html, body { margin: 0; width: ${canvas.width}px; height: ${canvas.height}px; background: transparent; overflow: hidden; }
+    svg { display: block; width: ${canvas.width}px; height: ${canvas.height}px; }
     text { font-family: Arial, Helvetica, sans-serif; font-weight: 700; paint-order: stroke; stroke: rgba(0,0,0,0.55); stroke-width: 4px; stroke-linejoin: round; }
   </style>
 </head>
 <body>
-  <svg xmlns="http://www.w3.org/2000/svg" width="${CANVAS.width}" height="${CANVAS.height}" viewBox="0 0 ${CANVAS.width} ${CANVAS.height}">
+  <svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}" viewBox="0 0 ${canvas.width} ${canvas.height}">
     ${content}
   </svg>
 </body>
@@ -316,13 +297,13 @@ function guideSvg(guide) {
     </g>`;
 }
 
-async function renderPng(page, content, outPath) {
-  await page.setViewportSize(CANVAS);
-  await page.setContent(svgDocument(content), { waitUntil: "load" });
+async function renderPng(page, content, outPath, canvas = CANVAS) {
+  await page.setViewportSize(canvas);
+  await page.setContent(svgDocument(content, canvas), { waitUntil: "load" });
   await page.screenshot({
     path: outPath,
     omitBackground: true,
-    clip: { x: 0, y: 0, width: CANVAS.width, height: CANVAS.height },
+    clip: { x: 0, y: 0, width: canvas.width, height: canvas.height },
   });
 }
 
@@ -385,6 +366,88 @@ async function proofSheetSvg(sourceAbsolute) {
     </g>`;
 }
 
+async function singleSlotProofSvg(sourceAbsolute, id, item) {
+  const base64 = await readFile(sourceAbsolute, "base64");
+  const isGuide = id.endsWith("_anchor");
+  const color = isGuide ? item.color : PROOF_COLORS[id];
+  const overlay = isGuide
+    ? guideSvg(item)
+    : item.shapes
+        .map((shape) =>
+          shapeToSvg(shape, {
+            fill: color,
+            "fill-opacity": id === "cloak_back" ? 0.24 : 0.36,
+            stroke: color,
+            "stroke-opacity": 0.95,
+            "stroke-width": 4,
+          }),
+        )
+        .join("\n");
+
+  return `
+    <image x="0" y="0" width="${CANVAS.width}" height="${CANVAS.height}" opacity="0.94" href="data:image/png;base64,${base64}" />
+    ${overlay}
+    <g>
+      <rect x="24" y="24" width="338" height="76" rx="12" fill="rgba(15,23,42,0.7)" stroke="rgba(255,255,255,0.42)" />
+      <rect x="44" y="47" width="30" height="30" rx="5" fill="${color}" fill-opacity="0.86" />
+      <text x="90" y="72" font-size="28" fill="#ffffff">${esc(id)}</text>
+    </g>`;
+}
+
+async function slotProofSheetSvg(sourceAbsolute) {
+  const base64 = await readFile(sourceAbsolute, "base64");
+  const cells = [
+    ["cloak_back", MASKS.cloak_back],
+    ["torso", MASKS.torso],
+    ["cloak_front", MASKS.cloak_front],
+    ["boots", MASKS.boots],
+    ["head", MASKS.head],
+    ["trinket", MASKS.trinket],
+    ["mainhand_anchor", GUIDES.mainhand_anchor],
+    ["offhand_anchor", GUIDES.offhand_anchor],
+  ];
+  const cellWidth = 1024;
+  const cellHeight = 768;
+  const scale = 0.43;
+  const rigWidth = CANVAS.width * scale;
+  const rigHeight = CANVAS.height * scale;
+  const sourceImage = `<image x="0" y="0" width="${CANVAS.width}" height="${CANVAS.height}" opacity="0.94" href="data:image/png;base64,${base64}" />`;
+
+  return cells
+    .map(([id, item], index) => {
+      const col = index % 2;
+      const row = Math.floor(index / 2);
+      const x = col * cellWidth;
+      const y = row * cellHeight;
+      const tx = x + (cellWidth - rigWidth) / 2;
+      const ty = y + 78;
+      const isGuide = id.endsWith("_anchor");
+      const overlay = isGuide
+        ? guideSvg(item)
+        : item.shapes
+            .map((shape) =>
+              shapeToSvg(shape, {
+                fill: PROOF_COLORS[id],
+                "fill-opacity": 0.38,
+                stroke: PROOF_COLORS[id],
+                "stroke-opacity": 0.95,
+                "stroke-width": 5,
+              }),
+            )
+            .join("\n");
+      return `
+        <g>
+          <rect x="${x}" y="${y}" width="${cellWidth}" height="${cellHeight}" fill="rgba(15,23,42,0.18)" />
+          <text x="${x + 34}" y="${y + 46}" font-size="30" fill="#ffffff">${esc(id)}</text>
+          <g transform="translate(${tx} ${ty}) scale(${scale})">
+            ${sourceImage}
+            ${overlay}
+          </g>
+        </g>`;
+    })
+    .join("\n");
+}
+
 function manifest(sourceRelative) {
   return {
     project: "Liam's Game / Lanterns of Briar Crown",
@@ -409,6 +472,8 @@ function manifest(sourceRelative) {
       ...Object.values(GUIDES).map((guide) => guide.file),
       "manifest.json",
       "proof_sheet.png",
+      "proof_sheet_by_slot.png",
+      ...PROOF_OUTPUTS,
       "README.md",
     ],
   };
@@ -431,13 +496,16 @@ Regenerate from repo root:
 node scripts/generate_m_standard_masks.mjs
 \`\`\`
 
-The mask coordinates live near the top of the script. Edit the polygon/ellipse points there, rerun the script, and review \`proof_sheet.png\`.
+The mask coordinates live near the top of the script. Edit the path coordinates there, rerun the script, and review \`proof_sheet.png\`, \`proof_sheet_by_slot.png\`, and the full-size \`proof_*.png\` overlays.
 
 ## Canvas
 
 - Size: 1024 x 1536
 - Mask files: solid white slot shape on transparent background
 - Guide files: colored markers on transparent background
+- \`proof_sheet.png\`: all masks overlaid together on the base rig
+- \`proof_sheet_by_slot.png\`: each mask/guide shown separately on the base rig
+- \`proof_*.png\`: full-size single-slot overlay proofs for detailed alignment review
 
 ## Hand Direction
 
@@ -469,7 +537,9 @@ The mask coordinates live near the top of the script. Edit the polygon/ellipse p
 
 ## Notes
 
-These masks are intentionally approximate first-pass shapes. They are not AI-generated. They are vector-defined and rendered by code so the rig can be tuned deterministically as the paper-doll system matures.
+These masks are deterministic vector paths, not AI-generated art. Treat them as editable slot boundaries: tighten or loosen the path coordinates in \`scripts/generate_m_standard_masks.mjs\`, rerun the generator, and review the proof overlays before painting equipment.
+
+\`cloak_back\` is intentionally reviewed a little differently from the front-facing slots: the mask is painted behind \`base_rig\`, so the proof overlay shows some area that will be hidden by the body in the actual stack. Boots, torso, head, trinket, and cloak_front should read much tighter in their full-size \`proof_*.png\` files.
 `;
 }
 
@@ -494,6 +564,20 @@ async function main() {
     }
 
     await renderPng(page, await proofSheetSvg(source.absolute), path.join(outDir, "proof_sheet.png"));
+    await renderPng(
+      page,
+      await slotProofSheetSvg(source.absolute),
+      path.join(outDir, "proof_sheet_by_slot.png"),
+      SLOT_PROOF_CANVAS,
+    );
+
+    for (const [id, mask] of Object.entries(MASKS)) {
+      await renderPng(page, await singleSlotProofSvg(source.absolute, id, mask), path.join(outDir, `proof_${id}.png`));
+    }
+
+    for (const [id, guide] of Object.entries(GUIDES)) {
+      await renderPng(page, await singleSlotProofSvg(source.absolute, id, guide), path.join(outDir, `proof_${id}.png`));
+    }
   } finally {
     await browser.close();
   }

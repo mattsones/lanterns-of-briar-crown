@@ -14,13 +14,16 @@ Regenerate from repo root:
 node scripts/generate_m_standard_masks.mjs
 ```
 
-The mask coordinates live near the top of the script. Edit the polygon/ellipse points there, rerun the script, and review `proof_sheet.png`.
+The mask coordinates live near the top of the script. Edit the path coordinates there, rerun the script, and review `proof_sheet.png`, `proof_sheet_by_slot.png`, and the full-size `proof_*.png` overlays.
 
 ## Canvas
 
 - Size: 1024 x 1536
 - Mask files: solid white slot shape on transparent background
 - Guide files: colored markers on transparent background
+- `proof_sheet.png`: all masks overlaid together on the base rig
+- `proof_sheet_by_slot.png`: each mask/guide shown separately on the base rig
+- `proof_*.png`: full-size single-slot overlay proofs for detailed alignment review
 
 ## Hand Direction
 
@@ -52,4 +55,6 @@ The mask coordinates live near the top of the script. Edit the polygon/ellipse p
 
 ## Notes
 
-These masks are intentionally approximate first-pass shapes. They are not AI-generated. They are vector-defined and rendered by code so the rig can be tuned deterministically as the paper-doll system matures.
+These masks are deterministic vector paths, not AI-generated art. Treat them as editable slot boundaries: tighten or loosen the path coordinates in `scripts/generate_m_standard_masks.mjs`, rerun the generator, and review the proof overlays before painting equipment.
+
+`cloak_back` is intentionally reviewed a little differently from the front-facing slots: the mask is painted behind `base_rig`, so the proof overlay shows some area that will be hidden by the body in the actual stack. Boots, torso, head, trinket, and cloak_front should read much tighter in their full-size `proof_*.png` files.
