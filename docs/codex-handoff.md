@@ -341,3 +341,37 @@ git diff --check
 ```
 
 All checks passed locally. `npm run build` was blocked by the Windows PowerShell execution policy for `npm.ps1`, so `npm.cmd` was used instead.
+
+## Current Handoff - m_standard Slot Masks
+
+Last updated: 2026-05-15
+
+Branch: `main`
+
+### What Changed
+
+- Added `scripts/generate_m_standard_masks.mjs`, a deterministic vector/SVG-based mask generator using Playwright rendering.
+- Generated reusable 1024x1536 transparent PNG masks in `art/characters/hero/masks/m_standard/`.
+- Generated:
+  - `mask_torso.png`
+  - `mask_cloak_back.png`
+  - `mask_cloak_front.png`
+  - `mask_boots.png`
+  - `mask_head.png`
+  - `mask_trinket.png`
+  - `guide_mainhand_anchor.png`
+  - `guide_offhand_anchor.png`
+  - `manifest.json`
+  - `proof_sheet.png`
+  - `README.md`
+- Manifest includes source rig, m_standard anchors, handedness, stacking order, mask coordinates, guide coordinates, and output file list.
+- README documents slot purpose, hand direction, regeneration command, and stacking order.
+
+### Latest Verification
+
+```bash
+node scripts\generate_m_standard_masks.mjs
+node -e "<PNG header/alpha verification script>"
+```
+
+All generated PNGs verified as 1024x1536 with an alpha channel. The six masks and two guide PNGs include transparent pixels and opaque mask/marker pixels. The proof sheet was visually inspected.

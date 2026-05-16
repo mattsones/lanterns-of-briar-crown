@@ -1,0 +1,474 @@
+{
+  "project": "Liam's Game / Lanterns of Briar Crown",
+  "assetType": "paper-doll-slot-masks",
+  "rig": "m_standard",
+  "version": "v1",
+  "generatedBy": "scripts/generate_m_standard_masks.mjs",
+  "canvas": {
+    "width": 1024,
+    "height": 1536,
+    "background": "transparent"
+  },
+  "sourceRig": "art/characters/hero/rig-guides/rig_reference_m_standard.png",
+  "handedness": {
+    "mainhand": "character_right_hand",
+    "mainhandAppearsOn": "viewer_left",
+    "offhand": "character_left_hand",
+    "offhandAppearsOn": "viewer_right"
+  },
+  "stackingOrder": [
+    "cloak_back",
+    "base_rig",
+    "boots",
+    "torso",
+    "cloak_front",
+    "head",
+    "trinket",
+    "mainhand",
+    "offhand"
+  ],
+  "anchors": {
+    "helmetZoneCenter": {
+      "x": 512,
+      "y": 194
+    },
+    "eyeLineY": 253,
+    "shoulderLineY": 343,
+    "cloakOriginLeft": {
+      "x": 444,
+      "y": 364
+    },
+    "cloakOriginRight": {
+      "x": 582,
+      "y": 364
+    },
+    "chestCenter": {
+      "x": 512,
+      "y": 457
+    },
+    "trinketCenter": {
+      "x": 488,
+      "y": 432
+    },
+    "waistCenter": {
+      "x": 512,
+      "y": 612
+    },
+    "mainhandGrip": {
+      "x": 327,
+      "y": 797
+    },
+    "offhandGrip": {
+      "x": 622,
+      "y": 689
+    },
+    "feetBaselineY": 1387
+  },
+  "masks": {
+    "torso": {
+      "file": "mask_torso.png",
+      "purpose": "Torso clothing and armor overlays such as tunics, vests, and chest armor.",
+      "shapes": [
+        {
+          "kind": "polygon",
+          "points": [
+            [
+              424,
+              340
+            ],
+            [
+              492,
+              318
+            ],
+            [
+              560,
+              318
+            ],
+            [
+              620,
+              344
+            ],
+            [
+              650,
+              424
+            ],
+            [
+              634,
+              540
+            ],
+            [
+              602,
+              628
+            ],
+            [
+              512,
+              646
+            ],
+            [
+              416,
+              626
+            ],
+            [
+              382,
+              542
+            ],
+            [
+              374,
+              424
+            ]
+          ]
+        },
+        {
+          "kind": "ellipse",
+          "cx": 512,
+          "cy": 556,
+          "rx": 118,
+          "ry": 102
+        }
+      ]
+    },
+    "cloak_back": {
+      "file": "mask_cloak_back.png",
+      "purpose": "Back cloak or cape mass, rendered behind the base rig.",
+      "shapes": [
+        {
+          "kind": "polygon",
+          "points": [
+            [
+              420,
+              342
+            ],
+            [
+              604,
+              342
+            ],
+            [
+              690,
+              612
+            ],
+            [
+              682,
+              1058
+            ],
+            [
+              620,
+              1288
+            ],
+            [
+              526,
+              1348
+            ],
+            [
+              410,
+              1282
+            ],
+            [
+              330,
+              1050
+            ],
+            [
+              322,
+              620
+            ]
+          ]
+        },
+        {
+          "kind": "ellipse",
+          "cx": 512,
+          "cy": 780,
+          "rx": 190,
+          "ry": 430
+        }
+      ]
+    },
+    "cloak_front": {
+      "file": "mask_cloak_front.png",
+      "purpose": "Front cloak lapels and visible front drape, rendered over torso but under head/trinket.",
+      "shapes": [
+        {
+          "kind": "polygon",
+          "points": [
+            [
+              424,
+              348
+            ],
+            [
+              474,
+              354
+            ],
+            [
+              468,
+              622
+            ],
+            [
+              426,
+              758
+            ],
+            [
+              386,
+              706
+            ],
+            [
+              394,
+              492
+            ]
+          ]
+        },
+        {
+          "kind": "polygon",
+          "points": [
+            [
+              596,
+              352
+            ],
+            [
+              640,
+              372
+            ],
+            [
+              654,
+              510
+            ],
+            [
+              636,
+              720
+            ],
+            [
+              592,
+              774
+            ],
+            [
+              552,
+              628
+            ],
+            [
+              548,
+              360
+            ]
+          ]
+        }
+      ]
+    },
+    "boots": {
+      "file": "mask_boots.png",
+      "purpose": "Boots and shoes around the lower legs and planted feet.",
+      "shapes": [
+        {
+          "kind": "polygon",
+          "points": [
+            [
+              372,
+              1234
+            ],
+            [
+              462,
+              1230
+            ],
+            [
+              466,
+              1378
+            ],
+            [
+              436,
+              1422
+            ],
+            [
+              326,
+              1418
+            ],
+            [
+              300,
+              1382
+            ],
+            [
+              340,
+              1334
+            ],
+            [
+              366,
+              1292
+            ]
+          ]
+        },
+        {
+          "kind": "polygon",
+          "points": [
+            [
+              596,
+              1234
+            ],
+            [
+              676,
+              1230
+            ],
+            [
+              710,
+              1328
+            ],
+            [
+              742,
+              1378
+            ],
+            [
+              724,
+              1428
+            ],
+            [
+              612,
+              1430
+            ],
+            [
+              584,
+              1386
+            ],
+            [
+              584,
+              1300
+            ]
+          ]
+        }
+      ]
+    },
+    "head": {
+      "file": "mask_head.png",
+      "purpose": "Headwear, helmets, hoods, hair-overlap checks, and upper head accessory coverage.",
+      "shapes": [
+        {
+          "kind": "ellipse",
+          "cx": 512,
+          "cy": 225,
+          "rx": 110,
+          "ry": 135
+        },
+        {
+          "kind": "polygon",
+          "points": [
+            [
+              420,
+              188
+            ],
+            [
+              456,
+              112
+            ],
+            [
+              518,
+              92
+            ],
+            [
+              586,
+              126
+            ],
+            [
+              628,
+              198
+            ],
+            [
+              606,
+              326
+            ],
+            [
+              552,
+              366
+            ],
+            [
+              480,
+              360
+            ],
+            [
+              434,
+              314
+            ]
+          ]
+        }
+      ]
+    },
+    "trinket": {
+      "file": "mask_trinket.png",
+      "purpose": "Visible chest trinkets such as pins, charms, chains, and small medallions.",
+      "shapes": [
+        {
+          "kind": "ellipse",
+          "cx": 488,
+          "cy": 432,
+          "rx": 58,
+          "ry": 62
+        },
+        {
+          "kind": "polygon",
+          "points": [
+            [
+              454,
+              386
+            ],
+            [
+              526,
+              386
+            ],
+            [
+              552,
+              438
+            ],
+            [
+              518,
+              504
+            ],
+            [
+              456,
+              498
+            ],
+            [
+              426,
+              438
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  "guides": {
+    "mainhand_anchor": {
+      "file": "guide_mainhand_anchor.png",
+      "point": {
+        "x": 327,
+        "y": 797
+      },
+      "color": "#ff3b30",
+      "label": "mainhand / character right / viewer-left",
+      "labelOffset": {
+        "x": 44,
+        "y": -36
+      },
+      "textAnchor": "start",
+      "purpose": "Main hand weapon grip anchor. This is the character's right hand on viewer-left."
+    },
+    "offhand_anchor": {
+      "file": "guide_offhand_anchor.png",
+      "point": {
+        "x": 622,
+        "y": 689
+      },
+      "color": "#0a84ff",
+      "label": "offhand / character left / viewer-right",
+      "labelOffset": {
+        "x": -44,
+        "y": -36
+      },
+      "textAnchor": "end",
+      "purpose": "Off-hand shield/lantern/book anchor. This is the character's left hand on viewer-right."
+    }
+  },
+  "outputs": [
+    "mask_torso.png",
+    "mask_cloak_back.png",
+    "mask_cloak_front.png",
+    "mask_boots.png",
+    "mask_head.png",
+    "mask_trinket.png",
+    "guide_mainhand_anchor.png",
+    "guide_offhand_anchor.png",
+    "manifest.json",
+    "proof_sheet.png",
+    "README.md"
+  ]
+}
