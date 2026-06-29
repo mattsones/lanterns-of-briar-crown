@@ -145,11 +145,11 @@ Branch: merged into `main`
 - Tuned Hearthhollow, Lantern Road, Bramblecross, and Old Root Cellar tile layouts so movement follows the painted artwork more naturally.
 - Added Dev Tools map debug mode. It is off during normal play and shows node centers, labels, states, and nav bounds when enabled.
 - Added portrait-backed NPC map tokens where portraits exist, with emoji fallbacks preserved.
-- Added fog-of-war exploration on all non-Hearthhollow maps. Hearthhollow stays visible because Liam knows his hometown.
+- Added fog-of-war exploration on wilderness/road/dungeon maps. Town and village maps stay visible because Liam can read civic spaces at a glance.
 - Adjusted Bramblecross Inn companion portrait crops slightly downward.
 - Updated the smoke test to assert the painted map stage, hidden old grid, hero movement, save/load controls, Dev Tools, and built-in QA checks.
 - Wired the cleaned Hearthhollow and Lantern Road map exports into production (`hearthhollow-gameplay-map-v04.png` and `lantern-road-gameplay-map-v02.png`).
-- Tuned the Old Root Cellar visual projection in `src/data/mapVisuals.ts` with Root Cellar-only node anchors so the hidden grid follows the painted corridors more closely. Bramblecross was intentionally left unchanged.
+- Tuned the Old Root Cellar visual projection in `src/data/mapVisuals.ts` with Root Cellar-only node anchors so the hidden grid follows the painted corridors more closely. Bramblecross keeps the regular grid and uses blocked town tiles for roofs/fenced lots.
 - Strengthened fog-of-war in `src/components/MapStage.tsx` so unexplored map areas are fully hidden instead of faintly visible through a dark overlay.
 
 ### Verification Run
@@ -174,8 +174,8 @@ Latest local verification:
 
 ### Known Follow-Ups
 
-- Continue checking map alignment with Dev Tools > Show Map Debug after any map art replacement. Prefer map-specific `pointOverrides` in `src/data/mapVisuals.ts` before changing gameplay tile arrays.
-- Bramblecross currently lines up well enough; avoid changing its projection unless new art changes require it.
+- Continue checking map alignment with Dev Tools > Show Map Debug after any map art replacement. For grid-readable maps, prefer tile ownership/blocking changes before custom point overrides; reserve `pointOverrides` for organic layouts like Root Cellar.
+- Bramblecross should remain a regular Manhattan town grid unless new art forces a projection change. Prefer tile-level blocking for buildings/fenced lots before adding custom graph navigation.
 - The current hero map token is still a styled placeholder using the selected appearance emoji. A proper hero portrait/token asset can replace it later.
 - If a future session needs a GitHub PR, install and authenticate GitHub CLI with `gh auth login`. This machine can push with `git`, but `gh` is not currently installed.
 
@@ -204,6 +204,33 @@ npm run playtest:smoke
 ```
 
 All three passed locally after this pass. Manual browser visual checks also confirmed 49 visible Root Cellar debug nodes, 0 blocked debug nodes, strong graph-aware fog at the cellar entrance, and a keyboard route to the Warden. The known Warden route is documented in `docs/playtest-notes/root-cellar-navigation-graph.md`.
+
+## Current Handoff - Lantern Road and Bramblecross Alignment
+
+Last updated: 2026-05-11
+
+Branch: `main`
+
+### What Changed
+
+- Kept Lantern Road on grid-centered movement and moved landmark ownership to better matching cells: milestone `7,1`, cart `11,2`, road cache `11,4`, ambush `7,7`, pond `2,6`, Hearthhollow entrance `0,7`, and Bramblecross road `11,7`.
+- Marked Hearthhollow and Bramblecross as `revealAll` maps in `src/data/mapVisuals.ts`; fog-of-war now remains for Lantern Road and Root Cellar.
+- Kept Bramblecross on the regular tile grid and replaced building/fenced-yard filler cells with blocked `fenced_yard` tiles.
+- Reopened the Bramblecross lower-center north/south road at tile `6,7` so the town still reads as a Manhattan street grid from the gate.
+- Opened Hearthhollow tile `2,6` for movement.
+- Added rules coverage for town reveal behavior, Lantern Road grid ownership, and Bramblecross blocked-yard preservation.
+
+### Latest Verification
+
+Run the standard checks:
+
+```bash
+npm run build
+npm run test:rules
+npm run playtest:smoke
+```
+
+Latest local verification passed after this pass: TypeScript no-emit check, Vite build, rules tests, smoke test, and Playwright visual captures of Lantern Road, Hearthhollow, and Bramblecross debug maps. Normal-mode fog check confirmed Hearthhollow and Bramblecross have no fog layer, while Lantern Road and Old Root Cellar still do.
 
 ## Current Handoff - Hearthhollow Polish
 

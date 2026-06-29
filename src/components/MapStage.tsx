@@ -88,7 +88,7 @@ export function MapStage({
   const visual = getMapVisualConfig(region);
   const rows = map.length;
   const columns = map[0]?.length || 1;
-  const fullyVisibleMap = ["hearthhollow", "bramblecross"].includes(region);
+  const revealAll = !!visual.revealAll;
   const usesNavigationGraph = hasNavigationGraph(region);
   const fogMaskId = `map-fog-${region}`;
   const fogBlurId = `${fogMaskId}-blur`;
@@ -99,7 +99,7 @@ export function MapStage({
       const point = getMapNodePoint(region, x, y, columns, rows);
       const isPlayer = position.x === x && position.y === y;
       const explored = !!exploredMap[getVisitedKey(x, y)] || isPlayer;
-      const visible = fullyVisibleMap || explored || debug;
+      const visible = revealAll || explored || debug;
       const meta = TILE_META[tile] || TILE_META.hidden;
       const clickable =
         isPlayer || areMapNodesConnected(region, position, { x, y });
@@ -159,7 +159,7 @@ export function MapStage({
         <div data-testid="map-background" className="painted-map-fallback" />
       )}
       <div className="painted-map-vignette" />
-      {!fullyVisibleMap && !debug ? (
+      {!revealAll && !debug ? (
         <svg
           className="map-fog-layer"
           viewBox="0 0 100 100"

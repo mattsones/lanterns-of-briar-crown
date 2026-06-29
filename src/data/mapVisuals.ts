@@ -10,6 +10,7 @@ type Direction = "up" | "down" | "left" | "right";
 type MapVisualConfig = {
   aspectRatio: string;
   navBounds: MapBounds;
+  revealAll?: boolean;
   fogRadius?: number;
   nodeHitboxSize?: string;
   pointGrid?: {
@@ -108,6 +109,7 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
   hearthhollow: {
     aspectRatio: "1 / 1",
     navBounds: { left: 9, top: 13, width: 82, height: 76 },
+    revealAll: true,
   },
   lanternRoad: {
     aspectRatio: "4 / 3",
@@ -117,6 +119,7 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
   bramblecross: {
     aspectRatio: "4 / 3",
     navBounds: { left: 7, top: 8, width: 86, height: 78 },
+    revealAll: true,
     fogRadius: 7,
   },
   westrootTrail: {

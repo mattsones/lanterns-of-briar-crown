@@ -370,6 +370,8 @@ export default function LiamsGamePrototype() {
         ? "Oof. That tree was stronger than it looked."
         : tile === "water"
           ? "Your boots vote no on that water."
+          : tile === "fenced_yard"
+            ? "The fence has made a very convincing argument."
           : tile?.includes("building")
             ? "That's a wall, not an entrance. Doors remain fashionable for a reason."
             : "That way is blocked.",
@@ -2574,7 +2576,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       else if (tile === "town_gate")
         travelToRegion(
           "lanternRoad",
-          { x: 12, y: 6 },
+          { x: 11, y: 7 },
           player.checkpointLabel,
           "You head back onto Lantern Road.",
         );

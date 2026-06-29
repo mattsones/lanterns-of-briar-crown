@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { resolveRoll, resolveSkillCheck } from "../src/game/dice";
 import { MAPS, TILE_META } from "../src/data/maps";
+import { getMapVisualConfig } from "../src/data/mapVisuals";
 import { gainItem, getDefaultBattlePouch, removeItem } from "../src/game/inventory";
 import { buildDefaultVisited, buildPlayer } from "../src/game/state";
 import { getHeroXpTarget } from "../src/game/progression";
@@ -73,9 +74,14 @@ test("progression and default map state stay compatible with chapter one", () =>
   const visited = buildDefaultVisited();
   expect(visited.hearthhollow[getVisitedKey(2, 4)]).toBe(true);
   expect(visited.lanternRoad).toEqual({});
+  expect(getMapVisualConfig("hearthhollow").revealAll).toBe(true);
+  expect(getMapVisualConfig("bramblecross").revealAll).toBe(true);
+  expect(getMapVisualConfig("lanternRoad").revealAll).toBeUndefined();
+  expect(getMapVisualConfig("lanternRoad").pointOverrides).toBeUndefined();
   expect(MAPS.hearthhollow.tiles[4][2]).toBe("grass");
   expect(MAPS.hearthhollow.tiles[2][5]).toBe("baker");
   expect(MAPS.hearthhollow.tiles[2][3]).toBe("home_door");
+  expect(MAPS.hearthhollow.tiles[6][2]).toBe("grass");
   expect(MAPS.hearthhollow.tiles[6][1]).toBe("potion_door");
   expect(MAPS.hearthhollow.tiles[6][11]).toBe("chest");
   expect(MAPS.hearthhollow.tiles[5][10]).toBe("tree");
@@ -87,6 +93,38 @@ test("progression and default map state stay compatible with chapter one", () =>
     ),
   ).toBe(true);
   expect(TILE_META.well.blocked).toBe(true);
+  expect(MAPS.bramblecross.tiles[7][6]).toBe("road");
+  expect(MAPS.bramblecross.tiles[8][6]).toBe("road");
+  expect(MAPS.bramblecross.tiles[6][5]).toBe("cellar");
+  expect(TILE_META[MAPS.bramblecross.tiles[7][5]].blocked).toBe(true);
+  expect(TILE_META[MAPS.bramblecross.tiles[8][2]].blocked).toBe(true);
+  expect(MAPS.lanternRoad.start).toEqual({ x: 0, y: 7 });
+  expect(MAPS.lanternRoad.tiles[1][7]).toBe("ruins");
+  expect(MAPS.lanternRoad.tiles[2][11]).toBe("cart");
+  expect(MAPS.lanternRoad.tiles[4][11]).toBe("chest2");
+  expect(MAPS.lanternRoad.tiles[7][11]).toBe("bramblecross");
+  expect(MAPS.lanternRoad.tiles[7][7]).toBe("wildbattle");
+  expect(MAPS.lanternRoad.tiles[6][2]).toBe("pond");
+  expect(MAPS.lanternRoad.tiles[5][2]).toBe("road");
+  [
+    [11, 1],
+    [11, 3],
+    [11, 5],
+    [10, 6],
+    [11, 6],
+    [12, 6],
+    [1, 2],
+    [1, 3],
+    [1, 4],
+    [2, 4],
+    [3, 6],
+    [4, 6],
+    [3, 7],
+    [4, 7],
+    [5, 7],
+  ].forEach(([x, y]) => {
+    expect(TILE_META[MAPS.lanternRoad.tiles[y][x]].blocked).toBe(true);
+  });
 });
 
 test("chapter one story script beats stay wired into data", () => {
