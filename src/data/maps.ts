@@ -630,6 +630,21 @@ export const MAPS = {
       ],
     ],
   },
+  westrootTrail: {
+    name: "Westroot Trail",
+    subtitle: "Chapter 2: The old road west",
+    start: { x: 0, y: 3 },
+    backgroundImage: null,
+    tiles: [
+      ["tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree"],
+      ["tree", "grass", "shelter_nook", "grass", "false_notice", "grass", "roadwatcher", "grass", "tree"],
+      ["tree", "grass", "road", "road", "road", "road", "road", "grass", "tree"],
+      ["westroot_return", "westroot_cut", "road", "grass", "three_hollow", "road", "no_handle_stone", "westroot_gate", "tree"],
+      ["tree", "grass", "road", "grass", "crown_sign", "lantern_sign", "road", "grass", "tree"],
+      ["tree", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "tree"],
+      ["tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree"],
+    ],
+  },
 };
 
 function makeTile(icon, label, blocked, classes) {
@@ -727,3 +742,15 @@ export const TILE_META = {
   clerk: makeTile("🗂️", "Watch Clerk Enna", false, "bg-slate-600/80"),
   cellar: makeTile("🕳️", "Old Root Cellar", false, "bg-stone-800/90"),
 };
+Object.assign(TILE_META, {
+  westroot_return: makeTile("↩", "Path to Bramblecross", false, "bg-slate-600/80"),
+  westroot_cut: makeTile("✦", "Old Westward Cut", false, "bg-emerald-700/75"),
+  shelter_nook: makeTile("⌂", "Roadside Shelter Nook", false, "bg-amber-700/75"),
+  false_notice: makeTile("!", "False Detour Notice", false, "bg-red-700/80"),
+  three_hollow: makeTile("3", "Three-Sign Hollow", false, "bg-indigo-700/75"),
+  crown_sign: makeTile("♛", "Crown Sign", false, "bg-rose-800/80"),
+  lantern_sign: makeTile("✶", "Lantern Sign", false, "bg-yellow-700/80"),
+  no_handle_stone: makeTile("▯", "No-Handle Stone", false, "bg-stone-700/80"),
+  roadwatcher: makeTile("!", "Watched Road", false, "bg-red-900/85"),
+  westroot_gate: makeTile("▣", "First Westroot Gate", false, "bg-emerald-900/90"),
+});

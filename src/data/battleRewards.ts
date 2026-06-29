@@ -33,6 +33,22 @@ export const BATTLE_REWARDS = {
     name: "Briar Knot Warden",
     text: "As the guardian falls, forged seal-cloth tears free from its chains.",
   },
+  roadwatcher: {
+    item: "pine_pitch_wax",
+    gold: 18,
+    xp: 20,
+    flagUpdate: { beatRoadwatcher: true },
+    name: "Briar Roadwatcher",
+    text: "The watcher breaks apart into thorn-scraps, seal-cloth, and sticky pine-pitch wax. Whatever is using Westroot knows witnesses are coming.",
+  },
+  roadwatcherHard: {
+    item: "pine_pitch_wax",
+    gold: 22,
+    xp: 24,
+    flagUpdate: { beatRoadwatcher: true, roadwatcherHardCleared: true },
+    name: "Briar Roadwatcher",
+    text: "The harder ambush finally collapses. Under the false sign-scraps you find pine-pitch wax and the edge of a copied Willow mark.",
+  },
 };
 
 export function getBattleReward(rewardKey) {

@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { useEffect, useState, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { getItemArtwork } from "../data/itemArtwork";
 
 export function Button({ children, className = "", ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
@@ -81,6 +81,13 @@ export function ItemIcon({
 }) {
   const artwork = getItemArtwork(item?.id);
   const label = item?.name || "Item";
+  const [artFailed, setArtFailed] = useState(false);
+
+  useEffect(() => {
+    setArtFailed(false);
+  }, [item?.id]);
+
+  const showArtwork = !!artwork && !artFailed;
 
   return (
     <span
@@ -88,14 +95,15 @@ export function ItemIcon({
       title={label}
       className={`relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-amber-200/20 bg-slate-950/70 text-white shadow-inner ${itemIconSizes[size]} ${className}`}
     >
-      <span>{item?.icon || "?"}</span>
-      {artwork ? (
+      {!showArtwork ? <span>{item?.icon || "?"}</span> : null}
+      {showArtwork ? (
         <img
           src={artwork.src}
           alt={artwork.alt}
           className="absolute inset-0 h-full w-full object-contain p-1"
           onError={(event) => {
             event.currentTarget.style.display = "none";
+            setArtFailed(true);
           }}
         />
       ) : null}

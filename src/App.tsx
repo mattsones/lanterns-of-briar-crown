@@ -1046,6 +1046,8 @@ export default function LiamsGamePrototype() {
   const openClerkDialogue = () => {
     if (flags.chapterOneClear && !flags.chapterReported)
       return openChapterReportDialogue();
+    if (flags.chapterReported && !flags.chapterTwoClear)
+      return openChapter2Briefing();
     if (!flags.ennaBriefed)
       return setDialogue({
         portrait: "🗂️",
@@ -1114,6 +1116,10 @@ export default function LiamsGamePrototype() {
   const openCaptainDialogue = () => {
     if (flags.chapterOneClear && !flags.chapterReported)
       return openChapterReportDialogue();
+    if (flags.chapterReported && !flags.eddenDrawingReceived)
+      return openEddenRecoveryDialogue();
+    if (flags.chapterReported && !flags.chapterTwoClear)
+      return openChapter2Briefing();
     if (!flags.ennaBriefed)
       return setDialogue({
         portrait: "🛡️",
@@ -1247,6 +1253,10 @@ export default function LiamsGamePrototype() {
     });
   };
   const openMerchantDialogue = () => {
+    if (flags.chapterReported && !flags.adaSealLessonComplete)
+      return openAdaSealLesson();
+    if (flags.chapterReported && flags.adaSealLessonComplete && !flags.chapterTwoClear)
+      return openAdaSealLesson();
     if (
       flags.boardQuestAccepted &&
       flags.cartRecoveredForAda &&
@@ -1904,6 +1914,507 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         },
       ],
     });
+
+  const gainStoryItemOnce = (itemId) => {
+    if (!hasItem(player, itemId, 1)) gainItem(setPlayer, itemId, 1);
+  };
+
+  const chapter2CompanionLine = (rowan, tilda, moss, fallback = "") => {
+    if (!companion.recruited) return fallback;
+    if (companion.id === "rowan") return rowan;
+    if (companion.id === "tilda") return tilda;
+    if (companion.id === "moss") return moss;
+    return fallback;
+  };
+
+  const getWestrootClueCount = () =>
+    [
+      flags.crownSignRejected,
+      flags.crownSignLensUsed,
+      flags.lanternSignCleaned,
+      flags.lanternSignCompared,
+      flags.lioHookMarkFound,
+      flags.eddenDrawingComparedAtDoor,
+      flags.falseNoticeLensUsed,
+    ].filter(Boolean).length;
+
+  const openChapter2Briefing = () => {
+    if (!flags.chapterReported)
+      return setToast("Finish reporting Chapter 1 before following Westroot.");
+    if (flags.chapterTwoBriefed)
+      return setDialogue({
+        portrait: "🗺️",
+        name: "Westroot Briefing",
+        text: flags.maraJoined
+          ? "Enna has three maps spread across the table: public road, courier marks, and Edden's impossible drawing. None of them agree, but they all point west. Mara watches the maps like they might try to leave without her."
+          : "Enna has three maps spread across the table. Hollis nods toward the inn and the watchhouse door. \"Choose your companion if you want one, then speak with Mara. She knows Lio's private marks better than any of us.\"",
+        choices: [
+          !flags.maraJoined
+            ? { label: "Call Mara into the plan.", effect: () => openMaraChapter2Dialogue() }
+            : null,
+          !flags.eddenDrawingReceived
+            ? { label: "Visit Edden's recovery room.", effect: () => openEddenRecoveryDialogue() }
+            : null,
+          { label: "Step back.", effect: () => setDialogue(null) },
+        ].filter(Boolean),
+      });
+
+    setDialogue({
+      portrait: "🗺️",
+      name: "Bramblecross Watchhouse",
+      text: `${companion.recruited ? "Enna nods once to the companion at your side. \"Good. One clear witness is better than a crowd of half-listeners.\"" : "Enna looks at the empty space beside you. \"You can follow this lead alone if you must, but I would rather you did not. The road west is not simply dangerous. It is being edited.\""}\n\nHollis stands near the case wall, where Edden's blue cloth is pinned beside the Briar Crown mark.\n\n\"The cellar gave us a direction,\" he says. \"Westroot. But the maps disagree on what Westroot is.\"\n\nEnna taps three pages in turn: a public road map, a courier map, and Edden's charcoal drawing of three doors under roots.\n\n\"Someone else has already opened it,\" she says. \"So we follow carefully.\"`,
+      choices: [
+        {
+          label: "What exactly is Westroot?",
+          effect: () =>
+            setDialogue({
+              portrait: "🗺️",
+              name: "Westroot",
+              text: "Enna pulls out an older strip of parchment. \"Westroot is not listed like a town. It appears in old courier shorthand as a root mark, a lantern mark, and sometimes a storehouse tally. It may be a route, a gate, a hidden waystation, or all of those wearing one name.\"",
+              choices: [{ label: "Then we follow the old marks.", effect: openChapter2Briefing }],
+            }),
+        },
+        {
+          label: "What did Edden draw?",
+          effect: () =>
+            setDialogue({
+              portrait: "📜",
+              name: "Edden's Drawing",
+              text: "The lines are shaky, but not careless. Three doors stand side by side under a tangle of roots. The first has a crown. The second has a lantern. The third has no handle.\n\nUnder them, Edden wrote the same phrase three times: THE HONEST ONE HAS NO HANDLE.",
+              choices: [{ label: "I should talk to Edden.", effect: openEddenRecoveryDialogue }],
+            }),
+        },
+        {
+          label: "How does this help us find Lio?",
+          effect: () => {
+            setFlags((f) => ({ ...f, chapterTwoBriefed: true, chapterTwoStarted: true }));
+            setDialogue({
+              portrait: "🧵",
+              name: "Mara Brindle",
+              text: "Enna draws a line from Hearthhollow to Lantern Road, then Bramblecross, then west. \"If Lio was moved through the old ways, Westroot is the next honest place to look. And if he left even one courier mark behind, someone who knows him may be able to read what the rest of us miss.\"\n\nA voice from the doorway says, \"That would be me, then.\"",
+              choices: [{ label: "Mara, come in.", effect: openMaraChapter2Dialogue }],
+            });
+          },
+        },
+        {
+          label: "I understand the lead.",
+          effect: () => {
+            setFlags((f) => ({ ...f, chapterTwoBriefed: true, chapterTwoStarted: true }));
+            setDialogue(null);
+            setToast("Chapter 2 started: The Westroot Trail.");
+          },
+        },
+      ],
+    });
+  };
+
+  const openMaraChapter2Dialogue = () => {
+    setFlags((f) => ({ ...f, chapterTwoBriefed: true, chapterTwoStarted: true }));
+    setDialogue({
+      portrait: "🧵",
+      name: "Mara Brindle",
+      text: flags.maraJoined
+        ? "Mara has arranged crumbs, string, and a button into what may be a route diagram. \"If Lio left a mark, it will be where grown-ups almost see it and then decide it is probably just dirt.\""
+        : "A girl stands in the watchhouse doorway with road dust on her boots and a blue string tied around one wrist. \"I am Mara Brindle,\" she says. \"If you are making a plan about my brother without me, it is probably a worse plan than it needs to be.\"\n\nShe points to Edden's drawing. \"Lio writes small when he is worried. And if he wants me to know a mark is his, he adds a little hook-tail to the arrow.\"",
+      choices: [
+        {
+          label: flags.maraJoined ? "I remember: hook-tail arrows." : "Then help us read what he left behind.",
+          effect: () => {
+            setFlags((f) => ({ ...f, maraJoined: true }));
+            setPlayer((p) => ({ ...p, xp: p.xp + (flags.maraJoined ? 0 : 6) }));
+            setDialogue(null);
+            setToast(flags.maraJoined ? "Mara watches for Lio's marks." : "Mara joins the Westroot search. XP +6");
+          },
+        },
+        { label: "Step back.", effect: () => setDialogue(null) },
+      ],
+    });
+  };
+
+  const openEddenRecoveryDialogue = () => {
+    if (!flags.chapterTwoBriefed)
+      return setToast("Get the Westroot briefing from Enna and Hollis first.");
+    setDialogue({
+      portrait: "📜",
+      name: "Edden's Recovery Room",
+      text: flags.eddenDrawingReceived
+        ? "Edden rests with charcoal still smudged on his fingers. \"Three doors,\" he murmurs. \"The honest one has no handle. It opens when the road hears truth first.\""
+        : "Edden Vale sits beside a narrow window with a blanket over his shoulders and charcoal on his fingers. The cracked lantern rests beside him.\n\n\"The road was trying to explain itself,\" he says. \"Three doors. Crown, lantern, no handle. The honest one has no handle because it does not open from the side that lies.\"",
+      choices: [
+        !flags.eddenDrawingReceived
+          ? {
+              label: "Take Edden's three-door drawing.",
+              effect: () => {
+                setFlags((f) => ({ ...f, eddenVisited: true, eddenDrawingReceived: true }));
+                gainStoryItemOnce("eddens_three_door_drawing");
+                setPlayer((p) => ({ ...p, xp: p.xp + 6 }));
+                setDialogue(null);
+                announce("Edden gives you his three-door drawing. XP +6", [{ id: "eddens_three_door_drawing", qty: 1 }]);
+              },
+            }
+          : null,
+        { label: "Let him rest.", effect: () => setDialogue(null) },
+      ].filter(Boolean),
+    });
+  };
+
+  const openAdaSealLesson = () => {
+    if (!flags.eddenDrawingReceived)
+      return setToast("Edden's drawing should come first; Ada's lesson will make more sense after it.");
+    if (flags.adaSealLessonComplete)
+      return setDialogue({
+        portrait: "🔍",
+        name: "Ada Willowmarket",
+        text: "Ada taps the Willowmark Lens. \"Remember: honest marks have familiar flaws. Mine has a nick in the lower leaf. Copied marks are often too smooth. Altered marks have fresh scraping around the circle.\"",
+        choices: [{ label: "I'll watch for that.", effect: () => setDialogue(null) }],
+      });
+    setDialogue({
+      portrait: "🔍",
+      name: "Ada's Seal Lesson",
+      text: "Ada turns a practice crate-mark under a small brass lens. \"Trust is a tool,\" she says. \"A good seal lets tired people move food, oil, bandages, and news without arguing over every box. A copied seal steals that trust.\"\n\nUnder the lens, her honest Willow mark shows a tiny nick in the lower leaf. \"That flaw is mine. If you see a mark too perfect, or stamped over scraped wax, be suspicious.\"",
+      choices: [
+        {
+          label: "Borrow the Willowmark Lens.",
+          effect: () => {
+            setFlags((f) => ({ ...f, adaSealLessonComplete: true }));
+            gainStoryItemOnce("willowmark_lens");
+            setPlayer((p) => ({ ...p, xp: p.xp + 6 }));
+            setDialogue(null);
+            announce("Ada lends you the Willowmark Lens. XP +6", [{ id: "willowmark_lens", qty: 1 }]);
+          },
+        },
+      ],
+    });
+  };
+
+  const openWestrootDeparture = () => {
+    if (!flags.chapterTwoBriefed) return setToast("Get the Westroot lead from Enna and Hollis first.");
+    if (!flags.maraJoined) return setToast("Mara may recognize Lio's personal marks. Speak with her at the watchhouse first.");
+    if (!flags.eddenDrawingReceived) return setToast("Edden's drawing may help you read the road west.");
+    if (!flags.adaSealLessonComplete) return setToast("Ada's Willowmark Lens may help you spot false cargo marks.");
+    setDialogue({
+      portrait: "✦",
+      name: "Leaving Bramblecross",
+      text: `The westward cut does not look like a road at first. It looks like a place where the grass has been persuaded to lean the same direction for a very long time.\n\nMara touches the blue string at her wrist. Hollis says, \"Mara stays behind the line when trouble starts.\"\n\n${companion.recruited ? chapter2CompanionLine("Rowan adjusts his shield. \"Then we walk carefully.\"", "Tilda grins. \"I have always wanted to argue with a road.\"", "Moss touches the mossy lantern mark. \"Old roads ask so we remember what kind of travelers we are.\"") : "The westward cut waits in silence. It does not look safer for being quiet."}`,
+      choices: [
+        { label: "Mara, watch for Lio's smallest marks.", effect: () => departToWestroot("lioMarks") },
+        { label: "Mara, keep Edden's drawing ready.", effect: () => departToWestroot("eddenDrawing") },
+        { label: "Mara, watch the lantern signs.", effect: () => departToWestroot("lanternSigns") },
+        { label: "Mara, stay behind us when danger starts.", effect: () => departToWestroot("safety") },
+        { label: "Stay in Bramblecross.", effect: () => setDialogue(null) },
+      ],
+    });
+  };
+
+  const departToWestroot = (maraJob) => {
+    setFlags((f) => ({ ...f, maraJob }));
+    setDialogue(null);
+    travelToRegion(
+      "westrootTrail",
+      MAPS.westrootTrail.start,
+      "Westroot Trail",
+      "You step onto the old Westroot Trail.",
+    );
+  };
+
+  const openWestrootCutDialogue = () => {
+    setFlags((f) => ({ ...f, westrootCutStudied: true }));
+    setDialogue({
+      portrait: "✦",
+      name: "Old Westward Cut",
+      text: "Old cart ruts appear, vanish, then appear again under grass. A lantern scratch marks a stone at knee height, but the lower marks have been freshly scraped away. A false crown mark is pressed into the mud below it: not carved, not permanent, planted.\n\nMara crouches beside the stone. \"Not Lio's,\" she says. \"But someone wanted us to think it might be.\"",
+      choices: [
+        {
+          label: "Copy the damaged lantern mark.",
+          effect: () => {
+            setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
+            setDialogue(null);
+            setToast("You copy the damaged lantern mark. XP +4");
+          },
+        },
+      ],
+    });
+  };
+
+  const openShelterNookDialogue = () => {
+    setDialogue({
+      portrait: "⌂",
+      name: "Roadside Shelter Nook",
+      text: flags.shelterNoticeRemoved
+        ? "The false notice is gone. The shelter notes are visible again: warnings, thanks, and small kindnesses left by travelers for travelers."
+        : "A small cedar shelter sits under fern and root. A true lantern mark above it says: SHELTER. SMALL. DRY. LEAVE KINDLING.\n\nSomeone has nailed a false notice over the back wall: BY CROWN ORDER, ALL WESTBOUND TRAVELERS MUST RETURN TO BRAMBLECROSS AND AWAIT SAFE COMMAND.",
+      choices: [
+        !flags.shelterNoticeRemoved
+          ? {
+              label: "Remove the false notice.",
+              effect: () => {
+                setFlags((f) => ({ ...f, shelterNoticeRemoved: true }));
+                setPlayer((p) => ({ ...p, xp: p.xp + 5 }));
+                setDialogue(null);
+                setToast("You uncover the old shelter notes. XP +5");
+              },
+            }
+          : null,
+        !flags.lioShelterMarkFound
+          ? {
+              label: "Search for Lio's mark.",
+              effect: () => {
+                setFlags((f) => ({ ...f, lioShelterMarkFound: true, lioHookMarkFound: true }));
+                setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
+                setDialogue(null);
+                setToast("Mara finds a tiny hook-tailed arrow. XP +4");
+              },
+            }
+          : null,
+        {
+          label: "Rest briefly.",
+          effect: () => {
+            setFlags((f) => ({ ...f, shelterRested: true }));
+            setPlayer((p) => ({ ...p, hp: Math.min(p.maxHp, p.hp + 8) }));
+            setCompanion((c) => (c.recruited ? { ...c, hp: Math.min(c.maxHp, c.hp + 8) } : c));
+            setDialogue(null);
+            setToast("The shelter gives everyone a little steadiness. HP +8");
+          },
+        },
+        { label: "Leave the shelter.", effect: () => setDialogue(null) },
+      ].filter(Boolean),
+    });
+  };
+
+  const openFalseNoticeDialogue = () => {
+    setDialogue({
+      portrait: "!",
+      name: "False Detour Notice",
+      text: "A royal-looking notice orders all westbound travelers to detour east. The seal is close enough to worry a frightened traveler and wrong enough to worry you. A smaller lantern scratch hides under moss beside it.",
+      choices: [
+        {
+          label: "Inspect the royal-looking seal.",
+          effect: () => {
+            setFlags((f) => ({ ...f, falseNoticeInspected: true }));
+            setDialogue({ portrait: "!", name: "Copied Seal", text: "The crown points look too even, too polished, like someone copied the shape of authority without understanding its weight.", choices: [{ label: "That is useful.", effect: () => setDialogue(null) }] });
+          },
+        },
+        {
+          label: "Use the Willowmark Lens.",
+          effect: () => {
+            setFlags((f) => ({ ...f, falseNoticeLensUsed: true }));
+            gainStoryItemOnce("broken_false_seal_wax");
+            setPlayer((p) => ({ ...p, xp: p.xp + 5 }));
+            setDialogue(null);
+            announce("The lens reveals scraped Willow wax under the false seal. XP +5", [{ id: "broken_false_seal_wax", qty: 1 }]);
+          },
+        },
+        {
+          label: "Follow the old lantern scratch instead.",
+          effect: () => {
+            setFlags((f) => ({ ...f, falseNoticeLanternRead: true }));
+            setDialogue(null);
+            setToast("The lantern mark guides west. False signs command; true signs guide.");
+          },
+        },
+        {
+          label: "Follow the detour east anyway.",
+          effect: () => {
+            setFlags((f) => ({ ...f, followedFalseDetour: true, messyWestrootSolve: true }));
+            setDialogue(null);
+            setToast("The detour loops back on itself. Something wanted travelers confused.");
+          },
+        },
+      ],
+    });
+  };
+
+  const openThreeHollowDialogue = () =>
+    setDialogue({
+      portrait: "3",
+      name: "The Three-Sign Hollow",
+      text: "Three westward signs wait in a hollow: a Crown Sign that commands, a Lantern Sign that guides, and a blank stone door with no handle. Edden's drawing suddenly feels less like a drawing and more like a warning.",
+      choices: [
+        { label: "Inspect the Crown Sign.", effect: () => openCrownSignDialogue() },
+        { label: "Inspect the Lantern Sign.", effect: () => openLanternSignDialogue() },
+        { label: "Inspect the No-Handle Stone.", effect: () => openNoHandleStoneDialogue() },
+        { label: "Step back.", effect: () => setDialogue(null) },
+      ],
+    });
+
+  const openCrownSignDialogue = () =>
+    setDialogue({
+      portrait: "♛",
+      name: "Crown Sign",
+      text: "The Crown Sign is large, clean, and bossy. It does not warn, guide, shelter, or remember. It only orders travelers to obey the straight road.",
+      choices: [
+        {
+          label: "This sign commands, but does not guide.",
+          effect: () => {
+            setFlags((f) => ({ ...f, crownSignRejected: true }));
+            setDialogue(null);
+            setToast("You reject the Crown Sign as false guidance.");
+          },
+        },
+        {
+          label: "Use the Willowmark Lens.",
+          effect: () => {
+            setFlags((f) => ({ ...f, crownSignLensUsed: true }));
+            setDialogue({ portrait: "🔍", name: "Hidden Willow Mark", text: "Under the false seal, the lens catches scraped wax and the nicked lower leaf of Ada's honest mark. This sign is wearing stolen trust.", choices: [{ label: "That is one more truth.", effect: () => setDialogue(null) }] });
+          },
+        },
+      ],
+    });
+
+  const openLanternSignDialogue = () =>
+    setDialogue({
+      portrait: "✶",
+      name: "Lantern Sign",
+      text: "The Lantern Sign is half-covered with mud. Beneath it, older marks seem to guide rather than command: warning, shelter, memory.",
+      choices: [
+        {
+          label: "Clean the Lantern Sign fully.",
+          effect: () => {
+            setFlags((f) => ({ ...f, lanternSignCleaned: true }));
+            setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
+            setDialogue(null);
+            setToast("The old lantern marks shine through. XP +4");
+          },
+        },
+        {
+          label: "Compare it with Edden's drawing.",
+          effect: () => {
+            setFlags((f) => ({ ...f, lanternSignCompared: true }));
+            setDialogue(null);
+            setToast("Edden's drawing matches the hollow when turned sideways.");
+          },
+        },
+      ],
+    });
+
+  const openNoHandleStoneDialogue = () => {
+    const supportingClues =
+      getWestrootClueCount() + (flags.lioHookMarkFound ? 0 : 1);
+    const enoughClues = supportingClues >= 2;
+    setFlags((f) => ({ ...f, noHandleStoneInspected: true, lioHookMarkFound: true }));
+    setDialogue({
+      portrait: "▯",
+      name: "No-Handle Stone",
+      text: `The stone door has no handle, no latch, and no keyhole. Near the base, Mara finds a tiny hooked arrow scratched where adults would almost miss it.\n\n\"Lio,\" she whispers. \"Alive past this point. Do not trust the straight road.\"\n\nSupporting truths found: ${supportingClues} of 2 needed.`,
+      choices: [
+        {
+          label: "Study the door for a way in.",
+          effect: () => {
+            setFlags((f) => ({ ...f, noHandleDoorStudied: true }));
+            setDialogue(null);
+            setToast("The door will not open by force. It is waiting for truth.");
+          },
+        },
+        {
+          label: "Compare the mark with Edden's drawing.",
+          effect: () => {
+            setFlags((f) => ({ ...f, eddenDrawingComparedAtDoor: true }));
+            setDialogue(null);
+            setToast("The no-handle door is Edden's honest door.");
+          },
+        },
+        {
+          label: "Say: A road is safest when truth walks it first.",
+          effect: () => {
+            if (!enoughClues) {
+              setFlags((f) => ({ ...f, messyWestrootSolve: true }));
+              setDialogue(null);
+              setToast("The road listens, but the answer feels incomplete. Find more true clues.");
+              return;
+            }
+            setFlags((f) => ({ ...f, westrootGateOpened: true, cleanWestrootSolve: !f.messyWestrootSolve }));
+            if (!flags.messyWestrootSolve) {
+              gainStoryItemOnce("no_handle_token");
+              setPlayer((p) => ({ ...p, xp: p.xp + 10 }));
+              announce("The no-handle door opens. XP +10", [{ id: "no_handle_token", qty: 1 }]);
+            } else {
+              setToast("The no-handle door opens, but the road has noticed the rough edges.");
+            }
+            setDialogue(null);
+          },
+        },
+        {
+          label: "Try to force the door.",
+          effect: () => {
+            setFlags((f) => ({ ...f, messyWestrootSolve: true }));
+            setDialogue(null);
+            setToast("The door does not move. Something in the thorns stirs.");
+          },
+        },
+      ],
+    });
+  };
+
+  const openRoadwatcherDialogue = () => {
+    if (flags.beatRoadwatcher || flags.cleanWestrootSolve)
+      return setToast("The watched road is quiet now.");
+    setDialogue({
+      portrait: "👁️",
+      name: "Briar Roadwatcher",
+      text: "A thorn-wrapped watcher unfolds beside the road, wearing strips of false seal-cloth like a badge. Mara steps back behind the line before Hollis can somehow object from town.",
+      choices: [
+        {
+          label: "Break the watcher.",
+          effect: () => {
+            setDialogue(null);
+            startBattle(
+              buildEncounterEnemies(flags.messyWestrootSolve ? "roadwatcherHard" : "roadwatcher"),
+              flags.messyWestrootSolve ? "roadwatcherHard" : "roadwatcher",
+            );
+          },
+        },
+        { label: "Back away.", effect: () => setDialogue(null) },
+      ],
+    });
+  };
+
+  const openWestrootGateDialogue = () => {
+    if (!flags.westrootGateOpened)
+      return setToast("The First Westroot Gate waits for the no-handle stone to open.");
+    setDialogue({
+      portrait: "▣",
+      name: "First Westroot Gate",
+      text: "The door with no handle opens inward by itself. Gold-green light spills through root and stone. Mara reads Lio's tiny mark one more time: ALIVE PAST THIS POINT. DO NOT TRUST THE STRAIGHT ROAD.",
+      choices: [
+        !flags.searchedWestrootThreshold
+          ? {
+              label: "Search the threshold first.",
+              effect: () => {
+                setFlags((f) => ({ ...f, searchedWestrootThreshold: true }));
+                gainStoryItemOnce("pine_pitch_wax");
+                setDialogue(null);
+                announce("You collect Pine-Pitch Wax from the threshold.", [{ id: "pine_pitch_wax", qty: 1 }]);
+              },
+            }
+          : null,
+        !flags.witnessNoteSent
+          ? {
+              label: "Leave a witness note for Bramblecross.",
+              effect: () => {
+                setFlags((f) => ({ ...f, witnessNoteSent: true }));
+                gainStoryItemOnce("witness_note_bramblecross");
+                setDialogue(null);
+                announce("You prepare a witness note for Bramblecross.", [{ id: "witness_note_bramblecross", qty: 1 }]);
+              },
+            }
+          : null,
+        {
+          label: "Step through the gate.",
+          effect: () => {
+            setFlags((f) => ({ ...f, chapterTwoClear: true }));
+            setPlayer((p) => ({ ...p, xp: p.xp + 16 }));
+            setDialogue({
+              portrait: "✨",
+              name: "Chapter 2 Complete: The Westroot Trail",
+              text: "You step through into gold-green underground light.\n\nLio is alive past this point. The old road opened when truth came first. Somewhere below the hill, Westroot waits.",
+              choices: [{ label: "Continue", effect: () => setDialogue(null) }],
+            });
+          },
+        },
+      ].filter(Boolean),
+    });
+  };
+
   const inspectTile = (tile, options = {}) => {
     if (options.auto && shouldSkipAutoInspect(tile)) return;
     if (region === "hearthhollow") {
@@ -2058,7 +2569,9 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         });
     }
     if (region === "bramblecross") {
-      if (tile === "town_gate")
+      if (tile === "town_gate" && flags.chapterReported && !flags.chapterTwoClear)
+        openWestrootDeparture();
+      else if (tile === "town_gate")
         travelToRegion(
           "lanternRoad",
           { x: 12, y: 6 },
@@ -2102,6 +2615,24 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         openSkulkDialogue(options.previousPosition);
       if (tile === "boss" && !flags.beatCellarBoss) openBossDialogue();
       if (tile === "exit_door") openExitDoorDialogue();
+    }
+    if (region === "westrootTrail") {
+      if (tile === "westroot_return")
+        travelToRegion(
+          "bramblecross",
+          { x: 6, y: 9 },
+          player.checkpointLabel,
+          "You return to Bramblecross with Westroot still behind you.",
+        );
+      if (tile === "westroot_cut") openWestrootCutDialogue();
+      if (tile === "shelter_nook") openShelterNookDialogue();
+      if (tile === "false_notice") openFalseNoticeDialogue();
+      if (tile === "three_hollow") openThreeHollowDialogue();
+      if (tile === "crown_sign") openCrownSignDialogue();
+      if (tile === "lantern_sign") openLanternSignDialogue();
+      if (tile === "no_handle_stone") openNoHandleStoneDialogue();
+      if (tile === "roadwatcher") openRoadwatcherDialogue();
+      if (tile === "westroot_gate") openWestrootGateDialogue();
     }
   };
 
@@ -2154,6 +2685,8 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         ? "South Gate"
         : region === "rootCellar"
           ? "Old Root Cellar"
+          : region === "westrootTrail"
+            ? "Westroot Trail"
           : "Lantern Road",
     );
   };

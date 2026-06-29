@@ -45,6 +45,16 @@ const MAP_TOKEN_CONFIG: Record<
   town_gate: { kind: "action" },
   board: { kind: "action" },
   cellar: { kind: "action" },
+  westroot_return: { kind: "action" },
+  westroot_cut: { kind: "action" },
+  shelter_nook: { kind: "action" },
+  false_notice: { kind: "action" },
+  three_hollow: { kind: "action" },
+  crown_sign: { kind: "action" },
+  lantern_sign: { kind: "action" },
+  no_handle_stone: { kind: "action" },
+  westroot_gate: { kind: "action" },
+  roadwatcher: { kind: "threat" },
   stairs_up: { kind: "action" },
   sigil: { kind: "action" },
   mural: { kind: "action" },
@@ -78,7 +88,7 @@ export function MapStage({
   const visual = getMapVisualConfig(region);
   const rows = map.length;
   const columns = map[0]?.length || 1;
-  const hometownMap = region === "hearthhollow";
+  const fullyVisibleMap = ["hearthhollow", "bramblecross"].includes(region);
   const usesNavigationGraph = hasNavigationGraph(region);
   const fogMaskId = `map-fog-${region}`;
   const fogBlurId = `${fogMaskId}-blur`;
@@ -89,7 +99,7 @@ export function MapStage({
       const point = getMapNodePoint(region, x, y, columns, rows);
       const isPlayer = position.x === x && position.y === y;
       const explored = !!exploredMap[getVisitedKey(x, y)] || isPlayer;
-      const visible = hometownMap || explored || debug;
+      const visible = fullyVisibleMap || explored || debug;
       const meta = TILE_META[tile] || TILE_META.hidden;
       const clickable =
         isPlayer || areMapNodesConnected(region, position, { x, y });
@@ -149,7 +159,7 @@ export function MapStage({
         <div data-testid="map-background" className="painted-map-fallback" />
       )}
       <div className="painted-map-vignette" />
-      {!hometownMap && !debug ? (
+      {!fullyVisibleMap && !debug ? (
         <svg
           className="map-fog-layer"
           viewBox="0 0 100 100"

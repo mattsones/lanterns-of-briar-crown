@@ -43,6 +43,24 @@ export const ENEMY_DB = {
     attackA: { count: 1, sides: 8, bonus: 3 },
     attackB: { count: 2, sides: 6, bonus: 2 },
   },
+  briar_roadwatcher: {
+    name: "Briar Roadwatcher",
+    icon: "👁️",
+    hp: 28,
+    intentA: "False Command",
+    intentB: "Thorn Lash",
+    attackA: { count: 1, sides: 8, bonus: 2 },
+    attackB: { count: 2, sides: 4, bonus: 2 },
+  },
+  false_sign_scratcher: {
+    name: "False Sign Scratcher",
+    icon: "🪧",
+    hp: 18,
+    intentA: "Scrape Mark",
+    intentB: "Pocket Sand",
+    attackA: { count: 1, sides: 6, bonus: 1 },
+    attackB: { count: 1, sides: 4, bonus: 2 },
+  },
 };
 
 export const ENCOUNTERS = {
@@ -50,6 +68,8 @@ export const ENCOUNTERS = {
   wilds: ["thorncoat_ruffian", "thorny_hound"],
   cellarSkulk: ["rustroot_skulk"],
   cellarBoss: ["briar_knot_warden"],
+  roadwatcher: ["briar_roadwatcher"],
+  roadwatcherHard: ["briar_roadwatcher", "false_sign_scratcher"],
 };
 
 export function buildEnemy(enemyId) {
