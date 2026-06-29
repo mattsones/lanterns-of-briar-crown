@@ -331,7 +331,11 @@ The hero should feel capable but not yet epic.
 
 ## Gear visibility
 
-Gear should visibly affect the hero when possible:
+Gear should affect the game visually through custom item artwork, loot presentation, skill identity, and equipment UI before it affects the hero body.
+
+The paper-doll equipment-overlay plan is no longer the recommended production path. It required too much manual fitting and alignment for the current project stage. Do not prioritize visible gear layers on the hero body unless a future pass deliberately reopens that system.
+
+Use custom painted object icons for equipment instead. These should be bespoke storybook item illustrations, not stock-looking vector symbols.
 
 - Old Hatchet: rugged village tool / starter weapon
 - Turnipwood Blade: cleaner rootwood blade
@@ -671,12 +675,11 @@ No photorealism, no 3D-rendered look, no glossy digital game art, no anime style
 7. Briar Knot Warden
 8. Briar Crown symbol sheet
 9. Lantern Road symbol sheet
-10. item icon sheet
+10. custom Chapter 1 item icon set
 
 ## Later assets
 
-- hero customization base bodies
-- gear overlays
+- curated hero portraits or milestone hero art
 - battle backgrounds
 - UI parchment panels
 - skill icons
@@ -706,9 +709,12 @@ The safest implementation path is:
 2. Copy current keepers into production folders later:
    - `assets/portraits/characters/`
    - `assets/maps/`
+   - `assets/icons/items/`
 3. Add asset references in data files once the code has been moved into a repo.
-4. Replace emoji portraits gradually, one character at a time.
+4. Replace emoji portraits and item icons gradually, one asset at a time.
 5. Keep fallback emoji/icons until every asset reference is tested.
+
+For item art specifically, use `docs/art/item-icons/liams-game-custom-item-icon-plan.md` as the production target. The item UI should render custom art when present and fall back to the existing emoji when art is missing or broken.
 
 ---
 

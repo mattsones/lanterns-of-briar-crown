@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { getItemArtwork } from "../data/itemArtwork";
 
 export function Button({ children, className = "", ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
@@ -59,6 +60,46 @@ export function StatBadge({ label, value, bonus = 0 }: { label: ReactNode; value
         {bonus > 0 ? <span className="ml-1 text-emerald-300">+{bonus}</span> : null}
       </div>
     </div>
+  );
+}
+
+const itemIconSizes = {
+  xs: "h-7 w-7 text-base",
+  sm: "h-9 w-9 text-lg",
+  md: "h-12 w-12 text-2xl",
+  lg: "h-16 w-16 text-3xl",
+};
+
+export function ItemIcon({
+  item,
+  size = "md",
+  className = "",
+}: {
+  item?: { id?: string; icon?: ReactNode; name?: string } | null;
+  size?: keyof typeof itemIconSizes;
+  className?: string;
+}) {
+  const artwork = getItemArtwork(item?.id);
+  const label = item?.name || "Item";
+
+  return (
+    <span
+      aria-label={label}
+      title={label}
+      className={`relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-amber-200/20 bg-slate-950/70 text-white shadow-inner ${itemIconSizes[size]} ${className}`}
+    >
+      <span>{item?.icon || "?"}</span>
+      {artwork ? (
+        <img
+          src={artwork.src}
+          alt={artwork.alt}
+          className="absolute inset-0 h-full w-full object-contain p-1"
+          onError={(event) => {
+            event.currentTarget.style.display = "none";
+          }}
+        />
+      ) : null}
+    </span>
   );
 }
 

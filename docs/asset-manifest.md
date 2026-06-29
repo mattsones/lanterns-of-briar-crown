@@ -37,6 +37,26 @@ Production-ready versions can later be copied into `assets/maps/`, `assets/portr
 
 ---
 
+# Current Artwork Strategy
+
+The production artwork strategy is now:
+
+- painted maps for explorable locations;
+- half-body portraits for dialogue, companions, and key NPCs;
+- custom painted object art for item icons;
+- story/key art for major chapter moments;
+- emoji/icon fallbacks preserved anywhere art is missing.
+
+The paper-doll equipment effort is archived as proof work only. Do not build the main UI around visible gear overlays on the hero body. Item art should be generated as bespoke icon-object illustrations instead.
+
+The item icon production plan lives at:
+
+```text
+docs/art/item-icons/liams-game-custom-item-icon-plan.md
+```
+
+---
+
 # Selected First-Pass Assets
 
 ## Key Art
@@ -109,7 +129,7 @@ Production-ready versions can later be copied into `assets/maps/`, `assets/portr
 
 - Briar Crown symbol sheet
 - Lantern Road symbol sheet
-- item icon sheet
+- custom item icon set
 - skill icon sheet
 - parchment dialogue panel
 - quest journal panel
@@ -117,12 +137,84 @@ Production-ready versions can later be copied into `assets/maps/`, `assets/portr
 
 ## Hero Assets
 
-- default hero full-body
-- customizable race/ancestry base bodies
-- gender presentation variations
-- visible gear overlays
-- weapon variants
-- trinket variants
+- default hero portrait or full-body key illustration
+- curated race/ancestry hero portraits later if needed
+- fixed major-look hero art only if chapter milestones justify it
+
+Do not prioritize dynamic visible gear overlays. Equipment should be represented through custom item icons, combat skills, loot cards, and inventory/equipment UI.
+
+---
+
+# Existing Item-Art Proof Assets
+
+The generated paper-doll proof files are not production item icons, but they are useful as style and subject references:
+
+| Source asset | Status | Notes |
+|---|---|---|
+| `art/characters/hero/equipment/m_standard/proof_set/equip_mainhand_old_hatchet.png` | Reference only | Strong custom painted hatchet, but stored as RGB with a fake checkerboard background. Regenerate or clean before production icon use. |
+| `art/characters/hero/equipment/m_standard/proof_set/equip_torso_briarweave_vest_m_standard.png` | Reference only | Good Briarweave Vest concept, but stored as RGB with a fake checkerboard background. Regenerate or clean before production icon use. |
+| `art/characters/hero/equipment/m_standard/proof_set/equip_boots_village_boots_m_standard_ROTATION_CANDIDATE.png` | Reference only | Has alpha, but composition is a full paper-doll canvas with too much blank area. Needs icon-specific crop or regeneration. |
+
+---
+
+# Immediate Item Icon Batch
+
+Generate custom icon-object art for Chapter 1 items first:
+
+- Old Hatchet
+- Turnipwood Blade
+- Pebbleknock Hammer
+- Apprentice Kettle Helm
+- Briarweave Vest
+- Giggleleaf Cloak
+- Friendmaker Cloak
+- Stormbell Charm
+- Lantern Pin
+- Warden Chain
+- Edden's Blue Watch Cloth
+- Healing Fizzpop
+- Trail Snack
+- Fizzberry Handpie
+- Bubbleburst Tonic
+- Moonmint
+- Bubblecap Mushroom
+
+## Selected Production Item Icons
+
+These icons have been cleaned and promoted into the item-art registry:
+
+| Item | Selected asset | Notes |
+|---|---|---|
+| Old Hatchet | `assets/icons/items/old-hatchet-icon-v01.png` | Best starter-tool personality; worn and readable. |
+| Turnipwood Blade | `assets/icons/items/turnipwood-blade-icon-v01.png` | Strongest design in the first batch; distinctive and very readable. |
+| Pebbleknock Hammer | `assets/icons/items/pebbleknock-hammer-icon-v02.png` | Cleaner small-size silhouette than v1. |
+| Apprentice Kettle Helm | `assets/icons/items/apprentice-kettle-helm-icon-v01.png` | Better apprentice/made-do charm than the more ornate v2. |
+| Briarweave Vest | `assets/icons/items/briarweave-vest-icon-v01.png` | Darker but readable; strong woven-thorn armor identity. |
+| Giggleleaf Cloak | `assets/icons/items/giggleleaf-cloak-icon-v01.png` | Strong silhouette and playful leaf-cloak personality. |
+| Friendmaker Cloak | `assets/icons/items/friendmaker-cloak-icon-v01.png` | Clear, warm cloak read with distinct color identity. |
+| Stormbell Charm | `assets/icons/items/stormbell-charm-icon-v01.png` | Production-usable; optional future v2 could emphasize cracked/weathered storm magic more. |
+| Lantern Pin | `assets/icons/items/lantern-pin-icon-v01.png` | Excellent read as a humble road-lantern pin. |
+| Warden Chain | `assets/icons/items/warden-chain-icon-v01.png` | Strong reward icon; still readable at small size. |
+| Edden's Blue Watch Cloth | `assets/icons/items/eddens-blue-watch-cloth-icon-v01.png` | Good story-item read; civic watch identity is clear. |
+| Healing Fizzpop | `assets/icons/items/healing-fizzpop-icon-v01.png` | Bright, readable potion icon. |
+| Trail Snack | `assets/icons/items/trail-snack-icon-v01.png` | Strong food bundle silhouette with useful detail. |
+| Fizzberry Handpie | `assets/icons/items/fizzberry-handpie-icon-v01.png` | Readable and charming; filling color separates it from generic pie. |
+| Bubbleburst Tonic | `assets/icons/items/bubbleburst-tonic-icon-v01.png` | Strong potion silhouette and bubble identity. |
+| Moonmint | `assets/icons/items/moonmint-icon-v01.png` | Clean herb silhouette; cool color contrast works. |
+| Bubblecap Mushroom | `assets/icons/items/bubblecap-mushroom-icon-v01.png` | Production-usable ingredient cluster; includes a moss base but remains item-like. |
+
+## Selected Chapter 2 Story-Item Icons
+
+These have also been cleaned and promoted into the item-art registry so Chapter 2 item data can use them as soon as the items exist:
+
+| Item | Selected asset | Notes |
+|---|---|---|
+| Edden's Three-Door Drawing | `assets/icons/items/eddens-three-door-drawing-icon-v02.png` | Chosen over v1 because the door shapes remain clearer at 40-64 px and the sketch feels more urgent. Keep v1 as a polished reference candidate. |
+| Willowmark Lens | `assets/icons/items/willowmark-lens-icon-v01.png` | Production-ready; strong silhouette, brass detail, and clear investigative identity. |
+| Broken False Seal Wax | `assets/icons/items/broken-false-seal-wax-icon-v01.png` | Production-ready; reads immediately as cracked false authority. |
+| Pine-Pitch Wax | `assets/icons/items/pine-pitch-wax-icon-v01.png` | Production-ready; amber resin and twine give it a useful material read. |
+| No-Handle Token | `assets/icons/items/no-handle-token-icon-v01.png` | Production-ready; the missing handle reads clearly even small. |
+| Witness Note for Bramblecross | `assets/icons/items/witness-note-for-bramblecross-icon-v01.png` | Production-ready; official note shape and blue watch detail are clear. |
 
 ---
 
@@ -136,7 +228,8 @@ Safe integration order:
 2. Reference selected portraits in NPC data.
 3. Display portrait images in dialogue with emoji fallback.
 4. Add map backgrounds behind current tile maps as experiments.
-5. Replace item icons gradually.
-6. Add UI panels after gameplay remains stable.
+5. Add production item icon art in `assets/icons/items/`.
+6. Wire item art through `src/data/itemArtwork.ts` while preserving emoji fallback.
+7. Add UI panels after gameplay remains stable.
 
 Avoid replacing the tile system with freeform movement for now.

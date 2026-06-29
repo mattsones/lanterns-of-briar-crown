@@ -19,7 +19,7 @@ import {
   getCompanionGrowthPreview,
   getCompanionXpTarget,
 } from "../game/progression";
-import { Button, Meter } from "./ui";
+import { Button, ItemIcon, Meter } from "./ui";
 
 export function QuestTab({ journal }) {
   return (
@@ -118,9 +118,11 @@ export function InventoryTab({
                     className="rounded-2xl border border-white/10 bg-black/20 p-3"
                   >
                     <div className="flex items-start justify-between gap-3">
-                      <div>
+                      <div className="flex min-w-0 items-start gap-3">
+                        <ItemIcon item={item} />
+                        <div className="min-w-0">
                         <div className="font-medium">
-                          {item.icon} {item.name}{" "}
+                          {item.name}{" "}
                           <span className="text-xs text-white/60">
                             x{count}
                           </span>
@@ -147,6 +149,7 @@ export function InventoryTab({
                             {line}
                           </div>
                         ))}
+                        </div>
                       </div>
                       <div className="flex flex-wrap justify-end gap-2">
                         {item.slot ? (
@@ -223,9 +226,14 @@ export function EquipmentTab({
                 {titleCase(slot)}
               </div>
               <div className="mt-1 font-medium">
-                {itemId
-                  ? `${ITEM_DB[itemId].icon} ${ITEM_DB[itemId].name}`
-                  : "Empty"}
+                {itemId ? (
+                  <span className="flex items-center gap-2">
+                    <ItemIcon item={ITEM_DB[itemId]} size="sm" />
+                    <span>{ITEM_DB[itemId].name}</span>
+                  </span>
+                ) : (
+                  "Empty"
+                )}
               </div>
             </button>
           ))}
@@ -265,9 +273,11 @@ export function EquipmentTab({
                   className="rounded-2xl border border-white/10 bg-black/20 p-3"
                 >
                   <div className="flex justify-between gap-3">
-                    <div>
+                    <div className="flex min-w-0 items-start gap-3">
+                      <ItemIcon item={item} />
+                      <div className="min-w-0">
                       <div className="font-medium">
-                        {item.icon} {item.name}
+                        {item.name}
                       </div>
                       <div className="mt-1 text-xs text-white/70">
                         {item.description}
@@ -282,6 +292,7 @@ export function EquipmentTab({
                       ))}
                       <div className="mt-1 text-[11px] text-white/50">
                         Owned: {count} • Free copies: {Math.max(0, available)}
+                      </div>
                       </div>
                     </div>
                     <Button
@@ -320,9 +331,14 @@ export function PouchTab({ player, focusSlot, setFocusSlot, assign, clear }) {
                 Battle Pouch Slot {i + 1}
               </div>
               <div className="mt-1 font-medium">
-                {itemId
-                  ? `${ITEM_DB[itemId]?.icon} ${ITEM_DB[itemId]?.name}`
-                  : "Empty"}
+                {itemId ? (
+                  <span className="flex items-center gap-2">
+                    <ItemIcon item={ITEM_DB[itemId]} size="sm" />
+                    <span>{ITEM_DB[itemId]?.name}</span>
+                  </span>
+                ) : (
+                  "Empty"
+                )}
               </div>
             </button>
           );
@@ -354,13 +370,16 @@ export function PouchTab({ player, focusSlot, setFocusSlot, assign, clear }) {
                 className="rounded-2xl border border-white/10 bg-black/20 p-3"
               >
                 <div className="flex justify-between gap-3">
-                  <div>
+                  <div className="flex min-w-0 items-start gap-3">
+                    <ItemIcon item={ITEM_DB[id]} />
+                    <div className="min-w-0">
                     <div className="font-medium">
-                      {ITEM_DB[id].icon} {ITEM_DB[id].name}{" "}
+                      {ITEM_DB[id].name}{" "}
                       <span className="text-xs text-white/60">x{count}</span>
                     </div>
                     <div className="mt-1 text-xs text-white/70">
                       Restores {BATTLE_CONSUMABLES[id].heal} HP.
+                    </div>
                     </div>
                   </div>
                   <Button
@@ -496,12 +515,15 @@ export function RecipesTab({ player }) {
             key={recipe.id}
             className="rounded-2xl border border-white/10 bg-white/5 p-4"
           >
-            <div className="font-medium">
-              {item.icon} {recipe.name}
-            </div>
-            <div className="mt-1 text-sm text-white/75">{recipe.note}</div>
-            <div className="mt-2 text-xs text-white/60">
-              Ingredients: {formatIngredients(recipe.ingredients)}
+            <div className="flex items-start gap-3">
+              <ItemIcon item={item} />
+              <div className="min-w-0">
+                <div className="font-medium">{recipe.name}</div>
+                <div className="mt-1 text-sm text-white/75">{recipe.note}</div>
+                <div className="mt-2 text-xs text-white/60">
+                  Ingredients: {formatIngredients(recipe.ingredients)}
+                </div>
+              </div>
             </div>
             <div
               className={`mt-2 inline-block rounded-full px-3 py-1 text-xs ${canCraftRecipe(player, recipe) ? "bg-emerald-500/20 text-emerald-300" : "bg-white/10 text-white/60"}`}

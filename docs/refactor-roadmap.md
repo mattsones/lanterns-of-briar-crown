@@ -231,12 +231,14 @@ Add tests after relevant logic is extracted.
 3. Add character portrait fields to NPC data.
 4. Display portrait images in dialogue with fallback emoji.
 5. Add map background experiments behind the tile system.
+6. Add custom painted item icon art with fallback emoji.
 
 ## Do not do yet
 
 - Do not replace tile movement with freeform movement.
 - Do not remove fallback emoji before assets are tested.
 - Do not bake labels into map images.
+- Do not build new UI around paper-doll equipment overlays.
 
 ---
 

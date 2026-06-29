@@ -2,6 +2,18 @@
 
 This document defines the first-pass production spec for the **player character art and equipment layering system** in **Liam’s Game / Lanterns of Briar Crown**.
 
+## Status
+
+This paper-doll production spec is archived as proof-only guidance. The current production direction is custom painted item icon art, painted maps, and portraits with emoji fallbacks. Do not treat the rigged equipment overlay plan below as the active implementation target unless the paper-doll system is deliberately reopened later.
+
+For the active item-art plan, use:
+
+```text
+docs/art/item-icons/liams-game-custom-item-icon-plan.md
+```
+
+---
+
 It is intended for repo storage and future use during asset generation, naming, implementation, and testing.
 
 This spec follows the project’s storybook fantasy art direction: hand-painted warmth, subtle painterly texture, expressive but grounded characters, and a readable paper-doll style layering system. See the main art direction document for the broader visual rules and mood. fileciteturn5file0
@@ -573,4 +585,3 @@ Do not do the following in v1:
 3. Produce one proof-of-concept hero layering set.
 4. Verify compositing.
 5. Proceed to full base hero production.
-

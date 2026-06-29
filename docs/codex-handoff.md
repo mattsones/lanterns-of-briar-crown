@@ -437,3 +437,35 @@ git diff --check
 ```
 
 The boot rotation candidate was visually inspected against the base rig. It is suitable as proof-of-pipeline evidence, but it is not final production equipment art.
+
+## Current Handoff - Artwork/UI Pivot to Custom Item Icons
+
+Last updated: 2026-06-28
+
+Branch: `main`
+
+### Decision
+
+- Abandoned the paper-doll equipment overlay path as the active production direction.
+- Keep the paper-doll files in `art/characters/hero/` as proof/reference material only.
+- Use custom painted object art for item icons instead of stock-looking icons or rig-fitted gear overlays.
+- Keep emoji fallbacks anywhere item, portrait, map-token, or enemy art is missing.
+
+### Current Art Model
+
+- Painted maps remain the primary exploration art layer.
+- Half-body portraits remain the primary dialogue/companion art layer.
+- Item art should live in `assets/icons/items/` once production-ready.
+- Item artwork wiring should go through `src/data/itemArtwork.ts`.
+- The item UI should render custom artwork when present and fall back to each item's existing emoji.
+
+### Useful References
+
+- `docs/art/item-icons/liams-game-custom-item-icon-plan.md`
+- `docs/asset-manifest.md`
+- `docs/liams-game-art-direction.md`
+
+### Proof Asset Evaluation
+
+- `equip_mainhand_old_hatchet.png` and `equip_torso_briarweave_vest_m_standard.png` have strong custom painted object art, but are RGB with fake checkerboard backgrounds. Treat as source references, not production UI assets.
+- `equip_boots_village_boots_m_standard_ROTATION_CANDIDATE.png` has alpha, but it is composed as a paper-doll overlay canvas with too much blank area. Treat as source/reference unless recropped or regenerated as an icon.

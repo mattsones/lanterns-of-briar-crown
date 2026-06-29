@@ -10,7 +10,7 @@ import {
   RecipesTab,
 } from "./components/tabs";
 import { MapStage } from "./components/MapStage";
-import { Button, Meter, Panel, StatBadge } from "./components/ui";
+import { Button, ItemIcon, Meter, Panel, StatBadge } from "./components/ui";
 import { getBattleReward } from "./data/battleRewards";
 import {
   APPEARANCES,
@@ -3281,9 +3281,9 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                 key={entry.id}
                 className="flex items-center justify-between rounded-2xl bg-white/5 px-3 py-2 text-sm"
               >
-                <div>
-                  {ITEM_DB[entry.id]?.icon}{" "}
-                  {ITEM_DB[entry.id]?.name || entry.id}
+                <div className="flex min-w-0 items-center gap-2">
+                  <ItemIcon item={ITEM_DB[entry.id]} size="sm" />
+                  <span>{ITEM_DB[entry.id]?.name || entry.id}</span>
                 </div>
                 <div className="text-emerald-300">+{entry.qty}</div>
               </div>
