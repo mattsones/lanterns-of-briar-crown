@@ -8,6 +8,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "playtest:smoke": "playwright test tests/smoke.spec.ts",
+    "playtest:chapter2": "playwright test tests/chapter2.spec.ts",
     "test:rules": "playwright test tests/rules.spec.ts"
   },
   "dependencies": {

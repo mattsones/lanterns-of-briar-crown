@@ -49,7 +49,7 @@ export const MAP_ARTWORK_PLAN: Record<string, ArtworkPlanEntry> = {
   lantern_road: entry("lantern_road", "Lantern Road Gameplay Map", "map", 1, "painted-map-fallback", "available"),
   bramblecross: entry("bramblecross", "Bramblecross Town Map", "map", 1, "painted-map-fallback", "available"),
   root_cellar: entry("root_cellar", "Old Root Cellar Map", "map", 1, "painted-map-fallback", "available"),
-  westroot_trail: entry("westroot_trail", "Westroot Trail Map", "map", 2, "painted-map-fallback"),
+  westroot_trail: entry("westroot_trail", "Westroot Trail Map", "map", 2, "painted-map-fallback", "available"),
   westroot_hub: entry("westroot_hub", "Westroot Hub Map", "map", 3, "painted-map-fallback"),
   riddle_road_underway: entry("riddle_road_underway", "Riddle Road Underway Map", "map", 4, "painted-map-fallback"),
   briarhold_waystation: entry("briarhold_waystation", "Briarhold Waystation Map", "map", 5, "painted-map-fallback"),

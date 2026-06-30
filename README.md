@@ -4,7 +4,7 @@ A storybook fantasy adventure prototype about Hearthhollow, Lantern Road, Brambl
 
 ## Current Status
 
-Chapter 1 is playable as a React/TypeScript prototype. Chapter 2, **The Westroot Trail**, has started in code and is the current implementation focus.
+Chapter 1 is playable as a React/TypeScript prototype. Chapter 2, **The Westroot Trail**, now has a playable clean/messy No-Handle Gate path with a painted Westroot Trail map integrated.
 
 Current features include:
 
@@ -17,7 +17,7 @@ Current features include:
 - item-granted combat skills
 - hero XP and level-up choices
 - Chapter 1 story arc through the Root Cellar and report-back scene
-- early Chapter 2 Westroot Trail scenes, flags, quest steps, and placeholder map
+- Chapter 2 Westroot Trail scenes, puzzle flags, clean/messy Roadwatcher outcomes, and painted map background
 - painted Chapter 1 maps, portrait integration, and custom item icons with emoji fallbacks
 
 ## Chapter 1
@@ -58,6 +58,7 @@ npm.cmd run build
 
 ```bash
 npm.cmd run test:rules
+npm.cmd run playtest:chapter2
 npm.cmd run playtest:smoke
 ```
 
@@ -105,8 +106,8 @@ Visual direction:
 
 ## Short-Term Roadmap
 
-1. Complete the Chapter 2 playable path and add clean/messy path tests.
-2. Generate and integrate the Westroot Trail painted map.
+1. Play through Chapter 2 for story feel and map-label taste.
+2. Apply any Westroot Trail map projection tweaks found during playthrough.
 3. Continue extracting chapter story text and interaction helpers from `src/App.tsx`.
-4. Add chapter-progress, guest-NPC, and artwork-registry tests as new chapters land.
-5. Build each Chapter 3-5 milestone as a vertical slice with automated QA before user playthrough.
+4. Start Chapter 3 as the next vertical slice: story module, Westroot hub map, interactions, and tests.
+5. Add chapter-progress, guest-NPC, and artwork-registry tests as new chapters land.

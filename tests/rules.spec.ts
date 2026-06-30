@@ -22,6 +22,13 @@ import {
   normalizeChapterFlags,
 } from "../src/game/chapterProgress";
 import {
+  CHAPTER_2_REQUIRED_END_FLAGS,
+  CHAPTER_2_STORY,
+  getRoadwatcherEncounterKey,
+  getWestrootClueCount,
+  getWestrootPuzzleOutcome,
+} from "../src/story/chapter2";
+import {
   getActiveGuestNpc,
   guestCanEnterBattle,
   guestCanTakeDamage,
@@ -224,7 +231,7 @@ test("art backlog tracks full illustrated prototype scope", () => {
     expect(HERO_VARIANT_ARTWORK_PLAN[`hero_${race.id}_female`]).toBeTruthy();
   });
 
-  expect(ARTWORK_PLAN_GROUPS.maps.westroot_trail.status).toBe("needed");
+  expect(ARTWORK_PLAN_GROUPS.maps.westroot_trail.status).toBe("available");
   expect(ARTWORK_PLAN_GROUPS.maps.briarhold_waystation.chapter).toBe(5);
   expect(ARTWORK_PLAN_GROUPS.symbols.briar_crown_symbols.fallback).toBe("text labels");
   expect(getArtworkBacklog().some((entry) => entry.id === "mara")).toBe(true);
@@ -263,4 +270,65 @@ test("future chapter data IDs exist with fallbacks", () => {
     roadwatcherDefeated: true,
     briarCrownWatchingWestroot: true,
   });
+});
+
+test("chapter two westroot puzzle supports clean, standard, and messy outcomes", () => {
+  const clean = getWestrootPuzzleOutcome({
+    lanternSignCleaned: true,
+    lioHookMarkFound: true,
+  });
+  expect(clean).toMatchObject({
+    supportingClues: 2,
+    enoughClues: true,
+    cleanSolve: true,
+    roadwatcherMode: "avoided",
+  });
+
+  const tooEarly = getWestrootPuzzleOutcome({
+    lioHookMarkFound: true,
+  });
+  expect(tooEarly.enoughClues).toBe(false);
+  expect(tooEarly.cleanSolve).toBe(false);
+
+  const standardFlags = {
+    forcedNoHandleDoor: true,
+    lanternSignCleaned: true,
+    lioHookMarkFound: true,
+  };
+  const standard = getWestrootPuzzleOutcome(standardFlags);
+  expect(standard.cleanSolve).toBe(false);
+  expect(standard.roadwatcherMode).toBe("standard");
+  expect(getRoadwatcherEncounterKey(standardFlags)).toBe("roadwatcher");
+
+  const messy = getWestrootPuzzleOutcome({
+    followedFalseDetour: true,
+    crownSignRejected: true,
+    lioHookMarkFound: true,
+  });
+  expect(messy.roadwatcherMode).toBe("hard");
+  expect(getRoadwatcherEncounterKey({ followedFalseDetour: true })).toBe("roadwatcherHard");
+  expect(getWestrootClueCount({ willowForgeryConfirmedAtHollow: true })).toBe(1);
+});
+
+test("chapter two contract keeps required flags, map prompt, and reveal boundaries stable", () => {
+  CHAPTER_2_REQUIRED_END_FLAGS.forEach((flag) => {
+    expect(normalizeChapterFlags({})[flag]).toBe(false);
+  });
+  expect(CHAPTER_2_STORY.mapPromptDoc).toBe("docs/art/prompts/chapter-2-westroot-trail-map.md");
+  expect(CHAPTER_STORY_PLANS[2].keyLines.join(" ")).not.toContain("Princess Elowen");
+  expect(MAPS.westrootTrail.backgroundImage).toContain("westroot-trail-map-v04");
+  expect(getMapVisualConfig("westrootTrail")).toMatchObject({
+    aspectRatio: "16 / 9",
+    navBounds: { left: 5, top: 8, width: 90, height: 82 },
+  });
+  expect(MAPS.westrootTrail.tiles.flat()).toEqual(
+    expect.arrayContaining([
+      "westroot_cut",
+      "shelter_nook",
+      "false_notice",
+      "three_hollow",
+      "roadwatcher",
+      "westroot_gate",
+    ]),
+  );
 });

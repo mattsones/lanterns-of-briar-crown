@@ -537,3 +537,46 @@ git diff --check
 ### Build Size Note
 
 `npm.cmd run build` is currently green, but the asset list already includes multiple 1-3.5 MB PNG files. Before the full Chapter 2-5 art push, add export/compression guidelines and review any new painted maps, portraits, and item icons for dimensions and file size before registering them.
+
+## Current Handoff - Chapter 2 Completion Pass
+
+Last updated: 2026-06-30
+
+Branch: `codex/chapter-2-completion`
+
+### What Changed
+
+- Added `src/story/chapter2.ts` as the Chapter 2 puzzle/story contract module, including the old road phrase, Lio gate mark, required end flags, supporting clue flags, mistake flags, and clean/standard/hard Roadwatcher outcome helpers.
+- Added the saved Westroot Trail map art prompt at `docs/art/prompts/chapter-2-westroot-trail-map.md`.
+- Promoted `assets/maps/westroot-trail-map-v04.png` as the active painted Westroot Trail gameplay map. `v01`, `v02`, and `v03` are preserved as alternate candidates.
+- Wired the Westroot Trail map background in `src/data/maps.ts`, marked it available in `src/data/artworkPlan.ts`, and tuned the first `src/data/mapVisuals.ts` projection pass for the painted landmarks.
+- Expanded the Three-Sign Hollow flow in `src/App.tsx`: Mara can receive a non-combat puzzle job, the active companion can comment on the hollow, Crown/Lantern sign choices now write stable clue/mistake flags, and the No-Handle Stone uses the shared Chapter 2 outcome helper.
+- Clean No-Handle solve now avoids combat and grants Roadwatcher evidence. Messy solves summon Roadwatcher pressure and open the gate after the Roadwatcher battle resolves.
+- Threshold search now grants the No-Handle Token; clean Roadwatcher avoidance grants Pine-Pitch Wax.
+- Added `npm.cmd run playtest:chapter2` with browser coverage for clean and messy Chapter 2 No-Handle outcomes plus visual assertions that the painted Westroot map and hero token render.
+- Expanded rules coverage for Chapter 2 puzzle outcomes, map prompt registration, required end flags, map art wiring, and the no-Princess-Elowen-in-Chapter-2 boundary.
+
+### Verification Run
+
+```bash
+npm.cmd run build
+npm.cmd run test:rules
+npm.cmd run playtest:chapter2
+npm.cmd run playtest:smoke
+git diff --check
+```
+
+Latest local results:
+
+- `npm.cmd run build` passed. The selected `westroot-trail-map-v04` production export is about 3.37 MB in the Vite output.
+- `npm.cmd run test:rules` passed: 11 tests.
+- `npm.cmd run playtest:chapter2` passed: 2 tests.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `git diff --check` passed with only normal Windows CRLF warnings.
+
+### Next Recommended Slice
+
+Do one manual/user playthrough of Chapter 2 for story feel and map-label taste, then either:
+
+1. Add any map projection adjustments from playthrough notes.
+2. Start Chapter 3 as the next vertical slice: story module, placeholder Westroot hub map, Rootmarket/Witness Stones/Split Hall interactions, then tests.

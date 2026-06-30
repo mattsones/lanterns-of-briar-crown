@@ -73,6 +73,7 @@ docs/art/item-icons/liams-game-custom-item-icon-plan.md
 | Lantern Road gameplay map | `lantern-road-gameplay-map-v02.png` | Current clean production map; icon-free version of the winding road layout. |
 | Bramblecross town concept | `bramblecross-town-concept-v01.png` | Practical, square, guarded town layout. |
 | Root Cellar map concept | `root-cellar-map-concept-v01.png` | Strong layout; Warden visibly blocks sealed door. |
+| Westroot Trail gameplay map | `westroot-trail-map-v04.png` | Current Chapter 2 production map; readable Shelter Nook, false notice, Three-Sign Hollow, Roadwatcher bend, and First Westroot Gate. |
 
 ## Characters
 
@@ -100,6 +101,9 @@ docs/art/item-icons/liams-game-custom-item-icon-plan.md
 | Lantern Road gameplay map v01 | Preserved as concept/reference; replaced in production by icon-free v02. |
 | First Rowan human portrait | Too human/soft for defensive non-human companion. |
 | Rowan fox-person portrait | Good art, but fox-person was not one of the intended playable ancestries. Could be repurposed as a future roadside trickster NPC. |
+| `westroot-trail-map-v01.png` | Strong painterly candidate, but the gate/sign composition is less aligned to the current Chapter 2 playable route than v04. |
+| `westroot-trail-map-v02.png` | Clear candidate with good landmarks, but v04 has better safe margins and a more readable path-to-gate composition. |
+| `westroot-trail-map-v03.png` | Strong candidate and previous code target; replaced by v04 because v04 gives cleaner path readability and overlay spacing. |
 
 ---
 

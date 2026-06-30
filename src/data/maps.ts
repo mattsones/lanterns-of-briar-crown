@@ -14,6 +14,10 @@ const rootCellarMap = new URL(
   "../../assets/maps/root-cellar-map-v01.png",
   import.meta.url,
 ).href;
+const westrootTrailMap = new URL(
+  "../../assets/maps/westroot-trail-map-v04.png",
+  import.meta.url,
+).href;
 
 export const MAPS = {
   hearthhollow: {
@@ -634,7 +638,7 @@ export const MAPS = {
     name: "Westroot Trail",
     subtitle: "Chapter 2: The old road west",
     start: { x: 0, y: 3 },
-    backgroundImage: null,
+    backgroundImage: westrootTrailMap,
     tiles: [
       ["tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree", "tree"],
       ["tree", "grass", "shelter_nook", "grass", "false_notice", "grass", "roadwatcher", "grass", "tree"],
