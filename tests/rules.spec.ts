@@ -1,5 +1,13 @@
 import { expect, test } from "@playwright/test";
 import { resolveRoll, resolveSkillCheck } from "../src/game/dice";
+import { RACES } from "../src/data/character";
+import { ENCOUNTERS, ENEMY_DB } from "../src/data/enemies";
+import {
+  ARTWORK_PLAN_GROUPS,
+  HERO_VARIANT_ARTWORK_PLAN,
+  getArtworkBacklog,
+} from "../src/data/artworkPlan";
+import { ITEM_DB } from "../src/data/items";
 import { MAPS, TILE_META } from "../src/data/maps";
 import { getMapVisualConfig } from "../src/data/mapVisuals";
 import { gainItem, getDefaultBattlePouch, removeItem } from "../src/game/inventory";
@@ -9,10 +17,21 @@ import { getVisitedKey } from "../src/game/map";
 import { addBonuses } from "../src/game/stats";
 import { BATTLE_REWARDS } from "../src/data/battleRewards";
 import {
+  CHAPTER_DEFINITIONS,
+  getChapterProgress,
+  normalizeChapterFlags,
+} from "../src/game/chapterProgress";
+import {
+  getActiveGuestNpc,
+  guestCanEnterBattle,
+  guestCanTakeDamage,
+} from "../src/game/guestNpcs";
+import {
   CHAPTER_1_STORY,
   appendChapter1CompanionReaction,
   getChapter1CompanionReaction,
 } from "../src/story/chapter1";
+import { CHAPTER_STORY_PLANS } from "../src/story/chapters2to5";
 
 test("dice helpers format notation and skill checks", () => {
   const originalRandom = Math.random;
@@ -149,4 +168,99 @@ test("chapter one story script beats stay wired into data", () => {
   expect(
     appendChapter1CompanionReaction("Base text", "rowan", "reportBack"),
   ).toContain("One route at a time");
+});
+
+test("chapter progress derives current chapter from stable flags", () => {
+  expect(getChapterProgress({}).currentChapterId).toBe(1);
+  expect(getChapterProgress({ chapterReported: true }).currentChapterId).toBe(2);
+  expect(getChapterProgress({ chapterTwoClear: true }).currentChapterId).toBe(3);
+  expect(getChapterProgress({ chapterThreeClear: true }).currentChapterId).toBe(4);
+  expect(getChapterProgress({ chapterFourClear: true }).currentChapterId).toBe(5);
+  expect(getChapterProgress({ chapterFiveClear: true })).toMatchObject({
+    currentChapterId: 5,
+    allChaptersComplete: true,
+  });
+
+  const normalized = normalizeChapterFlags({});
+  expect(normalized.lioAlivePastGate).toBe(false);
+  expect(normalized.chapterFiveClear).toBe(false);
+  expect(CHAPTER_DEFINITIONS[5].title).toBe("Briarhold Waystation");
+});
+
+test("guest NPC support keeps Mara out of combat systems", () => {
+  expect(getActiveGuestNpc({})).toBeNull();
+
+  const mara = getActiveGuestNpc({ maraJoined: true });
+  expect(mara).toMatchObject({
+    id: "mara",
+    name: "Mara Brindle",
+    present: true,
+    participatesInBattle: false,
+    canTakeDamage: false,
+  });
+  expect(guestCanEnterBattle(mara)).toBe(false);
+  expect(guestCanTakeDamage(mara)).toBe(false);
+  expect(getActiveGuestNpc({ maraJoined: true, chapterFiveClear: true })).toBeNull();
+});
+
+test("chapters two through five have story and art contracts", () => {
+  [2, 3, 4, 5].forEach((chapterId) => {
+    const plan = CHAPTER_STORY_PLANS[chapterId];
+    expect(plan.title).toBeTruthy();
+    expect(plan.requiredEndFlags.length).toBeGreaterThanOrEqual(4);
+    expect(plan.coreBeats.length).toBeGreaterThanOrEqual(7);
+    expect(plan.keyLines.length).toBeGreaterThanOrEqual(3);
+    expect(plan.artTargets.maps.length).toBeGreaterThanOrEqual(1);
+  });
+
+  expect(CHAPTER_STORY_PLANS[2].keyLines).toContain("The honest one has no handle.");
+  expect(CHAPTER_STORY_PLANS[5].keyLines).toContain("It was not supposed to wake yet.");
+});
+
+test("art backlog tracks full illustrated prototype scope", () => {
+  expect(Object.keys(HERO_VARIANT_ARTWORK_PLAN)).toHaveLength(RACES.length * 2);
+  RACES.forEach((race) => {
+    expect(HERO_VARIANT_ARTWORK_PLAN[`hero_${race.id}_male`]).toBeTruthy();
+    expect(HERO_VARIANT_ARTWORK_PLAN[`hero_${race.id}_female`]).toBeTruthy();
+  });
+
+  expect(ARTWORK_PLAN_GROUPS.maps.westroot_trail.status).toBe("needed");
+  expect(ARTWORK_PLAN_GROUPS.maps.briarhold_waystation.chapter).toBe(5);
+  expect(ARTWORK_PLAN_GROUPS.symbols.briar_crown_symbols.fallback).toBe("text labels");
+  expect(getArtworkBacklog().some((entry) => entry.id === "mara")).toBe(true);
+});
+
+test("future chapter data IDs exist with fallbacks", () => {
+  [
+    "rootbread_charm",
+    "witness_stone_rubbing",
+    "folded_map_scrap",
+    "lanternwell_drop",
+    "true_seal_fragment",
+    "briar_chain_link",
+    "lios_courier_knot",
+  ].forEach((itemId) => {
+    expect(ITEM_DB[itemId]).toBeTruthy();
+    expect(ITEM_DB[itemId].icon).toBeTruthy();
+  });
+
+  [
+    "thorn_collared_hound",
+    "briar_relay_guard",
+    "seal_forged_sentry",
+    "crown_whisperer",
+    "bracken_voss",
+    "thornseal_guard",
+    "thornroot_sentry",
+  ].forEach((enemyId) => {
+    expect(ENEMY_DB[enemyId]).toBeTruthy();
+    expect(ENEMY_DB[enemyId].icon).toBeTruthy();
+  });
+
+  expect(ENCOUNTERS.roadwatcherHard).toContain("thorn_collared_hound");
+  expect(ENCOUNTERS.briarholdBoss).toContain("bracken_voss");
+  expect(BATTLE_REWARDS.roadwatcher.flagUpdate).toMatchObject({
+    roadwatcherDefeated: true,
+    briarCrownWatchingWestroot: true,
+  });
 });

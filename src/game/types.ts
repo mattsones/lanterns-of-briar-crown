@@ -1,6 +1,8 @@
 export type StatBlock = Record<string, number>;
 export type Inventory = Record<string, number>;
 
+export type ChapterId = 1 | 2 | 3 | 4 | 5;
+
 export type Equipment = {
   weapon: string | null;
   helm: string | null;
@@ -60,13 +62,28 @@ export type Companion = {
 
 export type Flags = Record<string, unknown>;
 
+export type GuestNpcId = "mara";
+
+export type GuestNpc = {
+  id: GuestNpcId;
+  name: string;
+  role: string;
+  present: boolean;
+  mapTokenIcon: string;
+  statusText: string;
+  participatesInBattle: false;
+  canTakeDamage: false;
+};
+
 export type SavePayload = {
   screen: string;
+  chapterId?: ChapterId;
   player: Player;
   region: string;
   position: Position;
   visited: Record<string, Record<string, boolean>>;
   companion: Companion;
+  guestNpc?: GuestNpc | null;
   flags: Flags;
   quest: unknown;
   toast: string;

@@ -33,6 +33,7 @@ import { RECIPE_DB } from "./data/recipes";
 import { SHOP_INVENTORIES } from "./data/shops";
 import { buildQuestJournal } from "./data/quests";
 import { SKILL_DB } from "./data/skills";
+import { HERO_VARIANT_ARTWORK_PLAN, MAP_ARTWORK_PLAN } from "./data/artworkPlan";
 import {
   BattleModal,
   CraftModal,
@@ -43,8 +44,10 @@ import {
   ShopModal,
 } from "./components/modals";
 import { tickCooldowns } from "./game/battle";
+import { getChapterProgress } from "./game/chapterProgress";
 import { getHeroAvatar } from "./game/appearance";
 import { checkSummary, resolveRoll, resolveSkillCheck } from "./game/dice";
+import { getActiveGuestNpc } from "./game/guestNpcs";
 import {
   canCraftRecipe,
   gainItem,
@@ -83,6 +86,7 @@ import {
   appendChapter1CompanionReaction,
   getChapter1CompanionReaction,
 } from "./story/chapter1";
+import { CHAPTER_STORY_PLANS } from "./story/chapters2to5";
 
 function getVillageNpcDialogue(tile, flags) {
   const lines = {
@@ -287,11 +291,13 @@ export default function LiamsGamePrototype() {
     if (!player) return;
     const payload = {
       screen: "play",
+      chapterId: getChapterProgress(flags).currentChapterId,
       player: { ...player, checkpointLabel: label },
       region,
       position,
       visited,
       companion,
+      guestNpc: getActiveGuestNpc(flags),
       flags,
       quest,
       toast: `Checkpoint reached: ${label}`,
@@ -2310,7 +2316,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         {
           label: "Compare the mark with Edden's drawing.",
           effect: () => {
-            setFlags((f) => ({ ...f, eddenDrawingComparedAtDoor: true }));
+            setFlags((f) => ({ ...f, eddenDrawingComparedAtDoor: true, eddensDrawingValidated: true }));
             setDialogue(null);
             setToast("The no-handle door is Edden's honest door.");
           },
@@ -2324,7 +2330,14 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               setToast("The road listens, but the answer feels incomplete. Find more true clues.");
               return;
             }
-            setFlags((f) => ({ ...f, westrootGateOpened: true, cleanWestrootSolve: !f.messyWestrootSolve }));
+            setFlags((f) => ({
+              ...f,
+              westrootGateOpened: true,
+              cleanWestrootSolve: !f.messyWestrootSolve,
+              eddensDrawingValidated: true,
+              briarCrownWatchingWestroot: true,
+              roadwatcherEncounterAvoided: !f.messyWestrootSolve,
+            }));
             if (!flags.messyWestrootSolve) {
               gainStoryItemOnce("no_handle_token");
               setPlayer((p) => ({ ...p, xp: p.xp + 10 }));
@@ -2403,7 +2416,13 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         {
           label: "Step through the gate.",
           effect: () => {
-            setFlags((f) => ({ ...f, chapterTwoClear: true }));
+            setFlags((f) => ({
+              ...f,
+              chapterTwoClear: true,
+              lioAlivePastGate: true,
+              eddensDrawingValidated: true,
+              briarCrownWatchingWestroot: true,
+            }));
             setPlayer((p) => ({ ...p, xp: p.xp + 16 }));
             setDialogue({
               portrait: "✨",
@@ -3259,6 +3278,32 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       "Lantern Shrine discovery flag exists",
       "Shrine side thread can stay hidden until discovered.",
     );
+    add(
+      getChapterProgress(flags).currentChapterId >= 1,
+      "Chapter progress contract resolves",
+      `Current chapter: ${getChapterProgress(flags).currentTitle}.`,
+    );
+    add(
+      [2, 3, 4, 5].every((chapterId) => CHAPTER_STORY_PLANS[chapterId]?.requiredEndFlags?.length),
+      "Chapter 2-5 story contracts exist",
+      "Later chapters have implementation-facing beats, key lines, required flags, and art targets.",
+    );
+    add(
+      Object.keys(HERO_VARIANT_ARTWORK_PLAN).length === RACES.length * 2,
+      "Hero variant art backlog covers 8 races x 2 genders",
+      "Appearance choices remain UI/personality until a later art expansion.",
+    );
+    add(
+      MAP_ARTWORK_PLAN.westroot_trail?.status === "needed",
+      "Westroot Trail painted map is tracked",
+      "Chapter 2 map art can be generated and integrated without losing fallback behavior.",
+    );
+    const guest = getActiveGuestNpc(flags);
+    add(
+      !guest || (!guest.participatesInBattle && !guest.canTakeDamage),
+      "Guest NPCs stay out of combat",
+      guest ? `${guest.name} is present as a protected story guest.` : "No active guest NPC.",
+    );
     setQaResults(results);
     setToast(
       `QA checks complete: ${results.filter((r) => !r.ok).length} issue(s) found.`,
@@ -3323,11 +3368,13 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       `${player.name} • ${currentRegionInfo.name}`;
     const payload = {
       screen: "play",
+      chapterId: getChapterProgress(flags).currentChapterId,
       player: normalizePlayerData(player),
       region,
       position,
       visited,
       companion,
+      guestNpc: getActiveGuestNpc(flags),
       flags,
       quest,
       toast: `Loaded ${name}.`,

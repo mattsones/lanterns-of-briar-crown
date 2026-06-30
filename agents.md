@@ -1,10 +1,25 @@
 # Liam’s Game — Agent Instructions
 
+## Thread Start Ritual
+
+At the start of every new Codex thread for this project:
+
+1. Run `git fetch --all --prune`.
+2. Run `git status --short --branch`.
+3. Compare local and remote with `git rev-list --left-right --count HEAD...origin/main`.
+4. If local is clean and behind only, fast-forward with `git pull --ff-only`.
+5. If local has uncommitted work, diverges from remote, or is on a feature branch, do not assume local is the source of truth. Inspect first and explain the state before changing files.
+6. Read `docs/codex-handoff.md` and any task-specific docs before implementation.
+
+Remote `origin/main` is the project source of truth unless the user explicitly says otherwise.
+
 ## Project Goal
 
 Preserve and evolve Liam’s Game, a storybook fantasy React/TypeScript adventure prototype.
 
-The current priority is to turn the existing single-file prototype into a runnable Vite React TypeScript project without changing gameplay behavior.
+The current priority is to complete the playable, fully illustrated prototype through Chapter 5 while preserving the working Chapter 1 baseline.
+
+Chapter 1 is playable. Chapter 2 has already started in code and should be completed before adding Chapter 3 content.
 
 ## Read First
 
@@ -18,13 +33,21 @@ Before making changes, read:
 - `docs/asset-manifest.md`
 - `docs/playtest-notes/chapter-1-golden-path.md`
 
-## Current Prototype
+## Current App
 
-The current working prototype is:
+The original working prototype is preserved as:
 
 - `liams_game_prototype.jsx`
 
-Preserve this behavior when moving it into `src/App.tsx`.
+The active app is now:
+
+- `src/App.tsx`
+- extracted helpers in `src/game/`
+- extracted data in `src/data/`
+- extracted reusable UI in `src/components/`
+- chapter story modules in `src/story/`
+
+Preserve Chapter 1 behavior while extending later chapters.
 
 ## Rules
 
@@ -37,24 +60,14 @@ Preserve this behavior when moving it into `src/App.tsx`.
 7. Do not remove fallback emoji/icons when adding art.
 8. If behavior must change to make the app compile, document the change.
 
-## First Milestone
-
-Create a runnable Vite + React + TypeScript app.
-
-Expected files:
-
-- `package.json`
-- `index.html`
-- `src/main.tsx`
-- `src/App.tsx`
-- `src/styles.css`
-- `.gitignore`
-- `README.md`
-
-## First Commands to Run
+## Standard Verification Commands
 
 ```bash
-git init
 npm install
+npm.cmd run build
+npm.cmd run test:rules
+npm.cmd run playtest:smoke
 npm run dev
-npm run build
+```
+
+On Windows, prefer `npm.cmd` for scripted verification when PowerShell execution policy blocks `npm.ps1`.

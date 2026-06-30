@@ -1,0 +1,121 @@
+import type { ChapterId, Flags } from "./types";
+
+export type ChapterDefinition = {
+  id: ChapterId;
+  title: string;
+  startFlag: string | null;
+  completeFlag: string;
+};
+
+export const CHAPTER_DEFINITIONS: Record<ChapterId, ChapterDefinition> = {
+  1: {
+    id: 1,
+    title: "The Road That Lied",
+    startFlag: null,
+    completeFlag: "chapterReported",
+  },
+  2: {
+    id: 2,
+    title: "The Westroot Trail",
+    startFlag: "chapterTwoStarted",
+    completeFlag: "chapterTwoClear",
+  },
+  3: {
+    id: 3,
+    title: "The Hidden Root",
+    startFlag: "chapterThreeStarted",
+    completeFlag: "chapterThreeClear",
+  },
+  4: {
+    id: 4,
+    title: "The Riddle Road",
+    startFlag: "chapterFourStarted",
+    completeFlag: "chapterFourClear",
+  },
+  5: {
+    id: 5,
+    title: "Briarhold Waystation",
+    startFlag: "chapterFiveStarted",
+    completeFlag: "chapterFiveClear",
+  },
+};
+
+export const CHAPTER_FLAG_DEFAULTS: Flags = {
+  chapterTwoStarted: false,
+  chapterTwoBriefed: false,
+  maraJoined: false,
+  eddenVisited: false,
+  eddenDrawingReceived: false,
+  eddensDrawingValidated: false,
+  adaSealLessonComplete: false,
+  lioAlivePastGate: false,
+  briarCrownWatchingWestroot: false,
+  roadwatcherEncounterAvoided: false,
+  roadwatcherDefeated: false,
+  chapterTwoClear: false,
+  chapterThreeStarted: false,
+  westrootTrustEarned: false,
+  witnessStoneSequenceSolved: false,
+  willowCargoExposed: false,
+  chapterThreeClear: false,
+  chapterFourStarted: false,
+  foldedMapDecoded: false,
+  captivePorterHelped: false,
+  lioMessageFound: false,
+  princessNameSeen: false,
+  briarholdLeadFound: false,
+  chapterFourClear: false,
+  chapterFiveStarted: false,
+  captiveLanternsRestored: false,
+  lioRescued: false,
+  brackenEscaped: false,
+  briarCrownFactionRevealed: false,
+  livingBriarMarkSeen: false,
+  chapterFiveClear: false,
+};
+
+export function normalizeChapterFlags(flags: Flags = {}) {
+  return { ...CHAPTER_FLAG_DEFAULTS, ...flags };
+}
+
+export function getChapterIdForFlags(flags: Flags = {}): ChapterId {
+  const normalized = normalizeChapterFlags(flags);
+  if (normalized.chapterFourClear || normalized.chapterFiveStarted || normalized.chapterFiveClear) return 5;
+  if (normalized.chapterThreeClear || normalized.chapterFourStarted) return 4;
+  if (normalized.chapterTwoClear || normalized.chapterThreeStarted) return 3;
+  if (normalized.chapterReported || normalized.chapterTwoStarted) return 2;
+  return 1;
+}
+
+export function getCompletedChapterIds(flags: Flags = {}): ChapterId[] {
+  const normalized = normalizeChapterFlags(flags);
+  const highestCompleted: ChapterId | 0 = normalized.chapterFiveClear
+    ? 5
+    : normalized.chapterFourClear
+      ? 4
+      : normalized.chapterThreeClear
+        ? 3
+        : normalized.chapterTwoClear
+          ? 2
+          : normalized.chapterReported
+            ? 1
+            : 0;
+  return (Object.values(CHAPTER_DEFINITIONS) as ChapterDefinition[])
+    .filter((chapter) => chapter.id <= highestCompleted)
+    .map((chapter) => chapter.id);
+}
+
+export function getChapterProgress(flags: Flags = {}) {
+  const normalized = normalizeChapterFlags(flags);
+  const currentChapterId = getChapterIdForFlags(normalized);
+  const completedChapterIds = getCompletedChapterIds(normalized);
+  const currentChapter = CHAPTER_DEFINITIONS[currentChapterId];
+
+  return {
+    currentChapterId,
+    currentChapter,
+    currentTitle: currentChapter.title,
+    completedChapterIds,
+    allChaptersComplete: !!normalized.chapterFiveClear,
+  };
+}

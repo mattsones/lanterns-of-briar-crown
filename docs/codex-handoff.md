@@ -496,3 +496,44 @@ Branch: `main`
 
 - `equip_mainhand_old_hatchet.png` and `equip_torso_briarweave_vest_m_standard.png` have strong custom painted object art, but are RGB with fake checkerboard backgrounds. Treat as source references, not production UI assets.
 - `equip_boots_village_boots_m_standard_ROTATION_CANDIDATE.png` has alpha, but it is composed as a paper-doll overlay canvas with too much blank area. Treat as source/reference unless recropped or regenerated as an icon.
+
+## Current Handoff - Chapters 2-5 Roadmap Foundation
+
+Last updated: 2026-06-30
+
+Branch: `codex/roadmap-foundation-ch2-5`
+
+### What Changed
+
+- Updated `agents.md` with the required thread-start repo sync ritual. Remote `origin/main` should be treated as the source of truth unless the user says otherwise.
+- Updated README and refactor roadmap to reflect the current state: Chapter 1 is playable, Chapter 2 is already underway, and the long-term target is a fully illustrated playable prototype through Chapter 5.
+- Added chapter progress scaffolding in `src/game/chapterProgress.ts` for Chapters 1-5.
+- Added non-combat guest NPC scaffolding in `src/game/guestNpcs.ts`; Mara is explicitly present in story/map flow but excluded from combat and damage systems.
+- Added implementation-facing story plan metadata for Chapters 2-5 in `src/story/chapters2to5.ts`.
+- Added full-scope art backlog metadata in `src/data/artworkPlan.ts`, including 16 hero race/gender variants, future maps, portraits, enemies, item icons, and symbol/UI sheets.
+- Added future Chapter 3-5 story item IDs to `src/data/items.ts` with emoji fallbacks.
+- Added future Chapter 4-5 enemy IDs and encounters to `src/data/enemies.ts` with emoji fallbacks.
+- Wired current Chapter 2 completion moments to stable flags: `lioAlivePastGate`, `eddensDrawingValidated`, `briarCrownWatchingWestroot`, `roadwatcherEncounterAvoided`, and `roadwatcherDefeated`.
+- Added rules coverage for chapter progress, Mara guest behavior, story plan coverage, art backlog scope, future item/enemy IDs, and Roadwatcher reward flags.
+
+### Next Recommended Slice
+
+Complete the Chapter 2 playable path before starting Chapter 3 code:
+
+1. Extract the current Chapter 2 dialogue text from `src/App.tsx` into a story module.
+2. Generate or add the painted Westroot Trail map, then tune `src/data/mapVisuals.ts`.
+3. Add Playwright coverage for Chapter 2 clean and messy Three-Sign Hollow outcomes.
+4. Add visual QA screenshots for the Westroot Trail map with debug on and off.
+
+### Verification To Run
+
+```bash
+npm.cmd run build
+npm.cmd run test:rules
+npm.cmd run playtest:smoke
+git diff --check
+```
+
+### Build Size Note
+
+`npm.cmd run build` is currently green, but the asset list already includes multiple 1-3.5 MB PNG files. Before the full Chapter 2-5 art push, add export/compression guidelines and review any new painted maps, portraits, and item icons for dimensions and file size before registering them.

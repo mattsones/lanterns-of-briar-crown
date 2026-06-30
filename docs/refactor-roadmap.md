@@ -2,6 +2,12 @@
 
 This roadmap describes how to move from the current single-file prototype to a maintainable game project without breaking Chapter 1.
 
+## Current State
+
+The original Vite milestone is complete. Chapter 1 is playable, data and helper extraction has started, painted Chapter 1 maps are integrated, custom item artwork is wired through a fallback-safe registry, and Chapter 2 has started in `src/App.tsx`.
+
+The active refactor goal is no longer "make the app run." It is to reduce `App.tsx` risk while Chapters 2-5 are implemented as tested vertical slices.
+
 ## Guiding Rule
 
 Do not refactor everything at once.
@@ -242,12 +248,46 @@ Add tests after relevant logic is extracted.
 
 ---
 
-# Phase 7 — Chapter 2 Readiness
+# Phase 7 — Chapter 2 Completion
 
-Chapter 2 implementation should wait until:
+Chapter 2 implementation is already underway. Complete it before starting Chapter 3 code.
 
-- Chapter 1 is committed and runnable.
-- Data extraction has started.
-- Key docs are in repo.
-- Basic tests exist for progression and battle.
-- Map/art integration approach is chosen.
+- Keep Mara as a non-combat guest, not a battle companion.
+- Finish the Westroot Trail flow from briefing through the First Westroot Gate.
+- Add clean and messy Three-Sign Hollow paths.
+- Generate and integrate the Westroot Trail painted map.
+- Add Chapter 2 rules and Playwright coverage.
+- Preserve the Chapter 1 golden path.
+
+---
+
+# Phase 8 — Chapters 3-5 Vertical Slices
+
+Each later chapter should land in this order:
+
+1. Story module and quest copy.
+2. Stable item/enemy/map data.
+3. Placeholder playable map with tile/node movement.
+4. Painted map art and projection tuning.
+5. NPC/enemy/item artwork registries and production assets.
+6. Automated golden-path and rules coverage.
+7. Handoff update, commit, and push.
+
+Target chapters:
+
+- Chapter 3: The Hidden Root
+- Chapter 4: The Riddle Road
+- Chapter 5: Briarhold Waystation
+
+---
+
+# Phase 9 — Fully Illustrated Prototype Pass
+
+Before treating Chapter 5 as done:
+
+- All planned gameplay maps have painted backgrounds.
+- Major NPC and enemy portraits/art are generated, inspected, and wired with fallbacks.
+- Sixteen hero base variants exist: 8 races x Male/Female.
+- Chapter 3-5 item icons are generated and registered.
+- Large assets are reviewed for web build size and compressed where needed.
+- Automated tests pass before user playthrough.

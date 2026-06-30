@@ -4,7 +4,7 @@ A storybook fantasy adventure prototype about Hearthhollow, Lantern Road, Brambl
 
 ## Current Status
 
-Chapter 1 is playable as a React prototype.
+Chapter 1 is playable as a React/TypeScript prototype. Chapter 2, **The Westroot Trail**, has started in code and is the current implementation focus.
 
 Current features include:
 
@@ -17,6 +17,8 @@ Current features include:
 - item-granted combat skills
 - hero XP and level-up choices
 - Chapter 1 story arc through the Root Cellar and report-back scene
+- early Chapter 2 Westroot Trail scenes, flags, quest steps, and placeholder map
+- painted Chapter 1 maps, portrait integration, and custom item icons with emoji fallbacks
 
 ## Chapter 1
 
@@ -25,6 +27,19 @@ Current features include:
 The road was not simply dangerous. It was being lied about.
 
 The player begins in Hearthhollow, follows evidence onto Lantern Road, briefs Enna in Bramblecross, investigates the old Root Cellar, discovers the Briar Crown mark, and receives the next lead: Westroot.
+
+## Chapters 2-5 Roadmap
+
+The current long-term goal is a fully illustrated playable prototype through **Chapter 5: Briarhold Waystation**.
+
+Planned arc:
+
+1. **Chapter 2: The Westroot Trail** - complete Mara, Edden, Ada's Willowmark Lens, the Three-Sign Hollow, Roadwatcher consequences, and the First Westroot Gate.
+2. **Chapter 3: The Hidden Root** - introduce Westroot as a hidden Lantern Road community and expose Willow-sealed cargo.
+3. **Chapter 4: The Riddle Road** - follow Edden's folded-map clues, find Lio's message, and discover the Briarhold lead.
+4. **Chapter 5: Briarhold Waystation** - rescue Lio, reveal the Briar Crown cell structure, and hint that the mark itself is older than the faction.
+
+Implementation should move in vertical slices: story/script, data, map, art prompts/generation, implementation, automated QA, then user playthrough.
 
 ## Run Locally
 
@@ -36,7 +51,14 @@ npm run dev
 ## Recommended Build Check
 
 ```bash
-npm run build
+npm.cmd run build
+```
+
+## Test Checks
+
+```bash
+npm.cmd run test:rules
+npm.cmd run playtest:smoke
 ```
 
 ## Smoke Playtest
@@ -65,6 +87,8 @@ docs/prompts/chapter-1-characters.md
 
 Preserve the working Chapter 1 prototype first. Refactor slowly after the baseline is committed.
 
+At the start of a new thread, fetch and compare against `origin/main` before assuming local files are current.
+
 ## Art Direction
 
 The game should feel like a hand-painted storybook where the map is playable.
@@ -81,11 +105,8 @@ Visual direction:
 
 ## Short-Term Roadmap
 
-1. Preserve the current prototype as `src/App.tsx`.
-2. Commit the working baseline.
-3. Organize docs and selected concept art.
-4. Extract stable data.
-5. Extract utilities.
-6. Extract UI components.
-7. Add tests for progression, battle, map gating, and quest visibility.
-8. Begin integrating portraits and illustrated maps.
+1. Complete the Chapter 2 playable path and add clean/messy path tests.
+2. Generate and integrate the Westroot Trail painted map.
+3. Continue extracting chapter story text and interaction helpers from `src/App.tsx`.
+4. Add chapter-progress, guest-NPC, and artwork-registry tests as new chapters land.
+5. Build each Chapter 3-5 milestone as a vertical slice with automated QA before user playthrough.
