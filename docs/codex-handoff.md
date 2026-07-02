@@ -590,3 +590,47 @@ Next Chapter 2 pass should continue the puzzle redesign before map alignment:
 4. Treat Roadwatcher combat as desirable adventure content, not a punishment for a messy solve. Better solving can change the encounter setup, enemy mix, rewards, or Mara's safety, but should not simply skip the battle.
 5. Keep a future false-door mini-dungeon in mind. For the next small pass, a short false passage or combat-forward branch is enough; a full second Chapter 2 dungeon can come later.
 6. After that interaction model settles, take the detailed Westroot Trail node-alignment pass and consider graph-driven movement instead of the current rectangular grid.
+
+## Current Handoff - Chapter 2 Three-Door Puzzle Pass
+
+Last updated: 2026-07-02
+
+Branch: `codex/chapter-2-completion`
+
+### What Changed
+
+- Reworked Three-Sign Hollow into a three-door interaction hub: Crown Door, Lantern Door, and No-Handle Door now each have their own local door/sign surface.
+- Added a short false Crown Door passage branch that marks the straight official-looking route as a lure and records the existing messy-solve flags.
+- Removed explicit checklist-style solving from the No-Handle Door text and Chapter 2 quest copy. The shared puzzle contract still tracks requirements, but player-facing copy now gives inscription/description feedback instead of listing tasks.
+- Added door-level "ask Mara" and "ask companion" reads. Mara now confirms the No-Handle Door's tiny Lio mark only after the player asks her about that scratch and has found Lio's shelter/practice mark.
+- Changed the clean No-Handle solve so it prepares the standard Roadwatcher battle instead of skipping combat. Messy solves still escalate to the hard Roadwatcher encounter.
+- Moved Roadwatcher evidence and Pine-Pitch Wax payoff onto Roadwatcher battle victory rewards.
+- Added stable flags for the new door interactions and prepared fight state, including `maraAskedNoHandleMark`, `roadwatcherPrepared`, and `maraProtectedAtHollow`.
+- Updated built-in QA, rules coverage, and Chapter 2 Playwright coverage for the three-door hub, non-checklist door copy, clean prepared Roadwatcher fight, and messy hard Roadwatcher pressure.
+
+### Verification Run
+
+```bash
+npm.cmd run build
+npm.cmd run test:rules
+npm.cmd run playtest:chapter2
+npm.cmd run playtest:smoke
+git diff --check
+```
+
+Latest local results:
+
+- `npm.cmd run build` passed. Vite still reports the selected `westroot-trail-map-v04` production export at about 3.37 MB.
+- `npm.cmd run test:rules` passed: 11 tests.
+- `npm.cmd run playtest:chapter2` passed: 6 tests.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `git diff --check` passed with normal Windows LF-to-CRLF warnings only.
+
+### Next Recommended Slice
+
+After this puzzle model pass, take the detailed Westroot Trail node-alignment pass:
+
+1. Check the painted Westroot Trail map with Dev Tools map debug on and off.
+2. Tune `src/data/mapVisuals.ts` node placement around the three-door hollow, shelter nook, false notice, Roadwatcher node, and First Westroot Gate.
+3. Consider graph-driven movement for Westroot Trail if the rectangular grid cannot follow the painted road cleanly.
+4. Keep the future false-door mini-dungeon idea open, but do not expand it until map alignment and the main Chapter 2 route feel stable.

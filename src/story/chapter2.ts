@@ -1,6 +1,6 @@
 import type { Flags } from "../game/types";
 
-export type RoadwatcherMode = "avoided" | "standard" | "hard";
+export type RoadwatcherMode = "standard" | "hard";
 
 export const CHAPTER_2_STORY = {
   title: "Chapter 2: The Westroot Trail",
@@ -144,11 +144,8 @@ export function getWestrootPuzzleOutcome(flags: Flags = {}, assumedFlags: Flags 
     merged.forcedNoHandleDoorTwice ||
     (enoughClues && !readTrueLanternGuidance)
   );
-  const roadwatcherMode: RoadwatcherMode = cleanSolve
-    ? "avoided"
-    : seriousMistake || mistakeCount >= 2
-      ? "hard"
-      : "standard";
+  const roadwatcherMode: RoadwatcherMode =
+    seriousMistake || mistakeCount >= 2 ? "hard" : "standard";
 
   return {
     supportingClues,
@@ -157,6 +154,7 @@ export function getWestrootPuzzleOutcome(flags: Flags = {}, assumedFlags: Flags 
     foundLioMark,
     readTrueLanternGuidance,
     cleanSolve,
+    roadwatcherPrepared: cleanSolve,
     roadwatcherMode,
     repair,
   };

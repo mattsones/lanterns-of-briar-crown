@@ -269,6 +269,7 @@ test("future chapter data IDs exist with fallbacks", () => {
   expect(ENCOUNTERS.briarholdBoss).toContain("bracken_voss");
   expect(BATTLE_REWARDS.roadwatcher.flagUpdate).toMatchObject({
     roadwatcherDefeated: true,
+    roadwatcherEvidenceFound: true,
     briarCrownWatchingWestroot: true,
   });
 });
@@ -289,7 +290,8 @@ test("chapter two westroot puzzle supports clean, standard, and messy outcomes",
     supportingClues: 4,
     enoughClues: true,
     cleanSolve: true,
-    roadwatcherMode: "avoided",
+    roadwatcherPrepared: true,
+    roadwatcherMode: "standard",
   });
   expect(getWestrootDoorRepairState(cleanFlags)).toMatchObject({
     falseOrdersBroken: true,

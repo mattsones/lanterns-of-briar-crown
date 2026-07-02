@@ -127,11 +127,35 @@ test("chapter two no-handle door frames the repair puzzle before it opens", asyn
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
   await expect(page.getByText("LET THE ROAD BEHIND YOU SPEAK TRUE")).toBeVisible();
-  await expect(page.getByText("Break the false road orders.")).toBeVisible();
+  await expect(page.getByText("The door listens to the road behind you")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Ask Mara about the tiny scratch." })).toBeVisible();
+  await expect(page.getByText("Break the false road orders.")).not.toBeVisible();
 
   await page.getByRole("button", { name: /Say: A road is safest/ }).click();
   await expect(page.getByText("The Door Waits")).toBeVisible();
-  await expect(page.getByText(/Still waiting: break the false road orders/)).toBeVisible();
+  await expect(page.getByText("The door listens to the road behind you")).toBeVisible();
+  await expect(page.getByText(/Still waiting:/)).not.toBeVisible();
+});
+
+test("chapter two three-sign hollow works as a three-door hub", async ({ page }) => {
+  await loadChapter2Checkpoint(
+    page,
+    {},
+    { position: { x: 4, y: 3 }, expectedTile: "Three-Sign Hollow" },
+  );
+
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Go to the Crown Door." })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Go to the Lantern Door." })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Go to the No-Handle Door." })).toBeVisible();
+
+  await page.getByRole("button", { name: "Go to the Crown Door." }).click();
+  await expect(page.getByText("Crown Door", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Ask Mara about the Crown Door." })).toBeVisible();
+  await page.getByRole("button", { name: "Try the Crown Door." }).click();
+  await expect(page.getByText("False Crown Passage")).toBeVisible();
+  await page.getByRole("button", { name: "Mark the passage as false." }).click();
+  await expect(page.getByText("Crown Door", { exact: true })).toBeVisible();
 });
 
 test("chapter two shelter nook supports multiple local actions in one visit", async ({ page }) => {
@@ -150,7 +174,7 @@ test("chapter two shelter nook supports multiple local actions in one visit", as
   await expect(page.getByRole("button", { name: "Rest briefly." })).toBeVisible();
 });
 
-test("chapter two clean no-handle solve opens the Westroot gate", async ({ page }) => {
+test("chapter two clean no-handle solve prepares the Roadwatcher fight", async ({ page }) => {
   await loadChapter2Checkpoint(page, {
     shelterNoticeRemoved: true,
     falseNoticeLensUsed: true,
@@ -162,17 +186,12 @@ test("chapter two clean no-handle solve opens the Westroot gate", async ({ page 
   });
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
-  await expect(page.getByText("Align Edden's drawing with the hollow.")).toBeVisible();
+  await expect(page.getByText("The inscription feels warmer now.")).toBeVisible();
   await page.getByRole("button", { name: /Say: A road is safest/ }).click();
-  await expect(page.getByText("opens cleanly").first()).toBeVisible();
-
-  await page.getByRole("button", { name: "Move to First Westroot Gate" }).click();
-  await expect(page.getByText("First Westroot Gate", { exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "Search the threshold first." }).click();
-  await expect(page.getByText("No-Handle Token").first()).toBeVisible();
-  await expect(page.getByRole("button", { name: "Step through the gate." })).toBeVisible();
-  await page.getByRole("button", { name: "Step through the gate." }).click();
-  await expect(page.getByText("Chapter 2 Complete: The Westroot Trail")).toBeVisible();
+  await expect(page.getByText("This time the hollow is ready")).toBeVisible();
+  await page.getByRole("button", { name: "Meet the watcher on honest ground." }).click();
+  await expect(page.getByText("Battle • Briar Roadwatcher")).toBeVisible();
+  await expect(page.getByText("Thorn-Collared Hound")).not.toBeVisible();
 });
 
 test("chapter two messy no-handle solve triggers hard Roadwatcher pressure", async ({ page }) => {
