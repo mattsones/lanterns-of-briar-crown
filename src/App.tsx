@@ -89,6 +89,7 @@ import {
 import {
   CHAPTER_2_STORY,
   getRoadwatcherEncounterKey,
+  getWestrootDoorRepairState,
   getWestrootClueCount,
   getWestrootPuzzleOutcome,
 } from "./story/chapter2";
@@ -217,6 +218,24 @@ export default function LiamsGamePrototype() {
     }
     if (region === "hearthhollow" && tile === "chest" && flags.openedChest)
       return true;
+    if (region === "westrootTrail") {
+      if (tile === "westroot_cut" && flags.westrootCutStudied) return true;
+      if (tile === "shelter_nook" && flags.shelterNoticeRemoved && flags.lioShelterMarkFound)
+        return true;
+      if (
+        tile === "false_notice" &&
+        (flags.falseNoticeLensUsed || flags.falseNoticeLanternRead || flags.followedFalseDetour)
+      )
+        return true;
+      if (tile === "crown_sign" && (flags.crownSignRejected || flags.crownSignLensUsed))
+        return true;
+      if (tile === "lantern_sign" && flags.lanternSignCleaned && flags.lanternSignCompared)
+        return true;
+      if (tile === "no_handle_stone" && flags.westrootGateOpened) return true;
+      if (tile === "roadwatcher" && (flags.roadwatcherDefeated || flags.roadwatcherEncounterAvoided))
+        return true;
+      if (tile === "westroot_gate" && flags.chapterTwoClear) return true;
+    }
     return false;
   };
   const heroSkills = useMemo(() => {
@@ -1941,6 +1960,21 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     return fallback;
   };
 
+  const formatWestrootDoorChecklist = (repair) => {
+    const line = (done, label) => `${done ? "✓" : "•"} ${label}`;
+    return [
+      line(repair.falseOrdersBroken, "Break the false road orders."),
+      line(repair.trueLanternGuidanceRestored, "Restore the true Lantern guidance."),
+      line(repair.lioMarkConfirmed, "Confirm Lio's real hook-tailed mark."),
+      line(repair.eddenDrawingAligned, "Align Edden's drawing with the hollow."),
+    ].join("\n");
+  };
+
+  const formatWestrootDoorMissing = (repair) =>
+    repair.missingRequirements.length
+      ? `Still waiting: ${repair.missingRequirements.join("; ")}.`
+      : "The road behind you is ready to speak true.";
+
   const openChapter2Briefing = () => {
     if (!flags.chapterReported)
       return setToast("Finish reporting Chapter 1 before following Westroot.");
@@ -2129,105 +2163,139 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
   };
 
   const openWestrootCutDialogue = () => {
-    setFlags((f) => ({ ...f, westrootCutStudied: true }));
+    const alreadyStudied = !!flags.westrootCutStudied;
     setDialogue({
       portrait: "✦",
       name: "Old Westward Cut",
-      text: "Old cart ruts appear, vanish, then appear again under grass. A lantern scratch marks a stone at knee height, but the lower marks have been freshly scraped away. A false crown mark is pressed into the mud below it: not carved, not permanent, planted.\n\nMara crouches beside the stone. \"Not Lio's,\" she says. \"But someone wanted us to think it might be.\"",
+      text: alreadyStudied
+        ? "The first scraped lantern mark is copied in your notes now. The false crown mark in the mud already looks less convincing once you know it was planted there."
+        : "Old cart ruts appear, vanish, then appear again under grass. A lantern scratch marks a stone at knee height, but the lower marks have been freshly scraped away. A false crown mark is pressed into the mud below it: not carved, not permanent, planted.\n\nMara crouches beside the stone. \"Not Lio's,\" she says. \"But someone wanted us to think it might be.\"",
       choices: [
-        {
-          label: "Copy the damaged lantern mark.",
-          effect: () => {
-            setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
-            setDialogue(null);
-            setToast("You copy the damaged lantern mark. XP +4");
-          },
-        },
-      ],
+        !alreadyStudied
+          ? {
+              label: "Copy the damaged lantern mark.",
+              effect: () => {
+                setFlags((f) => ({ ...f, westrootCutStudied: true }));
+                setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
+                setDialogue(null);
+                setToast("You copy the damaged lantern mark. XP +4");
+              },
+            }
+          : null,
+        { label: "Continue west.", effect: () => setDialogue(null) },
+      ].filter(Boolean),
     });
   };
 
-  const openShelterNookDialogue = () => {
+  const openShelterNookDialogue = (assumedFlags = {}) => {
+    const viewFlags = { ...flags, ...assumedFlags };
     setDialogue({
       portrait: "⌂",
       name: "Roadside Shelter Nook",
-      text: flags.shelterNoticeRemoved
-        ? "The false notice is gone. The shelter notes are visible again: warnings, thanks, and small kindnesses left by travelers for travelers."
+      text: viewFlags.shelterNoticeRemoved
+        ? viewFlags.lioShelterMarkFound
+          ? "The false notice is gone. The old traveler notes are visible again, and Mara's thumb keeps drifting toward the hook-tailed arrow under the bench.\n\n\"West,\" she says. \"Still west. That part is really him.\""
+          : "The false notice is gone. Behind it, old traveler notes cover the cedar wall: RAIN EAST. BRIDGE LOW. BERRIES SAFE AFTER FIRST FROST. THANK YOU FOR THE KINDLING.\n\nMara runs one finger under the older marks. \"Lio likes these,\" she says quietly. \"He says road notes are proof that strangers can be useful on purpose.\""
         : "A small cedar shelter sits under fern and root. A true lantern mark above it says: SHELTER. SMALL. DRY. LEAVE KINDLING.\n\nSomeone has nailed a false notice over the back wall: BY CROWN ORDER, ALL WESTBOUND TRAVELERS MUST RETURN TO BRAMBLECROSS AND AWAIT SAFE COMMAND.",
       choices: [
-        !flags.shelterNoticeRemoved
+        !viewFlags.shelterNoticeRemoved
           ? {
               label: "Remove the false notice.",
               effect: () => {
                 setFlags((f) => ({ ...f, shelterNoticeRemoved: true }));
-                setPlayer((p) => ({ ...p, xp: p.xp + 5 }));
-                setDialogue(null);
+                if (!flags.shelterNoticeRemoved) setPlayer((p) => ({ ...p, xp: p.xp + 5 }));
                 setToast("You uncover the old shelter notes. XP +5");
+                openShelterNookDialogue({ ...assumedFlags, shelterNoticeRemoved: true });
               },
             }
           : null,
-        !flags.lioShelterMarkFound
+        !viewFlags.lioShelterMarkFound
           ? {
               label: "Search for Lio's mark.",
               effect: () => {
                 setFlags((f) => ({ ...f, lioShelterMarkFound: true, lioHookMarkFound: true }));
-                setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
-                setDialogue(null);
-                setToast("Mara finds a tiny hook-tailed arrow. XP +4");
+                if (!flags.lioShelterMarkFound) setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
+                setToast("Mara finds Lio's real hook-tailed arrow. XP +4");
+                openShelterNookDialogue({
+                  ...assumedFlags,
+                  lioShelterMarkFound: true,
+                  lioHookMarkFound: true,
+                });
               },
             }
           : null,
-        {
-          label: "Rest briefly.",
-          effect: () => {
-            setFlags((f) => ({ ...f, shelterRested: true }));
-            setPlayer((p) => ({ ...p, hp: Math.min(p.maxHp, p.hp + 8) }));
-            setCompanion((c) => (c.recruited ? { ...c, hp: Math.min(c.maxHp, c.hp + 8) } : c));
-            setDialogue(null);
-            setToast("The shelter gives everyone a little steadiness. HP +8");
-          },
-        },
+        !viewFlags.shelterRested
+          ? {
+              label: "Rest briefly.",
+              effect: () => {
+                setFlags((f) => ({ ...f, shelterRested: true }));
+                setPlayer((p) => ({ ...p, hp: Math.min(p.maxHp, p.hp + 8) }));
+                setCompanion((c) => (c.recruited ? { ...c, hp: Math.min(c.maxHp, c.hp + 8) } : c));
+                setToast("The shelter gives everyone a little steadiness. HP +8");
+                openShelterNookDialogue({ ...assumedFlags, shelterRested: true });
+              },
+            }
+          : null,
         { label: "Leave the shelter.", effect: () => setDialogue(null) },
       ].filter(Boolean),
     });
   };
 
-  const openFalseNoticeDialogue = () => {
+  const openFalseNoticeDialogue = (assumedFlags = {}) => {
+    const viewFlags = { ...flags, ...assumedFlags };
     setDialogue({
       portrait: "!",
       name: "False Detour Notice",
-      text: "A royal-looking notice orders all westbound travelers to detour east. The seal is close enough to worry a frightened traveler and wrong enough to worry you. A smaller lantern scratch hides under moss beside it.",
+      text: viewFlags.falseNoticeLensUsed || viewFlags.falseNoticeLanternRead
+        ? "The detour notice looks smaller now. Its command still points east, but the copied seal and the old lantern scratch have given it away: this sign was made to stop truth from reaching Westroot."
+        : "A fresh notice orders all westbound travelers to detour east and await Crown direction. The seal is close enough to worry a frightened traveler and wrong enough to worry you. A smaller lantern scratch hides under moss beside it, pointing onward.",
       choices: [
-        {
-          label: "Inspect the royal-looking seal.",
-          effect: () => {
-            setFlags((f) => ({ ...f, falseNoticeInspected: true }));
-            setDialogue({ portrait: "!", name: "Copied Seal", text: "The crown points look too even, too polished, like someone copied the shape of authority without understanding its weight.", choices: [{ label: "That is useful.", effect: () => setDialogue(null) }] });
-          },
-        },
-        {
-          label: "Use the Willowmark Lens.",
-          effect: () => {
-            setFlags((f) => ({
-              ...f,
-              falseNoticeLensUsed: true,
-              willowForgeryConfirmedAtHollow: true,
-              brokenSealWaxFound: true,
-            }));
-            gainStoryItemOnce("broken_false_seal_wax");
-            setPlayer((p) => ({ ...p, xp: p.xp + 5 }));
-            setDialogue(null);
-            announce("The lens reveals scraped Willow wax under the false seal. XP +5", [{ id: "broken_false_seal_wax", qty: 1 }]);
-          },
-        },
-        {
-          label: "Follow the old lantern scratch instead.",
-          effect: () => {
-            setFlags((f) => ({ ...f, falseNoticeLanternRead: true, trustedLanternBeforeHollow: true }));
-            setDialogue(null);
-            setToast("The lantern mark guides west. False signs command; true signs guide.");
-          },
-        },
+        !viewFlags.falseNoticeInspected
+          ? {
+              label: "Inspect the royal-looking seal.",
+              effect: () => {
+                setFlags((f) => ({ ...f, falseNoticeInspected: true }));
+                setToast("The crown points are too even, copied from authority rather than earned by it.");
+                openFalseNoticeDialogue({ ...assumedFlags, falseNoticeInspected: true });
+              },
+            }
+          : null,
+        !viewFlags.falseNoticeLensUsed
+          ? {
+              label: "Use the Willowmark Lens.",
+              effect: () => {
+                setFlags((f) => ({
+                  ...f,
+                  falseNoticeLensUsed: true,
+                  willowForgeryConfirmedAtHollow: true,
+                  brokenSealWaxFound: true,
+                }));
+                gainStoryItemOnce("broken_false_seal_wax");
+                if (!flags.falseNoticeLensUsed) setPlayer((p) => ({ ...p, xp: p.xp + 5 }));
+                announce("The lens reveals scraped Willow wax under the false seal. XP +5", [{ id: "broken_false_seal_wax", qty: 1 }]);
+                openFalseNoticeDialogue({
+                  ...assumedFlags,
+                  falseNoticeLensUsed: true,
+                  willowForgeryConfirmedAtHollow: true,
+                  brokenSealWaxFound: true,
+                });
+              },
+            }
+          : null,
+        !viewFlags.falseNoticeLanternRead
+          ? {
+              label: "Follow the old lantern scratch instead.",
+              effect: () => {
+                setFlags((f) => ({ ...f, falseNoticeLanternRead: true, trustedLanternBeforeHollow: true }));
+                setToast("The lantern mark guides west. False signs command; true signs guide.");
+                openFalseNoticeDialogue({
+                  ...assumedFlags,
+                  falseNoticeLanternRead: true,
+                  trustedLanternBeforeHollow: true,
+                });
+              },
+            }
+          : null,
         {
           label: "Follow the detour east anyway.",
           effect: () => {
@@ -2236,7 +2304,8 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             setToast("The detour loops back on itself. Something wanted travelers confused.");
           },
         },
-      ],
+        { label: "Leave the false notice.", effect: () => setDialogue(null) },
+      ].filter(Boolean),
     });
   };
 
@@ -2312,27 +2381,39 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openCrownSignDialogue = () =>
+  const openCrownSignDialogue = (assumedFlags = {}) => {
+    const viewFlags = { ...flags, ...assumedFlags };
     setDialogue({
       portrait: "♛",
       name: "Crown Sign",
-      text: "The Crown Sign is large, clean, and bossy. It does not warn, guide, shelter, or remember. It only orders travelers to obey the straight road.",
+      text: viewFlags.crownSignRejected || viewFlags.crownSignLensUsed
+        ? "The Crown Sign still stands tall, but its authority has cracked. It gives no warning, no shelter, no witness name, no help for the next traveler. It only performs command."
+        : "The Crown Sign is large, clean, and bossy. It does not warn, guide, shelter, or remember. It only orders travelers to obey the straight road.",
       choices: [
-        {
-          label: "This sign commands, but does not guide.",
-          effect: () => {
-            setFlags((f) => ({ ...f, crownSignRejected: true }));
-            setDialogue(null);
-            setToast("You reject the Crown Sign as false guidance.");
-          },
-        },
-        {
-          label: "Use the Willowmark Lens.",
-          effect: () => {
-            setFlags((f) => ({ ...f, crownSignLensUsed: true, willowForgeryConfirmedAtHollow: true }));
-            setDialogue({ portrait: "🔍", name: "Hidden Willow Mark", text: "Under the false seal, the lens catches scraped wax and the nicked lower leaf of Ada's honest mark. This sign is wearing stolen trust.", choices: [{ label: "That is one more truth.", effect: () => setDialogue(null) }] });
-          },
-        },
+        !viewFlags.crownSignRejected
+          ? {
+              label: "This sign commands, but does not guide.",
+              effect: () => {
+                setFlags((f) => ({ ...f, crownSignRejected: true }));
+                setToast("You mark the Crown Sign as false guidance.");
+                openCrownSignDialogue({ ...assumedFlags, crownSignRejected: true });
+              },
+            }
+          : null,
+        !viewFlags.crownSignLensUsed
+          ? {
+              label: "Use the Willowmark Lens.",
+              effect: () => {
+                setFlags((f) => ({ ...f, crownSignLensUsed: true, willowForgeryConfirmedAtHollow: true }));
+                setToast("Under the seal, the lens catches scraped wax and Ada's nicked Willow mark.");
+                openCrownSignDialogue({
+                  ...assumedFlags,
+                  crownSignLensUsed: true,
+                  willowForgeryConfirmedAtHollow: true,
+                });
+              },
+            }
+          : null,
         {
           label: "Try following its direction anyway.",
           effect: () => {
@@ -2341,71 +2422,101 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             setToast("The straight road feels easier for one breath, then Edden's drawing rustles in warning.");
           },
         },
-      ],
+        { label: "Step back.", effect: () => setDialogue(null) },
+      ].filter(Boolean),
     });
+  };
 
-  const openLanternSignDialogue = () =>
+  const openLanternSignDialogue = (assumedFlags = {}) => {
+    const viewFlags = { ...flags, ...assumedFlags };
     setDialogue({
       portrait: "✶",
       name: "Lantern Sign",
-      text: "The Lantern Sign is half-covered with mud. Beneath it, older marks seem to guide rather than command: warning, shelter, memory.",
+      text: viewFlags.lanternSignCleaned
+        ? "The Lantern Sign is clean now. Four older marks show clearly: WARNING. SHELTER. WATER. WITNESS.\n\nBelow them, a route phrase reads: DO NOT FORCE THE CLOSED WAY. SPEAK TRUE AND WAIT."
+        : "The Lantern Sign is half-covered with mud. Beneath it, older marks seem to guide rather than command: warning, shelter, memory.",
       choices: [
-        {
-          label: "Clean the Lantern Sign fully.",
-          effect: () => {
-            setFlags((f) => ({ ...f, lanternSignCleaned: true, understandsTrueSigns: true }));
-            setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
-            setDialogue(null);
-            setToast("The old lantern marks shine through. XP +4");
-          },
-        },
-        {
-          label: "Compare it with Edden's drawing.",
-          effect: () => {
-            setFlags((f) => ({ ...f, lanternSignCompared: true, eddensDrawingRotated: true }));
-            setDialogue(null);
-            setToast("Edden's drawing matches the hollow when turned sideways.");
-          },
-        },
+        !viewFlags.lanternSignCleaned
+          ? {
+              label: "Clean the Lantern Sign fully.",
+              effect: () => {
+                setFlags((f) => ({ ...f, lanternSignCleaned: true, understandsTrueSigns: true }));
+                if (!flags.lanternSignCleaned) setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
+                setToast("The old lantern marks shine through. XP +4");
+                openLanternSignDialogue({
+                  ...assumedFlags,
+                  lanternSignCleaned: true,
+                  understandsTrueSigns: true,
+                });
+              },
+            }
+          : null,
+        !viewFlags.lanternSignCompared
+          ? {
+              label: "Compare it with Edden's drawing.",
+              effect: () => {
+                setFlags((f) => ({ ...f, lanternSignCompared: true, eddensDrawingRotated: true }));
+                setToast("Mara turns Edden's drawing sideways. The roots match the no-handle stone.");
+                openLanternSignDialogue({
+                  ...assumedFlags,
+                  lanternSignCompared: true,
+                  eddensDrawingRotated: true,
+                });
+              },
+            }
+          : null,
         {
           label: "Ask what the marks mean.",
           effect: () => {
             setFlags((f) => ({ ...f, understandsTrueSigns: true }));
-            setDialogue({
-              portrait: "✶",
-              name: "True Road Marks",
-              text: "Warning means danger ahead. Shelter means protect the traveler. Water means sustain the traveler. Witness means remember what happened here so the next person is not alone.\n\nNone of them says obey.",
-              choices: [{ label: "A true sign guides.", effect: () => setDialogue(null) }],
-            });
+            setToast("Warning, shelter, water, and witness are traveler help. None of them says obey.");
+            openLanternSignDialogue({ ...assumedFlags, understandsTrueSigns: true });
           },
         },
-      ],
+        { label: "Step back.", effect: () => setDialogue(null) },
+      ].filter(Boolean),
     });
+  };
 
-  const openNoHandleStoneDialogue = () => {
-    const assumedFlags = { noHandleStoneInspected: true, lioHookMarkFound: true };
-    const outcome = getWestrootPuzzleOutcome(flags, assumedFlags);
-    setFlags((f) => ({ ...f, ...assumedFlags }));
+  const openNoHandleStoneDialogue = (assumedFlags = {}) => {
+    const doorFlags = { ...assumedFlags, noHandleStoneInspected: true };
+    const outcome = getWestrootPuzzleOutcome(flags, doorFlags);
+    const repair = getWestrootDoorRepairState(flags, doorFlags);
+    const lioText = repair.lioMarkConfirmed
+      ? `Near the base, Mara finds the tiny hook-tailed arrow again and reads the courier shorthand with a shaking breath.\n\n"Lio," she whispers. "${CHAPTER_2_STORY.lioGateMark}"`
+      : "Near the base is a tiny hook-tailed scratch, half-hidden under a root. Mara drops to her knees, then hesitates.\n\n\"It might be Lio,\" she says. \"But he would leave a practice mark first, somewhere only someone short or stubborn would look. I need to compare it.\"";
+    setFlags((f) => ({ ...f, noHandleStoneInspected: true }));
     setDialogue({
       portrait: "▯",
       name: "No-Handle Stone",
-      text: `The stone door has no handle, no latch, and no keyhole. Near the base, Mara finds a tiny hooked arrow scratched where adults would almost miss it.\n\n\"Lio,\" she whispers. \"${CHAPTER_2_STORY.lioGateMark}\"\n\nSupporting truths found: ${outcome.supportingClues} of 2 needed.`,
+      text: `The stone door has no handle, no latch, and no keyhole. Roots curl around its edge like folded hands.\n\nAn inscription is scratched where a handle should be:\n\nLET THE ROAD BEHIND YOU SPEAK TRUE. I OPEN FOR TRUTH-BEARERS AND FALSE-BREAKERS.\n\n${lioText}\n\n${formatWestrootDoorChecklist(repair)}`,
       choices: [
         {
-          label: "Study the door for a way in.",
+          label: "Study the door inscription.",
           effect: () => {
             setFlags((f) => ({ ...f, noHandleDoorStudied: true }));
-            setDialogue(null);
-            setToast("The door will not open by force. It is waiting for truth.");
+            setToast(formatWestrootDoorMissing(repair));
+            openNoHandleStoneDialogue({ ...doorFlags, noHandleDoorStudied: true });
           },
         },
         {
-          label: "Compare the mark with Edden's drawing.",
+          label: "Compare Edden's drawing here.",
           effect: () => {
-            setFlags((f) => ({ ...f, eddenDrawingComparedAtDoor: true, eddensDrawingValidated: true }));
-            if (!flags.eddenDrawingComparedAtDoor) setPlayer((p) => ({ ...p, xp: p.xp + 5 }));
-            setDialogue(null);
-            setToast(flags.eddenDrawingComparedAtDoor ? "The no-handle door is Edden's honest door." : "Edden's drawing points to Lio's mark. XP +5");
+            const drawingFlags = {
+              eddenDrawingComparedAtDoor: true,
+              ...(flags.lanternSignCleaned || doorFlags.lanternSignCleaned
+                ? { eddensDrawingRotated: true, eddensDrawingValidated: true }
+                : {}),
+            };
+            setFlags((f) => ({ ...f, ...drawingFlags }));
+            if (!flags.eddenDrawingComparedAtDoor && (flags.lanternSignCleaned || doorFlags.lanternSignCleaned))
+              setPlayer((p) => ({ ...p, xp: p.xp + 5 }));
+            setToast(
+              flags.lanternSignCleaned || doorFlags.lanternSignCleaned
+                ? "Mara turns Edden's drawing sideways. The roots match the no-handle stone. XP +5"
+                : "The roots almost line up, but the Lantern Sign is still too muddied to orient the drawing.",
+            );
+            openNoHandleStoneDialogue({ ...doorFlags, ...drawingFlags });
           },
         },
         {
@@ -2413,15 +2524,19 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           effect: () => {
             if (!outcome.enoughClues) {
               setFlags((f) => ({ ...f, incompleteTruthPhraseSpoken: true }));
-              setDialogue(null);
-              setToast("The road listens, but the answer feels incomplete. Find more true clues.");
+              setDialogue({
+                portrait: "▯",
+                name: "The Door Waits",
+                text: `You speak the old road phrase.\n\nThe roots shift, listening. Then they settle again.\n\n${formatWestrootDoorMissing(repair)}`,
+                choices: [{ label: "Repair the road behind us.", effect: () => setDialogue(null) }],
+              });
               return;
             }
 
             if (outcome.cleanSolve) {
               setFlags((f) => ({
                 ...f,
-                ...assumedFlags,
+                ...doorFlags,
                 westrootGateOpened: true,
                 lioAlivePastGate: true,
                 cleanWestrootSolve: true,
@@ -2438,10 +2553,10 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               return;
             }
 
-            const encounterKey = getRoadwatcherEncounterKey(flags, assumedFlags);
+            const encounterKey = getRoadwatcherEncounterKey(flags, doorFlags);
             setFlags((f) => ({
               ...f,
-              ...assumedFlags,
+              ...doorFlags,
               westrootGateOpeningPending: true,
               roadwatcherSummoned: true,
               roadwatcherEncounterAvoided: false,
@@ -2462,8 +2577,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               forcedNoHandleDoorTwice: !!f.forcedNoHandleDoor || !!f.forcedNoHandleDoorTwice,
               messyWestrootSolve: !!f.forcedNoHandleDoor || !!f.messyWestrootSolve,
             }));
-            setDialogue(null);
             setToast("The door does not move. Something in the thorns stirs.");
+            openNoHandleStoneDialogue({
+              ...doorFlags,
+              forcedNoHandleDoor: true,
+              forcedNoHandleDoorTwice: !!flags.forcedNoHandleDoor || !!flags.forcedNoHandleDoorTwice,
+            });
           },
         },
       ],
@@ -2514,7 +2633,8 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openWestrootGateDialogue = () => {
+  const openWestrootGateDialogue = (assumedFlags = {}) => {
+    const viewFlags = { ...flags, ...assumedFlags };
     if (!flags.westrootGateOpened)
       return setToast("The First Westroot Gate waits for the no-handle stone to open.");
     setDialogue({
@@ -2522,25 +2642,25 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       name: "First Westroot Gate",
       text: `The door with no handle opens inward by itself. Gold-green light spills through root and stone. Mara reads Lio's tiny mark one more time: ${CHAPTER_2_STORY.lioGateMark.toUpperCase()}`,
       choices: [
-        !flags.searchedWestrootThreshold
+        !viewFlags.searchedWestrootThreshold
           ? {
               label: "Search the threshold first.",
               effect: () => {
                 setFlags((f) => ({ ...f, searchedWestrootThreshold: true }));
                 gainStoryItemOnce("no_handle_token");
-                setDialogue(null);
                 announce("You find a No-Handle Token tucked inside the threshold.", [{ id: "no_handle_token", qty: 1 }]);
+                openWestrootGateDialogue({ ...assumedFlags, searchedWestrootThreshold: true });
               },
             }
           : null,
-        !flags.witnessNoteSent
+        !viewFlags.witnessNoteSent
           ? {
               label: "Leave a witness note for Bramblecross.",
               effect: () => {
                 setFlags((f) => ({ ...f, witnessNoteSent: true }));
                 gainStoryItemOnce("witness_note_bramblecross");
-                setDialogue(null);
                 announce("You prepare a witness note for Bramblecross.", [{ id: "witness_note_bramblecross", qty: 1 }]);
+                openWestrootGateDialogue({ ...assumedFlags, witnessNoteSent: true });
               },
             }
           : null,
@@ -3449,10 +3569,23 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       guest ? `${guest.name} is present as a protected story guest.` : "No active guest NPC.",
     );
     const cleanWestrootOutcome = getWestrootPuzzleOutcome({
+      noHandleStoneInspected: true,
+      shelterNoticeRemoved: true,
+      falseNoticeLensUsed: true,
       lanternSignCleaned: true,
+      understandsTrueSigns: true,
+      lanternSignCompared: true,
+      lioShelterMarkFound: true,
       lioHookMarkFound: true,
     });
     const messyWestrootOutcome = getWestrootPuzzleOutcome({
+      noHandleStoneInspected: true,
+      shelterNoticeRemoved: true,
+      falseNoticeLensUsed: true,
+      lanternSignCleaned: true,
+      understandsTrueSigns: true,
+      lanternSignCompared: true,
+      lioShelterMarkFound: true,
       followedFalseDetour: true,
       lioHookMarkFound: true,
       crownSignRejected: true,

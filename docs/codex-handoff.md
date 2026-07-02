@@ -540,7 +540,7 @@ git diff --check
 
 ## Current Handoff - Chapter 2 Completion Pass
 
-Last updated: 2026-07-01
+Last updated: 2026-07-02
 
 Branch: `codex/chapter-2-completion`
 
@@ -557,6 +557,10 @@ Branch: `codex/chapter-2-completion`
 - Expanded rules coverage for Chapter 2 puzzle outcomes, map prompt registration, required end flags, map art wiring, and the no-Princess-Elowen-in-Chapter-2 boundary.
 - Fixed a Chapter 2 briefing dead-end where choosing "I should talk to Edden." from Edden's Drawing before the briefing flag was set only raised the pre-briefing toast and left the same modal open.
 - Added Playwright regression coverage for that exact Bramblecross briefing path; it now verifies the button opens Edden's Recovery Room and exposes the drawing pickup choice.
+- Redesigned the No-Handle Stone puzzle around the door-first repair loop: the door now frames the problem with "let the road behind you speak true," then requires concrete repairs instead of an accidental clue count.
+- The opening requirements are now: break false road orders, restore true Lantern guidance, confirm Lio's real hook-tailed mark through Mara/Shelter Nook, and align Edden's drawing with the hollow.
+- Shelter Nook, false notice, Crown Sign, Lantern Sign, and First Westroot Gate now keep local menus open after useful actions so players can naturally select multiple options in one visit.
+- Spent Chapter 2 trail nodes now skip movement-triggered repeat popups where appropriate while remaining available through manual Inspect.
 
 ### Verification Run
 
@@ -572,13 +576,13 @@ Latest local results:
 
 - `npm.cmd run build` passed. The selected `westroot-trail-map-v04` production export is about 3.37 MB in the Vite output.
 - `npm.cmd run test:rules` passed: 11 tests.
-- `npm.cmd run playtest:chapter2` passed: 3 tests.
+- `npm.cmd run playtest:chapter2` passed: 5 tests.
 - `npm.cmd run playtest:smoke` passed: 1 test.
 - `git diff --check` passed with only normal Windows CRLF warnings.
 
 ### Next Recommended Slice
 
-Do one manual/user playthrough of Chapter 2 for story feel and map-label taste, then either:
+Do one manual/user playthrough of the revised Chapter 2 puzzle for story feel and map-label taste, then:
 
-1. Add any map projection adjustments from playthrough notes.
+1. Take the detailed Westroot Trail node-alignment pass now that the puzzle route is more stable.
 2. Start Chapter 3 as the next vertical slice: story module, placeholder Westroot hub map, Rootmarket/Witness Stones/Split Hall interactions, then tests.

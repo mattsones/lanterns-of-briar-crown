@@ -20,6 +20,8 @@ export const CHAPTER_2_REQUIRED_END_FLAGS = [
 ];
 
 export const WESTROOT_SUPPORTING_CLUE_FLAGS = [
+  "shelterNoticeRemoved",
+  "lioShelterMarkFound",
   "falseNoticeLensUsed",
   "falseNoticeLanternRead",
   "crownSignRejected",
@@ -67,14 +69,75 @@ export function hasReadTrueLanternGuidance(flags: Flags = {}, assumedFlags: Flag
   );
 }
 
+export function getWestrootDoorRepairState(flags: Flags = {}, assumedFlags: Flags = {}) {
+  const merged = mergeFlags(flags, assumedFlags);
+  const falseOrdersBroken = !!(
+    merged.shelterNoticeRemoved &&
+    (
+      merged.falseNoticeLensUsed ||
+      merged.falseNoticeLanternRead ||
+      merged.crownSignRejected ||
+      merged.crownSignLensUsed ||
+      merged.willowForgeryConfirmedAtHollow
+    )
+  );
+  const trueLanternGuidanceRestored = !!(
+    merged.lanternSignCleaned &&
+    (
+      merged.understandsTrueSigns ||
+      merged.lanternSignCompared ||
+      merged.eddensDrawingRotated ||
+      merged.falseNoticeLanternRead
+    )
+  );
+  const lioMarkConfirmed = !!(merged.lioShelterMarkFound && merged.lioHookMarkFound);
+  const eddenDrawingAligned = !!(
+    merged.eddensDrawingRotated ||
+    merged.lanternSignCompared ||
+    merged.eddensDrawingValidated ||
+    (merged.eddenDrawingComparedAtDoor && merged.lanternSignCleaned)
+  );
+  const doorHasAskedForTruth = !!merged.noHandleStoneInspected;
+  const completedRequirements = [
+    falseOrdersBroken,
+    trueLanternGuidanceRestored,
+    lioMarkConfirmed,
+    eddenDrawingAligned,
+  ].filter(Boolean).length;
+  const missingRequirements = [
+    !falseOrdersBroken ? "break the false road orders" : null,
+    !trueLanternGuidanceRestored ? "restore the true Lantern guidance" : null,
+    !lioMarkConfirmed ? "find Lio's real hook-tailed mark" : null,
+    !eddenDrawingAligned ? "align Edden's drawing with the hollow" : null,
+  ].filter(Boolean);
+
+  return {
+    doorHasAskedForTruth,
+    falseOrdersBroken,
+    trueLanternGuidanceRestored,
+    lioMarkConfirmed,
+    eddenDrawingAligned,
+    completedRequirements,
+    requiredCount: 4,
+    missingRequirements,
+    readyToOpen:
+      doorHasAskedForTruth &&
+      falseOrdersBroken &&
+      trueLanternGuidanceRestored &&
+      lioMarkConfirmed &&
+      eddenDrawingAligned,
+  };
+}
+
 export function getWestrootPuzzleOutcome(flags: Flags = {}, assumedFlags: Flags = {}) {
   const merged = mergeFlags(flags, assumedFlags);
-  const supportingClues = getWestrootClueCount(merged);
+  const repair = getWestrootDoorRepairState(merged);
+  const supportingClues = repair.completedRequirements;
   const mistakeCount = getWestrootMistakeCount(merged);
-  const enoughClues = supportingClues >= 2;
-  const foundLioMark = !!merged.lioHookMarkFound;
+  const enoughClues = repair.readyToOpen;
+  const foundLioMark = repair.lioMarkConfirmed;
   const readTrueLanternGuidance = hasReadTrueLanternGuidance(merged);
-  const cleanSolve = enoughClues && foundLioMark && readTrueLanternGuidance && mistakeCount === 0;
+  const cleanSolve = enoughClues && mistakeCount === 0;
   const seriousMistake = !!(
     merged.followedFalseDetour ||
     merged.trustedCrownSignAtHollow ||
@@ -95,6 +158,7 @@ export function getWestrootPuzzleOutcome(flags: Flags = {}, assumedFlags: Flags 
     readTrueLanternGuidance,
     cleanSolve,
     roadwatcherMode,
+    repair,
   };
 }
 

@@ -8,7 +8,7 @@ import {
 } from "../src/game/state";
 import { STORAGE_KEY } from "../src/game/save";
 
-function buildChapter2Checkpoint(flagOverrides = {}) {
+function buildChapter2Checkpoint(flagOverrides = {}, position = { x: 6, y: 3 }) {
   const player = buildPlayer({
     name: "Liam",
     gender: "Male",
@@ -26,9 +26,9 @@ function buildChapter2Checkpoint(flagOverrides = {}) {
     chapterId: 2,
     player,
     region: "westrootTrail",
-    position: { x: 6, y: 3 },
+    position,
     visited: {
-      westrootTrail: buildVisitedMap("westrootTrail", 6, 3, 9),
+      westrootTrail: buildVisitedMap("westrootTrail", position.x, position.y, 9),
     },
     companion: buildDefaultCompanion(),
     guestNpc: null,
@@ -81,8 +81,10 @@ function buildChapter2BriefingCheckpoint() {
   };
 }
 
-async function loadChapter2Checkpoint(page, flagOverrides = {}) {
-  const payload = buildChapter2Checkpoint(flagOverrides);
+async function loadChapter2Checkpoint(page, flagOverrides = {}, options = {}) {
+  const position = options.position || { x: 6, y: 3 };
+  const expectedTile = options.expectedTile || "No-Handle Stone";
+  const payload = buildChapter2Checkpoint(flagOverrides, position);
   await page.addInitScript(
     ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
     { key: STORAGE_KEY, value: payload },
@@ -90,7 +92,7 @@ async function loadChapter2Checkpoint(page, flagOverrides = {}) {
   await page.goto("/");
   await page.getByRole("button", { name: "Continue Checkpoint" }).click();
   await expect(page.getByRole("heading", { name: MAPS.westrootTrail.name })).toBeVisible();
-  await expect(page.getByText("You are standing on: No-Handle Stone.")).toBeVisible();
+  await expect(page.getByText(`You are standing on: ${expectedTile}.`)).toBeVisible();
   await expect(page.getByTestId("map-background")).toBeVisible();
   await expect(page.getByTestId("map-background")).toHaveAttribute("src", /westroot-trail-map-v04/);
   await expect(page.getByTestId("hero-token")).toBeVisible();
@@ -120,13 +122,47 @@ test("chapter two briefing Edden drawing choice opens the recovery room", async 
   await expect(page.getByRole("button", { name: "Take Edden's three-door drawing." })).toBeVisible();
 });
 
+test("chapter two no-handle door frames the repair puzzle before it opens", async ({ page }) => {
+  await loadChapter2Checkpoint(page);
+
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await expect(page.getByText("LET THE ROAD BEHIND YOU SPEAK TRUE")).toBeVisible();
+  await expect(page.getByText("Break the false road orders.")).toBeVisible();
+
+  await page.getByRole("button", { name: /Say: A road is safest/ }).click();
+  await expect(page.getByText("The Door Waits")).toBeVisible();
+  await expect(page.getByText(/Still waiting: break the false road orders/)).toBeVisible();
+});
+
+test("chapter two shelter nook supports multiple local actions in one visit", async ({ page }) => {
+  await loadChapter2Checkpoint(
+    page,
+    {},
+    { position: { x: 2, y: 1 }, expectedTile: "Roadside Shelter Nook" },
+  );
+
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await page.getByRole("button", { name: "Remove the false notice." }).click();
+  await expect(page.getByRole("button", { name: "Search for Lio's mark." })).toBeVisible();
+
+  await page.getByRole("button", { name: "Search for Lio's mark." }).click();
+  await expect(page.getByText("Still west. That part is really him.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Rest briefly." })).toBeVisible();
+});
+
 test("chapter two clean no-handle solve opens the Westroot gate", async ({ page }) => {
   await loadChapter2Checkpoint(page, {
+    shelterNoticeRemoved: true,
+    falseNoticeLensUsed: true,
     lanternSignCleaned: true,
+    understandsTrueSigns: true,
+    lanternSignCompared: true,
+    lioShelterMarkFound: true,
+    lioHookMarkFound: true,
   });
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
-  await expect(page.getByText("Supporting truths found: 2 of 2 needed.")).toBeVisible();
+  await expect(page.getByText("Align Edden's drawing with the hollow.")).toBeVisible();
   await page.getByRole("button", { name: /Say: A road is safest/ }).click();
   await expect(page.getByText("opens cleanly").first()).toBeVisible();
 
@@ -134,19 +170,26 @@ test("chapter two clean no-handle solve opens the Westroot gate", async ({ page 
   await expect(page.getByText("First Westroot Gate", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Search the threshold first." }).click();
   await expect(page.getByText("No-Handle Token").first()).toBeVisible();
-  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Step through the gate." })).toBeVisible();
   await page.getByRole("button", { name: "Step through the gate." }).click();
   await expect(page.getByText("Chapter 2 Complete: The Westroot Trail")).toBeVisible();
 });
 
 test("chapter two messy no-handle solve triggers hard Roadwatcher pressure", async ({ page }) => {
   await loadChapter2Checkpoint(page, {
+    shelterNoticeRemoved: true,
+    falseNoticeLensUsed: true,
+    lanternSignCleaned: true,
+    understandsTrueSigns: true,
+    lanternSignCompared: true,
+    lioShelterMarkFound: true,
+    lioHookMarkFound: true,
     followedFalseDetour: true,
     crownSignRejected: true,
   });
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
-  await expect(page.getByText("Supporting truths found: 2 of 2 needed.")).toBeVisible();
+  await expect(page.getByText("LET THE ROAD BEHIND YOU SPEAK TRUE")).toBeVisible();
   await page.getByRole("button", { name: /Say: A road is safest/ }).click();
   await expect(page.getByText("Briar Roadwatcher Ambush")).toBeVisible();
   await page.getByRole("button", { name: "Protect Mara and hold the hollow." }).click();

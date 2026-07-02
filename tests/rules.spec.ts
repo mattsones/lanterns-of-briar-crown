@@ -24,6 +24,7 @@ import {
 import {
   CHAPTER_2_REQUIRED_END_FLAGS,
   CHAPTER_2_STORY,
+  getWestrootDoorRepairState,
   getRoadwatcherEncounterKey,
   getWestrootClueCount,
   getWestrootPuzzleOutcome,
@@ -273,27 +274,42 @@ test("future chapter data IDs exist with fallbacks", () => {
 });
 
 test("chapter two westroot puzzle supports clean, standard, and messy outcomes", () => {
-  const clean = getWestrootPuzzleOutcome({
+  const cleanFlags = {
+    noHandleStoneInspected: true,
+    shelterNoticeRemoved: true,
+    falseNoticeLensUsed: true,
     lanternSignCleaned: true,
+    understandsTrueSigns: true,
+    lanternSignCompared: true,
+    lioShelterMarkFound: true,
     lioHookMarkFound: true,
-  });
+  };
+  const clean = getWestrootPuzzleOutcome(cleanFlags);
   expect(clean).toMatchObject({
-    supportingClues: 2,
+    supportingClues: 4,
     enoughClues: true,
     cleanSolve: true,
     roadwatcherMode: "avoided",
   });
+  expect(getWestrootDoorRepairState(cleanFlags)).toMatchObject({
+    falseOrdersBroken: true,
+    trueLanternGuidanceRestored: true,
+    lioMarkConfirmed: true,
+    eddenDrawingAligned: true,
+    readyToOpen: true,
+  });
 
   const tooEarly = getWestrootPuzzleOutcome({
+    noHandleStoneInspected: true,
     lioHookMarkFound: true,
   });
   expect(tooEarly.enoughClues).toBe(false);
   expect(tooEarly.cleanSolve).toBe(false);
+  expect(tooEarly.repair.missingRequirements).toContain("break the false road orders");
 
   const standardFlags = {
     forcedNoHandleDoor: true,
-    lanternSignCleaned: true,
-    lioHookMarkFound: true,
+    ...cleanFlags,
   };
   const standard = getWestrootPuzzleOutcome(standardFlags);
   expect(standard.cleanSolve).toBe(false);
@@ -301,9 +317,9 @@ test("chapter two westroot puzzle supports clean, standard, and messy outcomes",
   expect(getRoadwatcherEncounterKey(standardFlags)).toBe("roadwatcher");
 
   const messy = getWestrootPuzzleOutcome({
+    ...cleanFlags,
     followedFalseDetour: true,
     crownSignRejected: true,
-    lioHookMarkFound: true,
   });
   expect(messy.roadwatcherMode).toBe("hard");
   expect(getRoadwatcherEncounterKey({ followedFalseDetour: true })).toBe("roadwatcherHard");
