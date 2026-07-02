@@ -582,7 +582,11 @@ Latest local results:
 
 ### Next Recommended Slice
 
-Do one manual/user playthrough of the revised Chapter 2 puzzle for story feel and map-label taste, then:
+Next Chapter 2 pass should continue the puzzle redesign before map alignment:
 
-1. Take the detailed Westroot Trail node-alignment pass now that the puzzle route is more stable.
-2. Start Chapter 3 as the next vertical slice: story module, placeholder Westroot hub map, Rootmarket/Witness Stones/Split Hall interactions, then tests.
+1. Rework Three-Sign Hollow into a freer three-door interaction hub. Let the player inspect and try the Crown, Lantern, and No-Handle doors/signs individually.
+2. Remove explicit checklist-style solving from the door and quest copy. The No-Handle Door should imply the need to clear falsehoods through inscription/description, not tell the player exactly which tasks remain.
+3. Add "ask Mara" and "ask companion" options at the doors. Mara should notice Lio's tiny mark at the No-Handle Door only when asked or brought into that moment, making her knowledge feel earned and personal.
+4. Treat Roadwatcher combat as desirable adventure content, not a punishment for a messy solve. Better solving can change the encounter setup, enemy mix, rewards, or Mara's safety, but should not simply skip the battle.
+5. Keep a future false-door mini-dungeon in mind. For the next small pass, a short false passage or combat-forward branch is enough; a full second Chapter 2 dungeon can come later.
+6. After that interaction model settles, take the detailed Westroot Trail node-alignment pass and consider graph-driven movement instead of the current rectangular grid.
