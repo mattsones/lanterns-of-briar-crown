@@ -50,6 +50,37 @@ function buildChapter2Checkpoint(flagOverrides = {}) {
   };
 }
 
+function buildChapter2BriefingCheckpoint() {
+  const player = buildPlayer({
+    name: "Liam",
+    gender: "Male",
+    raceId: "human",
+    appearanceId: "brave",
+  });
+
+  return {
+    screen: "play",
+    chapterId: 2,
+    player,
+    region: "bramblecross",
+    position: { x: 7, y: 4 },
+    visited: {
+      bramblecross: buildVisitedMap("bramblecross", 7, 4, 9),
+    },
+    companion: buildDefaultCompanion(),
+    guestNpc: null,
+    flags: {
+      ...buildDefaultFlags(),
+      chapterOneClear: true,
+      chapterReported: true,
+      reachedBramblecross: true,
+      enteredBramblecross: true,
+    },
+    quest: { title: "The Westroot Lead", description: "Get the Westroot briefing from Enna and Hollis." },
+    toast: "Loaded Chapter 2 briefing test checkpoint.",
+  };
+}
+
 async function loadChapter2Checkpoint(page, flagOverrides = {}) {
   const payload = buildChapter2Checkpoint(flagOverrides);
   await page.addInitScript(
@@ -64,6 +95,30 @@ async function loadChapter2Checkpoint(page, flagOverrides = {}) {
   await expect(page.getByTestId("map-background")).toHaveAttribute("src", /westroot-trail-map-v04/);
   await expect(page.getByTestId("hero-token")).toBeVisible();
 }
+
+async function loadChapter2BriefingCheckpoint(page) {
+  const payload = buildChapter2BriefingCheckpoint();
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: payload },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await expect(page.getByRole("heading", { name: MAPS.bramblecross.name })).toBeVisible();
+  await expect(page.getByText("You are standing on: Watch Clerk Enna.")).toBeVisible();
+}
+
+test("chapter two briefing Edden drawing choice opens the recovery room", async ({ page }) => {
+  await loadChapter2BriefingCheckpoint(page);
+
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await page.getByRole("button", { name: "What did Edden draw?" }).click();
+  await expect(page.getByText("Edden's Drawing")).toBeVisible();
+
+  await page.getByRole("button", { name: "I should talk to Edden." }).click();
+  await expect(page.getByText("Edden's Recovery Room")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Take Edden's three-door drawing." })).toBeVisible();
+});
 
 test("chapter two clean no-handle solve opens the Westroot gate", async ({ page }) => {
   await loadChapter2Checkpoint(page, {

@@ -540,7 +540,7 @@ git diff --check
 
 ## Current Handoff - Chapter 2 Completion Pass
 
-Last updated: 2026-06-30
+Last updated: 2026-07-01
 
 Branch: `codex/chapter-2-completion`
 
@@ -555,6 +555,8 @@ Branch: `codex/chapter-2-completion`
 - Threshold search now grants the No-Handle Token; clean Roadwatcher avoidance grants Pine-Pitch Wax.
 - Added `npm.cmd run playtest:chapter2` with browser coverage for clean and messy Chapter 2 No-Handle outcomes plus visual assertions that the painted Westroot map and hero token render.
 - Expanded rules coverage for Chapter 2 puzzle outcomes, map prompt registration, required end flags, map art wiring, and the no-Princess-Elowen-in-Chapter-2 boundary.
+- Fixed a Chapter 2 briefing dead-end where choosing "I should talk to Edden." from Edden's Drawing before the briefing flag was set only raised the pre-briefing toast and left the same modal open.
+- Added Playwright regression coverage for that exact Bramblecross briefing path; it now verifies the button opens Edden's Recovery Room and exposes the drawing pickup choice.
 
 ### Verification Run
 
@@ -570,7 +572,7 @@ Latest local results:
 
 - `npm.cmd run build` passed. The selected `westroot-trail-map-v04` production export is about 3.37 MB in the Vite output.
 - `npm.cmd run test:rules` passed: 11 tests.
-- `npm.cmd run playtest:chapter2` passed: 2 tests.
+- `npm.cmd run playtest:chapter2` passed: 3 tests.
 - `npm.cmd run playtest:smoke` passed: 1 test.
 - `git diff --check` passed with only normal Windows CRLF warnings.
 

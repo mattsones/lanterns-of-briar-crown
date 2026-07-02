@@ -1984,7 +1984,15 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               portrait: "📜",
               name: "Edden's Drawing",
               text: "The lines are shaky, but not careless. Three doors stand side by side under a tangle of roots. The first has a crown. The second has a lantern. The third has no handle.\n\nUnder them, Edden wrote the same phrase three times: THE HONEST ONE HAS NO HANDLE.",
-              choices: [{ label: "I should talk to Edden.", effect: openEddenRecoveryDialogue }],
+              choices: [
+                {
+                  label: "I should talk to Edden.",
+                  effect: () => {
+                    setFlags((f) => ({ ...f, chapterTwoBriefed: true, chapterTwoStarted: true }));
+                    openEddenRecoveryDialogue({ allowPreBriefing: true });
+                  },
+                },
+              ],
             }),
         },
         {
@@ -2034,8 +2042,8 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openEddenRecoveryDialogue = () => {
-    if (!flags.chapterTwoBriefed)
+  const openEddenRecoveryDialogue = ({ allowPreBriefing = false } = {}) => {
+    if (!flags.chapterTwoBriefed && !allowPreBriefing)
       return setToast("Get the Westroot briefing from Enna and Hollis first.");
     setDialogue({
       portrait: "📜",
