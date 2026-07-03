@@ -9,7 +9,12 @@ import {
 } from "../src/data/artworkPlan";
 import { ITEM_DB } from "../src/data/items";
 import { MAPS, TILE_META } from "../src/data/maps";
-import { getMapVisualConfig } from "../src/data/mapVisuals";
+import {
+  areMapNodesConnected,
+  getMapVisualConfig,
+  getNavigationDestination,
+  getNavigationNodeKeys,
+} from "../src/data/mapVisuals";
 import { gainItem, getDefaultBattlePouch, removeItem } from "../src/game/inventory";
 import { buildDefaultVisited, buildPlayer } from "../src/game/state";
 import { getHeroXpTarget } from "../src/game/progression";
@@ -339,14 +344,97 @@ test("chapter two contract keeps required flags, map prompt, and reveal boundari
     aspectRatio: "16 / 9",
     navBounds: { left: 5, top: 8, width: 90, height: 82 },
   });
+  expect(getNavigationNodeKeys("westrootTrail")).toEqual(
+    expect.arrayContaining([
+      "0,3",
+      "0,5",
+      "0,4",
+      "1,5",
+      "2,6",
+      "2,5",
+      "3,5",
+      "2,1",
+      "3,4",
+      "4,1",
+      "4,2",
+      "5,0",
+      "4,3",
+      "7,0",
+      "6,0",
+      "8,0",
+      "6,1",
+      "8,3",
+      "7,6",
+      "8,4",
+      "8,6",
+      "8,5",
+      "7,5",
+      "6,4",
+      "5,5",
+      "4,6",
+      "3,6",
+      "4,5",
+      "5,6",
+      "6,6",
+    ]),
+  );
+  expect(getNavigationNodeKeys("westrootTrail")).not.toContain("8,1");
+  expect(getNavigationNodeKeys("westrootTrail")).not.toContain("6,3");
+  expect(getNavigationNodeKeys("westrootTrail")).not.toContain("7,3");
+  expect(areMapNodesConnected("westrootTrail", { x: 0, y: 3 }, { x: 0, y: 5 })).toBe(true);
+  expect(areMapNodesConnected("westrootTrail", { x: 0, y: 5 }, { x: 1, y: 5 })).toBe(true);
+  expect(areMapNodesConnected("westrootTrail", { x: 1, y: 4 }, { x: 2, y: 6 })).toBe(true);
+  expect(areMapNodesConnected("westrootTrail", { x: 2, y: 4 }, { x: 3, y: 5 })).toBe(true);
+  expect(areMapNodesConnected("westrootTrail", { x: 4, y: 2 }, { x: 3, y: 4 })).toBe(true);
+  expect(areMapNodesConnected("westrootTrail", { x: 5, y: 1 }, { x: 5, y: 0 })).toBe(true);
+  expect(areMapNodesConnected("westrootTrail", { x: 7, y: 2 }, { x: 6, y: 0 })).toBe(true);
+  expect(areMapNodesConnected("westrootTrail", { x: 8, y: 2 }, { x: 8, y: 0 })).toBe(true);
+  expect(areMapNodesConnected("westrootTrail", { x: 8, y: 0 }, { x: 8, y: 3 })).toBe(true);
+  expect(areMapNodesConnected("westrootTrail", { x: 8, y: 3 }, { x: 7, y: 6 })).toBe(true);
+  expect(areMapNodesConnected("westrootTrail", { x: 7, y: 6 }, { x: 8, y: 4 })).toBe(true);
+  expect(areMapNodesConnected("westrootTrail", { x: 8, y: 5 }, { x: 7, y: 5 })).toBe(true);
+  expect(areMapNodesConnected("westrootTrail", { x: 6, y: 5 }, { x: 5, y: 6 })).toBe(true);
+  expect(areMapNodesConnected("westrootTrail", { x: 6, y: 6 }, { x: 5, y: 5 })).toBe(true);
+  expect(areMapNodesConnected("westrootTrail", { x: 4, y: 6 }, { x: 3, y: 6 })).toBe(true);
+  expect(areMapNodesConnected("westrootTrail", { x: 6, y: 6 }, { x: 6, y: 4 })).toBe(true);
+  expect(areMapNodesConnected("westrootTrail", { x: 3, y: 5 }, { x: 4, y: 5 })).toBe(false);
+  expect(getNavigationDestination("westrootTrail", 3, 3, "up")).toEqual({ x: 2, y: 2 });
+  expect(getNavigationDestination("westrootTrail", 2, 3, "up")).toEqual({ x: 3, y: 3 });
+  expect(getNavigationDestination("westrootTrail", 2, 3, "left")).toBeNull();
+  expect(getNavigationDestination("westrootTrail", 3, 2, "up")).toEqual({ x: 3, y: 4 });
+  expect(getNavigationDestination("westrootTrail", 3, 1, "up")).toEqual({ x: 3, y: 4 });
+  expect(getNavigationDestination("westrootTrail", 4, 2, "up")).toEqual({ x: 3, y: 4 });
+  expect(getNavigationDestination("westrootTrail", 4, 2, "right")).toEqual({ x: 5, y: 1 });
+  expect(getNavigationDestination("westrootTrail", 7, 1, "up")).toEqual({ x: 4, y: 3 });
+  expect(getNavigationDestination("westrootTrail", 7, 1, "right")).toEqual({ x: 7, y: 0 });
+  expect(getNavigationDestination("westrootTrail", 7, 1, "down")).toEqual({ x: 7, y: 0 });
+  expect(getNavigationDestination("westrootTrail", 7, 0, "right")).toEqual({ x: 5, y: 3 });
+  expect(getNavigationDestination("westrootTrail", 5, 3, "left")).toEqual({ x: 7, y: 0 });
+  expect(getNavigationDestination("westrootTrail", 7, 2, "up")).toEqual({ x: 5, y: 3 });
+  expect(getNavigationDestination("westrootTrail", 5, 3, "down")).toEqual({ x: 7, y: 2 });
+  expect(getNavigationDestination("westrootTrail", 8, 2, "up")).toEqual({ x: 6, y: 1 });
+  expect(getNavigationDestination("westrootTrail", 8, 2, "right")).toEqual({ x: 6, y: 1 });
+  expect(getNavigationDestination("westrootTrail", 8, 2, "down")).toEqual({ x: 8, y: 0 });
+  expect(getNavigationDestination("westrootTrail", 8, 0, "up")).toEqual({ x: 8, y: 2 });
+  expect(getNavigationDestination("westrootTrail", 8, 0, "right")).toEqual({ x: 8, y: 3 });
+  expect(getNavigationDestination("westrootTrail", 6, 6, "up")).toEqual({ x: 6, y: 4 });
+  expect(getNavigationDestination("westrootTrail", 6, 5, "left")).toEqual({ x: 5, y: 6 });
+  expect(getNavigationDestination("westrootTrail", 5, 6, "right")).toEqual({ x: 6, y: 5 });
+  expect(getNavigationDestination("westrootTrail", 5, 6, "left")).toEqual({ x: 5, y: 5 });
+  expect(getNavigationDestination("westrootTrail", 6, 6, "right")).toEqual({ x: 6, y: 5 });
+  expect(getNavigationDestination("westrootTrail", 6, 6, "left")).toEqual({ x: 5, y: 5 });
+  expect(getNavigationDestination("westrootTrail", 6, 6, "down")).toEqual({ x: 5, y: 6 });
+  expect(getNavigationDestination("westrootTrail", 5, 5, "right")).toEqual({ x: 5, y: 6 });
+  expect(getNavigationDestination("westrootTrail", 5, 5, "up")).toEqual({ x: 6, y: 6 });
   expect(MAPS.westrootTrail.tiles.flat()).toEqual(
     expect.arrayContaining([
       "westroot_cut",
       "shelter_nook",
       "false_notice",
       "three_hollow",
+      "no_handle_stone",
       "roadwatcher",
-      "westroot_gate",
     ]),
   );
+  expect(MAPS.westrootTrail.tiles.flat()).not.toContain("westroot_gate");
 });

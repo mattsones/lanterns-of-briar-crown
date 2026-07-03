@@ -28,6 +28,7 @@ import {
   areMapNodesConnected,
   getNavigationDestination,
   getNavigationNodeKeys,
+  hasNavigationGraph,
 } from "./data/mapVisuals";
 import { RECIPE_DB } from "./data/recipes";
 import { SHOP_INVENTORIES } from "./data/shops";
@@ -118,6 +119,17 @@ function getMayorDialogue(flags) {
   if (!flags.gotDungeonLead)
     return 'Mayor Anwen studies the watchhouse windows. "Enna says your report turned scattered worries into a route case. Good. That means we\'re not losing our minds. Bad, because it means someone else is using theirs. Read what the town knows, then speak with Hollis."';
   return 'Mayor Anwen nods toward the old cellar ways. "If Hollis is sending you below, then Bramblecross is past pretending this is only paperwork. Go carefully. Towns are built on foundations, and foundations remember things."';
+}
+
+function normalizeMapPosition(regionId, position) {
+  if (
+    regionId === "westrootTrail" &&
+    ((position?.x === 6 && position?.y === 3) ||
+      (position?.x === 7 && position?.y === 3))
+  ) {
+    return { x: 6, y: 4 };
+  }
+  return position;
 }
 
 export default function LiamsGamePrototype() {
@@ -333,9 +345,15 @@ export default function LiamsGamePrototype() {
   };
   const applyLoadedPayload = (payload, toastMessage) => {
     if (!payload?.player) return;
+    const nextRegion = payload.region || "hearthhollow";
     setPlayer(normalizePlayerData(payload.player));
-    setRegion(payload.region || "hearthhollow");
-    setPosition(payload.position || MAPS.hearthhollow.start);
+    setRegion(nextRegion);
+    setPosition(
+      normalizeMapPosition(
+        nextRegion,
+        payload.position || MAPS.hearthhollow.start,
+      ),
+    );
     setVisited(payload.visited || buildDefaultVisited());
     setCompanion(normalizeCompanionData(payload.companion));
     setFlags({ ...buildDefaultFlags(), ...(payload.flags || {}) });
@@ -527,9 +545,9 @@ export default function LiamsGamePrototype() {
       position.y,
       direction,
     );
+    if (hasNavigationGraph(region) && !graphDestination) return;
     const nx = graphDestination?.x ?? position.x + dx;
     const ny = graphDestination?.y ?? position.y + dy;
-    if (!graphDestination && region === "rootCellar") return;
     if (
       ny < 0 ||
       ny >= currentMap.length ||
@@ -1962,12 +1980,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
 
   const formatWestrootDoorWhisper = (repair) => {
     if (repair.readyToOpen)
-      return "The inscription feels warmer now. Behind you, the false signs have gone quiet and the helpful ones seem to answer one another.";
+      return "The inscription feels warmer now. Somewhere behind you, the road feels less tangled than it did.";
     if (repair.completedRequirements >= 2)
-      return "The roots shift as if the hollow almost remembers its shape. Some lies have been named, but the road behind you has not finished speaking.";
+      return "The roots shift as if the threshold almost remembers its shape. The road behind you is closer to making sense.";
     if (repair.doorHasAskedForTruth)
-      return "The door listens to the road behind you, not just to the words at its face.";
-    return "The hollow is full of marks that disagree. The no-handle door seems to be waiting for the road itself to become a witness.";
+      return "The door is not only listening to you. It is listening to the trail you just walked.";
+    return "The no-handle door waits with the patience of a locked room that knows you have missed something.";
   };
 
   const openChapter2Briefing = () => {
@@ -2159,21 +2177,30 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
 
   const openWestrootCutDialogue = () => {
     const alreadyStudied = !!flags.westrootCutStudied;
+    const repairMode = !!flags.noHandleStoneInspected;
     setDialogue({
       portrait: "✦",
       name: "Old Westward Cut",
       text: alreadyStudied
-        ? "The first scraped lantern mark is copied in your notes now. The false crown mark in the mud already looks less convincing once you know it was planted there."
-        : "Old cart ruts appear, vanish, then appear again under grass. A lantern scratch marks a stone at knee height, but the lower marks have been freshly scraped away. A false crown mark is pressed into the mud below it: not carved, not permanent, planted.\n\nMara crouches beside the stone. \"Not Lio's,\" she says. \"But someone wanted us to think it might be.\"",
+        ? repairMode
+          ? "The westward cut looks different now that the no-handle door has refused you. The small cuts in the stone are not dramatic, but they are steady: an older road language under newer scratches."
+          : "The old cut still points west. Mara keeps moving, eyes low, looking for the next mark Lio would have left in a hurry."
+        : repairMode
+          ? "Old cart ruts appear, vanish, then appear again under grass. A small route mark survives on a knee-high stone, half hidden by fresh scrapes. It is easy to miss because it is not trying to impress anyone."
+          : "Old cart ruts appear, vanish, then appear again under grass. Mara is already ahead, one hand on the blue string at her wrist.\n\n\"Lio came this way,\" she says. \"He cuts his arrows low when he does not want tall people noticing them. West. Fast.\"",
       choices: [
         !alreadyStudied
           ? {
-              label: "Copy the damaged lantern mark.",
+              label: repairMode ? "Copy the old route mark." : "Keep following Lio's mark.",
               effect: () => {
                 setFlags((f) => ({ ...f, westrootCutStudied: true }));
-                setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
+                if (repairMode) setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
                 setDialogue(null);
-                setToast("You copy the damaged lantern mark. XP +4");
+                setToast(
+                  repairMode
+                    ? "You copy the old route mark. XP +4"
+                    : "Mara keeps the trail moving west.",
+                );
               },
             }
           : null,
@@ -2184,18 +2211,21 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
 
   const openShelterNookDialogue = (assumedFlags = {}) => {
     const viewFlags = { ...flags, ...assumedFlags };
+    const repairMode = !!viewFlags.noHandleStoneInspected;
     setDialogue({
       portrait: "⌂",
       name: "Roadside Shelter Nook",
       text: viewFlags.shelterNoticeRemoved
         ? viewFlags.lioShelterMarkFound
-          ? "The false notice is gone. The old traveler notes are visible again, and Mara's thumb keeps drifting toward the hook-tailed arrow under the bench.\n\n\"West,\" she says. \"Still west. That part is really him.\""
-          : "The false notice is gone. Behind it, old traveler notes cover the cedar wall: RAIN EAST. BRIDGE LOW. BERRIES SAFE AFTER FIRST FROST. THANK YOU FOR THE KINDLING.\n\nMara runs one finger under the older marks. \"Lio likes these,\" she says quietly. \"He says road notes are proof that strangers can be useful on purpose.\""
-        : "A small cedar shelter sits under fern and root. A true lantern mark above it says: SHELTER. SMALL. DRY. LEAVE KINDLING.\n\nSomeone has nailed a false notice over the back wall: BY CROWN ORDER, ALL WESTBOUND TRAVELERS MUST RETURN TO BRAMBLECROSS AND AWAIT SAFE COMMAND.",
+          ? "The turn-back notice is gone. Old traveler notes cover the cedar wall again, and Mara keeps glancing at the low hook-tailed arrow under the bench.\n\n\"West,\" she says. \"Still west. That part is really him.\""
+          : "The turn-back notice is gone. Behind it, old traveler notes cover the cedar wall: rain east, bridge low, berries safe after first frost, kindling tucked under the left stone."
+        : repairMode
+          ? "The cedar shelter waits under fern and root. The notice on the back wall is easier to notice on the way back: BY CROWN ORDER, ALL WESTBOUND TRAVELERS MUST RETURN TO BRAMBLECROSS AND AWAIT SAFE COMMAND.\n\nThe no-handle door's words tug at the memory of it."
+          : "A small cedar shelter sits under fern and root. A posted warning says westbound travelers should return to Bramblecross until the road is safe.\n\nMara ignores the big notice and drops to one knee near the bench. \"Here. Lio was here.\"",
       choices: [
-        !viewFlags.shelterNoticeRemoved
+        repairMode && !viewFlags.shelterNoticeRemoved
           ? {
-              label: "Remove the false notice.",
+              label: "Take down the turn-back notice.",
               effect: () => {
                 setFlags((f) => ({ ...f, shelterNoticeRemoved: true }));
                 if (!flags.shelterNoticeRemoved) setPlayer((p) => ({ ...p, xp: p.xp + 5 }));
@@ -2208,13 +2238,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           ? {
               label: "Search for Lio's mark.",
               effect: () => {
-                setFlags((f) => ({ ...f, lioShelterMarkFound: true, lioHookMarkFound: true }));
+                setFlags((f) => ({ ...f, lioShelterMarkFound: true }));
                 if (!flags.lioShelterMarkFound) setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
-                setToast("Mara finds Lio's real hook-tailed arrow. XP +4");
+                setToast("Mara finds Lio's hook-tailed shelter mark. XP +4");
                 openShelterNookDialogue({
                   ...assumedFlags,
                   lioShelterMarkFound: true,
-                  lioHookMarkFound: true,
                 });
               },
             }
@@ -2238,26 +2267,29 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
 
   const openFalseNoticeDialogue = (assumedFlags = {}) => {
     const viewFlags = { ...flags, ...assumedFlags };
+    const repairMode = !!viewFlags.noHandleStoneInspected;
     setDialogue({
       portrait: "!",
       name: "False Detour Notice",
       text: viewFlags.falseNoticeLensUsed || viewFlags.falseNoticeLanternRead
-        ? "The detour notice looks smaller now. Its command still points east, but the copied seal and the old lantern scratch have given it away: this sign was made to stop truth from reaching Westroot."
-        : "A fresh notice orders all westbound travelers to detour east and await Crown direction. The seal is close enough to worry a frightened traveler and wrong enough to worry you. A smaller lantern scratch hides under moss beside it, pointing onward.",
+        ? "The detour notice hangs crooked now, its seal broken and its post scraped clean enough for older marks to show through."
+        : repairMode
+          ? "The notice orders all westbound travelers to detour east and await Crown direction. You remember how quickly you passed it before. Now the nail heads, wax edge, and moss-covered scratch beside it all seem worth a second look."
+          : "A fresh notice orders westbound travelers to detour east and return to Bramblecross. Mara looks past it, not at it, and finds a tiny hook-tailed arrow cut into the bark beyond.\n\n\"Lio did not turn back,\" she says. \"Neither do we.\"",
       choices: [
-        !viewFlags.falseNoticeInspected
+        repairMode && !viewFlags.falseNoticeInspected
           ? {
-              label: "Inspect the royal-looking seal.",
+              label: "Check the seal closely.",
               effect: () => {
                 setFlags((f) => ({ ...f, falseNoticeInspected: true }));
-                setToast("The crown points are too even, copied from authority rather than earned by it.");
+                setToast("The wax edge has been lifted and pressed down again.");
                 openFalseNoticeDialogue({ ...assumedFlags, falseNoticeInspected: true });
               },
             }
           : null,
-        !viewFlags.falseNoticeLensUsed
+        repairMode && !viewFlags.falseNoticeLensUsed
           ? {
-              label: "Use the Willowmark Lens.",
+              label: "Use the Willowmark Lens on the seal.",
               effect: () => {
                 setFlags((f) => ({
                   ...f,
@@ -2277,12 +2309,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               },
             }
           : null,
-        !viewFlags.falseNoticeLanternRead
+        repairMode && !viewFlags.falseNoticeLanternRead
           ? {
-              label: "Follow the old lantern scratch instead.",
+              label: "Clear the moss around the smaller scratch.",
               effect: () => {
                 setFlags((f) => ({ ...f, falseNoticeLanternRead: true, trustedLanternBeforeHollow: true }));
-                setToast("The lantern mark guides west. False signs command; true signs guide.");
+                setToast("The smaller scratch points west, almost hidden under the detour notice.");
                 openFalseNoticeDialogue({
                   ...assumedFlags,
                   falseNoticeLanternRead: true,
@@ -2292,7 +2324,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             }
           : null,
         {
-          label: "Follow the detour east anyway.",
+          label: repairMode ? "Follow the detour east anyway." : "Risk the detour east.",
           effect: () => {
             setFlags((f) => ({ ...f, followedFalseDetour: true, messyWestrootSolve: true }));
             setDialogue(null);
@@ -2304,19 +2336,79 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openThreeHollowDialogue = () =>
+  const openThreeHollowDialogue = (assumedFlags = {}) => {
+    const viewFlags = { ...flags, ...assumedFlags };
+    const repairMode = !!viewFlags.noHandleStoneInspected;
     setDialogue({
       portrait: "3",
       name: "The Three-Sign Hollow",
-      text: "Three rooted doorways share one hollow. The Crown Door stands high and straight beside a polished command. The Lantern Door is lower, muddied, and crowded with traveler marks. The third door is blank stone with no handle at all.\n\nEdden's drawing suddenly feels less like a drawing and more like a warning.",
+      text: viewFlags.crownSignRejected || viewFlags.crownSignLensUsed
+        ? "The three warnings no longer agree with one another. One sign is down, one seal has cracked, and the third points back to Bramblecross with less confidence than paint should have."
+        : repairMode
+          ? "Three warning signs crowd a narrow hollow. RETURN TO BRAMBLECROSS. WESTROOT UNSAFE. AWAIT CROWN COMMAND.\n\nOn the first pass they were scenery. Now they feel like hands pushing at your shoulders."
+          : "Three warning signs crowd a narrow hollow. RETURN TO BRAMBLECROSS. WESTROOT UNSAFE. AWAIT CROWN COMMAND.\n\nMara barely slows. \"Lio saw these too,\" she says. \"He still went on.\"",
       choices: [
-        { label: "Go to the Crown Door.", effect: () => openCrownDoorDialogue() },
-        { label: "Go to the Lantern Door.", effect: () => openLanternDoorDialogue() },
-        { label: "Go to the No-Handle Door.", effect: () => openNoHandleStoneDialogue() },
+        repairMode && !viewFlags.crownSignRejected
+          ? {
+              label: "Pull down the newest turn-back sign.",
+              effect: () => {
+                setFlags((f) => ({ ...f, crownSignRejected: true }));
+                setToast("The hollow looks less certain with one warning gone.");
+                openThreeHollowDialogue({ ...assumedFlags, crownSignRejected: true });
+              },
+            }
+          : null,
+        repairMode && !viewFlags.crownSignLensUsed
+          ? {
+              label: "Use the Willowmark Lens on the wax.",
+              effect: () => {
+                setFlags((f) => ({ ...f, crownSignLensUsed: true, willowForgeryConfirmedAtHollow: true }));
+                setToast("The lens catches scraped wax under a too-clean crown seal.");
+                openThreeHollowDialogue({
+                  ...assumedFlags,
+                  crownSignLensUsed: true,
+                  willowForgeryConfirmedAtHollow: true,
+                });
+              },
+            }
+          : null,
+        {
+          label: repairMode ? "Follow the return signs anyway." : "Turn back like the signs say.",
+          effect: () => {
+            setFlags((f) => ({
+              ...f,
+              followedFalseDetour: true,
+              trustedCrownSignAtHollow: true,
+              messyWestrootSolve: true,
+            }));
+            setToast("The return path bends strangely and drops you back where you started.");
+            setDialogue(null);
+          },
+        },
+        { label: repairMode ? "Leave the hollow." : "Hurry after Lio.", effect: () => setDialogue(null) },
+      ].filter(Boolean),
+    });
+  };
+
+  const openThreeDoorThresholdDialogue = (fallbackPosition) =>
+    setDialogue({
+      portrait: "▯",
+      name: "Three-Door Threshold",
+      text: "The trail pinches between roots and old stone, then opens on three doors set into the hillside.\n\nThe Crown Door stands straight and official. The Lantern Door is lower, weathered, and tucked beside a little stone cache. The third door has no handle at all.\n\nMara stops so suddenly you nearly bump into her.",
+      choices: [
+        { label: "Try the Crown Door.", effect: () => openCrownDoorDialogue() },
+        { label: "Try the Lantern Door.", effect: () => openLanternDoorDialogue() },
+        {
+          label: "Inspect the no-handle door.",
+          effect: () => openNoHandleStoneDialogue({}, fallbackPosition),
+        },
+        flags.westrootGateOpened
+          ? { label: "Step through the First Westroot Gate.", effect: () => openWestrootGateDialogue() }
+          : null,
         { label: "Give Mara a job here.", effect: () => openMaraHollowJobDialogue() },
         { label: "Ask your companion for their read.", effect: () => openCompanionHollowReadDialogue() },
         { label: "Step back.", effect: () => setDialogue(null) },
-      ],
+      ].filter(Boolean),
     });
 
   const openCrownDoorDialogue = (assumedFlags = {}) => {
@@ -2325,8 +2417,8 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       portrait: "♛",
       name: "Crown Door",
       text: viewFlags.enteredFalseCrownPassage
-        ? "The Crown Door is still open a crack, but the passage beyond looks painted flat now that you know its trick. Its command has volume, not depth."
-        : "The Crown Door is the easiest one to understand at a glance: tall, bright, official, and too eager to be trusted. Its sign points toward the straightest passage through the roots.",
+        ? "The Crown Door is still open a crack. Cold air moves behind it, carrying the smell of wet roots and scraped wax."
+        : "The Crown Door is tall, straight, and marked with a polished crown seal. The passage behind it slopes down instead of forward, vanishing into a colder root-tunnel.",
       choices: [
         { label: "Inspect the Crown Sign.", effect: () => openCrownSignDialogue() },
         {
@@ -2346,7 +2438,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           },
         },
         { label: "Ask your companion about this door.", effect: () => openCompanionDoorReadDialogue("crown") },
-        { label: "Back to the hollow.", effect: openThreeHollowDialogue },
+        { label: "Back to the threshold.", effect: openThreeDoorThresholdDialogue },
       ],
     });
   };
@@ -2356,24 +2448,27 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       ...f,
       crownDoorTried: true,
       enteredFalseCrownPassage: true,
-      followedFalseDetour: true,
-      trustedCrownSignAtHollow: true,
-      messyWestrootSolve: true,
+      ...(assumedFlags.trustedCrownSignAtHollow
+        ? {
+            followedFalseDetour: true,
+            trustedCrownSignAtHollow: true,
+            messyWestrootSolve: true,
+          }
+        : {}),
     }));
     setDialogue({
       portrait: "♛",
       name: "False Crown Passage",
-      text: "The straight passage accepts your first three steps, then repeats them back at you. Fern, root, polished crown mark. Fern, root, polished crown mark.\n\nOn the second loop, a scrape of seal-cloth catches on a thorn. Someone maintains this false way by hand.",
+      text: "The Crown Door leads into a narrow root passage, colder than the trail and much too quiet. The floor drops toward a lower chamber where seal-cloth hangs from thorns like warning flags.\n\nIt is a real way, but not Lio's way. Not the quick one. Not the one Mara is trying not to cry about.",
       choices: [
         {
-          label: "Mark the passage as false.",
+          label: "Mark this as a dangerous branch.",
           effect: () => {
-            setFlags((f) => ({ ...f, crownSignRejected: true }));
-            setToast("The Crown Door is a lure, not a route.");
-            openCrownDoorDialogue({ ...assumedFlags, crownSignRejected: true, enteredFalseCrownPassage: true });
+            setToast("You mark the Crown Door as a deeper branch to handle later.");
+            openCrownDoorDialogue({ ...assumedFlags, enteredFalseCrownPassage: true });
           },
         },
-        { label: "Return to the hollow.", effect: openThreeHollowDialogue },
+        { label: "Return to the threshold.", effect: openThreeDoorThresholdDialogue },
       ],
     });
   };
@@ -2384,38 +2479,43 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       portrait: "✶",
       name: "Lantern Door",
       text: viewFlags.lanternDoorTried
-        ? "The Lantern Door still refuses to behave like a door. Its old marks seem less interested in opening than in teaching the hollow how to be read."
-        : "The Lantern Door is squat and weathered. Mud hides part of its sign, but the older cuts around it are practical: warning, shelter, water, witness.",
+        ? "The Lantern Door is not really a door after all. The little stone cache beside it sits open, smelling faintly of dry herbs and waxed cloth."
+        : "The Lantern Door is squat and weathered. Beside it, a small stone cache is tucked under a root lip, exactly the sort of thing a tired courier would know to check without thinking.",
       choices: [
         { label: "Inspect the Lantern Sign.", effect: () => openLanternSignDialogue() },
         {
           label: "Try the Lantern Door.",
           effect: () => {
-            setFlags((f) => ({ ...f, lanternDoorTried: true, understandsTrueSigns: true }));
+            const firstTry = !flags.lanternDoorTried && !viewFlags.lanternDoorTried;
+            setFlags((f) => ({ ...f, lanternDoorTried: true }));
+            if (firstTry) {
+              gainItem(setPlayer, "trail_snack", 1);
+              gainItem(setPlayer, "healing_fizzpop", 1);
+            }
             setDialogue({
               portrait: "✶",
               name: "Lantern Door",
-              text: viewFlags.lanternSignCleaned
-                ? "The Lantern Door does not open. Instead, its witness mark catches the light and points across the hollow to the blank stone. It was never the way through; it was the way to read the way through."
-                : "The Lantern Door gives under your palm like old bark, not a hinge. Mud still clings to the lower marks. Whatever it knows, it is not finished saying it.",
-              choices: [{ label: "Back to the Lantern Door.", effect: () => openLanternDoorDialogue({ ...assumedFlags, lanternDoorTried: true, understandsTrueSigns: true }) }],
+              text: firstTry
+                ? "The slab does not swing open. Instead, the cache stone slides loose with a soft scrape. Inside are travel supplies wrapped in dry leaf-cloth.\n\nMara lets out a breath. \"Lio would have checked this. He would have known.\""
+                : "The cache is empty now. The Lantern Door stays quiet.",
+              choices: [{ label: "Back to the Lantern Door.", effect: () => openLanternDoorDialogue({ ...assumedFlags, lanternDoorTried: true }) }],
             });
           },
         },
         {
           label: "Ask Mara about the Lantern Door.",
           effect: () => {
-            setFlags((f) => ({ ...f, maraQuestionedLanternDoor: true, understandsTrueSigns: true }));
+            setFlags((f) => ({ ...f, maraQuestionedLanternDoor: true }));
             setDialogue({
               portrait: "🧵",
               name: "Mara at the Lantern Door",
-              text: "\"Lio says good road marks are bossy only when they are saving your life,\" Mara says. \"Warning first. Shelter next. Then water, then witness. That sounds like somebody cared who came after.\"",
-              choices: [{ label: "Back to the Lantern Door.", effect: () => openLanternDoorDialogue({ ...assumedFlags, maraQuestionedLanternDoor: true, understandsTrueSigns: true }) }],
+              text: "\"Lio knows these little caches,\" Mara says. \"He says the best road help is boring because boring means somebody planned for you to survive.\"",
+              choices: [{ label: "Back to the Lantern Door.", effect: () => openLanternDoorDialogue({ ...assumedFlags, maraQuestionedLanternDoor: true }) }],
             });
           },
         },
         { label: "Ask your companion about this door.", effect: () => openCompanionDoorReadDialogue("lantern") },
-        { label: "Back to the hollow.", effect: openThreeHollowDialogue },
+        { label: "Back to the threshold.", effect: openThreeDoorThresholdDialogue },
       ],
     });
   };
@@ -2423,7 +2523,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
   const openMaraHollowJobDialogue = () =>
     setDialogue({
       portrait: "🧵",
-      name: "Mara at the Hollow",
+      name: "Mara at the Threshold",
       text: '"Yes," Mara says immediately.\n\n"You do not know what I am going to ask."\n\n"Yes to that too."',
       choices: [
         {
@@ -2431,24 +2531,24 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           effect: () => {
             setFlags((f) => ({ ...f, maraJob: "lioMarks" }));
             setToast("Mara starts searching where official sign-makers would never kneel.");
-            openThreeHollowDialogue();
+            openThreeDoorThresholdDialogue();
           },
         },
         {
-          label: "Compare Edden's drawing to the hollow.",
+          label: "Compare Edden's drawing to the threshold.",
           effect: () => {
             setFlags((f) => ({ ...f, maraJob: "eddenDrawing", eddensDrawingRotated: true }));
             setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
             setToast("Mara turns Edden's drawing sideways. The roots match the blank stone. XP +4");
-            openThreeHollowDialogue();
+            openThreeDoorThresholdDialogue();
           },
         },
         {
-          label: "Watch the Lantern Sign from behind the line.",
+          label: "Watch the threshold from behind the line.",
           effect: () => {
             setFlags((f) => ({ ...f, maraJob: "lanternSigns", maraWatchedLantern: true }));
-            setToast("Mara watches the Lantern Sign from an extremely behind-the-line place.");
-            openThreeHollowDialogue();
+            setToast("Mara watches the threshold from an extremely behind-the-line place.");
+            openThreeDoorThresholdDialogue();
           },
         },
         {
@@ -2456,7 +2556,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           effect: () => {
             setFlags((f) => ({ ...f, maraJob: "safety" }));
             setToast("Mara stays safe in a very visible way.");
-            openThreeHollowDialogue();
+            openThreeDoorThresholdDialogue();
           },
         },
       ],
@@ -2464,16 +2564,16 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
 
   const openCompanionHollowReadDialogue = () => {
     const text = chapter2CompanionLine(
-      'Rowan studies the three signs. "The Crown Sign demands obedience but offers no protection. The Lantern Sign gives warning before direction. The stone door waits until we know why we are entering."',
-      'Tilda circles the signs with theatrical suspicion. "Tall sign: bossy. Low sign: useful. Blank rock: deeply annoying, probably important."',
-      'Moss stands very still in the center of the hollow. "No handle means it was not made to be forced."',
-      "The hollow offers no easy answer, but Edden's drawing and Mara's attention make the pattern clearer.",
+      'Rowan studies the three doors. "One goes down. One gives supplies. One waits. I do not love that order, but I understand it."',
+      'Tilda circles the threshold with theatrical suspicion. "Crown door: ominous basement. Lantern door: snacks. Blank rock: rude, suspicious, probably important."',
+      'Moss stands very still before the blank stone. "No handle means it is not asking for strength."',
+      "The threshold offers no easy answer, but Edden's drawing and Mara's attention make the pattern clearer.",
     );
     setDialogue({
       portrait: companion.icon || "3",
-      name: companion.recruited ? `${companion.name}'s Read` : "The Hollow Waits",
+      name: companion.recruited ? `${companion.name}'s Read` : "The Threshold Waits",
       text,
-      choices: [{ label: "Back to the hollow.", effect: openThreeHollowDialogue }],
+      choices: [{ label: "Back to the threshold.", effect: openThreeDoorThresholdDialogue }],
     });
   };
 
@@ -2502,30 +2602,33 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       portrait: companion.icon || "3",
       name: companion.recruited ? `${companion.name}'s Read` : "The Hollow Waits",
       text: doorText[door] || doorText.noHandle,
-      choices: [{ label: "Back to the hollow.", effect: openThreeHollowDialogue }],
+      choices: [{ label: "Back to the threshold.", effect: openThreeDoorThresholdDialogue }],
     });
   };
 
   const openCrownSignDialogue = (assumedFlags = {}) => {
     const viewFlags = { ...flags, ...assumedFlags };
+    const repairMode = !!viewFlags.noHandleStoneInspected;
     setDialogue({
       portrait: "♛",
       name: "Crown Sign",
       text: viewFlags.crownSignRejected || viewFlags.crownSignLensUsed
-        ? "The Crown Sign still stands tall, but its authority has cracked. It gives no warning, no shelter, no witness name, no help for the next traveler. It only performs command."
-        : "The Crown Sign is large, clean, and bossy. It does not warn, guide, shelter, or remember. It only orders travelers to obey the straight road.",
+        ? "The Crown Sign still stands tall, but its seal has cracked and one edge has peeled away from older scratches underneath."
+        : repairMode
+          ? "The Crown Sign is large, clean, and newly nailed. It gives an order, a direction, and a seal, but no traveler's name and no sign of who wrote it."
+          : "The Crown Sign is large, clean, and official-looking. Mara gives it one impatient glance, then looks back to the places where Lio would actually write.",
       choices: [
-        !viewFlags.crownSignRejected
+        repairMode && !viewFlags.crownSignRejected
           ? {
-              label: "This sign commands, but does not guide.",
+              label: "Loosen the nailed-on crown sign.",
               effect: () => {
                 setFlags((f) => ({ ...f, crownSignRejected: true }));
-                setToast("You mark the Crown Sign as false guidance.");
+                setToast("The sign comes loose enough to show older scratches beneath it.");
                 openCrownSignDialogue({ ...assumedFlags, crownSignRejected: true });
               },
             }
           : null,
-        !viewFlags.crownSignLensUsed
+        repairMode && !viewFlags.crownSignLensUsed
           ? {
               label: "Use the Willowmark Lens.",
               effect: () => {
@@ -2550,14 +2653,17 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
 
   const openLanternSignDialogue = (assumedFlags = {}) => {
     const viewFlags = { ...flags, ...assumedFlags };
+    const repairMode = !!viewFlags.noHandleStoneInspected;
     setDialogue({
       portrait: "✶",
       name: "Lantern Sign",
       text: viewFlags.lanternSignCleaned
         ? "The Lantern Sign is clean now. Four older marks show clearly: WARNING. SHELTER. WATER. WITNESS.\n\nBelow them, a route phrase reads: DO NOT FORCE THE CLOSED WAY. SPEAK TRUE AND WAIT."
-        : "The Lantern Sign is half-covered with mud. Beneath it, older marks seem to guide rather than command: warning, shelter, memory.",
+        : repairMode
+          ? "The Lantern Sign is half-covered with mud. Beneath it, older cuts wait in a line, too practical to be decoration."
+          : "The Lantern Sign is half-covered with mud beside the little cache. Mara glances at it, then at the no-handle door. \"Later,\" she says. \"Lio first.\"",
       choices: [
-        !viewFlags.lanternSignCleaned
+        repairMode && !viewFlags.lanternSignCleaned
           ? {
               label: "Clean the Lantern Sign fully.",
               effect: () => {
@@ -2572,7 +2678,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               },
             }
           : null,
-        !viewFlags.lanternSignCompared
+        repairMode && !viewFlags.lanternSignCompared
           ? {
               label: "Compare it with Edden's drawing.",
               effect: () => {
@@ -2586,29 +2692,31 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               },
             }
           : null,
-        {
+        repairMode
+          ? {
           label: "Ask what the marks mean.",
           effect: () => {
             setFlags((f) => ({ ...f, understandsTrueSigns: true }));
             setToast("Warning, shelter, water, and witness are traveler help. None of them says obey.");
             openLanternSignDialogue({ ...assumedFlags, understandsTrueSigns: true });
           },
-        },
+        }
+          : null,
         { label: "Back to the Lantern Door.", effect: () => openLanternDoorDialogue(assumedFlags) },
       ].filter(Boolean),
     });
   };
 
-  const openNoHandleStoneDialogue = (assumedFlags = {}) => {
+  const openNoHandleStoneDialogue = (assumedFlags = {}, fallbackPosition) => {
     const doorFlags = { ...assumedFlags, noHandleStoneInspected: true };
     const outcome = getWestrootPuzzleOutcome(flags, doorFlags);
     const repair = getWestrootDoorRepairState(flags, doorFlags);
     const viewFlags = { ...flags, ...doorFlags };
-    const lioText = viewFlags.maraAskedNoHandleMark && repair.lioMarkConfirmed
-      ? `Near the base, Mara finds the tiny hook-tailed arrow again and reads the courier shorthand with a shaking breath.\n\n"Lio," she whispers. "${CHAPTER_2_STORY.lioGateMark}"`
-      : viewFlags.maraAskedNoHandleMark
-        ? "Near the base is a tiny hook-tailed scratch, half-hidden under a root. Mara studies it until her forehead nearly touches the stone.\n\n\"It could be Lio,\" she says, \"but I need his practice mark from the road behind us before I say it out loud.\""
-        : "Near the base, a tiny scratch hides under a root. It is easy to miss unless someone knows exactly how small a worried courier can write.";
+    const lioText = viewFlags.maraAskedNoHandleMark && viewFlags.lioHookMarkFound
+      ? repair.lioMarkConfirmed
+        ? `Near the base, Mara finds the tiny hook-tailed arrow again and reads the courier shorthand with a shaking breath.\n\n"Lio," she whispers. "${CHAPTER_2_STORY.lioGateMark}"`
+        : "Near the base, Mara finds the tiny hook-tailed arrow and goes very still.\n\n\"It is Lio's,\" she says. \"No maybe. No probably. He marked this door.\""
+      : "Near the base, a tiny scratch hides under a root. It is easy to miss unless someone knows exactly how small a worried courier can write.";
     setFlags((f) => ({ ...f, noHandleStoneInspected: true }));
     setDialogue({
       portrait: "▯",
@@ -2620,7 +2728,10 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           effect: () => {
             setFlags((f) => ({ ...f, noHandleDoorStudied: true }));
             setToast(formatWestrootDoorWhisper(repair));
-            openNoHandleStoneDialogue({ ...doorFlags, noHandleDoorStudied: true });
+            openNoHandleStoneDialogue(
+              { ...doorFlags, noHandleDoorStudied: true },
+              fallbackPosition,
+            );
           },
         },
         {
@@ -2629,7 +2740,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             const foundMark = !!(flags.lioShelterMarkFound || doorFlags.lioShelterMarkFound);
             const markFlags = {
               maraAskedNoHandleMark: true,
-              ...(foundMark ? { lioHookMarkFound: true } : {}),
+              lioHookMarkFound: true,
             };
             setFlags((f) => ({ ...f, ...markFlags }));
             if (foundMark && !flags.maraAskedNoHandleMark && !flags.lioHookMarkFound)
@@ -2637,9 +2748,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             setToast(
               foundMark
                 ? "Mara matches the tiny hook-tail to Lio's shelter mark. XP +5"
-                : "Mara needs one of Lio's practice marks from the road before she can trust this scratch.",
+                : "Mara knows the tiny hook-tail is Lio's. The door still seems to be listening past you.",
             );
-            openNoHandleStoneDialogue({ ...doorFlags, ...markFlags });
+            openNoHandleStoneDialogue(
+              { ...doorFlags, ...markFlags },
+              fallbackPosition,
+            );
           },
         },
         { label: "Ask your companion about this door.", effect: () => openCompanionDoorReadDialogue("noHandle") },
@@ -2660,7 +2774,10 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                 ? "Mara turns Edden's drawing sideways. The roots match the no-handle stone. XP +5"
                 : "The roots almost line up, but the Lantern Door has not made its older marks clear yet.",
             );
-            openNoHandleStoneDialogue({ ...doorFlags, ...drawingFlags });
+            openNoHandleStoneDialogue(
+              { ...doorFlags, ...drawingFlags },
+              fallbackPosition,
+            );
           },
         },
         {
@@ -2672,7 +2789,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                 portrait: "▯",
                 name: "The Door Waits",
                 text: `You speak the old road phrase.\n\nThe roots shift, listening. Then they settle again.\n\n${formatWestrootDoorWhisper(repair)}`,
-                choices: [{ label: "Listen to the hollow again.", effect: openThreeHollowDialogue }],
+                choices: [
+                  {
+                    label: "Listen to the threshold again.",
+                    effect: () => openThreeDoorThresholdDialogue(fallbackPosition),
+                  },
+                ],
               });
               return;
             }
@@ -2701,6 +2823,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             openRoadwatcherAmbushDialogue(encounterKey, {
               prepared: outcome.cleanSolve,
               maraProtected,
+              previousPosition: fallbackPosition,
             });
           },
         },
@@ -2714,16 +2837,31 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               messyWestrootSolve: !!f.forcedNoHandleDoor || !!f.messyWestrootSolve,
             }));
             setToast("The door does not move. Something in the thorns stirs.");
-            openNoHandleStoneDialogue({
-              ...doorFlags,
-              forcedNoHandleDoor: true,
-              forcedNoHandleDoorTwice: !!flags.forcedNoHandleDoor || !!flags.forcedNoHandleDoorTwice,
-            });
+            openNoHandleStoneDialogue(
+              {
+                ...doorFlags,
+                forcedNoHandleDoor: true,
+                forcedNoHandleDoorTwice: !!flags.forcedNoHandleDoor || !!flags.forcedNoHandleDoorTwice,
+              },
+              fallbackPosition,
+            );
           },
         },
-        { label: "Back to the hollow.", effect: openThreeHollowDialogue },
+        {
+          label: "Back to the threshold.",
+          effect: () => openThreeDoorThresholdDialogue(fallbackPosition),
+        },
       ],
     });
+  };
+
+  const backAwayFromWestrootDialogue = (fallbackPosition, message) => {
+    if (fallbackPosition) {
+      setPosition(fallbackPosition);
+      revealArea("westrootTrail", fallbackPosition.x, fallbackPosition.y);
+      setToast(message);
+    }
+    setDialogue(null);
   };
 
   const openRoadwatcherAmbushDialogue = (
@@ -2753,12 +2891,19 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             startBattle(buildEncounterEnemies(encounterKey), encounterKey);
           },
         },
-        { label: "Back away.", effect: () => setDialogue(null) },
+        {
+          label: "Back away.",
+          effect: () =>
+            backAwayFromWestrootDialogue(
+              options.previousPosition,
+              "You back away from the watched road.",
+            ),
+        },
       ],
     });
   };
 
-  const openRoadwatcherDialogue = () => {
+  const openRoadwatcherDialogue = (fallbackPosition) => {
     if (flags.beatRoadwatcher || flags.roadwatcherDefeated || flags.roadwatcherEncounterAvoided)
       return setToast("The watched road is quiet now.");
     setDialogue({
@@ -2776,7 +2921,14 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             );
           },
         },
-        { label: "Back away.", effect: () => setDialogue(null) },
+        {
+          label: "Back away.",
+          effect: () =>
+            backAwayFromWestrootDialogue(
+              fallbackPosition,
+              "You back away from the watched road.",
+            ),
+        },
       ],
     });
   };
@@ -3050,8 +3202,10 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       if (tile === "three_hollow") openThreeHollowDialogue();
       if (tile === "crown_sign") openCrownSignDialogue();
       if (tile === "lantern_sign") openLanternSignDialogue();
-      if (tile === "no_handle_stone") openNoHandleStoneDialogue();
-      if (tile === "roadwatcher") openRoadwatcherDialogue();
+      if (tile === "no_handle_stone")
+        openThreeDoorThresholdDialogue(options.previousPosition);
+      if (tile === "roadwatcher")
+        openRoadwatcherDialogue(options.previousPosition);
       if (tile === "westroot_gate") openWestrootGateDialogue();
     }
   };
@@ -4062,6 +4216,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               getStoryTile={getStoryTile}
               onNodeClick={handleMapNodeClick}
               debug={mapDebug}
+              fogComplete={region === "rootCellar" && !!flags.chapterOneClear}
             />
             <div className="mt-3 rounded-2xl bg-white/5 px-3 py-2 text-sm">
               You are standing on: {currentTileLabel}.

@@ -3,6 +3,7 @@ import {
   areMapNodesConnected,
   getMapNodePoint,
   getMapVisualConfig,
+  getNavigationNodeKeys,
   hasNavigationGraph,
   isMapNavigationNode,
 } from "../data/mapVisuals";
@@ -84,6 +85,7 @@ export function MapStage({
   getStoryTile,
   onNodeClick,
   debug = false,
+  fogComplete = false,
 }) {
   const visual = getMapVisualConfig(region);
   const rows = map.length;
@@ -130,6 +132,37 @@ export function MapStage({
       )
     : nodes;
   const fogNodes = renderedNodes.filter((node) => node.explored);
+  const fogNodeKeys = new Set(fogNodes.map((node) => `${node.x},${node.y}`));
+  const navigationNodeKeys = usesNavigationGraph
+    ? getNavigationNodeKeys(region)
+    : [];
+  const graphFullyExplored =
+    usesNavigationGraph &&
+    navigationNodeKeys.length > 0 &&
+    navigationNodeKeys.every((key) => fogNodeKeys.has(key));
+  const completedFog = fogComplete || graphFullyExplored;
+  const fogOpacity = completedFog ? visual.completedFogOpacity ?? 0.55 : 1;
+  const fogPathWidth =
+    visual.fogPathWidth || (visual.fogRadius || 8) * 1.7;
+  const fogEdges = usesNavigationGraph
+    ? fogNodes.flatMap((node) =>
+        fogNodes
+          .filter(
+            (other) =>
+              `${node.x},${node.y}` < `${other.x},${other.y}` &&
+              areMapNodesConnected(
+                region,
+                { x: node.x, y: node.y },
+                { x: other.x, y: other.y },
+              ),
+          )
+          .map((other) => ({
+            key: `fog-edge-${node.key}-${other.key}`,
+            from: node.point,
+            to: other.point,
+          })),
+      )
+    : [];
   const renderedTokens = tokens.filter(
     (node) =>
       !usesNavigationGraph || isMapNavigationNode(region, node.x, node.y),
@@ -187,6 +220,18 @@ export function MapStage({
             >
               <rect width="100" height="100" fill="white" />
               <g filter={`url(#${fogBlurId})`}>
+                {fogEdges.map((edge) => (
+                  <line
+                    key={edge.key}
+                    x1={edge.from.x}
+                    y1={edge.from.y}
+                    x2={edge.to.x}
+                    y2={edge.to.y}
+                    stroke="black"
+                    strokeWidth={fogPathWidth}
+                    strokeLinecap="round"
+                  />
+                ))}
                 {fogNodes.map((node) => (
                   <circle
                     key={`fog-${node.key}`}
@@ -203,6 +248,7 @@ export function MapStage({
             width="100"
             height="100"
             fill="#020617"
+            opacity={fogOpacity}
             mask={`url(#${fogMaskId})`}
           />
         </svg>

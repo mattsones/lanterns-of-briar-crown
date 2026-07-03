@@ -8,7 +8,7 @@ import {
 } from "../src/game/state";
 import { STORAGE_KEY } from "../src/game/save";
 
-function buildChapter2Checkpoint(flagOverrides = {}, position = { x: 6, y: 3 }) {
+function buildChapter2Checkpoint(flagOverrides = {}, position = { x: 6, y: 4 }) {
   const player = buildPlayer({
     name: "Liam",
     gender: "Male",
@@ -82,8 +82,8 @@ function buildChapter2BriefingCheckpoint() {
 }
 
 async function loadChapter2Checkpoint(page, flagOverrides = {}, options = {}) {
-  const position = options.position || { x: 6, y: 3 };
-  const expectedTile = options.expectedTile || "No-Handle Stone";
+  const position = options.position || { x: 6, y: 4 };
+  const expectedTile = options.expectedTile || "Three-Door Threshold";
   const payload = buildChapter2Checkpoint(flagOverrides, position);
   await page.addInitScript(
     ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
@@ -123,21 +123,27 @@ test("chapter two briefing Edden drawing choice opens the recovery room", async 
 });
 
 test("chapter two no-handle door frames the repair puzzle before it opens", async ({ page }) => {
-  await loadChapter2Checkpoint(page);
+  await loadChapter2Checkpoint(page, {
+    lioShelterMarkFound: true,
+  });
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await expect(page.getByText("Three-Door Threshold", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Inspect the no-handle door." }).click();
   await expect(page.getByText("LET THE ROAD BEHIND YOU SPEAK TRUE")).toBeVisible();
-  await expect(page.getByText("The door listens to the road behind you")).toBeVisible();
+  await expect(page.getByText("The door is not only listening to you")).toBeVisible();
   await expect(page.getByRole("button", { name: "Ask Mara about the tiny scratch." })).toBeVisible();
   await expect(page.getByText("Break the false road orders.")).not.toBeVisible();
 
+  await page.getByRole("button", { name: "Ask Mara about the tiny scratch." }).click();
+  await expect(page.getByText("Mara matches the tiny hook-tail")).toBeVisible();
   await page.getByRole("button", { name: /Say: A road is safest/ }).click();
   await expect(page.getByText("The Door Waits")).toBeVisible();
-  await expect(page.getByText("The door listens to the road behind you")).toBeVisible();
+  await expect(page.getByText("The door is not only listening to you")).toBeVisible();
   await expect(page.getByText(/Still waiting:/)).not.toBeVisible();
 });
 
-test("chapter two three-sign hollow works as a three-door hub", async ({ page }) => {
+test("chapter two three-sign hollow is a turn-back warning area", async ({ page }) => {
   await loadChapter2Checkpoint(
     page,
     {},
@@ -145,17 +151,33 @@ test("chapter two three-sign hollow works as a three-door hub", async ({ page })
   );
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
-  await expect(page.getByRole("button", { name: "Go to the Crown Door." })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Go to the Lantern Door." })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Go to the No-Handle Door." })).toBeVisible();
+  await expect(page.getByText("RETURN TO BRAMBLECROSS")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Hurry after Lio." })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Try the Crown Door." })).not.toBeVisible();
 
-  await page.getByRole("button", { name: "Go to the Crown Door." }).click();
-  await expect(page.getByText("Crown Door", { exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Ask Mara about the Crown Door." })).toBeVisible();
+  await page.getByRole("button", { name: "Hurry after Lio." }).click();
+  await expect(page.getByRole("button", { name: "Hurry after Lio." })).not.toBeVisible();
+});
+
+test("chapter two threshold supports trying each door", async ({ page }) => {
+  await loadChapter2Checkpoint(page);
+
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await expect(page.getByText("Three-Door Threshold", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Try the Crown Door." })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Try the Lantern Door." })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Inspect the no-handle door." })).toBeVisible();
+
+  await page.getByRole("button", { name: "Try the Lantern Door." }).click();
+  await expect(page.getByText("Lantern Door", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Try the Lantern Door." }).click();
+  await expect(page.getByText("travel supplies wrapped in dry leaf-cloth")).toBeVisible();
+  await page.getByRole("button", { name: "Back to the Lantern Door." }).click();
+  await page.getByRole("button", { name: "Back to the threshold." }).click();
+  await page.getByRole("button", { name: "Try the Crown Door." }).click();
   await page.getByRole("button", { name: "Try the Crown Door." }).click();
   await expect(page.getByText("False Crown Passage")).toBeVisible();
-  await page.getByRole("button", { name: "Mark the passage as false." }).click();
-  await expect(page.getByText("Crown Door", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Mark this as a dangerous branch." })).toBeVisible();
 });
 
 test("chapter two shelter nook supports multiple local actions in one visit", async ({ page }) => {
@@ -166,11 +188,11 @@ test("chapter two shelter nook supports multiple local actions in one visit", as
   );
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
-  await page.getByRole("button", { name: "Remove the false notice." }).click();
+  await expect(page.getByRole("button", { name: "Take down the turn-back notice." })).not.toBeVisible();
   await expect(page.getByRole("button", { name: "Search for Lio's mark." })).toBeVisible();
 
   await page.getByRole("button", { name: "Search for Lio's mark." }).click();
-  await expect(page.getByText("Still west. That part is really him.")).toBeVisible();
+  await expect(page.getByText("Lio was here")).toBeVisible();
   await expect(page.getByRole("button", { name: "Rest briefly." })).toBeVisible();
 });
 
@@ -186,6 +208,7 @@ test("chapter two clean no-handle solve prepares the Roadwatcher fight", async (
   });
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await page.getByRole("button", { name: "Inspect the no-handle door." }).click();
   await expect(page.getByText("The inscription feels warmer now.")).toBeVisible();
   await page.getByRole("button", { name: /Say: A road is safest/ }).click();
   await expect(page.getByText("This time the hollow is ready")).toBeVisible();
@@ -208,6 +231,7 @@ test("chapter two messy no-handle solve triggers hard Roadwatcher pressure", asy
   });
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await page.getByRole("button", { name: "Inspect the no-handle door." }).click();
   await expect(page.getByText("LET THE ROAD BEHIND YOU SPEAK TRUE")).toBeVisible();
   await page.getByRole("button", { name: /Say: A road is safest/ }).click();
   await expect(page.getByText("Briar Roadwatcher Ambush")).toBeVisible();
@@ -215,4 +239,18 @@ test("chapter two messy no-handle solve triggers hard Roadwatcher pressure", asy
   await expect(page.getByText("Battle • Briar Roadwatcher")).toBeVisible();
   await expect(page.getByText("Thorn-Collared Hound")).toBeVisible();
   await expect(page.getByText("False Sign Scratcher")).toBeVisible();
+});
+
+test("chapter two roadwatcher back away returns to the previous trail node", async ({ page }) => {
+  await loadChapter2Checkpoint(
+    page,
+    {},
+    { position: { x: 8, y: 2 }, expectedTile: "Road" },
+  );
+
+  await page.getByTestId("move-up").click();
+  await expect(page.getByText("Briar Roadwatcher", { exact: true })).toBeVisible();
+
+  await page.getByRole("button", { name: "Back away." }).click();
+  await expect(page.getByText("You are standing on: Road.")).toBeVisible();
 });
