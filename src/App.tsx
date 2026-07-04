@@ -67,8 +67,13 @@ import {
   getHeroXpTarget,
 } from "./game/progression";
 import {
+  CHAPTER_2_PLAYTEST_SAVE_PATH,
+  formatDiskSaveFilename,
+  getSavePayload,
   parseCheckpointPayload,
+  parseDiskSaveText,
   parseSaveSlotRecords,
+  serializeDiskSave,
   STORAGE_KEY,
   writeSaveSlotRecords,
 } from "./game/save";
@@ -324,12 +329,12 @@ export default function LiamsGamePrototype() {
         { label: "Stay outside", effect: () => setDialogue(null) },
       ],
     });
-  const saveGame = (label = "Checkpoint") => {
-    if (!player) return;
-    const payload = {
+  const buildCurrentSavePayload = (payloadToast = "Save loaded.", playerSnapshot = player) => {
+    if (!playerSnapshot) return null;
+    return {
       screen: "play",
       chapterId: getChapterProgress(flags).currentChapterId,
-      player: { ...player, checkpointLabel: label },
+      player: normalizePlayerData(playerSnapshot),
       region,
       position,
       visited,
@@ -337,14 +342,25 @@ export default function LiamsGamePrototype() {
       guestNpc: getActiveGuestNpc(flags),
       flags,
       quest,
-      toast: `Checkpoint reached: ${label}`,
+      toast: payloadToast,
     };
+  };
+  const saveGame = (label = "Checkpoint") => {
+    if (!player) return;
+    const payload = buildCurrentSavePayload(`Checkpoint reached: ${label}`, {
+      ...player,
+      checkpointLabel: label,
+    });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     setPlayer((prev) => ({ ...prev, checkpointLabel: label }));
     setToast(`Checkpoint reached: ${label}`);
   };
-  const applyLoadedPayload = (payload, toastMessage) => {
-    if (!payload?.player) return;
+  const applyLoadedPayload = (rawPayload, toastMessage) => {
+    const payload = getSavePayload(rawPayload);
+    if (!payload?.player) {
+      setToast("That save file could not be loaded.");
+      return false;
+    }
     const nextRegion = payload.region || "hearthhollow";
     setPlayer(normalizePlayerData(payload.player));
     setRegion(nextRegion);
@@ -371,7 +387,9 @@ export default function LiamsGamePrototype() {
     setCraftOpen(false);
     setInteriorScene(null);
     setScreen("play");
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     setToast(toastMessage || payload.toast || "Save loaded.");
+    return true;
   };
   const loadGame = () =>
     applyLoadedPayload(parseCheckpointPayload(), "Checkpoint loaded.");
@@ -3959,23 +3977,55 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     );
     setSaveModalMode("load");
   };
+  const exportSaveToDisk = () => {
+    const name = `${player.name} - ${currentRegionInfo.name}`;
+    const payload = buildCurrentSavePayload(`Loaded ${name}.`);
+    if (!payload) return;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    const blob = new Blob([serializeDiskSave(name, payload)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = formatDiskSaveFilename(name);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    setToast(`Disk save exported: ${link.download}`);
+  };
+  const importSaveFromDisk = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    try {
+      const imported = parseDiskSaveText(await file.text());
+      applyLoadedPayload(imported.payload, `Loaded disk save: ${imported.name || file.name}`);
+      setSaveModalMode(null);
+    } catch (error) {
+      setToast(error?.message || "That save file could not be loaded.");
+    } finally {
+      event.target.value = "";
+    }
+  };
+  const loadChapter2PlaytestSave = async () => {
+    try {
+      const response = await fetch(CHAPTER_2_PLAYTEST_SAVE_PATH, {
+        cache: "no-store",
+      });
+      if (!response.ok) throw new Error("Chapter 2 playtest save is missing.");
+      const imported = parseDiskSaveText(await response.text());
+      applyLoadedPayload(imported.payload, `Loaded ${imported.name}.`);
+      setSaveModalMode(null);
+    } catch (error) {
+      setToast(error?.message || "Chapter 2 playtest save could not be loaded.");
+    }
+  };
   const saveToSlot = (slotId) => {
     const name =
       (saveNameDrafts[slotId] || "").trim() ||
       `${player.name} • ${currentRegionInfo.name}`;
-    const payload = {
-      screen: "play",
-      chapterId: getChapterProgress(flags).currentChapterId,
-      player: normalizePlayerData(player),
-      region,
-      position,
-      visited,
-      companion,
-      guestNpc: getActiveGuestNpc(flags),
-      flags,
-      quest,
-      toast: `Loaded ${name}.`,
-    };
+    const payload = buildCurrentSavePayload(`Loaded ${name}.`);
     const next = saveSlots.map((slot) =>
       slot.id === slotId
         ? { ...slot, name, updatedAt: Date.now(), payload }
@@ -4023,9 +4073,11 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               </Button>
               <Button
                 onClick={openLoadSlotModal}
-                disabled={!saveSlots.some((s) => s.payload)}
               >
                 Load Save Slot
+              </Button>
+              <Button onClick={loadChapter2PlaytestSave}>
+                Load Chapter 2 Playtest Save
               </Button>
             </div>
           </div>
@@ -4039,6 +4091,9 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             close={() => setSaveModalMode(null)}
             save={saveToSlot}
             load={loadFromSlot}
+            exportToDisk={player ? exportSaveToDisk : null}
+            importFromDisk={importSaveFromDisk}
+            loadChapter2PlaytestSave={loadChapter2PlaytestSave}
             loadCheckpoint={() => {
               loadGame();
               setSaveModalMode(null);
@@ -4392,6 +4447,9 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           close={() => setSaveModalMode(null)}
           save={saveToSlot}
           load={loadFromSlot}
+          exportToDisk={exportSaveToDisk}
+          importFromDisk={importSaveFromDisk}
+          loadChapter2PlaytestSave={loadChapter2PlaytestSave}
           loadCheckpoint={() => {
             loadGame();
             setSaveModalMode(null);

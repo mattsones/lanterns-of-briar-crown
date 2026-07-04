@@ -110,6 +110,17 @@ async function loadChapter2BriefingCheckpoint(page) {
   await expect(page.getByText("You are standing on: Watch Clerk Enna.")).toBeVisible();
 }
 
+test("title screen loads the checked-in Chapter 2 playtest save", async ({ page }) => {
+  await page.addInitScript(() => window.localStorage.clear());
+  await page.goto("/");
+  await page.getByRole("button", { name: "Load Chapter 2 Playtest Save" }).click();
+
+  await expect(page.getByRole("heading", { name: MAPS.bramblecross.name })).toBeVisible();
+  await expect(page.getByText("Goal: Return to the Watchhouse")).toBeVisible();
+  await expect(page.getByText("You are standing on: Watch Clerk Enna.")).toBeVisible();
+  await expect(page.getByText("Chapter 1 complete: The Road That Lied")).toBeVisible();
+});
+
 test("chapter two briefing Edden drawing choice opens the recovery room", async ({ page }) => {
   await loadChapter2BriefingCheckpoint(page);
 

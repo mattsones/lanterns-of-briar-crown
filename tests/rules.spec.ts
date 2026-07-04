@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { readFileSync } from "node:fs";
 import { resolveRoll, resolveSkillCheck } from "../src/game/dice";
 import { RACES } from "../src/data/character";
 import { ENCOUNTERS, ENEMY_DB } from "../src/data/enemies";
@@ -16,7 +17,11 @@ import {
   getNavigationNodeKeys,
 } from "../src/data/mapVisuals";
 import { gainItem, getDefaultBattlePouch, removeItem } from "../src/game/inventory";
-import { buildDefaultVisited, buildPlayer } from "../src/game/state";
+import {
+  buildDefaultCompanion,
+  buildDefaultVisited,
+  buildPlayer,
+} from "../src/game/state";
 import { getHeroXpTarget } from "../src/game/progression";
 import { getVisitedKey } from "../src/game/map";
 import { addBonuses } from "../src/game/stats";
@@ -45,6 +50,13 @@ import {
   getChapter1CompanionReaction,
 } from "../src/story/chapter1";
 import { CHAPTER_STORY_PLANS } from "../src/story/chapters2to5";
+import {
+  formatDiskSaveFilename,
+  getSavePayload,
+  parseDiskSaveText,
+  serializeDiskSave,
+} from "../src/game/save";
+import type { SavePayload } from "../src/game/types";
 
 test("dice helpers format notation and skill checks", () => {
   const originalRandom = Math.random;
@@ -87,6 +99,72 @@ test("inventory helpers preserve pouch and item mutation behavior", () => {
 
   removeItem(setPlayer, "trail_snack", 1);
   expect(player.inventory.trail_snack).toBe(2);
+});
+
+test("disk save helpers preserve Liam's Game save payloads", () => {
+  const player = buildPlayer({
+    name: "Liam",
+    gender: "Male",
+    raceId: "human",
+    appearanceId: "brave",
+  });
+  const payload: SavePayload = {
+    screen: "play",
+    chapterId: 1,
+    player,
+    region: "hearthhollow",
+    position: { x: 2, y: 4 },
+    visited: buildDefaultVisited(),
+    companion: buildDefaultCompanion(),
+    guestNpc: null,
+    flags: {},
+    quest: { title: "Test", description: "Save helper test." },
+    toast: "Loaded helper test.",
+  };
+
+  const parsed = parseDiskSaveText(serializeDiskSave("Liam Helper Save", payload));
+  expect(parsed.name).toBe("Liam Helper Save");
+  expect(parsed.payload).toMatchObject({
+    region: "hearthhollow",
+    position: { x: 2, y: 4 },
+    player: { name: "Liam" },
+  });
+  expect(getSavePayload(payload)).toBe(payload);
+  expect(formatDiskSaveFilename("Liam / Chapter 2: Westroot")).toBe("liam-chapter-2-westroot.json");
+  expect(() => parseDiskSaveText("{}")).toThrow("Invalid Liam's Game save file.");
+});
+
+test("checked-in Chapter 2 playtest save is loadable and item-safe", () => {
+  const saveText = readFileSync(
+    new URL("../public/saves/chapter-2-playtest.json", import.meta.url),
+    "utf8",
+  );
+  const imported = parseDiskSaveText(saveText);
+  const payload = imported.payload;
+
+  expect(imported.name).toBe("Chapter 2 Playtest - Chapter 1 Complete");
+  expect(payload).toMatchObject({
+    screen: "play",
+    chapterId: 2,
+    region: "bramblecross",
+    position: { x: 7, y: 4 },
+    flags: {
+      chapterOneClear: true,
+      chapterReported: true,
+    },
+  });
+  expect(payload.flags.chapterTwoBriefed).toBeUndefined();
+  expect(payload.player.equipment).toMatchObject({
+    weapon: "pebbleknock_hammer",
+    helm: "kettle_helm",
+    armor: "briar_vest",
+    trinket1: "warden_chain",
+    trinket2: "lantern_pin",
+  });
+  Object.keys(payload.player.inventory).forEach((id) => expect(ITEM_DB[id]).toBeTruthy());
+  Object.values(payload.player.equipment)
+    .filter(Boolean)
+    .forEach((id) => expect(ITEM_DB[id]).toBeTruthy());
 });
 
 test("progression and default map state stay compatible with chapter one", () => {
