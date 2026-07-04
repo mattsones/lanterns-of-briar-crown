@@ -121,6 +121,61 @@ test("title screen loads the checked-in Chapter 2 playtest save", async ({ page 
   await expect(page.getByText("Chapter 1 complete: The Road That Lied")).toBeVisible();
 });
 
+test("chapter two fog covers map tokens instead of floating over darkness", async ({ page }) => {
+  await page.setViewportSize({ width: 2048, height: 1280 });
+  await loadChapter2Checkpoint(
+    page,
+    {},
+    { position: { x: 2, y: 1 }, expectedTile: "Roadside Shelter Nook" },
+  );
+
+  await expect(page.locator(".map-fog-layer")).toBeVisible();
+  await expect(page.locator(".map-token-layer")).toHaveCSS("z-index", "2");
+  await expect(page.locator(".map-fog-layer")).toHaveCSS("z-index", "3");
+
+  const bounds = await page.evaluate(() => {
+    const stage = document.querySelector('[data-testid="map-stage"]')?.getBoundingClientRect();
+    const fog = document.querySelector(".map-fog-layer")?.getBoundingClientRect();
+    return stage && fog
+      ? {
+          stageWidth: stage.width,
+          stageHeight: stage.height,
+          fogWidth: fog.width,
+          fogHeight: fog.height,
+        }
+      : null;
+  });
+  expect(bounds).not.toBeNull();
+  expect(Math.abs(bounds.stageWidth - bounds.fogWidth)).toBeLessThan(3);
+  expect(Math.abs(bounds.stageHeight - bounds.fogHeight)).toBeLessThan(3);
+});
+
+test("chapter two loaded saves refresh fog after westroot node normalization", async ({ page }) => {
+  const payload = buildChapter2Checkpoint({}, { x: 6, y: 3 });
+  payload.visited = {
+    westrootTrail: {
+      "6,3": true,
+    },
+  };
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: payload },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+
+  await expect(page.getByRole("heading", { name: MAPS.westrootTrail.name })).toBeVisible();
+  await expect(page.getByText("You are standing on: Three-Door Threshold.")).toBeVisible();
+
+  const stored = await page.evaluate((key) => {
+    const raw = window.localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : null;
+  }, STORAGE_KEY);
+  expect(stored.position).toEqual({ x: 6, y: 4 });
+  expect(stored.visited.westrootTrail["6,4"]).toBe(true);
+});
+
 test("chapter two briefing Edden drawing choice opens the recovery room", async ({ page }) => {
   await loadChapter2BriefingCheckpoint(page);
 

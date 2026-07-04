@@ -137,6 +137,16 @@ function normalizeMapPosition(regionId, position) {
   return position;
 }
 
+function ensureVisitedIncludesPosition(visitedState, regionId, position, radius = 1) {
+  return {
+    ...visitedState,
+    [regionId]: {
+      ...(visitedState[regionId] || {}),
+      ...buildVisitedMap(regionId, position.x, position.y, radius),
+    },
+  };
+}
+
 export default function LiamsGamePrototype() {
   const [screen, setScreen] = useState("title");
   const [createForm, setCreateForm] = useState({
@@ -361,24 +371,31 @@ export default function LiamsGamePrototype() {
       setToast("That save file could not be loaded.");
       return false;
     }
-    const nextRegion = payload.region || "hearthhollow";
-    setPlayer(normalizePlayerData(payload.player));
-    setRegion(nextRegion);
-    setPosition(
-      normalizeMapPosition(
-        nextRegion,
-        payload.position || MAPS.hearthhollow.start,
-      ),
+    const nextRegion = MAPS[payload.region] ? payload.region : "hearthhollow";
+    const nextPosition = normalizeMapPosition(
+      nextRegion,
+      payload.position || MAPS[nextRegion].start,
     );
-    setVisited(payload.visited || buildDefaultVisited());
-    setCompanion(normalizeCompanionData(payload.companion));
-    setFlags({ ...buildDefaultFlags(), ...(payload.flags || {}) });
-    setQuest(
+    const nextPlayer = normalizePlayerData(payload.player);
+    const nextVisited = ensureVisitedIncludesPosition(
+      payload.visited || buildDefaultVisited(),
+      nextRegion,
+      nextPosition,
+    );
+    const nextCompanion = normalizeCompanionData(payload.companion);
+    const nextFlags = { ...buildDefaultFlags(), ...(payload.flags || {}) };
+    const nextQuest =
       payload.quest || {
         title: "Adventure in progress",
         description: "Continue exploring.",
-      },
-    );
+      };
+    setPlayer(nextPlayer);
+    setRegion(nextRegion);
+    setPosition(nextPosition);
+    setVisited(nextVisited);
+    setCompanion(nextCompanion);
+    setFlags(nextFlags);
+    setQuest(nextQuest);
     setLevelUpPending(null);
     setDialogue(null);
     setBattle(null);
@@ -387,7 +404,20 @@ export default function LiamsGamePrototype() {
     setCraftOpen(false);
     setInteriorScene(null);
     setScreen("play");
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        ...payload,
+        screen: "play",
+        player: nextPlayer,
+        region: nextRegion,
+        position: nextPosition,
+        visited: nextVisited,
+        companion: nextCompanion,
+        flags: nextFlags,
+        quest: nextQuest,
+      }),
+    );
     setToast(toastMessage || payload.toast || "Save loaded.");
     return true;
   };
