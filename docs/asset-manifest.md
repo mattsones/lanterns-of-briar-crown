@@ -24,6 +24,7 @@ assets/
   maps/
   portraits/
     characters/
+    enemies/
   icons/
     items/
     skills/
@@ -94,6 +95,29 @@ docs/art/item-icons/liams-game-custom-item-icon-plan.md
 | Rowan Reedshield | `rowan-portrait-v02.png` | Defensive companion; sturdy playable-ancestry look, not fox-person. |
 | Tilda Quickstep | `tilda-portrait-v01.png` | Quick, clever, mischievous companion. |
 | Moss Fenmere | `moss-portrait-v01.png` | Mossback companion; calm, rooted, ancient-adjacent. |
+| Ada Willowmarket | `ada-willowmarket-portrait-v01.png` | Production portrait; organized market authority and Willow seal identity. |
+| Smith Orin | `smith-orin-portrait-v02.png` | Selected Emberling/fireperson blacksmith direction. |
+| Mayor Anwen | `mayor-anwen-portrait-v01.png` | Production portrait; Bramblecross civic leader. |
+| Nella the Baker | `nella-portrait-v03.png` | Selected Tideborn/water-person baker direction. |
+| Toma Fielding | `toma-fielding-portrait-v02.png` | Selected farmer portrait with clearer tool silhouette. |
+| Miri of the Loom | `miri-portrait-v02.png` | Selected loom/thread portrait with stronger face variety. |
+| Mara Brindle | `mara-brindle-portrait-v01.png` | Production portrait for Chapter 2 protected guest role. |
+| Edden Vale | `edden-vale-portrait-v01.png` | Production portrait for the recovery-room witness. |
+| Lio Brindle | `lio-brindle-portrait-v01.png` | Pre-rescue or remembered courier portrait; generate a later rescued variant if needed. |
+| Worried Road Traveler | `worried-road-traveler-portrait-v01.png` | Production-usable generic traveler; includes baked-in sign text, so use sparingly. |
+
+## Enemies
+
+| Enemy | Suggested filename | Notes |
+|---|---|---|
+| Bramble Boar | `bramble-boar-v01.png` | Production battle portrait; frantic road threat with satchel clue. |
+| Thorncoat Ruffian | `thorncoat-ruffian-v02.png` | Selected humanoid version; avoids implying foxfolk as a new ancestry. |
+| Thorny Hound | `thorny-hound-v01.png` | Production battle portrait; wild bramble-tangled hound. |
+| Rustroot Skulk | `rustroot-skulk-v02.png` | Selected organic root-cellar creature; less mechanical than v1. |
+| Briar Knot Warden | `briar-knot-warden-v01.png` | Production boss portrait; still could use future root-cellar/chain specificity. |
+| Briar Roadwatcher | `briar-roadwatcher-v02.png` | Selected practical sign-forging field agent; replaces Warden-like v1. |
+| Thorn-Collared Hound | `thorn-collared-hound-v01.png` | Production battle portrait; collar-control read is clear. |
+| False Sign Scratcher | `false-sign-scratcher-v02.png` | Selected support enemy; clearer face and less Warden overlap than v1. |
 
 ---
 
@@ -118,23 +142,18 @@ docs/art/item-icons/liams-game-custom-item-icon-plan.md
 
 ## Important NPCs
 
-- Ada Willowmarket
-- Smith Orin
-- Mayor Anwen
-- Nella the Baker
-- Toma Fielding
-- Miri of the Loom
-- Edden Vale
-- Lio Brindle
-- Mara
+- Bracken Voss portrait and combat/boss variant
+- Chapter 3 Westroot NPC set
+- Chapter 4 captive porter and relay captain portraits
+- Optional post-rescue Lio portrait
 
 ## Enemies
 
-- Bramble Boar
-- Thorncoat Ruffian
-- Thorny Hound
-- Rustroot Skulk
-- Briar Knot Warden
+- Briar Relay Guard
+- Seal-Forged Sentry
+- Crown Whisperer
+- Thornseal Guard
+- Thornroot Sentry
 
 ## Symbols / UI
 

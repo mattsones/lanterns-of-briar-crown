@@ -121,6 +121,10 @@ export type SkillCheckResult = {
 export type Enemy = {
   name: string;
   icon: string;
+  artwork?: {
+    src: string;
+    alt: string;
+  };
   hp: number;
   maxHp: number;
   intentA: string;

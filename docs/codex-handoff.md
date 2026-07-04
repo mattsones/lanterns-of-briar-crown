@@ -682,3 +682,36 @@ The Crown Door Den is now playable; the next Chapter 2 pass should be visual and
 2. Check Westroot Trail and Crown Door Den with Dev Tools map debug on and off.
 3. Tune `src/data/mapVisuals.ts` node placement around Three-Sign Hollow, the Crown Door entry, den rooms, Roadwatcher bend, and First Westroot Gate.
 4. Consider close-up painted scene images for the individual Crown, Lantern, and No-Handle Door dialogs if the procedural door visuals start to feel thin beside the threshold art.
+
+## Current Handoff - NPC and Enemy Art Integration
+
+Last updated: 2026-07-04
+
+Branch: `codex/chapter-2-completion`
+
+### What Changed
+
+- Added the new NPC and enemy portrait assets under `assets/portraits/characters/` and `assets/portraits/enemies/`.
+- Wired selected NPC portraits through `src/data/portraits.ts`, preserving dialogue and map-token emoji fallbacks.
+- Selected bolder fantasy ancestry reads for Smith Orin and Nella: Orin uses the Emberling/fireperson v2 portrait, and Nella uses the Tideborn/water-person v3 portrait.
+- Wired selected enemy portraits through `src/data/enemies.ts` and the battle modal, preserving the existing enemy emoji fallback if art is missing or fails to load.
+- Selected Roadwatcher v2 and False Sign Scratcher v2 for production; Roadwatcher v2 fixes the earlier Warden silhouette overlap.
+- Marked the wired Chapter 1-2 portrait and enemy entries as available in `src/data/artworkPlan.ts`.
+- Updated `docs/asset-manifest.md`, `docs/liams-game-art-direction.md`, and the art prompt/review docs for the selected versions and bolder ancestry direction.
+
+### Verification Run
+
+Run before pushing this slice:
+
+```bash
+npm.cmd run build
+npm.cmd run test:rules
+npm.cmd run playtest:smoke
+git diff --check
+```
+
+### Next Recommended Slice
+
+1. Run a browser visual pass through Hearthhollow, Bramblecross, Westroot Trail, Crown Door Den, and at least one battle per enemy-art group.
+2. Optimize production portrait PNGs before a public build; most source portraits are still roughly 2.3-3.0 MB each.
+3. Generate future Chapter 3-5 portraits/enemies after the next story slice hardens.

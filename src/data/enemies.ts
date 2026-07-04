@@ -1,9 +1,28 @@
 const DEFAULT_ATTACK_A = { count: 1, sides: 6, bonus: 1 };
 const DEFAULT_ATTACK_B = { count: 1, sides: 6, bonus: 2 };
 
+const brambleBoarArtwork = new URL("../../assets/portraits/enemies/bramble-boar-v01.png", import.meta.url).href;
+const briarKnotWardenArtwork = new URL("../../assets/portraits/enemies/briar-knot-warden-v01.png", import.meta.url)
+  .href;
+const briarRoadwatcherArtwork = new URL("../../assets/portraits/enemies/briar-roadwatcher-v02.png", import.meta.url)
+  .href;
+const falseSignScratcherArtwork = new URL(
+  "../../assets/portraits/enemies/false-sign-scratcher-v02.png",
+  import.meta.url,
+).href;
+const rustrootSkulkArtwork = new URL("../../assets/portraits/enemies/rustroot-skulk-v02.png", import.meta.url).href;
+const thornCollaredHoundArtwork = new URL(
+  "../../assets/portraits/enemies/thorn-collared-hound-v01.png",
+  import.meta.url,
+).href;
+const thorncoatRuffianArtwork = new URL("../../assets/portraits/enemies/thorncoat-ruffian-v02.png", import.meta.url)
+  .href;
+const thornyHoundArtwork = new URL("../../assets/portraits/enemies/thorny-hound-v01.png", import.meta.url).href;
+
 export const ENEMY_DB = {
   bramble_boar: {
     name: "Bramble Boar",
+    artwork: { src: brambleBoarArtwork, alt: "Portrait of a Bramble Boar" },
     icon: "🐗",
     hp: 24,
     intentA: "Wild Charge",
@@ -11,6 +30,7 @@ export const ENEMY_DB = {
   },
   thorncoat_ruffian: {
     name: "Thorncoat Ruffian",
+    artwork: { src: thorncoatRuffianArtwork, alt: "Portrait of a Thorncoat Ruffian" },
     icon: "🦊",
     hp: 22,
     intentA: "Knife Rush",
@@ -18,6 +38,7 @@ export const ENEMY_DB = {
   },
   thorny_hound: {
     name: "Thorny Hound",
+    artwork: { src: thornyHoundArtwork, alt: "Portrait of a Thorny Hound" },
     icon: "🐕",
     hp: 14,
     intentA: "Snap Lunge",
@@ -27,6 +48,7 @@ export const ENEMY_DB = {
   },
   rustroot_skulk: {
     name: "Rustroot Skulk",
+    artwork: { src: rustrootSkulkArtwork, alt: "Portrait of a Rustroot Skulk" },
     icon: "🦂",
     hp: 30,
     intentA: "Claw Flurry",
@@ -36,6 +58,7 @@ export const ENEMY_DB = {
   },
   briar_knot_warden: {
     name: "Briar Knot Warden",
+    artwork: { src: briarKnotWardenArtwork, alt: "Portrait of the Briar Knot Warden" },
     icon: "👹",
     hp: 38,
     intentA: "Chain Slam",
@@ -45,6 +68,7 @@ export const ENEMY_DB = {
   },
   briar_roadwatcher: {
     name: "Briar Roadwatcher",
+    artwork: { src: briarRoadwatcherArtwork, alt: "Portrait of a Briar Roadwatcher" },
     icon: "👁️",
     hp: 28,
     intentA: "False Command",
@@ -54,6 +78,7 @@ export const ENEMY_DB = {
   },
   false_sign_scratcher: {
     name: "False Sign Scratcher",
+    artwork: { src: falseSignScratcherArtwork, alt: "Portrait of a False Sign Scratcher" },
     icon: "🪧",
     hp: 18,
     intentA: "Scrape Mark",
@@ -63,6 +88,7 @@ export const ENEMY_DB = {
   },
   thorn_collared_hound: {
     name: "Thorn-Collared Hound",
+    artwork: { src: thornCollaredHoundArtwork, alt: "Portrait of a Thorn-Collared Hound" },
     icon: "🐕",
     hp: 18,
     intentA: "Collar-Snap",
@@ -148,6 +174,7 @@ export function buildEnemy(enemyId) {
   return {
     name: enemy.name,
     icon: enemy.icon,
+    artwork: enemy.artwork,
     hp: enemy.hp,
     maxHp: enemy.hp,
     intentA: enemy.intentA,

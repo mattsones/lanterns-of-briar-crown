@@ -317,9 +317,11 @@ test("art backlog tracks full illustrated prototype scope", () => {
   });
 
   expect(ARTWORK_PLAN_GROUPS.maps.westroot_trail.status).toBe("available");
+  expect(ARTWORK_PLAN_GROUPS.portraits.mara.status).toBe("available");
+  expect(ARTWORK_PLAN_GROUPS.enemies.false_sign_scratcher.status).toBe("available");
   expect(ARTWORK_PLAN_GROUPS.maps.briarhold_waystation.chapter).toBe(5);
   expect(ARTWORK_PLAN_GROUPS.symbols.briar_crown_symbols.fallback).toBe("text labels");
-  expect(getArtworkBacklog().some((entry) => entry.id === "mara")).toBe(true);
+  expect(getArtworkBacklog().some((entry) => entry.id === "bracken_voss")).toBe(true);
 });
 
 test("future chapter data IDs exist with fallbacks", () => {
@@ -351,6 +353,8 @@ test("future chapter data IDs exist with fallbacks", () => {
     expect(ENEMY_DB[enemyId]).toBeTruthy();
     expect(ENEMY_DB[enemyId].icon).toBeTruthy();
   });
+  expect(ENEMY_DB.briar_roadwatcher.artwork?.src).toContain("briar-roadwatcher-v02");
+  expect(ENEMY_DB.false_sign_scratcher.artwork?.src).toContain("false-sign-scratcher-v02");
 
   expect(ENCOUNTERS.roadwatcher).toContain("thorn_collared_hound");
   expect(ENCOUNTERS.roadwatcherHard).toContain("thorn_collared_hound");

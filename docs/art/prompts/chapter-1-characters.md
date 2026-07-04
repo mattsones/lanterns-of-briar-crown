@@ -149,9 +149,11 @@ Use the master style block.
 # Smith Orin
 
 ```text
-Create a half-body storybook fantasy portrait of Smith Orin, Hearthhollow’s blacksmith. He should be sturdy, practical, warm but blunt, with coal-smudged hands, a hammer, leather apron, and forge light behind him. He should look like someone who will not give road gear to eager hands until Elder Mira says it is time.
+Create a half-body storybook fantasy portrait of Smith Orin, Hearthhollow’s blacksmith. Orin should be an Emberling, one of the firepeople of Liam's Game: sturdy, practical, warm but blunt, and completely comfortable around open flame. He should read clearly as an Emberling at first glance, not as a human blacksmith lit by orange forge light.
 
-Mood: protective, practical, no-nonsense, caring beneath gruffness.
+Use visible Emberling traits: ember-orange or coal-red skin, coal-glow freckles, faint inner heat at the cheeks and knuckles, cinder-dark or flame-colored hair, and eyes that catch like banked coals. Show coal-smudged hands, a hammer, leather apron, and forge light behind him. He should look like someone who will not give road gear to eager hands until Elder Mira says it is time. His design should be grounded village fantasy: a fireperson who is also a working village smith, not ornate knightly armor and not a disembodied fire elemental.
+
+Mood: protective, practical, no-nonsense, caring beneath gruffness, forge-warm.
 
 Use the master style block.
 ```

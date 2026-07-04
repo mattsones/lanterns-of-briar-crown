@@ -84,6 +84,23 @@ Portraits should usually be **half-body dialogue portraits**, with enough costum
 
 The protagonist eventually needs **full-body art** because gear changes should visibly affect the hero.
 
+## Playable Ancestry Visual Language
+
+Playable ancestries should read clearly as fantasy people, not ordinary humans with tiny cosmetic hints. They should remain warm, family-friendly, expressive, and suited to village life, but the silhouette, skin/material language, hair, ears, eyes, and costume details can be bold enough for a player to recognize the ancestry at a glance.
+
+Use the current eight playable ancestry options this way:
+
+- **Human:** grounded baseline for ordinary villages, watchhouses, farms, and markets.
+- **Stonekin:** broad, sturdy stone-folk with granite, slate, clay, or mineral texture; ideal for smiths, guards, builders, and steady protectors.
+- **Sylvan:** woodland people with leaf, bark, branch, or green-gold cues; graceful without becoming generic elves.
+- **Emberling:** firepeople; ember-orange, coal-red, soot-black, banked-flame, warm glow, cinder freckles, and flame-touched hair are appropriate.
+- **Tideborn:** water-people; blue, teal, river-stone, subtle scale, fin, pearl, reed, current, sea-glass, and rainwater cues are appropriate.
+- **Cloudling:** air and weather folk; soft cloud hair, pale sky colors, wind-swept clothing, feather-light posture, and misty edges.
+- **Mossback:** moss, lichen, root, shell, and old-growth folk; earthy, patient, rounded, and durable.
+- **Moonmark:** moonlit, nocturne, silver, violet, star-freckled, and quiet-mystic people; calm rather than spooky.
+
+Do not make ancestries grotesque, monstrous, or too alien for dialogue portraits. The goal is "storybook fantasy neighbor," with a strong enough fantasy read that Orin can be a clear Emberling fireperson and Nella can be a clear Tideborn water-person.
+
 ## Texture
 
 Use **subtle painterly texture**.
