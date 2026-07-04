@@ -74,6 +74,13 @@ docs/art/item-icons/liams-game-custom-item-icon-plan.md
 | Bramblecross town concept | `bramblecross-town-concept-v01.png` | Practical, square, guarded town layout. |
 | Root Cellar map concept | `root-cellar-map-concept-v01.png` | Strong layout; Warden visibly blocks sealed door. |
 | Westroot Trail gameplay map | `westroot-trail-map-v04.png` | Current Chapter 2 production map; readable Shelter Nook, false notice, Three-Sign Hollow, Roadwatcher bend, and First Westroot Gate. |
+| Crown Door Den gameplay map | `crown-door-den-map-v01.png` | Current Chapter 2 production map for the Roadwatcher signworks behind the Crown Door. Prompt lives in `docs/art/prompts/chapter-2-crown-door-and-three-doors.md`. |
+
+## Scenes
+
+| Asset | Suggested filename | Notes |
+|---|---|---|
+| Three-Door Threshold scene | `three-doors-threshold-v01.png` | Current Chapter 2 room-dialog scene for the Crown Door, Lantern Door, and No-Handle Door. Crown Door uses the false-official thorn crown and slat latch. |
 
 ## Characters
 

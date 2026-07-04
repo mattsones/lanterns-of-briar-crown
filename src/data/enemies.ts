@@ -131,8 +131,9 @@ export const ENCOUNTERS = {
   wilds: ["thorncoat_ruffian", "thorny_hound"],
   cellarSkulk: ["rustroot_skulk"],
   cellarBoss: ["briar_knot_warden"],
-  roadwatcher: ["briar_roadwatcher"],
+  roadwatcher: ["briar_roadwatcher", "thorn_collared_hound"],
   roadwatcherHard: ["briar_roadwatcher", "thorn_collared_hound", "false_sign_scratcher"],
+  crownDenGuard: ["false_sign_scratcher", "thorn_collared_hound"],
   briarRelay: ["briar_relay_guard", "seal_forged_sentry"],
   briarholdBoss: ["bracken_voss", "thornseal_guard", "thornroot_sentry"],
 };

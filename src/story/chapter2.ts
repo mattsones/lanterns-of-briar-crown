@@ -17,6 +17,7 @@ export const CHAPTER_2_REQUIRED_END_FLAGS = [
   "lioAlivePastGate",
   "eddensDrawingValidated",
   "briarCrownWatchingWestroot",
+  "crownDoorDungeonCleared",
 ];
 
 export const WESTROOT_SUPPORTING_CLUE_FLAGS = [
@@ -97,6 +98,9 @@ export function getWestrootDoorRepairState(flags: Flags = {}, assumedFlags: Flag
     merged.eddensDrawingValidated ||
     (merged.eddenDrawingComparedAtDoor && merged.lanternSignCleaned)
   );
+  const crownFalsehoodCleared = !!merged.crownDoorDungeonCleared;
+  const roadwatcherDefeated = !!merged.roadwatcherDefeated;
+  const crownDoorKeyFound = !!merged.crownDoorKeyFound;
   const doorHasAskedForTruth = !!merged.noHandleStoneInspected;
   const completedRequirements = [
     falseOrdersBroken,
@@ -120,12 +124,22 @@ export function getWestrootDoorRepairState(flags: Flags = {}, assumedFlags: Flag
     completedRequirements,
     requiredCount: 4,
     missingRequirements,
-    readyToOpen:
+    crownFalsehoodCleared,
+    roadwatcherDefeated,
+    crownDoorKeyFound,
+    readyForRoadwatcher:
       doorHasAskedForTruth &&
       falseOrdersBroken &&
       trueLanternGuidanceRestored &&
       lioMarkConfirmed &&
       eddenDrawingAligned,
+    readyToOpen:
+      doorHasAskedForTruth &&
+      falseOrdersBroken &&
+      trueLanternGuidanceRestored &&
+      lioMarkConfirmed &&
+      eddenDrawingAligned &&
+      crownFalsehoodCleared,
   };
 }
 
@@ -134,7 +148,7 @@ export function getWestrootPuzzleOutcome(flags: Flags = {}, assumedFlags: Flags 
   const repair = getWestrootDoorRepairState(merged);
   const supportingClues = repair.completedRequirements;
   const mistakeCount = getWestrootMistakeCount(merged);
-  const enoughClues = repair.readyToOpen;
+  const enoughClues = repair.readyForRoadwatcher;
   const foundLioMark = repair.lioMarkConfirmed;
   const readTrueLanternGuidance = hasReadTrueLanternGuidance(merged);
   const cleanSolve = enoughClues && mistakeCount === 0;

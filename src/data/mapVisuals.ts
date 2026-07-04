@@ -289,6 +289,33 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
       "6,8": { x: 53.5, y: 81.2 },
     },
   },
+  crownDoorDen: {
+    aspectRatio: "16 / 9",
+    navBounds: { left: 6, top: 11, width: 88, height: 78 },
+    fogRadius: 10,
+    completedFogOpacity: 0.5,
+    nodeHitboxSize: "clamp(1.35rem, 5.2%, 2.45rem)",
+    pointOverrides: {
+      "1,0": { x: 16.5, y: 25 },
+      "3,0": { x: 46, y: 24 },
+      "5,0": { x: 77.5, y: 24 },
+      "1,1": { x: 17, y: 35 },
+      "2,1": { x: 32.5, y: 36 },
+      "3,1": { x: 45.5, y: 30 },
+      "4,1": { x: 61.5, y: 31 },
+      "5,1": { x: 78, y: 31 },
+      "1,2": { x: 17, y: 53 },
+      "3,2": { x: 43, y: 49 },
+      "5,2": { x: 89, y: 53 },
+      "1,3": { x: 18, y: 61 },
+      "2,3": { x: 34, y: 63 },
+      "3,3": { x: 61.5, y: 67 },
+      "4,3": { x: 74, y: 66 },
+      "5,3": { x: 86, y: 65 },
+      "1,4": { x: 17.5, y: 80 },
+      "2,4": { x: 34, y: 78 },
+    },
+  },
 };
 
 export function getMapVisualConfig(region: string) {

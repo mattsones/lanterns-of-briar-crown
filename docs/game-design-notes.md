@@ -112,6 +112,7 @@ Simple turn-based combat with:
 
 ## Combat Principles
 
+- Combat is part of the fun, not just a failure state. Investigation, puzzle solving, and good choices should usually make combat clearer, fairer, better staged, or more rewarding rather than removing it entirely.
 - Enemies should not act after reaching 0 HP.
 - Enemy winning initiative should trigger the enemy turn correctly.
 - Multiple enemies should be visible in the interface.

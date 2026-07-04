@@ -34,11 +34,97 @@ export function LevelUpModal({ player, target, choose }) {
   </div>;
 }
 
+function DialogueVisual({ kind }) {
+  const doorBase =
+    "relative flex min-h-48 flex-col items-center justify-end overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-slate-800 to-slate-950 p-4 shadow-inner";
+  const rootLines = (
+    <div className="pointer-events-none absolute inset-x-4 top-3 h-12 rounded-full border-t border-emerald-300/25 opacity-70" />
+  );
+  const singleDoor = {
+    crownDoor: {
+      title: "Crown Door",
+      mark: "Crown",
+      doorClass: "h-36 w-24 rounded-t-xl border-4 border-rose-200/70 bg-rose-950/70",
+      accent: "bg-rose-300",
+    },
+    lanternDoor: {
+      title: "Lantern Door",
+      mark: "Lantern",
+      doorClass: "h-28 w-28 rounded-t-3xl border-4 border-amber-200/70 bg-stone-800/80",
+      accent: "bg-amber-300",
+    },
+    noHandleDoor: {
+      title: "No-Handle Door",
+      mark: "No handle",
+      doorClass: "h-32 w-28 rounded-[2rem] border-4 border-emerald-200/60 bg-stone-700/90",
+      accent: "bg-emerald-300",
+    },
+  }[kind];
+
+  if (kind === "threeDoors")
+    return (
+      <div className="mt-4 rounded-3xl border border-emerald-300/20 bg-emerald-950/30 p-4">
+        <div className="grid gap-3 sm:grid-cols-3">
+          {[
+            ["Crown", "h-32 w-20 rounded-t-xl border-4 border-rose-200/70 bg-rose-950/70", "bg-rose-300"],
+            ["Lantern", "h-24 w-24 rounded-t-3xl border-4 border-amber-200/70 bg-stone-800/80", "bg-amber-300"],
+            ["No handle", "h-28 w-24 rounded-[2rem] border-4 border-emerald-200/60 bg-stone-700/90", "bg-emerald-300"],
+          ].map(([label, doorClass, accent]) => (
+            <div key={label} className={doorBase}>
+              {rootLines}
+              <div className={`${doorClass} relative`}>
+                <div className={`absolute left-1/2 top-4 h-2 w-2 -translate-x-1/2 rounded-full ${accent}`} />
+                {label !== "No handle" ? (
+                  <div className="absolute right-3 top-1/2 h-2 w-2 rounded-full bg-white/50" />
+                ) : null}
+              </div>
+              <div className="mt-3 text-sm font-semibold text-white/80">{label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+
+  if (!singleDoor) return null;
+
+  return (
+    <div className="mt-4 rounded-3xl border border-emerald-300/20 bg-emerald-950/30 p-5">
+      <div className={`${doorBase} min-h-64`}>
+        {rootLines}
+        <div className={`${singleDoor.doorClass} relative scale-125`}>
+          <div className={`absolute left-1/2 top-5 h-3 w-3 -translate-x-1/2 rounded-full ${singleDoor.accent}`} />
+          {kind !== "noHandleDoor" ? (
+            <div className="absolute right-4 top-1/2 h-3 w-3 rounded-full bg-white/50" />
+          ) : null}
+        </div>
+        <div className="mt-8 text-base font-semibold text-white/85">{singleDoor.title}</div>
+        <div className="mt-1 text-xs uppercase tracking-wide text-white/45">{singleDoor.mark}</div>
+      </div>
+    </div>
+  );
+}
+
+function DialogueSceneImage({ image }) {
+  if (!image?.src) return null;
+
+  return (
+    <figure className="mt-4 overflow-hidden rounded-xl border border-white/10 bg-black/20">
+      <img
+        data-testid="dialogue-scene-image"
+        src={image.src}
+        alt={image.alt || ""}
+        className="aspect-video w-full object-cover"
+      />
+    </figure>
+  );
+}
+
 export function DialogueModal({ dialogue }) {
   const portraitAsset = getDialoguePortrait(dialogue.name);
+  const widthClass = dialogue.size === "wide" || dialogue.visual || dialogue.sceneImage ? "max-w-5xl" : "max-w-3xl";
 
   return <div className="fixed inset-0 z-[80] flex items-end justify-center bg-black/60 p-4 sm:items-center">
-    <div className="flex max-h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900 p-5 shadow-2xl">
+    <div className={`flex max-h-[85vh] w-full ${widthClass} flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900 p-5 shadow-2xl`}>
       <div className="min-h-0 flex-1 overflow-y-auto pr-1">
         <div className="flex items-start gap-4">
           <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-3xl bg-white/10 text-4xl">
@@ -47,6 +133,8 @@ export function DialogueModal({ dialogue }) {
           </div>
           <div className="min-w-0 flex-1">
             <div className="text-xl font-semibold">{dialogue.name}</div>
+            {dialogue.sceneImage ? <DialogueSceneImage image={dialogue.sceneImage} /> : null}
+            {dialogue.visual ? <DialogueVisual kind={dialogue.visual} /> : null}
             {dialogue.messages ? <div className="mt-3 space-y-2">{dialogue.messages.map((m, i) => <div key={`${m.speaker}-${i}`} className={`flex ${m.side === "right" ? "justify-end" : "justify-start"}`}><div className={`max-w-[85%] rounded-2xl px-4 py-3 text-base leading-7 ${m.side === "right" ? "bg-emerald-500/20" : "bg-white/10 text-white/85"}`}><div className="mb-1 text-[10px] uppercase tracking-wide text-white/50">{m.speaker}</div><div>{m.text}</div></div></div>)}</div> : <div className="mt-2 whitespace-pre-line text-base leading-7 text-white/85">{dialogue.text}</div>}
           </div>
         </div>
@@ -55,7 +143,7 @@ export function DialogueModal({ dialogue }) {
     </div>
   </div>;
 }
-export function InteriorModal({ scene, close, flags, setFlags, player, setPlayer, companion, setCompanion, setActiveCompanion, dismissCompanion, saveGame, announce, setCraftOpen, setDialogue }) {
+export function InteriorModal({ scene, close, flags, setFlags, player, setPlayer, companion, setCompanion, setActiveCompanion, dismissCompanion, saveGame, announce, setCraftOpen, setDialogue, openClerkDialogue, openCaptainDialogue, openChapter2Briefing, openMaraChapter2Dialogue, openEddenRecoveryDialogue }) {
   const getRecruitmentScene = (option) => {
     const scenes = {
       rowan: { opening: "Rowan Reedshield sits near the inn's side wall, not at a table but beside it, where he can see both the front door and the stairs. A scratched shield rests across his knees. He is polishing out a dent slowly, not because the shield needs polish, but because the work gives his hands somewhere calm to be. When a cart-driver bumps into a serving girl, Rowan rises halfway before anyone else notices. The girl steadies the tray, the driver apologizes, and Rowan sits again without asking to be thanked.", ask: "He looks up when you approach. “If you're looking for someone to swing first and think later, keep walking. If you're looking for someone to make sure people come home, sit down.”", goodLabel: "People are in danger. I need someone who protects first and boasts never.", goodReply: "Rowan studies you for a long moment, then sets the shield strap properly across his shoulder. “Good answer. Trouble is loud enough without us adding noise. I'll come. If the road is being trained to fear the wrong thing, then we keep our heads, keep our line, and bring people home.”", badLabel: "I need someone sturdy enough to stand in front of me.", badReply: "Rowan's expression closes like a gate. “A shield is not furniture, and neither am I. Come back when you are asking for a companion, not a wall with boots.”", neutralLabel: "What kind of trouble are you expecting?", neutralReply: "“The organized kind,” Rowan says. “The kind that counts on frightened people shoving each other aside. That's when someone steady matters most. Ask me straight if you want me with you.”" },
@@ -101,6 +189,20 @@ ${scene.ask}`, choices: [
     {scene === "home" ? <div className="space-y-4"><div className="rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-white/80">A warm, familiar room. Your own things suddenly feel more important now that the road has gone dangerous.</div><div className="flex flex-wrap gap-2"><Button onClick={() => { setPlayer((p) => ({ ...p, hp: Math.min(p.maxHp, p.hp + 6) })); }}>Rest a little</Button>{!flags.homeStashClaimed ? <Button onClick={() => { gainItem(setPlayer, "old_hatchet", 1); setFlags((f) => ({ ...f, homeStashClaimed: true })); announce("You gather your old village hatchet from home.", [{ id: "old_hatchet", qty: 1 }]); }}>Take your old hatchet</Button> : null}</div></div> : null}
     {scene === "bramInn" ? <div className="space-y-4"><div className="rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-white/80">The Bramblecross Inn is trying very hard to feel ordinary. Mugs clink, someone laughs too loudly, and every traveler in the room seems to be listening for news from the road. Three capable strangers stand out—not because they are waiting to be hired, but because each of them is already responding to the crisis in their own way. Recruitment is conversation-driven: the way you speak to them matters.</div><div className="flex flex-wrap gap-2">{companion.recruited ? <Button onClick={dismissCompanion}>Ask current companion to wait here</Button> : null}<Button onClick={() => { setPlayer((p) => ({ ...p, hp: p.maxHp })); setCompanion((c) => c.recruited ? { ...c, hp: c.maxHp } : c); saveGame("Bramblecross Inn"); }}>Rest for the night</Button></div><div className="grid gap-3 md:grid-cols-3">{Object.values(COMPANION_OPTIONS).map((o) => <div key={o.id} className="rounded-3xl border border-white/10 bg-white/5 p-4"><div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl bg-white/10 text-4xl"><span>{o.icon}</span>{o.portraitSrc ? <img src={o.portraitSrc} alt={`Portrait of ${o.name}`} onError={(event) => { event.currentTarget.style.display = "none"; }} className="absolute inset-0 h-full w-full object-cover" /> : null}</div><div className="mt-2 text-lg font-semibold">{o.name}</div><div className="text-sm text-emerald-300">{o.role}</div><div className="mt-2 text-sm text-white/75">{o.description}</div><div className="mt-2 text-xs text-white/55">{o.id === "rowan" ? "Polishing a dented shield while watching the door." : o.id === "tilda" ? "Making apple seeds land where apple seeds should not." : "Listening to the fire as if it is telling the truth slowly."}</div><div className="mt-4"><Button onClick={() => recruitConversation(o)}>{companion.id === o.id ? "Traveling" : "Talk"}</Button></div></div>)}</div></div> : null}
     {scene === "watchhouse" ? <div className="space-y-4">
+      <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+        <div className="text-sm uppercase tracking-wide text-white/50">People Inside</div>
+        <div className="mt-2 text-xl font-semibold">Watchhouse Table</div>
+        <div className="mt-2 text-sm leading-6 text-white/75">
+          Enna keeps the maps pinned down with inkpots and impatience. Hollis stands close enough to the case wall to look official, but not close enough to stop watching Edden's door.
+        </div>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          <Button className="justify-start text-left" onClick={() => openClerkDialogue?.()}>Talk with Enna</Button>
+          <Button className="justify-start text-left" onClick={() => openCaptainDialogue?.()}>Talk with Hollis</Button>
+          {flags.chapterReported && !flags.chapterTwoClear ? <Button className="justify-start text-left" onClick={() => openChapter2Briefing?.()}>Review the Westroot briefing</Button> : null}
+          {flags.chapterTwoBriefed && !flags.maraJoined ? <Button className="justify-start text-left" onClick={() => openMaraChapter2Dialogue?.()}>Call Mara to the table</Button> : null}
+          {flags.chapterTwoBriefed ? <Button className="justify-start text-left" onClick={() => openEddenRecoveryDialogue?.({ allowPreBriefing: true })}>Visit Edden's recovery room</Button> : null}
+        </div>
+      </div>
       {!flags.ennaBriefed ? <>
         <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="rounded-3xl border border-white/10 bg-white/5 p-5">

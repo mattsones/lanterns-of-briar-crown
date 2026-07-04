@@ -6,6 +6,7 @@ import { ENCOUNTERS, ENEMY_DB } from "../src/data/enemies";
 import {
   ARTWORK_PLAN_GROUPS,
   HERO_VARIANT_ARTWORK_PLAN,
+  MAP_ARTWORK_PLAN,
   getArtworkBacklog,
 } from "../src/data/artworkPlan";
 import { ITEM_DB } from "../src/data/items";
@@ -330,6 +331,9 @@ test("future chapter data IDs exist with fallbacks", () => {
     "true_seal_fragment",
     "briar_chain_link",
     "lios_courier_knot",
+    "split_crown_slat",
+    "briar_signmaker_ledger",
+    "cleaned_lantern_mark",
   ].forEach((itemId) => {
     expect(ITEM_DB[itemId]).toBeTruthy();
     expect(ITEM_DB[itemId].icon).toBeTruthy();
@@ -348,12 +352,16 @@ test("future chapter data IDs exist with fallbacks", () => {
     expect(ENEMY_DB[enemyId].icon).toBeTruthy();
   });
 
+  expect(ENCOUNTERS.roadwatcher).toContain("thorn_collared_hound");
   expect(ENCOUNTERS.roadwatcherHard).toContain("thorn_collared_hound");
+  expect(ENCOUNTERS.crownDenGuard).toContain("false_sign_scratcher");
   expect(ENCOUNTERS.briarholdBoss).toContain("bracken_voss");
+  expect(BATTLE_REWARDS.roadwatcher.extraItems).toContain("split_crown_slat");
   expect(BATTLE_REWARDS.roadwatcher.flagUpdate).toMatchObject({
     roadwatcherDefeated: true,
     roadwatcherEvidenceFound: true,
     briarCrownWatchingWestroot: true,
+    crownDoorKeyFound: true,
   });
 });
 
@@ -381,6 +389,12 @@ test("chapter two westroot puzzle supports clean, standard, and messy outcomes",
     trueLanternGuidanceRestored: true,
     lioMarkConfirmed: true,
     eddenDrawingAligned: true,
+    readyForRoadwatcher: true,
+    readyToOpen: false,
+  });
+  expect(getWestrootDoorRepairState({ ...cleanFlags, crownDoorDungeonCleared: true })).toMatchObject({
+    crownFalsehoodCleared: true,
+    readyForRoadwatcher: true,
     readyToOpen: true,
   });
 
@@ -418,6 +432,22 @@ test("chapter two contract keeps required flags, map prompt, and reveal boundari
   expect(CHAPTER_2_STORY.mapPromptDoc).toBe("docs/art/prompts/chapter-2-westroot-trail-map.md");
   expect(CHAPTER_STORY_PLANS[2].keyLines.join(" ")).not.toContain("Princess Elowen");
   expect(MAPS.westrootTrail.backgroundImage).toContain("westroot-trail-map-v04");
+  expect(MAPS.crownDoorDen.backgroundImage).toContain("crown-door-den-map-v01");
+  expect(MAP_ARTWORK_PLAN.crown_door_den.status).toBe("available");
+  expect(MAPS.crownDoorDen.tiles.flat()).toEqual(
+    expect.arrayContaining([
+      "crown_den_exit",
+      "wax_table",
+      "slat_rack",
+      "witness_ledger",
+      "collar_kennel",
+      "false_map",
+      "den_guard",
+    ]),
+  );
+  expect(getMapVisualConfig("crownDoorDen")).toMatchObject({
+    aspectRatio: "16 / 9",
+  });
   expect(getMapVisualConfig("westrootTrail")).toMatchObject({
     aspectRatio: "16 / 9",
     navBounds: { left: 5, top: 8, width: 90, height: 82 },

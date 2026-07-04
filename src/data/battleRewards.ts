@@ -35,6 +35,7 @@ export const BATTLE_REWARDS = {
   },
   roadwatcher: {
     item: "pine_pitch_wax",
+    extraItems: ["split_crown_slat"],
     gold: 18,
     xp: 20,
     flagUpdate: {
@@ -42,12 +43,15 @@ export const BATTLE_REWARDS = {
       roadwatcherDefeated: true,
       roadwatcherEvidenceFound: true,
       briarCrownWatchingWestroot: true,
+      crownDoorKeyFound: true,
+      crownDoorUnlocked: true,
     },
     name: "Briar Roadwatcher",
-    text: "The watcher breaks apart into thorn-scraps, seal-cloth, and sticky pine-pitch wax. The hollow is open, and whatever is using Westroot knows witnesses are coming.",
+    text: "The watcher falls back, leaving thorn-scraps, seal-cloth, sticky pine-pitch wax, and a split false-sign slat. The bent crown mark on the slat looks less like loot than a key.",
   },
   roadwatcherHard: {
     item: "pine_pitch_wax",
+    extraItems: ["split_crown_slat"],
     gold: 22,
     xp: 24,
     flagUpdate: {
@@ -56,9 +60,22 @@ export const BATTLE_REWARDS = {
       roadwatcherHardCleared: true,
       roadwatcherEvidenceFound: true,
       briarCrownWatchingWestroot: true,
+      crownDoorKeyFound: true,
+      crownDoorUnlocked: true,
     },
     name: "Briar Roadwatcher",
-    text: "The harder ambush finally collapses. Under the false sign-scraps you find pine-pitch wax and the edge of a copied Willow mark.",
+    text: "The harder ambush finally collapses. Under the false sign-scraps you find pine-pitch wax, the edge of a copied Willow mark, and a split crown slat shaped like it belongs in the false door.",
+  },
+  crownDenGuard: {
+    item: "trail_snack",
+    gold: 8,
+    xp: 14,
+    flagUpdate: {
+      beatCrownDenGuard: true,
+      crownDoorGuardDefeated: true,
+    },
+    name: "False Sign Guard",
+    text: "The den guard breaks apart in a clatter of sign nails and scraped paint. The room suddenly sounds less certain of itself.",
   },
 };
 

@@ -11,7 +11,7 @@
 This version merges the original Chapter 2 script with the polish pass decisions:
 
 - The Three-Sign Hollow puzzle is slightly challenging but not hard.
-- The Roadwatcher encounter is consequence-based but likely.
+- The Roadwatcher encounter is part of the fun of Chapter 2. Clean play prepares the party for a better fight; messy play makes the fight harder.
 - The kingdom has true royal authority, but Chapter 2 does **not** name the princess yet.
 - Ada’s Willowmark Lens receives a Chapter 2 payoff.
 - Mara is given jobs instead of fences.
@@ -91,6 +91,8 @@ The player should combine clues already earned:
 - Mara’s clue: **Lio hides small marks where adults almost notice them.**
 - Recurring phrase: **A road is safest when truth walks it first.**
 
+Ada's Willowmark Lens is helpful but not mandatory for opening the No-Handle Door. It should reveal deeper evidence, clearer conspiracy links, and better reward context. If the player skipped Ada, wax/seal scenes should still be readable through other clues, but should include a visible missed-tool hint such as: "Maybe Ada's lens could show whether this mark is true or copied."
+
 ### Puzzle Structure
 
 The player can solve the gate by identifying enough true clues.
@@ -120,13 +122,15 @@ Clean solving gives:
 - bonus XP;
 - optional No-Handle Token;
 - Mara trust increase;
-- easier Roadwatcher outcome or avoided combat.
+- a prepared standard Roadwatcher fight where the player understands the threat, Mara is safely positioned, and the Lantern Sign can reveal tactical truth.
 
 Messy solving gives:
 
-- extra combat;
+- a harder Roadwatcher fight;
 - lost or delayed optional reward;
 - clearer evidence that the Briar Crown is monitoring Westroot.
+
+Do not treat combat avoidance as the "best" outcome. Liam's Game should make combat feel like adventure payoff: the reward for careful investigation is entering the fight with better knowledge, better positioning, and more satisfying story context.
 
 ### Royal Authority Note
 
@@ -994,6 +998,27 @@ You can leave alone, but the road west is dangerous. Consider choosing a compani
 
 Mara may know Lio’s personal route marks. Speak with her at the watchhouse before following the trail.
 
+## If player has not learned Ada's seal lesson
+
+### Soft Warning / Choice
+
+Hollis glances toward Willow Market before you leave.
+
+"Ada's seal was named on the cellar door. If her mark is being used west of town, her lens may show what ordinary eyes miss."
+
+Enna does not block the gate.
+
+"You can follow Westroot now. Just know that copied seals and altered wax may stay silent if you do."
+
+### Choices
+
+- Check in with Ada first.
+- Leave without the Willowmark Lens.
+
+### Design Note
+
+This is not a hard gate. Skipping Ada should preserve freedom of action, but later wax/seal interactions should make the missed tool legible.
+
 ## Departure Scene
 
 ### Text
@@ -1409,6 +1434,7 @@ Below that, almost hidden in the grass, an older lantern scratch points onward.
 
 - Inspect the royal-looking seal.
 - Use the Willowmark Lens on the seal. *(Available if player has Willowmark Lens.)*
+- Wonder whether Ada's lens could read the seal. *(Visible hint if player does not have Willowmark Lens; not a blocker.)*
 - Inspect the old lantern scratch.
 - Follow the detour east.
 - Continue west by the lantern mark.
@@ -1454,6 +1480,12 @@ The seal looks official until you look for the person behind it. Then it looks s
 ### Outcome
 
 Puzzle clue gained: The detour sign commands without witness.
+
+If the player does not have the Willowmark Lens:
+
+You can tell the seal is wrong in what it asks of travelers, but the wax itself keeps its secrets.
+
+Maybe Ada's lens could show whether this mark is true, copied, or pressed over something older.
 
 ### Choice
 
@@ -1828,6 +1860,7 @@ At the bottom, in smaller letters, someone has written:
 
 - This sign commands, but does not guide.
 - Use the Willowmark Lens on the seal. *(Available if player has Willowmark Lens.)*
+- Wonder whether Ada's lens could read the seal. *(Visible hint if player does not have Willowmark Lens; not a blocker.)*
 - Try following its direction anyway.
 - Step back.
 
@@ -1850,6 +1883,12 @@ Puzzle clue gained: Crown Sign is false.
 `crownSignRejected = true`
 
 XP +3
+
+If the player does not have the Willowmark Lens:
+
+The sign is false because it commands without guiding. Still, the seal itself has layers you cannot read by eye.
+
+Ada carried a small lens for this kind of work. If you had it, the wax might tell you who made the lie.
 
 ## Choice: Use the Willowmark Lens on the seal.
 
@@ -2447,13 +2486,61 @@ The blank door waits.
 
 ---
 
+# Crown Door Den
+
+## Design Intent
+
+The Crown Door is more than a false button. After the Roadwatcher is defeated, its split crown slat unlocks a short dungeon: a Roadwatcher den where false road commands are made, stored, repaired, and sent back out onto Westroot.
+
+This preserves the puzzle theme while making combat and exploration part of the fun. The player does not avoid danger by solving the signs. The player learns enough truth to enter danger on purpose.
+
+## Implemented Flow
+
+1. The party reaches the Three-Door Threshold and studies the Crown, Lantern, and No-Handle doors.
+2. The No-Handle Door makes clear that the road behind the party must "speak true" before it opens fully.
+3. The Roadwatcher encounter happens as a normal adventure beat. Clean play makes it a prepared standard fight; messy play makes it harder.
+4. After victory, the Roadwatcher drops **Split Crown Slat**, a false-sign piece whose bent crown mark fits the Crown Door latch.
+5. The Crown Door can now be opened and explored as the Crown Door Den.
+6. Inside, the player finds the machinery of falsehood: sign slats, copied wax, witness lists, lantern marks scraped off wood, and thorn-collar supplies.
+7. Clearing the den removes the final false command from the road, giving the No-Handle Door enough truth to open.
+
+## Why It Works
+
+- The Crown Door is not the true route, but it is a real place.
+- The Briar Crown becomes practical and organized, not abstract.
+- "Clear the road of falsehood" becomes physical: take down signs, break wax layers, recover witness names, and free or disable false-command tools.
+- Ada's lens becomes useful inside the dungeon without becoming mandatory: it can reveal copied Willow wax on crates, hidden witness lists under seals, and which signs are altered.
+- Combat stays central. The Roadwatcher fight opens the investigation, and the dungeon can include smaller encounters with a False Sign Scratcher, thorn-collared hound, or signmaker support enemy.
+
+## Dungeon Rooms
+
+- **Crown Vestibule:** a too-official entry lined with blank order boards and six useless handles.
+- **Wax Table:** pine-pitch wax, green Willow wax scraps, crown stamps, and scraped shipping tags.
+- **Slat Rack:** half-painted false signs. Correcting or breaking them weakens the dungeon's false-command aura.
+- **Witness Ledger Nook:** a hidden list of names or route marks, including hints that someone saw Lio moved through Westroot.
+- **Collar Kennel:** thorn-collar supplies; family-friendly rescue beat where the hound is freed or the collars are broken.
+- **False Map Room:** a map that shows how the straight road has been edited. This can point the player back to the No-Handle Door with the final truth clue.
+
+## Key Rewards / Clues
+
+- **Briar Signmaker's Ledger:** proves the false road signs are maintained by an organized cell.
+- **Split Crown Slat:** physical proof that the Crown Door route is manufactured, not royal.
+- **Witness List Scrap:** connects "KEEP WESTROOT CLOSED TO WITNESSES" to Lio and sets up the next chapter.
+- **Cleaned Lantern Mark:** the final truth the No-Handle Door needed from "the road behind you."
+
+## Implementation Note
+
+The current playable build uses `assets/maps/crown-door-den-map-v01.png` as the painted Crown Door Den map. The dungeon should stay compact: a 5-7 room side dungeon that makes the Chapter 2 climax richer without becoming a second full chapter.
+
+---
+
 # Roadwatcher Encounter Logic
 
 ## Trigger Rules
 
 The Roadwatcher encounter should be consequence-based but likely.
 
-### Clean Solve
+### Clean Prepared Solve
 
 If the player:
 
@@ -2464,11 +2551,11 @@ If the player:
 - finds Lio’s mark;
 - and uses the truth phrase correctly;
 
-then the Roadwatcher does not attack before the gate opens.
+then the No-Handle Door answers and the Roadwatcher encounter begins from a prepared position rather than as a punishment.
 
-Instead, the player sees evidence of the watcher and may avoid the harder fight.
+The player should still fight. The difference is that the party understands what is happening: Mara is already behind the line, the Lantern Sign can identify the thorn-collar as the hound's false command, and the Roadwatcher is exposed as a field agent trying to keep witnesses away from Westroot.
 
-### Clean Solve Text
+### Clean Prepared Encounter Text
 
 As the no-handle door opens, something moves in the brush beyond the cracked Crown Sign.
 
@@ -2480,43 +2567,51 @@ Then the old Lantern Sign flares gold.
 
 The figure flinches as if the light has named them.
 
-They vanish into the trees, leaving behind a pouch of pine-pitch wax and three half-painted sign slats.
+They step out anyway, one hand closing around a pouch of pine-pitch wax and half-painted sign slats.
 
 Mara stares after them.
 
-“They were watching.”
+"They were watching."
+
+The Roadwatcher looks past you, straight at the open gate.
+
+"That gate was not meant for witnesses."
 
 #### Rowan active
 
-“And now they know someone reached the gate truthfully,” Rowan says. “That will frighten them.”
+"And now they know someone reached the gate truthfully," Rowan says, raising his shield. "Good. Let them be frightened."
 
 #### Tilda active
 
-Tilda picks up one of the sign slats.
+Tilda eyes the half-painted slats.
 
-“Half-painted lies. Wasteful and rude.”
+"They brought spare lies. Wasteful and rude."
 
 #### Moss active
 
 Moss looks toward the open gate.
 
-“The old road did not strike them. It witnessed them. Sometimes that is worse.”
+"The old road did not strike them," Moss says. "It witnessed them. Sometimes that is worse."
 
 #### No active companion
 
-The hollow feels quieter after the watcher flees, but not safer. Somewhere west of here, someone now knows the gate opened.
+The hollow tightens around you. You reached the gate truthfully, but truth has made the watcher visible, not harmless.
 
 #### Outcome
 
-Story clue gained: Briar Crown roadwatchers are monitoring Westroot.
+Trigger standard Roadwatcher encounter.
 
-Loot: **Pine-Pitch Wax**
+`roadwatcherPrepared = true`
 
-XP +5
+Prepared fight advantages:
 
-No battle.
+- Standard enemy group: Briar Roadwatcher + Thorn-Collared Hound.
+- Mara starts protected behind the Lantern Sign roots.
+- If Mara was assigned to lantern signs, she identifies the hound's collar as the false command to break.
+- Victory grants Pine-Pitch Wax, Split Crown Slat, and the "KEEP WESTROOT CLOSED TO WITNESSES" clue.
+- The Split Crown Slat unlocks the Crown Door Den.
 
-`roadwatcherEncounterAvoided = true`
+XP +5 clean-solve bonus remains available after the gate opens or after victory, depending on final implementation pacing.
 
 ### Standard Solve
 
@@ -2599,10 +2694,13 @@ The hollow tightens around you. Mara stays behind the roots, eyes wide but stead
 - Thorn-Collared Hound
 - False Sign Scratcher
 
-### Clean-solve avoided combat
+### Prepared clean-solve encounter
 
-- No combat.
-- Roadwatcher flees and drops evidence.
+- Briar Roadwatcher
+- Thorn-Collared Hound
+- Mara protected before round one
+- Lantern Sign / hound-collar clue available
+- Better post-victory evidence read
 
 ## Victory text
 
@@ -2618,7 +2716,7 @@ The roadwatcher falls back, cloak torn and false seal pouch split open. They loo
 
 “You do not know what opens when Westroot opens,” they say.
 
-Then they flee into the trees, leaving pine-pitch wax, false nails, and unfinished orders scattered behind them.
+Then they flee into the trees, leaving pine-pitch wax, false nails, unfinished orders, and a split crown slat scattered behind them.
 
 Among the scraps is a half-finished notice:
 
@@ -2629,6 +2727,8 @@ The last word has been underlined twice.
 Mara reads it and goes very still.
 
 “Witnesses,” she says. “That means they are afraid someone saw something.”
+
+The split slat is shaped like a false key. Its bent crown mark matches the Crown Door latch.
 
 ### If `willowForgeryConfirmedAtHollow = true`
 
@@ -2855,6 +2955,7 @@ lioAlivePastGate = true
 maraTrustInHero += 1
 eddensDrawingValidated = true
 briarCrownWatchingWestroot = true
+crownDoorDungeonCleared = true
 ```
 
 ## Optional / Conditional Flags
@@ -2868,8 +2969,16 @@ followedFalseDetour = optional true
 forcedNoHandleDoor = optional true
 trustedCrownSignAtHollow = optional true
 cleanPuzzleSolve = optional true
-roadwatcherEncounterAvoided = optional true
+roadwatcherPrepared = optional true
 roadwatcherDefeated = optional true
+crownDoorKeyFound = optional true
+crownDoorDungeonEntered = optional true
+crownDoorWaxTableCleared = optional true
+crownDoorSlatsBroken = optional true
+crownDoorWitnessLedgerFound = optional true
+crownDoorCollarsBroken = optional true
+beatCrownDenGuard = optional true
+cleanedLanternMarkFound = optional true
 foundLioShelterMark = optional true
 maraJob = lioMarks | eddenDrawing | lanternSigns | safety
 ```
@@ -2882,6 +2991,9 @@ maraJob = lioMarks | eddenDrawing | lanternSigns | safety
 - **Willowmark Lens**
 - **Broken False Seal Wax** *(optional)*
 - **Pine-Pitch Wax**
+- **Split Crown Slat**
+- **Briar Signmaker's Ledger**
+- **Cleaned Lantern Mark**
 - **No-Handle Token** *(optional)*
 - **Witness Note for Bramblecross** *(optional/sendable)*
 
@@ -2967,7 +3079,19 @@ At the hollow, three signs wait: a commanding Crown Sign, a guiding Lantern Sign
 
 ---
 
-### Step 7 — Open the No-Handle Door
+### Step 7 — Investigate the Crown Door Den
+
+#### Objective Title
+
+Investigate the Crown Door Den
+
+#### Objective Detail
+
+The Roadwatcher's split crown slat fits the false Crown Door. Explore the den behind it, break the false signworks, copy the witness ledger, and recover the cleaned lantern mark beneath the false map.
+
+---
+
+### Step 8 — Open the No-Handle Door
 
 #### Objective Title
 
@@ -2975,7 +3099,7 @@ Open the No-Handle Door
 
 #### Objective Detail
 
-Lio’s hooked courier mark is scratched near the blank stone door. The message says he was alive past this point. The door will not open by force. Find the truth it is waiting for, then speak it.
+Lio’s hooked courier mark is scratched near the blank stone door. The message says he was alive past this point. The false den is quiet now; return to the No-Handle Door and speak the old road phrase.
 
 ---
 
@@ -3185,7 +3309,9 @@ By the end of Chapter 2:
 - Ada has equipped the player to recognize false cargo marks.
 - The Willowmark Lens has revealed that false road orders may be stamped over honest Willowmarket cargo wax.
 - The player has practiced distinguishing command from guidance.
-- A Briar Crown roadwatcher has confirmed Westroot is being guarded or monitored.
+- A Briar Crown roadwatcher has been defeated or driven off after confirming Westroot is being guarded.
+- The Crown Door Den has revealed how Roadwatchers manufacture false signs, copied wax, witness lists, and thorn-collar pressure.
+- The player has recovered the Split Crown Slat, Briar Signmaker's Ledger, and Cleaned Lantern Mark.
 - Lio is confirmed alive beyond the First Westroot Gate.
 - The old Lantern Road opens to truth rather than force.
 - Chapter 3 is set up: Westroot is waiting beneath the hill.

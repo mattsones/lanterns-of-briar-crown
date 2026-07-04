@@ -18,6 +18,10 @@ const westrootTrailMap = new URL(
   "../../assets/maps/westroot-trail-map-v04.png",
   import.meta.url,
 ).href;
+const crownDoorDenMap = new URL(
+  "../../assets/maps/crown-door-den-map-v01.png",
+  import.meta.url,
+).href;
 
 export const MAPS = {
   hearthhollow: {
@@ -649,6 +653,19 @@ export const MAPS = {
       ["tree", "tree", "road", "road", "road", "road", "road", "road", "road"],
     ],
   },
+  crownDoorDen: {
+    name: "Crown Door Den",
+    subtitle: "Chapter 2: Roadwatcher signworks",
+    start: { x: 1, y: 1 },
+    backgroundImage: crownDoorDenMap,
+    tiles: [
+      ["wall", "crown_den_exit", "wall", "floor", "wall", "slat_rack", "wall"],
+      ["wall", "crown_vestibule", "floor", "wax_table", "floor", "floor", "wall"],
+      ["wall", "floor", "wall", "floor", "wall", "den_guard", "wall"],
+      ["wall", "witness_ledger", "floor", "false_map", "floor", "floor", "wall"],
+      ["wall", "collar_kennel", "floor", "wall", "wall", "wall", "wall"],
+    ],
+  },
 };
 
 function makeTile(icon, label, blocked, classes) {
@@ -758,4 +775,12 @@ Object.assign(TILE_META, {
   no_handle_stone: makeTile("▯", "Three-Door Threshold", false, "bg-stone-700/80"),
   roadwatcher: makeTile("!", "Watched Road", false, "bg-red-900/85"),
   westroot_gate: makeTile("▣", "First Westroot Gate", false, "bg-emerald-900/90"),
+  crown_den_exit: makeTile("<", "Return to the Threshold", false, "bg-slate-600/80"),
+  crown_vestibule: makeTile("C", "Crown Vestibule", false, "bg-rose-900/80"),
+  wax_table: makeTile("wax", "Wax Table", false, "bg-amber-800/80"),
+  slat_rack: makeTile("sign", "Slat Rack", false, "bg-orange-900/80"),
+  witness_ledger: makeTile("book", "Witness Ledger Nook", false, "bg-indigo-900/80"),
+  collar_kennel: makeTile("link", "Collar Kennel", false, "bg-red-950/80"),
+  false_map: makeTile("map", "False Map Room", false, "bg-emerald-900/80"),
+  den_guard: makeTile("!", "False Sign Guard", false, "bg-red-900/85"),
 });

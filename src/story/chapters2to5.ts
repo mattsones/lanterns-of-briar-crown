@@ -37,6 +37,7 @@ export const CHAPTER_STORY_PLANS: Record<Exclude<ChapterId, 1>, ChapterStoryPlan
       "Old Westward Cut and Shelter Nook introduce the hidden road",
       "Three-Sign Hollow tests true guidance against false command",
       "Roadwatcher consequence confirms the Briar Crown is watching",
+      "Crown Door den reveals how false signs are manufactured",
       "First Westroot Gate opens and Lio is confirmed alive past it",
     ],
     keyLines: [
@@ -48,10 +49,10 @@ export const CHAPTER_STORY_PLANS: Record<Exclude<ChapterId, 1>, ChapterStoryPlan
       "A road is safest when truth walks it first.",
     ],
     artTargets: {
-      maps: ["westroot-trail"],
+      maps: ["westroot-trail", "crown-door-den"],
       portraits: ["mara-brindle", "edden-vale", "ada-willowmarket"],
       enemies: ["briar-roadwatcher", "thorn-collared-hound", "false-sign-scratcher"],
-      items: ["eddens-three-door-drawing", "willowmark-lens", "pine-pitch-wax", "no-handle-token"],
+      items: ["eddens-three-door-drawing", "willowmark-lens", "pine-pitch-wax", "split-crown-slat", "briar-signmaker-ledger", "cleaned-lantern-mark", "no-handle-token"],
       symbols: ["lantern-road-signs", "briar-crown-signs", "willow-seal-reference"],
     },
   },

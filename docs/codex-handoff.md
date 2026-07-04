@@ -513,7 +513,7 @@ Branch: `codex/roadmap-foundation-ch2-5`
 - Added full-scope art backlog metadata in `src/data/artworkPlan.ts`, including 16 hero race/gender variants, future maps, portraits, enemies, item icons, and symbol/UI sheets.
 - Added future Chapter 3-5 story item IDs to `src/data/items.ts` with emoji fallbacks.
 - Added future Chapter 4-5 enemy IDs and encounters to `src/data/enemies.ts` with emoji fallbacks.
-- Wired current Chapter 2 completion moments to stable flags: `lioAlivePastGate`, `eddensDrawingValidated`, `briarCrownWatchingWestroot`, `roadwatcherEncounterAvoided`, and `roadwatcherDefeated`.
+- Wired current Chapter 2 completion moments to stable flags including `lioAlivePastGate`, `eddensDrawingValidated`, `briarCrownWatchingWestroot`, `roadwatcherPrepared`, and `roadwatcherDefeated`. `roadwatcherEncounterAvoided` is legacy/default state, not the desired clean-solve reward.
 - Added rules coverage for chapter progress, Mara guest behavior, story plan coverage, art backlog scope, future item/enemy IDs, and Roadwatcher reward flags.
 
 ### Next Recommended Slice
@@ -551,8 +551,8 @@ Branch: `codex/chapter-2-completion`
 - Promoted `assets/maps/westroot-trail-map-v04.png` as the active painted Westroot Trail gameplay map. `v01`, `v02`, and `v03` are preserved as alternate candidates.
 - Wired the Westroot Trail map background in `src/data/maps.ts`, marked it available in `src/data/artworkPlan.ts`, and tuned the first `src/data/mapVisuals.ts` projection pass for the painted landmarks.
 - Expanded the Three-Sign Hollow flow in `src/App.tsx`: Mara can receive a non-combat puzzle job, the active companion can comment on the hollow, Crown/Lantern sign choices now write stable clue/mistake flags, and the No-Handle Stone uses the shared Chapter 2 outcome helper.
-- Clean No-Handle solve now avoids combat and grants Roadwatcher evidence. Messy solves summon Roadwatcher pressure and open the gate after the Roadwatcher battle resolves.
-- Threshold search now grants the No-Handle Token; clean Roadwatcher avoidance grants Pine-Pitch Wax.
+- Clean No-Handle solve should prepare the standard Roadwatcher battle and grant better context/rewards. Messy solves summon harder Roadwatcher pressure and open the gate after the Roadwatcher battle resolves.
+- Threshold search now grants the No-Handle Token; Roadwatcher victory grants Pine-Pitch Wax and the witness clue.
 - Added `npm.cmd run playtest:chapter2` with browser coverage for clean and messy Chapter 2 No-Handle outcomes plus visual assertions that the painted Westroot map and hero token render.
 - Expanded rules coverage for Chapter 2 puzzle outcomes, map prompt registration, required end flags, map art wiring, and the no-Princess-Elowen-in-Chapter-2 boundary.
 - Fixed a Chapter 2 briefing dead-end where choosing "I should talk to Edden." from Edden's Drawing before the briefing flag was set only raised the pre-briefing toast and left the same modal open.
@@ -628,9 +628,57 @@ Latest local results:
 
 ### Next Recommended Slice
 
-After this puzzle model pass, take the detailed Westroot Trail node-alignment pass:
+After this puzzle model pass, the preferred next design slice is the Crown Door dungeon expansion, followed by the detailed Westroot Trail node-alignment pass:
 
-1. Check the painted Westroot Trail map with Dev Tools map debug on and off.
-2. Tune `src/data/mapVisuals.ts` node placement around the three-door hollow, shelter nook, false notice, Roadwatcher node, and First Westroot Gate.
-3. Consider graph-driven movement for Westroot Trail if the rectangular grid cannot follow the painted road cleanly.
-4. Keep the future false-door mini-dungeon idea open, but do not expand it until map alignment and the main Chapter 2 route feel stable.
+1. Expand the Crown Door from a short false branch into a compact Roadwatcher den where false signs, copied wax, witness lists, and thorn-collar supplies are found.
+2. Make Roadwatcher victory provide the clue/key-mark that turns the Crown Door into an explorable dungeon.
+3. Let clearing the Crown Door dungeon remove the final false command from the road, making the No-Handle Door's truth requirement feel earned.
+4. Keep the dungeon compact: roughly 5-7 rooms, one or two small encounters, and strong evidence/reward beats rather than a full second chapter.
+5. After that design lands, check the painted Westroot Trail map with Dev Tools map debug on and off.
+6. Tune `src/data/mapVisuals.ts` node placement around the three-door hollow, shelter nook, false notice, Roadwatcher node, Crown Door dungeon entry, and First Westroot Gate.
+7. Consider graph-driven movement for Westroot Trail if the rectangular grid cannot follow the painted road cleanly.
+
+## Current Handoff - Chapter 2 Crown Door Den Pass
+
+Last updated: 2026-07-04
+
+Branch: `codex/chapter-2-completion`
+
+### What Changed
+
+- Expanded the Crown Door into a playable compact dungeon map, the Crown Door Den, now using `assets/maps/crown-door-den-map-v01.png`.
+- Made Roadwatcher victory grant the Split Crown Slat, which acts as the story key for opening the Crown Door.
+- Updated the standard Roadwatcher fight to include a Thorn-Collared Hound, keeping combat as adventure payoff rather than a failure-only branch. The hard version still escalates with the False Sign Scratcher.
+- Added Crown Door Den rooms for copied wax, false sign slats, a witness ledger, thorn-collar supplies, a den guard encounter, and the final false map.
+- Added den rewards and evidence items: Split Crown Slat, Briar Signmaker's Ledger, and Cleaned Lantern Mark.
+- Changed the No-Handle Door so the prepared Roadwatcher fight is not the final unlock by itself. The door now waits until the Crown Door Den's false map is cleared.
+- Updated Chapter 2 quest, story-plan, item, map, enemy, battle reward, and art backlog data for the Crown Door Den flow.
+- Added shared dialogue scene-image support and wired `assets/scenes/three-doors-threshold-v01.png` into the Three-Door Threshold overview dialog.
+- Expanded Chapter 2 Playwright coverage and rules tests for the key, dungeon entry, false map clearing, den-gated No-Handle Door, and updated Roadwatcher enemy mix.
+
+### Verification Run
+
+```bash
+npm.cmd run build
+npm.cmd run test:rules
+npm.cmd run playtest:chapter2
+npm.cmd run playtest:smoke
+git diff --check
+```
+
+Latest local results:
+
+- `npm.cmd run build` passed.
+- `npm.cmd run test:rules` passed: 13 tests.
+- `npm.cmd run playtest:chapter2` passed: 16 tests.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `git diff --check` passed with normal Windows LF-to-CRLF warnings only.
+
+### Next Recommended Slice
+
+The Crown Door Den is now playable; the next Chapter 2 pass should be visual and script polish:
+
+1. Human playtest the expanded Chapter 2 again from Bramblecross briefing through the Crown Door Den and First Westroot Gate. Automated coverage is green, but the new pacing, repeated dialogue, and den evidence beats need a fresh human read.
+2. Check Westroot Trail and Crown Door Den with Dev Tools map debug on and off.
+3. Tune `src/data/mapVisuals.ts` node placement around Three-Sign Hollow, the Crown Door entry, den rooms, Roadwatcher bend, and First Westroot Gate.
+4. Consider close-up painted scene images for the individual Crown, Lantern, and No-Handle Door dialogs if the procedural door visuals start to feel thin beside the threshold art.

@@ -50,6 +50,7 @@ export const MAP_ARTWORK_PLAN: Record<string, ArtworkPlanEntry> = {
   bramblecross: entry("bramblecross", "Bramblecross Town Map", "map", 1, "painted-map-fallback", "available"),
   root_cellar: entry("root_cellar", "Old Root Cellar Map", "map", 1, "painted-map-fallback", "available"),
   westroot_trail: entry("westroot_trail", "Westroot Trail Map", "map", 2, "painted-map-fallback", "available"),
+  crown_door_den: entry("crown_door_den", "Crown Door Den Map", "map", 2, "painted-map-fallback", "available", "Roadwatcher signworks behind the false Crown Door."),
   westroot_hub: entry("westroot_hub", "Westroot Hub Map", "map", 3, "painted-map-fallback"),
   riddle_road_underway: entry("riddle_road_underway", "Riddle Road Underway Map", "map", 4, "painted-map-fallback"),
   briarhold_waystation: entry("briarhold_waystation", "Briarhold Waystation Map", "map", 5, "painted-map-fallback"),
