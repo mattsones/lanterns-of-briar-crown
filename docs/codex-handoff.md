@@ -241,8 +241,8 @@ Branch: `main`
 ### What Changed
 
 - Moved Nella the Baker off the hero start tile at `2,4`; she now uses Hearthhollow tile `5,2`.
-- Changed Hearthhollow tile `6,4` into a blocked `well` landmark.
-- Added a small well interaction in `src/App.tsx` for players who try to walk onto it.
+- Changed Hearthhollow tile `6,4` into a `well` landmark. Historical note: this was originally blocked, but the 2026-07-09 playtest polish pass made it walkable and hidden-token.
+- Added a small well interaction in `src/App.tsx`; it now fires as a one-time walk-on discovery instead of a blocked-tile bump.
 - Added QA/smoke coverage so future map edits preserve the Nella/start/well placement.
 
 ### Latest Verification
@@ -250,7 +250,7 @@ Branch: `main`
 - `npm run build` passed.
 - `npm run test:rules` passed.
 - `npm run playtest:smoke` passed.
-- Manual browser check confirmed the hero starts on Grass, Nella is separate, and walking into the well opens the Village Well joke interaction instead of moving onto it.
+- Manual browser check at the time confirmed the hero starts on Grass and Nella is separate. The well behavior has since been superseded by the one-time walk-on discovery pass.
 
 ## Current Handoff - Root Cellar Annotation Follow-Up
 
@@ -715,3 +715,84 @@ git diff --check
 1. Run a browser visual pass through Hearthhollow, Bramblecross, Westroot Trail, Crown Door Den, and at least one battle per enemy-art group.
 2. Optimize production portrait PNGs before a public build; most source portraits are still roughly 2.3-3.0 MB each.
 3. Generate future Chapter 3-5 portraits/enemies after the next story slice hardens.
+
+## Current Handoff - Chapter 2 Playtest Polish
+
+Last updated: 2026-07-09
+
+Branch: `codex/chapter-2-completion`
+
+### What Changed
+
+- Generated and wired `assets/scenes/eddens-three-door-drawing-scene-v01.png` for the Edden's Drawing review dialog.
+- Removed the early explicit "honest one has no handle" clue from active app text, item descriptions, and Chapter 2 story-plan metadata.
+- Rewrote Edden's recovery-room dialog to sound more traumatized and fragmentary, with "back first / old side / listens behind" as the subtle delayed-payoff clue.
+- Moved Hollis and Enna off outdoor Bramblecross map tiles; they are now accessed through the Watchhouse interior flow.
+- Moved the Ada lens reminder into the Watchhouse briefing copy before departure.
+- Added dialogue `portraitName` support so Edden's Recovery Room and Ada's Seal Lesson can keep scene titles while showing character portraits.
+- Audited skill-check failure copy and tightened fail-forward results for the Watchhouse board, ledger, wall map, forged orders, broken cart, Lantern Shrine, and Briar Crown study so failures no longer reveal the same interpretive answer as successes.
+- Changed map portrait tokens to crop toward faces instead of fitting the full half-body portrait into the small circular map marker. Dialogue still shows the full portrait.
+- Opened Bramblecross road-art movement cells along `3,9` through `11,9`, `3,6` through `11,6`, `10,4` through `10,6`, `3,6` through `3,9`, and `11,6` through `11,9`; preserved the Root Cellar and town gate as walkable interactable tiles inside those runs.
+- Corrected the Bramblecross pass by turning over-opened cells `4,7`, `4,8`, `5,8`, `7,8`, `8,7`, `8,8`, `5,4`, `7,4`, `8,4`, `8,5`, and `8,2` back into blocked `fenced_yard` cells.
+- Updated the Chapter 2 playtest save to start outside the Watchhouse door instead of on Enna's old outdoor tile.
+- Added the shopkeeper portrait header to shop modals so Smith Orin is visible in his shop; Ada also uses the same shopkeeper portrait slot in Willow Market.
+- Turned the Hearthhollow well and Lantern Road pond into quiet walk-on discoveries: their map tokens are hidden, the tiles are walkable, and each auto-dialog fires only the first time the player steps onto it.
+- Added `ada-willowmarket-portrait-no-lens-v01.png` and swapped Ada's portrait immediately after the player borrows the Willowmark Lens; pre-briefing Ada interactions now open a short dialogue instead of only setting a toast.
+
+### Latest Verification
+
+```bash
+npm.cmd run build
+npm.cmd run test:rules
+npm.cmd run playtest:chapter2
+npm.cmd run playtest:smoke
+git diff --check
+```
+
+Latest local results:
+
+- `npm.cmd run build` passed.
+- `npm.cmd run test:rules` passed: 13 tests.
+- `npm.cmd run playtest:chapter2` passed: 18 tests.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `git diff --check` passed with normal Windows LF-to-CRLF warnings only.
+- Live sanity against `http://127.0.0.1:5173/` passed for Orin's shop portrait, hidden well/pond map tokens, and one-time well/pond walk-on discovery dialogs.
+- Live sanity against `http://127.0.0.1:5173/` passed for Ada's immediate no-lens portrait swap after borrowing the Willowmark Lens.
+
+## Current Handoff - Player Hero Art Curation
+
+Last updated: 2026-07-09
+
+Branch: `codex/chapter-2-completion`
+
+### What Changed
+
+- Added generated player hero base art under `assets/portraits/player/`.
+- Curated the visible working set down to 16 selected ancestry/gender variants:
+  - `human-female-v03.png`
+  - `human-male-v02.png`
+  - `stonekin-female-v06.png`
+  - `stonekin-male-v04.png`
+  - `sylvan-female-v04.png`
+  - `sylvan-male-v03.png`
+  - `emberling-female-v06.png`
+  - `emberling-male-v06.png`
+  - `tideborn-female-v02.png`
+  - `tideborn-male-v01.png`
+  - `cloudling-female-v02.png`
+  - `cloudling-male-v02.png`
+  - `mossback-female-v02.png`
+  - `mossback-male-v02.png`
+  - `moonmark-female-v04.png`
+  - `moonmark-male-v02.png`
+- Moved non-selected generated versions into `assets/portraits/player/_alternates/` so the selected folder is easier to process.
+- Added `assets/portraits/player/README.md` with the selected list and art-direction notes.
+
+### Art Direction Notes
+
+- Cloudlings should be allowed to read more ephemeral and spirit-like than the other ancestries.
+- The selected v6 Emberlings, latest female Stonekin, and latest female Moonmark reflect current user preference.
+
+### Next Reminder
+
+Before wiring player hero art into the app, remove the baked checkerboard backgrounds and export the selected images as true transparent PNGs. A local check showed most selected files are RGB with no alpha channel.
