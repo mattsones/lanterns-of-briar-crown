@@ -34,11 +34,9 @@ const MAP_TOKEN_CONFIG: Record<
   watch_door: { kind: "action" },
   gate: { kind: "action" },
   chest: { kind: "action" },
-  well: { kind: "action" },
   return_gate: { kind: "action" },
   camp: { kind: "action" },
   ruins: { kind: "action" },
-  pond: { kind: "action" },
   shrine: { kind: "action" },
   bramblecross: { kind: "action" },
   cart: { kind: "action" },
@@ -310,6 +308,7 @@ export function MapStage({
                 <img
                   src={portrait.src}
                   alt=""
+                  className="map-token-portrait"
                   onError={(event) => {
                     event.currentTarget.style.display = "none";
                   }}

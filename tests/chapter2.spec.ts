@@ -63,9 +63,9 @@ function buildChapter2BriefingCheckpoint() {
     chapterId: 2,
     player,
     region: "bramblecross",
-    position: { x: 7, y: 4 },
+    position: { x: 6, y: 3 },
     visited: {
-      bramblecross: buildVisitedMap("bramblecross", 7, 4, 9),
+      bramblecross: buildVisitedMap("bramblecross", 6, 3, 9),
     },
     companion: buildDefaultCompanion(),
     guestNpc: null,
@@ -107,7 +107,7 @@ async function loadChapter2BriefingCheckpoint(page) {
   await page.goto("/");
   await page.getByRole("button", { name: "Continue Checkpoint" }).click();
   await expect(page.getByRole("heading", { name: MAPS.bramblecross.name })).toBeVisible();
-  await expect(page.getByText("You are standing on: Watch Clerk Enna.")).toBeVisible();
+  await expect(page.getByText("You are standing on: Road.")).toBeVisible();
 }
 
 test("title screen loads the checked-in Chapter 2 playtest save", async ({ page }) => {
@@ -117,7 +117,7 @@ test("title screen loads the checked-in Chapter 2 playtest save", async ({ page 
 
   await expect(page.getByRole("heading", { name: MAPS.bramblecross.name })).toBeVisible();
   await expect(page.getByText("Goal: Return to the Watchhouse")).toBeVisible();
-  await expect(page.getByText("You are standing on: Watch Clerk Enna.")).toBeVisible();
+  await expect(page.getByText("You are standing on: Road.")).toBeVisible();
   await expect(page.getByText("Chapter 1 complete: The Road That Lied")).toBeVisible();
 });
 
@@ -179,16 +179,77 @@ test("chapter two loaded saves refresh fog after westroot node normalization", a
 test("chapter two briefing Edden drawing choice opens the recovery room", async ({ page }) => {
   await loadChapter2BriefingCheckpoint(page);
 
-  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await page.keyboard.press("ArrowUp");
+  await page.getByRole("button", { name: "Enter" }).click();
+  await page.getByRole("button", { name: "Review the Westroot briefing" }).click();
   await page.getByRole("button", { name: "What did Edden draw?" }).click();
   await expect(page.getByText("Edden's Drawing")).toBeVisible();
+  await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute(
+    "src",
+    /eddens-three-door-drawing-scene-v01/,
+  );
+  await expect(page.getByText("THE HONEST ONE HAS NO HANDLE")).not.toBeVisible();
 
   await page.getByRole("button", { name: "I should talk to Edden." }).click();
-  await expect(page.getByText("Edden's Recovery Room")).toBeVisible();
+  await expect(page.getByText("Edden's Recovery Room", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Take Edden's three-door drawing." })).toBeVisible();
   await page.getByRole("button", { name: "Take Edden's three-door drawing." }).click();
-  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await page.getByRole("button", { name: "Review the Westroot briefing" }).click();
   await expect(page.getByRole("button", { name: "What exactly is Westroot?" })).toBeVisible();
+});
+
+test("chapter two Ada pre-briefing interaction opens a dialog", async ({ page }) => {
+  const payload = buildChapter2BriefingCheckpoint();
+  payload.position = { x: 9, y: 4 };
+  payload.visited = {
+    bramblecross: buildVisitedMap("bramblecross", 9, 4, 9),
+  };
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: payload },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await expect(page.getByText("You are standing on: Ada Willowmarket.")).toBeVisible();
+
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await expect(page.getByText("Ada Willowmarket", { exact: true })).toBeVisible();
+  await expect(page.getByText("Bring me the watchhouse shape of it")).toBeVisible();
+  await expect(page.getByAltText("Portrait of Ada Willowmarket")).toBeVisible();
+});
+
+test("chapter two Ada seal lesson swaps to no-lens portrait immediately", async ({ page }) => {
+  const payload = buildChapter2BriefingCheckpoint();
+  payload.position = { x: 9, y: 4 };
+  payload.visited = {
+    bramblecross: buildVisitedMap("bramblecross", 9, 4, 9),
+  };
+  payload.player.inventory.eddens_three_door_drawing = 1;
+  payload.flags.chapterTwoStarted = true;
+  payload.flags.chapterTwoBriefed = true;
+  payload.flags.eddenVisited = true;
+  payload.flags.eddenDrawingReceived = true;
+  payload.flags.adaSealLessonComplete = false;
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: payload },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await expect(page.getByText("You are standing on: Ada Willowmarket.")).toBeVisible();
+
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await expect(page.getByText("Ada's Seal Lesson", { exact: true })).toBeVisible();
+  await expect(page.getByAltText("Portrait of Ada Willowmarket")).toBeVisible();
+  await expect(page.getByAltText("Portrait of Ada Willowmarket without the Willowmark Lens")).toHaveCount(0);
+
+  await page.getByRole("button", { name: "Borrow the Willowmark Lens." }).click();
+  await expect(page.getByText("Ada Willowmarket", { exact: true })).toBeVisible();
+  await expect(page.getByText("empty place on her work strap")).toBeVisible();
+  await expect(page.getByAltText("Portrait of Ada Willowmarket without the Willowmark Lens")).toBeVisible();
+  await expect(page.getByRole("button", { name: "I'll bring it back." })).toBeVisible();
 });
 
 test("chapter two skipped Ada lesson hides Willowmark Lens choices", async ({ page }) => {
@@ -222,7 +283,8 @@ test("chapter two no-handle door frames the repair puzzle before it opens", asyn
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
   await expect(page.getByText("Three-Door Threshold", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Approach the No-Handle Door." }).click();
-  await expect(page.getByText("LET THE ROAD BEHIND YOU SPEAK TRUE")).toBeVisible();
+  await expect(page.getByText("LET THE ROAD BEHIND YOU SPEAK")).toBeVisible();
+  await expect(page.getByText("I DO NOT ANSWER HANDS")).toBeVisible();
   await expect(page.getByText("The door is not only listening to you")).toBeVisible();
   await expect(page.getByRole("button", { name: "Ask Mara to read the tiny scratch." })).toBeVisible();
   await expect(page.getByText("Break the false road orders.")).not.toBeVisible();
@@ -423,7 +485,8 @@ test("chapter two messy no-handle solve triggers hard Roadwatcher pressure", asy
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
   await page.getByRole("button", { name: "Approach the No-Handle Door." }).click();
-  await expect(page.getByText("LET THE ROAD BEHIND YOU SPEAK TRUE")).toBeVisible();
+  await expect(page.getByText("LET THE ROAD BEHIND YOU SPEAK")).toBeVisible();
+  await expect(page.getByText("I DO NOT ANSWER HANDS")).toBeVisible();
   await page.getByRole("button", { name: /Say: A road is safest/ }).click();
   await expect(page.getByText("Briar Roadwatcher Ambush")).toBeVisible();
   await page.getByRole("button", { name: "Protect Mara and hold the hollow." }).click();

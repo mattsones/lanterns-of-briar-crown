@@ -1,5 +1,7 @@
 const adaPortrait = new URL("../../assets/portraits/characters/ada-willowmarket-portrait-v01.png", import.meta.url)
   .href;
+const adaNoLensPortrait = new URL("../../assets/portraits/characters/ada-willowmarket-portrait-no-lens-v01.png", import.meta.url)
+  .href;
 const eddenPortrait = new URL("../../assets/portraits/characters/edden-vale-portrait-v01.png", import.meta.url).href;
 const ennaPortrait = new URL("../../assets/portraits/characters/enna-portrait-v02.png", import.meta.url).href;
 const hollisPortrait = new URL("../../assets/portraits/characters/hollis-portrait-v01.png", import.meta.url).href;
@@ -33,6 +35,10 @@ export const DIALOGUE_PORTRAITS = {
   "Toma Fielding": { src: tomaPortrait, alt: "Portrait of Toma Fielding" },
   "Miri of the Loom": { src: miriPortrait, alt: "Portrait of Miri of the Loom" },
   "Ada Willowmarket": { src: adaPortrait, alt: "Portrait of Ada Willowmarket" },
+  "Ada Willowmarket No Lens": {
+    src: adaNoLensPortrait,
+    alt: "Portrait of Ada Willowmarket without the Willowmark Lens",
+  },
   "Mara Brindle": { src: maraPortrait, alt: "Portrait of Mara Brindle" },
   "Edden Vale": { src: eddenPortrait, alt: "Portrait of Edden Vale" },
   "Lio Brindle": { src: lioPortrait, alt: "Portrait of Lio Brindle" },

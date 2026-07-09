@@ -82,6 +82,7 @@ docs/art/item-icons/liams-game-custom-item-icon-plan.md
 | Asset | Suggested filename | Notes |
 |---|---|---|
 | Three-Door Threshold scene | `three-doors-threshold-v01.png` | Current Chapter 2 room-dialog scene for the Crown Door, Lantern Door, and No-Handle Door. Crown Door uses the false-official thorn crown and slat latch. |
+| Edden's Three-Door Drawing scene | `eddens-three-door-drawing-scene-v01.png` | Current Chapter 2 dialogue scene image for Edden's shaky charcoal drawing. Avoids readable labels and keeps the no-handle clue obscure. |
 
 ## Characters
 
@@ -96,6 +97,7 @@ docs/art/item-icons/liams-game-custom-item-icon-plan.md
 | Tilda Quickstep | `tilda-portrait-v01.png` | Quick, clever, mischievous companion. |
 | Moss Fenmere | `moss-portrait-v01.png` | Mossback companion; calm, rooted, ancient-adjacent. |
 | Ada Willowmarket | `ada-willowmarket-portrait-v01.png` | Production portrait; organized market authority and Willow seal identity. |
+| Ada Willowmarket, no lens | `ada-willowmarket-portrait-no-lens-v01.png` | Post-borrow portrait variant for after the player takes the Willowmark Lens. |
 | Smith Orin | `smith-orin-portrait-v02.png` | Selected Emberling/fireperson blacksmith direction. |
 | Mayor Anwen | `mayor-anwen-portrait-v01.png` | Production portrait; Bramblecross civic leader. |
 | Nella the Baker | `nella-portrait-v03.png` | Selected Tideborn/water-person baker direction. |

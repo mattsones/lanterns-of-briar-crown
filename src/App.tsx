@@ -105,6 +105,19 @@ const threeDoorsThresholdScene = new URL(
   "../assets/scenes/three-doors-threshold-v01.png",
   import.meta.url,
 ).href;
+const eddensThreeDoorDrawingScene = new URL(
+  "../assets/scenes/eddens-three-door-drawing-scene-v01.png",
+  import.meta.url,
+).href;
+
+const EDDEN_DRAWING_REVIEW_TEXT =
+  "The drawing is not a map so much as a memory that lost a fight. Three door-shapes crowd under black roots: a thorn-crowned arch, a mud-blurred lantern door, and a third slab rubbed nearly smooth where a latch should make sense.\n\nIn the margins, Edden has written half-words and crossed most of them out: BACK FIRST. OLD SIDE. LISTENS BEHIND.";
+
+const EDDEN_RECOVERY_FIRST_TEXT =
+  "Edden Vale sits beside a narrow window with a blanket over his shoulders and charcoal on his fingers. The cracked lantern rests beside him, turned so the broken glass faces the wall.\n\nHe does not look at you at first. He looks at the corners of the room, counting them wrong.\n\n\"Crown bit the root,\" he whispers. \"Lantern blinked under mud. Third one was quiet. Not a door. Not from this side. I put my hand where the pull should be and... cold. Cold stone. Back first. Old side listens behind.\"\n\nHis fingers twitch like they are still holding charcoal. \"Don't make it shout. It lies when it shouts.\"";
+
+const EDDEN_RECOVERY_REPEAT_TEXT =
+  "Edden rests with charcoal still smudged on his fingers. \"Back first,\" he murmurs. \"Old side listens. Crown shouts. Lantern remembers. Smooth stone waits.\"";
 
 function getVillageNpcDialogue(tile, flags) {
   const lines = {
@@ -240,6 +253,7 @@ export default function LiamsGamePrototype() {
     }
     if (region === "lanternRoad") {
       if (tile === "chest2" && flags.openedWildChest) return true;
+      if (tile === "pond" && flags.pondVisited) return true;
       if (tile === "shrine" && flags.usedShrine) return true;
       if (tile === "ruins" && flags.foundRuinNote) return true;
       if (
@@ -250,8 +264,10 @@ export default function LiamsGamePrototype() {
         return true;
       if (tile === "wildbattle" && flags.clearedWildBattle) return true;
     }
-    if (region === "hearthhollow" && tile === "chest" && flags.openedChest)
-      return true;
+    if (region === "hearthhollow") {
+      if (tile === "chest" && flags.openedChest) return true;
+      if (tile === "well" && flags.wellVisited) return true;
+    }
     if (region === "westrootTrail") {
       if (tile === "westroot_cut" && flags.westrootCutStudied) return true;
       if (tile === "shelter_nook" && flags.shelterNoticeRemoved && flags.lioShelterMarkFound)
@@ -493,6 +509,51 @@ export default function LiamsGamePrototype() {
     region === "rootCellar" && tile === "exit_door" && !flags.beatCellarBoss;
   const blockLockedCellarExit = () =>
     setToast("The Briar Knot Warden blocks the sealed door.");
+  const openVillageWellDialogue = () => {
+    setFlags((f) => ({ ...f, wellVisited: true }));
+    setDialogue({
+      portrait: TILE_META.well.icon,
+      name: "Village Well",
+      text: "The village well sits exactly where wells like to sit: in everybody's way and somehow still very useful. You consider climbing onto the rim for a better view, but the well has the solemn confidence of a thing that has already watched three generations make that mistake.",
+      choices: [
+        {
+          label: "Respect local infrastructure.",
+          effect: () => setDialogue(null),
+        },
+      ],
+    });
+  };
+  const openPondDialogue = () => {
+    setFlags((f) => ({ ...f, pondVisited: true }));
+    setDialogue({
+      portrait: TILE_META.pond.icon,
+      name: "Pond Edge",
+      text: flags.pondForaged
+        ? "The pond settles back into itself. A frog sits on a stone with the smug expression of someone who knows you have already had your chance."
+        : "The pond is small enough to skip a stone across and deep enough to hide exactly one interesting thing. Moonmint leans over the bank, reeds tick softly against each other, and something round bubbles once beneath the mud. You will probably only get one careful search before the edge turns cloudy.",
+      choices: [
+        {
+          label: "Search the pond edge carefully.",
+          effect: () => {
+            setDialogue(null);
+            if (!flags.pondForaged) {
+              setFlags((f) => ({ ...f, pondVisited: true, pondForaged: true }));
+              const found = Math.random() > 0.45;
+              if (found) {
+                gainItem(setPlayer, "bubblecap", 1);
+                announce(
+                  "You find a Bubblecap tucked under the pond reeds.",
+                  [{ id: "bubblecap", qty: 1 }],
+                );
+              } else
+                setToast("Wet hands, reeds, and one suspicious frog stare.");
+            }
+          },
+        },
+        { label: "Leave the pond alone.", effect: () => setDialogue(null) },
+      ],
+    });
+  };
   const handleBlockedTileInteraction = (tile) => {
     if (tile === "home_door")
       return openEnterPrompt(
@@ -549,47 +610,8 @@ export default function LiamsGamePrototype() {
         "Enter the watchhouse? The windows glow with lamplight, maps, and the particular smell of ink being used urgently.",
         () => setInteriorScene("watchhouse"),
       );
-    if (tile === "well")
-      return setDialogue({
-        portrait: "🪣",
-        name: "Village Well",
-        text: "The village well sits exactly where wells like to sit: in everybody's way and somehow still very useful. You consider climbing onto the rim for a better view, but the well has the solemn confidence of a thing that has already watched three generations make that mistake.",
-        choices: [
-          {
-            label: "Respect local infrastructure.",
-            effect: () => setDialogue(null),
-          },
-        ],
-      });
-    if (tile === "pond")
-      return setDialogue({
-        portrait: "💧",
-        name: "Pond Edge",
-        text: flags.pondForaged
-          ? "The pond settles back into itself. A frog sits on a stone with the smug expression of someone who knows you have already had your chance."
-          : "The pond is small enough to skip a stone across and deep enough to hide exactly one interesting thing. Moonmint leans over the bank, reeds tick softly against each other, and something round bubbles once beneath the mud. You will probably only get one careful search before the edge turns cloudy.",
-        choices: [
-          {
-            label: "Search the pond edge carefully.",
-            effect: () => {
-              setDialogue(null);
-              if (!flags.pondForaged) {
-                setFlags((f) => ({ ...f, pondForaged: true }));
-                const found = Math.random() > 0.45;
-                if (found) {
-                  gainItem(setPlayer, "bubblecap", 1);
-                  announce(
-                    "You find a Bubblecap tucked under the pond reeds.",
-                    [{ id: "bubblecap", qty: 1 }],
-                  );
-                } else
-                  setToast("Wet hands, reeds, and one suspicious frog stare.");
-              }
-            },
-          },
-          { label: "Leave the pond alone.", effect: () => setDialogue(null) },
-        ],
-      });
+    if (tile === "well") return openVillageWellDialogue();
+    if (tile === "pond") return openPondDialogue();
   };
   const movePlayer = (dx, dy) => {
     if (
@@ -1438,7 +1460,7 @@ export default function LiamsGamePrototype() {
       const successText =
         "The wheel-ruts bend sharply toward the ditch, but the hoofprints do not panic. That is the strange part. Whoever stopped this cart was calm enough afterward to cut away the identifying marks. The missing seal was removed by hand, not broken loose in the crash.";
       const failText =
-        "The cart is a mess of mud, splinters, and bent iron. You can still tell the crate seal was cut away, but the road marks blur together before they give up anything more certain.";
+        "The cart is a mess of mud, splinters, and bent iron. You gather enough paint flakes and crate-lid splinters for Ada to inspect, but the road marks blur together before they give up anything more certain.";
       setDialogue({
         portrait: "🛒",
         name: "Cart Tracks",
@@ -1533,7 +1555,7 @@ ${check.success ? successText : failText}`,
                   name: "Broken Cart",
                   text: `${checkSummary(check)}
 
-${check.success ? "You find a scrape of green paint, a cut mark where a seal used to be, and a faint smell of spice under the mud. You cannot place it yet, but it feels like proof waiting for the right person to name it." : "You find a scrape of green paint but cannot place it yet. It feels like the sort of detail that will matter once someone in Bramblecross is angry enough to identify it."}`,
+${check.success ? "You find a scrape of green paint, a cut mark where a seal used to be, and a faint smell of spice under the mud. You cannot place it yet, but it feels like proof waiting for the right person to name it." : "You find a scrape of green paint under the mud. It might be ordinary wagon paint, or it might matter later. Without a local owner, it stays a color instead of a clue."}`,
                   choices: [
                     {
                       label: "Keep that in mind.",
@@ -1602,7 +1624,7 @@ But one fresh mark cuts across the older names: a false crown seal, copied badly
               name: "Lantern Shrine",
               text: `${checkSummary(check)}
 
-${check.success ? "The marks settle into meaning as you trace them: water here, shelter north, broken bridge east, safe camp beyond the pines. These signs do not order anyone around. They simply tell the truth to the next traveler. Then you notice three recent courier marks scratched in a hurry, each beside a tiny arrow pointing toward Bramblecross. The shrine has not been silent. It has been interrupted." : "Most of the shrine marks are old, but not random. You cannot read every sign clearly, but you can tell the false crown has been scratched across older marks that were meant to guide rather than command."}`,
+${check.success ? "The marks settle into meaning as you trace them: water here, shelter north, broken bridge east, safe camp beyond the pines. These signs do not order anyone around. They simply tell the truth to the next traveler. Then you notice three recent courier marks scratched in a hurry, each beside a tiny arrow pointing toward Bramblecross. The shrine has not been silent. It has been interrupted." : "Most of the shrine marks are old, layered, and worn smooth by weather. The fresh crown scratch is easier to see than the cuts beneath it, which is probably why it was put there."}`,
               choices: [
                 {
                   label: "Clean the false seal and honor the true marks.",
@@ -2072,8 +2094,8 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         name: "Westroot Briefing",
         size: "wide",
         text: flags.maraJoined
-          ? "Enna has three maps spread across the table: public road, courier marks, and Edden's impossible drawing. None of them agree, but they all point west. Mara watches the maps like they might try to leave without her."
-          : "Enna has three maps spread across the table. Hollis nods toward the inn and the watchhouse door. \"Choose your companion if you want one, then speak with Mara. She knows Lio's private marks better than any of us.\"",
+          ? "Enna has three maps spread across the table: public road, courier marks, and Edden's impossible drawing. None of them agree, but they all point west. Mara watches the maps like they might try to leave without her.\n\nHollis has added Ada's name to the margin: if Willow-marked cargo appears west of town, her lens may show what ordinary eyes miss."
+          : "Enna has three maps spread across the table. Hollis nods toward the inn and the watchhouse door. \"Choose your companion if you want one, then speak with Mara. She knows Lio's private marks better than any of us. Before you leave, borrow Ada's lens too. Her seal was named under the cellar, and Westroot may hide cargo lies as well as road lies.\"",
         choices: [
           {
             label: "What exactly is Westroot?",
@@ -2092,9 +2114,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               setDialogue({
                 portrait: "paper",
                 name: "Edden's Drawing",
-                visual: "threeDoors",
+                sceneImage: {
+                  src: eddensThreeDoorDrawingScene,
+                  alt: "Edden's shaky charcoal drawing of three root-buried doors.",
+                },
                 size: "wide",
-                text: "The lines are shaky, but not careless. Three doors stand side by side under a tangle of roots. The first has a crown. The second has a lantern. The third has no handle.\n\nUnder them, Edden wrote the same phrase three times: THE HONEST ONE HAS NO HANDLE.",
+                text: EDDEN_DRAWING_REVIEW_TEXT,
                 choices: [{ label: "Back to the map table.", effect: openChapter2Briefing }],
               }),
           },
@@ -2112,7 +2137,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       portrait: "🗺️",
       name: "Bramblecross Watchhouse",
       size: "wide",
-      text: `${companion.recruited ? "Enna nods once to the companion at your side. \"Good. One clear witness is better than a crowd of half-listeners.\"" : "Enna looks at the empty space beside you. \"You can follow this lead alone if you must, but I would rather you did not. The road west is not simply dangerous. It is being edited.\""}\n\nHollis stands near the case wall, where Edden's blue cloth is pinned beside the Briar Crown mark.\n\n\"The cellar gave us a direction,\" he says. \"Westroot. But the maps disagree on what Westroot is.\"\n\nEnna taps three pages in turn: a public road map, a courier map, and Edden's charcoal drawing of three doors under roots.\n\n\"Someone else has already opened it,\" she says. \"So we follow carefully.\"`,
+      text: `${companion.recruited ? "Enna nods once to the companion at your side. \"Good. One clear witness is better than a crowd of half-listeners.\"" : "Enna looks at the empty space beside you. \"You can follow this lead alone if you must, but I would rather you did not. The road west is not simply dangerous. It is being edited.\""}\n\nHollis stands near the case wall, where Edden's blue cloth is pinned beside the Briar Crown mark.\n\n\"The cellar gave us a direction,\" he says. \"Westroot. But the maps disagree on what Westroot is.\"\n\nEnna taps three pages in turn: a public road map, a courier map, and Edden's charcoal drawing of three doors under roots.\n\n\"Someone else has already opened it,\" she says. \"So we follow carefully. Mara reads Lio's smallest marks. Ada's lens reads copied Willow marks. We should have both before the west road gets a vote.\"`,
       choices: [
         {
           label: "What exactly is Westroot?",
@@ -2130,9 +2155,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             setDialogue({
               portrait: "📜",
               name: "Edden's Drawing",
-              visual: "threeDoors",
+              sceneImage: {
+                src: eddensThreeDoorDrawingScene,
+                alt: "Edden's shaky charcoal drawing of three root-buried doors.",
+              },
               size: "wide",
-              text: "The lines are shaky, but not careless. Three doors stand side by side under a tangle of roots. The first has a crown. The second has a lantern. The third has no handle.\n\nUnder them, Edden wrote the same phrase three times: THE HONEST ONE HAS NO HANDLE.",
+              text: EDDEN_DRAWING_REVIEW_TEXT,
               choices: [
                 {
                   label: "I should talk to Edden.",
@@ -2196,10 +2224,11 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       return setToast("Get the Westroot briefing from Enna and Hollis first.");
     setDialogue({
       portrait: "📜",
+      portraitName: "Edden Vale",
       name: "Edden's Recovery Room",
       text: flags.eddenDrawingReceived
-        ? "Edden rests with charcoal still smudged on his fingers. \"Three doors,\" he murmurs. \"The honest one has no handle. It opens when the road hears truth first.\""
-        : "Edden Vale sits beside a narrow window with a blanket over his shoulders and charcoal on his fingers. The cracked lantern rests beside him.\n\n\"The road was trying to explain itself,\" he says. \"Three doors. Crown, lantern, no handle. The honest one has no handle because it does not open from the side that lies.\"",
+        ? EDDEN_RECOVERY_REPEAT_TEXT
+        : EDDEN_RECOVERY_FIRST_TEXT,
       choices: [
         !flags.eddenDrawingReceived
           ? {
@@ -2220,16 +2249,24 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
 
   const openAdaSealLesson = () => {
     if (!flags.eddenDrawingReceived)
-      return setToast("Edden's drawing should come first; Ada's lesson will make more sense after it.");
+      return setDialogue({
+        portrait: "🔍",
+        portraitName: "Ada Willowmarket",
+        name: "Ada Willowmarket",
+        text: "Ada turns a brass inspection lens beside her ledger, studying the tiny Willow mark on a practice crate tag. \"If Enna and Hollis are sending you west, I want to know what kind of lie you are walking into first. Bring me the watchhouse shape of it, and I will show you exactly how a copied Willow mark gives itself away.\"",
+        choices: [{ label: "I'll speak with the watchhouse first.", effect: () => setDialogue(null) }],
+      });
     if (flags.adaSealLessonComplete)
       return setDialogue({
         portrait: "🔍",
+        portraitName: "Ada Willowmarket No Lens",
         name: "Ada Willowmarket",
         text: "Ada taps the Willowmark Lens. \"Remember: honest marks have familiar flaws. Mine has a nick in the lower leaf. Copied marks are often too smooth. Altered marks have fresh scraping around the circle.\"",
         choices: [{ label: "I'll watch for that.", effect: () => setDialogue(null) }],
       });
     setDialogue({
       portrait: "🔍",
+      portraitName: "Ada Willowmarket",
       name: "Ada's Seal Lesson",
       text: "Ada turns a practice crate-mark under a small brass lens. \"Trust is a tool,\" she says. \"A good seal lets tired people move food, oil, bandages, and news without arguing over every box. A copied seal steals that trust.\"\n\nUnder the lens, her honest Willow mark shows a tiny nick in the lower leaf. \"That flaw is mine. If you see a mark too perfect, or stamped over scraped wax, be suspicious.\"",
       choices: [
@@ -2239,7 +2276,13 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             setFlags((f) => ({ ...f, adaSealLessonComplete: true }));
             gainStoryItemOnce("willowmark_lens");
             setPlayer((p) => ({ ...p, xp: p.xp + 6 }));
-            setDialogue(null);
+            setDialogue({
+              portrait: "🔍",
+              portraitName: "Ada Willowmarket No Lens",
+              name: "Ada Willowmarket",
+              text: "Ada folds your fingers around the Willowmark Lens, and her own hand goes instinctively to the empty place on her work strap. \"Bring it back with fewer scratches than you bring back yourself,\" she says. \"And remember the nick in the lower leaf. A perfect mark is often the most suspicious thing in the room.\"",
+              choices: [{ label: "I'll bring it back.", effect: () => setDialogue(null) }],
+            });
             announce("Ada lends you the Willowmark Lens. XP +6", [{ id: "willowmark_lens", qty: 1 }]);
           },
         },
@@ -2979,7 +3022,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     setFlags((f) => ({ ...f, companionReadThreshold: true }));
     const text = chapter2CompanionLine(
       'Rowan studies the three doors. "One goes down. One gives supplies. One waits. I do not love that order, but I understand it."',
-      'Tilda circles the threshold with theatrical suspicion. "Crown door: ominous basement. Lantern door: snacks. Blank rock: rude, suspicious, probably important."',
+      'Tilda circles the threshold with theatrical suspicion. "Crown door: ominous basement. Lantern door: snacks. Blank rock: rude, suspicious, refusing to do normal door work."',
       'Moss stands very still before the blank stone. "No handle means it is not asking for strength."',
       "The threshold offers no easy answer, but Edden's drawing and Mara's attention make the pattern clearer.",
     );
@@ -3016,9 +3059,9 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         "The Lantern Door seems less interested in opening than in helping you read the hollow.",
       ),
       noHandle: chapter2CompanionLine(
-        'Rowan rests one hand near his sword but does not touch the stone. "If it opens for truth-bearers, we should make sure the truth has witnesses."',
-        'Tilda squints at the blank stone. "No handle. No lock. Very rude. Also probably honest."',
-        'Moss kneels near the root seam. "It opens from the side that has stopped lying."',
+        'Rowan rests one hand near his sword but does not touch the stone. "If it is waiting on the road behind us, we should make sure the road has witnesses."',
+        'Tilda squints at the blank stone. "No handle. No lock. Very rude. Also weirdly calm about being stared at."',
+        'Moss kneels near the root seam. "It is listening somewhere other than its face."',
         "The no-handle door waits with uncomfortable patience.",
       ),
     };
@@ -3158,7 +3201,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       name: "No-Handle Door",
       visual: "noHandleDoor",
       size: "wide",
-      text: addLocalResult(`The stone door has no handle, no latch, and no keyhole. Roots curl around its edge like folded hands.\n\nAn inscription is scratched where a handle should be:\n\nLET THE ROAD BEHIND YOU SPEAK TRUE. I OPEN FOR TRUTH-BEARERS AND FALSE-BREAKERS.\n\n${lioText}\n\n${formatWestrootDoorWhisper(repair)}`, viewFlags),
+      text: addLocalResult(`The stone door has no handle, no latch, and no keyhole. Roots curl around its edge like folded hands.\n\nAn inscription is scratched where a handle should be:\n\nLET THE ROAD BEHIND YOU SPEAK. I DO NOT ANSWER HANDS.\n\n${lioText}\n\n${formatWestrootDoorWhisper(repair)}`, viewFlags),
       choices: [
         {
           label: "Study the door inscription.",
@@ -3488,6 +3531,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       if (tile === "elder") openElderDialogue();
       if (tile === "pibble") openPibbleDialogue();
       if (tile === "gate") openGateEvent();
+      if (tile === "well") openVillageWellDialogue();
       if (tile === "chest" && !flags.openedChest) {
         setFlags((f) => ({ ...f, openedChest: true }));
         gainItem(setPlayer, "trail_snack", 1);
@@ -3520,6 +3564,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       if (tile === "wildbattle") openWildBattleDialogue();
       if (tile === "bramblecross") openBramblecrossDialogue();
       if (tile === "cart") openCartDialogue();
+      if (tile === "pond") openPondDialogue();
       if (tile === "camp") {
         setFlags((f) => ({ ...f, sawRoadCamp: true }));
         setDialogue({
@@ -4210,9 +4255,13 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         MAPS.hearthhollow.tiles[9].every(
           (tile, x) => x === 6 ? tile === "gate" : TILE_META[tile]?.blocked,
         ) &&
-        TILE_META.well?.blocked,
+        !TILE_META.well?.blocked &&
+        !isBlockedInteractionTile("well") &&
+        MAPS.lanternRoad.tiles[6][2] === "pond" &&
+        !TILE_META.pond?.blocked &&
+        !isBlockedInteractionTile("pond"),
       "Hearthhollow placement tweaks are tuned",
-      "Doors, chest, blocked well, upper-right trees, and south-row gate boundary match the latest map pass.",
+      "Doors, chest, quiet well/pond landmarks, upper-right trees, and south-row gate boundary match the latest map pass.",
     );
     const shopIds = [
       ...new Set([...SHOP_INVENTORIES.smith, ...SHOP_INVENTORIES.market]),

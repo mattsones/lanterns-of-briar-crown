@@ -24,7 +24,7 @@ import {
   buildPlayer,
 } from "../src/game/state";
 import { getHeroXpTarget } from "../src/game/progression";
-import { getVisitedKey } from "../src/game/map";
+import { getVisitedKey, isBlockedInteractionTile } from "../src/game/map";
 import { addBonuses } from "../src/game/stats";
 import { BATTLE_REWARDS } from "../src/data/battleRewards";
 import {
@@ -148,7 +148,7 @@ test("checked-in Chapter 2 playtest save is loadable and item-safe", () => {
     screen: "play",
     chapterId: 2,
     region: "bramblecross",
-    position: { x: 7, y: 4 },
+    position: { x: 6, y: 3 },
     flags: {
       chapterOneClear: true,
       chapterReported: true,
@@ -203,9 +203,41 @@ test("progression and default map state stay compatible with chapter one", () =>
       x === 6 ? tile === "gate" : TILE_META[tile]?.blocked,
     ),
   ).toBe(true);
-  expect(TILE_META.well.blocked).toBe(true);
+  expect(TILE_META.well.blocked).toBe(false);
+  expect(isBlockedInteractionTile("well")).toBe(false);
+  expect(MAPS.bramblecross.tiles[2][6]).toBe("watch_door");
+  [
+    ...Array.from({ length: 9 }, (_, index) => [3 + index, 9]),
+    ...Array.from({ length: 9 }, (_, index) => [3 + index, 6]),
+    ...Array.from({ length: 3 }, (_, index) => [10, 4 + index]),
+    ...Array.from({ length: 4 }, (_, index) => [3, 6 + index]),
+    ...Array.from({ length: 4 }, (_, index) => [11, 6 + index]),
+  ].forEach(([x, y]) => {
+    const tile = MAPS.bramblecross.tiles[y][x];
+    expect(TILE_META[tile]?.blocked).toBe(false);
+    if (!(x === 5 && y === 6) && !(x === 6 && y === 9)) {
+      expect(tile).toBe("road");
+    }
+  });
   expect(MAPS.bramblecross.tiles[7][6]).toBe("road");
   expect(MAPS.bramblecross.tiles[8][6]).toBe("road");
+  [
+    [4, 7],
+    [4, 8],
+    [5, 8],
+    [7, 8],
+    [8, 7],
+    [8, 8],
+    [5, 4],
+    [7, 4],
+    [8, 4],
+    [8, 5],
+    [8, 2],
+  ].forEach(([x, y]) => {
+    const tile = MAPS.bramblecross.tiles[y][x];
+    expect(tile).toBe("fenced_yard");
+    expect(TILE_META[tile]?.blocked).toBe(true);
+  });
   expect(MAPS.bramblecross.tiles[6][5]).toBe("cellar");
   expect(TILE_META[MAPS.bramblecross.tiles[7][5]].blocked).toBe(true);
   expect(TILE_META[MAPS.bramblecross.tiles[8][2]].blocked).toBe(true);
@@ -216,6 +248,8 @@ test("progression and default map state stay compatible with chapter one", () =>
   expect(MAPS.lanternRoad.tiles[7][11]).toBe("bramblecross");
   expect(MAPS.lanternRoad.tiles[7][7]).toBe("wildbattle");
   expect(MAPS.lanternRoad.tiles[6][2]).toBe("pond");
+  expect(TILE_META.pond.blocked).toBe(false);
+  expect(isBlockedInteractionTile("pond")).toBe(false);
   expect(MAPS.lanternRoad.tiles[5][2]).toBe("road");
   [
     [11, 1],
@@ -305,7 +339,7 @@ test("chapters two through five have story and art contracts", () => {
     expect(plan.artTargets.maps.length).toBeGreaterThanOrEqual(1);
   });
 
-  expect(CHAPTER_STORY_PLANS[2].keyLines).toContain("The honest one has no handle.");
+  expect(CHAPTER_STORY_PLANS[2].keyLines).toContain("Back first. Old side listens behind.");
   expect(CHAPTER_STORY_PLANS[5].keyLines).toContain("It was not supposed to wake yet.");
 });
 

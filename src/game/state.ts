@@ -99,6 +99,8 @@ export function buildDefaultFlags(): Flags {
     searchedCart: false,
     cartRecoveredForAda: false,
     openedWildChest: false,
+    wellVisited: false,
+    pondVisited: false,
     pondForaged: false,
     usedShrine: false,
     sawShrine: false,

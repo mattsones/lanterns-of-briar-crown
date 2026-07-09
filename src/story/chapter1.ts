@@ -67,7 +67,7 @@ The forged orders were not the whole plan. They were cover. The stolen Willow se
     briarCrownStudySuccess:
       "You brush dirt from the carved briar crown and the mark resolves into something uglier than a symbol. It is not royal, though it wants to be mistaken for royalty at a glance. It twists the idea of a crown into a thorned thing: authority without care, command without responsibility, fear dressed up as order. Beside it, the lantern route marks look older and humbler. They were made by people who needed roads to be trustworthy: couriers, traders, porters, pilgrims, children tracing the marks with curious fingers. The Briar Crown mark has been carved over those older signs, but it has not erased them. Not yet.",
     briarCrownStudyFallback:
-      "You brush dirt from the carved briar crown. The mark is not royal, though it wants to be mistaken for something royal at a glance. Beside it, the lantern route marks look older and humbler. They were made to guide; this was carved to control. The Briar Crown mark has been carved over those older signs, but it has not erased them. Not yet.",
+      "You brush dirt from the carved briar crown. It has been cut hard over older, shallower marks, but the older lines keep slipping away under grime and shadow. Whatever this symbol means, someone wanted it to be the first thing a frightened person noticed.",
     takeProofLabel: "Take the Warden Chain and Edden's cloth.",
     discoveryCompleteToast:
       "Chapter 1 discovery complete. Report back to Hollis and Enna.",

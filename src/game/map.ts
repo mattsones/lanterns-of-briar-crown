@@ -74,7 +74,5 @@ export function isBlockedInteractionTile(tile: string) {
     "bram_inn_door",
     "market_door",
     "watch_door",
-    "pond",
-    "well",
   ].includes(tile);
 }

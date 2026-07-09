@@ -42,7 +42,7 @@ export const CHAPTER_STORY_PLANS: Record<Exclude<ChapterId, 1>, ChapterStoryPlan
     ],
     keyLines: [
       "If you are making a plan about my brother without me, it is probably a worse plan than it needs to be.",
-      "The honest one has no handle.",
+      "Back first. Old side listens behind.",
       "When the sign is loud, listen smaller.",
       "This sign commands, but does not guide.",
       "Alive past this point. Do not trust the straight road.",
