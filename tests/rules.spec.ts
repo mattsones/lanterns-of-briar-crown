@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import { resolveRoll, resolveSkillCheck } from "../src/game/dice";
-import { RACES } from "../src/data/character";
+import { DEFAULT_HUMAN_HERITAGE_ID, GENDERS, HUMAN_HERITAGES, RACES } from "../src/data/character";
 import { ENCOUNTERS, ENEMY_DB } from "../src/data/enemies";
 import {
   ARTWORK_PLAN_GROUPS,
@@ -9,6 +9,7 @@ import {
   MAP_ARTWORK_PLAN,
   getArtworkBacklog,
 } from "../src/data/artworkPlan";
+import { PLAYER_HERO_ARTWORK, getPlayerArtworkBySelection } from "../src/data/playerArtwork";
 import { ITEM_DB } from "../src/data/items";
 import { MAPS, TILE_META } from "../src/data/maps";
 import {
@@ -107,8 +108,8 @@ test("disk save helpers preserve Liam's Game save payloads", () => {
     name: "Liam",
     gender: "Male",
     raceId: "human",
-    appearanceId: "brave",
   });
+  expect(player.humanHeritageId).toBe(DEFAULT_HUMAN_HERITAGE_ID);
   const payload: SavePayload = {
     screen: "play",
     chapterId: 1,
@@ -172,7 +173,7 @@ test("progression and default map state stay compatible with chapter one", () =>
   expect(getHeroXpTarget(1)).toBe(32);
   expect(addBonuses({ Heart: 3 }, { Heart: 1 })).toEqual({ Heart: 4 });
 
-  const hero = buildPlayer({ name: "Liam", gender: "Male", raceId: "human", appearanceId: "brave" });
+  const hero = buildPlayer({ name: "Liam", gender: "Male", raceId: "human" });
   expect(hero).toMatchObject({
     name: "Liam",
     raceId: "human",
@@ -344,10 +345,48 @@ test("chapters two through five have story and art contracts", () => {
 });
 
 test("art backlog tracks full illustrated prototype scope", () => {
-  expect(Object.keys(HERO_VARIANT_ARTWORK_PLAN)).toHaveLength(RACES.length * 2);
+  const expectedHeroVariants =
+    (RACES.length - 1) * GENDERS.length +
+    HUMAN_HERITAGES.length * GENDERS.length;
+  expect(Object.keys(HERO_VARIANT_ARTWORK_PLAN)).toHaveLength(expectedHeroVariants);
+  expect(Object.keys(PLAYER_HERO_ARTWORK)).toHaveLength(expectedHeroVariants);
   RACES.forEach((race) => {
-    expect(HERO_VARIANT_ARTWORK_PLAN[`hero_${race.id}_male`]).toBeTruthy();
-    expect(HERO_VARIANT_ARTWORK_PLAN[`hero_${race.id}_female`]).toBeTruthy();
+    if (race.id === "human") {
+      HUMAN_HERITAGES.forEach((heritage) => {
+        GENDERS.forEach((gender) => {
+          const normalizedGender = gender.toLowerCase();
+          const plan = HERO_VARIANT_ARTWORK_PLAN[
+            `hero_human_${heritage.id}_${normalizedGender}`
+          ];
+          const artwork = getPlayerArtworkBySelection(
+            "human",
+            gender,
+            heritage.id,
+          );
+          expect(plan).toBeTruthy();
+          expect(plan.status).toBe("available");
+          expect(plan.label).toContain(`${heritage.name} Human ${gender}`);
+          expect(artwork?.src).toContain(
+            `human-${heritage.id}-${normalizedGender}`,
+          );
+          expect(artwork?.alt).toContain(`${heritage.name} Human ${gender}`);
+        });
+      });
+      expect(getPlayerArtworkBySelection("human", "Male")?.src).toContain(
+        "human-rainroot-male",
+      );
+      return;
+    }
+
+    GENDERS.forEach((gender) => {
+      const normalizedGender = gender.toLowerCase();
+      const plan = HERO_VARIANT_ARTWORK_PLAN[`hero_${race.id}_${normalizedGender}`];
+      const artwork = getPlayerArtworkBySelection(race.id, gender);
+      expect(plan).toBeTruthy();
+      expect(plan.status).toBe("available");
+      expect(artwork?.src).toContain(`${race.id}-${normalizedGender}`);
+      expect(artwork?.alt).toContain(`${race.name} ${gender}`);
+    });
   });
 
   expect(ARTWORK_PLAN_GROUPS.maps.westroot_trail.status).toBe("available");
@@ -355,6 +394,7 @@ test("art backlog tracks full illustrated prototype scope", () => {
   expect(ARTWORK_PLAN_GROUPS.enemies.false_sign_scratcher.status).toBe("available");
   expect(ARTWORK_PLAN_GROUPS.maps.briarhold_waystation.chapter).toBe(5);
   expect(ARTWORK_PLAN_GROUPS.symbols.briar_crown_symbols.fallback).toBe("text labels");
+  expect(getArtworkBacklog().some((entry) => entry.category === "hero")).toBe(false);
   expect(getArtworkBacklog().some((entry) => entry.id === "bracken_voss")).toBe(true);
 });
 
@@ -392,8 +432,19 @@ test("future chapter data IDs exist with fallbacks", () => {
 
   expect(ENCOUNTERS.roadwatcher).toContain("thorn_collared_hound");
   expect(ENCOUNTERS.roadwatcherHard).toContain("thorn_collared_hound");
-  expect(ENCOUNTERS.crownDenGuard).toContain("false_sign_scratcher");
+  expect(ENCOUNTERS.crownDenGuard.filter((id) => id === "false_sign_scratcher")).toHaveLength(2);
+  expect(ENCOUNTERS.crownDenGuard).toContain("thorn_collared_hound");
+  expect(ENCOUNTERS.crownDenPatrol).toEqual(["false_sign_scratcher", "false_sign_scratcher"]);
+  expect(ENCOUNTERS.crownDenHound).toEqual(["thorn_collared_hound"]);
   expect(ENCOUNTERS.briarholdBoss).toContain("bracken_voss");
+  expect(BATTLE_REWARDS.crownDenHound.flagUpdate).toMatchObject({
+    crownDoorCollarsBroken: true,
+    crownDenHoundDefeated: true,
+  });
+  expect(BATTLE_REWARDS.crownDenPatrol.flagUpdate).toMatchObject({
+    crownDenPatrolDefeated: true,
+    crownDenAlertLevel: 0,
+  });
   expect(BATTLE_REWARDS.roadwatcher.extraItems).toContain("split_crown_slat");
   expect(BATTLE_REWARDS.roadwatcher.flagUpdate).toMatchObject({
     roadwatcherDefeated: true,
@@ -485,7 +536,36 @@ test("chapter two contract keeps required flags, map prompt, and reveal boundari
   );
   expect(getMapVisualConfig("crownDoorDen")).toMatchObject({
     aspectRatio: "16 / 9",
+    completedFogOpacity: 0.18,
   });
+  expect(getNavigationNodeKeys("crownDoorDen")).toEqual(
+    expect.arrayContaining([
+      "1,0",
+      "1,1",
+      "2,1",
+      "2,2",
+      "3,1",
+      "4,2",
+      "5,0",
+      "5,2",
+      "5,3",
+      "3,3",
+      "1,3",
+      "1,4",
+      "2,4",
+      "3,0",
+      "3,2",
+    ]),
+  );
+  expect(areMapNodesConnected("crownDoorDen", { x: 1, y: 1 }, { x: 2, y: 1 })).toBe(true);
+  expect(areMapNodesConnected("crownDoorDen", { x: 3, y: 1 }, { x: 3, y: 0 })).toBe(true);
+  expect(areMapNodesConnected("crownDoorDen", { x: 5, y: 1 }, { x: 5, y: 0 })).toBe(true);
+  expect(areMapNodesConnected("crownDoorDen", { x: 3, y: 2 }, { x: 2, y: 2 })).toBe(true);
+  expect(areMapNodesConnected("crownDoorDen", { x: 2, y: 2 }, { x: 2, y: 3 })).toBe(true);
+  expect(areMapNodesConnected("crownDoorDen", { x: 5, y: 1 }, { x: 4, y: 2 })).toBe(true);
+  expect(areMapNodesConnected("crownDoorDen", { x: 4, y: 2 }, { x: 5, y: 2 })).toBe(true);
+  expect(areMapNodesConnected("crownDoorDen", { x: 1, y: 3 }, { x: 1, y: 4 })).toBe(true);
+  expect(areMapNodesConnected("crownDoorDen", { x: 3, y: 3 }, { x: 4, y: 3 })).toBe(true);
   expect(getMapVisualConfig("westrootTrail")).toMatchObject({
     aspectRatio: "16 / 9",
     navBounds: { left: 5, top: 8, width: 90, height: 82 },

@@ -176,7 +176,7 @@ Latest local verification:
 
 - Continue checking map alignment with Dev Tools > Show Map Debug after any map art replacement. For grid-readable maps, prefer tile ownership/blocking changes before custom point overrides; reserve `pointOverrides` for organic layouts like Root Cellar.
 - Bramblecross should remain a regular Manhattan town grid unless new art forces a projection change. Prefer tile-level blocking for buildings/fenced lots before adding custom graph navigation.
-- The current hero map token is still a styled placeholder using the selected appearance emoji. A proper hero portrait/token asset can replace it later.
+- The current hero map token uses `HeroArtwork`; if artwork is missing, it falls back to a single neutral avatar marker.
 - If a future session needs a GitHub PR, install and authenticate GitHub CLI with `gh auth login`. This machine can push with `git`, but `gh` is not currently installed.
 
 ## Current Handoff - Root Cellar Navigation Graph Pass
@@ -795,4 +795,76 @@ Branch: `codex/chapter-2-completion`
 
 ### Next Reminder
 
-Before wiring player hero art into the app, remove the baked checkerboard backgrounds and export the selected images as true transparent PNGs. A local check showed most selected files are RGB with no alpha channel.
+The selected player hero images have now been cleaned to true transparent PNGs and are ready for game UI wiring.
+
+## Current Handoff - Player Hero Art Wiring
+
+Last updated: 2026-07-10
+
+Branch: `codex/chapter-2-completion`
+
+### What Changed
+
+- Wired the selected transparent player hero variants through `src/data/playerArtwork.ts`: 8 Human heritage variants plus 14 non-Human ancestry variants.
+- Added Human heritage support with fantasy-world labels: Hearthvale, Sunreach, Rainroot, and Dawnmere. New/default Human heroes normalize to Rainroot, and the player can choose a different heritage during character creation.
+- Removed the old player-facing attitude/appearance selector; `appearanceId` remains as a neutral default save-compatibility field.
+- Added a reusable `HeroArtwork` component that shows hero art when available and keeps a neutral avatar marker as the fallback.
+- Replaced the emoji-only hero display in character creation preview, the player panel, battle hero card, and the map hero token.
+- Tightened circular map-token portrait crops for both NPC portraits and player character art so the token centers on faces instead of necks/chests.
+- Marked all shared hero artwork plan entries as available, including the Human heritage variants.
+- Added the human sub-variant batch generation prompt at `docs/art/player-character/liams-game-human-subvariant-batch-prompt.md`.
+- Moved leftover and superseded human variants into `assets/portraits/player/_alternates/` so the selected folder remains the curated set:
+  - `human-female-africa-v03.png`
+  - `human-male-africa-v01.png`
+  - `human-male-america-v01.png`
+  - `human-female-v03.png`
+  - `human-male-v02.png`
+
+### Verification To Run
+
+```bash
+npm.cmd run build
+npm.cmd run test:rules
+npm.cmd run playtest:chapter2
+npm.cmd run playtest:smoke
+git diff --check
+```
+
+### Post-Chapter 2 Planning Note
+
+After Chapter 2 is playtested, finalized, committed, and pushed, use `docs/post-chapter-2-technical-hardening.md` as the next pickup plan before starting Chapter 3 code. The intent is a focused hardening pass: lock a Chapter 2 complete fixture, reduce `App.tsx` risk, type story flags, add save migrations, validate map graphs, audit asset size, and extract reusable QA validators without starting a broad rewrite.
+
+## Current Handoff - Chapter 2 Door And Den Token Art Wiring
+
+Last updated: 2026-07-10
+
+Branch: `codex/chapter-2-completion`
+
+### What Changed
+
+- Renamed the generated Crown Door Den token folder from `assets/icons/map tokens/` to `assets/icons/map-tokens/`.
+- Renamed the generated door and token PNGs from generation-batch filenames to production-style filenames:
+  - `crown-door-closeup-v01.png`
+  - `lantern-door-closeup-v01.png`
+  - `no-handle-door-closeup-v01.png`
+  - `assets/icons/map-tokens/crown-den-*-token-v01.png`
+- Wired the six transparent Crown Door Den active map-token images into `src/components/MapStage.tsx` while preserving text/icon fallbacks.
+- Wired five transparent cleared-state Crown Door Den map-token images for spent den objectives.
+- Renamed the generated Crown Door Den pursuit/tension UI icons into `assets/icons/ui/crown-den-*-icon-v01.png`.
+- Wired the four tension icons into a compact Crown Door Den pursuit strip that appears while `crownDenAlertLevel` is active.
+- Replaced Crown Door Den dialogue portrait placeholders (`wax`, `sign`, `book`, `link`, `map`, `!`, `C`) with image-backed token art and kept text fallbacks if image loading fails.
+- Removed the visible `C` vestibule map token while keeping the vestibule floor tile walkable/inspectable.
+- Added two floor-only Crown Door Den movement nodes at the central lower connector and the right-hand passage connector, with map-graph tests covering the new route.
+- Updated map-token CSS so transparent object art displays cleanly without portrait-style face cropping.
+- Wired the three generated door closeups into `DialogueVisual` for the Crown Door, Lantern Door, and No-Handle Door inspection panels.
+- Added the promoted assets to `docs/asset-manifest.md` and noted the no-space token path in the prompt doc.
+
+### Verification To Run
+
+```bash
+npm.cmd run build
+npm.cmd run test:rules
+npm.cmd run playtest:chapter2
+npm.cmd run playtest:smoke
+git diff --check
+```

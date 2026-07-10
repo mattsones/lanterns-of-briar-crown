@@ -1,11 +1,10 @@
 // @ts-nocheck
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HERO_GROWTH_OPTIONS } from "../data/character";
 import { COMPANION_OPTIONS } from "../data/companions";
 import { BATTLE_CONSUMABLES, ITEM_DB } from "../data/items";
 import { getDialoguePortrait } from "../data/portraits";
 import { RECIPE_DB } from "../data/recipes";
-import { getHeroAvatar } from "../game/appearance";
 import { getCompanionCommandHint } from "../game/companions";
 import { checkSummary, resolveSkillCheck } from "../game/dice";
 import { canCraftRecipe, formatIngredients, gainItem, getBuyPrice, getItemHighlights, getSellPrice } from "../game/inventory";
@@ -13,6 +12,24 @@ import { formatSaveTimestamp } from "../game/save";
 import { formatBonuses, getDerivedStats } from "../game/stats";
 import { appendChapter1CompanionReaction } from "../story/chapter1";
 import { Button, ChoiceButton, ItemIcon, Meter } from "./ui";
+import { HeroArtwork } from "./HeroArtwork";
+
+const threeDoorsThresholdScene = new URL(
+  "../../assets/scenes/three-doors-threshold-v01.png",
+  import.meta.url,
+).href;
+const crownDoorCloseupScene = new URL(
+  "../../assets/scenes/crown-door-closeup-v01.png",
+  import.meta.url,
+).href;
+const lanternDoorCloseupScene = new URL(
+  "../../assets/scenes/lantern-door-closeup-v01.png",
+  import.meta.url,
+).href;
+const noHandleDoorCloseupScene = new URL(
+  "../../assets/scenes/no-handle-door-closeup-v01.png",
+  import.meta.url,
+).href;
 
 export function LevelUpModal({ player, target, choose }) {
   return <div className="fixed inset-0 z-[90] flex items-end justify-center bg-black/70 p-4 sm:items-center">
@@ -36,51 +53,75 @@ export function LevelUpModal({ player, target, choose }) {
 }
 
 function DialogueVisual({ kind }) {
-  const doorBase =
-    "relative flex min-h-48 flex-col items-center justify-end overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-slate-800 to-slate-950 p-4 shadow-inner";
-  const rootLines = (
-    <div className="pointer-events-none absolute inset-x-4 top-3 h-12 rounded-full border-t border-emerald-300/25 opacity-70" />
-  );
+  const doors = [
+    {
+      key: "crownDoor",
+      title: "Crown Door",
+      mark: "Crown",
+      src: crownDoorCloseupScene,
+      alt: "Painted closeup of the thorn-crowned red Crown Door",
+    },
+    {
+      key: "lanternDoor",
+      title: "Lantern Door",
+      mark: "Lantern",
+      src: lanternDoorCloseupScene,
+      alt: "Painted closeup of the Lantern Door glowing under roots",
+    },
+    {
+      key: "noHandleDoor",
+      title: "No-Handle Door",
+      mark: "No handle",
+      src: noHandleDoorCloseupScene,
+      alt: "Painted closeup of the smooth No-Handle Door",
+    },
+  ];
   const singleDoor = {
     crownDoor: {
       title: "Crown Door",
       mark: "Crown",
-      doorClass: "h-36 w-24 rounded-t-xl border-4 border-rose-200/70 bg-rose-950/70",
-      accent: "bg-rose-300",
+      src: crownDoorCloseupScene,
+      alt: "Painted closeup of the thorn-crowned red Crown Door",
     },
     lanternDoor: {
       title: "Lantern Door",
       mark: "Lantern",
-      doorClass: "h-28 w-28 rounded-t-3xl border-4 border-amber-200/70 bg-stone-800/80",
-      accent: "bg-amber-300",
+      src: lanternDoorCloseupScene,
+      alt: "Painted closeup of the Lantern Door glowing under roots",
     },
     noHandleDoor: {
       title: "No-Handle Door",
       mark: "No handle",
-      doorClass: "h-32 w-28 rounded-[2rem] border-4 border-emerald-200/60 bg-stone-700/90",
-      accent: "bg-emerald-300",
+      src: noHandleDoorCloseupScene,
+      alt: "Painted closeup of the smooth No-Handle Door",
     },
   }[kind];
 
   if (kind === "threeDoors")
     return (
       <div className="mt-4 rounded-3xl border border-emerald-300/20 bg-emerald-950/30 p-4">
+        <figure className="overflow-hidden rounded-2xl border border-white/10 bg-black/20">
+          <img
+            src={threeDoorsThresholdScene}
+            alt="Painted threshold with the Crown, Lantern, and No-Handle Doors"
+            className="aspect-video w-full object-cover object-[center_58%]"
+          />
+        </figure>
         <div className="grid gap-3 sm:grid-cols-3">
-          {[
-            ["Crown", "h-32 w-20 rounded-t-xl border-4 border-rose-200/70 bg-rose-950/70", "bg-rose-300"],
-            ["Lantern", "h-24 w-24 rounded-t-3xl border-4 border-amber-200/70 bg-stone-800/80", "bg-amber-300"],
-            ["No handle", "h-28 w-24 rounded-[2rem] border-4 border-emerald-200/60 bg-stone-700/90", "bg-emerald-300"],
-          ].map(([label, doorClass, accent]) => (
-            <div key={label} className={doorBase}>
-              {rootLines}
-              <div className={`${doorClass} relative`}>
-                <div className={`absolute left-1/2 top-4 h-2 w-2 -translate-x-1/2 rounded-full ${accent}`} />
-                {label !== "No handle" ? (
-                  <div className="absolute right-3 top-1/2 h-2 w-2 rounded-full bg-white/50" />
-                ) : null}
-              </div>
-              <div className="mt-3 text-sm font-semibold text-white/80">{label}</div>
-            </div>
+          {doors.map((door) => (
+            <figure
+              key={door.key}
+              className="mt-3 overflow-hidden rounded-2xl border border-white/10 bg-black/20"
+            >
+              <img
+                src={door.src}
+                alt={door.alt}
+                className="aspect-[4/3] w-full object-cover"
+              />
+              <figcaption className="border-t border-white/10 bg-black/20 px-3 py-2 text-xs font-semibold text-white/75">
+                {door.title}
+              </figcaption>
+            </figure>
           ))}
         </div>
       </div>
@@ -89,19 +130,18 @@ function DialogueVisual({ kind }) {
   if (!singleDoor) return null;
 
   return (
-    <div className="mt-4 rounded-3xl border border-emerald-300/20 bg-emerald-950/30 p-5">
-      <div className={`${doorBase} min-h-64`}>
-        {rootLines}
-        <div className={`${singleDoor.doorClass} relative scale-125`}>
-          <div className={`absolute left-1/2 top-5 h-3 w-3 -translate-x-1/2 rounded-full ${singleDoor.accent}`} />
-          {kind !== "noHandleDoor" ? (
-            <div className="absolute right-4 top-1/2 h-3 w-3 rounded-full bg-white/50" />
-          ) : null}
-        </div>
-        <div className="mt-8 text-base font-semibold text-white/85">{singleDoor.title}</div>
+    <figure className="mt-4 overflow-hidden rounded-3xl border border-emerald-300/20 bg-emerald-950/30">
+      <img
+        data-testid={`dialogue-visual-${kind}`}
+        src={singleDoor.src}
+        alt={singleDoor.alt}
+        className="aspect-[4/3] max-h-[58vh] w-full object-cover"
+      />
+      <figcaption className="border-t border-white/10 bg-black/20 px-4 py-3">
+        <div className="text-base font-semibold text-white/85">{singleDoor.title}</div>
         <div className="mt-1 text-xs uppercase tracking-wide text-white/45">{singleDoor.mark}</div>
-      </div>
-    </div>
+      </figcaption>
+    </figure>
   );
 }
 
@@ -114,7 +154,7 @@ function DialogueSceneImage({ image }) {
         data-testid="dialogue-scene-image"
         src={image.src}
         alt={image.alt || ""}
-        className="aspect-video w-full object-cover"
+        className="aspect-video w-full object-cover object-[center_62%]"
       />
     </figure>
   );
@@ -122,15 +162,22 @@ function DialogueSceneImage({ image }) {
 
 export function DialogueModal({ dialogue }) {
   const portraitAsset = getDialoguePortrait(dialogue.portraitName || dialogue.name);
+  const portraitImage = dialogue.portraitImage;
   const widthClass = dialogue.size === "wide" || dialogue.visual || dialogue.sceneImage ? "max-w-5xl" : "max-w-3xl";
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0 });
+  }, [dialogue.name, dialogue.text, dialogue.visual, dialogue.sceneImage?.src, dialogue.messages?.length]);
 
   return <div className="fixed inset-0 z-[80] flex items-end justify-center bg-black/60 p-4 sm:items-center">
     <div className={`flex max-h-[85vh] w-full ${widthClass} flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900 p-5 shadow-2xl`}>
-      <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+      <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto pr-1">
         <div className="flex items-start gap-4">
           <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-3xl bg-white/10 text-4xl">
-            <span>{dialogue.portrait}</span>
-            {portraitAsset ? <img src={portraitAsset.src} alt={portraitAsset.alt} onError={(event) => { event.currentTarget.style.display = "none"; }} className="absolute inset-0 h-full w-full object-cover" /> : null}
+            <span className={portraitImage || portraitAsset ? "opacity-0" : ""}>{dialogue.portrait}</span>
+            {portraitImage ? <img src={portraitImage.src} alt={portraitImage.alt || ""} onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.previousElementSibling?.classList.remove("opacity-0"); }} className="absolute inset-0 h-full w-full object-contain p-2" /> : null}
+            {!portraitImage && portraitAsset ? <img src={portraitAsset.src} alt={portraitAsset.alt} onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.previousElementSibling?.classList.remove("opacity-0"); }} className="absolute inset-0 h-full w-full object-cover" /> : null}
           </div>
           <div className="min-w-0 flex-1">
             <div className="text-xl font-semibold">{dialogue.name}</div>
@@ -306,7 +353,7 @@ function EnemyPortrait({ enemy }) {
   );
 }
 
-export function BattleModal({ battle, player, companion, heroSkills, heroAttack, finishBattle, battleItemsOpen, setBattleItemsOpen, useBattleConsumable }) { return <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 p-4"><div className="w-full max-w-6xl rounded-[2rem] border border-white/10 bg-slate-900 p-5"><div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]"><div><div className="mb-4 flex justify-between"><div><div className="text-2xl font-bold">Battle • {battle.enemy.name}</div><div className="text-sm text-white/70">Enemy intent: {battle.enemy.intent}</div><div className="text-xs text-white/50">Enemy {Math.max(1, (battle.totalEnemies || 1) - (battle.queue?.length || 0))} of {battle.totalEnemies || 1}</div></div><Button onClick={finishBattle} disabled={!battle.finished}>{battle.finished ? (battle.turn === "victory" || battle.enemy.hp <= 0 ? "Claim Victory" : "You Died • Return") : "Battle in Progress"}</Button></div><div className="grid gap-4 md:grid-cols-2"><div className="rounded-3xl border border-white/10 bg-black/20 p-4"><div className="text-5xl">{getHeroAvatar(player)}</div><div className="mt-2 text-xl font-semibold">{player.name}</div><div className="mt-3 space-y-3"><Meter value={player.hp} max={player.maxHp} label="Hero HP" />{companion.recruited ? <Meter value={companion.hp} max={companion.maxHp} label={`${companion.name} HP`} colorClass="bg-rose-400" /> : null}</div></div><div className="rounded-3xl border border-white/10 bg-black/20 p-4 text-right"><EnemyPortrait enemy={battle.enemy} /><div className="mt-2 text-xl font-semibold">{battle.enemy.name}</div><Meter value={battle.enemy.hp} max={battle.enemy.maxHp} label="Enemy HP" colorClass="bg-orange-400" />{battle.queue?.length ? <div className="mt-3 text-left text-sm text-white/70">Next: {battle.queue.map((e) => e.name).join(", ")}</div> : null}</div></div><div className="mt-4 rounded-3xl border border-white/10 bg-black/20 p-4"><div className="mb-3 text-sm font-medium text-white/80">Battle Log</div><div className="space-y-2 text-sm text-white/75">{battle.log.map((entry, i) => <div key={`${entry}-${i}`} className="rounded-2xl bg-white/5 px-3 py-2">{entry}</div>)}</div></div></div><div className="rounded-3xl border border-white/10 bg-black/20 p-4"><div className="mb-3 text-lg font-semibold">Actions</div><div className="mb-3 text-sm text-white/70">{battle.turn === "hero" ? "Choose Liam's action." : battle.turn === "companion" ? `${companion.name} is acting.` : battle.turn === "enemy" ? `${battle.enemy.name} is acting…` : battle.turn === "victory" ? "Victory!" : "Defeat…"}</div><div className="grid gap-2">{heroSkills.map((skill) => { const cooldownRemaining = battle.cooldowns?.[skill.id] || 0; return <button key={skill.name} onClick={() => heroAttack(skill)} disabled={battle.turn !== "hero" || battle.finished || cooldownRemaining > 0} className="rounded-2xl border border-white/10 bg-white/10 px-3 py-3 text-left hover:bg-white/20 disabled:opacity-40"><div className="flex items-center justify-between gap-2"><div className="font-medium">{skill.name}</div>{cooldownRemaining > 0 ? <div className="rounded-full bg-sky-400/20 px-2 py-0.5 text-[10px] text-sky-200">Ready in {cooldownRemaining}</div> : null}</div><div className="mt-1 text-xs text-white/70">{skill.description}</div></button>; })}<Button onClick={() => setBattleItemsOpen((p) => !p)} disabled={battle.turn !== "hero" || battle.finished}>{battleItemsOpen ? "Hide Items" : "Items"}</Button></div>{battleItemsOpen ? <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-3"><div className="mb-2 text-xs uppercase tracking-wide text-white/50">Battle Pouch</div>{["slot1", "slot2"].map((slot, i) => { const id = player.battlePouch?.[slot]; if (!id || !BATTLE_CONSUMABLES[id]) return <div key={slot} className="mb-2 rounded-2xl border border-white/10 bg-black/20 p-3 text-sm text-white/65">Battle Pouch Slot {i + 1} is empty.</div>; const cfg = BATTLE_CONSUMABLES[id]; const qty = player.inventory?.[id] || 0; return <div key={slot} className="mb-2 rounded-2xl border border-white/10 bg-black/20 p-3"><div className="flex justify-between gap-3"><div className="flex min-w-0 items-start gap-3"><ItemIcon item={ITEM_DB[id]} size="sm" /><div className="min-w-0"><div className="font-medium">{cfg.name} <span className="text-xs text-white/60">x{qty}</span></div><div className="mt-1 text-xs text-white/70">Restores {cfg.heal} HP.</div></div></div><div className="flex flex-wrap gap-2"><Button onClick={() => useBattleConsumable(id, "hero")} disabled={qty <= 0 || player.hp >= player.maxHp}>Use on Liam</Button>{companion.recruited ? <Button onClick={() => useBattleConsumable(id, "companion")} disabled={qty <= 0 || companion.hp >= companion.maxHp}>Give to {companion.name}</Button> : null}</div></div></div>; })}</div> : null}{companion.recruited ? <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-3 text-xs text-white/70">Companion command: <span className="text-white">{companion.command}</span><div className="mt-1 text-white/60">{getCompanionCommandHint(companion)}</div></div> : null}</div></div></div></div>; }
+export function BattleModal({ battle, player, companion, heroSkills, heroAttack, finishBattle, battleItemsOpen, setBattleItemsOpen, useBattleConsumable }) { return <div className="fixed inset-0 z-50 flex items-stretch justify-center overflow-y-auto bg-slate-950/90 p-2 sm:items-center sm:p-4"><div className="max-h-[calc(100vh-1rem)] w-full max-w-6xl overflow-y-auto rounded-[2rem] border border-white/10 bg-slate-900 p-4 sm:p-5"><div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]"><div><div className="sticky top-0 z-10 mb-4 flex flex-wrap justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/95 p-3"><div><div className="text-2xl font-bold">Battle • {battle.enemy.name}</div><div className="text-sm text-white/70">Enemy intent: {battle.enemy.intent}</div><div className="text-xs text-white/50">Enemy {Math.max(1, (battle.totalEnemies || 1) - (battle.queue?.length || 0))} of {battle.totalEnemies || 1}</div></div><Button onClick={finishBattle} disabled={!battle.finished}>{battle.finished ? (battle.turn === "victory" || battle.enemy.hp <= 0 ? "Claim Victory" : "You Died • Return") : "Battle in Progress"}</Button></div><div className="grid gap-4 md:grid-cols-2"><div className="rounded-3xl border border-white/10 bg-black/20 p-4"><HeroArtwork player={player} variant="portrait" className="mx-auto h-36 w-full max-w-40" /><div className="mt-2 text-xl font-semibold">{player.name}</div><div className="mt-3 space-y-3"><Meter value={player.hp} max={player.maxHp} label="Hero HP" />{companion.recruited ? <Meter value={companion.hp} max={companion.maxHp} label={`${companion.name} HP`} colorClass="bg-rose-400" /> : null}</div></div><div className="rounded-3xl border border-white/10 bg-black/20 p-4 text-right"><EnemyPortrait enemy={battle.enemy} /><div className="mt-2 text-xl font-semibold">{battle.enemy.name}</div><Meter value={battle.enemy.hp} max={battle.enemy.maxHp} label="Enemy HP" colorClass="bg-orange-400" />{battle.queue?.length ? <div className="mt-3 text-left text-sm text-white/70">Next: {battle.queue.map((e) => e.name).join(", ")}</div> : null}</div></div><div className="mt-4 rounded-3xl border border-white/10 bg-black/20 p-4"><div className="mb-3 text-sm font-medium text-white/80">Battle Log</div><div className="space-y-2 text-sm text-white/75">{battle.log.map((entry, i) => <div key={`${entry}-${i}`} className="rounded-2xl bg-white/5 px-3 py-2">{entry}</div>)}</div></div></div><div className="rounded-3xl border border-white/10 bg-black/20 p-4"><div className="mb-3 text-lg font-semibold">Actions</div><div className="mb-3 text-sm text-white/70">{battle.turn === "hero" ? "Choose Liam's action." : battle.turn === "companion" ? `${companion.name} is acting.` : battle.turn === "enemy" ? `${battle.enemy.name} is acting…` : battle.turn === "victory" ? "Victory!" : "Defeat…"}</div><div className="grid gap-2">{heroSkills.map((skill) => { const cooldownRemaining = battle.cooldowns?.[skill.id] || 0; return <button key={skill.name} onClick={() => heroAttack(skill)} disabled={battle.turn !== "hero" || battle.finished || cooldownRemaining > 0} className="rounded-2xl border border-white/10 bg-white/10 px-3 py-3 text-left hover:bg-white/20 disabled:opacity-40"><div className="flex items-center justify-between gap-2"><div className="font-medium">{skill.name}</div>{cooldownRemaining > 0 ? <div className="rounded-full bg-sky-400/20 px-2 py-0.5 text-[10px] text-sky-200">Ready in {cooldownRemaining}</div> : null}</div><div className="mt-1 text-xs text-white/70">{skill.description}</div></button>; })}<Button onClick={() => setBattleItemsOpen((p) => !p)} disabled={battle.turn !== "hero" || battle.finished}>{battleItemsOpen ? "Hide Items" : "Items"}</Button></div>{battleItemsOpen ? <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-3"><div className="mb-2 text-xs uppercase tracking-wide text-white/50">Battle Pouch</div>{["slot1", "slot2"].map((slot, i) => { const id = player.battlePouch?.[slot]; if (!id || !BATTLE_CONSUMABLES[id]) return <div key={slot} className="mb-2 rounded-2xl border border-white/10 bg-black/20 p-3 text-sm text-white/65">Battle Pouch Slot {i + 1} is empty.</div>; const cfg = BATTLE_CONSUMABLES[id]; const qty = player.inventory?.[id] || 0; return <div key={slot} className="mb-2 rounded-2xl border border-white/10 bg-black/20 p-3"><div className="flex flex-col justify-between gap-3 sm:flex-row"><div className="flex min-w-0 items-start gap-3"><ItemIcon item={ITEM_DB[id]} size="sm" /><div className="min-w-0"><div className="font-medium">{cfg.name} <span className="text-xs text-white/60">x{qty}</span></div><div className="mt-1 text-xs text-white/70">Restores {cfg.heal} HP.</div></div></div><div className="flex flex-wrap gap-2"><Button onClick={() => useBattleConsumable(id, "hero")} disabled={qty <= 0 || player.hp >= player.maxHp}>Use on Liam</Button>{companion.recruited ? <Button onClick={() => useBattleConsumable(id, "companion")} disabled={qty <= 0 || companion.hp >= companion.maxHp}>Give to {companion.name}</Button> : null}</div></div></div>; })}</div> : null}{companion.recruited ? <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-3 text-xs text-white/70">Companion command: <span className="text-white">{companion.command}</span><div className="mt-1 text-white/60">{getCompanionCommandHint(companion)}</div></div> : null}{battle.finished ? <div className="mt-4"><Button onClick={finishBattle}>{battle.turn === "victory" || battle.enemy.hp <= 0 ? "Claim Victory" : "You Died • Return"}</Button></div> : null}</div></div></div></div>; }
 export function SaveModal({
   mode,
   slots,

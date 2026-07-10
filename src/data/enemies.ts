@@ -159,7 +159,9 @@ export const ENCOUNTERS = {
   cellarBoss: ["briar_knot_warden"],
   roadwatcher: ["briar_roadwatcher", "thorn_collared_hound"],
   roadwatcherHard: ["briar_roadwatcher", "thorn_collared_hound", "false_sign_scratcher"],
-  crownDenGuard: ["false_sign_scratcher", "thorn_collared_hound"],
+  crownDenPatrol: ["false_sign_scratcher", "false_sign_scratcher"],
+  crownDenHound: ["thorn_collared_hound"],
+  crownDenGuard: ["false_sign_scratcher", "thorn_collared_hound", "false_sign_scratcher"],
   briarRelay: ["briar_relay_guard", "seal_forged_sentry"],
   briarholdBoss: ["bracken_voss", "thornseal_guard", "thornroot_sentry"],
 };

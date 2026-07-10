@@ -9,12 +9,44 @@ export const RACES = [
   { id: "moonmark", name: "Moonmark", trait: "Glimmer Sense", description: "Rare wanderers touched by secrets and intuition.", bonuses: { Wit: 1, Instinct: 1, Will: 1 } },
 ];
 
-export const APPEARANCES = [
-  { id: "brave", name: "Brave", icon: "🧑" },
-  { id: "cheery", name: "Cheery", icon: "😄" },
-  { id: "mysterious", name: "Mysterious", icon: "😌" },
-  { id: "scrappy", name: "Scrappy", icon: "😎" },
+export const HUMAN_HERITAGES = [
+  {
+    id: "hearthvale",
+    name: "Hearthvale",
+    description: "Lantern-lit farm roads, market villages, and steady old hearths.",
+  },
+  {
+    id: "sunreach",
+    name: "Sunreach",
+    description: "Bright upland roads, warm trade towns, and open courtyards.",
+  },
+  {
+    id: "rainroot",
+    name: "Rainroot",
+    description: "Green river valleys, forest edges, and old root-road settlements.",
+  },
+  {
+    id: "dawnmere",
+    name: "Dawnmere",
+    description: "Misty lakes, hill paths, careful craft, and quiet morning villages.",
+  },
 ];
+
+export const DEFAULT_HUMAN_HERITAGE_ID = "rainroot";
+
+export function getHumanHeritage(id?: string | null) {
+  return (
+    HUMAN_HERITAGES.find((heritage) => heritage.id === id) ||
+    HUMAN_HERITAGES.find((heritage) => heritage.id === DEFAULT_HUMAN_HERITAGE_ID) ||
+    HUMAN_HERITAGES[0]
+  );
+}
+
+export function normalizeHumanHeritageId(id?: string | null) {
+  return getHumanHeritage(id).id;
+}
+
+export const DEFAULT_APPEARANCE_ID = "default";
 
 export const GENDERS = ["Male", "Female"];
 export const STAT_ORDER = ["Might", "Guard", "Agility", "Precision", "Vitality", "Will", "Wit", "Charm", "Grit", "Instinct", "Craft", "Heart"];

@@ -4,8 +4,14 @@ Selected current hero base art lives in this folder. Non-selected alternates are
 
 ## Selected Set
 
-- `human-female-v03.png`
-- `human-male-v02.png`
+- `human-hearthvale-female-v01.png`
+- `human-hearthvale-male-v01.png`
+- `human-sunreach-female-v01.png`
+- `human-sunreach-male-v01.png`
+- `human-rainroot-female-v01.png`
+- `human-rainroot-male-v01.png`
+- `human-dawnmere-female-v01.png`
+- `human-dawnmere-male-v01.png`
 - `stonekin-female-v06.png`
 - `stonekin-male-v04.png`
 - `sylvan-female-v04.png`
@@ -24,5 +30,8 @@ Selected current hero base art lives in this folder. Non-selected alternates are
 ## Art Direction Notes
 
 - Cloudlings should read as ephemeral and spirit-like while remaining warm and family-friendly.
-- The current selected PNGs need background cleanup before production wiring. Most files have checkerboard backgrounds baked into RGB pixels rather than true alpha transparency.
-- Remove backgrounds and export true transparent PNGs before wiring these into the app.
+- Humans use fantasy-world heritage labels in-game: Hearthvale, Sunreach, Rainroot, and Dawnmere. New Human heroes default to Rainroot unless the player chooses a different heritage.
+- The selected PNGs have been cleaned to true transparent RGBA exports and wired through `src/data/playerArtwork.ts`.
+- The same full-body images currently serve character creation preview, player panel portraits, battle hero portraits, and circular map tokens with emoji fallbacks preserved.
+- The human sub-variant batch prompt lives at `docs/art/player-character/liams-game-human-subvariant-batch-prompt.md`.
+- Superseded Human versions are archived in `_alternates/`.

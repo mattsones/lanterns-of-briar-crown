@@ -8,12 +8,63 @@ import {
   isMapNavigationNode,
 } from "../data/mapVisuals";
 import { getDialoguePortrait } from "../data/portraits";
-import { getAppearanceIcon } from "../game/appearance";
 import { getVisitedKey, isBlockedInteractionTile } from "../game/map";
+import { HeroArtwork } from "./HeroArtwork";
+
+const waxTableToken = new URL(
+  "../../assets/icons/map-tokens/crown-den-wax-table-token-v01.png",
+  import.meta.url,
+).href;
+const waxTableClearedToken = new URL(
+  "../../assets/icons/map-tokens/crown-den-wax-table-cleared-token-v01.png",
+  import.meta.url,
+).href;
+const slatRackToken = new URL(
+  "../../assets/icons/map-tokens/crown-den-slat-rack-token-v01.png",
+  import.meta.url,
+).href;
+const slatRackBrokenToken = new URL(
+  "../../assets/icons/map-tokens/crown-den-slat-rack-broken-token-v01.png",
+  import.meta.url,
+).href;
+const witnessLedgerToken = new URL(
+  "../../assets/icons/map-tokens/crown-den-witness-ledger-token-v01.png",
+  import.meta.url,
+).href;
+const witnessLedgerCopiedToken = new URL(
+  "../../assets/icons/map-tokens/crown-den-witness-ledger-copied-token-v01.png",
+  import.meta.url,
+).href;
+const collarKennelToken = new URL(
+  "../../assets/icons/map-tokens/crown-den-collar-kennel-token-v01.png",
+  import.meta.url,
+).href;
+const collarKennelBrokenToken = new URL(
+  "../../assets/icons/map-tokens/crown-den-collar-kennel-broken-token-v01.png",
+  import.meta.url,
+).href;
+const falseMapToken = new URL(
+  "../../assets/icons/map-tokens/crown-den-false-map-token-v01.png",
+  import.meta.url,
+).href;
+const falseMapClearedToken = new URL(
+  "../../assets/icons/map-tokens/crown-den-false-map-cleared-token-v01.png",
+  import.meta.url,
+).href;
+const crownDenExitToken = new URL(
+  "../../assets/icons/map-tokens/crown-den-exit-token-v01.png",
+  import.meta.url,
+).href;
 
 const MAP_TOKEN_CONFIG: Record<
   string,
-  { kind: "npc" | "action" | "threat"; portraitName?: string }
+  {
+    kind: "npc" | "action" | "threat";
+    portraitName?: string;
+    artworkSrc?: string;
+    spentArtworkSrc?: string;
+    artworkAlt?: string;
+  }
 > = {
   elder: { kind: "npc", portraitName: "Elder Mira" },
   pibble: { kind: "npc", portraitName: "Pibble Thatch" },
@@ -47,20 +98,53 @@ const MAP_TOKEN_CONFIG: Record<
   westroot_return: { kind: "action" },
   westroot_cut: { kind: "action" },
   shelter_nook: { kind: "action" },
-  false_notice: { kind: "action" },
+  false_notice: {
+    kind: "action",
+    artworkSrc: slatRackToken,
+    spentArtworkSrc: slatRackBrokenToken,
+    artworkAlt: "Painted token of a false detour sign",
+  },
   three_hollow: { kind: "action" },
   crown_sign: { kind: "action" },
   lantern_sign: { kind: "action" },
   no_handle_stone: { kind: "action" },
   westroot_gate: { kind: "action" },
   roadwatcher: { kind: "threat" },
-  crown_den_exit: { kind: "action" },
-  crown_vestibule: { kind: "action" },
-  wax_table: { kind: "action" },
-  slat_rack: { kind: "action" },
-  witness_ledger: { kind: "action" },
-  collar_kennel: { kind: "action" },
-  false_map: { kind: "action" },
+  crown_den_exit: {
+    kind: "action",
+    artworkSrc: crownDenExitToken,
+    artworkAlt: "Painted token of the Crown Door Den exit",
+  },
+  wax_table: {
+    kind: "action",
+    artworkSrc: waxTableToken,
+    spentArtworkSrc: waxTableClearedToken,
+    artworkAlt: "Painted token of wax, seal tools, and spoons",
+  },
+  slat_rack: {
+    kind: "action",
+    artworkSrc: slatRackToken,
+    spentArtworkSrc: slatRackBrokenToken,
+    artworkAlt: "Painted token of broken sign slats",
+  },
+  witness_ledger: {
+    kind: "action",
+    artworkSrc: witnessLedgerToken,
+    spentArtworkSrc: witnessLedgerCopiedToken,
+    artworkAlt: "Painted token of a bound witness ledger",
+  },
+  collar_kennel: {
+    kind: "action",
+    artworkSrc: collarKennelToken,
+    spentArtworkSrc: collarKennelBrokenToken,
+    artworkAlt: "Painted token of thorn collars and kennel straw",
+  },
+  false_map: {
+    kind: "action",
+    artworkSrc: falseMapToken,
+    spentArtworkSrc: falseMapClearedToken,
+    artworkAlt: "Painted token of a false road map",
+  },
   den_guard: { kind: "threat" },
   stairs_up: { kind: "action" },
   sigil: { kind: "action" },
@@ -92,6 +176,7 @@ export function MapStage({
   onNodeClick,
   debug = false,
   fogComplete = false,
+  getTokenState = (_tile: string, _tileRegion: string) => "active",
 }) {
   const visual = getMapVisualConfig(region);
   const rows = map.length;
@@ -109,6 +194,7 @@ export function MapStage({
       const explored = !!exploredMap[getVisitedKey(x, y)] || isPlayer;
       const visible = revealAll || explored || debug;
       const meta = TILE_META[tile] || TILE_META.hidden;
+      const tokenState = getTokenState(tile, region);
       const clickable =
         isPlayer || areMapNodesConnected(region, position, { x, y });
       const debugState = getDebugState(tile);
@@ -123,6 +209,7 @@ export function MapStage({
         explored,
         visible,
         meta,
+        tokenState,
         clickable,
         debugState,
       };
@@ -293,24 +380,44 @@ export function MapStage({
           const portrait = getDialoguePortrait(
             config.portraitName || node.meta.label,
           );
+          const artworkSrc =
+            node.tokenState === "spent" && config.spentArtworkSrc
+              ? config.spentArtworkSrc
+              : config.artworkSrc;
+          const artwork = artworkSrc
+            ? {
+                src: artworkSrc,
+                alt: config.artworkAlt || "",
+                className: "map-token-artwork",
+              }
+            : portrait
+              ? {
+                  src: portrait.src,
+                  alt: "",
+                  className: "map-token-portrait",
+                }
+              : null;
 
           return (
             <div
               key={`token-${node.key}`}
-              className={`map-token map-token--${config.kind}`}
+              className={`map-token map-token--${config.kind} is-${node.tokenState} ${artwork ? "has-artwork" : ""}`}
               title={node.meta.label}
               style={{ left: `${node.point.x}%`, top: `${node.point.y}%` }}
             >
               <span className="map-token-fallback">
                 {node.meta.icon || "•"}
               </span>
-              {portrait ? (
+              {artwork ? (
                 <img
-                  src={portrait.src}
-                  alt=""
-                  className="map-token-portrait"
+                  src={artwork.src}
+                  alt={artwork.alt}
+                  className={artwork.className}
                   onError={(event) => {
                     event.currentTarget.style.display = "none";
+                    event.currentTarget.parentElement?.classList.remove(
+                      "has-artwork",
+                    );
                   }}
                 />
               ) : null}
@@ -324,7 +431,7 @@ export function MapStage({
         style={{ left: `${heroPoint.x}%`, top: `${heroPoint.y}%` }}
         aria-label={`${player?.name || "Hero"} on the map`}
       >
-        <span>{getAppearanceIcon(player)}</span>
+        <HeroArtwork player={player} variant="token" decorative />
       </div>
       {debug ? (
         <div

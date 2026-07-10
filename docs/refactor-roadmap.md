@@ -261,6 +261,24 @@ Chapter 2 implementation is already underway. Complete it before starting Chapte
 
 ---
 
+# Phase 7.5 — Post-Chapter 2 Technical Hardening
+
+After Chapter 2 ships, take one focused technical hardening pass before building Chapter 3 content.
+
+Use `docs/post-chapter-2-technical-hardening.md` as the pickup plan. The priorities are:
+
+- lock a Chapter 2 complete / Chapter 3 ready save fixture;
+- extract stable Chapter 2 scene text from `App.tsx`;
+- add a typed story flag contract;
+- add save payload migrations;
+- validate hand-authored map navigation graphs;
+- add asset size/export discipline before Chapter 3 art grows;
+- move built-in QA checks into reusable validators.
+
+Keep this pass small and playable. It should reduce Chapter 3 risk, not become a full architecture rewrite.
+
+---
+
 # Phase 8 — Chapters 3-5 Vertical Slices
 
 Each later chapter should land in this order:

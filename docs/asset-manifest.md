@@ -27,6 +27,7 @@ assets/
     enemies/
   icons/
     items/
+    map-tokens/
     skills/
     ui/
   source-prompts/
@@ -83,6 +84,26 @@ docs/art/item-icons/liams-game-custom-item-icon-plan.md
 |---|---|---|
 | Three-Door Threshold scene | `three-doors-threshold-v01.png` | Current Chapter 2 room-dialog scene for the Crown Door, Lantern Door, and No-Handle Door. Crown Door uses the false-official thorn crown and slat latch. |
 | Edden's Three-Door Drawing scene | `eddens-three-door-drawing-scene-v01.png` | Current Chapter 2 dialogue scene image for Edden's shaky charcoal drawing. Avoids readable labels and keeps the no-handle clue obscure. |
+| Crown Door closeup | `crown-door-closeup-v01.png` | Current Chapter 2 dialogue closeup for inspecting the Crown Door. Wired into door dialogue visuals. |
+| Lantern Door closeup | `lantern-door-closeup-v01.png` | Current Chapter 2 dialogue closeup for inspecting the Lantern Door. Wired into door dialogue visuals. |
+| No-Handle Door closeup | `no-handle-door-closeup-v01.png` | Current Chapter 2 dialogue closeup for inspecting the No-Handle Door. Wired into door dialogue visuals. |
+
+## Map Tokens
+
+| Asset | Suggested filename | Notes |
+|---|---|---|
+| Crown Den wax table token | `assets/icons/map-tokens/crown-den-wax-table-token-v01.png` | Transparent PNG wired into the Crown Door Den map token renderer. |
+| Crown Den wax table cleared token | `assets/icons/map-tokens/crown-den-wax-table-cleared-token-v01.png` | Transparent PNG wired as the spent-state token after the wax table is cleared. |
+| Crown Den slat rack token | `assets/icons/map-tokens/crown-den-slat-rack-token-v01.png` | Transparent PNG wired into the Crown Door Den map token renderer. |
+| Crown Den slat rack broken token | `assets/icons/map-tokens/crown-den-slat-rack-broken-token-v01.png` | Transparent PNG wired as the spent-state token after the slats are broken. |
+| Crown Den witness ledger token | `assets/icons/map-tokens/crown-den-witness-ledger-token-v01.png` | Transparent PNG wired into the Crown Door Den map token renderer. |
+| Crown Den witness ledger copied token | `assets/icons/map-tokens/crown-den-witness-ledger-copied-token-v01.png` | Transparent PNG wired as the spent-state token after the ledger is copied. |
+| Crown Den collar kennel token | `assets/icons/map-tokens/crown-den-collar-kennel-token-v01.png` | Transparent PNG wired into the Crown Door Den map token renderer. |
+| Crown Den collar kennel broken token | `assets/icons/map-tokens/crown-den-collar-kennel-broken-token-v01.png` | Transparent PNG wired as the spent-state token after the collars are broken. |
+| Crown Den false map token | `assets/icons/map-tokens/crown-den-false-map-token-v01.png` | Transparent PNG wired into the Crown Door Den map token renderer. |
+| Crown Den false map cleared token | `assets/icons/map-tokens/crown-den-false-map-cleared-token-v01.png` | Transparent PNG wired as the spent-state token after the false map is pulled down. |
+| Crown Den exit token | `assets/icons/map-tokens/crown-den-exit-token-v01.png` | Transparent PNG wired into the Crown Door Den map token renderer. |
+| Crown Den cleared token master sheet | `assets/icons/map-tokens/crown-den-cleared-token-master-sheet-v01.png` | Reference-only sheet for the cleared token generation. The individual transparent PNGs are the production assets. |
 
 ## Characters
 
@@ -167,11 +188,35 @@ docs/art/item-icons/liams-game-custom-item-icon-plan.md
 - quest journal panel
 - battle pouch UI treatment
 
+| Asset | Suggested filename | Notes |
+|---|---|---|
+| Crown Den distant scratching icon | `assets/icons/ui/crown-den-distant-scratching-icon-v01.png` | Transparent PNG wired into the Crown Door Den tension strip. |
+| Crown Den chain drag icon | `assets/icons/ui/crown-den-chain-drag-icon-v01.png` | Transparent PNG wired into the Crown Door Den tension strip. |
+| Crown Den hound warning icon | `assets/icons/ui/crown-den-hound-warning-icon-v01.png` | Transparent PNG wired into the Crown Door Den tension strip. Reads primarily as the thorn collar, which fits the false-command beat. |
+| Crown Den patrol caught up icon | `assets/icons/ui/crown-den-patrol-caught-up-icon-v01.png` | Transparent PNG wired into the Crown Door Den tension strip. |
+| Crown Den pursuit tension master sheet | `assets/icons/ui/crown-den-pursuit-tension-master-sheet-v01.png` | Reference-only sheet for the tension icon generation. The individual transparent PNGs are the production assets. |
+
 ## Hero Assets
 
-- default hero portrait or full-body key illustration
-- curated race/ancestry hero portraits later if needed
-- fixed major-look hero art only if chapter milestones justify it
+- Twenty-two selected transparent full-body hero variants are wired in `src/data/playerArtwork.ts` and live under `assets/portraits/player/`. Humans use four fantasy-world heritages; new Human heroes default to Rainroot:
+  - Hearthvale Human: `human-hearthvale-female-v01.png`, `human-hearthvale-male-v01.png`
+  - Sunreach Human: `human-sunreach-female-v01.png`, `human-sunreach-male-v01.png`
+  - Rainroot Human: `human-rainroot-female-v01.png`, `human-rainroot-male-v01.png`
+  - Dawnmere Human: `human-dawnmere-female-v01.png`, `human-dawnmere-male-v01.png`
+  - `stonekin-female-v06.png`
+  - `stonekin-male-v04.png`
+  - `sylvan-female-v04.png`
+  - `sylvan-male-v03.png`
+  - `emberling-female-v06.png`
+  - `emberling-male-v06.png`
+  - `tideborn-female-v02.png`
+  - `tideborn-male-v01.png`
+  - `cloudling-female-v02.png`
+  - `cloudling-male-v02.png`
+  - `mossback-female-v02.png`
+  - `mossback-male-v02.png`
+  - `moonmark-female-v04.png`
+  - `moonmark-male-v02.png`
 
 Do not prioritize dynamic visible gear overlays. Equipment should be represented through custom item icons, combat skills, loot cards, and inventory/equipment UI.
 

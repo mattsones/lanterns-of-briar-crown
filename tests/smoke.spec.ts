@@ -32,6 +32,7 @@ test("starts a new adventure and passes built-in QA checks", async ({
   await expect(mapStage).toBeVisible();
   await expect(mapStage.getByTestId("map-background")).toBeVisible();
   await expect(heroToken).toBeVisible();
+  await expect(heroToken.getByTestId("hero-token-art")).toBeVisible();
   await expect(page.getByTestId("map-grid")).toHaveCount(0);
   await expect(mapStage.locator("text=?")).toHaveCount(0);
 

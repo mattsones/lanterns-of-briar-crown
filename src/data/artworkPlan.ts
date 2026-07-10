@@ -1,4 +1,4 @@
-import { GENDERS, RACES } from "./character";
+import { GENDERS, HUMAN_HERITAGES, RACES } from "./character";
 
 export type ArtworkStatus = "available" | "needed";
 
@@ -25,8 +25,28 @@ function entry(
 }
 
 export const HERO_VARIANT_ARTWORK_PLAN: Record<string, ArtworkPlanEntry> = Object.fromEntries(
-  RACES.flatMap((race) =>
-    GENDERS.map((gender) => {
+  RACES.flatMap((race) => {
+    if (race.id === "human") {
+      return HUMAN_HERITAGES.flatMap((heritage) =>
+        GENDERS.map((gender) => {
+          const id = `hero_human_${heritage.id}_${gender.toLowerCase()}`;
+          return [
+            id,
+            entry(
+              id,
+              `${heritage.name} Human ${gender} Hero`,
+              "hero",
+              "shared",
+              "neutral avatar fallback",
+              "available",
+              "Curated transparent Human heritage illustration wired through the player hero artwork registry.",
+            ),
+          ];
+        }),
+      );
+    }
+
+    return GENDERS.map((gender) => {
       const id = `hero_${race.id}_${gender.toLowerCase()}`;
       return [
         id,
@@ -35,13 +55,13 @@ export const HERO_VARIANT_ARTWORK_PLAN: Record<string, ArtworkPlanEntry> = Objec
           `${race.name} ${gender} Hero`,
           "hero",
           "shared",
-          "appearance emoji",
-          "needed",
-          "One curated base illustration per race/gender. Appearance choices remain UI/personality for now.",
+          "neutral avatar fallback",
+          "available",
+          "Curated transparent base illustration wired through the player hero artwork registry.",
         ),
       ];
-    }),
-  ),
+    });
+  }),
 );
 
 export const MAP_ARTWORK_PLAN: Record<string, ArtworkPlanEntry> = {

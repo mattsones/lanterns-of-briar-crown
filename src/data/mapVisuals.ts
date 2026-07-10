@@ -143,6 +143,32 @@ const WESTROOT_TRAIL_NAVIGATION_LINKS: Record<string, Partial<Record<Direction, 
   "4,5": { down: "3,6", left: "3,6" },
 };
 
+const CROWN_DOOR_DEN_NAV_CONNECTIONS: NavConnection[] = [
+  { from: "1,0", to: "1,1", direction: "down" },
+  { from: "1,1", to: "2,1", direction: "right" },
+  { from: "2,1", to: "3,1", direction: "right" },
+  { from: "3,1", to: "4,1", direction: "right" },
+  { from: "4,1", to: "5,1", direction: "right" },
+  { from: "5,1", to: "5,0", direction: "up" },
+  { from: "5,1", to: "4,2", direction: "down" },
+  { from: "4,2", to: "5,2", direction: "right" },
+  { from: "4,2", to: "4,3", direction: "down" },
+  { from: "5,2", to: "5,3", direction: "down" },
+  { from: "5,3", to: "4,3", direction: "left" },
+  { from: "4,3", to: "3,3", direction: "left" },
+  { from: "3,3", to: "2,3", direction: "left" },
+  { from: "2,3", to: "1,3", direction: "left" },
+  { from: "1,3", to: "1,2", direction: "up" },
+  { from: "1,2", to: "1,1", direction: "up" },
+  { from: "1,3", to: "1,4", direction: "down" },
+  { from: "1,4", to: "2,4", direction: "right" },
+  { from: "2,4", to: "2,3", direction: "up" },
+  { from: "3,1", to: "3,0", direction: "up" },
+  { from: "3,1", to: "3,2", direction: "down" },
+  { from: "3,2", to: "2,2", direction: "down" },
+  { from: "2,2", to: "2,3", direction: "down" },
+];
+
 function buildNavigationLinks(connections: NavConnection[]) {
   const links: Record<string, Partial<Record<Direction, string>>> = {};
 
@@ -292,9 +318,11 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
   crownDoorDen: {
     aspectRatio: "16 / 9",
     navBounds: { left: 6, top: 11, width: 88, height: 78 },
-    fogRadius: 10,
-    completedFogOpacity: 0.5,
+    fogRadius: 7.4,
+    fogPathWidth: 10.5,
+    completedFogOpacity: 0.18,
     nodeHitboxSize: "clamp(1.35rem, 5.2%, 2.45rem)",
+    navigationLinks: buildNavigationLinks(CROWN_DOOR_DEN_NAV_CONNECTIONS),
     pointOverrides: {
       "1,0": { x: 16.5, y: 25 },
       "3,0": { x: 46, y: 24 },
@@ -305,7 +333,9 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
       "4,1": { x: 61.5, y: 31 },
       "5,1": { x: 78, y: 31 },
       "1,2": { x: 17, y: 53 },
+      "2,2": { x: 42.7, y: 65.5 },
       "3,2": { x: 43, y: 49 },
+      "4,2": { x: 77.9, y: 47.6 },
       "5,2": { x: 89, y: 53 },
       "1,3": { x: 18, y: 61 },
       "2,3": { x: 34, y: 63 },

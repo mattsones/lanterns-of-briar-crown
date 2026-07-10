@@ -13,12 +13,14 @@ import { MapStage } from "./components/MapStage";
 import { Button, ItemIcon, Meter, Panel, StatBadge } from "./components/ui";
 import { getBattleReward } from "./data/battleRewards";
 import {
-  APPEARANCES,
   BASE_STATS,
+  DEFAULT_HUMAN_HERITAGE_ID,
   GENDERS,
   HERO_GROWTH_OPTIONS,
+  HUMAN_HERITAGES,
   RACES,
   STAT_ORDER,
+  getHumanHeritage,
 } from "./data/character";
 import { COMPANION_OPTIONS } from "./data/companions";
 import { buildEncounterEnemies } from "./data/enemies";
@@ -44,9 +46,9 @@ import {
   SaveModal,
   ShopModal,
 } from "./components/modals";
+import { HeroArtwork } from "./components/HeroArtwork";
 import { tickCooldowns } from "./game/battle";
 import { getChapterProgress } from "./game/chapterProgress";
-import { getHeroAvatar } from "./game/appearance";
 import { checkSummary, resolveRoll, resolveSkillCheck } from "./game/dice";
 import { getActiveGuestNpc } from "./game/guestNpcs";
 import {
@@ -109,6 +111,91 @@ const eddensThreeDoorDrawingScene = new URL(
   "../assets/scenes/eddens-three-door-drawing-scene-v01.png",
   import.meta.url,
 ).href;
+const crownDenDistantScratchingIcon = new URL(
+  "../assets/icons/ui/crown-den-distant-scratching-icon-v01.png",
+  import.meta.url,
+).href;
+const crownDenChainDragIcon = new URL(
+  "../assets/icons/ui/crown-den-chain-drag-icon-v01.png",
+  import.meta.url,
+).href;
+const crownDenHoundWarningIcon = new URL(
+  "../assets/icons/ui/crown-den-hound-warning-icon-v01.png",
+  import.meta.url,
+).href;
+const crownDenPatrolCaughtUpIcon = new URL(
+  "../assets/icons/ui/crown-den-patrol-caught-up-icon-v01.png",
+  import.meta.url,
+).href;
+const crownDenExitToken = new URL(
+  "../assets/icons/map-tokens/crown-den-exit-token-v01.png",
+  import.meta.url,
+).href;
+const crownDenWaxTableToken = new URL(
+  "../assets/icons/map-tokens/crown-den-wax-table-token-v01.png",
+  import.meta.url,
+).href;
+const crownDenWaxTableClearedToken = new URL(
+  "../assets/icons/map-tokens/crown-den-wax-table-cleared-token-v01.png",
+  import.meta.url,
+).href;
+const crownDenSlatRackToken = new URL(
+  "../assets/icons/map-tokens/crown-den-slat-rack-token-v01.png",
+  import.meta.url,
+).href;
+const crownDenSlatRackBrokenToken = new URL(
+  "../assets/icons/map-tokens/crown-den-slat-rack-broken-token-v01.png",
+  import.meta.url,
+).href;
+const crownDenWitnessLedgerToken = new URL(
+  "../assets/icons/map-tokens/crown-den-witness-ledger-token-v01.png",
+  import.meta.url,
+).href;
+const crownDenWitnessLedgerCopiedToken = new URL(
+  "../assets/icons/map-tokens/crown-den-witness-ledger-copied-token-v01.png",
+  import.meta.url,
+).href;
+const crownDenCollarKennelToken = new URL(
+  "../assets/icons/map-tokens/crown-den-collar-kennel-token-v01.png",
+  import.meta.url,
+).href;
+const crownDenCollarKennelBrokenToken = new URL(
+  "../assets/icons/map-tokens/crown-den-collar-kennel-broken-token-v01.png",
+  import.meta.url,
+).href;
+const crownDenFalseMapToken = new URL(
+  "../assets/icons/map-tokens/crown-den-false-map-token-v01.png",
+  import.meta.url,
+).href;
+const crownDenFalseMapClearedToken = new URL(
+  "../assets/icons/map-tokens/crown-den-false-map-cleared-token-v01.png",
+  import.meta.url,
+).href;
+
+const CROWN_DEN_TENSION_STEPS = [
+  {
+    level: 1,
+    label: "Distant scratching",
+    src: crownDenDistantScratchingIcon,
+  },
+  {
+    level: 2,
+    label: "Chain drag",
+    src: crownDenChainDragIcon,
+  },
+  {
+    level: 3,
+    label: "Collar warning",
+    src: crownDenHoundWarningIcon,
+  },
+  {
+    level: 4,
+    label: "Patrol caught up",
+    src: crownDenPatrolCaughtUpIcon,
+  },
+];
+
+const crownDenPortraitImage = (src, alt) => ({ src, alt });
 
 const EDDEN_DRAWING_REVIEW_TEXT =
   "The drawing is not a map so much as a memory that lost a fight. Three door-shapes crowd under black roots: a thorn-crowned arch, a mud-blurred lantern door, and a third slab rubbed nearly smooth where a latch should make sense.\n\nIn the margins, Edden has written half-words and crossed most of them out: BACK FIRST. OLD SIDE. LISTENS BEHIND.";
@@ -136,6 +223,56 @@ function getVillageNpcDialogue(tile, flags) {
     "Everyone in Hearthhollow can feel that the south road has gone wrong."
   );
 }
+
+function CrownDenTension({ level, text }) {
+  const currentLevel = Math.max(1, Math.min(4, Number(level || 1)));
+  const current = CROWN_DEN_TENSION_STEPS[currentLevel - 1];
+
+  return (
+    <div className="mb-4 rounded-3xl border border-rose-300/25 bg-rose-950/35 px-4 py-3 text-sm shadow-lg">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="flex items-center gap-3">
+          <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-rose-200/25 bg-black/25">
+            <img
+              src={current.src}
+              alt=""
+              className="h-full w-full object-contain p-1.5"
+            />
+          </div>
+          <div>
+            <div className="font-semibold text-rose-100">
+              Signworks closing in
+            </div>
+            <div className="mt-0.5 text-white/80">{text}</div>
+          </div>
+        </div>
+        <div className="flex gap-1.5 sm:ml-auto">
+          {CROWN_DEN_TENSION_STEPS.map((step) => {
+            const active = step.level <= currentLevel;
+            return (
+              <div
+                key={step.level}
+                className={`flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl border ${
+                  active
+                    ? "border-rose-200/35 bg-rose-300/15"
+                    : "border-white/10 bg-black/15 opacity-45"
+                }`}
+                title={step.label}
+              >
+                <img
+                  src={step.src}
+                  alt=""
+                  className="h-full w-full object-contain p-1"
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function getMayorDialogue(flags) {
   if (!flags.ennaBriefed)
     return 'Mayor Anwen stands beside a stack of unread petitions, but her eyes keep moving to the road. "We have missing porters, forged notices, delayed carts, and families asking whether to bolt their doors. I can calm a crowd for an hour. I cannot calm a lie unless someone brings me its shape. Take your road report to Enna. She sees patterns before the rest of us admit they exist."';
@@ -171,7 +308,7 @@ export default function LiamsGamePrototype() {
     name: "Liam",
     gender: GENDERS[0],
     raceId: RACES[0].id,
-    appearanceId: APPEARANCES[0].id,
+    humanHeritageId: DEFAULT_HUMAN_HERITAGE_ID,
   });
   const [player, setPlayer] = useState(null);
   const [region, setRegion] = useState("hearthhollow");
@@ -216,6 +353,12 @@ export default function LiamsGamePrototype() {
     () => RACES.find((r) => r.id === player?.raceId) || RACES[0],
     [player],
   );
+  const humanHeritage = useMemo(
+    () => getHumanHeritage(player?.humanHeritageId),
+    [player],
+  );
+  const playerAncestryLabel =
+    race.id === "human" ? `${humanHeritage.name} Human` : race.name;
   const inventorySections = useMemo(
     () => getInventorySections(player),
     [player],
@@ -224,6 +367,7 @@ export default function LiamsGamePrototype() {
     () => buildQuestJournal(flags, companion, region),
     [flags, companion, region],
   );
+  const chapterProgress = useMemo(() => getChapterProgress(flags), [flags]);
   const heroXpTarget = getHeroXpTarget(player?.level || 1);
   const getStoryTile = (tile, tileRegion = region) => {
     if (
@@ -297,6 +441,29 @@ export default function LiamsGamePrototype() {
     }
     return false;
   };
+  const getMapTokenState = (tile, tileRegion = region) => {
+    if (tileRegion === "westrootTrail") {
+      if (
+        tile === "false_notice" &&
+        (flags.falseNoticeLensUsed || flags.falseNoticeLanternRead || flags.followedFalseDetour)
+      )
+        return "spent";
+      if (tile === "roadwatcher" && flags.roadwatcherDefeated) return "spent";
+      if (tile === "crown_sign" && (flags.crownSignRejected || flags.crownSignLensUsed))
+        return "spent";
+      if (tile === "lantern_sign" && flags.lanternSignCleaned && flags.lanternSignCompared)
+        return "spent";
+    }
+    if (tileRegion === "crownDoorDen") {
+      if (tile === "wax_table" && flags.crownDoorWaxTableCleared) return "spent";
+      if (tile === "slat_rack" && flags.crownDoorSlatsBroken) return "spent";
+      if (tile === "witness_ledger" && flags.crownDoorWitnessLedgerFound) return "spent";
+      if (tile === "collar_kennel" && flags.crownDoorCollarsBroken) return "spent";
+      if (tile === "false_map" && flags.crownDoorDungeonCleared) return "spent";
+      if (tile === "den_guard" && flags.beatCrownDenGuard) return "spent";
+    }
+    return "active";
+  };
   const heroSkills = useMemo(() => {
     const core = [
       {
@@ -348,6 +515,7 @@ export default function LiamsGamePrototype() {
     checkpointLabel,
     message,
   ) => {
+    setDialogue(null);
     setRegion(nextRegion);
     setPosition(nextPosition);
     revealArea(nextRegion, nextPosition.x, nextPosition.y, 2);
@@ -509,6 +677,59 @@ export default function LiamsGamePrototype() {
     region === "rootCellar" && tile === "exit_door" && !flags.beatCellarBoss;
   const blockLockedCellarExit = () =>
     setToast("The Briar Knot Warden blocks the sealed door.");
+  const getCrownDenAlertText = (level) => {
+    if (level >= 4)
+      return "The scratchers find you. Red thread snaps tight across the passage, and a false sign clatters like a warning bell.";
+    if (level === 3)
+      return "The scraping is close now. Something is moving from room to room, following the sound of broken signs.";
+    if (level === 2)
+      return "A chain drags somewhere deeper in the den. Mara goes still and points toward the next room.";
+    return "From deeper in the signworks comes a dry scratch, scratch, scratch, like someone copying a road mark in the dark.";
+  };
+  const advanceCrownDenThreat = () => {
+    if (
+      region !== "crownDoorDen" ||
+      flags.crownDoorDungeonCleared ||
+      flags.crownDenPatrolDefeated ||
+      flags.crownDenPatrolEscaped
+    )
+      return false;
+
+    const nextLevel = Math.min(4, Number(flags.crownDenAlertLevel || 0) + 1);
+    setFlags((f) => ({ ...f, crownDenAlertLevel: nextLevel }));
+
+    if (nextLevel >= 4) {
+      setDialogue({
+        portrait: "!",
+        portraitImage: crownDenPortraitImage(
+          crownDenPatrolCaughtUpIcon,
+          "Painted crossed sign slats showing the patrol catching up",
+        ),
+        name: "The Signworks Finds You",
+        text: `${getCrownDenAlertText(nextLevel)}\n\nTwo false-sign scratchers skitter out from opposite passages, their wooden claws stained with red wax.`,
+        choices: [
+          {
+            label: "Stand and fight.",
+            effect: () => {
+              setDialogue(null);
+              startBattle(buildEncounterEnemies("crownDenPatrol"), "crownDenPatrol");
+            },
+          },
+          {
+            label: "Run back to the threshold.",
+            effect: () => {
+              setFlags((f) => ({ ...f, crownDenPatrolEscaped: true, crownDenAlertLevel: 0 }));
+              returnToThreeDoorThreshold();
+            },
+          },
+        ],
+      });
+      return true;
+    }
+
+    setToast(getCrownDenAlertText(nextLevel));
+    return false;
+  };
   const openVillageWellDialogue = () => {
     setFlags((f) => ({ ...f, wellVisited: true }));
     setDialogue({
@@ -655,6 +876,8 @@ export default function LiamsGamePrototype() {
     const previousPosition = { x: position.x, y: position.y };
     setPosition({ x: nx, y: ny });
     revealArea(region, nx, ny);
+    if (region === "crownDoorDen" && tile !== "crown_den_exit" && advanceCrownDenThreat())
+      return;
     inspectTile(tile, { auto: true, previousPosition });
   };
 
@@ -2679,17 +2902,26 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
   };
 
   const enterCrownDoorDen = () => {
-    setFlags((f) => ({ ...f, crownDoorDungeonEntered: true, crownDoorUnlocked: true }));
+    setFlags((f) => ({
+      ...f,
+      crownDoorDungeonEntered: true,
+      crownDoorUnlocked: true,
+      crownDenAlertLevel: f.crownDoorDungeonCleared || f.crownDenPatrolDefeated ? f.crownDenAlertLevel : 0,
+      crownDenPatrolEscaped: false,
+    }));
     setDialogue(null);
     travelToRegion(
       "crownDoorDen",
       MAPS.crownDoorDen.start,
       "Crown Door Den",
-      "The split crown slat clicks into the false door. The passage opens into a hidden signworks.",
+      "The split crown slat clicks into the false door. The passage opens into a hidden signworks. Somewhere deeper in the den, wood scratches stone in a patient rhythm.",
     );
   };
 
   const returnToThreeDoorThreshold = () => {
+    if (!flags.crownDoorDungeonCleared && !flags.crownDenPatrolDefeated) {
+      setFlags((f) => ({ ...f, crownDenPatrolEscaped: true, crownDenAlertLevel: 0 }));
+    }
     travelToRegion(
       "westrootTrail",
       { x: 6, y: 4 },
@@ -2701,7 +2933,11 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
   const openCrownVestibuleDialogue = () => {
     setFlags((f) => ({ ...f, crownDoorDungeonEntered: true }));
     setDialogue({
-      portrait: "C",
+      portrait: "",
+      portraitImage: crownDenPortraitImage(
+        crownDenExitToken,
+        "Painted token of the Crown Door Den threshold",
+      ),
       name: "Crown Vestibule",
       text: "The vestibule tries very hard to look official. Blank order boards line the wall. Six handles hang from one panel, each polished by hands that were meant to pull before thinking.\n\nMara looks at them and whispers, \"That is too many handles for one lie.\"",
       choices: [{ label: "Move deeper.", effect: () => setDialogue(null) }],
@@ -2712,6 +2948,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     const viewFlags = { ...flags, ...assumedFlags };
     setDialogue({
       portrait: "wax",
+      portraitImage: crownDenPortraitImage(
+        viewFlags.crownDoorWaxTableCleared
+          ? crownDenWaxTableClearedToken
+          : crownDenWaxTableToken,
+        "Painted token of wax, seal tools, and spoons",
+      ),
       name: "Wax Table",
       text: addLocalResult(
         viewFlags.crownDoorWaxTableCleared
@@ -2731,6 +2973,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                 }));
                 gainStoryItemOnce("broken_false_seal_wax");
                 setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
+                if (advanceCrownDenThreat()) return;
                 openWaxTableDialogue({
                   crownDoorWaxTableCleared: true,
                   willowForgeryConfirmedAtHollow: hasWillowmarkLens(),
@@ -2750,6 +2993,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     const viewFlags = { ...flags, ...assumedFlags };
     setDialogue({
       portrait: "sign",
+      portraitImage: crownDenPortraitImage(
+        viewFlags.crownDoorSlatsBroken
+          ? crownDenSlatRackBrokenToken
+          : crownDenSlatRackToken,
+        "Painted token of Crown Door Den sign slats",
+      ),
       name: "Slat Rack",
       text: addLocalResult(
         viewFlags.crownDoorSlatsBroken
@@ -2764,6 +3013,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               effect: () => {
                 setFlags((f) => ({ ...f, crownDoorSlatsBroken: true, crownSignRejected: true }));
                 setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
+                if (advanceCrownDenThreat()) return;
                 openSlatRackDialogue({
                   crownDoorSlatsBroken: true,
                   localResult: "The slats crack sharply. The den loses some of its bossy silence. XP +4",
@@ -2780,6 +3030,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     const viewFlags = { ...flags, ...assumedFlags };
     setDialogue({
       portrait: "book",
+      portraitImage: crownDenPortraitImage(
+        viewFlags.crownDoorWitnessLedgerFound
+          ? crownDenWitnessLedgerCopiedToken
+          : crownDenWitnessLedgerToken,
+        "Painted token of the witness ledger and notes",
+      ),
       name: "Witness Ledger Nook",
       text: addLocalResult(
         viewFlags.crownDoorWitnessLedgerFound
@@ -2795,6 +3051,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                 setFlags((f) => ({ ...f, crownDoorWitnessLedgerFound: true }));
                 gainStoryItemOnce("briar_signmaker_ledger");
                 setPlayer((p) => ({ ...p, xp: p.xp + 5 }));
+                if (advanceCrownDenThreat()) return;
                 openWitnessLedgerDialogue({
                   crownDoorWitnessLedgerFound: true,
                   localResult: "You copy the ledger page for Enna and Hollis. XP +5",
@@ -2811,24 +3068,69 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     const viewFlags = { ...flags, ...assumedFlags };
     setDialogue({
       portrait: "link",
+      portraitImage: crownDenPortraitImage(
+        viewFlags.crownDoorCollarsBroken
+          ? crownDenCollarKennelBrokenToken
+          : crownDenCollarKennelToken,
+        "Painted token of thorn collars and kennel straw",
+      ),
       name: "Collar Kennel",
       text: addLocalResult(
         viewFlags.crownDoorCollarsBroken
-          ? "The thorn collars are broken. The bedding in the corner looks less like a trap now and more like a place something frightened might recover."
-          : "The kennel is small and clean in a way that makes Mara angrier, not calmer. Thorn collars hang on pegs beside soft bedding and water bowls.\n\n\"They made scared things guard scared roads,\" she says.",
+          ? viewFlags.crownDenHoundFreed
+            ? "The thorn collars are broken. The hound has curled into the clean bedding, watching the door with tired, unenchanted eyes."
+            : "The thorn collars are broken. The bedding in the corner looks less like a trap now and more like a place something frightened might recover."
+          : "The kennel is small and clean in a way that makes Mara angrier, not calmer. A thorn-collared hound stands chained beside soft bedding and water bowls. The chain is short enough to be cruel without looking cruel.\n\n\"They made scared things guard scared roads,\" she says.",
         viewFlags,
       ),
       choices: [
         !viewFlags.crownDoorCollarsBroken
           ? {
-              label: "Break the spare thorn collars.",
+              label: "Ease the hound and cut the collar carefully.",
               effect: () => {
-                setFlags((f) => ({ ...f, crownDoorCollarsBroken: true }));
-                setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
+                const check = resolveSkillCheck(derivedStats, "Heart", 12);
+                if (!check.success) {
+                  setDialogue({
+                    portrait: "link",
+                    portraitImage: crownDenPortraitImage(
+                      crownDenHoundWarningIcon,
+                      "Painted thorn collar warning icon",
+                    ),
+                    name: "The Collar Snaps Tight",
+                    text: `${checkSummary(check)}\n\nThe hound wants to trust the quiet in your voice, but the collar burns red before it can choose. It lunges because the den taught it to lunge.`,
+                    choices: [
+                      {
+                        label: "Break the collar in battle.",
+                        effect: () => {
+                          setDialogue(null);
+                          startBattle(buildEncounterEnemies("crownDenHound"), "crownDenHound");
+                        },
+                      },
+                    ],
+                  });
+                  return;
+                }
+                setFlags((f) => ({
+                  ...f,
+                  crownDoorCollarsBroken: true,
+                  crownDenHoundFreed: true,
+                }));
+                setPlayer((p) => ({ ...p, xp: p.xp + 6 }));
+                if (advanceCrownDenThreat()) return;
                 openCollarKennelDialogue({
                   crownDoorCollarsBroken: true,
-                  localResult: "The spare collars snap under your heel. XP +4",
+                  crownDenHoundFreed: true,
+                  localResult: `${checkSummary(check)}\n\nThe collar opens with a thorny click. The hound does not run. It simply stops shaking. XP +6`,
                 });
+              },
+            }
+          : null,
+        !viewFlags.crownDoorCollarsBroken
+          ? {
+              label: "Break the collar by force.",
+              effect: () => {
+                setDialogue(null);
+                startBattle(buildEncounterEnemies("crownDenHound"), "crownDenHound");
               },
             }
           : null,
@@ -2841,8 +3143,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     if (flags.beatCrownDenGuard) return setToast("Only broken sign nails remain here.");
     setDialogue({
       portrait: "!",
+      portraitImage: crownDenPortraitImage(
+        crownDenPatrolCaughtUpIcon,
+        "Painted crossed sign slats for the signworks guard",
+      ),
       name: "False Sign Guard",
-      text: "A false-sign scratcher skitters down from the slat rack, dragging a thorn-collared hound on a cord of bramble. It points at the door behind you as if ordering you to leave.\n\nMara backs behind a root pillar. \"Behind the line,\" she says. \"Still doing it.\"",
+      text: "Two false-sign scratchers skitter down from the slat rack, dragging a thorn-collared hound on a cord of bramble. One points at the door behind you as if ordering you to leave. The other keeps scratching fresh arrows into old wood.\n\nMara backs behind a root pillar. \"Behind the line,\" she says. \"Still doing it.\"",
       choices: [
         {
           label: "Clear the signworks guard.",
@@ -2877,6 +3183,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     const ready = missing.length === 0;
     setDialogue({
       portrait: "map",
+      portraitImage: crownDenPortraitImage(
+        viewFlags.crownDoorDungeonCleared
+          ? crownDenFalseMapClearedToken
+          : crownDenFalseMapToken,
+        "Painted token of the false road map",
+      ),
       name: "False Map Room",
       text: addLocalResult(
         viewFlags.crownDoorDungeonCleared
@@ -3211,7 +3523,9 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               {
                 ...doorFlags,
                 noHandleDoorStudied: true,
-                localResult: formatWestrootDoorWhisper(repair),
+                localResult: repair.readyToOpen
+                  ? "The inscription is warm now, and the roots lean inward instead of away."
+                  : "You trace the inscription and listen for what the road behind you is still saying.",
               },
               fallbackPosition,
             );
@@ -4414,9 +4728,11 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       "Later chapters have implementation-facing beats, key lines, required flags, and art targets.",
     );
     add(
-      Object.keys(HERO_VARIANT_ARTWORK_PLAN).length === RACES.length * 2,
-      "Hero variant art backlog covers 8 races x 2 genders",
-      "Appearance choices remain UI/personality until a later art expansion.",
+      Object.keys(HERO_VARIANT_ARTWORK_PLAN).length ===
+        (RACES.length - 1) * GENDERS.length +
+          HUMAN_HERITAGES.length * GENDERS.length,
+      "Hero variant art backlog covers Human heritages",
+      "Hero art is keyed by ancestry, Human heritage, and gender.",
     );
     add(
       MAP_ARTWORK_PLAN.westroot_trail?.status === "available",
@@ -4645,6 +4961,11 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
   if (screen === "create") {
     const selectedRace =
       RACES.find((r) => r.id === createForm.raceId) || RACES[0];
+    const selectedHumanHeritage = getHumanHeritage(createForm.humanHeritageId);
+    const selectedAncestryLabel =
+      selectedRace.id === "human"
+        ? `${selectedHumanHeritage.name} Human`
+        : selectedRace.name;
     const previewStats = addBonuses(BASE_STATS, selectedRace.bonuses);
     return (
       <div className="min-h-screen bg-[radial-gradient(circle_at_top,#204a3d_0%,#0f172a_45%,#020617_100%)] p-6 text-white">
@@ -4685,7 +5006,14 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               {RACES.map((r) => (
                 <button
                   key={r.id}
-                  onClick={() => setCreateForm((p) => ({ ...p, raceId: r.id }))}
+                  onClick={() =>
+                    setCreateForm((p) => ({
+                      ...p,
+                      raceId: r.id,
+                      humanHeritageId:
+                        p.humanHeritageId || DEFAULT_HUMAN_HERITAGE_ID,
+                    }))
+                  }
                   className={`rounded-2xl border p-3 text-left ${createForm.raceId === r.id ? "border-emerald-400 bg-emerald-500/15" : "border-white/10 bg-white/5"}`}
                 >
                   <div className="font-semibold">{r.name}</div>
@@ -4698,37 +5026,51 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                 </button>
               ))}
             </div>
-            <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4">
-              {APPEARANCES.map((a) => (
-                <button
-                  key={a.id}
-                  onClick={() =>
-                    setCreateForm((p) => ({ ...p, appearanceId: a.id }))
-                  }
-                  className={`rounded-2xl border p-4 text-center ${createForm.appearanceId === a.id ? "border-sky-300 bg-sky-500/15" : "border-white/10 bg-white/5"}`}
-                >
-                  <div className="text-4xl">{a.icon}</div>
-                  <div className="mt-2 text-sm">{a.name}</div>
-                </button>
-              ))}
-            </div>
+            {selectedRace.id === "human" ? (
+              <div className="mt-5">
+                <div className="mb-2 text-sm font-semibold text-amber-200">
+                  Human Heritage
+                </div>
+                <div className="grid gap-3 md:grid-cols-2">
+                  {HUMAN_HERITAGES.map((heritage) => (
+                    <button
+                      key={heritage.id}
+                      onClick={() =>
+                        setCreateForm((p) => ({
+                          ...p,
+                          humanHeritageId: heritage.id,
+                        }))
+                      }
+                      className={`rounded-2xl border p-3 text-left ${createForm.humanHeritageId === heritage.id ? "border-amber-300 bg-amber-400/15" : "border-white/10 bg-white/5"}`}
+                    >
+                      <div className="font-semibold">{heritage.name}</div>
+                      <div className="mt-2 text-xs text-white/80">
+                        {heritage.description}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : null}
             <Button className="mt-6 bg-emerald-500/30" onClick={startGame}>
               Begin Chapter 1
             </Button>
           </Panel>
           <Panel title="Preview">
-            <div className="rounded-3xl border border-white/10 bg-black/20 p-5 text-center">
-              <div className="text-6xl">
-                {
-                  APPEARANCES.find((a) => a.id === createForm.appearanceId)
-                    ?.icon
-                }
-              </div>
+            <div className="text-center">
+              <HeroArtwork
+                raceId={createForm.raceId}
+                gender={createForm.gender}
+                humanHeritageId={createForm.humanHeritageId}
+                name={createForm.name || "Liam"}
+                variant="full"
+                className="mx-auto min-h-[24rem] w-full max-w-sm"
+              />
               <div className="mt-3 text-2xl font-bold">
                 {createForm.name || "Liam"}
               </div>
               <div className="text-white/70">
-                {selectedRace.name} • {createForm.gender}
+                {selectedAncestryLabel} • {createForm.gender}
               </div>
               <div className="mt-2 text-emerald-300">
                 Trait: {selectedRace.trait}
@@ -4756,6 +5098,16 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       ? { title: "Willow Market", inventory: SHOP_INVENTORIES.market }
       : { title: "Smith Orin's Shop", inventory: SHOP_INVENTORIES.smith };
   const mapBackgroundImage = currentRegionInfo.backgroundImage;
+  const crownDenAlertLevel = Math.min(
+    4,
+    Math.max(0, Number(flags.crownDenAlertLevel || 0)),
+  );
+  const showCrownDenTension =
+    region === "crownDoorDen" &&
+    crownDenAlertLevel > 0 &&
+    !flags.crownDoorDungeonCleared &&
+    !flags.crownDenPatrolDefeated &&
+    !flags.crownDenPatrolEscaped;
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,#244436_0%,#0f172a_40%,#020617_100%)] p-4 text-white sm:p-6">
@@ -4781,17 +5133,31 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             {toast || `You are standing on: ${currentTileLabel}.`}
           </div>
         </div>
+        {showCrownDenTension ? (
+          <CrownDenTension
+            level={crownDenAlertLevel}
+            text={getCrownDenAlertText(crownDenAlertLevel)}
+          />
+        ) : null}
         {flags.chapterOneClear ? (
           <div className="mb-4 rounded-3xl border border-emerald-300/20 bg-emerald-400/10 px-4 py-3 text-sm">
             <div className="font-semibold text-emerald-200">
-              {flags.chapterReported
-                ? "Chapter 1 complete: The Road That Lied"
-                : "Root Cellar discovery complete"}
+              {chapterProgress.currentChapterId >= 2
+                ? flags.chapterTwoClear
+                  ? "Chapter 2 complete: The Westroot Trail"
+                  : "Chapter 2: The Westroot Trail"
+                : flags.chapterReported
+                  ? "Chapter 1 complete: The Road That Lied"
+                  : "Root Cellar discovery complete"}
             </div>
             <div>
-              {flags.chapterReported
-                ? "Bramblecross understands the shape of the threat. Westroot is the next lead."
-                : "You found the deeper route. Bring what you discovered back to Hollis and Enna."}
+              {chapterProgress.currentChapterId >= 2
+                ? flags.chapterTwoClear
+                  ? "Lio is alive past the First Westroot Gate. The hidden road is ready to continue."
+                  : "Follow Westroot, clear the false roadwork, and open the old way beneath the hill."
+                : flags.chapterReported
+                  ? "Bramblecross understands the shape of the threat. Westroot is the next lead."
+                  : "You found the deeper route. Bring what you discovered back to Hollis and Enna."}
             </div>
           </div>
         ) : null}
@@ -4808,9 +5174,13 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               player={player}
               exploredMap={exploredMap}
               getStoryTile={getStoryTile}
+              getTokenState={getMapTokenState}
               onNodeClick={handleMapNodeClick}
               debug={mapDebug}
-              fogComplete={region === "rootCellar" && !!flags.chapterOneClear}
+              fogComplete={
+                (region === "rootCellar" && !!flags.chapterOneClear) ||
+                (region === "crownDoorDen" && !!flags.crownDoorDungeonCleared)
+              }
             />
             <div className="mt-3 rounded-2xl bg-white/5 px-3 py-2 text-sm">
               You are standing on: {currentTileLabel}.
@@ -4836,13 +5206,17 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               title={`${player.name} • Lv ${player.level}`}
               right={
                 <div className="text-sm text-white/70">
-                  {race.name} • {race.trait}
+                  {playerAncestryLabel} • {race.trait}
                 </div>
               }
             >
               <div className="grid gap-4 md:grid-cols-[0.8fr_1.2fr]">
                 <div className="rounded-3xl border border-white/10 bg-black/20 p-4 text-center">
-                  <div className="text-5xl">{getHeroAvatar(player)}</div>
+                  <HeroArtwork
+                    player={player}
+                    variant="portrait"
+                    className="mx-auto h-44 w-full max-w-36"
+                  />
                   <div className="mt-3 text-sm text-white/80">
                     {player.gender}
                   </div>

@@ -13,7 +13,6 @@ function buildChapter2Checkpoint(flagOverrides = {}, position = { x: 6, y: 4 }) 
     name: "Liam",
     gender: "Male",
     raceId: "human",
-    appearanceId: "brave",
   });
   player.inventory = {
     ...player.inventory,
@@ -55,7 +54,6 @@ function buildChapter2BriefingCheckpoint() {
     name: "Liam",
     gender: "Male",
     raceId: "human",
-    appearanceId: "brave",
   });
 
   return {
@@ -96,6 +94,7 @@ async function loadChapter2Checkpoint(page, flagOverrides = {}, options = {}) {
   await expect(page.getByTestId("map-background")).toBeVisible();
   await expect(page.getByTestId("map-background")).toHaveAttribute("src", /westroot-trail-map-v04/);
   await expect(page.getByTestId("hero-token")).toBeVisible();
+  await expect(page.getByTestId("hero-token").getByTestId("hero-token-art")).toBeVisible();
 }
 
 async function loadChapter2BriefingCheckpoint(page) {
@@ -118,7 +117,7 @@ test("title screen loads the checked-in Chapter 2 playtest save", async ({ page 
   await expect(page.getByRole("heading", { name: MAPS.bramblecross.name })).toBeVisible();
   await expect(page.getByText("Goal: Return to the Watchhouse")).toBeVisible();
   await expect(page.getByText("You are standing on: Road.")).toBeVisible();
-  await expect(page.getByText("Chapter 1 complete: The Road That Lied")).toBeVisible();
+  await expect(page.getByText("Chapter 2: The Westroot Trail")).toBeVisible();
 });
 
 test("chapter two fog covers map tokens instead of floating over darkness", async ({ page }) => {

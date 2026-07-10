@@ -1,4 +1,4 @@
-import { BASE_STATS, RACES } from "../data/character";
+import { BASE_STATS, DEFAULT_APPEARANCE_ID, DEFAULT_HUMAN_HERITAGE_ID, RACES, normalizeHumanHeritageId } from "../data/character";
 import { addBonuses } from "./stats";
 import { buildDefaultVisited } from "./map";
 import { getDefaultBattlePouch } from "./inventory";
@@ -10,7 +10,7 @@ export function getInitialInventory(): Inventory {
   return { moonmint: 1, bubblecap: 1 };
 }
 
-export function buildPlayer({ name, gender, raceId, appearanceId }): Player {
+export function buildPlayer({ name, gender, raceId, humanHeritageId, appearanceId }): Player {
   const race = RACES.find((r) => r.id === raceId) || RACES[0];
   const baseStats = addBonuses(BASE_STATS, race.bonuses);
   const inventory = getInitialInventory();
@@ -18,7 +18,8 @@ export function buildPlayer({ name, gender, raceId, appearanceId }): Player {
     name: name || "Liam",
     gender,
     raceId: race.id,
-    appearanceId,
+    humanHeritageId: race.id === "human" ? normalizeHumanHeritageId(humanHeritageId) : DEFAULT_HUMAN_HERITAGE_ID,
+    appearanceId: appearanceId || DEFAULT_APPEARANCE_ID,
     level: 1,
     xp: 0,
     gold: 4,
@@ -140,6 +141,11 @@ export function buildDefaultFlags(): Flags {
     cleanedLanternMarkFound: false,
     beatCrownDenGuard: false,
     crownDoorGuardDefeated: false,
+    crownDenAlertLevel: 0,
+    crownDenPatrolDefeated: false,
+    crownDenPatrolEscaped: false,
+    crownDenHoundFreed: false,
+    crownDenHoundDefeated: false,
     maraQuestionedCrownDoor: false,
     willowForgeryConfirmedAtHollow: false,
     lanternSignCleaned: false,
@@ -212,6 +218,7 @@ export function normalizePlayerData(player: Player | null) {
   };
   return {
     ...player,
+    humanHeritageId: normalizeHumanHeritageId(player.humanHeritageId as string | null),
     inventory: player.inventory || {},
     equipment,
     battlePouch: { ...getDefaultBattlePouch(player.inventory || {}), ...(player.battlePouch || {}) },

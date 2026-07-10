@@ -28,6 +28,7 @@ export type Player = {
   name: string;
   gender: string;
   raceId: string;
+  humanHeritageId: string;
   appearanceId: string;
   level: number;
   xp: number;

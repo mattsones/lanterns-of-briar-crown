@@ -68,14 +68,37 @@ export const BATTLE_REWARDS = {
   },
   crownDenGuard: {
     item: "trail_snack",
-    gold: 8,
-    xp: 14,
+    gold: 12,
+    xp: 18,
     flagUpdate: {
       beatCrownDenGuard: true,
       crownDoorGuardDefeated: true,
+      crownDenPatrolDefeated: true,
     },
     name: "False Sign Guard",
-    text: "The den guard breaks apart in a clatter of sign nails and scraped paint. The room suddenly sounds less certain of itself.",
+    text: "The scratchers scatter in a clatter of sign nails and scraped paint. The thorn-collared hound's leash goes slack, and the room suddenly sounds less certain of itself.",
+  },
+  crownDenPatrol: {
+    item: "trail_snack",
+    gold: 6,
+    xp: 12,
+    flagUpdate: {
+      crownDenPatrolDefeated: true,
+      crownDenAlertLevel: 0,
+    },
+    name: "Signworks Patrol",
+    text: "The skittering patrol breaks apart before it can raise the whole den. For a moment, the signworks holds its breath.",
+  },
+  crownDenHound: {
+    item: "trail_snack",
+    gold: 4,
+    xp: 10,
+    flagUpdate: {
+      crownDoorCollarsBroken: true,
+      crownDenHoundDefeated: true,
+    },
+    name: "Thorn-Collared Hound",
+    text: "The hound drops low, panting, as the thorn collar cracks loose. Whatever the den trained it to guard, it is not guarding it now.",
   },
 };
 
