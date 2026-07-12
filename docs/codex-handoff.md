@@ -1,4 +1,4 @@
-# Liam’s Game — Codex Handoff
+﻿# Liam’s Game — Codex Handoff
 
 This file is the starting point for Codex.
 
@@ -378,7 +378,7 @@ Branch: `main`
 ### What Changed
 
 - Added `scripts/generate_m_standard_masks.mjs`, a deterministic vector/SVG-based mask generator using Playwright rendering.
-- Generated reusable 1024x1536 transparent PNG masks in `art/characters/hero/masks/m_standard/`.
+- Generated reusable 1024x1536 transparent PNG masks in `assets/reference/paper-doll/characters/hero/masks/m_standard/`.
 - Generated:
   - `mask_torso.png`
   - `mask_cloak_back.png`
@@ -443,7 +443,7 @@ Branch: `main`
 
 ### What Changed
 
-- Added `art/characters/hero/equipment/m_standard/proof_set/` for generated paper-doll proof equipment assets.
+- Added `assets/reference/paper-doll/characters/hero/equipment/m_standard/proof_set/` for generated paper-doll proof equipment assets.
 - Tested the first three generated equipment assets: boots, Briarweave Vest, and Old Hatchet.
 - Confirmed the original three generated assets were not usable as overlays because they were standalone object art and/or had fully opaque fake checkerboard backgrounds.
 - Iterated on Village Boots through multiple ChatGPT exports (`v2` through `v5`), then used Paint.NET-cleaned `v6` as the first technically valid transparent overlay.
@@ -452,7 +452,7 @@ Branch: `main`
 - Marked the best current boot proof as a rotation candidate, not a final accepted production asset:
   - `equip_boots_village_boots_m_standard_ROTATION_CANDIDATE.png`
   - `qa_equip_boots_village_boots_m_standard_ROTATION_CANDIDATE_overlay.png`
-- Added `art/characters/hero/equipment/m_standard/proof_set/README.md` to explain the boot version history and the premature `ACCEPTED` filename.
+- Added `assets/reference/paper-doll/characters/hero/equipment/m_standard/proof_set/README.md` to explain the boot version history and the premature `ACCEPTED` filename.
 - Added `docs/art/player-character/liams-game-paper-doll-equipment-pipeline-notes.md` to capture the process lesson: AI is useful for painting source art, but fitting should be manual or deterministic.
 
 ### Latest Verification
@@ -474,7 +474,7 @@ Branch: `main`
 ### Decision
 
 - Abandoned the paper-doll equipment overlay path as the active production direction.
-- Keep the paper-doll files in `art/characters/hero/` as proof/reference material only.
+- Keep the paper-doll files in `assets/reference/paper-doll/characters/hero/` as proof/reference material only.
 - Use custom painted object art for item icons instead of stock-looking icons or rig-fitted gear overlays.
 - Keep emoji fallbacks anywhere item, portrait, map-token, or enemy art is missing.
 
@@ -868,3 +868,144 @@ npm.cmd run playtest:chapter2
 npm.cmd run playtest:smoke
 git diff --check
 ```
+
+## Current Handoff - Post-Chapter 2 Hardening, Items 1-4
+
+Last updated: 2026-07-12
+
+Branch: `main`
+
+### What Changed
+
+- Added `public/saves/chapter-2-complete.json` as the checked-in "Chapter 2 Complete - Chapter 3 Ready" save fixture. It loads at Westroot Trail / Three-Door Threshold with `chapterTwoClear`, `westrootGateOpened`, `lioAlivePastGate`, `eddensDrawingValidated`, `briarCrownWatchingWestroot`, and `crownDoorDungeonCleared` set.
+- Kept the existing `public/saves/chapter-2-playtest.json` fixture as the Chapter 1-complete / Chapter 2 briefing-start checkpoint.
+- Added `CHAPTER_2_COMPLETE_SAVE_PATH` plus a "Load Chapter 3 Ready Save" title/load-modal action.
+- Added save migration and normalization in `src/game/save.ts`; disk saves, slot saves, local checkpoints, and checked-in fixtures now pass through `migrateSavePayload`.
+- Bumped `SAVE_FILE_VERSION` to 2. Migration fills missing default flags, normalizes missing Human heritage/appearance fields, normalizes moved Westroot graph positions, backfills Chapter 2 completion-derived flags, and maps a few legacy flag names to current names.
+- Replaced the broad `Flags = Record<string, unknown>` shape with a typed `GameFlags` contract in `src/game/types.ts`.
+- Added the missing `roadwatcherHardCleared` default flag because the hard Roadwatcher reward already writes it.
+- Moved shared save-position helpers into `src/game/map.ts`.
+- Added reusable map graph validation in `src/game/mapValidation.ts` for graph endpoints, blocked nodes, orphan nodes, required landmark reachability, and one-way links.
+- Documented the current intentional one-way links for organic Root Cellar and Westroot Trail controls inside `DOCUMENTED_ONE_WAY_LINKS`.
+- Expanded rules and Chapter 2 Playwright coverage for the new fixture, migrations, typed flag defaults, and reusable graph validation.
+
+### Verification Run
+
+```bash
+npm.cmd run build
+npm.cmd run test:rules
+npm.cmd run playtest:chapter2
+npm.cmd run playtest:smoke
+git diff --check
+```
+
+Latest local results:
+
+- `npm.cmd run build` passed.
+- `npm.cmd run test:rules` passed: 16 tests.
+- `npm.cmd run playtest:chapter2` passed: 19 tests.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `git diff --check` passed with normal Windows LF-to-CRLF warnings only.
+
+### Next Recommended Slice
+
+Continue with the remaining post-Chapter 2 hardening items:
+
+1. Extract more stable Chapter 2 scene text from `src/App.tsx`.
+2. Add asset size/export audit guidance and/or a largest-production-assets script.
+3. Move the built-in Dev Tools QA checks out of `App.tsx` into reusable validators.
+
+## Current Handoff - Post-Chapter 2 Hardening, Items 5-7
+
+Last updated: 2026-07-12
+
+Branch: `main`
+
+### What Changed
+
+- Moved stable Chapter 2 review copy, scene metadata, door labels, Crown Door Den room text, companion reads, Edden recovery copy, Roadwatcher copy, and Chapter 2 completion copy into `src/story/chapter2.ts` under `CHAPTER_2_SCENE_COPY` and small formatting helpers.
+- Kept the imperative Chapter 2 callback flow in `src/App.tsx`; the app now reads the stable copy from the story module instead of owning the large dialogue blocks directly.
+- Fixed the threshold companion-read function scope while touching the Chapter 2 threshold flow so the "Ask your companion for their read" choice stays available from the outer app component scope.
+- Added `scripts/audit-assets.mjs` plus `npm.cmd run audit:assets` as a report-only largest-production-assets command. The script scans `assets/maps`, `assets/portraits`, `assets/scenes`, and `assets/icons`, reports dimensions where possible, and marks files over the documented target ranges.
+- Added production export discipline to `docs/asset-manifest.md` and linked it from `docs/liams-game-art-direction.md`: source/concept art stays separate, opaque maps/portraits/scenes should get WebP or AVIF derivatives, transparent icons/tokens/hero cutouts remain PNG, and fallbacks stay preserved.
+- Added `src/game/qa.ts` with reusable pure game QA checks for map shape/metadata, shop and recipe IDs, companion definitions, battle pouch IDs, item-granted skills, graph validation, chapter contracts, art contracts, guest NPC safety, and Chapter 2 puzzle divergence.
+- Slimmed the Dev Tools QA button in `src/App.tsx` so it calls `runGameQaChecks` and only supplies live runtime callback checks from inside the component.
+- Expanded rules coverage for Chapter 2 copy extraction, reusable QA checks, and asset audit docs/script discoverability.
+
+### Verification Run
+
+```bash
+npm.cmd run audit:assets -- --limit=5
+npm.cmd run build
+npm.cmd run test:rules
+npm.cmd run playtest:chapter2
+npm.cmd run playtest:smoke
+git diff --check
+```
+
+Latest local results:
+
+- `npm.cmd run audit:assets -- --limit=5` passed and reported the current largest production assets; top files are still multi-MB PNG maps, which is expected before web derivatives are created.
+- `npm.cmd run build` passed.
+- `npm.cmd run test:rules` passed: 18 tests.
+- `npm.cmd run playtest:chapter2` passed: 19 tests.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `git diff --check` passed with normal Windows LF-to-CRLF warnings only.
+
+### Next Recommended Slice
+
+Start the Chapter 3 vertical slice contract from `docs/post-chapter-2-technical-hardening.md`: enter Chapter 3 from the checked-in Chapter 2 complete fixture, add placeholder playable Westroot hub flow first, and keep Chapter 1/2 smoke paths green before adding final Chapter 3 art.
+
+## Current Handoff - Asset Runtime Split And Repo Cleanup
+
+Last updated: 2026-07-12
+
+Branch: `main`
+
+### What Changed
+
+- Split asset storage by runtime intent. Shipped game assets now live in `assets/maps/`, `assets/portraits/`, `assets/scenes/`, and `assets/icons/`; reference-only material lives under `assets/reference/`.
+- Moved the former top-level `art/characters/` proof work to `assets/reference/paper-doll/characters/` and updated the paper-doll docs/scripts to use the new path.
+- Moved Chapter 1 concept art and its top-level manifest docs into `assets/reference/concept/` and `docs/art/archive/`.
+- Added `assets/README.md` and `assets/reference/README.md` to document shipped vs. reference asset folders.
+- Added `scripts/optimize-assets.mjs` plus `npm.cmd run optimize:assets`. The optimizer preserves full-size originals in `assets/reference/source-art/`, moves non-imported production-folder images to `assets/reference/alternates/`, and leaves optimized runtime derivatives in the shipped asset folders.
+- Converted opaque imported maps, scenes, portraits, and enemy art to WebP runtime files. Transparent icons, map tokens, UI symbols, and full-body hero art remain PNG.
+- Updated `src/` asset imports for the WebP runtime derivatives while preserving existing emoji/text fallbacks.
+- Updated `docs/asset-manifest.md`, `docs/liams-game-art-direction.md`, README asset notes, and rules coverage for the new asset workflow.
+- Installed `sharp` as a dev dependency for local image optimization.
+- Updated Vite to `8.1.4` after `npm audit` flagged the old Vite range; `npm.cmd audit --audit-level=high` now reports zero vulnerabilities.
+- Removed ignored generated local clutter (`dist/`, `test-results/`, and `.vite-dev.*` logs). These are safe to delete and are recreated by build/playtest commands.
+
+### Asset Result
+
+- `npm.cmd run optimize:assets` optimized 98 imported assets.
+- Imported runtime asset payload went from 151.82 MB to 15.31 MB.
+- `npm.cmd run audit:assets -- --limit=10` reports all largest shipped assets as `ok`; the largest runtime image is under 500 KB.
+
+### Verification Run
+
+```bash
+npm.cmd run optimize:assets
+npm.cmd run audit:assets -- --limit=10
+npm.cmd run build
+npm.cmd audit --audit-level=high
+npm.cmd run test:rules
+npm.cmd run playtest:chapter2
+npm.cmd run playtest:smoke
+git diff --check
+```
+
+Latest local results:
+
+- `npm.cmd run optimize:assets` passed; repeat run moved 0 additional alternates.
+- `npm.cmd run audit:assets -- --limit=10` passed.
+- `npm.cmd run build` passed. Vite still reports the single JS chunk slightly over 500 KB, which is separate from image payload size.
+- `npm.cmd audit --audit-level=high` passed: 0 vulnerabilities.
+- `npm.cmd run test:rules` passed: 18 tests.
+- `npm.cmd run playtest:chapter2` passed: 19 tests.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `git diff --check` passed with normal Windows LF-to-CRLF warnings only.
+
+### Next Recommended Slice
+
+Start Chapter 3 from the checked-in Chapter 2 complete fixture, and keep the optimized asset workflow in place when adding Westroot hub art: source/concept/alternate images under `assets/reference/`, runtime derivatives only in the shipped asset folders, then run `npm.cmd run optimize:assets` and `npm.cmd run audit:assets`.

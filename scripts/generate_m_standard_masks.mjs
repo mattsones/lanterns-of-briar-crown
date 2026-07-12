@@ -1,4 +1,4 @@
-import { chromium } from "playwright";
+﻿import { chromium } from "playwright";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -9,10 +9,10 @@ const REPO_ROOT = path.resolve(__dirname, "..");
 const CANVAS = { width: 1024, height: 1536 };
 const SLOT_PROOF_CANVAS = { width: 2048, height: 3072 };
 const RIG_ID = "m_standard";
-const SOURCE_RIG = "art/characters/hero/rig-guides/rig_reference_m_standard.png";
+const SOURCE_RIG = "assets/reference/paper-doll/characters/hero/rig-guides/rig_reference_m_standard.png";
 const FALLBACK_SOURCE_RIG =
   "docs/art/player-character/liams-game-player-character-design-reference-lineup.png";
-const OUT_DIR = "art/characters/hero/masks/m_standard";
+const OUT_DIR = "assets/reference/paper-doll/characters/hero/masks/m_standard";
 
 // Edit these coordinates directly when tuning the rig.
 // Coordinate space: 1024 x 1536, origin at top-left.

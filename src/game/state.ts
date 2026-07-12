@@ -2,7 +2,7 @@ import { BASE_STATS, DEFAULT_APPEARANCE_ID, DEFAULT_HUMAN_HERITAGE_ID, RACES, no
 import { addBonuses } from "./stats";
 import { buildDefaultVisited } from "./map";
 import { getDefaultBattlePouch } from "./inventory";
-import type { Companion, Flags, Inventory, Player } from "./types";
+import type { Companion, GameFlags, Inventory, Player } from "./types";
 
 export { buildDefaultVisited };
 
@@ -52,7 +52,7 @@ export function buildDefaultCompanion(): Companion {
   };
 }
 
-export function buildDefaultFlags(): Flags {
+export function buildDefaultFlags(): GameFlags {
   return {
     metElder: false,
     elderGavePurse: false,
@@ -177,6 +177,7 @@ export function buildDefaultFlags(): Flags {
     maraProtectedAtHollow: false,
     roadwatcherEncounterAvoided: false,
     roadwatcherDefeated: false,
+    roadwatcherHardCleared: false,
     roadwatcherEvidenceFound: false,
     briarCrownWatchingWestroot: false,
     lioAlivePastGate: false,

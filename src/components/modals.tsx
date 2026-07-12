@@ -15,19 +15,19 @@ import { Button, ChoiceButton, ItemIcon, Meter } from "./ui";
 import { HeroArtwork } from "./HeroArtwork";
 
 const threeDoorsThresholdScene = new URL(
-  "../../assets/scenes/three-doors-threshold-v01.png",
+  "../../assets/scenes/three-doors-threshold-v01.webp",
   import.meta.url,
 ).href;
 const crownDoorCloseupScene = new URL(
-  "../../assets/scenes/crown-door-closeup-v01.png",
+  "../../assets/scenes/crown-door-closeup-v01.webp",
   import.meta.url,
 ).href;
 const lanternDoorCloseupScene = new URL(
-  "../../assets/scenes/lantern-door-closeup-v01.png",
+  "../../assets/scenes/lantern-door-closeup-v01.webp",
   import.meta.url,
 ).href;
 const noHandleDoorCloseupScene = new URL(
-  "../../assets/scenes/no-handle-door-closeup-v01.png",
+  "../../assets/scenes/no-handle-door-closeup-v01.webp",
   import.meta.url,
 ).href;
 
@@ -366,10 +366,11 @@ export function SaveModal({
   exportToDisk,
   importFromDisk,
   loadChapter2PlaytestSave,
+  loadChapter2CompleteSave,
 }) {
   const isSave = mode === "save";
   const fileButtonClass =
     "inline-flex cursor-pointer items-center rounded-2xl border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/20";
 
-  return <div className="fixed inset-0 z-[70] overflow-y-auto bg-black/60 p-4"><div className="mx-auto my-8 max-w-4xl rounded-[2rem] border border-white/10 bg-slate-900 p-5"><div className="mb-4 flex justify-between"><div><div className="text-2xl font-semibold">{isSave ? "Save Slots" : "Load Save Slot"}</div><div className="text-sm text-white/70">Multiple named saves for testing branches.</div></div><Button onClick={close}>Close</Button></div><div className="mb-3 grid gap-3 md:grid-cols-2">{isSave ? <div className="rounded-3xl border border-emerald-300/20 bg-emerald-400/10 p-4"><div className="mb-3 text-sm uppercase tracking-wide text-emerald-200/80">Disk Save</div><Button onClick={exportToDisk} disabled={!exportToDisk}>Save Current to Disk</Button></div> : null}<div className="rounded-3xl border border-sky-300/20 bg-sky-400/10 p-4"><div className="mb-3 text-sm uppercase tracking-wide text-sky-200/80">Disk Load</div><div className="flex flex-wrap gap-2"><label className={fileButtonClass}>Load From Disk<input type="file" accept="application/json,.json" className="sr-only" onChange={importFromDisk} /></label><Button onClick={loadChapter2PlaytestSave}>Load Chapter 2 Playtest Save</Button>{!isSave ? <Button onClick={loadCheckpoint}>Load Latest Checkpoint</Button> : null}</div></div></div><div className="grid gap-3">{slots.map((slot) => <div key={slot.id} className="rounded-3xl border border-white/10 bg-white/5 p-4"><div className="flex flex-wrap justify-between gap-3"><div><div className="text-sm uppercase tracking-wide text-white/50">Slot {slot.id}</div><div className="mt-1 text-lg font-semibold">{slot.name || `Empty Slot ${slot.id}`}</div><div className="mt-1 text-xs text-white/50">{formatSaveTimestamp(slot.updatedAt)}</div></div>{isSave ? <Button onClick={() => save(slot.id)}>{slot.payload ? "Overwrite" : "Save Here"}</Button> : <Button onClick={() => load(slot.id)} disabled={!slot.payload}>Load</Button>}</div>{isSave ? <input className="mt-3 w-full rounded-2xl border border-white/10 bg-black/20 px-3 py-2 text-white outline-none" value={drafts[slot.id] || ""} placeholder="Save name" onChange={(e) => setDrafts((p) => ({ ...p, [slot.id]: e.target.value }))} /> : null}</div>)}</div></div></div>;
+  return <div className="fixed inset-0 z-[70] overflow-y-auto bg-black/60 p-4"><div className="mx-auto my-8 max-w-4xl rounded-[2rem] border border-white/10 bg-slate-900 p-5"><div className="mb-4 flex justify-between"><div><div className="text-2xl font-semibold">{isSave ? "Save Slots" : "Load Save Slot"}</div><div className="text-sm text-white/70">Multiple named saves for testing branches.</div></div><Button onClick={close}>Close</Button></div><div className="mb-3 grid gap-3 md:grid-cols-2">{isSave ? <div className="rounded-3xl border border-emerald-300/20 bg-emerald-400/10 p-4"><div className="mb-3 text-sm uppercase tracking-wide text-emerald-200/80">Disk Save</div><Button onClick={exportToDisk} disabled={!exportToDisk}>Save Current to Disk</Button></div> : null}<div className="rounded-3xl border border-sky-300/20 bg-sky-400/10 p-4"><div className="mb-3 text-sm uppercase tracking-wide text-sky-200/80">Disk Load</div><div className="flex flex-wrap gap-2"><label className={fileButtonClass}>Load From Disk<input type="file" accept="application/json,.json" className="sr-only" onChange={importFromDisk} /></label><Button onClick={loadChapter2PlaytestSave}>Load Chapter 2 Playtest Save</Button><Button onClick={loadChapter2CompleteSave}>Load Chapter 3 Ready Save</Button>{!isSave ? <Button onClick={loadCheckpoint}>Load Latest Checkpoint</Button> : null}</div></div></div><div className="grid gap-3">{slots.map((slot) => <div key={slot.id} className="rounded-3xl border border-white/10 bg-white/5 p-4"><div className="flex flex-wrap justify-between gap-3"><div><div className="text-sm uppercase tracking-wide text-white/50">Slot {slot.id}</div><div className="mt-1 text-lg font-semibold">{slot.name || `Empty Slot ${slot.id}`}</div><div className="mt-1 text-xs text-white/50">{formatSaveTimestamp(slot.updatedAt)}</div></div>{isSave ? <Button onClick={() => save(slot.id)}>{slot.payload ? "Overwrite" : "Save Here"}</Button> : <Button onClick={() => load(slot.id)} disabled={!slot.payload}>Load</Button>}</div>{isSave ? <input className="mt-3 w-full rounded-2xl border border-white/10 bg-black/20 px-3 py-2 text-white outline-none" value={drafts[slot.id] || ""} placeholder="Save name" onChange={(e) => setDrafts((p) => ({ ...p, [slot.id]: e.target.value }))} /> : null}</div>)}</div></div></div>;
 }

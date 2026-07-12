@@ -62,6 +62,17 @@ npm.cmd run playtest:chapter2
 npm.cmd run playtest:smoke
 ```
 
+## Asset Maintenance
+
+Shipped game assets live in `assets/maps/`, `assets/portraits/`, `assets/scenes/`, and `assets/icons/`. Source art, alternates, concepts, and proof work live under `assets/reference/`.
+
+```bash
+npm.cmd run audit:assets
+npm.cmd run optimize:assets
+```
+
+`dist/`, `test-results/`, and local Vite logs are generated and ignored.
+
 ## Smoke Playtest
 
 ```bash

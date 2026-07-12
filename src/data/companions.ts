@@ -1,6 +1,6 @@
-const mossPortrait = new URL("../../assets/portraits/characters/moss-portrait-v01.png", import.meta.url).href;
-const rowanPortrait = new URL("../../assets/portraits/characters/rowan-portrait-v02.png", import.meta.url).href;
-const tildaPortrait = new URL("../../assets/portraits/characters/tilda-portrait-v01.png", import.meta.url).href;
+const mossPortrait = new URL("../../assets/portraits/characters/moss-portrait-v01.webp", import.meta.url).href;
+const rowanPortrait = new URL("../../assets/portraits/characters/rowan-portrait-v02.webp", import.meta.url).href;
+const tildaPortrait = new URL("../../assets/portraits/characters/tilda-portrait-v01.webp", import.meta.url).href;
 
 export const COMPANION_OPTIONS = {
   rowan: { id: "rowan", name: "Rowan Reedshield", icon: "🛡️", portraitSrc: rowanPortrait, role: "Guardian", style: "guardian", maxHp: 18, description: "Steady, protective, and serious about keeping ordinary people safe." },

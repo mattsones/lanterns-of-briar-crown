@@ -1,4 +1,4 @@
-# Liam’s Game — Art Direction
+﻿# Liam’s Game — Art Direction
 
 This document defines the first-pass visual direction for **Liam’s Game / Lanterns of Briar Crown, Chapter 1**. It is intended as a handoff for art generation, asset organization, UI design, and future implementation in the repo.
 
@@ -722,16 +722,15 @@ When integrating art into the repo:
 
 The safest implementation path is:
 
-1. Store selected concept art in `assets/concept/`.
-2. Copy current keepers into production folders later:
-   - `assets/portraits/characters/`
-   - `assets/maps/`
-   - `assets/icons/items/`
-3. Add asset references in data files once the code has been moved into a repo.
-4. Replace emoji portraits and item icons gradually, one asset at a time.
+1. Store concept art, source generations, and alternates in `assets/reference/`.
+2. Export cleaned runtime derivatives into `assets/maps/`, `assets/portraits/`, `assets/scenes/`, or `assets/icons/`.
+3. Run `npm.cmd run optimize:assets` after promoting a batch, then review `npm.cmd run audit:assets`.
+4. Wire selected assets from data files gradually, one asset group at a time.
 5. Keep fallback emoji/icons until every asset reference is tested.
 
 For item art specifically, use `docs/art/item-icons/liams-game-custom-item-icon-plan.md` as the production target. The item UI should render custom art when present and fall back to the existing emoji when art is missing or broken.
+
+For web export discipline, use `docs/asset-manifest.md#production-export-discipline`, run `npm.cmd run optimize:assets` after promoting a large production batch, and run `npm.cmd run audit:assets` before shipping it. Keep source art separate from shipped derivatives, prefer WebP/AVIF for opaque maps, portraits, and scenes, and keep PNG for transparent icons, tokens, and hero cutouts.
 
 ---
 

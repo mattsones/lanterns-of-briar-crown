@@ -1,4 +1,4 @@
-# Liam's Game — Normalized Rig Templates Package
+﻿# Liam's Game — Normalized Rig Templates Package
 
 This package contains the current approved **baseline normalized rig templates** for the Liam's Game player-character paper-doll system.
 
@@ -7,7 +7,7 @@ This package contains the current approved **baseline normalized rig templates**
 Located in:
 
 ```text
-art/characters/hero/rig-guides/
+assets/reference/paper-doll/characters/hero/rig-guides/
 ```
 
 Files:
@@ -78,5 +78,5 @@ Use these next in this order:
 
 ```text
 docs/art/player-character/
-art/characters/hero/rig-guides/
+assets/reference/paper-doll/characters/hero/rig-guides/
 ```

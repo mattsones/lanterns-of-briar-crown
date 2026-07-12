@@ -1,6 +1,6 @@
-# Liam’s Game — Asset Manifest
+﻿# Liam’s Game — Asset Manifest
 
-This document tracks selected and planned assets for Chapter 1.
+This document tracks selected and planned assets for the playable prototype chapters.
 
 ## Naming Convention
 
@@ -8,8 +8,7 @@ Use descriptive kebab-case filenames.
 
 ```text
 chapter-1-lantern-road-key-art-v02.png
-hearthhollow-map-concept-v03.png
-mira-portrait-v01.png
+mira-portrait-v01.webp
 enna-portrait-v02.png
 ```
 
@@ -17,25 +16,28 @@ enna-portrait-v02.png
 
 ```text
 assets/
-  concept/
-    key-art/
-    environments/
-    characters/
   maps/
   portraits/
     characters/
     enemies/
+    player/
+  scenes/
   icons/
     items/
     map-tokens/
     skills/
     ui/
+  reference/
+    concept/
+    alternates/
+    source-art/
+    paper-doll/
   source-prompts/
 ```
 
-Concept art should remain in `assets/concept/`.
+Concept art should remain in `assets/reference/concept/`.
 
-Production-ready versions can later be copied into `assets/maps/`, `assets/portraits/`, or `assets/icons/`.
+Production-ready runtime derivatives live in `assets/maps/`, `assets/portraits/`, `assets/scenes/`, or `assets/icons/`. Full-size originals for optimized shipped assets live in `assets/reference/source-art/`; non-selected alternates live in `assets/reference/alternates/`.
 
 ---
 
@@ -57,6 +59,33 @@ The item icon production plan lives at:
 docs/art/item-icons/liams-game-custom-item-icon-plan.md
 ```
 
+## Production Export Discipline
+
+Use this policy before Chapter 3-5 art production grows the web build:
+
+- Keep source, concept, and alternate generations in `assets/reference/`, `assets/source-prompts/`, or task-specific art folders.
+- Put only production-ready game assets in `assets/maps/`, `assets/portraits/`, `assets/scenes/`, and `assets/icons/`.
+- Prefer WebP or AVIF derivatives for opaque maps, portraits, and scene art.
+- Keep PNG for transparent assets such as item icons, map tokens, UI symbols, and full-body hero cutouts.
+- Preserve emoji/text fallbacks in code even when an asset is available.
+- Run `npm.cmd run audit:assets` to report the largest shipped assets before adding or promoting a large art batch.
+- Run `npm.cmd run optimize:assets` after promoting a batch to create web-ready runtime derivatives, move full-size originals to `assets/reference/source-art/`, and move non-imported production-folder images to `assets/reference/alternates/`.
+
+Target export ranges:
+
+| Asset type | Production format | Target dimensions | Target file size |
+|---|---|---|---|
+| Playable maps | WebP or AVIF derivative; source PNG may stay in concept/reference folders | 1600-2048 px wide, 16:9 or current map aspect | 450-750 KB |
+| Story scenes and closeups | WebP or AVIF derivative | 1400-1920 px wide | 350-700 KB |
+| Dialogue portraits | WebP or AVIF derivative when opaque; PNG only if transparency is required | 900-1400 px tall | 250-500 KB |
+| Full-body hero variants | Transparent PNG until a better alpha-safe pipeline exists | 900-1400 px tall | 450-900 KB |
+| Map tokens | Transparent PNG | 256-512 px on longest edge | 60-180 KB |
+| Item and UI icons | Transparent PNG | 128-512 px on longest edge | 30-120 KB |
+
+The audit script is report-only: it tells us what would ship. The optimizer performs the asset split. If a file is over target, create or regenerate a web-ready derivative rather than removing working art or fallback behavior.
+
+For imported opaque art, the runtime file usually keeps the selected basename and uses `.webp`. The original source file is preserved under `assets/reference/source-art/`.
+
 ---
 
 # Selected First-Pass Assets
@@ -71,22 +100,22 @@ docs/art/item-icons/liams-game-custom-item-icon-plan.md
 
 | Asset | Suggested filename | Notes |
 |---|---|---|
-| Hearthhollow gameplay map | `hearthhollow-gameplay-map-v04.png` | Current clean production map; icon-free version of the cozy village layout. |
-| Lantern Road gameplay map | `lantern-road-gameplay-map-v02.png` | Current clean production map; icon-free version of the winding road layout. |
-| Bramblecross town concept | `bramblecross-town-concept-v01.png` | Practical, square, guarded town layout. |
-| Root Cellar map concept | `root-cellar-map-concept-v01.png` | Strong layout; Warden visibly blocks sealed door. |
-| Westroot Trail gameplay map | `westroot-trail-map-v04.png` | Current Chapter 2 production map; readable Shelter Nook, false notice, Three-Sign Hollow, Roadwatcher bend, and First Westroot Gate. |
-| Crown Door Den gameplay map | `crown-door-den-map-v01.png` | Current Chapter 2 production map for the Roadwatcher signworks behind the Crown Door. Prompt lives in `docs/art/prompts/chapter-2-crown-door-and-three-doors.md`. |
+| Hearthhollow gameplay map | `hearthhollow-gameplay-map-v04.webp` | Current clean production map; icon-free version of the cozy village layout. |
+| Lantern Road gameplay map | `lantern-road-gameplay-map-v02.webp` | Current clean production map; icon-free version of the winding road layout. |
+| Bramblecross town gameplay map | `bramblecross-town-map-v01.webp` | Practical, square, guarded town layout. |
+| Root Cellar gameplay map | `root-cellar-map-v01.webp` | Strong layout; Warden visibly blocks sealed door. |
+| Westroot Trail gameplay map | `westroot-trail-map-v04.webp` | Current Chapter 2 production map; readable Shelter Nook, false notice, Three-Sign Hollow, Roadwatcher bend, and First Westroot Gate. |
+| Crown Door Den gameplay map | `crown-door-den-map-v01.webp` | Current Chapter 2 production map for the Roadwatcher signworks behind the Crown Door. Prompt lives in `docs/art/prompts/chapter-2-crown-door-and-three-doors.md`. |
 
 ## Scenes
 
 | Asset | Suggested filename | Notes |
 |---|---|---|
-| Three-Door Threshold scene | `three-doors-threshold-v01.png` | Current Chapter 2 room-dialog scene for the Crown Door, Lantern Door, and No-Handle Door. Crown Door uses the false-official thorn crown and slat latch. |
-| Edden's Three-Door Drawing scene | `eddens-three-door-drawing-scene-v01.png` | Current Chapter 2 dialogue scene image for Edden's shaky charcoal drawing. Avoids readable labels and keeps the no-handle clue obscure. |
-| Crown Door closeup | `crown-door-closeup-v01.png` | Current Chapter 2 dialogue closeup for inspecting the Crown Door. Wired into door dialogue visuals. |
-| Lantern Door closeup | `lantern-door-closeup-v01.png` | Current Chapter 2 dialogue closeup for inspecting the Lantern Door. Wired into door dialogue visuals. |
-| No-Handle Door closeup | `no-handle-door-closeup-v01.png` | Current Chapter 2 dialogue closeup for inspecting the No-Handle Door. Wired into door dialogue visuals. |
+| Three-Door Threshold scene | `three-doors-threshold-v01.webp` | Current Chapter 2 room-dialog scene for the Crown Door, Lantern Door, and No-Handle Door. Crown Door uses the false-official thorn crown and slat latch. |
+| Edden's Three-Door Drawing scene | `eddens-three-door-drawing-scene-v01.webp` | Current Chapter 2 dialogue scene image for Edden's shaky charcoal drawing. Avoids readable labels and keeps the no-handle clue obscure. |
+| Crown Door closeup | `crown-door-closeup-v01.webp` | Current Chapter 2 dialogue closeup for inspecting the Crown Door. Wired into door dialogue visuals. |
+| Lantern Door closeup | `lantern-door-closeup-v01.webp` | Current Chapter 2 dialogue closeup for inspecting the Lantern Door. Wired into door dialogue visuals. |
+| No-Handle Door closeup | `no-handle-door-closeup-v01.webp` | Current Chapter 2 dialogue closeup for inspecting the No-Handle Door. Wired into door dialogue visuals. |
 
 ## Map Tokens
 
@@ -109,38 +138,38 @@ docs/art/item-icons/liams-game-custom-item-icon-plan.md
 
 | Character | Suggested filename | Notes |
 |---|---|---|
-| Elder Mira | `mira-portrait-v01.png` | Warm, wise Hearthhollow elder. |
-| Enna | `enna-portrait-v02.png` | Black woman, darker skin, tough and focused. |
-| Captain Hollis | `hollis-portrait-v01.png` | Worn, responsible watch captain. |
-| Nix Fernwhistle | `nix-portrait-v01.png` | Wiry road-scout, Lantern Road guide. |
-| Pibble Thatch | `pibble-portrait-v01.png` | Curious, helpful, odd village clue-noticer. |
-| Rowan Reedshield | `rowan-portrait-v02.png` | Defensive companion; sturdy playable-ancestry look, not fox-person. |
-| Tilda Quickstep | `tilda-portrait-v01.png` | Quick, clever, mischievous companion. |
-| Moss Fenmere | `moss-portrait-v01.png` | Mossback companion; calm, rooted, ancient-adjacent. |
-| Ada Willowmarket | `ada-willowmarket-portrait-v01.png` | Production portrait; organized market authority and Willow seal identity. |
-| Ada Willowmarket, no lens | `ada-willowmarket-portrait-no-lens-v01.png` | Post-borrow portrait variant for after the player takes the Willowmark Lens. |
-| Smith Orin | `smith-orin-portrait-v02.png` | Selected Emberling/fireperson blacksmith direction. |
-| Mayor Anwen | `mayor-anwen-portrait-v01.png` | Production portrait; Bramblecross civic leader. |
-| Nella the Baker | `nella-portrait-v03.png` | Selected Tideborn/water-person baker direction. |
-| Toma Fielding | `toma-fielding-portrait-v02.png` | Selected farmer portrait with clearer tool silhouette. |
-| Miri of the Loom | `miri-portrait-v02.png` | Selected loom/thread portrait with stronger face variety. |
-| Mara Brindle | `mara-brindle-portrait-v01.png` | Production portrait for Chapter 2 protected guest role. |
-| Edden Vale | `edden-vale-portrait-v01.png` | Production portrait for the recovery-room witness. |
-| Lio Brindle | `lio-brindle-portrait-v01.png` | Pre-rescue or remembered courier portrait; generate a later rescued variant if needed. |
-| Worried Road Traveler | `worried-road-traveler-portrait-v01.png` | Production-usable generic traveler; includes baked-in sign text, so use sparingly. |
+| Elder Mira | `mira-portrait-v01.webp` | Warm, wise Hearthhollow elder. |
+| Enna | `enna-portrait-v02.webp` | Black woman, darker skin, tough and focused. |
+| Captain Hollis | `hollis-portrait-v01.webp` | Worn, responsible watch captain. |
+| Nix Fernwhistle | `nix-portrait-v01.webp` | Wiry road-scout, Lantern Road guide. |
+| Pibble Thatch | `pibble-portrait-v01.webp` | Curious, helpful, odd village clue-noticer. |
+| Rowan Reedshield | `rowan-portrait-v02.webp` | Defensive companion; sturdy playable-ancestry look, not fox-person. |
+| Tilda Quickstep | `tilda-portrait-v01.webp` | Quick, clever, mischievous companion. |
+| Moss Fenmere | `moss-portrait-v01.webp` | Mossback companion; calm, rooted, ancient-adjacent. |
+| Ada Willowmarket | `ada-willowmarket-portrait-v01.webp` | Production portrait; organized market authority and Willow seal identity. |
+| Ada Willowmarket, no lens | `ada-willowmarket-portrait-no-lens-v01.webp` | Post-borrow portrait variant for after the player takes the Willowmark Lens. |
+| Smith Orin | `smith-orin-portrait-v02.webp` | Selected Emberling/fireperson blacksmith direction. |
+| Mayor Anwen | `mayor-anwen-portrait-v01.webp` | Production portrait; Bramblecross civic leader. |
+| Nella the Baker | `nella-portrait-v03.webp` | Selected Tideborn/water-person baker direction. |
+| Toma Fielding | `toma-fielding-portrait-v02.webp` | Selected farmer portrait with clearer tool silhouette. |
+| Miri of the Loom | `miri-portrait-v02.webp` | Selected loom/thread portrait with stronger face variety. |
+| Mara Brindle | `mara-brindle-portrait-v01.webp` | Production portrait for Chapter 2 protected guest role. |
+| Edden Vale | `edden-vale-portrait-v01.webp` | Production portrait for the recovery-room witness. |
+| Lio Brindle | `lio-brindle-portrait-v01.webp` | Pre-rescue or remembered courier portrait; generate a later rescued variant if needed. |
+| Worried Road Traveler | `worried-road-traveler-portrait-v01.webp` | Production-usable generic traveler; includes baked-in sign text, so use sparingly. |
 
 ## Enemies
 
 | Enemy | Suggested filename | Notes |
 |---|---|---|
-| Bramble Boar | `bramble-boar-v01.png` | Production battle portrait; frantic road threat with satchel clue. |
-| Thorncoat Ruffian | `thorncoat-ruffian-v02.png` | Selected humanoid version; avoids implying foxfolk as a new ancestry. |
-| Thorny Hound | `thorny-hound-v01.png` | Production battle portrait; wild bramble-tangled hound. |
-| Rustroot Skulk | `rustroot-skulk-v02.png` | Selected organic root-cellar creature; less mechanical than v1. |
-| Briar Knot Warden | `briar-knot-warden-v01.png` | Production boss portrait; still could use future root-cellar/chain specificity. |
-| Briar Roadwatcher | `briar-roadwatcher-v02.png` | Selected practical sign-forging field agent; replaces Warden-like v1. |
-| Thorn-Collared Hound | `thorn-collared-hound-v01.png` | Production battle portrait; collar-control read is clear. |
-| False Sign Scratcher | `false-sign-scratcher-v02.png` | Selected support enemy; clearer face and less Warden overlap than v1. |
+| Bramble Boar | `bramble-boar-v01.webp` | Production battle portrait; frantic road threat with satchel clue. |
+| Thorncoat Ruffian | `thorncoat-ruffian-v02.webp` | Selected humanoid version; avoids implying foxfolk as a new ancestry. |
+| Thorny Hound | `thorny-hound-v01.webp` | Production battle portrait; wild bramble-tangled hound. |
+| Rustroot Skulk | `rustroot-skulk-v02.webp` | Selected organic root-cellar creature; less mechanical than v1. |
+| Briar Knot Warden | `briar-knot-warden-v01.webp` | Production boss portrait; still could use future root-cellar/chain specificity. |
+| Briar Roadwatcher | `briar-roadwatcher-v02.webp` | Selected practical sign-forging field agent; replaces Warden-like v1. |
+| Thorn-Collared Hound | `thorn-collared-hound-v01.webp` | Production battle portrait; collar-control read is clear. |
+| False Sign Scratcher | `false-sign-scratcher-v02.webp` | Selected support enemy; clearer face and less Warden overlap than v1. |
 
 ---
 
@@ -228,9 +257,9 @@ The generated paper-doll proof files are not production item icons, but they are
 
 | Source asset | Status | Notes |
 |---|---|---|
-| `art/characters/hero/equipment/m_standard/proof_set/equip_mainhand_old_hatchet.png` | Reference only | Strong custom painted hatchet, but stored as RGB with a fake checkerboard background. Regenerate or clean before production icon use. |
-| `art/characters/hero/equipment/m_standard/proof_set/equip_torso_briarweave_vest_m_standard.png` | Reference only | Good Briarweave Vest concept, but stored as RGB with a fake checkerboard background. Regenerate or clean before production icon use. |
-| `art/characters/hero/equipment/m_standard/proof_set/equip_boots_village_boots_m_standard_ROTATION_CANDIDATE.png` | Reference only | Has alpha, but composition is a full paper-doll canvas with too much blank area. Needs icon-specific crop or regeneration. |
+| `assets/reference/paper-doll/characters/hero/equipment/m_standard/proof_set/equip_mainhand_old_hatchet.png` | Reference only | Strong custom painted hatchet, but stored as RGB with a fake checkerboard background. Regenerate or clean before production icon use. |
+| `assets/reference/paper-doll/characters/hero/equipment/m_standard/proof_set/equip_torso_briarweave_vest_m_standard.png` | Reference only | Good Briarweave Vest concept, but stored as RGB with a fake checkerboard background. Regenerate or clean before production icon use. |
+| `assets/reference/paper-doll/characters/hero/equipment/m_standard/proof_set/equip_boots_village_boots_m_standard_ROTATION_CANDIDATE.png` | Reference only | Has alpha, but composition is a full paper-doll canvas with too much blank area. Needs icon-specific crop or regeneration. |
 
 ---
 

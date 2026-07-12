@@ -1,4 +1,4 @@
-# Liam's Game - NPC and Enemy Art Prompt Pack
+﻿# Liam's Game - NPC and Enemy Art Prompt Pack
 
 Last updated: 2026-07-04
 
@@ -45,7 +45,7 @@ Ask for one polished image or a small set of 2-4 variations. Do not ask for bake
 - Prefer isolated subject with a simple painted vignette, transparent background, or very plain contextual background.
 - The silhouette must read at small combat-card size.
 - Keep danger readable without gore, horror, or grimdark mood.
-- Enemy art can start in `assets/concept/characters/` until a production enemy-art folder is introduced.
+- Enemy art can start in `assets/reference/concept/characters/` until a production enemy-art folder is introduced.
 - Suggested filename: `briar-roadwatcher-enemy-v01.png`, `bramble-boar-enemy-v01.png`, etc.
 
 ## Master Style Block

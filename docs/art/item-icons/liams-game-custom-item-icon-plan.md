@@ -1,4 +1,4 @@
-# Liam's Game - Custom Item Icon Art Plan
+﻿# Liam's Game - Custom Item Icon Art Plan
 
 ## Decision
 
@@ -52,7 +52,7 @@ willowmark-lens-icon-v01.png
 eddens-three-door-drawing-icon-v01.png
 ```
 
-Keep experimental proof art in `art/` or `assets/concept/`. Only copy or export cleaned, game-ready icon images into `assets/icons/items/`.
+Keep experimental proof art in `assets/reference/paper-doll/` or `assets/reference/concept/`. Only copy or export cleaned, game-ready icon images into `assets/icons/items/`.
 
 ## Icon Art Specs
 
@@ -87,9 +87,9 @@ The paper-doll proof files are not production icons, but several can guide futur
 
 | Source asset | Evaluation | Use |
 |---|---|---|
-| `art/characters/hero/equipment/m_standard/proof_set/equip_mainhand_old_hatchet.png` | Strong custom object silhouette, but RGB with fake checkerboard background. | Good style/source reference; needs regeneration or cleanup for icon use. |
-| `art/characters/hero/equipment/m_standard/proof_set/equip_torso_briarweave_vest_m_standard.png` | Good painted vest concept, but RGB with fake checkerboard background. | Good source reference; needs square icon crop/regeneration. |
-| `art/characters/hero/equipment/m_standard/proof_set/equip_boots_village_boots_m_standard_ROTATION_CANDIDATE.png` | Has alpha, but framed as a rig overlay with too much blank canvas. | Usable concept/reference; needs icon-specific composition. |
+| `assets/reference/paper-doll/characters/hero/equipment/m_standard/proof_set/equip_mainhand_old_hatchet.png` | Strong custom object silhouette, but RGB with fake checkerboard background. | Good style/source reference; needs regeneration or cleanup for icon use. |
+| `assets/reference/paper-doll/characters/hero/equipment/m_standard/proof_set/equip_torso_briarweave_vest_m_standard.png` | Good painted vest concept, but RGB with fake checkerboard background. | Good source reference; needs square icon crop/regeneration. |
+| `assets/reference/paper-doll/characters/hero/equipment/m_standard/proof_set/equip_boots_village_boots_m_standard_ROTATION_CANDIDATE.png` | Has alpha, but framed as a rig overlay with too much blank canvas. | Usable concept/reference; needs icon-specific composition. |
 
 ## First Icon Batch
 

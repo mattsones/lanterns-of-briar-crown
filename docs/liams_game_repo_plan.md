@@ -1,4 +1,4 @@
-# Liam’s Game — Repository Plan
+﻿# Liam’s Game — Repository Plan
 
 This plan turns the current single-file prototype and Chapter 1 assets into a maintainable project without over-engineering too early.
 
@@ -352,19 +352,19 @@ progression.ts
 Use descriptive kebab-case filenames.
 
 ```text
-assets/concept/key-art/chapter-1-lantern-road-key-art-v01.png
-assets/concept/environments/hearthhollow-map-concept-v03.png
-assets/concept/environments/lantern-road-map-concept-v01.png
-assets/concept/environments/bramblecross-town-concept-v01.png
-assets/concept/environments/root-cellar-map-concept-v01.png
-assets/concept/characters/mira-portrait-v01.png
-assets/concept/characters/enna-portrait-v02.png
-assets/concept/characters/hollis-portrait-v01.png
-assets/concept/characters/nix-portrait-v01.png
-assets/concept/characters/pibble-portrait-v01.png
-assets/concept/characters/rowan-portrait-v02.png
-assets/concept/characters/tilda-portrait-v01.png
-assets/concept/characters/moss-portrait-v01.png
+assets/reference/concept/key-art/chapter-1-lantern-road-key-art-v01.png
+assets/reference/concept/environments/hearthhollow-map-concept-v03.png
+assets/reference/concept/environments/lantern-road-map-concept-v01.png
+assets/reference/concept/environments/bramblecross-town-concept-v01.png
+assets/reference/concept/environments/root-cellar-map-concept-v01.png
+assets/reference/concept/characters/mira-portrait-v01.png
+assets/reference/concept/characters/enna-portrait-v02.png
+assets/reference/concept/characters/hollis-portrait-v01.png
+assets/reference/concept/characters/nix-portrait-v01.png
+assets/reference/concept/characters/pibble-portrait-v01.png
+assets/reference/concept/characters/rowan-portrait-v02.png
+assets/reference/concept/characters/tilda-portrait-v01.png
+assets/reference/concept/characters/moss-portrait-v01.png
 ```
 
 When an image is selected as a current keeper, copy it later into a production-oriented folder:
@@ -538,7 +538,7 @@ The first priority is preserving a working Chapter 1 prototype. Refactors should
 3. Paste the current working prototype into `src/App.tsx`.
 4. Add the Chapter 1 story script to `docs/chapter-1-story-script.md`.
 5. Add this repo plan to `docs/repo-plan.md`.
-6. Add selected concept art to `assets/concept/`.
+6. Add selected concept art to `assets/reference/concept/`.
 7. Commit the working baseline.
 8. Only then begin extraction/refactoring.
 

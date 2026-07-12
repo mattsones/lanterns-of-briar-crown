@@ -1,4 +1,4 @@
-# Codex Bootstrap Prompt
+﻿# Codex Bootstrap Prompt
 
 Paste this into Codex after opening the repo folder.
 
@@ -31,9 +31,9 @@ Important constraints:
    - src/styles.css
    - README.md
 5. Add placeholder folders for:
-   - assets/concept/key-art/
-   - assets/concept/environments/
-   - assets/concept/characters/
+   - assets/reference/concept/key-art/
+   - assets/reference/concept/environments/
+   - assets/reference/concept/characters/
    - assets/maps/
    - assets/portraits/
    - assets/icons/

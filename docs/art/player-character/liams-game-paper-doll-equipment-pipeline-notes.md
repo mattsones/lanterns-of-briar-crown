@@ -1,4 +1,4 @@
-# Liam's Game - Paper-Doll Equipment Pipeline Notes
+﻿# Liam's Game - Paper-Doll Equipment Pipeline Notes
 
 These notes summarize the first proof loop for `m_standard` equipment overlays.
 
@@ -45,7 +45,7 @@ The boot loop produced useful evidence:
 - Rotation-aware variants improved fit further, with the best candidate stored as:
 
 ```text
-art/characters/hero/equipment/m_standard/proof_set/equip_boots_village_boots_m_standard_ROTATION_CANDIDATE.png
+assets/reference/paper-doll/characters/hero/equipment/m_standard/proof_set/equip_boots_village_boots_m_standard_ROTATION_CANDIDATE.png
 ```
 
 The rotation candidate is not final production art. It is a proof that the pipeline can work, but the boot art still wants human/art-direction fitting.

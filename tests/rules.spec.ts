@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolveRoll, resolveSkillCheck } from "../src/game/dice";
 import { DEFAULT_HUMAN_HERITAGE_ID, GENDERS, HUMAN_HERITAGES, RACES } from "../src/data/character";
 import { ENCOUNTERS, ENEMY_DB } from "../src/data/enemies";
@@ -21,6 +21,7 @@ import {
 import { gainItem, getDefaultBattlePouch, removeItem } from "../src/game/inventory";
 import {
   buildDefaultCompanion,
+  buildDefaultFlags,
   buildDefaultVisited,
   buildPlayer,
 } from "../src/game/state";
@@ -35,7 +36,10 @@ import {
 } from "../src/game/chapterProgress";
 import {
   CHAPTER_2_REQUIRED_END_FLAGS,
+  CHAPTER_2_SCENE_COPY,
   CHAPTER_2_STORY,
+  getChapter2CompanionRead,
+  getCrownDoorText,
   getWestrootDoorRepairState,
   getRoadwatcherEncounterKey,
   getWestrootClueCount,
@@ -55,9 +59,13 @@ import { CHAPTER_STORY_PLANS } from "../src/story/chapters2to5";
 import {
   formatDiskSaveFilename,
   getSavePayload,
+  migrateSavePayload,
   parseDiskSaveText,
+  SAVE_FILE_VERSION,
   serializeDiskSave,
 } from "../src/game/save";
+import { validateAllMapNavigationGraphs } from "../src/game/mapValidation";
+import { runGameQaChecks } from "../src/game/qa";
 import type { SavePayload } from "../src/game/types";
 
 test("dice helpers format notation and skill checks", () => {
@@ -131,7 +139,12 @@ test("disk save helpers preserve Liam's Game save payloads", () => {
     position: { x: 2, y: 4 },
     player: { name: "Liam" },
   });
-  expect(getSavePayload(payload)).toBe(payload);
+  expect(getSavePayload(payload)).toMatchObject({
+    region: "hearthhollow",
+    position: { x: 2, y: 4 },
+    player: { name: "Liam", humanHeritageId: DEFAULT_HUMAN_HERITAGE_ID },
+    flags: { chapterTwoClear: false },
+  });
   expect(formatDiskSaveFilename("Liam / Chapter 2: Westroot")).toBe("liam-chapter-2-westroot.json");
   expect(() => parseDiskSaveText("{}")).toThrow("Invalid Liam's Game save file.");
 });
@@ -155,7 +168,8 @@ test("checked-in Chapter 2 playtest save is loadable and item-safe", () => {
       chapterReported: true,
     },
   });
-  expect(payload.flags.chapterTwoBriefed).toBeUndefined();
+  expect(payload.flags.chapterTwoBriefed).toBe(false);
+  expect(payload.player.humanHeritageId).toBe(DEFAULT_HUMAN_HERITAGE_ID);
   expect(payload.player.equipment).toMatchObject({
     weapon: "pebbleknock_hammer",
     helm: "kettle_helm",
@@ -167,6 +181,95 @@ test("checked-in Chapter 2 playtest save is loadable and item-safe", () => {
   Object.values(payload.player.equipment)
     .filter(Boolean)
     .forEach((id) => expect(ITEM_DB[id]).toBeTruthy());
+});
+
+test("checked-in Chapter 2 complete save is Chapter 3 ready", () => {
+  const saveText = readFileSync(
+    new URL("../public/saves/chapter-2-complete.json", import.meta.url),
+    "utf8",
+  );
+  const imported = parseDiskSaveText(saveText);
+  const payload = imported.payload;
+
+  expect(imported.name).toBe("Chapter 2 Complete - Chapter 3 Ready");
+  expect(payload).toMatchObject({
+    screen: "play",
+    chapterId: 3,
+    region: "westrootTrail",
+    position: { x: 6, y: 4 },
+    flags: {
+      chapterReported: true,
+      chapterTwoStarted: true,
+      chapterTwoClear: true,
+      westrootGateOpened: true,
+      lioAlivePastGate: true,
+      eddensDrawingValidated: true,
+      briarCrownWatchingWestroot: true,
+      crownDoorDungeonCleared: true,
+    },
+  });
+  expect(getChapterProgress(payload.flags)).toMatchObject({
+    currentChapterId: 3,
+    completedChapterIds: [1, 2],
+  });
+  expect(payload.visited.westrootTrail["6,4"]).toBe(true);
+  [
+    "eddens_three_door_drawing",
+    "willowmark_lens",
+    "pine_pitch_wax",
+    "split_crown_slat",
+    "briar_signmaker_ledger",
+    "cleaned_lantern_mark",
+    "no_handle_token",
+    "witness_note_bramblecross",
+  ].forEach((id) => expect(payload.player.inventory[id]).toBeGreaterThan(0));
+  Object.keys(payload.player.inventory).forEach((id) => expect(ITEM_DB[id]).toBeTruthy());
+});
+
+test("save migrations normalize older payloads before load", () => {
+  const player = buildPlayer({
+    name: "Old Liam",
+    gender: "Male",
+    raceId: "human",
+  });
+  const oldPayload = {
+    screen: "play",
+    player: {
+      ...player,
+      humanHeritageId: undefined,
+      appearanceId: undefined,
+    },
+    region: "westrootTrail",
+    position: { x: 6, y: 3 },
+    visited: {},
+    companion: buildDefaultCompanion(),
+    flags: {
+      chapterReported: true,
+      chapterTwoClear: true,
+      roadwatcherCleared: true,
+      crownDenCleared: true,
+    },
+    quest: null,
+    toast: "",
+  } as SavePayload;
+
+  const migrated = migrateSavePayload(oldPayload, 1);
+  expect(SAVE_FILE_VERSION).toBe(2);
+  expect(migrated.position).toEqual({ x: 6, y: 4 });
+  expect(migrated.visited.westrootTrail["6,4"]).toBe(true);
+  expect(migrated.player.humanHeritageId).toBe(DEFAULT_HUMAN_HERITAGE_ID);
+  expect(migrated.player.appearanceId).toBe("default");
+  expect(migrated.flags).toMatchObject({
+    chapterTwoClear: true,
+    chapterTwoStarted: true,
+    westrootGateOpened: true,
+    roadwatcherDefeated: true,
+    crownDoorDungeonCleared: true,
+    lioAlivePastGate: true,
+    eddensDrawingValidated: true,
+    briarCrownWatchingWestroot: true,
+  });
+  expect(getChapterProgress(migrated.flags).currentChapterId).toBe(3);
 });
 
 test("progression and default map state stay compatible with chapter one", () => {
@@ -519,6 +622,10 @@ test("chapter two contract keeps required flags, map prompt, and reveal boundari
     expect(normalizeChapterFlags({})[flag]).toBe(false);
   });
   expect(CHAPTER_2_STORY.mapPromptDoc).toBe("docs/art/prompts/chapter-2-westroot-trail-map.md");
+  expect(CHAPTER_2_SCENE_COPY.threeDoorThreshold.text).toContain("three doors");
+  expect(CHAPTER_2_SCENE_COPY.crownDoorDen.falseMap.result).toContain("cleaned lantern mark");
+  expect(getChapter2CompanionRead("threshold", "tilda")).toContain("rude, suspicious");
+  expect(getCrownDoorText({ crownDoorDungeonCleared: true })).toContain("workshop");
   expect(CHAPTER_STORY_PLANS[2].keyLines.join(" ")).not.toContain("Princess Elowen");
   expect(MAPS.westrootTrail.backgroundImage).toContain("westroot-trail-map-v04");
   expect(MAPS.crownDoorDen.backgroundImage).toContain("crown-door-den-map-v01");
@@ -663,4 +770,53 @@ test("chapter two contract keeps required flags, map prompt, and reveal boundari
     ]),
   );
   expect(MAPS.westrootTrail.tiles.flat()).not.toContain("westroot_gate");
+});
+
+test("hand-authored map navigation graphs pass reusable validation", () => {
+  const results = validateAllMapNavigationGraphs();
+  expect(results.map((result) => result.region).sort()).toEqual([
+    "crownDoorDen",
+    "rootCellar",
+    "westrootTrail",
+  ]);
+  results.forEach((result) => {
+    expect(result.issues).toEqual([]);
+    expect(result.ok).toBe(true);
+  });
+});
+
+test("reusable game QA checks pass without rendering App", () => {
+  const qaResults = runGameQaChecks({
+    flags: buildDefaultFlags(),
+    player: buildPlayer({ name: "QA Liam", gender: "Male", raceId: "human" }),
+  });
+
+  expect(qaResults.filter((result) => !result.ok)).toEqual([]);
+  expect(qaResults.map((result) => result.label)).toEqual(
+    expect.arrayContaining([
+      "Hearthhollow placement tweaks are tuned",
+      "Root Cellar uses walkable-only graph nodes",
+      "Westroot Trail navigation graph validates",
+      "Chapter 2 clean and messy outcomes diverge",
+    ]),
+  );
+});
+
+test("asset audit command and export guidance are documented", () => {
+  const scriptUrl = new URL("../scripts/audit-assets.mjs", import.meta.url);
+  const optimizerUrl = new URL("../scripts/optimize-assets.mjs", import.meta.url);
+  const manifest = readFileSync(
+    new URL("../docs/asset-manifest.md", import.meta.url),
+    "utf8",
+  );
+
+  expect(existsSync(scriptUrl)).toBe(true);
+  expect(existsSync(optimizerUrl)).toBe(true);
+  expect(readFileSync(scriptUrl, "utf8")).toContain("Production asset audit");
+  expect(readFileSync(optimizerUrl, "utf8")).toContain("optimization-manifest.json");
+  expect(manifest).toContain("npm.cmd run audit:assets");
+  expect(manifest).toContain("npm.cmd run optimize:assets");
+  expect(manifest).toContain("assets/reference/source-art");
+  expect(manifest).toContain("Production Export Discipline");
+  expect(manifest).toContain("Playable maps");
 });

@@ -1,10 +1,10 @@
-import type { ChapterId, Flags } from "./types";
+import type { ChapterId, Flags, GameFlagKey } from "./types";
 
 export type ChapterDefinition = {
   id: ChapterId;
   title: string;
-  startFlag: string | null;
-  completeFlag: string;
+  startFlag: GameFlagKey | null;
+  completeFlag: GameFlagKey;
 };
 
 export const CHAPTER_DEFINITIONS: Record<ChapterId, ChapterDefinition> = {

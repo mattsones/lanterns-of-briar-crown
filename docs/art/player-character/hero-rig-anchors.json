@@ -1,4 +1,4 @@
-{
+﻿{
   "project": "Liam's Game / Lanterns of Briar Crown",
   "version": "v2-refined-anchors",
   "canvas": {
@@ -20,7 +20,7 @@
   ],
   "rigs": {
     "m_standard": {
-      "file": "art/characters/hero/rig-guides/rig_reference_m_standard.png",
+      "file": "assets/reference/paper-doll/characters/hero/rig-guides/rig_reference_m_standard.png",
       "anchors": {
         "helmetZoneCenter": { "x": 512, "y": 194 },
         "eyeLineY": 253,
@@ -36,7 +36,7 @@
       }
     },
     "f_standard": {
-      "file": "art/characters/hero/rig-guides/rig_reference_f_standard.png",
+      "file": "assets/reference/paper-doll/characters/hero/rig-guides/rig_reference_f_standard.png",
       "anchors": {
         "helmetZoneCenter": { "x": 512, "y": 194 },
         "eyeLineY": 254,
@@ -52,7 +52,7 @@
       }
     },
     "m_stocky": {
-      "file": "art/characters/hero/rig-guides/rig_reference_m_stocky.png",
+      "file": "assets/reference/paper-doll/characters/hero/rig-guides/rig_reference_m_stocky.png",
       "anchors": {
         "helmetZoneCenter": { "x": 512, "y": 194 },
         "eyeLineY": 254,
@@ -68,7 +68,7 @@
       }
     },
     "f_stocky": {
-      "file": "art/characters/hero/rig-guides/rig_reference_f_stocky.png",
+      "file": "assets/reference/paper-doll/characters/hero/rig-guides/rig_reference_f_stocky.png",
       "anchors": {
         "helmetZoneCenter": { "x": 512, "y": 194 },
         "eyeLineY": 254,

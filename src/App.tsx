@@ -29,14 +29,11 @@ import { MAPS, TILE_META } from "./data/maps";
 import {
   areMapNodesConnected,
   getNavigationDestination,
-  getNavigationNodeKeys,
   hasNavigationGraph,
 } from "./data/mapVisuals";
 import { RECIPE_DB } from "./data/recipes";
 import { SHOP_INVENTORIES } from "./data/shops";
 import { buildQuestJournal } from "./data/quests";
-import { SKILL_DB } from "./data/skills";
-import { HERO_VARIANT_ARTWORK_PLAN, MAP_ARTWORK_PLAN } from "./data/artworkPlan";
 import {
   BattleModal,
   CraftModal,
@@ -62,14 +59,21 @@ import {
   itemFitsSlot,
   removeItem,
 } from "./game/inventory";
-import { buildVisitedMap, isBlockedInteractionTile } from "./game/map";
+import {
+  buildVisitedMap,
+  ensureVisitedIncludesPosition,
+  isBlockedInteractionTile,
+  normalizeMapPosition,
+} from "./game/map";
 import {
   getCompanionGrowthPreview,
   getCompanionXpTarget,
   getHeroXpTarget,
 } from "./game/progression";
+import { runGameQaChecks } from "./game/qa";
 import {
   CHAPTER_2_PLAYTEST_SAVE_PATH,
+  CHAPTER_2_COMPLETE_SAVE_PATH,
   formatDiskSaveFilename,
   getSavePayload,
   parseCheckpointPayload,
@@ -96,19 +100,31 @@ import {
 } from "./story/chapter1";
 import {
   CHAPTER_2_STORY,
+  CHAPTER_2_SCENE_COPY,
+  formatDoorNeedsCrownTruthText,
+  formatDoorOpensText,
+  formatDoorWaitsText,
+  formatNoHandleDoorText,
+  formatPreparedRoadwatcherText,
+  formatWestrootGateText,
+  getChapter2CompanionRead,
+  getCrownDenFalseMapText,
+  getCrownDoorText,
+  getCrownSignText,
+  getLanternSignText,
+  getNoHandleLioText,
   getRoadwatcherEncounterKey,
   getWestrootDoorRepairState,
   getWestrootClueCount,
   getWestrootPuzzleOutcome,
 } from "./story/chapter2";
-import { CHAPTER_STORY_PLANS } from "./story/chapters2to5";
 
 const threeDoorsThresholdScene = new URL(
-  "../assets/scenes/three-doors-threshold-v01.png",
+  "../assets/scenes/three-doors-threshold-v01.webp",
   import.meta.url,
 ).href;
 const eddensThreeDoorDrawingScene = new URL(
-  "../assets/scenes/eddens-three-door-drawing-scene-v01.png",
+  "../assets/scenes/eddens-three-door-drawing-scene-v01.webp",
   import.meta.url,
 ).href;
 const crownDenDistantScratchingIcon = new URL(
@@ -197,15 +213,6 @@ const CROWN_DEN_TENSION_STEPS = [
 
 const crownDenPortraitImage = (src, alt) => ({ src, alt });
 
-const EDDEN_DRAWING_REVIEW_TEXT =
-  "The drawing is not a map so much as a memory that lost a fight. Three door-shapes crowd under black roots: a thorn-crowned arch, a mud-blurred lantern door, and a third slab rubbed nearly smooth where a latch should make sense.\n\nIn the margins, Edden has written half-words and crossed most of them out: BACK FIRST. OLD SIDE. LISTENS BEHIND.";
-
-const EDDEN_RECOVERY_FIRST_TEXT =
-  "Edden Vale sits beside a narrow window with a blanket over his shoulders and charcoal on his fingers. The cracked lantern rests beside him, turned so the broken glass faces the wall.\n\nHe does not look at you at first. He looks at the corners of the room, counting them wrong.\n\n\"Crown bit the root,\" he whispers. \"Lantern blinked under mud. Third one was quiet. Not a door. Not from this side. I put my hand where the pull should be and... cold. Cold stone. Back first. Old side listens behind.\"\n\nHis fingers twitch like they are still holding charcoal. \"Don't make it shout. It lies when it shouts.\"";
-
-const EDDEN_RECOVERY_REPEAT_TEXT =
-  "Edden rests with charcoal still smudged on his fingers. \"Back first,\" he murmurs. \"Old side listens. Crown shouts. Lantern remembers. Smooth stone waits.\"";
-
 function getVillageNpcDialogue(tile, flags) {
   const lines = {
     baker: flags.metElder
@@ -279,27 +286,6 @@ function getMayorDialogue(flags) {
   if (!flags.gotDungeonLead)
     return 'Mayor Anwen studies the watchhouse windows. "Enna says your report turned scattered worries into a route case. Good. That means we\'re not losing our minds. Bad, because it means someone else is using theirs. Read what the town knows, then speak with Hollis."';
   return 'Mayor Anwen nods toward the old cellar ways. "If Hollis is sending you below, then Bramblecross is past pretending this is only paperwork. Go carefully. Towns are built on foundations, and foundations remember things."';
-}
-
-function normalizeMapPosition(regionId, position) {
-  if (
-    regionId === "westrootTrail" &&
-    ((position?.x === 6 && position?.y === 3) ||
-      (position?.x === 7 && position?.y === 3))
-  ) {
-    return { x: 6, y: 4 };
-  }
-  return position;
-}
-
-function ensureVisitedIncludesPosition(visitedState, regionId, position, radius = 1) {
-  return {
-    ...visitedState,
-    [regionId]: {
-      ...(visitedState[regionId] || {}),
-      ...buildVisitedMap(regionId, position.x, position.y, radius),
-    },
-  };
 }
 
 export default function LiamsGamePrototype() {
@@ -2342,7 +2328,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                   alt: "Edden's shaky charcoal drawing of three root-buried doors.",
                 },
                 size: "wide",
-                text: EDDEN_DRAWING_REVIEW_TEXT,
+                text: CHAPTER_2_SCENE_COPY.edden.drawingReview,
                 choices: [{ label: "Back to the map table.", effect: openChapter2Briefing }],
               }),
           },
@@ -2383,7 +2369,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                 alt: "Edden's shaky charcoal drawing of three root-buried doors.",
               },
               size: "wide",
-              text: EDDEN_DRAWING_REVIEW_TEXT,
+              text: CHAPTER_2_SCENE_COPY.edden.drawingReview,
               choices: [
                 {
                   label: "I should talk to Edden.",
@@ -2450,8 +2436,8 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       portraitName: "Edden Vale",
       name: "Edden's Recovery Room",
       text: flags.eddenDrawingReceived
-        ? EDDEN_RECOVERY_REPEAT_TEXT
-        : EDDEN_RECOVERY_FIRST_TEXT,
+        ? CHAPTER_2_SCENE_COPY.edden.recoveryRepeat
+        : CHAPTER_2_SCENE_COPY.edden.recoveryFirst,
       choices: [
         !flags.eddenDrawingReceived
           ? {
@@ -2799,31 +2785,31 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
 
   const openThreeDoorThresholdDialogue = (fallbackPosition, assumedFlags = {}) =>
     setDialogue({
-      portrait: "▯",
-      name: "Three-Door Threshold",
+      portrait: CHAPTER_2_SCENE_COPY.threeDoorThreshold.portrait,
+      name: CHAPTER_2_SCENE_COPY.threeDoorThreshold.name,
       sceneImage: {
         src: threeDoorsThresholdScene,
-        alt: "The Crown Door, Lantern Door, and No-Handle Door set into the Westroot hillside.",
+        alt: CHAPTER_2_SCENE_COPY.threeDoorThreshold.sceneAlt,
       },
       size: "wide",
-      text: addLocalResult("The trail pinches between roots and old stone, then opens on three doors set into the hillside.\n\nThe Crown Door stands straight and official. The Lantern Door is lower, weathered, and tucked beside a little stone cache. The third door has no handle at all.\n\nMara stops so suddenly you nearly bump into her.", assumedFlags),
+      text: addLocalResult(CHAPTER_2_SCENE_COPY.threeDoorThreshold.text, assumedFlags),
       choices: [
-        { label: "Approach the Crown Door.", effect: () => openCrownDoorDialogue({}, fallbackPosition) },
-        { label: "Approach the Lantern Door.", effect: () => openLanternDoorDialogue({}, fallbackPosition) },
+        { label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.crownDoor, effect: () => openCrownDoorDialogue({}, fallbackPosition) },
+        { label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.lanternDoor, effect: () => openLanternDoorDialogue({}, fallbackPosition) },
         {
-          label: "Approach the No-Handle Door.",
+          label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.noHandleDoor,
           effect: () => openNoHandleStoneDialogue({}, fallbackPosition),
         },
         flags.westrootGateOpened
-          ? { label: "Step through the First Westroot Gate.", effect: () => openWestrootGateDialogue() }
+          ? { label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.westrootGate, effect: () => openWestrootGateDialogue() }
           : null,
         !(flags.maraConsultedAtThreshold || assumedFlags.maraConsultedAtThreshold)
-          ? { label: "Ask Mara for her read.", effect: () => openMaraHollowJobDialogue(fallbackPosition) }
+          ? { label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.maraRead, effect: () => openMaraHollowJobDialogue(fallbackPosition) }
           : null,
         !(flags.companionReadThreshold || assumedFlags.companionReadThreshold)
-          ? { label: "Ask your companion for their read.", effect: () => openCompanionHollowReadDialogue(fallbackPosition) }
+          ? { label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.companionRead, effect: () => openCompanionHollowReadDialogue(fallbackPosition) }
           : null,
-        { label: "Step back.", effect: () => setDialogue(null) },
+        { label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.back, effect: () => setDialogue(null) },
       ].filter(Boolean),
     });
 
@@ -2831,42 +2817,38 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     const viewFlags = { ...flags, ...assumedFlags };
     const canOpenDen = !!(viewFlags.crownDoorKeyFound || hasItem(player, "split_crown_slat", 1));
     setDialogue({
-      portrait: "♛",
-      name: "Crown Door",
+      portrait: CHAPTER_2_SCENE_COPY.crownDoor.portrait,
+      name: CHAPTER_2_SCENE_COPY.crownDoor.name,
       visual: "crownDoor",
       size: "wide",
-      text: viewFlags.crownDoorDungeonCleared
-        ? "The Crown Door stands open now. The passage behind it no longer feels like a command. It feels like a workshop someone abandoned in a hurry."
-        : canOpenDen
-          ? "The Crown Door is tall, straight, and marked with a polished crown seal. The split slat from the Roadwatcher fits a narrow notch under the seal, where a keyhole was pretending to be decoration."
-          : viewFlags.enteredFalseCrownPassage
-            ? "The Crown Door is still open a crack. Cold air moves behind it, carrying the smell of wet roots and scraped wax. Something in there feels real, but the latch has not admitted you yet."
-            : "The Crown Door is tall, straight, and marked with a polished crown seal. The passage behind it slopes down instead of forward, vanishing into a colder root-tunnel.",
+      text: getCrownDoorText(viewFlags, canOpenDen),
       choices: [
-        { label: "Inspect the Crown Sign.", effect: () => openCrownSignDialogue({}, fallbackPosition) },
+        { label: CHAPTER_2_SCENE_COPY.crownDoor.labels.inspectSign, effect: () => openCrownSignDialogue({}, fallbackPosition) },
         canOpenDen
           ? {
-              label: viewFlags.crownDoorDungeonCleared ? "Return to the Crown Door Den." : "Open the Crown Door with the split slat.",
+              label: viewFlags.crownDoorDungeonCleared
+                ? CHAPTER_2_SCENE_COPY.crownDoor.labels.returnDen
+                : CHAPTER_2_SCENE_COPY.crownDoor.labels.openWithSlat,
               effect: () => enterCrownDoorDen(),
             }
           : {
-              label: "Try the Crown Door.",
+              label: CHAPTER_2_SCENE_COPY.crownDoor.labels.tryDoor,
               effect: () => openFalseCrownPassageDialogue({ ...assumedFlags, crownDoorTried: true }, fallbackPosition),
             },
         {
-          label: "Ask Mara about the Crown Door.",
+          label: CHAPTER_2_SCENE_COPY.crownDoor.labels.askMara,
           effect: () => {
             setFlags((f) => ({ ...f, maraQuestionedCrownDoor: true }));
             setDialogue({
               portrait: "🧵",
               name: "Mara at the Crown Door",
-              text: "\"Lio hates signs that sound like scolding,\" Mara says. \"He would write who it helps, or what it warns about. This one just wants to be obeyed.\"",
-              choices: [{ label: "Back to the Crown Door.", effect: () => openCrownDoorDialogue({ ...assumedFlags, maraQuestionedCrownDoor: true }, fallbackPosition) }],
+              text: CHAPTER_2_SCENE_COPY.crownDoor.maraRead,
+              choices: [{ label: CHAPTER_2_SCENE_COPY.crownDoor.labels.backDoor, effect: () => openCrownDoorDialogue({ ...assumedFlags, maraQuestionedCrownDoor: true }, fallbackPosition) }],
             });
           },
         },
-        { label: "Ask your companion about this door.", effect: () => openCompanionDoorReadDialogue("crown", fallbackPosition) },
-        { label: "Back to the threshold.", effect: () => openThreeDoorThresholdDialogue(fallbackPosition) },
+        { label: CHAPTER_2_SCENE_COPY.crownDoor.labels.askCompanion, effect: () => openCompanionDoorReadDialogue("crown", fallbackPosition) },
+        { label: CHAPTER_2_SCENE_COPY.crownDoor.labels.backThreshold, effect: () => openThreeDoorThresholdDialogue(fallbackPosition) },
       ],
     });
   };
@@ -2885,18 +2867,18 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         : {}),
     }));
     setDialogue({
-      portrait: "♛",
-      name: "False Crown Passage",
-      text: "The Crown Door leads into a narrow root passage, colder than the trail and much too quiet. The floor drops toward a lower chamber where seal-cloth hangs from thorns like warning flags.\n\nIt is a real way, but not Lio's way. Not the quick one. Not the one Mara is trying not to cry about.",
+      portrait: CHAPTER_2_SCENE_COPY.crownDoor.portrait,
+      name: CHAPTER_2_SCENE_COPY.falseCrownPassage.name,
+      text: CHAPTER_2_SCENE_COPY.falseCrownPassage.text,
       choices: [
         {
-          label: "Mark this as a dangerous branch.",
+          label: CHAPTER_2_SCENE_COPY.falseCrownPassage.labels.markDanger,
           effect: () => {
-            setToast("The Crown Door is real, but something else holds its latch.");
+            setToast(CHAPTER_2_SCENE_COPY.falseCrownPassage.markedToast);
             openCrownDoorDialogue({ ...assumedFlags, enteredFalseCrownPassage: true }, fallbackPosition);
           },
         },
-        { label: "Return to the threshold.", effect: () => openThreeDoorThresholdDialogue(fallbackPosition) },
+        { label: CHAPTER_2_SCENE_COPY.falseCrownPassage.labels.returnThreshold, effect: () => openThreeDoorThresholdDialogue(fallbackPosition) },
       ],
     });
   };
@@ -2914,7 +2896,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       "crownDoorDen",
       MAPS.crownDoorDen.start,
       "Crown Door Den",
-      "The split crown slat clicks into the false door. The passage opens into a hidden signworks. Somewhere deeper in the den, wood scratches stone in a patient rhythm.",
+      CHAPTER_2_SCENE_COPY.crownDoorDen.enterTravelText,
     );
   };
 
@@ -2926,7 +2908,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       "westrootTrail",
       { x: 6, y: 4 },
       "Westroot Trail",
-      "You climb back to the Three-Door Threshold.",
+      CHAPTER_2_SCENE_COPY.crownDoorDen.returnTravelText,
     );
   };
 
@@ -2936,11 +2918,11 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       portrait: "",
       portraitImage: crownDenPortraitImage(
         crownDenExitToken,
-        "Painted token of the Crown Door Den threshold",
+        CHAPTER_2_SCENE_COPY.crownDoorDen.vestibule.portraitAlt,
       ),
-      name: "Crown Vestibule",
-      text: "The vestibule tries very hard to look official. Blank order boards line the wall. Six handles hang from one panel, each polished by hands that were meant to pull before thinking.\n\nMara looks at them and whispers, \"That is too many handles for one lie.\"",
-      choices: [{ label: "Move deeper.", effect: () => setDialogue(null) }],
+      name: CHAPTER_2_SCENE_COPY.crownDoorDen.vestibule.name,
+      text: CHAPTER_2_SCENE_COPY.crownDoorDen.vestibule.text,
+      choices: [{ label: CHAPTER_2_SCENE_COPY.crownDoorDen.vestibule.moveDeeper, effect: () => setDialogue(null) }],
     });
   };
 
@@ -2952,19 +2934,21 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         viewFlags.crownDoorWaxTableCleared
           ? crownDenWaxTableClearedToken
           : crownDenWaxTableToken,
-        "Painted token of wax, seal tools, and spoons",
+        CHAPTER_2_SCENE_COPY.crownDoorDen.waxTable.portraitAlt,
       ),
-      name: "Wax Table",
+      name: CHAPTER_2_SCENE_COPY.crownDoorDen.waxTable.name,
       text: addLocalResult(
         viewFlags.crownDoorWaxTableCleared
-          ? "The wax table is scraped clean enough to tell its story: crown wax over pine pitch, pine pitch over green Willow wax, and old honest marks softened until they could be made to lie."
-          : "A worktable sits under a hanging root-lamp. Red crown wax, green Willow wax, pine pitch, crate tags, and little heating spoons are arranged with upsetting neatness.",
+          ? CHAPTER_2_SCENE_COPY.crownDoorDen.waxTable.text.cleared
+          : CHAPTER_2_SCENE_COPY.crownDoorDen.waxTable.text.active,
         viewFlags,
       ),
       choices: [
         !viewFlags.crownDoorWaxTableCleared
           ? {
-              label: hasWillowmarkLens() ? "Use Ada's lens on the wax layers." : "Scrape the wax layers apart.",
+              label: hasWillowmarkLens()
+                ? CHAPTER_2_SCENE_COPY.crownDoorDen.waxTable.labels.useLens
+                : CHAPTER_2_SCENE_COPY.crownDoorDen.waxTable.labels.scrape,
               effect: () => {
                 setFlags((f) => ({
                   ...f,
@@ -2978,13 +2962,13 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                   crownDoorWaxTableCleared: true,
                   willowForgeryConfirmedAtHollow: hasWillowmarkLens(),
                   localResult: hasWillowmarkLens()
-                    ? "Ada's lens catches the nicked Willow leaf under two false layers. You recover broken false seal wax. XP +4"
-                    : "Even without Ada's lens, the scraped layers show market wax being buried under a crown order. You recover broken false seal wax. XP +4",
+                    ? CHAPTER_2_SCENE_COPY.crownDoorDen.waxTable.results.lens
+                    : CHAPTER_2_SCENE_COPY.crownDoorDen.waxTable.results.scrape,
                 });
               },
             }
           : null,
-        { label: "Leave the wax table.", effect: () => setDialogue(null) },
+        { label: CHAPTER_2_SCENE_COPY.crownDoorDen.waxTable.labels.leave, effect: () => setDialogue(null) },
       ].filter(Boolean),
     });
   };
@@ -2997,31 +2981,31 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         viewFlags.crownDoorSlatsBroken
           ? crownDenSlatRackBrokenToken
           : crownDenSlatRackToken,
-        "Painted token of Crown Door Den sign slats",
+        CHAPTER_2_SCENE_COPY.crownDoorDen.slatRack.portraitAlt,
       ),
-      name: "Slat Rack",
+      name: CHAPTER_2_SCENE_COPY.crownDoorDen.slatRack.name,
       text: addLocalResult(
         viewFlags.crownDoorSlatsBroken
-          ? "The half-painted signs lie cracked on the floor. Under their false directions, older lantern scratches are visible again."
-          : "Wooden sign slats hang in rows: RETURN EAST, AWAIT COMMAND, STRAIGHT ROAD SAFE. Some are only half-painted. Beneath the paint, older lantern marks have been scraped nearly away.",
+          ? CHAPTER_2_SCENE_COPY.crownDoorDen.slatRack.text.cleared
+          : CHAPTER_2_SCENE_COPY.crownDoorDen.slatRack.text.active,
         viewFlags,
       ),
       choices: [
         !viewFlags.crownDoorSlatsBroken
           ? {
-              label: "Break the half-painted false signs.",
+              label: CHAPTER_2_SCENE_COPY.crownDoorDen.slatRack.labels.breakSigns,
               effect: () => {
                 setFlags((f) => ({ ...f, crownDoorSlatsBroken: true, crownSignRejected: true }));
                 setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
                 if (advanceCrownDenThreat()) return;
                 openSlatRackDialogue({
                   crownDoorSlatsBroken: true,
-                  localResult: "The slats crack sharply. The den loses some of its bossy silence. XP +4",
+                  localResult: CHAPTER_2_SCENE_COPY.crownDoorDen.slatRack.result,
                 });
               },
             }
           : null,
-        { label: "Leave the slat rack.", effect: () => setDialogue(null) },
+        { label: CHAPTER_2_SCENE_COPY.crownDoorDen.slatRack.labels.leave, effect: () => setDialogue(null) },
       ].filter(Boolean),
     });
   };
@@ -3034,19 +3018,19 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         viewFlags.crownDoorWitnessLedgerFound
           ? crownDenWitnessLedgerCopiedToken
           : crownDenWitnessLedgerToken,
-        "Painted token of the witness ledger and notes",
+        CHAPTER_2_SCENE_COPY.crownDoorDen.witnessLedger.portraitAlt,
       ),
-      name: "Witness Ledger Nook",
+      name: CHAPTER_2_SCENE_COPY.crownDoorDen.witnessLedger.name,
       text: addLocalResult(
         viewFlags.crownDoorWitnessLedgerFound
-          ? "The copied ledger page is folded safely away. Its neat columns make the whole den feel worse, because fear was being filed like inventory."
-          : "A small desk is tucked into a root alcove. The ledger on it is written in tidy columns: sign site, wax used, witness risk, route correction.\n\nOne line is underlined twice: LIO BRINDLE - moved past gate - witness risk unresolved.",
+          ? CHAPTER_2_SCENE_COPY.crownDoorDen.witnessLedger.text.copied
+          : CHAPTER_2_SCENE_COPY.crownDoorDen.witnessLedger.text.active,
         viewFlags,
       ),
       choices: [
         !viewFlags.crownDoorWitnessLedgerFound
           ? {
-              label: "Copy the witness ledger page.",
+              label: CHAPTER_2_SCENE_COPY.crownDoorDen.witnessLedger.labels.copy,
               effect: () => {
                 setFlags((f) => ({ ...f, crownDoorWitnessLedgerFound: true }));
                 gainStoryItemOnce("briar_signmaker_ledger");
@@ -3054,12 +3038,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                 if (advanceCrownDenThreat()) return;
                 openWitnessLedgerDialogue({
                   crownDoorWitnessLedgerFound: true,
-                  localResult: "You copy the ledger page for Enna and Hollis. XP +5",
+                  localResult: CHAPTER_2_SCENE_COPY.crownDoorDen.witnessLedger.result,
                 });
               },
             }
           : null,
-        { label: "Leave the ledger nook.", effect: () => setDialogue(null) },
+        { label: CHAPTER_2_SCENE_COPY.crownDoorDen.witnessLedger.labels.leave, effect: () => setDialogue(null) },
       ].filter(Boolean),
     });
   };
@@ -3072,21 +3056,21 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         viewFlags.crownDoorCollarsBroken
           ? crownDenCollarKennelBrokenToken
           : crownDenCollarKennelToken,
-        "Painted token of thorn collars and kennel straw",
+        CHAPTER_2_SCENE_COPY.crownDoorDen.collarKennel.portraitAlt,
       ),
-      name: "Collar Kennel",
+      name: CHAPTER_2_SCENE_COPY.crownDoorDen.collarKennel.name,
       text: addLocalResult(
         viewFlags.crownDoorCollarsBroken
           ? viewFlags.crownDenHoundFreed
-            ? "The thorn collars are broken. The hound has curled into the clean bedding, watching the door with tired, unenchanted eyes."
-            : "The thorn collars are broken. The bedding in the corner looks less like a trap now and more like a place something frightened might recover."
-          : "The kennel is small and clean in a way that makes Mara angrier, not calmer. A thorn-collared hound stands chained beside soft bedding and water bowls. The chain is short enough to be cruel without looking cruel.\n\n\"They made scared things guard scared roads,\" she says.",
+            ? CHAPTER_2_SCENE_COPY.crownDoorDen.collarKennel.text.houndFreed
+            : CHAPTER_2_SCENE_COPY.crownDoorDen.collarKennel.text.broken
+          : CHAPTER_2_SCENE_COPY.crownDoorDen.collarKennel.text.active,
         viewFlags,
       ),
       choices: [
         !viewFlags.crownDoorCollarsBroken
           ? {
-              label: "Ease the hound and cut the collar carefully.",
+              label: CHAPTER_2_SCENE_COPY.crownDoorDen.collarKennel.labels.easeHound,
               effect: () => {
                 const check = resolveSkillCheck(derivedStats, "Heart", 12);
                 if (!check.success) {
@@ -3096,11 +3080,11 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                       crownDenHoundWarningIcon,
                       "Painted thorn collar warning icon",
                     ),
-                    name: "The Collar Snaps Tight",
-                    text: `${checkSummary(check)}\n\nThe hound wants to trust the quiet in your voice, but the collar burns red before it can choose. It lunges because the den taught it to lunge.`,
+                    name: CHAPTER_2_SCENE_COPY.crownDoorDen.collarKennel.failureName,
+                    text: `${checkSummary(check)}\n\n${CHAPTER_2_SCENE_COPY.crownDoorDen.collarKennel.failureText}`,
                     choices: [
                       {
-                        label: "Break the collar in battle.",
+                        label: CHAPTER_2_SCENE_COPY.crownDoorDen.collarKennel.labels.battle,
                         effect: () => {
                           setDialogue(null);
                           startBattle(buildEncounterEnemies("crownDenHound"), "crownDenHound");
@@ -3120,45 +3104,45 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                 openCollarKennelDialogue({
                   crownDoorCollarsBroken: true,
                   crownDenHoundFreed: true,
-                  localResult: `${checkSummary(check)}\n\nThe collar opens with a thorny click. The hound does not run. It simply stops shaking. XP +6`,
+                  localResult: `${checkSummary(check)}\n\n${CHAPTER_2_SCENE_COPY.crownDoorDen.collarKennel.successResult}`,
                 });
               },
             }
           : null,
         !viewFlags.crownDoorCollarsBroken
           ? {
-              label: "Break the collar by force.",
+              label: CHAPTER_2_SCENE_COPY.crownDoorDen.collarKennel.labels.force,
               effect: () => {
                 setDialogue(null);
                 startBattle(buildEncounterEnemies("crownDenHound"), "crownDenHound");
               },
             }
           : null,
-        { label: "Leave the kennel.", effect: () => setDialogue(null) },
+        { label: CHAPTER_2_SCENE_COPY.crownDoorDen.collarKennel.labels.leave, effect: () => setDialogue(null) },
       ].filter(Boolean),
     });
   };
 
   const openCrownDenGuardDialogue = (fallbackPosition) => {
-    if (flags.beatCrownDenGuard) return setToast("Only broken sign nails remain here.");
+    if (flags.beatCrownDenGuard) return setToast(CHAPTER_2_SCENE_COPY.crownDoorDen.guard.defeatedToast);
     setDialogue({
       portrait: "!",
       portraitImage: crownDenPortraitImage(
         crownDenPatrolCaughtUpIcon,
-        "Painted crossed sign slats for the signworks guard",
+        CHAPTER_2_SCENE_COPY.crownDoorDen.guard.portraitAlt,
       ),
-      name: "False Sign Guard",
-      text: "Two false-sign scratchers skitter down from the slat rack, dragging a thorn-collared hound on a cord of bramble. One points at the door behind you as if ordering you to leave. The other keeps scratching fresh arrows into old wood.\n\nMara backs behind a root pillar. \"Behind the line,\" she says. \"Still doing it.\"",
+      name: CHAPTER_2_SCENE_COPY.crownDoorDen.guard.name,
+      text: CHAPTER_2_SCENE_COPY.crownDoorDen.guard.text,
       choices: [
         {
-          label: "Clear the signworks guard.",
+          label: CHAPTER_2_SCENE_COPY.crownDoorDen.guard.labels.clear,
           effect: () => {
             setDialogue(null);
             startBattle(buildEncounterEnemies("crownDenGuard"), "crownDenGuard");
           },
         },
         {
-          label: "Back away.",
+          label: CHAPTER_2_SCENE_COPY.crownDoorDen.guard.labels.backAway,
           effect: () => {
             if (fallbackPosition) {
               setPosition(fallbackPosition);
@@ -3187,21 +3171,14 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         viewFlags.crownDoorDungeonCleared
           ? crownDenFalseMapClearedToken
           : crownDenFalseMapToken,
-        "Painted token of the false road map",
+        CHAPTER_2_SCENE_COPY.crownDoorDen.falseMap.portraitAlt,
       ),
-      name: "False Map Room",
-      text: addLocalResult(
-        viewFlags.crownDoorDungeonCleared
-          ? "The false map hangs slack now. The straight road is crossed out, the hidden old marks are visible, and one cleaned lantern mark glows softly in your pack."
-          : ready
-            ? "The false map is made of strings, pins, crown slats, and scraped lantern marks. Now that the den's tools are broken, the map no longer looks like a plan. It looks like a confession."
-            : `A distorted road map covers the far wall. It shows the straight road bold and clean, while the true route is buried under pins and red thread.\n\nThe map will not come free while the den is still working.\n\nStill holding the lie: ${missing.join(", ")}.`,
-        viewFlags,
-      ),
+      name: CHAPTER_2_SCENE_COPY.crownDoorDen.falseMap.name,
+      text: addLocalResult(getCrownDenFalseMapText(viewFlags, missing), viewFlags),
       choices: [
         ready && !viewFlags.crownDoorDungeonCleared
           ? {
-              label: "Pull the false road off the map.",
+              label: CHAPTER_2_SCENE_COPY.crownDoorDen.falseMap.labels.pull,
               effect: () => {
                 setFlags((f) => ({
                   ...f,
@@ -3217,15 +3194,15 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                   crownDoorFalseMapRead: true,
                   crownDoorDungeonCleared: true,
                   cleanedLanternMarkFound: true,
-                  localResult: "The false route tears loose. Beneath it, a cleaned lantern mark points back to the No-Handle Door. XP +8",
+                  localResult: CHAPTER_2_SCENE_COPY.crownDoorDen.falseMap.result,
                 });
               },
             }
           : null,
         viewFlags.crownDoorDungeonCleared
-          ? { label: "Return to the Three-Door Threshold.", effect: returnToThreeDoorThreshold }
+          ? { label: CHAPTER_2_SCENE_COPY.crownDoorDen.falseMap.labels.returnThreshold, effect: returnToThreeDoorThreshold }
           : null,
-        { label: "Leave the false map.", effect: () => setDialogue(null) },
+        { label: CHAPTER_2_SCENE_COPY.crownDoorDen.falseMap.labels.leave, effect: () => setDialogue(null) },
       ].filter(Boolean),
     });
   };
@@ -3233,17 +3210,17 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
   const openLanternDoorDialogue = (assumedFlags = {}, fallbackPosition) => {
     const viewFlags = { ...flags, ...assumedFlags };
     setDialogue({
-      portrait: "✶",
-      name: "Lantern Door",
+      portrait: CHAPTER_2_SCENE_COPY.lanternDoor.portrait,
+      name: CHAPTER_2_SCENE_COPY.lanternDoor.name,
       visual: "lanternDoor",
       size: "wide",
       text: viewFlags.lanternDoorTried
-        ? "The Lantern Door is not really a door after all. The little stone cache beside it sits open, smelling faintly of dry herbs and waxed cloth."
-        : "The Lantern Door is squat and weathered. Beside it, a small stone cache is tucked under a root lip, exactly the sort of thing a tired courier would know to check without thinking.",
+        ? CHAPTER_2_SCENE_COPY.lanternDoor.text.tried
+        : CHAPTER_2_SCENE_COPY.lanternDoor.text.default,
       choices: [
-        { label: "Inspect the Lantern Sign.", effect: () => openLanternSignDialogue({}, fallbackPosition) },
+        { label: CHAPTER_2_SCENE_COPY.lanternDoor.labels.inspectSign, effect: () => openLanternSignDialogue({}, fallbackPosition) },
         {
-          label: "Try the Lantern Door.",
+          label: CHAPTER_2_SCENE_COPY.lanternDoor.labels.tryDoor,
           effect: () => {
             const firstTry = !flags.lanternDoorTried && !viewFlags.lanternDoorTried;
             setFlags((f) => ({ ...f, lanternDoorTried: true }));
@@ -3252,29 +3229,29 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               gainItem(setPlayer, "healing_fizzpop", 1);
             }
             setDialogue({
-              portrait: "✶",
-              name: "Lantern Door",
+              portrait: CHAPTER_2_SCENE_COPY.lanternDoor.portrait,
+              name: CHAPTER_2_SCENE_COPY.lanternDoor.name,
               text: firstTry
-                ? "The slab does not swing open. Instead, the cache stone slides loose with a soft scrape. Inside are travel supplies wrapped in dry leaf-cloth.\n\nMara lets out a breath. \"Lio would have checked this. He would have known.\""
-                : "The cache is empty now. The Lantern Door stays quiet.",
-              choices: [{ label: "Back to the Lantern Door.", effect: () => openLanternDoorDialogue({ ...assumedFlags, lanternDoorTried: true }, fallbackPosition) }],
+                ? CHAPTER_2_SCENE_COPY.lanternDoor.text.firstTry
+                : CHAPTER_2_SCENE_COPY.lanternDoor.text.empty,
+              choices: [{ label: CHAPTER_2_SCENE_COPY.lanternDoor.labels.backDoor, effect: () => openLanternDoorDialogue({ ...assumedFlags, lanternDoorTried: true }, fallbackPosition) }],
             });
           },
         },
         {
-          label: "Ask Mara about the Lantern Door.",
+          label: CHAPTER_2_SCENE_COPY.lanternDoor.labels.askMara,
           effect: () => {
             setFlags((f) => ({ ...f, maraQuestionedLanternDoor: true }));
             setDialogue({
               portrait: "🧵",
               name: "Mara at the Lantern Door",
-              text: "\"Lio knows these little caches,\" Mara says. \"He says the best road help is boring because boring means somebody planned for you to survive.\"",
-              choices: [{ label: "Back to the Lantern Door.", effect: () => openLanternDoorDialogue({ ...assumedFlags, maraQuestionedLanternDoor: true }, fallbackPosition) }],
+              text: CHAPTER_2_SCENE_COPY.lanternDoor.maraRead,
+              choices: [{ label: CHAPTER_2_SCENE_COPY.lanternDoor.labels.backDoor, effect: () => openLanternDoorDialogue({ ...assumedFlags, maraQuestionedLanternDoor: true }, fallbackPosition) }],
             });
           },
         },
-        { label: "Ask your companion about this door.", effect: () => openCompanionDoorReadDialogue("lantern", fallbackPosition) },
-        { label: "Back to the threshold.", effect: () => openThreeDoorThresholdDialogue(fallbackPosition) },
+        { label: CHAPTER_2_SCENE_COPY.lanternDoor.labels.askCompanion, effect: () => openCompanionDoorReadDialogue("lantern", fallbackPosition) },
+        { label: CHAPTER_2_SCENE_COPY.lanternDoor.labels.backThreshold, effect: () => openThreeDoorThresholdDialogue(fallbackPosition) },
       ],
     });
   };
@@ -3283,61 +3260,57 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     setFlags((f) => ({ ...f, maraConsultedAtThreshold: true }));
     setDialogue({
       portrait: "🧵",
-      name: "Mara at the Threshold",
-      text: '"Yes," Mara says immediately.\n\n"You do not know what I am going to ask."\n\n"Yes to that too."',
+      name: CHAPTER_2_SCENE_COPY.maraThresholdRead.name,
+      text: CHAPTER_2_SCENE_COPY.maraThresholdRead.text,
       choices: [
         {
-          label: "Look for Lio's smallest marks.",
+          label: CHAPTER_2_SCENE_COPY.maraThresholdRead.labels.lioMarks,
           effect: () => {
             setFlags((f) => ({ ...f, maraJob: "lioMarks", maraConsultedAtThreshold: true }));
             openThreeDoorThresholdDialogue(fallbackPosition, {
               maraConsultedAtThreshold: true,
-              localResult: "Mara starts searching where official sign-makers would never kneel.",
+              localResult: CHAPTER_2_SCENE_COPY.maraThresholdRead.results.lioMarks,
             });
           },
         },
         {
-          label: "Compare Edden's drawing to the threshold.",
+          label: CHAPTER_2_SCENE_COPY.maraThresholdRead.labels.eddenDrawing,
           effect: () => {
             setFlags((f) => ({ ...f, maraJob: "eddenDrawing", eddensDrawingRotated: true, maraConsultedAtThreshold: true }));
             setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
             openThreeDoorThresholdDialogue(fallbackPosition, {
               maraConsultedAtThreshold: true,
-              localResult: "Mara turns Edden's drawing sideways. The roots match the blank stone. XP +4",
+              localResult: CHAPTER_2_SCENE_COPY.maraThresholdRead.results.eddenDrawing,
             });
           },
         },
         {
-          label: "Watch the threshold from behind the line.",
+          label: CHAPTER_2_SCENE_COPY.maraThresholdRead.labels.lanternSigns,
           effect: () => {
             setFlags((f) => ({ ...f, maraJob: "lanternSigns", maraWatchedLantern: true, maraConsultedAtThreshold: true }));
             openThreeDoorThresholdDialogue(fallbackPosition, {
               maraConsultedAtThreshold: true,
-              localResult: "Mara watches the threshold from an extremely behind-the-line place.",
+              localResult: CHAPTER_2_SCENE_COPY.maraThresholdRead.results.lanternSigns,
             });
           },
         },
         {
-          label: "Stay where I can see you.",
+          label: CHAPTER_2_SCENE_COPY.maraThresholdRead.labels.safety,
           effect: () => {
             setFlags((f) => ({ ...f, maraJob: "safety", maraConsultedAtThreshold: true }));
             openThreeDoorThresholdDialogue(fallbackPosition, {
               maraConsultedAtThreshold: true,
-              localResult: "Mara stays safe in a very visible way.",
+              localResult: CHAPTER_2_SCENE_COPY.maraThresholdRead.results.safety,
             });
           },
         },
       ],
     });
+  };
 
   const openCompanionHollowReadDialogue = (fallbackPosition) => {
     setFlags((f) => ({ ...f, companionReadThreshold: true }));
-    const text = chapter2CompanionLine(
-      'Rowan studies the three doors. "One goes down. One gives supplies. One waits. I do not love that order, but I understand it."',
-      'Tilda circles the threshold with theatrical suspicion. "Crown door: ominous basement. Lantern door: snacks. Blank rock: rude, suspicious, refusing to do normal door work."',
-      'Moss stands very still before the blank stone. "No handle means it is not asking for strength."',
-      "The threshold offers no easy answer, but Edden's drawing and Mara's attention make the pattern clearer.",
-    );
+    const text = getChapter2CompanionRead("threshold", companion.id);
     setDialogue({
       portrait: companion.icon || "3",
       name: companion.recruited ? `${companion.name}'s Read` : "The Threshold Waits",
@@ -3354,34 +3327,18 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       ],
     });
   };
-  };
 
   const openCompanionDoorReadDialogue = (door, fallbackPosition) => {
     const doorText = {
-      crown: chapter2CompanionLine(
-        'Rowan plants his shield between Mara and the straight passage. "A real order can explain who it protects. This one only explains who it expects to obey."',
-        'Tilda peers down the straight passage. "It is trying very hard to look official. That is what I do when I am lying with props."',
-        'Moss touches the edge of the crown mark, then wipes his fingers on the grass. "This mark was placed over the road. It did not grow from it."',
-        "The Crown Door sounds certain, but certainty is not the same thing as truth.",
-      ),
-      lantern: chapter2CompanionLine(
-        'Rowan reads the marks slowly. "Warning, shelter, water, witness. That is a road trying to keep people alive, not a trap trying to hurry them."',
-        'Tilda taps each mark in turn. "This one is not glamorous, which is how you know it may be doing actual work."',
-        'Moss smiles at the old cuts. "Lantern marks do not command the traveler. They remember the traveler."',
-        "The Lantern Door seems less interested in opening than in helping you read the hollow.",
-      ),
-      noHandle: chapter2CompanionLine(
-        'Rowan rests one hand near his sword but does not touch the stone. "If it is waiting on the road behind us, we should make sure the road has witnesses."',
-        'Tilda squints at the blank stone. "No handle. No lock. Very rude. Also weirdly calm about being stared at."',
-        'Moss kneels near the root seam. "It is listening somewhere other than its face."',
-        "The no-handle door waits with uncomfortable patience.",
-      ),
+      crown: getChapter2CompanionRead("crownDoor", companion.id),
+      lantern: getChapter2CompanionRead("lanternDoor", companion.id),
+      noHandle: getChapter2CompanionRead("noHandleDoor", companion.id),
     };
     setDialogue({
       portrait: companion.icon || "3",
       name: companion.recruited ? `${companion.name}'s Read` : "The Hollow Waits",
       text: doorText[door] || doorText.noHandle,
-      choices: [{ label: "Back to the threshold.", effect: () => openThreeDoorThresholdDialogue(fallbackPosition) }],
+      choices: [{ label: CHAPTER_2_SCENE_COPY.crownDoor.labels.backThreshold, effect: () => openThreeDoorThresholdDialogue(fallbackPosition) }],
     });
   };
 
@@ -3389,48 +3346,44 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     const viewFlags = { ...flags, ...assumedFlags };
     const repairMode = !!viewFlags.noHandleStoneInspected;
     setDialogue({
-      portrait: "♛",
-      name: "Crown Sign",
-      text: addLocalResult(viewFlags.crownSignRejected || viewFlags.crownSignLensUsed
-        ? "The Crown Sign still stands tall, but its seal has cracked and one edge has peeled away from older scratches underneath."
-        : repairMode
-          ? "The Crown Sign is large, clean, and newly nailed. It gives an order, a direction, and a seal, but no traveler's name and no sign of who wrote it."
-          : "The Crown Sign is large, clean, and official-looking. Mara gives it one impatient glance, then looks back to the places where Lio would actually write.", viewFlags),
+      portrait: CHAPTER_2_SCENE_COPY.crownDoor.portrait,
+      name: CHAPTER_2_SCENE_COPY.crownSign.name,
+      text: addLocalResult(getCrownSignText(viewFlags), viewFlags),
       choices: [
         repairMode && !viewFlags.crownSignRejected
           ? {
-              label: "Loosen the nailed-on crown sign.",
+              label: CHAPTER_2_SCENE_COPY.crownSign.labels.loosen,
               effect: () => {
                 setFlags((f) => ({ ...f, crownSignRejected: true }));
                 openCrownSignDialogue({
                   ...assumedFlags,
                   crownSignRejected: true,
-                  localResult: "The sign comes loose enough to show older scratches beneath it.",
+                  localResult: CHAPTER_2_SCENE_COPY.crownSign.results.loosen,
                 }, fallbackPosition);
               },
             }
           : null,
         repairMode && hasWillowmarkLens() && !viewFlags.crownSignLensUsed
           ? {
-              label: "Use the Willowmark Lens.",
+              label: CHAPTER_2_SCENE_COPY.crownSign.labels.lens,
               effect: () => {
                 setFlags((f) => ({ ...f, crownSignLensUsed: true, willowForgeryConfirmedAtHollow: true }));
                 openCrownSignDialogue({
                   ...assumedFlags,
                   crownSignLensUsed: true,
                   willowForgeryConfirmedAtHollow: true,
-                  localResult: "Under the seal, the lens catches scraped wax and Ada's nicked Willow mark.",
+                  localResult: CHAPTER_2_SCENE_COPY.crownSign.results.lens,
                 }, fallbackPosition);
               },
             }
           : null,
         !viewFlags.crownSignRejected
           ? {
-              label: "Test the false direction anyway.",
+              label: CHAPTER_2_SCENE_COPY.crownSign.labels.testDirection,
               effect: () => openFalseCrownPassageDialogue({ ...assumedFlags, trustedCrownSignAtHollow: true }, fallbackPosition),
             }
           : null,
-        { label: "Back to the Crown Door.", effect: () => openCrownDoorDialogue(assumedFlags, fallbackPosition) },
+        { label: CHAPTER_2_SCENE_COPY.crownSign.labels.backDoor, effect: () => openCrownDoorDialogue(assumedFlags, fallbackPosition) },
       ].filter(Boolean),
     });
   };
@@ -3439,17 +3392,13 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     const viewFlags = { ...flags, ...assumedFlags };
     const repairMode = !!viewFlags.noHandleStoneInspected;
     setDialogue({
-      portrait: "✶",
-      name: "Lantern Sign",
-      text: addLocalResult(viewFlags.lanternSignCleaned
-        ? "The Lantern Sign is clean now. Four older marks show clearly: WARNING. SHELTER. WATER. WITNESS.\n\nBelow them, a route phrase reads: DO NOT FORCE THE CLOSED WAY. SPEAK TRUE AND WAIT."
-        : repairMode
-          ? "The Lantern Sign is half-covered with mud. Beneath it, older cuts wait in a line, too practical to be decoration."
-          : "The Lantern Sign is half-covered with mud beside the little cache. Mara glances at it, then at the no-handle door. \"Later,\" she says. \"Lio first.\"", viewFlags),
+      portrait: CHAPTER_2_SCENE_COPY.lanternDoor.portrait,
+      name: CHAPTER_2_SCENE_COPY.lanternSign.name,
+      text: addLocalResult(getLanternSignText(viewFlags), viewFlags),
       choices: [
         repairMode && !viewFlags.lanternSignCleaned
           ? {
-              label: "Clean the Lantern Sign fully.",
+              label: CHAPTER_2_SCENE_COPY.lanternSign.labels.clean,
               effect: () => {
                 setFlags((f) => ({ ...f, lanternSignCleaned: true, understandsTrueSigns: true }));
                 if (!flags.lanternSignCleaned) setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
@@ -3457,42 +3406,42 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                   ...assumedFlags,
                   lanternSignCleaned: true,
                   understandsTrueSigns: true,
-                  localResult: "The old lantern marks shine through. XP +4",
+                  localResult: CHAPTER_2_SCENE_COPY.lanternSign.results.clean,
                 }, fallbackPosition);
               },
             }
           : null,
         repairMode && !viewFlags.lanternSignCompared
           ? {
-              label: "Compare it with Edden's drawing.",
+              label: CHAPTER_2_SCENE_COPY.lanternSign.labels.compare,
               effect: () => {
                 setFlags((f) => ({ ...f, lanternSignCompared: true, eddensDrawingRotated: true }));
                 openLanternSignDialogue({
                   ...assumedFlags,
                   lanternSignCompared: true,
                   eddensDrawingRotated: true,
-                  localResult: "Mara turns Edden's drawing sideways. The roots match the no-handle stone.",
+                  localResult: CHAPTER_2_SCENE_COPY.lanternSign.results.compare,
                 }, fallbackPosition);
               },
             }
           : null,
         repairMode && !viewFlags.understandsTrueSigns
           ? {
-              label: "Ask what the marks mean.",
+              label: CHAPTER_2_SCENE_COPY.lanternSign.labels.askMarks,
               effect: () => {
                 setFlags((f) => ({ ...f, understandsTrueSigns: true }));
                 openLanternSignDialogue(
                   {
                     ...assumedFlags,
                     understandsTrueSigns: true,
-                    localResult: "Warning, shelter, water, and witness are traveler help. None of them says obey.",
+                    localResult: CHAPTER_2_SCENE_COPY.lanternSign.results.askMarks,
                   },
                   fallbackPosition,
                 );
               },
             }
           : null,
-        { label: "Back to the Lantern Door.", effect: () => openLanternDoorDialogue(assumedFlags, fallbackPosition) },
+        { label: CHAPTER_2_SCENE_COPY.lanternSign.labels.backDoor, effect: () => openLanternDoorDialogue(assumedFlags, fallbackPosition) },
       ].filter(Boolean),
     });
   };
@@ -3502,21 +3451,17 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     const outcome = getWestrootPuzzleOutcome(flags, doorFlags);
     const repair = getWestrootDoorRepairState(flags, doorFlags);
     const viewFlags = { ...flags, ...doorFlags };
-    const lioText = viewFlags.maraAskedNoHandleMark && viewFlags.lioHookMarkFound
-      ? repair.lioMarkConfirmed
-        ? `Near the base, Mara finds the tiny hook-tailed arrow again and reads the courier shorthand with a shaking breath.\n\n"Lio," she whispers. "${CHAPTER_2_STORY.lioGateMark}"`
-        : "Near the base, Mara finds the tiny hook-tailed arrow and goes very still.\n\n\"It is Lio's,\" she says. \"No maybe. No probably. He marked this door.\""
-      : "Near the base, a tiny scratch hides under a root. It is easy to miss unless someone knows exactly how small a worried courier can write.";
+    const lioText = getNoHandleLioText(viewFlags, repair);
     setFlags((f) => ({ ...f, noHandleStoneInspected: true }));
     setDialogue({
-      portrait: "▯",
-      name: "No-Handle Door",
+      portrait: CHAPTER_2_SCENE_COPY.noHandleDoor.portrait,
+      name: CHAPTER_2_SCENE_COPY.noHandleDoor.name,
       visual: "noHandleDoor",
       size: "wide",
-      text: addLocalResult(`The stone door has no handle, no latch, and no keyhole. Roots curl around its edge like folded hands.\n\nAn inscription is scratched where a handle should be:\n\nLET THE ROAD BEHIND YOU SPEAK. I DO NOT ANSWER HANDS.\n\n${lioText}\n\n${formatWestrootDoorWhisper(repair)}`, viewFlags),
+      text: addLocalResult(formatNoHandleDoorText(lioText, formatWestrootDoorWhisper(repair)), viewFlags),
       choices: [
         {
-          label: "Study the door inscription.",
+          label: CHAPTER_2_SCENE_COPY.noHandleDoor.labels.study,
           effect: () => {
             setFlags((f) => ({ ...f, noHandleDoorStudied: true }));
             openNoHandleStoneDialogue(
@@ -3524,8 +3469,8 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                 ...doorFlags,
                 noHandleDoorStudied: true,
                 localResult: repair.readyToOpen
-                  ? "The inscription is warm now, and the roots lean inward instead of away."
-                  : "You trace the inscription and listen for what the road behind you is still saying.",
+                  ? CHAPTER_2_SCENE_COPY.noHandleDoor.results.studyReady
+                  : CHAPTER_2_SCENE_COPY.noHandleDoor.results.studyWaiting,
               },
               fallbackPosition,
             );
@@ -3533,7 +3478,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         },
         !viewFlags.maraAskedNoHandleMark
           ? {
-          label: "Ask Mara to read the tiny scratch.",
+          label: CHAPTER_2_SCENE_COPY.noHandleDoor.labels.askMara,
           effect: () => {
             const foundMark = !!(flags.lioShelterMarkFound || doorFlags.lioShelterMarkFound);
             const markFlags = {
@@ -3548,8 +3493,8 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                 ...doorFlags,
                 ...markFlags,
                 localResult: foundMark
-                  ? "Mara matches the tiny hook-tail to Lio's shelter mark. XP +5"
-                  : "Mara knows the tiny hook-tail is Lio's. The door still seems to be listening past you.",
+                  ? CHAPTER_2_SCENE_COPY.noHandleDoor.results.lioMarkMatched
+                  : CHAPTER_2_SCENE_COPY.noHandleDoor.results.lioMarkKnown,
               },
               fallbackPosition,
             );
@@ -3558,7 +3503,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           : null,
         !viewFlags.companionReadNoHandleDoor
           ? {
-              label: "Ask your companion about this door.",
+              label: CHAPTER_2_SCENE_COPY.noHandleDoor.labels.askCompanion,
               effect: () => {
                 setFlags((f) => ({ ...f, companionReadNoHandleDoor: true }));
                 openCompanionDoorReadDialogue("noHandle", fallbackPosition);
@@ -3567,7 +3512,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           : null,
         !viewFlags.eddenDrawingComparedAtDoor
           ? {
-          label: "Compare Edden's drawing here.",
+          label: CHAPTER_2_SCENE_COPY.noHandleDoor.labels.compareDrawing,
           effect: () => {
             const drawingFlags = {
               eddenDrawingComparedAtDoor: true,
@@ -3584,8 +3529,8 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                 ...drawingFlags,
                 localResult:
                   flags.lanternSignCleaned || doorFlags.lanternSignCleaned
-                    ? "Mara turns Edden's drawing sideways. The roots match the no-handle stone. XP +5"
-                    : "The roots almost line up, but the Lantern Door has not made its older marks clear yet.",
+                    ? CHAPTER_2_SCENE_COPY.noHandleDoor.results.drawingMatched
+                    : CHAPTER_2_SCENE_COPY.noHandleDoor.results.drawingAlmost,
               },
               fallbackPosition,
             );
@@ -3598,12 +3543,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             if (!outcome.enoughClues) {
               setFlags((f) => ({ ...f, incompleteTruthPhraseSpoken: true }));
               setDialogue({
-                portrait: "▯",
-                name: "The Door Waits",
-                text: `You speak the old road phrase.\n\nThe roots shift, listening. Then they settle again.\n\n${formatWestrootDoorWhisper(repair)}`,
+                portrait: CHAPTER_2_SCENE_COPY.noHandleDoor.portrait,
+                name: CHAPTER_2_SCENE_COPY.noHandleDoor.doorWaitsName,
+                text: formatDoorWaitsText(formatWestrootDoorWhisper(repair)),
                 choices: [
                   {
-                    label: "Listen to the threshold again.",
+                    label: CHAPTER_2_SCENE_COPY.noHandleDoor.labels.listenThreshold,
                     effect: () => openThreeDoorThresholdDialogue(fallbackPosition),
                   },
                 ],
@@ -3613,12 +3558,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
 
             if (flags.roadwatcherDefeated && !repair.readyToOpen) {
               setDialogue({
-                portrait: "▯",
-                name: "The Door Listens Behind You",
-                text: `You speak the old road phrase.\n\nThe no-handle door warms, then stills. Its roots turn slightly toward the Crown Door.\n\n${formatWestrootDoorWhisper(repair)}\n\nMara looks from the blank door to the false one. "The watcher had a key for a reason."`,
+                portrait: CHAPTER_2_SCENE_COPY.noHandleDoor.portrait,
+                name: CHAPTER_2_SCENE_COPY.noHandleDoor.doorListensName,
+                text: formatDoorNeedsCrownTruthText(formatWestrootDoorWhisper(repair)),
                 choices: [
                   {
-                    label: "Return to the threshold.",
+                    label: CHAPTER_2_SCENE_COPY.noHandleDoor.labels.returnThreshold,
                     effect: () => openThreeDoorThresholdDialogue(fallbackPosition),
                   },
                 ],
@@ -3638,12 +3583,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               }));
               if (!flags.westrootGateOpened) setPlayer((p) => ({ ...p, xp: p.xp + 10 }));
               setDialogue({
-                portrait: "▯",
-                name: "The No-Handle Door Opens",
-                text: `You speak the old road phrase.\n\nThe cleaned lantern mark warms in your pack. Behind you, the Crown Door den goes quiet. Ahead of you, the no-handle door opens inward without a sound.\n\nMara reads the tiny hook-tailed mark at the base: ${CHAPTER_2_STORY.lioGateMark}`,
+                portrait: CHAPTER_2_SCENE_COPY.noHandleDoor.portrait,
+                name: CHAPTER_2_SCENE_COPY.noHandleDoor.doorOpensName,
+                text: formatDoorOpensText(),
                 choices: [
                   {
-                    label: "Step to the First Westroot Gate.",
+                    label: CHAPTER_2_SCENE_COPY.noHandleDoor.labels.stepGate,
                     effect: () => openWestrootGateDialogue({ westrootGateOpened: true }),
                   },
                 ],
@@ -3680,7 +3625,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           },
         },
         {
-          label: "Try to force the door.",
+          label: CHAPTER_2_SCENE_COPY.noHandleDoor.labels.force,
           effect: () => {
             setFlags((f) => ({
               ...f,
@@ -3693,14 +3638,14 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                 ...doorFlags,
                 forcedNoHandleDoor: true,
                 forcedNoHandleDoorTwice: !!flags.forcedNoHandleDoor || !!flags.forcedNoHandleDoorTwice,
-                localResult: "The door does not move. Something in the thorns stirs.",
+                localResult: CHAPTER_2_SCENE_COPY.noHandleDoor.results.force,
               },
               fallbackPosition,
             );
           },
         },
         {
-          label: "Back to the threshold.",
+          label: CHAPTER_2_SCENE_COPY.noHandleDoor.labels.backThreshold,
           effect: () => openThreeDoorThresholdDialogue(fallbackPosition),
         },
       ].filter(Boolean),
@@ -3724,31 +3669,31 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     const prepared = !!(options.prepared || flags.roadwatcherPrepared);
     const maraProtected = !!(options.maraProtected || flags.maraProtectedAtHollow);
     setDialogue({
-      portrait: "👁️",
-      name: hard ? "Briar Roadwatcher Ambush" : "Briar Roadwatcher",
+      portrait: CHAPTER_2_SCENE_COPY.roadwatcher.portrait,
+      name: hard ? CHAPTER_2_SCENE_COPY.roadwatcher.hardName : CHAPTER_2_SCENE_COPY.roadwatcher.name,
       text: hard
-        ? "The Crown Sign splits with a sharp wooden crack. A hooded roadwatcher steps from the brush with a thorn-collared hound and a false-sign scratcher at their side.\n\nMara ducks behind the sheltering roots near the Lantern Sign. \"I am behind the line,\" she says quickly. \"I am extremely behind it.\""
+        ? CHAPTER_2_SCENE_COPY.roadwatcher.hardText
         : prepared
-          ? `The no-handle door opens a handspan. Then the Crown Sign cracks, and a hooded roadwatcher steps from the brush, face hidden beneath a crooked crown mark. A thorn-collared hound pads beside them, the collar glowing where the Lantern Sign points.\n\nThis time the hollow is ready: the Lantern marks are clean, Edden's drawing is aligned, and Mara is ${maraProtected ? "already behind the sheltering roots" : "moving back from the fight"} with one hand wrapped around the blue string.`
-          : "The Crown Sign splits with a sharp wooden crack. A hooded roadwatcher steps from the brush with a thorn-collared hound, face hidden beneath a crooked crown mark.\n\nMara steps back before anyone has to tell her, one hand wrapped around the blue string.",
+          ? formatPreparedRoadwatcherText(maraProtected)
+          : CHAPTER_2_SCENE_COPY.roadwatcher.standardText,
       choices: [
         {
           label: hard
-            ? "Protect Mara and hold the hollow."
+            ? CHAPTER_2_SCENE_COPY.roadwatcher.labels.hard
             : prepared
-              ? "Meet the watcher on honest ground."
-              : "Drive them away from the gate.",
+              ? CHAPTER_2_SCENE_COPY.roadwatcher.labels.prepared
+              : CHAPTER_2_SCENE_COPY.roadwatcher.labels.standard,
           effect: () => {
             setDialogue(null);
             startBattle(buildEncounterEnemies(encounterKey), encounterKey);
           },
         },
         {
-          label: "Back away.",
+          label: CHAPTER_2_SCENE_COPY.roadwatcher.labels.backAway,
           effect: () =>
             backAwayFromWestrootDialogue(
               options.previousPosition,
-              "You back away from the watched road.",
+              CHAPTER_2_SCENE_COPY.roadwatcher.backAwayToast,
             ),
         },
       ],
@@ -3757,14 +3702,14 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
 
   const openRoadwatcherDialogue = (fallbackPosition) => {
     if (flags.beatRoadwatcher || flags.roadwatcherDefeated || flags.roadwatcherEncounterAvoided)
-      return setToast("The watched road is quiet now.");
+      return setToast(CHAPTER_2_SCENE_COPY.roadwatcher.quietToast);
     setDialogue({
-      portrait: "👁️",
-      name: "Briar Roadwatcher",
-      text: "A thorn-wrapped watcher unfolds beside the road, wearing strips of false seal-cloth like a badge. A thorn-collared hound pads at their heel. Mara steps back behind the line before Hollis can somehow object from town.",
+      portrait: CHAPTER_2_SCENE_COPY.roadwatcher.portrait,
+      name: CHAPTER_2_SCENE_COPY.roadwatcher.name,
+      text: CHAPTER_2_SCENE_COPY.roadwatcher.directText,
       choices: [
         {
-          label: "Break the watcher.",
+          label: CHAPTER_2_SCENE_COPY.roadwatcher.labels.breakWatcher,
           effect: () => {
             setDialogue(null);
             startBattle(
@@ -3774,11 +3719,11 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           },
         },
         {
-          label: "Back away.",
+          label: CHAPTER_2_SCENE_COPY.roadwatcher.labels.backAway,
           effect: () =>
             backAwayFromWestrootDialogue(
               fallbackPosition,
-              "You back away from the watched road.",
+              CHAPTER_2_SCENE_COPY.roadwatcher.backAwayToast,
             ),
         },
       ],
@@ -3788,36 +3733,36 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
   const openWestrootGateDialogue = (assumedFlags = {}) => {
     const viewFlags = { ...flags, ...assumedFlags };
     if (!viewFlags.westrootGateOpened)
-      return setToast("The First Westroot Gate waits for the no-handle stone to open.");
+      return setToast(CHAPTER_2_SCENE_COPY.westrootGate.closedToast);
     setDialogue({
-      portrait: "▣",
-      name: "First Westroot Gate",
-      text: `The door with no handle opens inward by itself. Gold-green light spills through root and stone. Mara reads Lio's tiny mark one more time: ${CHAPTER_2_STORY.lioGateMark.toUpperCase()}`,
+      portrait: CHAPTER_2_SCENE_COPY.westrootGate.portrait,
+      name: CHAPTER_2_SCENE_COPY.westrootGate.name,
+      text: formatWestrootGateText(),
       choices: [
         !viewFlags.searchedWestrootThreshold
           ? {
-              label: "Search the threshold first.",
+              label: CHAPTER_2_SCENE_COPY.westrootGate.labels.search,
               effect: () => {
                 setFlags((f) => ({ ...f, searchedWestrootThreshold: true }));
                 gainStoryItemOnce("no_handle_token");
-                announce("You find a No-Handle Token tucked inside the threshold.", [{ id: "no_handle_token", qty: 1 }]);
+                announce(CHAPTER_2_SCENE_COPY.westrootGate.thresholdFound, [{ id: "no_handle_token", qty: 1 }]);
                 openWestrootGateDialogue({ ...assumedFlags, searchedWestrootThreshold: true });
               },
             }
           : null,
         !viewFlags.witnessNoteSent
           ? {
-              label: "Leave a witness note for Bramblecross.",
+              label: CHAPTER_2_SCENE_COPY.westrootGate.labels.witnessNote,
               effect: () => {
                 setFlags((f) => ({ ...f, witnessNoteSent: true }));
                 gainStoryItemOnce("witness_note_bramblecross");
-                announce("You prepare a witness note for Bramblecross.", [{ id: "witness_note_bramblecross", qty: 1 }]);
+                announce(CHAPTER_2_SCENE_COPY.westrootGate.witnessNotePrepared, [{ id: "witness_note_bramblecross", qty: 1 }]);
                 openWestrootGateDialogue({ ...assumedFlags, witnessNoteSent: true });
               },
             }
           : null,
         {
-          label: "Step through the gate.",
+          label: CHAPTER_2_SCENE_COPY.westrootGate.labels.stepThrough,
           effect: () => {
             setFlags((f) => ({
               ...f,
@@ -3829,9 +3774,9 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             setPlayer((p) => ({ ...p, xp: p.xp + 16 }));
             setDialogue({
               portrait: "✨",
-              name: "Chapter 2 Complete: The Westroot Trail",
-              text: "You step through into gold-green underground light.\n\nLio is alive past this point. The old road opened when truth came first. Somewhere below the hill, Westroot waits.",
-              choices: [{ label: "Continue", effect: () => setDialogue(null) }],
+              name: CHAPTER_2_SCENE_COPY.westrootGate.completeName,
+              text: CHAPTER_2_SCENE_COPY.westrootGate.completeText,
+              choices: [{ label: CHAPTER_2_SCENE_COPY.westrootGate.labels.continue, effect: () => setDialogue(null) }],
             });
           },
         },
@@ -4539,241 +4484,67 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     setToast(`${name} waits at the inn.`);
   };
   const runQaChecks = () => {
-    const results = [];
-    const add = (ok, label, detail = "") => results.push({ ok, label, detail });
-    Object.entries(MAPS).forEach(([mapId, map]) => {
-      const width = map.tiles[0].length;
-      add(
-        map.tiles.every((row) => row.length === width),
-        `${map.name} map is rectangular`,
-        `${map.tiles.length}x${width}`,
-      );
-      const missing = [
-        ...new Set(map.tiles.flat().filter((tile) => !TILE_META[tile])),
-      ];
-      add(
-        missing.length === 0,
-        `${map.name} tiles have metadata`,
-        missing.join(", ") || "All tile IDs are known.",
-      );
+    const results = runGameQaChecks({
+      flags,
+      player,
+      runtimeChecks: [
+        {
+          ok: typeof applyLoadedPayload === "function",
+          label: "Load handler exists",
+          detail: "Regression test: no companionReward reference in load path.",
+        },
+        {
+          ok: typeof movePlayer === "function",
+          label: "Keyboard movement can call movePlayer",
+          detail: "Regression check for arrow/WASD controls.",
+        },
+        {
+          ok: true,
+          label: "Arrow/WASD movement works after clicking menu buttons",
+          detail: "Keyboard handler now allows movement keys even when a button still has focus.",
+        },
+        {
+          ok: typeof advanceToNextEnemyOrVictory === "function",
+          label: "Battle defeat/victory helper exists",
+          detail: "Regression check for defeated enemies not taking ghost turns.",
+        },
+        {
+          ok: typeof buildVisitedMap === "function",
+          label: "Dev jump reveal helper exists",
+          detail: "Regression test: no revealAround reference.",
+        },
+        {
+          ok: typeof openChapterReportDialogue === "function",
+          label: "Chapter 1 report-back scene exists",
+          detail: "Post-cellar story resolution is wired to Enna/Hollis.",
+        },
+        {
+          ok: typeof getStoryTile === "function",
+          label: "Story tile overrides exist",
+          detail: "Traveler tile becomes grass after the traveler goes to camp.",
+        },
+        {
+          ok: true,
+          label: "Loot popup auto-dismisses",
+          detail: "Loot banners now close after a short delay and can still be clicked away immediately.",
+        },
+        {
+          ok: typeof resolveSkillCheck === "function",
+          label: "Skill check helper exists",
+          detail: "Dialogue checks can roll 1d20 + stat bonus against a DC.",
+        },
+        {
+          ok: typeof shouldSkipAutoInspect === "function",
+          label: "Spent tiles do not auto-interrupt",
+          detail: "Previously used cellar clues/caches can be walked over; manual Inspect still works.",
+        },
+        {
+          ok: Array.isArray(HERO_GROWTH_OPTIONS) && HERO_GROWTH_OPTIONS.length >= 5,
+          label: "Hero growth options exist",
+          detail: "Growth choices are available for protagonist progression.",
+        },
+      ],
     });
-    add(
-      MAPS.hearthhollow.tiles[4][2] !== "baker" &&
-        MAPS.hearthhollow.tiles[2][5] === "baker" &&
-        MAPS.hearthhollow.tiles[2][3] === "home_door" &&
-        MAPS.hearthhollow.tiles[6][1] === "potion_door" &&
-        MAPS.hearthhollow.tiles[6][11] === "chest" &&
-        MAPS.hearthhollow.tiles[5][10] === "tree" &&
-        MAPS.hearthhollow.tiles[5][11] === "tree" &&
-        MAPS.hearthhollow.tiles[4][6] === "well" &&
-        MAPS.hearthhollow.tiles[9].every(
-          (tile, x) => x === 6 ? tile === "gate" : TILE_META[tile]?.blocked,
-        ) &&
-        !TILE_META.well?.blocked &&
-        !isBlockedInteractionTile("well") &&
-        MAPS.lanternRoad.tiles[6][2] === "pond" &&
-        !TILE_META.pond?.blocked &&
-        !isBlockedInteractionTile("pond"),
-      "Hearthhollow placement tweaks are tuned",
-      "Doors, chest, quiet well/pond landmarks, upper-right trees, and south-row gate boundary match the latest map pass.",
-    );
-    const shopIds = [
-      ...new Set([...SHOP_INVENTORIES.smith, ...SHOP_INVENTORIES.market]),
-    ];
-    add(
-      shopIds.every((id) => ITEM_DB[id]),
-      "Shop item IDs exist",
-      shopIds.filter((id) => !ITEM_DB[id]).join(", ") ||
-        "All shop items exist.",
-    );
-    add(
-      Object.values(RECIPE_DB).every(
-        (recipe) =>
-          ITEM_DB[recipe.resultId] &&
-          Object.keys(recipe.ingredients).every((id) => ITEM_DB[id]),
-      ),
-      "Recipe item IDs exist",
-      "Crafting recipes reference known items.",
-    );
-    add(
-      Object.values(COMPANION_OPTIONS).every(
-        (option) => option.id && option.style && option.maxHp,
-      ),
-      "Companion definitions are complete",
-      "All companion options include id, style, and HP.",
-    );
-    add(
-      !Object.values(player?.battlePouch || {})
-        .filter(Boolean)
-        .some((id) => !BATTLE_CONSUMABLES[id]),
-      "Battle pouch contains valid consumables",
-    );
-    add(
-      typeof applyLoadedPayload === "function",
-      "Load handler exists",
-      "Regression test: no companionReward reference in load path.",
-    );
-    add(
-      typeof movePlayer === "function",
-      "Keyboard movement can call movePlayer",
-      "Regression check for arrow/WASD controls.",
-    );
-    add(
-      true,
-      "Arrow/WASD movement works after clicking menu buttons",
-      "Keyboard handler now allows movement keys even when a button still has focus.",
-    );
-    add(
-      typeof advanceToNextEnemyOrVictory === "function",
-      "Battle defeat/victory helper exists",
-      "Regression check for defeated enemies not taking ghost turns.",
-    );
-    add(
-      typeof buildVisitedMap === "function",
-      "Dev jump reveal helper exists",
-      "Regression test: no revealAround reference.",
-    );
-    add(
-      !!ITEM_DB.edden_cloth,
-      "Story item exists: Edden's cloth",
-      "Chapter 1 ending can award the report-back proof item.",
-    );
-    add(
-      typeof openChapterReportDialogue === "function",
-      "Chapter 1 report-back scene exists",
-      "Post-cellar story resolution is wired to Enna/Hollis.",
-    );
-    add(
-      typeof getStoryTile === "function",
-      "Story tile overrides exist",
-      "Traveler tile becomes grass after the traveler goes to camp.",
-    );
-    add(
-      true,
-      "Loot popup auto-dismisses",
-      "Loot banners now close after a short delay and can still be clicked away immediately.",
-    );
-    add(
-      typeof resolveSkillCheck === "function",
-      "Skill check helper exists",
-      "Dialogue checks can roll 1d20 + stat bonus against a DC.",
-    );
-    add(
-      Object.values(ITEM_DB)
-        .filter((item) => item.skills?.length)
-        .every((item) => item.skills.every((id) => SKILL_DB[id])),
-      "Item-granted skills resolve",
-      "Weapons and trinkets can add combat abilities.",
-    );
-    const rootCellarNodeKeys = getNavigationNodeKeys("rootCellar");
-    const removedCellarFillerNodes = [
-      "1,2",
-      "1,3",
-      "2,3",
-      "3,6",
-      "4,3",
-      "5,3",
-      "5,4",
-      "9,1",
-      "8,2",
-      "9,2",
-      "8,4",
-      "8,7",
-      "2,8",
-      "10,5",
-    ];
-    const rootCellarGraphIsWalkable =
-      rootCellarNodeKeys.length > 0 &&
-      rootCellarNodeKeys.every((key) => {
-        const [x, y] = key.split(",").map(Number);
-        const tile = MAPS.rootCellar.tiles[y]?.[x];
-        return tile && !TILE_META[getStoryTile(tile, "rootCellar")]?.blocked;
-      }) &&
-      removedCellarFillerNodes.every((key) => !rootCellarNodeKeys.includes(key));
-    add(
-      rootCellarGraphIsWalkable,
-      "Root Cellar uses walkable-only graph nodes",
-      "The cellar debug overlay now omits black-space filler nodes and keeps movement on linked painted paths.",
-    );
-    add(
-      typeof shouldSkipAutoInspect === "function",
-      "Spent tiles do not auto-interrupt",
-      "Previously used cellar clues/caches can be walked over; manual Inspect still works.",
-    );
-    add(
-      typeof getHeroXpTarget === "function" &&
-        Array.isArray(HERO_GROWTH_OPTIONS) &&
-        HERO_GROWTH_OPTIONS.length >= 5,
-      "Hero level-up system exists",
-      "XP thresholds and growth choices are available for protagonist progression.",
-    );
-    add(
-      SKILL_DB.roadwarden_resolve?.cooldown === 5,
-      "Roadwarden's Resolve has cooldown",
-      "Lantern Pin support skill cannot be spammed every turn.",
-    );
-    add(
-      "sawShrine" in buildDefaultFlags(),
-      "Lantern Shrine discovery flag exists",
-      "Shrine side thread can stay hidden until discovered.",
-    );
-    add(
-      getChapterProgress(flags).currentChapterId >= 1,
-      "Chapter progress contract resolves",
-      `Current chapter: ${getChapterProgress(flags).currentTitle}.`,
-    );
-    add(
-      [2, 3, 4, 5].every((chapterId) => CHAPTER_STORY_PLANS[chapterId]?.requiredEndFlags?.length),
-      "Chapter 2-5 story contracts exist",
-      "Later chapters have implementation-facing beats, key lines, required flags, and art targets.",
-    );
-    add(
-      Object.keys(HERO_VARIANT_ARTWORK_PLAN).length ===
-        (RACES.length - 1) * GENDERS.length +
-          HUMAN_HERITAGES.length * GENDERS.length,
-      "Hero variant art backlog covers Human heritages",
-      "Hero art is keyed by ancestry, Human heritage, and gender.",
-    );
-    add(
-      MAP_ARTWORK_PLAN.westroot_trail?.status === "available",
-      "Westroot Trail painted map is tracked",
-      "Chapter 2 map art is registered while fallback behavior remains in place.",
-    );
-    const guest = getActiveGuestNpc(flags);
-    add(
-      !guest || (!guest.participatesInBattle && !guest.canTakeDamage),
-      "Guest NPCs stay out of combat",
-      guest ? `${guest.name} is present as a protected story guest.` : "No active guest NPC.",
-    );
-    const cleanWestrootOutcome = getWestrootPuzzleOutcome({
-      noHandleStoneInspected: true,
-      shelterNoticeRemoved: true,
-      falseNoticeLensUsed: true,
-      lanternSignCleaned: true,
-      understandsTrueSigns: true,
-      lanternSignCompared: true,
-      lioShelterMarkFound: true,
-      lioHookMarkFound: true,
-    });
-    const messyWestrootOutcome = getWestrootPuzzleOutcome({
-      noHandleStoneInspected: true,
-      shelterNoticeRemoved: true,
-      falseNoticeLensUsed: true,
-      lanternSignCleaned: true,
-      understandsTrueSigns: true,
-      lanternSignCompared: true,
-      lioShelterMarkFound: true,
-      followedFalseDetour: true,
-      lioHookMarkFound: true,
-      crownSignRejected: true,
-    });
-    add(
-      cleanWestrootOutcome.cleanSolve &&
-        cleanWestrootOutcome.roadwatcherMode === "standard" &&
-        messyWestrootOutcome.roadwatcherMode === "hard",
-      "Chapter 2 clean and messy outcomes diverge",
-      "A careful truth-first solve prepares the standard Roadwatcher fight; a false detour escalates to the hard encounter.",
-    );
     setQaResults(results);
     setToast(
       `QA checks complete: ${results.filter((r) => !r.ok).length} issue(s) found.`,
@@ -4863,19 +4634,31 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       event.target.value = "";
     }
   };
-  const loadChapter2PlaytestSave = async () => {
+  const loadCheckedInSave = async (path, missingMessage, fallbackMessage) => {
     try {
-      const response = await fetch(CHAPTER_2_PLAYTEST_SAVE_PATH, {
+      const response = await fetch(path, {
         cache: "no-store",
       });
-      if (!response.ok) throw new Error("Chapter 2 playtest save is missing.");
+      if (!response.ok) throw new Error(missingMessage);
       const imported = parseDiskSaveText(await response.text());
       applyLoadedPayload(imported.payload, `Loaded ${imported.name}.`);
       setSaveModalMode(null);
     } catch (error) {
-      setToast(error?.message || "Chapter 2 playtest save could not be loaded.");
+      setToast(error?.message || fallbackMessage);
     }
   };
+  const loadChapter2PlaytestSave = () =>
+    loadCheckedInSave(
+      CHAPTER_2_PLAYTEST_SAVE_PATH,
+      "Chapter 2 playtest save is missing.",
+      "Chapter 2 playtest save could not be loaded.",
+    );
+  const loadChapter2CompleteSave = () =>
+    loadCheckedInSave(
+      CHAPTER_2_COMPLETE_SAVE_PATH,
+      "Chapter 2 complete save is missing.",
+      "Chapter 2 complete save could not be loaded.",
+    );
   const saveToSlot = (slotId) => {
     const name =
       (saveNameDrafts[slotId] || "").trim() ||
@@ -4934,6 +4717,9 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               <Button onClick={loadChapter2PlaytestSave}>
                 Load Chapter 2 Playtest Save
               </Button>
+              <Button onClick={loadChapter2CompleteSave}>
+                Load Chapter 3 Ready Save
+              </Button>
             </div>
           </div>
         </div>
@@ -4949,6 +4735,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             exportToDisk={player ? exportSaveToDisk : null}
             importFromDisk={importSaveFromDisk}
             loadChapter2PlaytestSave={loadChapter2PlaytestSave}
+            loadChapter2CompleteSave={loadChapter2CompleteSave}
             loadCheckpoint={() => {
               loadGame();
               setSaveModalMode(null);
@@ -5363,6 +5150,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           exportToDisk={exportSaveToDisk}
           importFromDisk={importSaveFromDisk}
           loadChapter2PlaytestSave={loadChapter2PlaytestSave}
+          loadChapter2CompleteSave={loadChapter2CompleteSave}
           loadCheckpoint={() => {
             loadGame();
             setSaveModalMode(null);

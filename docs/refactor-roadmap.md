@@ -1,4 +1,4 @@
-# Liam’s Game — Refactor Roadmap
+﻿# Liam’s Game — Refactor Roadmap
 
 This roadmap describes how to move from the current single-file prototype to a maintainable game project without breaking Chapter 1.
 
@@ -232,7 +232,7 @@ Add tests after relevant logic is extracted.
 
 ## Safe first integrations
 
-1. Store selected art in `assets/concept`.
+1. Store selected art in `assets/reference/concept`.
 2. Add asset references to docs.
 3. Add character portrait fields to NPC data.
 4. Display portrait images in dialogue with fallback emoji.

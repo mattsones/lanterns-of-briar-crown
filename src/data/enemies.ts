@@ -1,23 +1,23 @@
 const DEFAULT_ATTACK_A = { count: 1, sides: 6, bonus: 1 };
 const DEFAULT_ATTACK_B = { count: 1, sides: 6, bonus: 2 };
 
-const brambleBoarArtwork = new URL("../../assets/portraits/enemies/bramble-boar-v01.png", import.meta.url).href;
-const briarKnotWardenArtwork = new URL("../../assets/portraits/enemies/briar-knot-warden-v01.png", import.meta.url)
+const brambleBoarArtwork = new URL("../../assets/portraits/enemies/bramble-boar-v01.webp", import.meta.url).href;
+const briarKnotWardenArtwork = new URL("../../assets/portraits/enemies/briar-knot-warden-v01.webp", import.meta.url)
   .href;
-const briarRoadwatcherArtwork = new URL("../../assets/portraits/enemies/briar-roadwatcher-v02.png", import.meta.url)
+const briarRoadwatcherArtwork = new URL("../../assets/portraits/enemies/briar-roadwatcher-v02.webp", import.meta.url)
   .href;
 const falseSignScratcherArtwork = new URL(
-  "../../assets/portraits/enemies/false-sign-scratcher-v02.png",
+  "../../assets/portraits/enemies/false-sign-scratcher-v02.webp",
   import.meta.url,
 ).href;
-const rustrootSkulkArtwork = new URL("../../assets/portraits/enemies/rustroot-skulk-v02.png", import.meta.url).href;
+const rustrootSkulkArtwork = new URL("../../assets/portraits/enemies/rustroot-skulk-v02.webp", import.meta.url).href;
 const thornCollaredHoundArtwork = new URL(
-  "../../assets/portraits/enemies/thorn-collared-hound-v01.png",
+  "../../assets/portraits/enemies/thorn-collared-hound-v01.webp",
   import.meta.url,
 ).href;
-const thorncoatRuffianArtwork = new URL("../../assets/portraits/enemies/thorncoat-ruffian-v02.png", import.meta.url)
+const thorncoatRuffianArtwork = new URL("../../assets/portraits/enemies/thorncoat-ruffian-v02.webp", import.meta.url)
   .href;
-const thornyHoundArtwork = new URL("../../assets/portraits/enemies/thorny-hound-v01.png", import.meta.url).href;
+const thornyHoundArtwork = new URL("../../assets/portraits/enemies/thorny-hound-v01.webp", import.meta.url).href;
 
 export const ENEMY_DB = {
   bramble_boar: {

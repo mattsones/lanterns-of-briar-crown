@@ -1,25 +1,25 @@
 const bramblecrossTownMap = new URL(
-  "../../assets/maps/bramblecross-town-map-v01.png",
+  "../../assets/maps/bramblecross-town-map-v01.webp",
   import.meta.url,
 ).href;
 const hearthhollowMap = new URL(
-  "../../assets/maps/hearthhollow-gameplay-map-v04.png",
+  "../../assets/maps/hearthhollow-gameplay-map-v04.webp",
   import.meta.url,
 ).href;
 const lanternRoadMap = new URL(
-  "../../assets/maps/lantern-road-gameplay-map-v02.png",
+  "../../assets/maps/lantern-road-gameplay-map-v02.webp",
   import.meta.url,
 ).href;
 const rootCellarMap = new URL(
-  "../../assets/maps/root-cellar-map-v01.png",
+  "../../assets/maps/root-cellar-map-v01.webp",
   import.meta.url,
 ).href;
 const westrootTrailMap = new URL(
-  "../../assets/maps/westroot-trail-map-v04.png",
+  "../../assets/maps/westroot-trail-map-v04.webp",
   import.meta.url,
 ).href;
 const crownDoorDenMap = new URL(
-  "../../assets/maps/crown-door-den-map-v01.png",
+  "../../assets/maps/crown-door-den-map-v01.webp",
   import.meta.url,
 ).href;
 

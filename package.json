@@ -7,23 +7,26 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "audit:assets": "node scripts/audit-assets.mjs",
+    "optimize:assets": "node scripts/optimize-assets.mjs",
     "playtest:smoke": "playwright test tests/smoke.spec.ts",
     "playtest:chapter2": "playwright test tests/chapter2.spec.ts",
     "test:rules": "playwright test tests/rules.spec.ts"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "latest",
+    "@vitejs/plugin-react": "^6.0.3",
     "framer-motion": "latest",
     "lucide-react": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "vite": "latest"
+    "vite": "^8.1.4"
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",
     "@tailwindcss/vite": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "sharp": "^0.35.3",
     "tailwindcss": "latest",
     "typescript": "latest"
   }

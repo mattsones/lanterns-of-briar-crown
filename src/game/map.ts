@@ -66,6 +66,45 @@ export function buildDefaultVisited() {
   );
 }
 
+export function normalizeRegionId(regionId?: string | null) {
+  return regionId && MAPS[regionId] ? regionId : "hearthhollow";
+}
+
+export function normalizeMapPosition(regionId: string, position?: { x?: number; y?: number } | null) {
+  const region = normalizeRegionId(regionId);
+  const fallback = MAPS[region].start;
+  const current = {
+    x: typeof position?.x === "number" ? position.x : fallback.x,
+    y: typeof position?.y === "number" ? position.y : fallback.y,
+  };
+
+  if (
+    region === "westrootTrail" &&
+    ((current.x === 6 && current.y === 3) || (current.x === 7 && current.y === 3))
+  ) {
+    return { x: 6, y: 4 };
+  }
+
+  const tiles = MAPS[region].tiles;
+  if (!tiles[current.y]?.[current.x]) return fallback;
+  return current;
+}
+
+export function ensureVisitedIncludesPosition(
+  visitedState: Record<string, Record<string, boolean>> | null | undefined,
+  regionId: string,
+  position: { x: number; y: number },
+  radius = 1,
+) {
+  return {
+    ...(visitedState || {}),
+    [regionId]: {
+      ...(visitedState?.[regionId] || {}),
+      ...buildVisitedMap(regionId, position.x, position.y, radius),
+    },
+  };
+}
+
 export function isBlockedInteractionTile(tile: string) {
   return [
     "home_door",

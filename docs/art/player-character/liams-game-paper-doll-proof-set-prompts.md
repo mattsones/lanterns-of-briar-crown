@@ -1,4 +1,4 @@
-# Liam's Game - Paper-Doll Proof Set Prompts
+﻿# Liam's Game - Paper-Doll Proof Set Prompts
 
 Use this prompt pack to generate the first painted equipment overlays for the `m_standard` hero rig.
 
@@ -9,24 +9,24 @@ This is for **painting transparent PNG equipment assets**, not changing the base
 Attach these references when generating each asset:
 
 ```text
-art/characters/hero/rig-guides/rig_reference_m_standard.png
-art/characters/hero/masks/m_standard/proof_sheet_by_slot.png
-art/characters/hero/masks/m_standard/mask_torso.png
-art/characters/hero/masks/m_standard/mask_cloak_back.png
-art/characters/hero/masks/m_standard/mask_cloak_front.png
-art/characters/hero/masks/m_standard/mask_boots.png
-art/characters/hero/masks/m_standard/mask_head.png
-art/characters/hero/masks/m_standard/mask_trinket.png
-art/characters/hero/masks/m_standard/guide_mainhand_anchor.png
-art/characters/hero/masks/m_standard/guide_offhand_anchor.png
-art/characters/hero/masks/m_standard/proof_torso.png
-art/characters/hero/masks/m_standard/proof_cloak_back.png
-art/characters/hero/masks/m_standard/proof_cloak_front.png
-art/characters/hero/masks/m_standard/proof_boots.png
-art/characters/hero/masks/m_standard/proof_head.png
-art/characters/hero/masks/m_standard/proof_trinket.png
-art/characters/hero/masks/m_standard/proof_mainhand_anchor.png
-art/characters/hero/masks/m_standard/proof_offhand_anchor.png
+assets/reference/paper-doll/characters/hero/rig-guides/rig_reference_m_standard.png
+assets/reference/paper-doll/characters/hero/masks/m_standard/proof_sheet_by_slot.png
+assets/reference/paper-doll/characters/hero/masks/m_standard/mask_torso.png
+assets/reference/paper-doll/characters/hero/masks/m_standard/mask_cloak_back.png
+assets/reference/paper-doll/characters/hero/masks/m_standard/mask_cloak_front.png
+assets/reference/paper-doll/characters/hero/masks/m_standard/mask_boots.png
+assets/reference/paper-doll/characters/hero/masks/m_standard/mask_head.png
+assets/reference/paper-doll/characters/hero/masks/m_standard/mask_trinket.png
+assets/reference/paper-doll/characters/hero/masks/m_standard/guide_mainhand_anchor.png
+assets/reference/paper-doll/characters/hero/masks/m_standard/guide_offhand_anchor.png
+assets/reference/paper-doll/characters/hero/masks/m_standard/proof_torso.png
+assets/reference/paper-doll/characters/hero/masks/m_standard/proof_cloak_back.png
+assets/reference/paper-doll/characters/hero/masks/m_standard/proof_cloak_front.png
+assets/reference/paper-doll/characters/hero/masks/m_standard/proof_boots.png
+assets/reference/paper-doll/characters/hero/masks/m_standard/proof_head.png
+assets/reference/paper-doll/characters/hero/masks/m_standard/proof_trinket.png
+assets/reference/paper-doll/characters/hero/masks/m_standard/proof_mainhand_anchor.png
+assets/reference/paper-doll/characters/hero/masks/m_standard/proof_offhand_anchor.png
 ```
 
 For a specific slot, attach the base rig plus the relevant mask/guide and full-size `proof_*.png`. The mask is a fit guide, not a shape that must be filled edge-to-edge.
@@ -300,7 +300,7 @@ The asset must be only the shield overlay on a transparent 1024 x 1536 canvas. D
 Run a proof pass by compositing the generated asset with:
 
 ```text
-art/characters/hero/rig-guides/rig_reference_m_standard.png
+assets/reference/paper-doll/characters/hero/rig-guides/rig_reference_m_standard.png
 ```
 
 Check:

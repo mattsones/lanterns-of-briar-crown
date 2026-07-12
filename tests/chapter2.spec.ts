@@ -120,6 +120,17 @@ test("title screen loads the checked-in Chapter 2 playtest save", async ({ page 
   await expect(page.getByText("Chapter 2: The Westroot Trail")).toBeVisible();
 });
 
+test("title screen loads the checked-in Chapter 3 ready save", async ({ page }) => {
+  await page.addInitScript(() => window.localStorage.clear());
+  await page.goto("/");
+  await page.getByRole("button", { name: "Load Chapter 3 Ready Save" }).click();
+
+  await expect(page.getByRole("heading", { name: MAPS.westrootTrail.name })).toBeVisible();
+  await expect(page.getByText("You are standing on: Three-Door Threshold.")).toBeVisible();
+  await expect(page.getByText("Chapter 2 complete: The Westroot Trail", { exact: true })).toBeVisible();
+  await expect(page.getByText("Goal: Chapter 2 Complete: The Westroot Trail")).toBeVisible();
+});
+
 test("chapter two fog covers map tokens instead of floating over darkness", async ({ page }) => {
   await page.setViewportSize({ width: 2048, height: 1280 });
   await loadChapter2Checkpoint(
