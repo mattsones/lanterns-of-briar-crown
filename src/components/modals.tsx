@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useRef, useState } from "react";
 import { HERO_GROWTH_OPTIONS } from "../data/character";
 import { COMPANION_OPTIONS } from "../data/companions";
@@ -13,6 +12,53 @@ import { formatBonuses, getDerivedStats } from "../game/stats";
 import { appendChapter1CompanionReaction } from "../story/chapter1";
 import { Button, ChoiceButton, ItemIcon, Meter } from "./ui";
 import { HeroArtwork } from "./HeroArtwork";
+
+function useModalAccessibility(close?: () => void) {
+  const modalRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef(close);
+  closeRef.current = close;
+
+  useEffect(() => {
+    const previousFocus = document.activeElement as HTMLElement | null;
+    const modal = modalRef.current;
+    const focusableSelector =
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const firstFocusable = modal?.querySelector<HTMLElement>(focusableSelector);
+    (firstFocusable || modal)?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && closeRef.current) {
+        event.preventDefault();
+        closeRef.current();
+        return;
+      }
+      if (event.key !== "Tab" || !modal) return;
+      const focusable = Array.from(modal.querySelectorAll<HTMLElement>(focusableSelector));
+      if (!focusable.length) {
+        event.preventDefault();
+        modal.focus();
+        return;
+      }
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      previousFocus?.focus();
+    };
+  }, []);
+
+  return modalRef;
+}
 
 const threeDoorsThresholdScene = new URL(
   "../../assets/scenes/three-doors-threshold-v01.webp",
@@ -32,11 +78,12 @@ const noHandleDoorCloseupScene = new URL(
 ).href;
 
 export function LevelUpModal({ player, target, choose }) {
+  const modalRef = useModalAccessibility();
   return <div className="fixed inset-0 z-[90] flex items-end justify-center bg-black/70 p-4 sm:items-center">
-    <div className="w-full max-w-4xl rounded-[2rem] border border-sky-300/20 bg-slate-900 p-5 shadow-2xl">
+    <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="level-up-title" tabIndex={-1} className="w-full max-w-4xl rounded-[2rem] border border-sky-300/20 bg-slate-900 p-5 shadow-2xl">
       <div className="text-center">
         <div className="text-5xl">✨</div>
-        <div className="mt-2 text-3xl font-bold">Level Up!</div>
+        <div id="level-up-title" className="mt-2 text-3xl font-bold">Level Up!</div>
         <div className="mt-1 text-white/70">{player.name} reached Level {(player.level || 1) + 1}. XP {player.xp}/{target}</div>
         <div className="mt-3 rounded-2xl border border-sky-300/20 bg-sky-400/10 p-3 text-sm text-white/80">Every level gives <span className="font-semibold text-sky-200">Max HP +4</span> and <span className="font-semibold text-sky-200">Current HP +4</span>. Choose how your hero grows.</div>
       </div>
@@ -160,18 +207,19 @@ function DialogueSceneImage({ image }) {
   );
 }
 
-export function DialogueModal({ dialogue }) {
+export function DialogueModal({ dialogue, close }) {
   const portraitAsset = getDialoguePortrait(dialogue.portraitName || dialogue.name);
   const portraitImage = dialogue.portraitImage;
   const widthClass = dialogue.size === "wide" || dialogue.visual || dialogue.sceneImage ? "max-w-5xl" : "max-w-3xl";
   const scrollRef = useRef(null);
+  const modalRef = useModalAccessibility(close);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: 0 });
   }, [dialogue.name, dialogue.text, dialogue.visual, dialogue.sceneImage?.src, dialogue.messages?.length]);
 
   return <div className="fixed inset-0 z-[80] flex items-end justify-center bg-black/60 p-4 sm:items-center">
-    <div className={`flex max-h-[85vh] w-full ${widthClass} flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900 p-5 shadow-2xl`}>
+    <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="dialogue-title" tabIndex={-1} className={`flex max-h-[85vh] w-full ${widthClass} flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900 p-5 shadow-2xl`}>
       <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto pr-1">
         <div className="flex items-start gap-4">
           <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-3xl bg-white/10 text-4xl">
@@ -180,7 +228,7 @@ export function DialogueModal({ dialogue }) {
             {!portraitImage && portraitAsset ? <img src={portraitAsset.src} alt={portraitAsset.alt} onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.previousElementSibling?.classList.remove("opacity-0"); }} className="absolute inset-0 h-full w-full object-cover" /> : null}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="text-xl font-semibold">{dialogue.name}</div>
+            <div id="dialogue-title" className="text-xl font-semibold">{dialogue.name}</div>
             {dialogue.sceneImage ? <DialogueSceneImage image={dialogue.sceneImage} /> : null}
             {dialogue.visual ? <DialogueVisual kind={dialogue.visual} /> : null}
             {dialogue.messages ? <div className="mt-3 space-y-2">{dialogue.messages.map((m, i) => <div key={`${m.speaker}-${i}`} className={`flex ${m.side === "right" ? "justify-end" : "justify-start"}`}><div className={`max-w-[85%] rounded-2xl px-4 py-3 text-base leading-7 ${m.side === "right" ? "bg-emerald-500/20" : "bg-white/10 text-white/85"}`}><div className="mb-1 text-[10px] uppercase tracking-wide text-white/50">{m.speaker}</div><div>{m.text}</div></div></div>)}</div> : <div className="mt-2 whitespace-pre-line text-base leading-7 text-white/85">{dialogue.text}</div>}
@@ -191,7 +239,8 @@ export function DialogueModal({ dialogue }) {
     </div>
   </div>;
 }
-export function InteriorModal({ scene, close, flags, setFlags, player, setPlayer, companion, setCompanion, setActiveCompanion, dismissCompanion, saveGame, announce, setCraftOpen, setDialogue, openClerkDialogue, openCaptainDialogue, openChapter2Briefing, openMaraChapter2Dialogue, openEddenRecoveryDialogue }) {
+export function InteriorModal({ scene, close, flags, setFlags, player, setPlayer, companion, setCompanion, setActiveCompanion, dismissCompanion, saveGame, announce, setShopOpen, setCraftOpen, setDialogue, openClerkDialogue, openCaptainDialogue, openChapter2Briefing, openMaraChapter2Dialogue, openEddenRecoveryDialogue }) {
+  const modalRef = useModalAccessibility(close);
   const getRecruitmentScene = (option) => {
     const scenes = {
       rowan: { opening: "Rowan Reedshield sits near the inn's side wall, not at a table but beside it, where he can see both the front door and the stairs. A scratched shield rests across his knees. He is polishing out a dent slowly, not because the shield needs polish, but because the work gives his hands somewhere calm to be. When a cart-driver bumps into a serving girl, Rowan rises halfway before anyone else notices. The girl steadies the tray, the driver apologizes, and Rowan sits again without asking to be thanked.", ask: "He looks up when you approach. “If you're looking for someone to swing first and think later, keep walking. If you're looking for someone to make sure people come home, sit down.”", goodLabel: "People are in danger. I need someone who protects first and boasts never.", goodReply: "Rowan studies you for a long moment, then sets the shield strap properly across his shoulder. “Good answer. Trouble is loud enough without us adding noise. I'll come. If the road is being trained to fear the wrong thing, then we keep our heads, keep our line, and bring people home.”", badLabel: "I need someone sturdy enough to stand in front of me.", badReply: "Rowan's expression closes like a gate. “A shield is not furniture, and neither am I. Come back when you are asking for a companion, not a wall with boots.”", neutralLabel: "What kind of trouble are you expecting?", neutralReply: "“The organized kind,” Rowan says. “The kind that counts on frightened people shoving each other aside. That's when someone steady matters most. Ask me straight if you want me with you.”" },
@@ -233,7 +282,7 @@ ${scene.ask}`, choices: [
     ] });
   };
 
-  return <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/50 p-4 sm:items-center"><div className="max-h-[88vh] w-full max-w-5xl overflow-y-auto rounded-[2rem] border border-white/10 bg-slate-900 p-5 shadow-2xl"><div className="mb-4 flex items-center justify-between gap-3"><div><div className="text-2xl font-semibold">{scene === "home" ? "Inside Your Home" : scene === "bramInn" ? "Inside the Bramblecross Inn" : scene === "watchhouse" ? "Inside the Watchhouse" : "Interior"}</div><div className="text-sm text-white/70">{scene === "watchhouse" && !flags.ennaBriefed ? "An incomplete case wall waits for your road report." : "A focused interior scene."}</div></div><Button onClick={close}>Leave</Button></div>
+  return <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/50 p-4 sm:items-center"><div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="interior-title" tabIndex={-1} className="max-h-[88vh] w-full max-w-5xl overflow-y-auto rounded-[2rem] border border-white/10 bg-slate-900 p-5 shadow-2xl"><div className="mb-4 flex items-center justify-between gap-3"><div><div id="interior-title" className="text-2xl font-semibold">{scene === "home" ? "Inside Your Home" : scene === "bramInn" ? "Inside the Bramblecross Inn" : scene === "watchhouse" ? "Inside the Watchhouse" : "Interior"}</div><div className="text-sm text-white/70">{scene === "watchhouse" && !flags.ennaBriefed ? "An incomplete case wall waits for your road report." : "A focused interior scene."}</div></div><Button onClick={close}>Leave</Button></div>
     {scene === "home" ? <div className="space-y-4"><div className="rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-white/80">A warm, familiar room. Your own things suddenly feel more important now that the road has gone dangerous.</div><div className="flex flex-wrap gap-2"><Button onClick={() => { setPlayer((p) => ({ ...p, hp: Math.min(p.maxHp, p.hp + 6) })); }}>Rest a little</Button>{!flags.homeStashClaimed ? <Button onClick={() => { gainItem(setPlayer, "old_hatchet", 1); setFlags((f) => ({ ...f, homeStashClaimed: true })); announce("You gather your old village hatchet from home.", [{ id: "old_hatchet", qty: 1 }]); }}>Take your old hatchet</Button> : null}</div></div> : null}
     {scene === "bramInn" ? <div className="space-y-4"><div className="rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-white/80">The Bramblecross Inn is trying very hard to feel ordinary. Mugs clink, someone laughs too loudly, and every traveler in the room seems to be listening for news from the road. Three capable strangers stand out—not because they are waiting to be hired, but because each of them is already responding to the crisis in their own way. Recruitment is conversation-driven: the way you speak to them matters.</div><div className="flex flex-wrap gap-2">{companion.recruited ? <Button onClick={dismissCompanion}>Ask current companion to wait here</Button> : null}<Button onClick={() => { setPlayer((p) => ({ ...p, hp: p.maxHp })); setCompanion((c) => c.recruited ? { ...c, hp: c.maxHp } : c); saveGame("Bramblecross Inn"); }}>Rest for the night</Button></div><div className="grid gap-3 md:grid-cols-3">{Object.values(COMPANION_OPTIONS).map((o) => <div key={o.id} className="rounded-3xl border border-white/10 bg-white/5 p-4"><div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl bg-white/10 text-4xl"><span>{o.icon}</span>{o.portraitSrc ? <img src={o.portraitSrc} alt={`Portrait of ${o.name}`} onError={(event) => { event.currentTarget.style.display = "none"; }} className="absolute inset-0 h-full w-full object-cover" /> : null}</div><div className="mt-2 text-lg font-semibold">{o.name}</div><div className="text-sm text-emerald-300">{o.role}</div><div className="mt-2 text-sm text-white/75">{o.description}</div><div className="mt-2 text-xs text-white/55">{o.id === "rowan" ? "Polishing a dented shield while watching the door." : o.id === "tilda" ? "Making apple seeds land where apple seeds should not." : "Listening to the fire as if it is telling the truth slowly."}</div><div className="mt-4"><Button onClick={() => recruitConversation(o)}>{companion.id === o.id ? "Traveling" : "Talk"}</Button></div></div>)}</div></div> : null}
     {scene === "watchhouse" ? <div className="space-y-4">
@@ -324,7 +373,7 @@ function ShopkeeperPortrait({ shopMode, flags }) {
   );
 }
 
-export function ShopModal({ shop, player, close, buyItem, sellItem, shopMode, flags }) { return <div className="fixed inset-0 z-30 overflow-y-auto bg-black/50 p-4"><div className="mx-auto my-8 max-w-3xl rounded-[2rem] border border-white/10 bg-slate-900 p-5"><div className="mb-4 flex justify-between gap-4"><div className="flex min-w-0 items-center gap-4"><ShopkeeperPortrait shopMode={shopMode} flags={flags} /><div><div className="text-2xl font-semibold">{shop.title}</div><div className="text-sm text-yellow-300">Gold: {player.gold}</div>{shopMode === "smith" && flags.elderGavePurse && !flags.smithStarterDiscountUsed ? <div className="text-sm text-emerald-300">Starter discount available.</div> : null}</div></div><Button onClick={close}>Close</Button></div><div className="grid gap-5 lg:grid-cols-2"><div><div className="mb-2 text-sm font-semibold text-emerald-300">Buy</div><div className="grid gap-3">{shop.inventory.map((id) => { const item = ITEM_DB[id]; const discount = shopMode === "smith" && item?.slot && flags.elderGavePurse && !flags.smithStarterDiscountUsed ? 4 : shopMode === "market" && flags.marketDiscount ? 2 : 0; const cost = Math.max(1, getBuyPrice(id) - discount); return <div key={id} className="rounded-2xl border border-white/10 bg-white/5 p-3"><div className="flex justify-between gap-3"><div className="flex min-w-0 items-start gap-3"><ItemIcon item={item} size="sm" /><div className="min-w-0"><div className="font-medium">{item.name}</div><div className="mt-1 text-xs text-white/70">{item.description}</div>{getItemHighlights(item).slice(0, 2).map((line) => <div key={line} className="mt-1 text-[11px] text-emerald-300/90">{line}</div>)}</div></div><Button onClick={() => buyItem(id)} disabled={player.gold < cost}>Buy • {cost}g</Button></div></div>; })}</div></div><div><div className="mb-2 text-sm font-semibold text-amber-300">Sell</div><div className="grid gap-3">{Object.entries(player.inventory).filter(([, c]) => c > 0).map(([id, count]) => <div key={id} className="rounded-2xl border border-white/10 bg-white/5 p-3"><div className="flex justify-between gap-3"><div className="flex min-w-0 items-center gap-2"><ItemIcon item={ITEM_DB[id]} size="sm" /><span>{ITEM_DB[id]?.name} <span className="text-xs text-white/60">x{count}</span></span></div><Button onClick={() => sellItem(id)}>Sell • {getSellPrice(id)}g</Button></div></div>)}</div></div></div></div></div>; }
+export function ShopModal({ shop, player, close, buyItem, sellItem, shopMode, flags }) { return <div className="fixed inset-0 z-30 overflow-y-auto bg-black/50 p-4"><div className="mx-auto my-8 max-w-3xl rounded-[2rem] border border-white/10 bg-slate-900 p-5"><div className="mb-4 flex justify-between gap-4"><div className="flex min-w-0 items-center gap-4"><ShopkeeperPortrait shopMode={shopMode} flags={flags} /><div><div className="text-2xl font-semibold">{shop.title}</div><div className="text-sm text-yellow-300">Gold: {player.gold}</div>{shopMode === "smith" && flags.elderGavePurse && !flags.smithStarterDiscountUsed ? <div className="text-sm text-emerald-300">Starter discount available.</div> : null}</div></div><Button onClick={close}>Close</Button></div><div className="grid gap-5 lg:grid-cols-2"><div><div className="mb-2 text-sm font-semibold text-emerald-300">Buy</div><div className="grid gap-3">{shop.inventory.map((id) => { const item = ITEM_DB[id]; const discount = shopMode === "smith" && item?.slot && flags.elderGavePurse && !flags.smithStarterDiscountUsed ? 4 : shopMode === "market" && flags.marketDiscount ? 2 : 0; const cost = Math.max(1, getBuyPrice(id) - discount); return <div key={id} className="rounded-2xl border border-white/10 bg-white/5 p-3"><div className="flex justify-between gap-3"><div className="flex min-w-0 items-start gap-3"><ItemIcon item={item} size="sm" /><div className="min-w-0"><div className="font-medium">{item.name}</div><div className="mt-1 text-xs text-white/70">{item.description}</div>{getItemHighlights(item).slice(0, 2).map((line) => <div key={line} className="mt-1 text-[11px] text-emerald-300/90">{line}</div>)}</div></div><Button onClick={() => buyItem(id)} disabled={player.gold < cost}>Buy • {cost}g</Button></div></div>; })}</div></div><div><div className="mb-2 text-sm font-semibold text-amber-300">Sell</div><div className="grid gap-3">{(Object.entries(player.inventory) as [string, number][]).filter(([, c]) => c > 0).map(([id, count]) => <div key={id} className="rounded-2xl border border-white/10 bg-white/5 p-3"><div className="flex justify-between gap-3"><div className="flex min-w-0 items-center gap-2"><ItemIcon item={ITEM_DB[id]} size="sm" /><span>{ITEM_DB[id]?.name} <span className="text-xs text-white/60">x{count}</span></span></div><Button onClick={() => sellItem(id)}>Sell • {getSellPrice(id)}g</Button></div></div>)}</div></div></div></div></div>; }
 export function CraftModal({ player, close, craftRecipe }) { return <div className="fixed inset-0 z-30 overflow-y-auto bg-black/50 p-4"><div className="mx-auto my-8 max-w-2xl rounded-[2rem] border border-white/10 bg-slate-900 p-5"><div className="mb-4 flex justify-between"><div><div className="text-2xl font-semibold">Potion Shed</div><div className="text-sm text-white/70">Brew something useful or memorable.</div></div><Button onClick={close}>Close</Button></div><div className="space-y-3">{Object.values(RECIPE_DB).map((recipe) => { const item = ITEM_DB[recipe.resultId]; return <div key={recipe.id} className="rounded-2xl border border-white/10 bg-white/5 p-4"><div className="flex justify-between gap-3"><div className="flex min-w-0 items-start gap-3"><ItemIcon item={item} /><div className="min-w-0"><div className="font-medium">{recipe.name}</div><div className="mt-1 text-sm text-white/75">{recipe.note}</div><div className="mt-2 text-xs text-white/60">Ingredients: {formatIngredients(recipe.ingredients)}</div></div></div><Button onClick={() => craftRecipe(recipe.id)} disabled={!canCraftRecipe(player, recipe)}>Craft</Button></div></div>; })}</div></div></div>; }
 function EnemyPortrait({ enemy }) {
   const [artFailed, setArtFailed] = useState(false);
@@ -353,7 +402,121 @@ function EnemyPortrait({ enemy }) {
   );
 }
 
-export function BattleModal({ battle, player, companion, heroSkills, heroAttack, finishBattle, battleItemsOpen, setBattleItemsOpen, useBattleConsumable }) { return <div className="fixed inset-0 z-50 flex items-stretch justify-center overflow-y-auto bg-slate-950/90 p-2 sm:items-center sm:p-4"><div className="max-h-[calc(100vh-1rem)] w-full max-w-6xl overflow-y-auto rounded-[2rem] border border-white/10 bg-slate-900 p-4 sm:p-5"><div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]"><div><div className="sticky top-0 z-10 mb-4 flex flex-wrap justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/95 p-3"><div><div className="text-2xl font-bold">Battle • {battle.enemy.name}</div><div className="text-sm text-white/70">Enemy intent: {battle.enemy.intent}</div><div className="text-xs text-white/50">Enemy {Math.max(1, (battle.totalEnemies || 1) - (battle.queue?.length || 0))} of {battle.totalEnemies || 1}</div></div><Button onClick={finishBattle} disabled={!battle.finished}>{battle.finished ? (battle.turn === "victory" || battle.enemy.hp <= 0 ? "Claim Victory" : "You Died • Return") : "Battle in Progress"}</Button></div><div className="grid gap-4 md:grid-cols-2"><div className="rounded-3xl border border-white/10 bg-black/20 p-4"><HeroArtwork player={player} variant="portrait" className="mx-auto h-36 w-full max-w-40" /><div className="mt-2 text-xl font-semibold">{player.name}</div><div className="mt-3 space-y-3"><Meter value={player.hp} max={player.maxHp} label="Hero HP" />{companion.recruited ? <Meter value={companion.hp} max={companion.maxHp} label={`${companion.name} HP`} colorClass="bg-rose-400" /> : null}</div></div><div className="rounded-3xl border border-white/10 bg-black/20 p-4 text-right"><EnemyPortrait enemy={battle.enemy} /><div className="mt-2 text-xl font-semibold">{battle.enemy.name}</div><Meter value={battle.enemy.hp} max={battle.enemy.maxHp} label="Enemy HP" colorClass="bg-orange-400" />{battle.queue?.length ? <div className="mt-3 text-left text-sm text-white/70">Next: {battle.queue.map((e) => e.name).join(", ")}</div> : null}</div></div><div className="mt-4 rounded-3xl border border-white/10 bg-black/20 p-4"><div className="mb-3 text-sm font-medium text-white/80">Battle Log</div><div className="space-y-2 text-sm text-white/75">{battle.log.map((entry, i) => <div key={`${entry}-${i}`} className="rounded-2xl bg-white/5 px-3 py-2">{entry}</div>)}</div></div></div><div className="rounded-3xl border border-white/10 bg-black/20 p-4"><div className="mb-3 text-lg font-semibold">Actions</div><div className="mb-3 text-sm text-white/70">{battle.turn === "hero" ? "Choose Liam's action." : battle.turn === "companion" ? `${companion.name} is acting.` : battle.turn === "enemy" ? `${battle.enemy.name} is acting…` : battle.turn === "victory" ? "Victory!" : "Defeat…"}</div><div className="grid gap-2">{heroSkills.map((skill) => { const cooldownRemaining = battle.cooldowns?.[skill.id] || 0; return <button key={skill.name} onClick={() => heroAttack(skill)} disabled={battle.turn !== "hero" || battle.finished || cooldownRemaining > 0} className="rounded-2xl border border-white/10 bg-white/10 px-3 py-3 text-left hover:bg-white/20 disabled:opacity-40"><div className="flex items-center justify-between gap-2"><div className="font-medium">{skill.name}</div>{cooldownRemaining > 0 ? <div className="rounded-full bg-sky-400/20 px-2 py-0.5 text-[10px] text-sky-200">Ready in {cooldownRemaining}</div> : null}</div><div className="mt-1 text-xs text-white/70">{skill.description}</div></button>; })}<Button onClick={() => setBattleItemsOpen((p) => !p)} disabled={battle.turn !== "hero" || battle.finished}>{battleItemsOpen ? "Hide Items" : "Items"}</Button></div>{battleItemsOpen ? <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-3"><div className="mb-2 text-xs uppercase tracking-wide text-white/50">Battle Pouch</div>{["slot1", "slot2"].map((slot, i) => { const id = player.battlePouch?.[slot]; if (!id || !BATTLE_CONSUMABLES[id]) return <div key={slot} className="mb-2 rounded-2xl border border-white/10 bg-black/20 p-3 text-sm text-white/65">Battle Pouch Slot {i + 1} is empty.</div>; const cfg = BATTLE_CONSUMABLES[id]; const qty = player.inventory?.[id] || 0; return <div key={slot} className="mb-2 rounded-2xl border border-white/10 bg-black/20 p-3"><div className="flex flex-col justify-between gap-3 sm:flex-row"><div className="flex min-w-0 items-start gap-3"><ItemIcon item={ITEM_DB[id]} size="sm" /><div className="min-w-0"><div className="font-medium">{cfg.name} <span className="text-xs text-white/60">x{qty}</span></div><div className="mt-1 text-xs text-white/70">Restores {cfg.heal} HP.</div></div></div><div className="flex flex-wrap gap-2"><Button onClick={() => useBattleConsumable(id, "hero")} disabled={qty <= 0 || player.hp >= player.maxHp}>Use on Liam</Button>{companion.recruited ? <Button onClick={() => useBattleConsumable(id, "companion")} disabled={qty <= 0 || companion.hp >= companion.maxHp}>Give to {companion.name}</Button> : null}</div></div></div>; })}</div> : null}{companion.recruited ? <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-3 text-xs text-white/70">Companion command: <span className="text-white">{companion.command}</span><div className="mt-1 text-white/60">{getCompanionCommandHint(companion)}</div></div> : null}{battle.finished ? <div className="mt-4"><Button onClick={finishBattle}>{battle.turn === "victory" || battle.enemy.hp <= 0 ? "Claim Victory" : "You Died • Return"}</Button></div> : null}</div></div></div></div>; }
+export function BattleModal({ battle, player, companion, heroSkills, heroAttack, finishBattle, battleItemsOpen, setBattleItemsOpen, useBattleConsumable, selectTarget }) {
+  const modalRef = useModalAccessibility();
+  const livingEnemies = battle.enemies.filter((enemy) => enemy.hp > 0);
+  const selectedEnemy =
+    livingEnemies.find((enemy) => enemy.battleId === battle.selectedTargetId) ||
+    livingEnemies[0] ||
+    battle.enemies[0];
+  const victory = battle.turn === "victory" || livingEnemies.length === 0;
+  const turnText =
+    battle.turn === "hero"
+      ? `Choose ${player.name}'s action and target.`
+      : battle.turn === "companion"
+        ? `${companion.name} is acting.`
+        : battle.turn === "enemy"
+          ? `${livingEnemies.length === 1 ? livingEnemies[0].name : "The enemy side"} is acting…`
+          : victory
+            ? "Victory!"
+            : "Defeat…";
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-stretch justify-center overflow-y-auto bg-slate-950/90 p-2 sm:items-center sm:p-4">
+      <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="battle-title" tabIndex={-1} className="max-h-[calc(100vh-1rem)] w-full max-w-7xl overflow-y-auto rounded-[2rem] border border-amber-100/15 bg-slate-900 p-4 shadow-2xl sm:p-5">
+        <header className="sticky top-0 z-20 mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/95 p-3 backdrop-blur">
+          <div>
+            <h2 id="battle-title" className="text-2xl font-bold">Battle • {selectedEnemy?.name || "Enemy side"}</h2>
+            <div className="text-sm text-white/70">{livingEnemies.length} of {battle.totalEnemies} enemies standing • {turnText}</div>
+          </div>
+          <Button onClick={finishBattle} disabled={!battle.finished}>
+            {battle.finished ? (victory ? "Claim Victory" : "You Died • Return") : "Battle in Progress"}
+          </Button>
+        </header>
+
+        <div className="battlefield-grid grid gap-5 lg:grid-cols-[0.9fr_1.35fr]">
+          <section aria-labelledby="party-side-title" className="rounded-3xl border border-emerald-200/15 bg-emerald-950/20 p-4">
+            <h3 id="party-side-title" className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-emerald-200/80">Your party</h3>
+            <div className={`grid gap-3 ${companion.recruited ? "sm:grid-cols-2 lg:grid-cols-1" : ""}`}>
+              <article className="rounded-3xl border border-white/10 bg-black/20 p-4">
+                <HeroArtwork player={player} variant="portrait" className="mx-auto h-36 w-full max-w-40" />
+                <div className="mt-2 text-xl font-semibold">{player.name}</div>
+                <div className="mt-3"><Meter value={player.hp} max={player.maxHp} label="Hero HP" /></div>
+              </article>
+              {companion.recruited ? (
+                <article className={`rounded-3xl border border-white/10 bg-black/20 p-4 ${companion.hp <= 0 ? "opacity-50 grayscale" : ""}`}>
+                  <div className="flex h-36 items-center justify-center text-6xl" aria-hidden="true">{companion.icon}</div>
+                  <div className="mt-2 text-xl font-semibold">{companion.name}</div>
+                  <div className="text-xs text-white/55">{companion.role}</div>
+                  <div className="mt-3"><Meter value={companion.hp} max={companion.maxHp} label="Companion HP" colorClass="bg-rose-400" /></div>
+                </article>
+              ) : null}
+            </div>
+          </section>
+
+          <section aria-labelledby="enemy-side-title" className="rounded-3xl border border-orange-200/15 bg-orange-950/15 p-4">
+            <h3 id="enemy-side-title" className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-orange-200/80">Enemy side • select a target</h3>
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {battle.enemies.map((enemy) => {
+                const selected = enemy.battleId === selectedEnemy?.battleId && enemy.hp > 0;
+                const defeated = enemy.hp <= 0;
+                return (
+                  <button key={enemy.battleId} type="button" onClick={() => selectTarget(enemy.battleId)} disabled={defeated || battle.finished} aria-pressed={selected} className={`relative rounded-3xl border p-4 text-left transition ${selected ? "border-amber-300 bg-amber-400/10 ring-2 ring-amber-300/30" : "border-white/10 bg-black/20 hover:border-orange-200/35"} ${defeated ? "opacity-45 grayscale" : ""}`}>
+                    <EnemyPortrait enemy={enemy} />
+                    <div className="mt-2 flex items-start justify-between gap-2">
+                      <div className="font-semibold">{enemy.name}</div>
+                      {selected ? <span className="rounded-full bg-amber-300/20 px-2 py-1 text-[10px] uppercase tracking-wide text-amber-100">Target</span> : null}
+                      {defeated ? <span className="text-xs text-white/50">Defeated</span> : null}
+                    </div>
+                    <div className="mt-2"><Meter value={enemy.hp} max={enemy.maxHp} label="HP" colorClass="bg-orange-400" /></div>
+                    <div className="mt-3 rounded-xl bg-white/5 px-3 py-2 text-xs text-white/65">Intent: <span className="text-orange-100">{enemy.intent}</span></div>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+        </div>
+
+        <div className="mt-5 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+          <section className="rounded-3xl border border-white/10 bg-black/20 p-4">
+            <h3 className="mb-3 text-lg font-semibold">Actions</h3>
+            <div className="mb-3 text-sm text-white/70">{turnText}</div>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {heroSkills.map((skill) => {
+                const cooldownRemaining = battle.cooldowns?.[skill.id] || 0;
+                return (
+                  <button key={skill.name} onClick={() => heroAttack(skill)} disabled={battle.turn !== "hero" || battle.finished || cooldownRemaining > 0} className="rounded-2xl border border-white/10 bg-white/10 px-3 py-3 text-left hover:bg-white/20 disabled:opacity-40">
+                    <div className="flex items-center justify-between gap-2"><span className="font-medium">{skill.name}</span>{cooldownRemaining > 0 ? <span className="text-[10px] text-sky-200">Ready in {cooldownRemaining}</span> : null}</div>
+                    <div className="mt-1 text-xs text-white/70">{skill.description}</div>
+                  </button>
+                );
+              })}
+              <Button onClick={() => setBattleItemsOpen((open) => !open)} disabled={battle.turn !== "hero" || battle.finished}>{battleItemsOpen ? "Hide Items" : "Items"}</Button>
+            </div>
+            {battleItemsOpen ? (
+              <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-3">
+                <div className="mb-2 text-xs uppercase tracking-wide text-white/50">Battle Pouch</div>
+                {["slot1", "slot2"].map((slot, index) => {
+                  const id = player.battlePouch?.[slot];
+                  if (!id || !BATTLE_CONSUMABLES[id]) return <div key={slot} className="mb-2 text-sm text-white/55">Slot {index + 1} is empty.</div>;
+                  const config = BATTLE_CONSUMABLES[id];
+                  const quantity = player.inventory?.[id] || 0;
+                  return <div key={slot} className="mb-2 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-black/20 p-3"><span>{config.name} ×{quantity}</span><div className="flex gap-2"><Button onClick={() => useBattleConsumable(id, "hero")} disabled={quantity <= 0 || player.hp >= player.maxHp}>Use on {player.name}</Button>{companion.recruited ? <Button onClick={() => useBattleConsumable(id, "companion")} disabled={quantity <= 0 || companion.hp >= companion.maxHp}>Give to {companion.name}</Button> : null}</div></div>;
+                })}
+              </div>
+            ) : null}
+            {companion.recruited ? <div className="mt-4 text-xs text-white/60">Companion command: <span className="text-white">{companion.command}</span> • {getCompanionCommandHint(companion)}</div> : null}
+          </section>
+
+          <section aria-live="polite" className="rounded-3xl border border-white/10 bg-black/20 p-4">
+            <h3 className="mb-3 text-lg font-semibold">Battle Log</h3>
+            <div className="space-y-2 text-sm text-white/75">{battle.log.map((entry, index) => <div key={`${entry}-${index}`} className="rounded-2xl bg-white/5 px-3 py-2">{entry}</div>)}</div>
+          </section>
+        </div>
+      </div>
+    </div>
+  );
+}
 export function SaveModal({
   mode,
   slots,

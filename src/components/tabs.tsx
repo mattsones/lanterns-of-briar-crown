@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { COMPANION_OPTIONS } from "../data/companions";
 import { BATTLE_CONSUMABLES, ITEM_DB } from "../data/items";
 import { MAPS } from "../data/maps";
@@ -216,7 +215,7 @@ export function EquipmentTab({
       <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
         <div className="mb-3 text-sm font-semibold">Currently Equipped</div>
         <div className="grid gap-2">
-          {Object.entries(player.equipment).map(([slot, itemId]) => (
+          {(Object.entries(player.equipment) as [string, string | null][]).map(([slot, itemId]) => (
             <button
               key={slot}
               onClick={() => setFocusSlot(slot)}
@@ -257,7 +256,7 @@ export function EquipmentTab({
           </Button>
         </div>
         <div className="grid gap-3">
-          {Object.entries(player.inventory)
+          {(Object.entries(player.inventory) as [string, number][])
             .filter(
               ([id, count]) =>
                 count > 0 && itemFitsSlot(ITEM_DB[id], focusSlot),
@@ -362,7 +361,7 @@ export function PouchTab({ player, focusSlot, setFocusSlot, assign, clear }) {
           </Button>
         </div>
         <div className="grid gap-3">
-          {Object.entries(player.inventory)
+          {(Object.entries(player.inventory) as [string, number][])
             .filter(([id, count]) => count > 0 && BATTLE_CONSUMABLES[id])
             .map(([id, count]) => (
               <div
@@ -544,6 +543,7 @@ export function DevTab({
   giveSupplies,
   heal,
   reset,
+  startTestBattle,
   jump,
   player,
   position,
@@ -587,6 +587,7 @@ export function DevTab({
             <Button onClick={giveSupplies}>Give Supplies</Button>
             <Button onClick={heal}>Heal Party</Button>
             <Button onClick={reset}>Reset Fights</Button>
+            <Button onClick={startTestBattle}>Start 3-Enemy Battle</Button>
             <Button
               onClick={() => setMapDebug((value) => !value)}
               className={mapDebug ? "bg-sky-500/30" : ""}

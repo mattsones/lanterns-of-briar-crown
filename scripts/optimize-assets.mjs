@@ -146,14 +146,27 @@ async function loadExistingOriginalsByOutput() {
   }
 }
 
+async function findRuntimeSource(relativePath) {
+  if (await pathExists(path.join(repoRoot, relativePath))) return relativePath;
+
+  const parsed = path.parse(relativePath);
+  for (const extension of IMAGE_EXTENSIONS) {
+    const candidate = path.join(parsed.dir, `${parsed.name}${extension}`).replaceAll("\\", "/");
+    if (await pathExists(path.join(repoRoot, candidate))) return candidate;
+  }
+
+  return null;
+}
+
 async function optimizeOne(relativePath, existingOriginalsByOutput) {
   const mappedSourceArtPath = existingOriginalsByOutput.get(relativePath);
-  const defaultSourceArtPath = `${SOURCE_ART_ROOT}/${relativePath}`;
+  const runtimeSourcePath = await findRuntimeSource(relativePath);
+  const defaultSourceArtPath = `${SOURCE_ART_ROOT}/${runtimeSourcePath || relativePath}`;
   const sourceArtPath =
     mappedSourceArtPath && await pathExists(path.join(repoRoot, mappedSourceArtPath))
       ? mappedSourceArtPath
       : defaultSourceArtPath;
-  const hasRuntimeFile = await pathExists(path.join(repoRoot, relativePath));
+  const hasRuntimeFile = !!runtimeSourcePath;
   const hasSourceArtFile = await pathExists(path.join(repoRoot, sourceArtPath));
 
   if (!hasRuntimeFile && !hasSourceArtFile) {
@@ -161,7 +174,7 @@ async function optimizeOne(relativePath, existingOriginalsByOutput) {
   }
 
   if (!hasSourceArtFile) {
-    await moveFile(relativePath, sourceArtPath);
+    await moveFile(runtimeSourcePath, sourceArtPath);
   }
 
   const inputPath = path.join(repoRoot, sourceArtPath);
@@ -170,7 +183,7 @@ async function optimizeOne(relativePath, existingOriginalsByOutput) {
   const target = targetFor(relativePath, metadata);
   const outputRelativePath = outputPathFor(relativePath, target);
   const outputPath = path.join(repoRoot, outputRelativePath);
-  const staleOriginalPath = path.join(repoRoot, relativePath);
+  const staleOriginalPath = path.join(repoRoot, runtimeSourcePath || relativePath);
 
   await mkdir(path.dirname(outputPath), { recursive: true });
 
@@ -253,10 +266,13 @@ async function moveUnreferencedProductionImages(references) {
       collectFiles(root, (relativePath) => IMAGE_EXTENSIONS.has(path.extname(relativePath).toLowerCase())),
     ))
   ).flat();
+  const referencedStems = new Set(
+    [...references].map((relativePath) => relativePath.replace(/\.[^.]+$/, "")),
+  );
   const moved = [];
 
   for (const relativePath of productionImages) {
-    if (references.has(relativePath)) continue;
+    if (references.has(relativePath) || referencedStems.has(relativePath.replace(/\.[^.]+$/, ""))) continue;
     const destination = `${ALTERNATES_ROOT}/${relativePath}`;
     await moveFile(relativePath, destination);
     moved.push({ source: relativePath, destination });

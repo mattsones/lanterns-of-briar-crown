@@ -29,5 +29,17 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Asset audit
+        run: npm run audit:assets -- --limit=10
+
+      - name: Rules
+        run: npm run test:rules
+
+      - name: Chapter 1 golden path
+        run: npm run playtest:chapter1
+
+      - name: Chapter 2 golden paths
+        run: npm run playtest:chapter2
+
       - name: Smoke playtest
         run: npm run playtest:smoke

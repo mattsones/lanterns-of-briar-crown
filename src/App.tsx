@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useMemo, useState } from "react";
 import {
   CompanionTab,
@@ -44,7 +43,14 @@ import {
   ShopModal,
 } from "./components/modals";
 import { HeroArtwork } from "./components/HeroArtwork";
-import { tickCooldowns } from "./game/battle";
+import {
+  damageBattleEnemy,
+  getLivingEnemies,
+  getSelectedBattleEnemy,
+  prepareBattleEnemies,
+  rotateEnemyIntent,
+  tickCooldowns,
+} from "./game/battle";
 import { getChapterProgress } from "./game/chapterProgress";
 import { checkSummary, resolveRoll, resolveSkillCheck } from "./game/dice";
 import { getActiveGuestNpc } from "./game/guestNpcs";
@@ -93,6 +99,7 @@ import {
   normalizePlayerData,
 } from "./game/state";
 import { addBonuses, formatBonuses, getDerivedStats } from "./game/stats";
+import type { Flags, Position } from "./game/types";
 import {
   CHAPTER_1_STORY,
   appendChapter1CompanionReaction,
@@ -125,6 +132,14 @@ const threeDoorsThresholdScene = new URL(
 ).href;
 const eddensThreeDoorDrawingScene = new URL(
   "../assets/scenes/eddens-three-door-drawing-scene-v01.webp",
+  import.meta.url,
+).href;
+const westrootThresholdOpeningScene = new URL(
+  "../assets/scenes/westroot-threshold-opening-v01.webp",
+  import.meta.url,
+).href;
+const titleKeyArt = new URL(
+  "../assets/maps/hearthhollow-gameplay-map-v04.webp",
   import.meta.url,
 ).href;
 const crownDenDistantScratchingIcon = new URL(
@@ -295,6 +310,7 @@ export default function LiamsGamePrototype() {
     gender: GENDERS[0],
     raceId: RACES[0].id,
     humanHeritageId: DEFAULT_HUMAN_HERITAGE_ID,
+    appearanceId: "",
   });
   const [player, setPlayer] = useState(null);
   const [region, setRegion] = useState("hearthhollow");
@@ -571,7 +587,7 @@ export default function LiamsGamePrototype() {
     const nextCompanion = normalizeCompanionData(payload.companion);
     const nextFlags = { ...buildDefaultFlags(), ...(payload.flags || {}) };
     const nextQuest =
-      payload.quest || {
+      (payload.quest as { title: string; description: string } | undefined) || {
         title: "Adventure in progress",
         description: "Continue exploring.",
       };
@@ -875,7 +891,7 @@ export default function LiamsGamePrototype() {
         ["input", "textarea", "select"].includes(tagName) ||
         event.target?.isContentEditable;
       if (isTextEntry) return;
-      const keyMap = {
+      const keyMap: Record<string, [number, number]> = {
         ArrowUp: [0, -1],
         w: [0, -1],
         W: [0, -1],
@@ -1106,7 +1122,7 @@ export default function LiamsGamePrototype() {
       return setToast("Talk to Elder Mira before leaving town.");
     const hasWeaponReady =
       !!player.equipment?.weapon ||
-      Object.entries(player.inventory || {}).some(
+      (Object.entries(player.inventory || {}) as [string, number][]).some(
         ([id, qty]) => qty > 0 && ITEM_DB[id]?.slot === "weapon",
       );
     if (!flags.homeStashClaimed && !hasWeaponReady)
@@ -1278,7 +1294,7 @@ export default function LiamsGamePrototype() {
     setDialogue({
       portrait: "⚔️",
       name: "Roadside Ambush",
-      text: 'The moment your hand touches the forged order, the roadside act falls apart. A fox-faced ruffian steps from the brambles, knife low and smile lower. Beside him, a thorny hound growls like a hedge with teeth. "That paper isn\'t yours," the ruffian says. He sounds less angry than inconvenienced.',
+      text: 'The moment your hand touches the forged order, the roadside act falls apart. A thorn-cloaked ruffian steps from the brambles, knife low and smile lower. Beside him, a thorny hound growls like a hedge with teeth. "That paper isn\'t yours," the ruffian says. He sounds less angry than inconvenienced.',
       choices: [
         {
           label: "Break up the ambush.",
@@ -2269,7 +2285,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
   const hasWillowmarkLens = () =>
     flags.adaSealLessonComplete || hasItem(player, "willowmark_lens", 1);
 
-  const addLocalResult = (text, viewFlags = {}) =>
+  const addLocalResult = (text, viewFlags: Flags & { localResult?: string } = {}) =>
     viewFlags.localResult ? `${text}\n\n${viewFlags.localResult}` : text;
 
   const chapter2CompanionLine = (rowan, tilda, moss, fallback = "") => {
@@ -2346,7 +2362,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       portrait: "🗺️",
       name: "Bramblecross Watchhouse",
       size: "wide",
-      text: `${companion.recruited ? "Enna nods once to the companion at your side. \"Good. One clear witness is better than a crowd of half-listeners.\"" : "Enna looks at the empty space beside you. \"You can follow this lead alone if you must, but I would rather you did not. The road west is not simply dangerous. It is being edited.\""}\n\nHollis stands near the case wall, where Edden's blue cloth is pinned beside the Briar Crown mark.\n\n\"The cellar gave us a direction,\" he says. \"Westroot. But the maps disagree on what Westroot is.\"\n\nEnna taps three pages in turn: a public road map, a courier map, and Edden's charcoal drawing of three doors under roots.\n\n\"Someone else has already opened it,\" she says. \"So we follow carefully. Mara reads Lio's smallest marks. Ada's lens reads copied Willow marks. We should have both before the west road gets a vote.\"`,
+      text: `${companion.recruited ? "Enna nods once to the companion at your side. \"Good. One clear witness is better than a crowd of half-listeners.\"" : "Enna looks at the empty space beside you. \"You can follow this lead alone if you must, but I would rather you did not. The road west is not simply dangerous. It is being edited.\""}\n\nHollis stands near the case wall, where Edden's blue cloth is pinned beside the Briar Crown mark.\n\n\"The sealed cellar door still opens from the far side,\" he says. \"We cannot chase Westroot through it yet. But the old courier maps show a surface cut west of town that reaches the same buried road.\"\n\nEnna taps three pages in turn: a public road map, a courier map, and Edden's charcoal drawing of three doors under roots.\n\n\"Someone else has already opened Westroot,\" she says. \"This chapter of the search is about proving where Lio went and whether he survived the gate. Mara reads his smallest marks. Ada's lens reads copied Willow marks. We should have both before the west road gets a vote.\"\n\nFor the first time, the room stops treating Lio Brindle like a route problem. He becomes someone's brother.`,
       choices: [
         {
           label: "What exactly is Westroot?",
@@ -2588,7 +2604,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openShelterNookDialogue = (assumedFlags = {}) => {
+  const openShelterNookDialogue = (assumedFlags: Flags & { localResult?: string } = {}) => {
     const viewFlags = { ...flags, ...assumedFlags };
     const repairMode = !!viewFlags.noHandleStoneInspected;
     setDialogue({
@@ -2649,7 +2665,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openFalseNoticeDialogue = (assumedFlags = {}) => {
+  const openFalseNoticeDialogue = (assumedFlags: Flags & { localResult?: string } = {}) => {
     const viewFlags = { ...flags, ...assumedFlags };
     const repairMode = !!viewFlags.noHandleStoneInspected;
     setDialogue({
@@ -2724,7 +2740,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openThreeHollowDialogue = (assumedFlags = {}) => {
+  const openThreeHollowDialogue = (assumedFlags: Flags & { localResult?: string } = {}) => {
     const viewFlags = { ...flags, ...assumedFlags };
     const repairMode = !!viewFlags.noHandleStoneInspected;
     setDialogue({
@@ -2783,7 +2799,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openThreeDoorThresholdDialogue = (fallbackPosition, assumedFlags = {}) =>
+  const openThreeDoorThresholdDialogue = (fallbackPosition, assumedFlags: Flags & { localResult?: string } = {}) =>
     setDialogue({
       portrait: CHAPTER_2_SCENE_COPY.threeDoorThreshold.portrait,
       name: CHAPTER_2_SCENE_COPY.threeDoorThreshold.name,
@@ -2813,7 +2829,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       ].filter(Boolean),
     });
 
-  const openCrownDoorDialogue = (assumedFlags = {}, fallbackPosition) => {
+  const openCrownDoorDialogue = (assumedFlags: Flags & { localResult?: string } = {}, fallbackPosition) => {
     const viewFlags = { ...flags, ...assumedFlags };
     const canOpenDen = !!(viewFlags.crownDoorKeyFound || hasItem(player, "split_crown_slat", 1));
     setDialogue({
@@ -2853,7 +2869,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openFalseCrownPassageDialogue = (assumedFlags = {}, fallbackPosition) => {
+  const openFalseCrownPassageDialogue = (assumedFlags: Flags & { localResult?: string } = {}, fallbackPosition) => {
     setFlags((f) => ({
       ...f,
       crownDoorTried: true,
@@ -2926,7 +2942,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openWaxTableDialogue = (assumedFlags = {}) => {
+  const openWaxTableDialogue = (assumedFlags: Flags & { localResult?: string } = {}) => {
     const viewFlags = { ...flags, ...assumedFlags };
     setDialogue({
       portrait: "wax",
@@ -2973,7 +2989,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openSlatRackDialogue = (assumedFlags = {}) => {
+  const openSlatRackDialogue = (assumedFlags: Flags & { localResult?: string } = {}) => {
     const viewFlags = { ...flags, ...assumedFlags };
     setDialogue({
       portrait: "sign",
@@ -3010,7 +3026,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openWitnessLedgerDialogue = (assumedFlags = {}) => {
+  const openWitnessLedgerDialogue = (assumedFlags: Flags & { localResult?: string } = {}) => {
     const viewFlags = { ...flags, ...assumedFlags };
     setDialogue({
       portrait: "book",
@@ -3048,7 +3064,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openCollarKennelDialogue = (assumedFlags = {}) => {
+  const openCollarKennelDialogue = (assumedFlags: Flags & { localResult?: string } = {}) => {
     const viewFlags = { ...flags, ...assumedFlags };
     setDialogue({
       portrait: "link",
@@ -3155,7 +3171,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openFalseMapRoomDialogue = (assumedFlags = {}) => {
+  const openFalseMapRoomDialogue = (assumedFlags: Flags & { localResult?: string } = {}) => {
     const viewFlags = { ...flags, ...assumedFlags };
     const missing = [
       !viewFlags.crownDoorWaxTableCleared ? "read the wax table" : null,
@@ -3207,7 +3223,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openLanternDoorDialogue = (assumedFlags = {}, fallbackPosition) => {
+  const openLanternDoorDialogue = (assumedFlags: Flags & { localResult?: string } = {}, fallbackPosition) => {
     const viewFlags = { ...flags, ...assumedFlags };
     setDialogue({
       portrait: CHAPTER_2_SCENE_COPY.lanternDoor.portrait,
@@ -3342,7 +3358,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openCrownSignDialogue = (assumedFlags = {}, fallbackPosition) => {
+  const openCrownSignDialogue = (assumedFlags: Flags & { localResult?: string } = {}, fallbackPosition) => {
     const viewFlags = { ...flags, ...assumedFlags };
     const repairMode = !!viewFlags.noHandleStoneInspected;
     setDialogue({
@@ -3388,7 +3404,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openLanternSignDialogue = (assumedFlags = {}, fallbackPosition) => {
+  const openLanternSignDialogue = (assumedFlags: Flags & { localResult?: string } = {}, fallbackPosition) => {
     const viewFlags = { ...flags, ...assumedFlags };
     const repairMode = !!viewFlags.noHandleStoneInspected;
     setDialogue({
@@ -3446,7 +3462,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openNoHandleStoneDialogue = (assumedFlags = {}, fallbackPosition) => {
+  const openNoHandleStoneDialogue = (assumedFlags: Flags & { localResult?: string } = {}, fallbackPosition) => {
     const doorFlags = { ...assumedFlags, noHandleStoneInspected: true };
     const outcome = getWestrootPuzzleOutcome(flags, doorFlags);
     const repair = getWestrootDoorRepairState(flags, doorFlags);
@@ -3663,7 +3679,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
 
   const openRoadwatcherAmbushDialogue = (
     encounterKey = getRoadwatcherEncounterKey(flags),
-    options = {},
+    options: { prepared?: boolean; maraProtected?: boolean; previousPosition?: Position } = {},
   ) => {
     const hard = encounterKey === "roadwatcherHard";
     const prepared = !!(options.prepared || flags.roadwatcherPrepared);
@@ -3730,7 +3746,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openWestrootGateDialogue = (assumedFlags = {}) => {
+  const openWestrootGateDialogue = (assumedFlags: Flags & { localResult?: string } = {}) => {
     const viewFlags = { ...flags, ...assumedFlags };
     if (!viewFlags.westrootGateOpened)
       return setToast(CHAPTER_2_SCENE_COPY.westrootGate.closedToast);
@@ -3776,6 +3792,11 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               portrait: "✨",
               name: CHAPTER_2_SCENE_COPY.westrootGate.completeName,
               text: CHAPTER_2_SCENE_COPY.westrootGate.completeText,
+              sceneImage: {
+                src: westrootThresholdOpeningScene,
+                alt: CHAPTER_2_SCENE_COPY.westrootGate.completeSceneAlt,
+              },
+              size: "wide",
               choices: [{ label: CHAPTER_2_SCENE_COPY.westrootGate.labels.continue, effect: () => setDialogue(null) }],
             });
           },
@@ -3784,7 +3805,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const inspectTile = (tile, options = {}) => {
+  const inspectTile = (tile, options: { auto?: boolean; previousPosition?: Position } = {}) => {
     if (options.auto && shouldSkipAutoInspect(tile)) return;
     if (region === "hearthhollow") {
       if (tile === "elder") openElderDialogue();
@@ -4040,7 +4061,9 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
   };
 
   const startBattle = (enemies, rewardKey) => {
-    const [enemy, ...queue] = enemies;
+    const battleEnemies = prepareBattleEnemies(enemies);
+    const firstEnemy = battleEnemies[0];
+    if (!firstEnemy) return;
     const heroRoll = resolveRoll({
       count: 1,
       sides: 6,
@@ -4049,17 +4072,17 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     const enemyRoll = resolveRoll({ count: 1, sides: 6, bonus: 1 });
     const heroStarts = heroRoll.total >= enemyRoll.total;
     setBattle({
-      enemy,
-      queue,
-      totalEnemies: enemies.length,
+      enemies: battleEnemies,
+      selectedTargetId: firstEnemy.battleId,
+      totalEnemies: battleEnemies.length,
       rewardKey,
       turn: heroStarts ? "hero" : "enemy",
       heroGuard: 0,
       cooldowns: {},
       finished: false,
       log: [
-        `${enemy.name} squares up for a fight.`,
-        `${heroStarts ? player.name : enemy.name} moves first (${heroRoll.total} vs ${enemyRoll.total}).`,
+        `${battleEnemies.length} ${battleEnemies.length === 1 ? "enemy squares" : "enemies square"} up across the field.`,
+        `${heroStarts ? player.name : "The enemy side"} moves first (${heroRoll.total} vs ${enemyRoll.total}).`,
       ],
     });
     if (!heroStarts) window.setTimeout(() => enemyTurn(), 350);
@@ -4080,43 +4103,39 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       prev ? { ...prev, log: [...prev.log.slice(-5), text] } : prev,
     );
   const advanceToNextEnemyOrVictory = (prev, defeatMessage = null) => {
-    const log = defeatMessage
-      ? [...prev.log.slice(-5), defeatMessage]
-      : prev.log;
-    if (prev.queue.length) {
-      const [nextEnemy, ...rest] = prev.queue;
-      return {
-        ...prev,
-        enemy: nextEnemy,
-        queue: rest,
-        turn: "hero",
-        heroGuard: 0,
-        cooldowns: tickCooldowns(prev.cooldowns),
-        log: [
-          ...log.slice(-4),
-          `${prev.enemy.name} falls!`,
-          `${nextEnemy.name} leaps into the fight!`,
-        ],
-      };
-    }
+    const livingEnemies = getLivingEnemies(prev.enemies);
+    const log = defeatMessage ? [...prev.log.slice(-7), defeatMessage] : prev.log;
+    if (!livingEnemies.length)
+      return { ...prev, finished: true, turn: "victory", log };
+    const selectedTarget = getSelectedBattleEnemy(prev.enemies, prev.selectedTargetId);
     return {
       ...prev,
-      enemy: { ...prev.enemy, hp: 0 },
-      finished: true,
-      turn: "victory",
-      log: [...log.slice(-5), `${prev.enemy.name} falls!`],
+      selectedTargetId: selectedTarget?.battleId || livingEnemies[0].battleId,
+      log,
     };
   };
 
+  const selectBattleTarget = (battleId) =>
+    setBattle((prev) => {
+      if (!prev || prev.finished) return prev;
+      const target = getSelectedBattleEnemy(prev.enemies, battleId);
+      return target ? { ...prev, selectedTargetId: target.battleId } : prev;
+    });
+
   const heroAttack = (skill) => {
     if (!battle || battle.turn !== "hero" || battle.finished) return;
+    const target = getSelectedBattleEnemy(battle.enemies, battle.selectedTargetId);
+    if (!target) return;
     const cooldownRemaining = battle.cooldowns?.[skill.id] || 0;
-    if (cooldownRemaining > 0)
-      return setToast(
+    if (cooldownRemaining > 0) {
+      setToast(
         `${skill.name} is cooling down for ${cooldownRemaining} more turn${cooldownRemaining === 1 ? "" : "s"}.`,
       );
+      return;
+    }
+
     const sendNextTurn = () =>
-      setTimeout(
+      window.setTimeout(
         () =>
           companion.recruited && companion.hp > 0
             ? companionTurn()
@@ -4140,8 +4159,8 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               turn:
                 companion.recruited && companion.hp > 0 ? "companion" : "enemy",
               log: [
-                ...prev.log.slice(-5),
-                `${player.name} uses ${skill.name}. HP +${heal}, Guard +${guard}.${skill.cooldown ? ` ${skill.name} will be ready again in ${skill.cooldown} turns.` : ""}`,
+                ...prev.log.slice(-7),
+                `${player.name} uses ${skill.name}. HP +${heal}, Guard +${guard}.`,
               ],
             }
           : prev,
@@ -4152,133 +4171,138 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
 
     const roll = resolveRoll(skill.spec || { count: 1, sides: 6, bonus: 1 });
     const bonusVsApplies = skill.bonusVs?.some((term) =>
-      battle.enemy.name.toLowerCase().includes(term.toLowerCase()),
+      target.name.toLowerCase().includes(term.toLowerCase()),
     );
     const bonusDamage = bonusVsApplies ? 2 : 0;
-    const guardPenalty =
-      skill.pierce || skill.guardBreak || battle.enemy.guardBroken ? 0 : 1;
+    const guardPenalty = skill.pierce || skill.guardBreak || target.guardBroken ? 0 : 1;
     const damage = Math.max(1, roll.total + bonusDamage - guardPenalty);
-    const nextHp = Math.max(0, battle.enemy.hp - damage);
+    const targetWillFall = target.hp - damage <= 0;
+    const otherLivingEnemies = getLivingEnemies(battle.enemies).filter(
+      (enemy) => enemy.battleId !== target.battleId,
+    );
+
     setBattle((prev) => {
       if (!prev || prev.finished) return prev;
+      const activeTarget = getSelectedBattleEnemy(prev.enemies, target.battleId);
+      if (!activeTarget) return prev;
+      const nextEnemies = damageBattleEnemy(prev.enemies, activeTarget.battleId, damage, {
+        weaken: skill.weaken,
+        guardBreak: skill.guardBreak,
+      });
       const updated = {
         ...prev,
-        enemy: {
-          ...prev.enemy,
-          hp: Math.max(0, prev.enemy.hp - damage),
-          weakened: !!skill.weaken || prev.enemy.weakened,
-          guardBroken: !!skill.guardBreak || prev.enemy.guardBroken,
-        },
+        enemies: nextEnemies,
         cooldowns: skill.cooldown
           ? { ...(prev.cooldowns || {}), [skill.id]: skill.cooldown }
           : prev.cooldowns,
         log: [
-          ...prev.log.slice(-5),
-          `${player.name} uses ${skill.name} (${roll.notation} → ${roll.total}${bonusDamage ? `, +${bonusDamage} vs thorn/root` : ""}) for ${damage} damage.${skill.weaken ? " Enemy weakened." : ""}${skill.guardBreak ? " Guard broken." : ""}${skill.cooldown ? ` ${skill.name} will be ready again in ${skill.cooldown} turns.` : ""}`,
-        ],
+          ...prev.log.slice(-7),
+          `${player.name} uses ${skill.name} on ${activeTarget.name} for ${damage} damage (${roll.notation}).`,
+          ...(activeTarget.hp - damage <= 0 ? [`${activeTarget.name} falls!`] : []),
+        ].slice(-8),
       };
-      if (updated.enemy.hp <= 0) return advanceToNextEnemyOrVictory(updated);
+      if (!getLivingEnemies(nextEnemies).length)
+        return advanceToNextEnemyOrVictory(updated);
+      const nextTarget = getSelectedBattleEnemy(nextEnemies, prev.selectedTargetId);
       return {
         ...updated,
+        selectedTargetId: nextTarget?.battleId,
         turn: companion.recruited && companion.hp > 0 ? "companion" : "enemy",
       };
     });
-    if (nextHp > 0) sendNextTurn();
+
+    if (!targetWillFall || otherLivingEnemies.length) sendNextTurn();
   };
 
   const companionTurn = () => {
     setBattle((prev) => (prev ? { ...prev, turn: "companion" } : prev));
-    setTimeout(() => {
-      let defeatedEnemy = false;
+    window.setTimeout(() => {
+      let allEnemiesDefeated = false;
       setBattle((prev) => {
-        if (
-          !prev ||
-          prev.finished ||
-          prev.enemy.hp <= 0 ||
-          !companion.recruited ||
-          companion.hp <= 0
-        )
+        if (!prev || prev.finished || !companion.recruited || companion.hp <= 0)
           return prev;
+        const target = getSelectedBattleEnemy(prev.enemies, prev.selectedTargetId);
+        if (!target) return advanceToNextEnemyOrVictory(prev);
         const roll = resolveRoll({
           count: 1,
           sides: companion.style === "skirmisher" ? 6 : 4,
           bonus: companion.style === "guardian" ? 2 : 1,
         });
+        const nextEnemies = damageBattleEnemy(prev.enemies, target.battleId, roll.total, {
+          weaken: companion.command !== "Attack Freely",
+        });
+        allEnemiesDefeated = !getLivingEnemies(nextEnemies).length;
         const updated = {
           ...prev,
-          enemy: {
-            ...prev.enemy,
-            hp: Math.max(0, prev.enemy.hp - roll.total),
-            weakened: companion.command !== "Attack Freely",
-          },
+          enemies: nextEnemies,
           log: [
-            ...prev.log.slice(-5),
-            `${companion.name} helps for ${roll.total} damage (${roll.notation}).`,
-          ],
+            ...prev.log.slice(-7),
+            `${companion.name} strikes ${target.name} for ${roll.total} damage (${roll.notation}).`,
+            ...(target.hp - roll.total <= 0 ? [`${target.name} falls!`] : []),
+          ].slice(-8),
         };
-        defeatedEnemy = updated.enemy.hp <= 0;
-        if (defeatedEnemy) return advanceToNextEnemyOrVictory(updated);
-        return { ...updated, turn: "enemy" };
+        if (allEnemiesDefeated) return advanceToNextEnemyOrVictory(updated);
+        const nextTarget = getSelectedBattleEnemy(nextEnemies, prev.selectedTargetId);
+        return { ...updated, selectedTargetId: nextTarget?.battleId, turn: "enemy" };
       });
-      setTimeout(() => {
-        if (!defeatedEnemy) enemyTurn();
+      window.setTimeout(() => {
+        if (!allEnemiesDefeated) enemyTurn();
       }, 120);
     }, 300);
   };
 
   const enemyTurn = () => {
     setBattle((prev) => (prev ? { ...prev, turn: "enemy" } : prev));
-    setTimeout(() => {
+    window.setTimeout(() => {
       setBattle((prev) => {
-        if (!prev || prev.finished || prev.enemy.hp <= 0)
-          return prev ? { ...prev, finished: true, turn: "victory" } : prev;
-        const attack = resolveRoll(
-          prev.enemy.currentAttackSpec || { count: 1, sides: 6, bonus: 2 },
-        );
-        const base = Math.max(1, attack.total - (prev.enemy.weakened ? 2 : 0));
-        const targetHero =
-          !companion.recruited || companion.hp <= 0 || Math.random() < 0.7;
-        const heroDamage = Math.max(
-          1,
-          base - Math.floor(derivedStats.Guard / 3) - (prev.heroGuard || 0),
-        );
-        const companionDamage = Math.max(1, base - 2);
-        if (targetHero)
-          setPlayer((p) => ({ ...p, hp: Math.max(0, p.hp - heroDamage) }));
-        else
+        if (!prev || prev.finished) return prev;
+        const livingEnemies = getLivingEnemies(prev.enemies);
+        if (!livingEnemies.length) return advanceToNextEnemyOrVictory(prev);
+        let totalHeroDamage = 0;
+        let totalCompanionDamage = 0;
+        const attackLogs = livingEnemies.map((enemy) => {
+          const attack = resolveRoll(
+            enemy.currentAttackSpec || { count: 1, sides: 6, bonus: 2 },
+          );
+          const base = Math.max(1, attack.total - (enemy.weakened ? 2 : 0));
+          const companionStanding =
+            companion.recruited && companion.hp - totalCompanionDamage > 0;
+          const targetHero = !companionStanding || Math.random() < 0.7;
+          const damage = targetHero
+            ? Math.max(
+                1,
+                base - Math.floor(derivedStats.Guard / 3) - (prev.heroGuard || 0),
+              )
+            : Math.max(1, base - 2);
+          if (targetHero) totalHeroDamage += damage;
+          else totalCompanionDamage += damage;
+          return `${enemy.name} uses ${enemy.intent} for ${damage} damage${targetHero ? "" : ` to ${companion.name}`}.`;
+        });
+        if (totalHeroDamage)
+          setPlayer((p) => ({ ...p, hp: Math.max(0, p.hp - totalHeroDamage) }));
+        if (totalCompanionDamage)
           setCompanion((c) => ({
             ...c,
-            hp: Math.max(0, c.hp - companionDamage),
+            hp: Math.max(0, c.hp - totalCompanionDamage),
           }));
         return {
           ...prev,
           turn: "hero",
           heroGuard: 0,
           cooldowns: tickCooldowns(prev.cooldowns),
-          enemy: {
-            ...prev.enemy,
-            intent:
-              prev.enemy.intent === prev.enemy.intentA
-                ? prev.enemy.intentB
-                : prev.enemy.intentA,
-            currentAttackSpec:
-              prev.enemy.intent === prev.enemy.intentA
-                ? prev.enemy.attackB
-                : prev.enemy.attackA,
-            weakened: false,
-            guardBroken: false,
-          },
-          log: [
-            ...prev.log.slice(-5),
-            `${prev.enemy.name} uses ${prev.enemy.intent} (${attack.notation} → ${attack.total})${targetHero ? ` for ${heroDamage} damage.` : ` and clips ${companion.name} for ${companionDamage} damage.`}`,
-          ],
+          enemies: prev.enemies.map((enemy) =>
+            enemy.hp > 0 ? rotateEnemyIntent(enemy) : enemy,
+          ),
+          log: [...prev.log, ...attackLogs].slice(-8),
         };
       });
     }, 450);
   };
+
   const finishBattle = () => {
     if (!battle) return;
-    const victory = battle.turn === "victory" || battle.enemy.hp <= 0;
+    const victory =
+      battle.turn === "victory" || getLivingEnemies(battle.enemies).length === 0;
     if (victory) {
       let companionReward = null;
       if (companion.recruited && flags.companionChoice) {
@@ -4419,7 +4443,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
   const craftRecipe = (recipeId) => {
     const recipe = RECIPE_DB[recipeId];
     if (!recipe || !canCraftRecipe(player, recipe)) return;
-    Object.entries(recipe.ingredients).forEach(([id, qty]) =>
+    (Object.entries(recipe.ingredients) as [string, number][]).forEach(([id, qty]) =>
       removeItem(setPlayer, id, qty),
     );
     gainItem(setPlayer, recipe.resultId, recipe.resultQty);
@@ -4686,15 +4710,20 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
 
   if (screen === "title")
     return (
-      <div className="min-h-screen bg-[radial-gradient(circle_at_top,#224e3f_0%,#0f172a_45%,#020617_100%)] p-6 text-white">
+      <div className="storybook-shell min-h-screen p-4 text-white sm:p-6">
         <div className="mx-auto flex min-h-[85vh] max-w-6xl flex-col items-center justify-center gap-6">
-          <div className="rounded-[2rem] border border-white/10 bg-black/20 px-8 py-10 text-center shadow-2xl">
+          <div className="title-book-page w-full overflow-hidden rounded-[2rem] border border-amber-100/20 px-5 py-6 text-center shadow-2xl sm:px-8 sm:py-8">
+            <figure className="title-key-art relative mx-auto mb-7 min-h-64 max-w-4xl overflow-hidden rounded-[1.5rem] border border-amber-100/20">
+              <img src={titleKeyArt} alt="Painted map of Hearthhollow beneath the old forest" className="absolute inset-0 h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent" />
+              <figcaption className="absolute bottom-4 left-4 right-4 text-left text-sm text-amber-50/80">Every road begins at somebody's front door.</figcaption>
+            </figure>
             <div className="mb-4 text-6xl">🗺️🗡️✨</div>
             <h1 className="text-4xl font-bold sm:text-6xl">
               Lanterns of Briar Crown
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-white/80">
-              A funny, heroic fantasy adventure prototype for Liam.
+              A funny, heroic fantasy about false roads, brave friends, and finding the truth beneath the thorns.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Button
@@ -4755,7 +4784,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         : selectedRace.name;
     const previewStats = addBonuses(BASE_STATS, selectedRace.bonuses);
     return (
-      <div className="min-h-screen bg-[radial-gradient(circle_at_top,#204a3d_0%,#0f172a_45%,#020617_100%)] p-6 text-white">
+      <div className="storybook-shell min-h-screen p-4 text-white sm:p-6">
         <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <Panel
             title="Create Your Hero"
@@ -4897,7 +4926,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     !flags.crownDenPatrolEscaped;
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,#244436_0%,#0f172a_40%,#020617_100%)] p-4 text-white sm:p-6">
+    <div className="storybook-shell min-h-screen p-4 text-white sm:p-6">
       <div className="mx-auto max-w-7xl">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div>
@@ -5125,6 +5154,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                   giveSupplies={devGiveTestSupplies}
                   heal={devHealParty}
                   reset={devResetCombatFlags}
+                  startTestBattle={() =>
+                    startBattle(
+                      buildEncounterEnemies("roadwatcherHard"),
+                      "roadwatcherHard",
+                    )
+                  }
                   jump={devJumpTo}
                   player={player}
                   position={position}
@@ -5242,6 +5277,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           companion={companion}
           heroSkills={heroSkills}
           heroAttack={heroAttack}
+          selectTarget={selectBattleTarget}
           finishBattle={finishBattle}
           battleItemsOpen={battleItemsOpen}
           setBattleItemsOpen={setBattleItemsOpen}

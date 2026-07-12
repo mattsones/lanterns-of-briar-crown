@@ -441,6 +441,17 @@ test("chapter two clearing the Crown Door den lets the no-handle door open", asy
   await expect(page.getByText("The No-Handle Door Opens", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Step to the First Westroot Gate." }).click();
   await expect(page.getByText("First Westroot Gate")).toBeVisible();
+  await page.getByRole("button", { name: "Step through the gate." }).click();
+  await expect(
+    page.getByText("Chapter 2 Complete: The Westroot Trail", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText("He hoped someone would. That is different.")).toBeVisible();
+  await expect(page.getByText("Not a threat. Not a welcome. A question.")).toBeVisible();
+  await expect(page.getByText("Lio came this way.")).toBeVisible();
+  await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute(
+    "src",
+    /westroot-threshold-opening-v01/,
+  );
 });
 
 test("chapter two false map room clears the Crown Door den", async ({ page }) => {

@@ -2,7 +2,14 @@ import { expect, test } from "@playwright/test";
 import { existsSync, readFileSync } from "node:fs";
 import { resolveRoll, resolveSkillCheck } from "../src/game/dice";
 import { DEFAULT_HUMAN_HERITAGE_ID, GENDERS, HUMAN_HERITAGES, RACES } from "../src/data/character";
-import { ENCOUNTERS, ENEMY_DB } from "../src/data/enemies";
+import { buildEncounterEnemies, ENCOUNTERS, ENEMY_DB } from "../src/data/enemies";
+import {
+  damageBattleEnemy,
+  getLivingEnemies,
+  getSelectedBattleEnemy,
+  prepareBattleEnemies,
+  rotateEnemyIntent,
+} from "../src/game/battle";
 import {
   ARTWORK_PLAN_GROUPS,
   HERO_VARIANT_ARTWORK_PLAN,
@@ -56,6 +63,12 @@ import {
   getChapter1CompanionReaction,
 } from "../src/story/chapter1";
 import { CHAPTER_STORY_PLANS } from "../src/story/chapters2to5";
+import {
+  canStartChapter3,
+  CHAPTER_3_HUB_NODES,
+  CHAPTER_3_STORY,
+  isChapter3Complete,
+} from "../src/story/chapter3";
 import {
   formatDiskSaveFilename,
   getSavePayload,
@@ -181,6 +194,44 @@ test("checked-in Chapter 2 playtest save is loadable and item-safe", () => {
   Object.values(payload.player.equipment)
     .filter(Boolean)
     .forEach((id) => expect(ITEM_DB[id]).toBeTruthy());
+});
+
+test("simultaneous combat keeps every enemy active and targetable", () => {
+  const enemies = prepareBattleEnemies(buildEncounterEnemies("roadwatcherHard") as any);
+  expect(enemies).toHaveLength(3);
+  expect(new Set(enemies.map((enemy) => enemy.battleId)).size).toBe(3);
+  expect(getSelectedBattleEnemy(enemies, enemies[1].battleId)?.name).toBe(
+    "Thorn-Collared Hound",
+  );
+
+  const afterDefeat = damageBattleEnemy(
+    enemies,
+    enemies[1].battleId,
+    enemies[1].maxHp,
+    { weaken: true },
+  );
+  expect(getLivingEnemies(afterDefeat)).toHaveLength(2);
+  expect(getSelectedBattleEnemy(afterDefeat, enemies[1].battleId)?.battleId).toBe(
+    enemies[0].battleId,
+  );
+
+  const rotated = rotateEnemyIntent(enemies[0]);
+  expect(rotated.intent).toBe(enemies[0].intentB);
+  expect(rotated.currentAttackSpec).toEqual(enemies[0].attackB);
+});
+
+test("Chapter 3 scaffold has explicit entry, hub, and completion contracts", () => {
+  const entryFlags = Object.fromEntries(
+    CHAPTER_3_STORY.entryRequirements.map((flag) => [flag, true]),
+  );
+  const endFlags = Object.fromEntries(
+    CHAPTER_3_STORY.requiredEndFlags.map((flag) => [flag, true]),
+  );
+  expect(canStartChapter3(entryFlags)).toBe(true);
+  expect(isChapter3Complete({ ...entryFlags, ...endFlags })).toBe(true);
+  expect(CHAPTER_3_HUB_NODES.map((node) => node.id)).toEqual(
+    expect.arrayContaining(["first_gate", "witness_stones", "split_hall", "cargo_siding"]),
+  );
 });
 
 test("checked-in Chapter 2 complete save is Chapter 3 ready", () => {
@@ -624,6 +675,8 @@ test("chapter two contract keeps required flags, map prompt, and reveal boundari
   expect(CHAPTER_2_STORY.mapPromptDoc).toBe("docs/art/prompts/chapter-2-westroot-trail-map.md");
   expect(CHAPTER_2_SCENE_COPY.threeDoorThreshold.text).toContain("three doors");
   expect(CHAPTER_2_SCENE_COPY.crownDoorDen.falseMap.result).toContain("cleaned lantern mark");
+  expect(CHAPTER_2_SCENE_COPY.westrootGate.completeText).toContain("Let's be someone");
+  expect(CHAPTER_2_SCENE_COPY.westrootGate.completeText).toContain("Lio came this way");
   expect(getChapter2CompanionRead("threshold", "tilda")).toContain("rude, suspicious");
   expect(getCrownDoorText({ crownDoorDungeonCleared: true })).toContain("workshop");
   expect(CHAPTER_STORY_PLANS[2].keyLines.join(" ")).not.toContain("Princess Elowen");

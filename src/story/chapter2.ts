@@ -361,8 +361,30 @@ export const CHAPTER_2_SCENE_COPY = {
     thresholdFound: "You find a No-Handle Token tucked inside the threshold.",
     witnessNotePrepared: "You prepare a witness note for Bramblecross.",
     completeName: "Chapter 2 Complete: The Westroot Trail",
+    completeSceneAlt:
+      "The hero and Mara enter the open First Westroot Gate beneath warm gold-green moss lanterns.",
     completeText:
-      "You step through into gold-green underground light.\n\nLio is alive past this point. The old road opened when truth came first. Somewhere below the hill, Westroot waits.",
+      `You step through the no-handle gate.
+
+Behind you, the hollow remains: the cracked Crown Sign, the cleaned Lantern Sign, and the open stone door that did not yield to force but opened to truth.
+
+Mara kneels beside Lio's hooked arrow one last time. "Alive past this point. Do not trust the straight road."
+
+She presses her palm to the stone. "He knew I would find it," she says. Then she corrects herself. "No. He hoped someone would. That is different."
+
+"Let's be someone."
+
+"We are."
+
+Ahead, the passage bends downward under the roots. Moss-lanterns glow along the walls. Some are green. Some are gold. Some flicker uncertainly, as if deciding whether to trust you yet.
+
+Far below, something taps stone three times.
+
+Not a threat. Not a welcome. A question.
+
+Mara takes one breath, then another. "Lio came this way."
+
+The old road carries her words forward, under the hill, into Westroot.`,
   },
 } as const;
 

@@ -4,7 +4,7 @@ import { getItemArtwork } from "../data/itemArtwork";
 export function Button({ children, className = "", ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
-      className={`rounded-2xl border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-40 ${className}`}
+      className={`storybook-button rounded-2xl border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-40 ${className}`}
       {...props}
     >
       {children}
@@ -14,13 +14,13 @@ export function Button({ children, className = "", ...props }: ButtonHTMLAttribu
 
 export function Panel({ title, children, right }: { title: ReactNode; children: ReactNode; right?: ReactNode }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-slate-900/80 p-4 shadow-2xl backdrop-blur">
+    <section className="story-panel rounded-3xl border border-white/10 bg-slate-900/80 p-4 shadow-2xl backdrop-blur">
       <div className="mb-3 flex items-center justify-between gap-3">
         <h3 className="text-lg font-semibold text-white">{title}</h3>
         {right}
       </div>
       {children}
-    </div>
+    </section>
   );
 }
 

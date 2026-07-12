@@ -347,7 +347,7 @@ export function MapStage({
         </svg>
       ) : null}
       <div className="map-node-layer" aria-label="Map movement layer">
-        {renderedNodes.map((node) => (
+        {renderedNodes.filter((node) => node.clickable).map((node) => (
           <button
             key={node.key}
             type="button"

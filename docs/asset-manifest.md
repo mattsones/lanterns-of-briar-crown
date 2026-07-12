@@ -116,6 +116,7 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Crown Door closeup | `crown-door-closeup-v01.webp` | Current Chapter 2 dialogue closeup for inspecting the Crown Door. Wired into door dialogue visuals. |
 | Lantern Door closeup | `lantern-door-closeup-v01.webp` | Current Chapter 2 dialogue closeup for inspecting the Lantern Door. Wired into door dialogue visuals. |
 | No-Handle Door closeup | `no-handle-door-closeup-v01.webp` | Current Chapter 2 dialogue closeup for inspecting the No-Handle Door. Wired into door dialogue visuals. |
+| Westroot threshold opening | `westroot-threshold-opening-v01.webp` | Chapter 2 closing illustration: Mara and the hero enter the gold-green old road beneath the hill. |
 
 ## Map Tokens
 

@@ -58,8 +58,15 @@ npm.cmd run build
 
 ```bash
 npm.cmd run test:rules
+npm.cmd run playtest:chapter1
 npm.cmd run playtest:chapter2
 npm.cmd run playtest:smoke
+```
+
+Run the full pre-commit verification suite with:
+
+```bash
+npm.cmd run verify
 ```
 
 ## Asset Maintenance
