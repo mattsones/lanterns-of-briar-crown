@@ -677,6 +677,8 @@ test("chapter two contract keeps required flags, map prompt, and reveal boundari
   expect(CHAPTER_2_SCENE_COPY.crownDoorDen.falseMap.result).toContain("cleaned lantern mark");
   expect(CHAPTER_2_SCENE_COPY.westrootGate.completeText).toContain("Let's be someone");
   expect(CHAPTER_2_SCENE_COPY.westrootGate.completeText).toContain("Lio came this way");
+  expect(CHAPTER_2_SCENE_COPY.westrootGate.completeSceneAlt).toContain("oval-topped");
+  expect(CHAPTER_2_SCENE_COPY.westrootGate.completeSceneAlt).not.toMatch(/hero|Mara/i);
   expect(getChapter2CompanionRead("threshold", "tilda")).toContain("rude, suspicious");
   expect(getCrownDoorText({ crownDoorDungeonCleared: true })).toContain("workshop");
   expect(CHAPTER_STORY_PLANS[2].keyLines.join(" ")).not.toContain("Princess Elowen");

@@ -450,7 +450,7 @@ test("chapter two clearing the Crown Door den lets the no-handle door open", asy
   await expect(page.getByText("Lio came this way.")).toBeVisible();
   await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute(
     "src",
-    /westroot-threshold-opening-v01/,
+    /westroot-threshold-opening-v02/,
   );
 });
 

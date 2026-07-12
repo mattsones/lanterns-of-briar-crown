@@ -362,7 +362,7 @@ export const CHAPTER_2_SCENE_COPY = {
     witnessNotePrepared: "You prepare a witness note for Bramblecross.",
     completeName: "Chapter 2 Complete: The Westroot Trail",
     completeSceneAlt:
-      "The hero and Mara enter the open First Westroot Gate beneath warm gold-green moss lanterns.",
+      "An open oval-topped Westroot gate reveals a winding old road beneath warm gold-green moss lanterns.",
     completeText:
       `You step through the no-handle gate.
 

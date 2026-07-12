@@ -1,13 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
-import {
-  CompanionTab,
-  DevTab,
-  EquipmentTab,
-  InventoryTab,
-  PouchTab,
-  QuestTab,
-  RecipesTab,
-} from "./components/tabs";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { MapStage } from "./components/MapStage";
 import { Button, ItemIcon, Meter, Panel, StatBadge } from "./components/ui";
 import { getBattleReward } from "./data/battleRewards";
@@ -33,15 +24,6 @@ import {
 import { RECIPE_DB } from "./data/recipes";
 import { SHOP_INVENTORIES } from "./data/shops";
 import { buildQuestJournal } from "./data/quests";
-import {
-  BattleModal,
-  CraftModal,
-  DialogueModal,
-  InteriorModal,
-  LevelUpModal,
-  SaveModal,
-  ShopModal,
-} from "./components/modals";
 import { HeroArtwork } from "./components/HeroArtwork";
 import {
   damageBattleEnemy,
@@ -126,6 +108,50 @@ import {
   getWestrootPuzzleOutcome,
 } from "./story/chapter2";
 
+const QuestTab = React.lazy(() =>
+  import("./components/tabs").then((module) => ({ default: module.QuestTab })),
+);
+const InventoryTab = React.lazy(() =>
+  import("./components/tabs").then((module) => ({ default: module.InventoryTab })),
+);
+const EquipmentTab = React.lazy(() =>
+  import("./components/tabs").then((module) => ({ default: module.EquipmentTab })),
+);
+const PouchTab = React.lazy(() =>
+  import("./components/tabs").then((module) => ({ default: module.PouchTab })),
+);
+const CompanionTab = React.lazy(() =>
+  import("./components/tabs").then((module) => ({ default: module.CompanionTab })),
+);
+const RecipesTab = React.lazy(() =>
+  import("./components/tabs").then((module) => ({ default: module.RecipesTab })),
+);
+const DevTab = React.lazy(() =>
+  import("./components/tabs").then((module) => ({ default: module.DevTab })),
+);
+
+const LevelUpModal = React.lazy(() =>
+  import("./components/modals").then((module) => ({ default: module.LevelUpModal })),
+);
+const DialogueModal = React.lazy(() =>
+  import("./components/modals").then((module) => ({ default: module.DialogueModal })),
+);
+const InteriorModal = React.lazy(() =>
+  import("./components/modals").then((module) => ({ default: module.InteriorModal })),
+);
+const ShopModal = React.lazy(() =>
+  import("./components/modals").then((module) => ({ default: module.ShopModal })),
+);
+const CraftModal = React.lazy(() =>
+  import("./components/modals").then((module) => ({ default: module.CraftModal })),
+);
+const BattleModal = React.lazy(() =>
+  import("./components/modals").then((module) => ({ default: module.BattleModal })),
+);
+const SaveModal = React.lazy(() =>
+  import("./components/modals").then((module) => ({ default: module.SaveModal })),
+);
+
 const threeDoorsThresholdScene = new URL(
   "../assets/scenes/three-doors-threshold-v01.webp",
   import.meta.url,
@@ -135,7 +161,7 @@ const eddensThreeDoorDrawingScene = new URL(
   import.meta.url,
 ).href;
 const westrootThresholdOpeningScene = new URL(
-  "../assets/scenes/westroot-threshold-opening-v01.webp",
+  "../assets/scenes/westroot-threshold-opening-v02.webp",
   import.meta.url,
 ).href;
 const titleKeyArt = new URL(
@@ -5103,76 +5129,93 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                   ? `Active companion: ${companion.name} • ${companion.role} • HP ${companion.hp}/${companion.maxHp}`
                   : "No active companion. Visit inns to recruit, swap, or dismiss companions."}
               </div>
-              {tab === "quests" ? <QuestTab journal={questJournal} /> : null}
-              {tab === "inventory" ? (
-                <InventoryTab
-                  sections={inventorySections}
-                  player={player}
-                  equipItem={equipItem}
-                  setTab={setTab}
-                  setEquipmentFocusSlot={setEquipmentFocusSlot}
-                  setPouchFocusSlot={setPouchFocusSlot}
-                  useFieldItem={useFieldItem}
-                />
-              ) : null}
-              {tab === "equipment" ? (
-                <EquipmentTab
-                  player={player}
-                  focusSlot={equipmentFocusSlot}
-                  setFocusSlot={setEquipmentFocusSlot}
-                  equipItemToSlot={equipItemToSlot}
-                  unequipSlot={unequipSlot}
-                />
-              ) : null}
-              {tab === "pouch" ? (
-                <PouchTab
-                  player={player}
-                  focusSlot={pouchFocusSlot}
-                  setFocusSlot={setPouchFocusSlot}
-                  assign={assignBattlePouchItem}
-                  clear={(slot) =>
-                    setPlayer((p) => ({
-                      ...p,
-                      battlePouch: { ...p.battlePouch, [slot]: null },
-                    }))
-                  }
-                />
-              ) : null}
-              {tab === "companion" ? (
-                <CompanionTab
-                  companion={companion}
-                  setCompanion={setCompanion}
-                  flags={flags}
-                  dismiss={dismissCompanion}
-                />
-              ) : null}
-              {tab === "crafting" ? <RecipesTab player={player} /> : null}
-              {tab === "dev" ? (
-                <DevTab
-                  qaResults={qaResults}
-                  runQaChecks={runQaChecks}
-                  giveSupplies={devGiveTestSupplies}
-                  heal={devHealParty}
-                  reset={devResetCombatFlags}
-                  startTestBattle={() =>
-                    startBattle(
-                      buildEncounterEnemies("roadwatcherHard"),
-                      "roadwatcherHard",
-                    )
-                  }
-                  jump={devJumpTo}
-                  player={player}
-                  position={position}
-                  region={region}
-                  companion={companion}
-                  mapDebug={mapDebug}
-                  setMapDebug={setMapDebug}
-                />
-              ) : null}
+              <Suspense
+                fallback={
+                  <div className="mt-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/70" role="status">
+                    Opening adventure menu…
+                  </div>
+                }
+              >
+                {tab === "quests" ? <QuestTab journal={questJournal} /> : null}
+                {tab === "inventory" ? (
+                  <InventoryTab
+                    sections={inventorySections}
+                    player={player}
+                    equipItem={equipItem}
+                    setTab={setTab}
+                    setEquipmentFocusSlot={setEquipmentFocusSlot}
+                    setPouchFocusSlot={setPouchFocusSlot}
+                    useFieldItem={useFieldItem}
+                  />
+                ) : null}
+                {tab === "equipment" ? (
+                  <EquipmentTab
+                    player={player}
+                    focusSlot={equipmentFocusSlot}
+                    setFocusSlot={setEquipmentFocusSlot}
+                    equipItemToSlot={equipItemToSlot}
+                    unequipSlot={unequipSlot}
+                  />
+                ) : null}
+                {tab === "pouch" ? (
+                  <PouchTab
+                    player={player}
+                    focusSlot={pouchFocusSlot}
+                    setFocusSlot={setPouchFocusSlot}
+                    assign={assignBattlePouchItem}
+                    clear={(slot) =>
+                      setPlayer((p) => ({
+                        ...p,
+                        battlePouch: { ...p.battlePouch, [slot]: null },
+                      }))
+                    }
+                  />
+                ) : null}
+                {tab === "companion" ? (
+                  <CompanionTab
+                    companion={companion}
+                    setCompanion={setCompanion}
+                    flags={flags}
+                    dismiss={dismissCompanion}
+                  />
+                ) : null}
+                {tab === "crafting" ? <RecipesTab player={player} /> : null}
+                {tab === "dev" ? (
+                  <DevTab
+                    qaResults={qaResults}
+                    runQaChecks={runQaChecks}
+                    giveSupplies={devGiveTestSupplies}
+                    heal={devHealParty}
+                    reset={devResetCombatFlags}
+                    startTestBattle={() =>
+                      startBattle(
+                        buildEncounterEnemies("roadwatcherHard"),
+                        "roadwatcherHard",
+                      )
+                    }
+                    jump={devJumpTo}
+                    player={player}
+                    position={position}
+                    region={region}
+                    companion={companion}
+                    mapDebug={mapDebug}
+                    setMapDebug={setMapDebug}
+                  />
+                ) : null}
+              </Suspense>
             </Panel>
           </div>
         </div>
       </div>
+      <Suspense
+        fallback={
+          <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4" role="status">
+            <div className="rounded-3xl border border-white/10 bg-slate-900 px-6 py-4 text-sm text-white/80 shadow-2xl">
+              Opening scene…
+            </div>
+          </div>
+        }
+      >
       {saveModalMode ? (
         <SaveModal
           mode={saveModalMode}
@@ -5284,6 +5327,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           useBattleConsumable={useBattleConsumable}
         />
       ) : null}
+      </Suspense>
     </div>
   );
 }

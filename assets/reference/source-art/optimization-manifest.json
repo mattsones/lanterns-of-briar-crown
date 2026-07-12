@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-12T22:08:31.008Z",
+  "generatedAt": "2026-07-12T22:54:09.609Z",
   "sourceArtRoot": "assets/reference/source-art",
   "alternatesRoot": "assets/reference/alternates",
   "conversions": [
@@ -1082,16 +1082,21 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/scenes/westroot-threshold-opening-v01.webp",
-      "original": "assets/reference/source-art/assets/scenes/westroot-threshold-opening-v01.png",
-      "output": "assets/scenes/westroot-threshold-opening-v01.webp",
+      "source": "assets/scenes/westroot-threshold-opening-v02.webp",
+      "original": "assets/reference/source-art/assets/scenes/westroot-threshold-opening-v02.png",
+      "output": "assets/scenes/westroot-threshold-opening-v02.webp",
       "format": "webp",
-      "originalBytes": 2897060,
-      "outputBytes": 281150,
+      "originalBytes": 2864232,
+      "outputBytes": 281610,
       "width": 1672,
       "height": 941,
       "hasAlpha": false
     }
   ],
-  "movedAlternates": []
+  "movedAlternates": [
+    {
+      "source": "assets/scenes/westroot-threshold-opening-v01.webp",
+      "destination": "assets/reference/alternates/assets/scenes/westroot-threshold-opening-v01.webp"
+    }
+  ]
 }
