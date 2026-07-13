@@ -666,6 +666,20 @@ export const MAPS = {
       ["wall", "collar_kennel", "floor", "wall", "wall", "wall", "wall"],
     ],
   },
+  westrootHub: {
+    name: "Westroot",
+    subtitle: "Chapter 3: The hidden road-community",
+    start: { x: 1, y: 3 },
+    tiles: [
+      ["wall", "wall", "wall", "mossgarden", "mossgarden", "wall", "wall", "wall", "wall"],
+      ["wall", "westroot_path", "westroot_path", "westroot_path", "witness_stones", "westroot_path", "westroot_path", "cargo_siding", "wall"],
+      ["wall", "westroot_path", "rootmarket", "westroot_path", "westroot_path", "split_hall", "westroot_path", "cargo_siding", "wall"],
+      ["wall", "westroot_first_gate", "westroot_path", "rootmarket", "rootmarket", "westroot_path", "westroot_path", "westroot_path", "wall"],
+      ["wall", "westroot_path", "westroot_path", "westroot_path", "mossgarden", "westroot_path", "split_hall", "westroot_path", "wall"],
+      ["wall", "westroot_path", "rootbread_hatch", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "cargo_siding", "wall"],
+      ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+    ],
+  },
 };
 
 function makeTile(icon, label, blocked, classes) {
@@ -783,4 +797,12 @@ Object.assign(TILE_META, {
   collar_kennel: makeTile("link", "Collar Kennel", false, "bg-red-950/80"),
   false_map: makeTile("map", "False Map Room", false, "bg-emerald-900/80"),
   den_guard: makeTile("!", "False Sign Guard", false, "bg-red-900/85"),
+  westroot_path: makeTile("", "Westroot Path", false, "bg-emerald-900/70"),
+  westroot_first_gate: makeTile("◈", "First Westroot Gate", false, "bg-emerald-950/90"),
+  rootmarket: makeTile("⌂", "Rootmarket", false, "bg-amber-800/80"),
+  mossgarden: makeTile("✿", "Mossgarden", false, "bg-emerald-800/80"),
+  witness_stones: makeTile("◌", "Witness Stones", false, "bg-teal-800/85"),
+  split_hall: makeTile("▤", "Split Hall", false, "bg-stone-700/85"),
+  cargo_siding: makeTile("▰", "Cargo Siding", false, "bg-rose-950/85"),
+  rootbread_hatch: makeTile("🍞", "Rootbread Hatch", false, "bg-amber-700/80"),
 });

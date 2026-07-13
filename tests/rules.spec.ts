@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { existsSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { resolveRoll, resolveSkillCheck } from "../src/game/dice";
 import { DEFAULT_HUMAN_HERITAGE_ID, GENDERS, HUMAN_HERITAGES, RACES } from "../src/data/character";
 import { buildEncounterEnemies, ENCOUNTERS, ENEMY_DB } from "../src/data/enemies";
@@ -234,6 +235,33 @@ test("Chapter 3 scaffold has explicit entry, hub, and completion contracts", () 
   );
 });
 
+test("Chapter 3 Westroot placeholder hub and cargo encounter preserve the vertical-slice contract", () => {
+  expect(MAPS.westrootHub).toMatchObject({
+    name: "Westroot",
+    start: { x: 1, y: 3 },
+  });
+  const hubTiles = MAPS.westrootHub.tiles.flat();
+  [
+    "westroot_first_gate",
+    "rootmarket",
+    "mossgarden",
+    "witness_stones",
+    "split_hall",
+    "cargo_siding",
+  ].forEach((tile) => {
+    expect(hubTiles).toContain(tile);
+    expect(TILE_META[tile]).toBeTruthy();
+  });
+  expect(ENCOUNTERS.westrootCargo).toEqual([
+    "briar_cargo_runner",
+    "seal_forged_sentry",
+  ]);
+  expect(BATTLE_REWARDS.westrootCargo.flagUpdate).toMatchObject({
+    willowCargoExposed: true,
+  });
+  expect(existsSync(resolve("docs/art/prompts/chapter-3-westroot-hub-map.md"))).toBe(true);
+});
+
 test("checked-in Chapter 2 complete save is Chapter 3 ready", () => {
   const saveText = readFileSync(
     new URL("../public/saves/chapter-2-complete.json", import.meta.url),
@@ -246,8 +274,8 @@ test("checked-in Chapter 2 complete save is Chapter 3 ready", () => {
   expect(payload).toMatchObject({
     screen: "play",
     chapterId: 3,
-    region: "westrootTrail",
-    position: { x: 6, y: 4 },
+    region: "westrootHub",
+    position: { x: 1, y: 3 },
     flags: {
       chapterReported: true,
       chapterTwoStarted: true,
@@ -263,7 +291,7 @@ test("checked-in Chapter 2 complete save is Chapter 3 ready", () => {
     currentChapterId: 3,
     completedChapterIds: [1, 2],
   });
-  expect(payload.visited.westrootTrail["6,4"]).toBe(true);
+  expect(payload.visited.westrootHub["1,3"]).toBe(true);
   [
     "eddens_three_door_drawing",
     "willowmark_lens",

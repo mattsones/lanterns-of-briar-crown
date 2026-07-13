@@ -114,6 +114,15 @@ export const ENEMY_DB = {
     attackA: { count: 1, sides: 6, bonus: 3 },
     attackB: { count: 1, sides: 8, bonus: 1 },
   },
+  briar_cargo_runner: {
+    name: "Briar Cargo Runner",
+    icon: "📦",
+    hp: 24,
+    intentA: "Slip the Siding",
+    intentB: "Seal-Cloth Feint",
+    attackA: { count: 1, sides: 6, bonus: 3 },
+    attackB: { count: 2, sides: 4, bonus: 1 },
+  },
   crown_whisperer: {
     name: "Crown Whisperer",
     icon: "♛",
@@ -162,6 +171,7 @@ export const ENCOUNTERS = {
   crownDenPatrol: ["false_sign_scratcher", "false_sign_scratcher"],
   crownDenHound: ["thorn_collared_hound"],
   crownDenGuard: ["false_sign_scratcher", "thorn_collared_hound", "false_sign_scratcher"],
+  westrootCargo: ["briar_cargo_runner", "seal_forged_sentry"],
   briarRelay: ["briar_relay_guard", "seal_forged_sentry"],
   briarholdBoss: ["bracken_voss", "thornseal_guard", "thornroot_sentry"],
 };

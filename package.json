@@ -12,8 +12,9 @@
     "playtest:chapter1": "playwright test tests/chapter1.spec.ts",
     "playtest:smoke": "playwright test tests/smoke.spec.ts",
     "playtest:chapter2": "playwright test tests/chapter2.spec.ts",
+    "playtest:chapter3": "playwright test tests/chapter3.spec.ts",
     "test:rules": "playwright test tests/rules.spec.ts",
-    "verify": "npm run audit:assets -- --limit=10 && npm run build && npm run test:rules && npm run playtest:chapter1 && npm run playtest:chapter2 && npm run playtest:smoke"
+    "verify": "npm run audit:assets -- --limit=10 && npm run build && npm run test:rules && npm run playtest:chapter1 && npm run playtest:chapter2 && npm run playtest:chapter3 && npm run playtest:smoke"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^6.0.3",

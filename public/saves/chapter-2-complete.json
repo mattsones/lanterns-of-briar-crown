@@ -73,14 +73,14 @@
       },
       "checkpointLabel": "Chapter 3 Ready"
     },
-    "region": "westrootTrail",
+    "region": "westrootHub",
     "position": {
-      "x": 6,
-      "y": 4
+      "x": 1,
+      "y": 3
     },
     "visited": {
-      "westrootTrail": {
-        "6,4": true
+      "westrootHub": {
+        "1,3": true
       }
     },
     "companion": {

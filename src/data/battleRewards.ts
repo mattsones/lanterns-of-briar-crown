@@ -100,6 +100,17 @@ export const BATTLE_REWARDS = {
     name: "Thorn-Collared Hound",
     text: "The hound drops low, panting, as the thorn collar cracks loose. Whatever the den trained it to guard, it is not guarding it now.",
   },
+  westrootCargo: {
+    item: "healing_fizzpop",
+    gold: 20,
+    xp: 24,
+    flagUpdate: {
+      willowCargoExposed: true,
+      cargoRunnerEscaped: true,
+    },
+    name: "Cargo Siding Cleared",
+    text: "The false cargo operation breaks apart. A Briar runner vanishes into a service passage, but the crates, copied seals, and Westroot gate-account mark remain as proof.",
+  },
 };
 
 export function getBattleReward(rewardKey) {

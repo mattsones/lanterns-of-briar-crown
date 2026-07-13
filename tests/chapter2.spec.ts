@@ -125,10 +125,10 @@ test("title screen loads the checked-in Chapter 3 ready save", async ({ page }) 
   await page.goto("/");
   await page.getByRole("button", { name: "Load Chapter 3 Ready Save" }).click();
 
-  await expect(page.getByRole("heading", { name: MAPS.westrootTrail.name })).toBeVisible();
-  await expect(page.getByText("You are standing on: Three-Door Threshold.")).toBeVisible();
-  await expect(page.getByText("Chapter 2 complete: The Westroot Trail", { exact: true })).toBeVisible();
-  await expect(page.getByText("Goal: Chapter 2 Complete: The Westroot Trail")).toBeVisible();
+  await expect(page.getByRole("heading", { name: MAPS.westrootHub.name })).toBeVisible();
+  await expect(page.getByText("You are standing on: First Westroot Gate.")).toBeVisible();
+  await expect(page.getByText("Chapter 3: The Hidden Root", { exact: true })).toBeVisible();
+  await expect(page.getByText("Goal: Enter Westroot")).toBeVisible();
 });
 
 test("chapter two fog covers map tokens instead of floating over darkness", async ({ page }) => {

@@ -257,6 +257,12 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
       "6,4": { x: 72.1, y: 80.9 },
     },
   },
+  westrootHub: {
+    aspectRatio: "16 / 9",
+    navBounds: { left: 7, top: 9, width: 86, height: 82 },
+    fogRadius: 5.4,
+    fogPathWidth: 10,
+  },
   rootCellar: {
     aspectRatio: "4 / 3",
     navBounds: { left: 6, top: 6, width: 88, height: 86 },

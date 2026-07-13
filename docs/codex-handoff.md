@@ -1009,3 +1009,48 @@ Latest local results:
 ### Next Recommended Slice
 
 Start Chapter 3 from the checked-in Chapter 2 complete fixture, and keep the optimized asset workflow in place when adding Westroot hub art: source/concept/alternate images under `assets/reference/`, runtime derivatives only in the shipped asset folders, then run `npm.cmd run optimize:assets` and `npm.cmd run audit:assets`.
+
+## Current Handoff - Chapter 3 Westroot Vertical Slice And Map Prompt Pack
+
+Last updated: 2026-07-12
+
+Branch: `codex/chapter-3-vertical-slice`
+
+### What Changed
+
+- Added `docs/art/prompts/chapter-3-westroot-hub-map.md`, a ChatGPT-ready map prompt pack. Chapter 3 needs one connected Westroot Hub gameplay map; the pack also includes a route-readable alternate and a Cargo Siding contingency prompt that should only be used if playtesting proves an inset map is needed.
+- Added the fallback-safe `westrootHub` map, with placeholder First Westroot Gate, Rootmarket, Mossgarden, Witness Stones, Split Hall, Cargo Siding, and Rootbread Hatch nodes. It intentionally has no final background image yet.
+- The checked-in Chapter 2-complete fixture now loads at the First Westroot Gate, so Chapter 3 testing never requires replaying Chapter 2.
+- Added the first playable Chapter 3 loop: Bramwell's limited welcome, Quill and Noma's community voices, the optional Rootbread Promise, a fail-forward Witness Stones sequence, a simultaneous Cargo Siding encounter, and the Split Hall resolution/Chapter 4 handoff.
+- Added Chapter 3 typed flags, quest journal steps, fallback map tokens, enemy and reward data, and Chapter 3 scene copy in `src/story/chapter3.ts`.
+- Added `npm.cmd run playtest:chapter3` and its Playwright coverage. The test proves the Chapter 3-ready save reaches Westroot and that an incorrect Witness Stones choice recovers into the correct sequence.
+- Kept all art and token fallbacks intact; final map art is an overlay replacement task, not a movement-system rewrite.
+
+### Verification Run
+
+```bash
+npm.cmd run build
+npm.cmd run test:rules
+npm.cmd run playtest:chapter1
+npm.cmd run playtest:chapter2
+npm.cmd run playtest:chapter3
+npm.cmd run playtest:smoke
+git diff --check
+```
+
+Latest local results:
+
+- `npm.cmd run build` passed.
+- `npm.cmd run test:rules` passed: 21 tests.
+- `npm.cmd run playtest:chapter1` passed: 1 test.
+- `npm.cmd run playtest:chapter2` passed: 19 tests.
+- `npm.cmd run playtest:chapter3` passed: 1 test.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `git diff --check` passed with normal Windows LF-to-CRLF warnings only.
+
+### Next Recommended Slice
+
+1. Generate Westroot Hub candidates from `docs/art/prompts/chapter-3-westroot-hub-map.md`; select only after comparing path clarity and overlay safe space.
+2. Put raw generations in `assets/reference/`, promote the selected opaque map to `assets/maps/`, then run `npm.cmd run optimize:assets` and `npm.cmd run audit:assets`.
+3. Wire the selected background into `src/data/maps.ts`, tune `src/data/mapVisuals.ts` with Map Debug on/off, and preserve the Westroot placeholder fallback until visual QA passes.
+4. Expand the Chapter 3 Playwright path from the Witness Stones through Cargo Siding, Split Hall, and the completion flags before adding final portraits and scene art.

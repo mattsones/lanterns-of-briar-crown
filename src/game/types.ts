@@ -139,9 +139,16 @@ export type GameFlags = {
   witnessNoteSent: boolean;
   chapterTwoClear: boolean;
   chapterThreeStarted: boolean;
+  metBramwell: boolean;
+  metNoma: boolean;
+  metQuill: boolean;
+  rootbreadPromiseKept: boolean;
+  witnessStoneFirstAttemptMissed: boolean;
   westrootTrustEarned: boolean;
   witnessStoneSequenceSolved: boolean;
   willowCargoExposed: boolean;
+  cargoRunnerCaptured: boolean;
+  cargoRunnerEscaped: boolean;
   chapterThreeClear: boolean;
   chapterFourStarted: boolean;
   foldedMapDecoded: boolean;
