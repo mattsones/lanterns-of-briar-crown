@@ -106,6 +106,7 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Root Cellar gameplay map | `root-cellar-map-v01.webp` | Strong layout; Warden visibly blocks sealed door. |
 | Westroot Trail gameplay map | `westroot-trail-map-v04.webp` | Current Chapter 2 production map; readable Shelter Nook, false notice, Three-Sign Hollow, Roadwatcher bend, and First Westroot Gate. |
 | Crown Door Den gameplay map | `crown-door-den-map-v01.webp` | Current Chapter 2 production map for the Roadwatcher signworks behind the Crown Door. Prompt lives in `docs/art/prompts/chapter-2-crown-door-and-three-doors.md`. |
+| Westroot Hub gameplay map | `westroot-hub-map-v01.webp` | Current Chapter 3 production map; connected gate bridge, Rootmarket, Mossgarden/Witness Stones, Split Hall, Cargo Siding, and Rootbread Hatch space. Source PNG is preserved in `assets/reference/source-art/`. |
 
 ## Scenes
 

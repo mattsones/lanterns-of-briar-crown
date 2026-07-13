@@ -860,6 +860,7 @@ test("hand-authored map navigation graphs pass reusable validation", () => {
   expect(results.map((result) => result.region).sort()).toEqual([
     "crownDoorDen",
     "rootCellar",
+    "westrootHub",
     "westrootTrail",
   ]);
   results.forEach((result) => {

@@ -21,8 +21,9 @@ test("Chapter 3 ready save enters Westroot and corrects the Witness Stones fail-
   await page.getByRole("button", { name: "What does the lantern shutter do?" }).click();
   await page.getByRole("button", { name: "Thank Quill." }).click();
 
-  await page.getByTestId("move-down").click();
-  await page.getByTestId("move-right").click();
+  await page.getByTestId("move-up").click();
+  await page.getByTestId("move-up").click();
+  await page.getByTestId("move-up").click();
   await expect(page.getByText("Do not step on the names")).toBeVisible();
   await page.getByRole("button", { name: "Study the Witness Stones." }).click();
   await expect(page.getByText("The old road did not begin with command.").first()).toBeVisible();

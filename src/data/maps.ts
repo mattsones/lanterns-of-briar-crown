@@ -22,6 +22,10 @@ const crownDoorDenMap = new URL(
   "../../assets/maps/crown-door-den-map-v01.webp",
   import.meta.url,
 ).href;
+const westrootHubMap = new URL(
+  "../../assets/maps/westroot-hub-map-v01.webp",
+  import.meta.url,
+).href;
 
 export const MAPS = {
   hearthhollow: {
@@ -670,13 +674,14 @@ export const MAPS = {
     name: "Westroot",
     subtitle: "Chapter 3: The hidden road-community",
     start: { x: 1, y: 3 },
+    backgroundImage: westrootHubMap,
     tiles: [
-      ["wall", "wall", "wall", "mossgarden", "mossgarden", "wall", "wall", "wall", "wall"],
+      ["wall", "wall", "wall", "mossgarden", "westroot_path", "wall", "wall", "wall", "wall"],
       ["wall", "westroot_path", "westroot_path", "westroot_path", "witness_stones", "westroot_path", "westroot_path", "cargo_siding", "wall"],
-      ["wall", "westroot_path", "rootmarket", "westroot_path", "westroot_path", "split_hall", "westroot_path", "cargo_siding", "wall"],
-      ["wall", "westroot_first_gate", "westroot_path", "rootmarket", "rootmarket", "westroot_path", "westroot_path", "westroot_path", "wall"],
-      ["wall", "westroot_path", "westroot_path", "westroot_path", "mossgarden", "westroot_path", "split_hall", "westroot_path", "wall"],
-      ["wall", "westroot_path", "rootbread_hatch", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "cargo_siding", "wall"],
+      ["wall", "westroot_path", "rootmarket", "westroot_path", "westroot_path", "split_hall", "westroot_path", "westroot_path", "wall"],
+      ["wall", "westroot_first_gate", "westroot_path", "rootmarket", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "wall"],
+      ["wall", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "wall"],
+      ["wall", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "rootbread_hatch", "wall"],
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
     ],
   },

@@ -1054,3 +1054,36 @@ Latest local results:
 2. Put raw generations in `assets/reference/`, promote the selected opaque map to `assets/maps/`, then run `npm.cmd run optimize:assets` and `npm.cmd run audit:assets`.
 3. Wire the selected background into `src/data/maps.ts`, tune `src/data/mapVisuals.ts` with Map Debug on/off, and preserve the Westroot placeholder fallback until visual QA passes.
 4. Expand the Chapter 3 Playwright path from the Witness Stones through Cargo Siding, Split Hall, and the completion flags before adding final portraits and scene art.
+
+## Current Handoff - Westroot Hub Art Integration
+
+Last updated: 2026-07-12
+
+Branch: `codex/chapter-3-vertical-slice`
+
+### What Changed
+
+- Promoted the user-provided Westroot Hub source map into the runtime asset flow. The original `westroot-hub-map-v01.png` now lives under `assets/reference/source-art/assets/maps/`; the imported runtime derivative is `assets/maps/westroot-hub-map-v01.webp`.
+- The 1672x941 opaque source was optimized to a 1600x900 WebP runtime asset (about 413 KB), within the documented map budget.
+- Wired the WebP as `MAPS.westrootHub.backgroundImage` and marked Westroot Hub map art available in `src/data/artworkPlan.ts` and `docs/asset-manifest.md`.
+- Replaced the loose Westroot Hub grid with a connected navigation graph, then placed its gate bridge, Rootmarket, Mossgarden, Witness Stones, Split Hall, Cargo Siding, and Rootbread Hatch nodes directly on their painted landmarks in `src/data/mapVisuals.ts`.
+- Visual browser QA confirmed the initial fog now follows the painted gate bridge instead of revealing disconnected map pockets. The Chapter 3 Playwright path was adjusted to use the graph's real route to Mossgarden.
+
+### Verification Run
+
+```bash
+npm.cmd run audit:assets -- --limit=12
+npm.cmd run build
+npm.cmd run test:rules
+npm.cmd run playtest:chapter1
+npm.cmd run playtest:chapter2
+npm.cmd run playtest:chapter3
+npm.cmd run playtest:smoke
+git diff --check
+```
+
+### Next Recommended Slice
+
+1. Continue the Chapter 3 automated golden path through Cargo Siding, Split Hall, and the Chapter 4 handoff.
+2. Use Map Debug after any future Westroot image replacement; retain the graph and tune only node anchors, not freeform movement.
+3. Generate the Chapter 3 Westroot NPC portraits and any selected story-scene closeups after the core gameplay pass is human-playtested.

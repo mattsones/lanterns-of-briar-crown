@@ -169,6 +169,25 @@ const CROWN_DOOR_DEN_NAV_CONNECTIONS: NavConnection[] = [
   { from: "2,2", to: "2,3", direction: "down" },
 ];
 
+const WESTROOT_HUB_NAV_CONNECTIONS: NavConnection[] = [
+  { from: "1,3", to: "2,3", direction: "right" },
+  { from: "2,3", to: "3,3", direction: "right" },
+  { from: "3,3", to: "4,3", direction: "right" },
+  { from: "4,3", to: "5,3", direction: "right" },
+  { from: "5,3", to: "6,3", direction: "right" },
+  { from: "6,3", to: "7,3", direction: "right" },
+  { from: "7,3", to: "7,2", direction: "up" },
+  { from: "7,2", to: "7,1", direction: "up" },
+  { from: "3,3", to: "3,2", direction: "up" },
+  { from: "3,2", to: "3,1", direction: "up" },
+  { from: "3,1", to: "3,0", direction: "up" },
+  { from: "3,0", to: "4,0", direction: "right" },
+  { from: "4,0", to: "4,1", direction: "down" },
+  { from: "5,3", to: "5,2", direction: "up" },
+  { from: "7,3", to: "7,4", direction: "down" },
+  { from: "7,4", to: "7,5", direction: "down" },
+];
+
 function buildNavigationLinks(connections: NavConnection[]) {
   const links: Record<string, Partial<Record<Direction, string>>> = {};
 
@@ -262,6 +281,27 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
     navBounds: { left: 7, top: 9, width: 86, height: 82 },
     fogRadius: 5.4,
     fogPathWidth: 10,
+    nodeHitboxSize: "clamp(1.3rem, 3.8%, 2.2rem)",
+    navigationLinks: buildNavigationLinks(WESTROOT_HUB_NAV_CONNECTIONS),
+    pointOverrides: {
+      "1,3": { x: 16, y: 76 },
+      "2,3": { x: 25, y: 66 },
+      "3,3": { x: 37, y: 54 },
+      "4,3": { x: 45, y: 51 },
+      "3,2": { x: 35, y: 42 },
+      "3,1": { x: 35, y: 33 },
+      "3,0": { x: 30, y: 27 },
+      "4,0": { x: 38, y: 20 },
+      "4,1": { x: 45, y: 15 },
+      "5,3": { x: 55, y: 47 },
+      "5,2": { x: 64, y: 35 },
+      "6,3": { x: 67, y: 44 },
+      "7,3": { x: 76, y: 38 },
+      "7,2": { x: 83, y: 33 },
+      "7,1": { x: 86, y: 24 },
+      "7,4": { x: 86, y: 59 },
+      "7,5": { x: 91, y: 69 },
+    },
   },
   rootCellar: {
     aspectRatio: "4 / 3",

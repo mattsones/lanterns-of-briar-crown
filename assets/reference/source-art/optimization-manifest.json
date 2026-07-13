@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-12T22:54:09.609Z",
+  "generatedAt": "2026-07-13T01:36:43.539Z",
   "sourceArtRoot": "assets/reference/source-art",
   "alternatesRoot": "assets/reference/alternates",
   "conversions": [
@@ -474,6 +474,17 @@
       "outputBytes": 266242,
       "width": 1448,
       "height": 1086,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/westroot-hub-map-v01.png",
+      "original": "assets/reference/source-art/assets/maps/westroot-hub-map-v01.png",
+      "output": "assets/maps/westroot-hub-map-v01.webp",
+      "format": "webp",
+      "originalBytes": 3384142,
+      "outputBytes": 423148,
+      "width": 1672,
+      "height": 941,
       "hasAlpha": false
     },
     {
@@ -1093,10 +1104,5 @@
       "hasAlpha": false
     }
   ],
-  "movedAlternates": [
-    {
-      "source": "assets/scenes/westroot-threshold-opening-v01.webp",
-      "destination": "assets/reference/alternates/assets/scenes/westroot-threshold-opening-v01.webp"
-    }
-  ]
+  "movedAlternates": []
 }
