@@ -19,7 +19,9 @@ import {
 } from "../src/data/artworkPlan";
 import { PLAYER_HERO_ARTWORK, getPlayerArtworkBySelection } from "../src/data/playerArtwork";
 import { ITEM_DB } from "../src/data/items";
+import { ITEM_ARTWORK } from "../src/data/itemArtwork";
 import { MAPS, TILE_META } from "../src/data/maps";
+import { DIALOGUE_PORTRAITS } from "../src/data/portraits";
 import {
   areMapNodesConnected,
   getMapVisualConfig,
@@ -260,6 +262,25 @@ test("Chapter 3 Westroot placeholder hub and cargo encounter preserve the vertic
     willowCargoExposed: true,
   });
   expect(existsSync(resolve("docs/art/prompts/chapter-3-westroot-hub-map.md"))).toBe(true);
+});
+
+test("Chapter 3 production artwork is selected and fallback-safe", () => {
+  expect(DIALOGUE_PORTRAITS["Bramwell Gatehand"].src).toContain("bramwell-gatehand-portrait-v01");
+  expect(DIALOGUE_PORTRAITS["Quill Pebbleturn"].src).toContain("quill-pebbleturn-portrait-v01");
+  expect(DIALOGUE_PORTRAITS["Auntie Lume"].src).toContain("auntie-lume-portrait-v02");
+  expect(DIALOGUE_PORTRAITS["Noma Greenstill"].src).toContain("noma-greenstill-portrait-v02");
+  expect(DIALOGUE_PORTRAITS["Westroot Rootbread Child"].src).toContain(
+    "westroot-rootbread-child-portrait-v02",
+  );
+  expect(ENEMY_DB.briar_cargo_runner.artwork?.src).toContain("briar-cargo-runner-v01");
+  expect(ENEMY_DB.seal_forged_sentry.artwork?.src).toContain("seal-forged-sentry-v01");
+  expect(ITEM_ARTWORK.rootbread_charm?.src).toContain("rootbread-charm-icon-v01");
+  expect(ITEM_ARTWORK.witness_stone_rubbing?.src).toContain("witness-stone-rubbing-icon-v02");
+  expect(ITEM_ARTWORK.cargo_transfer_tag?.src).toContain("cargo-transfer-tag-icon-v02");
+  expect(ARTWORK_PLAN_GROUPS.portraits.westroot_npcs.status).toBe("available");
+  expect(ARTWORK_PLAN_GROUPS.enemies.briar_cargo_runner.status).toBe("available");
+  expect(ARTWORK_PLAN_GROUPS.enemies.seal_forged_sentry.status).toBe("available");
+  expect(ARTWORK_PLAN_GROUPS.items.cargo_transfer_tag.status).toBe("available");
 });
 
 test("checked-in Chapter 2 complete save is Chapter 3 ready", () => {
@@ -584,6 +605,7 @@ test("future chapter data IDs exist with fallbacks", () => {
   [
     "rootbread_charm",
     "witness_stone_rubbing",
+    "cargo_transfer_tag",
     "folded_map_scrap",
     "lanternwell_drop",
     "true_seal_fragment",

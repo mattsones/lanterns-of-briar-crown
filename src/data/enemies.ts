@@ -18,6 +18,14 @@ const thornCollaredHoundArtwork = new URL(
 const thorncoatRuffianArtwork = new URL("../../assets/portraits/enemies/thorncoat-ruffian-v02.webp", import.meta.url)
   .href;
 const thornyHoundArtwork = new URL("../../assets/portraits/enemies/thorny-hound-v01.webp", import.meta.url).href;
+const briarCargoRunnerArtwork = new URL(
+  "../../assets/portraits/enemies/briar-cargo-runner-v01.webp",
+  import.meta.url,
+).href;
+const sealForgedSentryArtwork = new URL(
+  "../../assets/portraits/enemies/seal-forged-sentry-v01.webp",
+  import.meta.url,
+).href;
 
 export const ENEMY_DB = {
   bramble_boar: {
@@ -107,6 +115,7 @@ export const ENEMY_DB = {
   },
   seal_forged_sentry: {
     name: "Seal-Forged Sentry",
+    artwork: { src: sealForgedSentryArtwork, alt: "Portrait of a Seal-Forged Sentry" },
     icon: "📜",
     hp: 26,
     intentA: "Stamp Command",
@@ -116,6 +125,7 @@ export const ENEMY_DB = {
   },
   briar_cargo_runner: {
     name: "Briar Cargo Runner",
+    artwork: { src: briarCargoRunnerArtwork, alt: "Portrait of a Briar Cargo Runner" },
     icon: "📦",
     hp: 24,
     intentA: "Slip the Siding",

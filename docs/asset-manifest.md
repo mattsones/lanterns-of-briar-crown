@@ -118,6 +118,12 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Lantern Door closeup | `lantern-door-closeup-v01.webp` | Current Chapter 2 dialogue closeup for inspecting the Lantern Door. Wired into door dialogue visuals. |
 | No-Handle Door closeup | `no-handle-door-closeup-v01.webp` | Current Chapter 2 dialogue closeup for inspecting the No-Handle Door. Wired into door dialogue visuals. |
 | Westroot threshold opening | `westroot-threshold-opening-v02.webp` | Chapter 2 closing illustration: a character-neutral view through the open oval Westroot gate, matching the rounded Three-Door Threshold architecture. |
+| Westroot arrival | `westroot-arrival-scene-v01.webp` | Chapter 3 First Westroot Gate dialogue scene; establishes Mara's arrival beneath the hill. |
+| Witness Stones | `witness-stones-scene-v01.webp` | Chapter 3 puzzle scene; the false crown slat and the four road-mark values are visually distinct. |
+| Rootbread Promise | `rootbread-promise-scene-v01.webp` | Chapter 3 sealed-hatch scene; Mara, the young Mossback, rootbread, and Lio's blue knot are present. |
+| Cargo Siding evidence | `cargo-siding-evidence-scene-v01.webp` | Chapter 3 cargo inspection scene; false Willow cargo and the evidence crate are legible. |
+| Split Hall resolution | `split-hall-resolution-scene-v03.webp` | Selected Chapter 3 resolution scene; Bramwell, Noma, Auntie Lume, Mara, Mossbacks, and Stonekin gather around the evidence table. |
+| Mossgarden closing mark | `mossgarden-closing-mark-scene-v01.webp` | Chapter 3 closing scene; Mara and Noma restore a courier mark without relying on baked-in text. |
 
 ## Map Tokens
 
@@ -158,6 +164,11 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Mara Brindle | `mara-brindle-portrait-v01.webp` | Production portrait for Chapter 2 protected guest role. |
 | Edden Vale | `edden-vale-portrait-v01.webp` | Production portrait for the recovery-room witness. |
 | Lio Brindle | `lio-brindle-portrait-v01.webp` | Pre-rescue or remembered courier portrait; generate a later rescued variant if needed. |
+| Bramwell Gatehand | `bramwell-gatehand-portrait-v01.webp` | Chapter 3 Stonekin gatehand; distinct elder/gate-tool silhouette. |
+| Quill Pebbleturn | `quill-pebbleturn-portrait-v01.webp` | Chapter 3 Rootmarket technician with lantern-shutter identity. |
+| Auntie Lume | `auntie-lume-portrait-v02.webp` | Selected Chapter 3 Rootmarket host portrait; clearer and warmer than v01. |
+| Noma Greenstill | `noma-greenstill-portrait-v02.webp` | Selected Chapter 3 Mossgarden memory-keeper portrait; older and steadier than v01. |
+| Westroot Rootbread Child | `westroot-rootbread-child-portrait-v02.webp` | Selected Chapter 3 child portrait; visibly young Mossback with the hatch/rootbread story read. |
 | Worried Road Traveler | `worried-road-traveler-portrait-v01.webp` | Production-usable generic traveler; includes baked-in sign text, so use sparingly. |
 
 ## Enemies
@@ -172,6 +183,8 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Briar Roadwatcher | `briar-roadwatcher-v02.webp` | Selected practical sign-forging field agent; replaces Warden-like v1. |
 | Thorn-Collared Hound | `thorn-collared-hound-v01.webp` | Production battle portrait; collar-control read is clear. |
 | False Sign Scratcher | `false-sign-scratcher-v02.webp` | Selected support enemy; clearer face and less Warden overlap than v1. |
+| Briar Cargo Runner | `briar-cargo-runner-v01.webp` | Chapter 3 cargo encounter portrait; clear runner/smuggler silhouette. |
+| Seal-Forged Sentry | `seal-forged-sentry-v01.webp` | Chapter 3 cargo encounter portrait; false-seal, wax, and sentry identity stay readable at battle-card size. |
 
 ---
 
@@ -197,14 +210,12 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 ## Important NPCs
 
 - Bracken Voss portrait and combat/boss variant
-- Chapter 3 Westroot NPC set
 - Chapter 4 captive porter and relay captain portraits
 - Optional post-rescue Lio portrait
 
 ## Enemies
 
 - Briar Relay Guard
-- Seal-Forged Sentry
 - Crown Whisperer
 - Thornseal Guard
 - Thornroot Sentry
@@ -323,6 +334,16 @@ These have also been cleaned and promoted into the item-art registry so Chapter 
 | Pine-Pitch Wax | `assets/icons/items/pine-pitch-wax-icon-v01.png` | Production-ready; amber resin and twine give it a useful material read. |
 | No-Handle Token | `assets/icons/items/no-handle-token-icon-v01.png` | Production-ready; the missing handle reads clearly even small. |
 | Witness Note for Bramblecross | `assets/icons/items/witness-note-for-bramblecross-icon-v01.png` | Production-ready; official note shape and blue watch detail are clear. |
+
+---
+
+## Selected Chapter 3 Story-Item Icons
+
+| Item | Selected asset | Notes |
+|---|---|---|
+| Rootbread Charm | `assets/icons/items/rootbread-charm-icon-v01.png` | Production-ready hospitality token; distinct warm bread-and-knot silhouette. |
+| Witness Stone Rubbing | `assets/icons/items/witness-stone-rubbing-icon-v02.png` | Selected correction: a loose charcoal crown-mark rubbing, not a book. |
+| Cargo Transfer Tag | `assets/icons/items/cargo-transfer-tag-icon-v02.png` | Selected correction: a tied freight tag with a seal, not a scroll. |
 
 ---
 

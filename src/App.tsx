@@ -109,8 +109,10 @@ import {
 } from "./story/chapter2";
 import {
   CHAPTER_3_SCENE_COPY,
+  CHAPTER_3_FULL_SCENE_COPY,
   WITNESS_STONE_LABELS,
   WITNESS_STONE_SEQUENCE,
+  appendChapter3CompanionReaction,
 } from "./story/chapter3";
 
 const QuestTab = React.lazy(() =>
@@ -167,6 +169,21 @@ const eddensThreeDoorDrawingScene = new URL(
 ).href;
 const westrootThresholdOpeningScene = new URL(
   "../assets/scenes/westroot-threshold-opening-v02.webp",
+  import.meta.url,
+).href;
+const westrootArrivalScene = new URL("../assets/scenes/westroot-arrival-scene-v01.webp", import.meta.url).href;
+const witnessStonesScene = new URL("../assets/scenes/witness-stones-scene-v01.webp", import.meta.url).href;
+const rootbreadPromiseScene = new URL("../assets/scenes/rootbread-promise-scene-v01.webp", import.meta.url).href;
+const cargoSidingEvidenceScene = new URL(
+  "../assets/scenes/cargo-siding-evidence-scene-v01.webp",
+  import.meta.url,
+).href;
+const splitHallResolutionScene = new URL(
+  "../assets/scenes/split-hall-resolution-scene-v03.webp",
+  import.meta.url,
+).href;
+const mossgardenClosingMarkScene = new URL(
+  "../assets/scenes/mossgarden-closing-mark-scene-v01.webp",
   import.meta.url,
 ).href;
 const titleKeyArt = new URL(
@@ -3805,6 +3822,11 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       return setDialogue({
         portrait: "◈",
         name: CHAPTER_3_SCENE_COPY.firstGate.name,
+        portraitName: "Bramwell Gatehand",
+        sceneImage: {
+          src: westrootArrivalScene,
+          alt: "Mara arriving at the lantern-lit First Westroot Gate beneath the hill.",
+        },
         text: CHAPTER_3_SCENE_COPY.firstGate.repeat,
         choices: [{ label: "Continue into Westroot.", effect: () => setDialogue(null) }],
       });
@@ -3814,6 +3836,11 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       setDialogue({
         portrait: "◈",
         name: CHAPTER_3_SCENE_COPY.firstGate.name,
+        portraitName: "Bramwell Gatehand",
+        sceneImage: {
+          src: westrootArrivalScene,
+          alt: "Mara arriving at the lantern-lit First Westroot Gate beneath the hill.",
+        },
         text: `${answer}\n\nBramwell studies the party again, this time as people rather than a problem. \"You may cross to the market. You may speak. You may not wander into sealed ways, touch a lantern shutter, or call this place yours because a door answered you.\"\n\nMara folds her arms. \"You can close every door in this hill if you want. But my brother is on the other side of one of them.\"\n\nBramwell's face changes—not into agreement, but recognition. \"Then we have a reason to be careful with one another.\"`,
         choices: [{ label: "Listen before asking for more.", effect: () => setDialogue(null) }],
       });
@@ -3821,6 +3848,11 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     setDialogue({
       portrait: "◈",
       name: CHAPTER_3_SCENE_COPY.firstGate.name,
+      portraitName: "Bramwell Gatehand",
+      sceneImage: {
+        src: westrootArrivalScene,
+        alt: "Mara arriving at the lantern-lit First Westroot Gate beneath the hill.",
+      },
       text: CHAPTER_3_SCENE_COPY.firstGate.text,
       choices: [
         {
@@ -3848,24 +3880,27 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openRootmarketDialogue = () => {
-    const firstVisit = !flags.metQuill;
-    if (firstVisit) setFlags((f) => ({ ...f, metQuill: true }));
+  const withChapter3CompanionReaction = (text, beat) =>
+    appendChapter3CompanionReaction(
+      text,
+      companion.recruited ? companion.id : null,
+      beat,
+    );
+
+  const openQuillFollowupDialogue = () =>
     setDialogue({
       portrait: "⌂",
-      name: CHAPTER_3_SCENE_COPY.rootmarket.name,
-      text: firstVisit
-        ? CHAPTER_3_SCENE_COPY.rootmarket.text
-        : CHAPTER_3_SCENE_COPY.rootmarket.repeat,
+      name: "Quill Pebbleturn",
+      text: CHAPTER_3_FULL_SCENE_COPY.rootmarket.converged,
       choices: [
         {
-          label: "What does the lantern shutter do?",
+          label: "Where can I learn the old rule?",
           effect: () =>
             setDialogue({
               portrait: "⌂",
               name: "Quill Pebbleturn",
-              text: "\"It keeps a lantern from calling through the hill when it should only light a stair. A road signal is useful. A road signal shouted at the wrong time is a map for anyone listening.\"\n\nQuill taps the hinge. \"Noma tends the Witness Stones in Mossgarden. Do not call them a puzzle while they can hear you. They will call you a puzzle back.\"",
-              choices: [{ label: "Thank Quill.", effect: () => setDialogue(null) }],
+              text: CHAPTER_3_FULL_SCENE_COPY.rootmarket.oldRule,
+              choices: [{ label: "Find Noma in the Mossgarden.", effect: () => setDialogue(null) }],
             }),
         },
         {
@@ -3874,51 +3909,187 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             setDialogue({
               portrait: "⌂",
               name: "Quill Pebbleturn",
-              text: "Quill's hands still on the hinge. \"A green-sealed crate came in by the Cargo Siding. Bramwell put a hold on it. Then somebody moved it anyway. That is why nobody is enjoying the gate being open.\"",
-              choices: [{ label: "I will find out how.", effect: () => setDialogue(null) }],
+              text: CHAPTER_3_FULL_SCENE_COPY.rootmarket.cargo,
+              choices: [{ label: "I will find out how it moved.", effect: () => setDialogue(null) }],
             }),
         },
-        { label: "Keep exploring.", effect: () => setDialogue(null) },
+        { label: "Speak with Auntie Lume.", effect: () => openAuntieLumeDialogue() },
+        { label: "I should keep moving.", effect: () => setDialogue(null) },
+      ],
+    });
+
+  const openQuillResponseDialogue = (response) =>
+    setDialogue({
+      portrait: "⌂",
+      name: "Quill Pebbleturn",
+      text: response,
+      choices: [{ label: "Listen to Quill's old-road rule.", effect: openQuillFollowupDialogue }],
+    });
+
+  const openAuntieLumeResponseDialogue = (response) =>
+    setDialogue({
+      portrait: "🍞",
+      name: "Auntie Lume",
+      text: response,
+      choices: [
+        { label: "Follow the Rootbread Promise.", effect: () => setDialogue(null) },
+        { label: "Stay in Rootmarket.", effect: () => openRootmarketDialogue() },
+      ],
+    });
+
+  const openAuntieLumeDialogue = () => {
+    if (!flags.metAuntieLume) setFlags((f) => ({ ...f, metAuntieLume: true }));
+    if (flags.rootbreadPromiseKept) {
+      return setDialogue({
+        portrait: "🍞",
+        name: "Auntie Lume",
+        text: CHAPTER_3_FULL_SCENE_COPY.auntieLume.repeat,
+        choices: [{ label: "Thank Lume.", effect: () => setDialogue(null) }],
+      });
+    }
+    setDialogue({
+      portrait: "🍞",
+      name: "Auntie Lume",
+      text: CHAPTER_3_FULL_SCENE_COPY.auntieLume.introduction,
+      choices: [
+        {
+          label: "Thank you. We are looking for Lio Brindle.",
+          effect: () => openAuntieLumeResponseDialogue(CHAPTER_3_FULL_SCENE_COPY.auntieLume.lioResponse),
+        },
+        {
+          label: "What is the Rootbread Promise?",
+          effect: () => openAuntieLumeResponseDialogue(CHAPTER_3_FULL_SCENE_COPY.auntieLume.promiseResponse),
+        },
+        {
+          label: "I should not take food from people who do not trust me.",
+          effect: () => openAuntieLumeResponseDialogue(CHAPTER_3_FULL_SCENE_COPY.auntieLume.refusalResponse),
+        },
       ],
     });
   };
 
-  const openMossgardenDialogue = () => {
-    const firstVisit = !flags.metNoma;
-    if (firstVisit) setFlags((f) => ({ ...f, metNoma: true }));
+  const openRootmarketDialogue = () => {
+    if (flags.metQuill) {
+      return setDialogue({
+        portrait: "⌂",
+        name: CHAPTER_3_SCENE_COPY.rootmarket.name,
+        text: CHAPTER_3_FULL_SCENE_COPY.rootmarket.repeat,
+        choices: [
+          { label: "Ask Quill about the old road.", effect: openQuillFollowupDialogue },
+          { label: "Speak with Auntie Lume.", effect: openAuntieLumeDialogue },
+          { label: "Keep exploring.", effect: () => setDialogue(null) },
+        ],
+      });
+    }
+    setFlags((f) => ({ ...f, metQuill: true }));
+    setDialogue({
+      portrait: "⌂",
+      name: "Quill Pebbleturn",
+      text: CHAPTER_3_FULL_SCENE_COPY.rootmarket.quillIntro,
+      choices: [
+        {
+          label: "I prefer 'guest under review.'",
+          effect: () => openQuillResponseDialogue(CHAPTER_3_FULL_SCENE_COPY.rootmarket.guestResponse),
+        },
+        {
+          label: "What does that shutter do?",
+          effect: () => openQuillResponseDialogue(CHAPTER_3_FULL_SCENE_COPY.rootmarket.shutterResponse),
+        },
+        {
+          label: "We are following a missing courier.",
+          effect: () => openQuillResponseDialogue(CHAPTER_3_FULL_SCENE_COPY.rootmarket.lioResponse),
+        },
+      ],
+    });
+  };
+
+  const openMossgardenWitnessContext = (response) =>
     setDialogue({
       portrait: "✿",
-      name: CHAPTER_3_SCENE_COPY.mossgarden.name,
-      text: firstVisit
-        ? CHAPTER_3_SCENE_COPY.mossgarden.text
-        : CHAPTER_3_SCENE_COPY.mossgarden.repeat,
+      name: "Noma Greenstill",
+      text: `${response}\n\n${CHAPTER_3_FULL_SCENE_COPY.mossgarden.converged}`,
+      choices: [
+        {
+          label: "Show me how the stones are meant to work.",
+          effect: () => openWitnessStonesDialogue([], CHAPTER_3_FULL_SCENE_COPY.mossgarden.showResponse),
+        },
+        {
+          label: "Can we remove the crown mark?",
+          effect: () => openWitnessStonesDialogue([], CHAPTER_3_FULL_SCENE_COPY.mossgarden.removeResponse),
+        },
+        {
+          label: "What happens if I get it wrong?",
+          effect: () => openWitnessStonesDialogue([], CHAPTER_3_FULL_SCENE_COPY.mossgarden.wrongResponse),
+        },
+      ],
+    });
+
+  const openMossgardenDialogue = () => {
+    if (flags.metNoma) {
+      return setDialogue({
+        portrait: "✿",
+        name: CHAPTER_3_SCENE_COPY.mossgarden.name,
+        text: CHAPTER_3_SCENE_COPY.mossgarden.repeat,
+        choices: [
+          { label: "Study the Witness Stones.", effect: () => openWitnessStonesDialogue() },
+          { label: "Keep exploring.", effect: () => setDialogue(null) },
+        ],
+      });
+    }
+    setFlags((f) => ({ ...f, metNoma: true }));
+    setDialogue({
+      portrait: "✿",
+      name: "Noma Greenstill",
+      text: CHAPTER_3_SCENE_COPY.mossgarden.text,
       choices: [
         {
           label: "What are these names?",
-          effect: () =>
-            setDialogue({
-              portrait: "✿",
-              name: "Noma Greenstill",
-              text: "\"Witnesses. Travelers. Bridge-menders. People who left a warning before it was fashionable to call one another frightened. The road remembers names because a missing person is never only a missing number.\"",
-              choices: [{ label: "Ask about the Witness Stones.", effect: () => openWitnessStonesDialogue() }],
-            }),
+          effect: () => openMossgardenWitnessContext(CHAPTER_3_FULL_SCENE_COPY.mossgarden.namesResponse),
         },
-        { label: "Study the Witness Stones.", effect: () => openWitnessStonesDialogue() },
-        { label: "Keep exploring.", effect: () => setDialogue(null) },
+        {
+          label: "We need to find the truth about a missing courier.",
+          effect: () => openMossgardenWitnessContext(CHAPTER_3_FULL_SCENE_COPY.mossgarden.courierResponse),
+        },
+        {
+          label: "Bramwell says Westroot should close the gate.",
+          effect: () => openMossgardenWitnessContext(CHAPTER_3_FULL_SCENE_COPY.mossgarden.gateResponse),
+        },
       ],
     });
   };
 
-  const chooseWitnessStone = (order, choice) => {
+  const openWitnessStoneInspectionDialogue = (order, guidance = "") =>
+    setDialogue({
+      portrait: "◌",
+      name: "Witness Stone Carvings",
+      text: Object.entries(CHAPTER_3_FULL_SCENE_COPY.witnessStones.inspections)
+        .map(([id, text]) => `${WITNESS_STONE_LABELS[id]}\n${text}`)
+        .join("\n\n"),
+      choices: [
+        {
+          label: "Return to the sequence.",
+          effect: () => openWitnessStonesDialogue(order, guidance),
+        },
+        { label: "Step back for now.", effect: () => setDialogue(null) },
+      ],
+    });
+
+  const chooseWitnessStone = (order, choice, guidance = "") => {
     const expected = WITNESS_STONE_SEQUENCE[order.length - 1];
     if (choice !== expected) {
+      const firstMiss = !flags.witnessStoneFirstAttemptMissed;
       setFlags((f) => ({ ...f, witnessStoneFirstAttemptMissed: true }));
+      gainStoryItemOnce("witness_stone_rubbing");
+      if (firstMiss) announce("Noma gives you a Witness Stone Rubbing.", [{ id: "witness_stone_rubbing", qty: 1 }]);
       return setDialogue({
         portrait: "◌",
         name: CHAPTER_3_SCENE_COPY.witnessStones.name,
-        text: CHAPTER_3_SCENE_COPY.witnessStones.failure,
+        text: withChapter3CompanionReaction(
+          `${CHAPTER_3_SCENE_COPY.witnessStones.failure}\n\n${CHAPTER_3_FULL_SCENE_COPY.witnessStones.correction}`,
+          "witnessMistake",
+        ),
         choices: [
-          { label: "Name the mistake and try again.", effect: () => openWitnessStonesDialogue() },
+          { label: "Name the mistake and try again.", effect: () => openWitnessStonesDialogue([], guidance) },
           { label: "Step back for now.", effect: () => setDialogue(null) },
         ],
       });
@@ -3927,9 +4098,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       setFlags((f) => ({ ...f, witnessStoneSequenceSolved: true }));
       gainStoryItemOnce("witness_stone_rubbing");
       setPlayer((p) => ({ ...p, xp: p.xp + 12 }));
-      announce("The Witness Stones remember their promise. XP +12", [
-        { id: "witness_stone_rubbing", qty: 1 },
-      ]);
+      announce("The Witness Stones remember their promise. XP +12", [{ id: "witness_stone_rubbing", qty: 1 }]);
       return setDialogue({
         portrait: "◌",
         name: CHAPTER_3_SCENE_COPY.witnessStones.name,
@@ -3937,10 +4106,10 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         choices: [{ label: "Follow the Willow cargo.", effect: () => setDialogue(null) }],
       });
     }
-    openWitnessStonesDialogue(order);
+    openWitnessStonesDialogue(order, guidance);
   };
 
-  const openWitnessStonesDialogue = (order = []) => {
+  const openWitnessStonesDialogue = (order = [], guidance = "") => {
     if (flags.witnessStoneSequenceSolved) {
       return setDialogue({
         portrait: "◌",
@@ -3951,48 +4120,91 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     }
     const prefix = order.length
       ? `So far: ${order.map((step) => WITNESS_STONE_LABELS[step]).join("\n")}\n\n`
-      : CHAPTER_3_SCENE_COPY.witnessStones.introduction;
+      : `${guidance ? `${guidance}\n\n` : ""}${CHAPTER_3_SCENE_COPY.witnessStones.introduction}`;
     setDialogue({
       portrait: "◌",
       name: CHAPTER_3_SCENE_COPY.witnessStones.name,
+      sceneImage: {
+        src: witnessStonesScene,
+        alt: "Mara and Noma examining Westroot's false crown-marked Witness Stones.",
+      },
       text: `${prefix}\n\n${CHAPTER_3_SCENE_COPY.witnessStones.prompt}`,
-      choices: Object.entries(WITNESS_STONE_LABELS).map(([id, label]) => ({
-        label,
-        effect: () => chooseWitnessStone([...order, id], id),
-      })),
+      choices: [
+        {
+          label: "Inspect the stone carvings.",
+          effect: () => openWitnessStoneInspectionDialogue(order, guidance),
+        },
+        ...Object.entries(WITNESS_STONE_LABELS).map(([id, label]) => ({
+          label,
+          effect: () => chooseWitnessStone([...order, id], id, guidance),
+        })),
+      ],
     });
   };
 
+  const completeRootbreadPromise = () => {
+    setFlags((f) => ({ ...f, rootbreadPromiseKept: true, lioKnotFound: true, metRootbreadChild: true }));
+    gainStoryItemOnce("rootbread_charm");
+    setPlayer((p) => ({ ...p, xp: p.xp + 6 }));
+    announce("The Rootbread Promise is kept. XP +6", [{ id: "rootbread_charm", qty: 1 }]);
+    setDialogue({
+      portrait: "🍞",
+      name: CHAPTER_3_SCENE_COPY.rootbread.name,
+      portraitName: "Westroot Rootbread Child",
+      text: withChapter3CompanionReaction(CHAPTER_3_FULL_SCENE_COPY.rootbread.converged, "rootbread"),
+      choices: [{ label: "Thank the child and keep the promise.", effect: () => setDialogue(null) }],
+    });
+  };
+
+  const openRootbreadChildResponse = (response) =>
+    setDialogue({
+      portrait: "🍞",
+      name: "The Rootbread Promise",
+      portraitName: "Westroot Rootbread Child",
+      text: `${response}\n\n${CHAPTER_3_FULL_SCENE_COPY.rootbread.converged}`,
+      choices: [{ label: "Keep Lio's knot safe.", effect: completeRootbreadPromise }],
+    });
+
   const openRootbreadHatchDialogue = () => {
+    if (!flags.metAuntieLume) {
+      return setDialogue({
+        portrait: "🍞",
+        name: CHAPTER_3_SCENE_COPY.rootbread.name,
+        text: CHAPTER_3_FULL_SCENE_COPY.rootbread.unavailable,
+        choices: [{ label: "Return to Rootmarket.", effect: () => setDialogue(null) }],
+      });
+    }
     if (flags.rootbreadPromiseKept) {
       return setDialogue({
         portrait: "🍞",
         name: CHAPTER_3_SCENE_COPY.rootbread.name,
-        text: "A fresh bundle of bread and water waits by the sealed hatch. The promise is being kept.",
+        portraitName: "Westroot Rootbread Child",
+        text: CHAPTER_3_FULL_SCENE_COPY.rootbread.repeat,
         choices: [{ label: "Leave it for the next traveler.", effect: () => setDialogue(null) }],
       });
     }
     setDialogue({
       portrait: "🍞",
       name: CHAPTER_3_SCENE_COPY.rootbread.name,
-      text: CHAPTER_3_SCENE_COPY.rootbread.text,
+      portraitName: "Westroot Rootbread Child",
+      sceneImage: {
+        src: rootbreadPromiseScene,
+        alt: "Mara speaking with the young Mossback who keeps rootbread at a sealed hatch.",
+      },
+      text: CHAPTER_3_FULL_SCENE_COPY.rootbread.introduction,
       choices: [
         {
-          label: "Honor the promise and ask gently who left it.",
-          effect: () => {
-            setFlags((f) => ({ ...f, rootbreadPromiseKept: true }));
-            gainStoryItemOnce("rootbread_charm");
-            setPlayer((p) => ({ ...p, xp: p.xp + 6 }));
-            announce("The Rootbread Promise is kept. XP +6", [{ id: "rootbread_charm", qty: 1 }]);
-            setDialogue({
-              portrait: "🍞",
-              name: CHAPTER_3_SCENE_COPY.rootbread.name,
-              text: CHAPTER_3_SCENE_COPY.rootbread.complete,
-              choices: [{ label: "Keep the blue thread safe.", effect: () => setDialogue(null) }],
-            });
-          },
+          label: "You did the right thing.",
+          effect: () => openRootbreadChildResponse(CHAPTER_3_FULL_SCENE_COPY.rootbread.rightThingResponse),
         },
-        { label: "Leave the hatch untouched for now.", effect: () => setDialogue(null) },
+        {
+          label: "When did the hatch rattle?",
+          effect: () => openRootbreadChildResponse(CHAPTER_3_FULL_SCENE_COPY.rootbread.whenResponse),
+        },
+        {
+          label: "It can be dangerous to leave food at a sealed way.",
+          effect: () => openRootbreadChildResponse(CHAPTER_3_FULL_SCENE_COPY.rootbread.dangerResponse),
+        },
       ],
     });
   };
@@ -4001,15 +4213,15 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     setDialogue({
       portrait: "▰",
       name: CHAPTER_3_SCENE_COPY.cargoSiding.name,
-      text: CHAPTER_3_SCENE_COPY.cargoSiding.evidence,
+      text: CHAPTER_3_FULL_SCENE_COPY.cargoSiding.evidence,
       choices: [
         {
           label: "Confront the cargo operation.",
-          effect: () => {
+          effect: () =>
             setDialogue({
               portrait: "▰",
               name: CHAPTER_3_SCENE_COPY.cargoSiding.name,
-              text: CHAPTER_3_SCENE_COPY.cargoSiding.battle,
+              text: CHAPTER_3_FULL_SCENE_COPY.cargoSiding.battle,
               choices: [
                 {
                   label: "Clear the Cargo Siding.",
@@ -4020,10 +4232,21 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                 },
                 { label: "Step back for now.", effect: () => setDialogue(null) },
               ],
-            });
-          },
+            }),
         },
         { label: "Bring the evidence to Split Hall later.", effect: () => setDialogue(null) },
+      ],
+    });
+
+  const openCargoInspectionDialogue = (result) =>
+    setDialogue({
+      portrait: "▰",
+      name: CHAPTER_3_SCENE_COPY.cargoSiding.name,
+      text: result,
+      choices: [
+        { label: "Read the whole crate record.", effect: openCargoEvidenceDialogue },
+        { label: "Keep investigating the siding.", effect: openCargoSidingDialogue },
+        { label: "Step back for now.", effect: () => setDialogue(null) },
       ],
     });
 
@@ -4041,29 +4264,69 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     setDialogue({
       portrait: "▰",
       name: CHAPTER_3_SCENE_COPY.cargoSiding.name,
+      sceneImage: {
+        src: cargoSidingEvidenceScene,
+        alt: "Mara examining false Willow cargo and the sealed crate evidence at Westroot's Cargo Siding.",
+      },
       text: CHAPTER_3_SCENE_COPY.cargoSiding.text,
       choices: [
         hasItem(player, "willowmark_lens", 1)
-          ? {
-              label: "Use the Willowmark Lens.",
-              effect: openCargoEvidenceDialogue,
-            }
+          ? { label: "Use the Willowmark Lens.", effect: () => openCargoInspectionDialogue(CHAPTER_3_FULL_SCENE_COPY.cargoSiding.lensResult) }
           : null,
-        { label: "Inspect the wax and crate tags closely.", effect: openCargoEvidenceDialogue },
+        { label: "Inspect the wax and crate tags closely.", effect: () => openCargoInspectionDialogue(CHAPTER_3_FULL_SCENE_COPY.cargoSiding.manualResult) },
+        { label: "Check the rail marks and loading ledger.", effect: () => openCargoInspectionDialogue(CHAPTER_3_FULL_SCENE_COPY.cargoSiding.ledgerResult) },
+        { label: "Open the crate carefully.", effect: () => openCargoInspectionDialogue(CHAPTER_3_FULL_SCENE_COPY.cargoSiding.crateResult) },
         { label: "Leave the crates for now.", effect: () => setDialogue(null) },
       ].filter(Boolean),
     });
   };
 
-  const completeChapterThree = () => {
+  const resolveCargoBattleOutcome = (outcome) => {
+    const captured = outcome === "captured";
+    setFlags((f) => ({ ...f, cargoRunnerCaptured: captured, cargoRunnerEscaped: !captured }));
+    gainStoryItemOnce("cargo_transfer_tag");
+    announce("Cargo Transfer Tag recovered.", [{ id: "cargo_transfer_tag", qty: 1 }]);
+    setDialogue({
+      portrait: "▰",
+      name: "Cargo Siding Cleared",
+      text: withChapter3CompanionReaction(
+        `${captured ? CHAPTER_3_FULL_SCENE_COPY.cargoSiding.captured : CHAPTER_3_FULL_SCENE_COPY.cargoSiding.escaped}\n\n${CHAPTER_3_FULL_SCENE_COPY.cargoSiding.converged}`,
+        "cargo",
+      ),
+      choices: [{ label: "Bring the evidence to Split Hall.", effect: () => setDialogue(null) }],
+    });
+  };
+
+  const openChapterThreeClosing = () =>
+    setDialogue({
+      portrait: "✿",
+      name: CHAPTER_3_SCENE_COPY.closing.name,
+      portraitName: "Noma Greenstill",
+      sceneImage: {
+        src: mossgardenClosingMarkScene,
+        alt: "Mara and Noma leaving a new courier mark in the lantern-lit Mossgarden.",
+      },
+      text: CHAPTER_3_SCENE_COPY.closing.text,
+      choices: [{ label: "Follow the westward lead.", effect: () => setDialogue(null) }],
+      size: "wide",
+    });
+
+  const completeChapterThree = (response) => {
     setFlags((f) => ({ ...f, westrootTrustEarned: true, chapterThreeClear: true }));
     setPlayer((p) => ({ ...p, xp: p.xp + 16 }));
     announce("Westroot trusts the road again. Chapter 3 complete. XP +16");
     setDialogue({
-      portrait: "✿",
-      name: CHAPTER_3_SCENE_COPY.closing.name,
-      text: CHAPTER_3_SCENE_COPY.closing.text,
-      choices: [{ label: "Follow the westward lead.", effect: () => setDialogue(null) }],
+      portrait: "▤",
+      name: CHAPTER_3_SCENE_COPY.splitHall.name,
+      sceneImage: {
+        src: splitHallResolutionScene,
+        alt: "Mara, Bramwell, Noma, Auntie Lume, Mossbacks, and Stonekin resolving Westroot's future in Split Hall.",
+      },
+      text: withChapter3CompanionReaction(
+        `${response}\n\n${CHAPTER_3_FULL_SCENE_COPY.splitHall.fullResolution}`,
+        "resolution",
+      ),
+      choices: [{ label: "Visit Noma in the Mossgarden.", effect: openChapterThreeClosing }],
       size: "wide",
     });
   };
@@ -4088,10 +4351,11 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     setDialogue({
       portrait: "▤",
       name: CHAPTER_3_SCENE_COPY.splitHall.name,
-      text: CHAPTER_3_SCENE_COPY.splitHall.resolution,
+      text: CHAPTER_3_FULL_SCENE_COPY.splitHall.fullIntroduction,
       choices: [
-        { label: "Caution was right. Silence was not enough.", effect: completeChapterThree },
-        { label: "The Witness Stones already gave us the answer.", effect: completeChapterThree },
+        { label: "Bramwell was right that the danger is real.", effect: () => completeChapterThree(CHAPTER_3_FULL_SCENE_COPY.splitHall.bramwellResponse) },
+        { label: "Noma was right that silence did not keep the lie out.", effect: () => completeChapterThree(CHAPTER_3_FULL_SCENE_COPY.splitHall.nomaResponse) },
+        { label: "The Witness Stones already gave us the answer.", effect: () => completeChapterThree(CHAPTER_3_FULL_SCENE_COPY.splitHall.stonesResponse) },
       ],
       size: "wide",
     });
@@ -4697,7 +4961,19 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         text: companionReward
           ? `${text}\n\n${companion.name} gains ${companionReward.gained} companion XP.`
           : text,
-        choices: [{ label: "Continue", effect: () => setDialogue(null) }],
+        choices:
+          battle.rewardKey === "westrootCargo"
+            ? [
+                {
+                  label: "Tell Quill to shut the lantern shutter.",
+                  effect: () => resolveCargoBattleOutcome("captured"),
+                },
+                {
+                  label: "Secure the evidence while the runner escapes.",
+                  effect: () => resolveCargoBattleOutcome("escaped"),
+                },
+              ]
+            : [{ label: "Continue", effect: () => setDialogue(null) }],
       });
       announce("Victory!", rewardItems.map((rewardItem) => ({ id: rewardItem, qty: 1 })));
     } else {

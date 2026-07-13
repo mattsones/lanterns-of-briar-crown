@@ -1087,3 +1087,94 @@ git diff --check
 1. Continue the Chapter 3 automated golden path through Cargo Siding, Split Hall, and the Chapter 4 handoff.
 2. Use Map Debug after any future Westroot image replacement; retain the graph and tune only node anchors, not freeform movement.
 3. Generate the Chapter 3 Westroot NPC portraits and any selected story-scene closeups after the core gameplay pass is human-playtested.
+
+## Current Handoff - Chapter 3 Full Story Flow
+
+Last updated: 2026-07-12
+
+Branch: `codex/chapter-3-vertical-slice`
+
+### What Changed
+
+- Promoted the full Chapter 3 script, not the former abbreviated vertical-slice copy, as the playable flow source.
+- Expanded Rootmarket into Quill's complete introduction and old-road follow-up choices, and added Auntie Lume's Rootbread Promise conversation.
+- Restored the sealed-hatch sequence: the Mossback child, Lio's blue-thread knot, the promise completion, and a visible side-quest journal entry.
+- Added Witness Stone inspection copy and the fail-forward correction outcome now awards the Witness Stone Rubbing immediately while keeping the correct sequence available.
+- Expanded Cargo Siding into lens, wax, ledger, and crate inspections; the true multi-enemy encounter remains intact.
+- Added a save-safe Cargo Transfer Tag story item with emoji fallback. After the Cargo Siding battle, the player can secure a captured runner or let the runner escape; both branches preserve the required evidence and Chapter 3 completion route.
+- Restored Split Hall's three player responses, its full community resolution, the Mossgarden closing handoff, and sparse companion reactions for the major Chapter 3 beats.
+- Expanded `tests/chapter3.spec.ts` to cover the Rootbread/Witness route and the Cargo/Split Hall/Chapter 4 handoff route.
+
+### Verification Run
+
+```bash
+npm.cmd run build
+npm.cmd run test:rules
+npm.cmd run playtest:chapter1
+npm.cmd run playtest:chapter2
+npm.cmd run playtest:chapter3
+npm.cmd run playtest:smoke
+git diff --check
+```
+
+Latest local results:
+
+- `npm.cmd run build` passed.
+- `npm.cmd run test:rules` passed: 21 tests.
+- `npm.cmd run playtest:chapter1` passed: 1 test.
+- `npm.cmd run playtest:chapter2` passed: 19 tests.
+- `npm.cmd run playtest:chapter3` passed: 2 tests.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+
+### Next Recommended Slice
+
+1. Human-playtest the fuller Chapter 3 script and adjust pacing or choice wording without reducing its story beats.
+2. Promote the selected Chapter 3 portrait, enemy, icon, and scene art from the prompt pack, then wire it through the fallback-safe registries.
+3. Keep Map Debug on/off visual QA after any Westroot map or scene art replacement.
+
+## Current Handoff - Chapter 3 Production Art Integration
+
+Last updated: 2026-07-13
+
+Branch: `codex/chapter-3-vertical-slice`
+
+### What Changed
+
+- Selected and wired the final Chapter 3 NPC portraits: Bramwell, Quill, Auntie Lume v02, Noma v02, and the Rootbread child v02. Dialogue retains emoji fallbacks if an image fails.
+- Selected and wired the Briar Cargo Runner and Seal-Forged Sentry battle portraits, while preserving their existing battle icons as fallbacks.
+- Selected and wired the Rootbread Charm plus corrected Witness Stone Rubbing v02 and Cargo Transfer Tag v02 item icons.
+- Added six story-scene images to their matching beats: First Westroot Gate, Witness Stones, Rootbread Promise, Cargo Siding, Split Hall resolution v03, and Mossgarden closing mark.
+- Extended the Chapter 3 Playwright path to assert all six scene-image references, and added static registry coverage for selected portraits, enemy artwork, icons, and art-plan availability.
+- Ran the production asset optimizer. Opaque portraits/enemies/scenes are now 1200px/1600px WebP runtime assets; transparent icons remain PNG. Full-size originals are under `assets/reference/source-art/`; earlier v01/v02 choices and source sheets are under `assets/reference/alternates/`.
+- Updated `docs/asset-manifest.md` and `src/data/artworkPlan.ts` to record the selected Chapter 3 production set.
+
+### Verification Run
+
+```bash
+npm.cmd run optimize:assets
+npm.cmd run audit:assets
+npm.cmd run build
+npm.cmd run test:rules
+npm.cmd run playtest:chapter1
+npm.cmd run playtest:chapter2
+npm.cmd run playtest:chapter3
+npm.cmd run playtest:smoke
+git diff --check
+```
+
+Latest local results:
+
+- Asset optimization reduced imported runtime payload from 198.71 MB to 19.59 MB and archived 9 unselected Chapter 3 files.
+- `npm.cmd run audit:assets` passed; selected Chapter 3 scenes are 1600×900 and within the documented runtime range.
+- `npm.cmd run build` passed.
+- `npm.cmd run test:rules` passed: 22 tests.
+- `npm.cmd run playtest:chapter1` passed: 1 test.
+- `npm.cmd run playtest:chapter2` passed: 19 tests.
+- `npm.cmd run playtest:chapter3` passed: 2 tests.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `git diff --check` passed with normal Windows LF-to-CRLF warnings only.
+
+### Next Recommended Slice
+
+1. Do one human visual playtest of Chapter 3 at desktop and narrow-mobile widths, focusing on dialogue scrolling around the six illustrations.
+2. When Chapter 4 art is ready, use the same source-art/alternate/runtime split and retain the existing fallback UI.

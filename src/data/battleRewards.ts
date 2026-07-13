@@ -106,10 +106,9 @@ export const BATTLE_REWARDS = {
     xp: 24,
     flagUpdate: {
       willowCargoExposed: true,
-      cargoRunnerEscaped: true,
     },
     name: "Cargo Siding Cleared",
-    text: "The false cargo operation breaks apart. A Briar runner vanishes into a service passage, but the crates, copied seals, and Westroot gate-account mark remain as proof.",
+    text: "The Seal-Forged Sentry collapses into wet wax, snapped cord, and paper that has forgotten how to stand up. The Briar runner reaches for crown-red powder as the Cargo Siding fills with smoke.",
   },
 };
 

@@ -95,7 +95,15 @@ export const PORTRAIT_ARTWORK_PLAN: Record<string, ArtworkPlanEntry> = {
   edden: entry("edden", "Edden Vale", "portrait", 2, "dialogue emoji", "available"),
   lio: entry("lio", "Lio Brindle", "portrait", 5, "dialogue emoji", "available"),
   bracken_voss: entry("bracken_voss", "Bracken Voss", "portrait", 5, "dialogue emoji"),
-  westroot_npcs: entry("westroot_npcs", "Key Westroot NPC Set", "portrait", 3, "dialogue emoji"),
+  westroot_npcs: entry(
+    "westroot_npcs",
+    "Key Westroot NPC Set",
+    "portrait",
+    3,
+    "dialogue emoji",
+    "available",
+    "Bramwell, Quill, Auntie Lume, Noma, and the Rootbread child are wired into Chapter 3 dialogue.",
+  ),
 };
 
 export const ENEMY_ARTWORK_PLAN: Record<string, ArtworkPlanEntry> = {
@@ -107,8 +115,9 @@ export const ENEMY_ARTWORK_PLAN: Record<string, ArtworkPlanEntry> = {
   briar_roadwatcher: entry("briar_roadwatcher", "Briar Roadwatcher", "enemy", 2, "enemy emoji", "available"),
   thorn_collared_hound: entry("thorn_collared_hound", "Thorn-Collared Hound", "enemy", 2, "enemy emoji", "available"),
   false_sign_scratcher: entry("false_sign_scratcher", "False Sign Scratcher", "enemy", 2, "enemy emoji", "available"),
+  briar_cargo_runner: entry("briar_cargo_runner", "Briar Cargo Runner", "enemy", 3, "enemy emoji", "available"),
   briar_relay_guard: entry("briar_relay_guard", "Briar Relay Guard", "enemy", 4, "enemy emoji"),
-  seal_forged_sentry: entry("seal_forged_sentry", "Seal-Forged Sentry", "enemy", 4, "enemy emoji"),
+  seal_forged_sentry: entry("seal_forged_sentry", "Seal-Forged Sentry", "enemy", 3, "enemy emoji", "available"),
   crown_whisperer: entry("crown_whisperer", "Crown Whisperer", "enemy", 4, "enemy emoji"),
   bracken_voss: entry("bracken_voss", "Bracken Voss", "enemy", 5, "enemy emoji"),
   thornseal_guard: entry("thornseal_guard", "Thornseal Guard", "enemy", 5, "enemy emoji"),
@@ -116,8 +125,9 @@ export const ENEMY_ARTWORK_PLAN: Record<string, ArtworkPlanEntry> = {
 };
 
 export const ITEM_ARTWORK_BACKLOG: Record<string, ArtworkPlanEntry> = {
-  rootbread_charm: entry("rootbread_charm", "Rootbread Charm", "item", 3, "item emoji"),
-  witness_stone_rubbing: entry("witness_stone_rubbing", "Witness Stone Rubbing", "item", 3, "item emoji"),
+  rootbread_charm: entry("rootbread_charm", "Rootbread Charm", "item", 3, "item emoji", "available"),
+  witness_stone_rubbing: entry("witness_stone_rubbing", "Witness Stone Rubbing", "item", 3, "item emoji", "available"),
+  cargo_transfer_tag: entry("cargo_transfer_tag", "Cargo Transfer Tag", "item", 3, "item emoji", "available"),
   folded_map_scrap: entry("folded_map_scrap", "Folded Map Scrap", "item", 4, "item emoji"),
   lanternwell_drop: entry("lanternwell_drop", "Lanternwell Drop", "item", 4, "item emoji"),
   true_seal_fragment: entry("true_seal_fragment", "True Seal Fragment", "item", 5, "item emoji"),

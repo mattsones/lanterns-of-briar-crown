@@ -24,6 +24,26 @@ const worriedRoadTravelerPortrait = new URL(
   "../../assets/portraits/characters/worried-road-traveler-portrait-v01.webp",
   import.meta.url,
 ).href;
+const auntieLumePortrait = new URL(
+  "../../assets/portraits/characters/auntie-lume-portrait-v02.webp",
+  import.meta.url,
+).href;
+const bramwellGatehandPortrait = new URL(
+  "../../assets/portraits/characters/bramwell-gatehand-portrait-v01.webp",
+  import.meta.url,
+).href;
+const nomaGreenstillPortrait = new URL(
+  "../../assets/portraits/characters/noma-greenstill-portrait-v02.webp",
+  import.meta.url,
+).href;
+const quillPebbleturnPortrait = new URL(
+  "../../assets/portraits/characters/quill-pebbleturn-portrait-v01.webp",
+  import.meta.url,
+).href;
+const westrootRootbreadChildPortrait = new URL(
+  "../../assets/portraits/characters/westroot-rootbread-child-portrait-v02.webp",
+  import.meta.url,
+).href;
 
 export const DIALOGUE_PORTRAITS = {
   "Elder Mira": { src: miraPortrait, alt: "Portrait of Elder Mira" },
@@ -47,6 +67,14 @@ export const DIALOGUE_PORTRAITS = {
   "Watch Clerk Enna": { src: ennaPortrait, alt: "Portrait of Enna" },
   Enna: { src: ennaPortrait, alt: "Portrait of Enna" },
   "Captain Hollis": { src: hollisPortrait, alt: "Portrait of Captain Hollis" },
+  "Bramwell Gatehand": { src: bramwellGatehandPortrait, alt: "Portrait of Bramwell Gatehand" },
+  "Quill Pebbleturn": { src: quillPebbleturnPortrait, alt: "Portrait of Quill Pebbleturn" },
+  "Auntie Lume": { src: auntieLumePortrait, alt: "Portrait of Auntie Lume" },
+  "Noma Greenstill": { src: nomaGreenstillPortrait, alt: "Portrait of Noma Greenstill" },
+  "Westroot Rootbread Child": {
+    src: westrootRootbreadChildPortrait,
+    alt: "Portrait of the Westroot Rootbread child",
+  },
   "Rowan Reedshield": { src: rowanPortrait, alt: "Portrait of Rowan Reedshield" },
   "Tilda Quickstep": { src: tildaPortrait, alt: "Portrait of Tilda Quickstep" },
   "Moss Fenmere": { src: mossPortrait, alt: "Portrait of Moss Fenmere" },

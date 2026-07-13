@@ -142,7 +142,10 @@ export type GameFlags = {
   metBramwell: boolean;
   metNoma: boolean;
   metQuill: boolean;
+  metAuntieLume: boolean;
+  metRootbreadChild: boolean;
   rootbreadPromiseKept: boolean;
+  lioKnotFound: boolean;
   witnessStoneFirstAttemptMissed: boolean;
   westrootTrustEarned: boolean;
   witnessStoneSequenceSolved: boolean;

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-13T01:36:43.539Z",
+  "generatedAt": "2026-07-13T04:14:29.393Z",
   "sourceArtRoot": "assets/reference/source-art",
   "alternatesRoot": "assets/reference/alternates",
   "conversions": [
@@ -56,6 +56,17 @@
       "outputBytes": 102497,
       "width": 1254,
       "height": 1254,
+      "hasAlpha": true
+    },
+    {
+      "source": "assets/icons/items/cargo-transfer-tag-icon-v02.png",
+      "original": "assets/reference/source-art/assets/icons/items/cargo-transfer-tag-icon-v02.png",
+      "output": "assets/icons/items/cargo-transfer-tag-icon-v02.png",
+      "format": "png",
+      "originalBytes": 1473670,
+      "outputBytes": 72827,
+      "width": 768,
+      "height": 768,
       "hasAlpha": true
     },
     {
@@ -191,6 +202,17 @@
       "hasAlpha": true
     },
     {
+      "source": "assets/icons/items/rootbread-charm-icon-v01.png",
+      "original": "assets/reference/source-art/assets/icons/items/rootbread-charm-icon-v01.png",
+      "output": "assets/icons/items/rootbread-charm-icon-v01.png",
+      "format": "png",
+      "originalBytes": 717072,
+      "outputBytes": 50424,
+      "width": 768,
+      "height": 768,
+      "hasAlpha": true
+    },
+    {
       "source": "assets/icons/items/stormbell-charm-icon-v01.png",
       "original": "assets/reference/source-art/assets/icons/items/stormbell-charm-icon-v01.png",
       "output": "assets/icons/items/stormbell-charm-icon-v01.png",
@@ -254,6 +276,17 @@
       "outputBytes": 91151,
       "width": 1254,
       "height": 1254,
+      "hasAlpha": true
+    },
+    {
+      "source": "assets/icons/items/witness-stone-rubbing-icon-v02.png",
+      "original": "assets/reference/source-art/assets/icons/items/witness-stone-rubbing-icon-v02.png",
+      "output": "assets/icons/items/witness-stone-rubbing-icon-v02.png",
+      "format": "png",
+      "originalBytes": 1656038,
+      "outputBytes": 130932,
+      "width": 768,
+      "height": 768,
       "hasAlpha": true
     },
     {
@@ -477,7 +510,7 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/maps/westroot-hub-map-v01.png",
+      "source": "assets/maps/westroot-hub-map-v01.webp",
       "original": "assets/reference/source-art/assets/maps/westroot-hub-map-v01.png",
       "output": "assets/maps/westroot-hub-map-v01.webp",
       "format": "webp",
@@ -516,6 +549,28 @@
       "format": "webp",
       "originalBytes": 2635185,
       "outputBytes": 143290,
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/portraits/characters/auntie-lume-portrait-v02.png",
+      "original": "assets/reference/source-art/assets/portraits/characters/auntie-lume-portrait-v02.png",
+      "output": "assets/portraits/characters/auntie-lume-portrait-v02.webp",
+      "format": "webp",
+      "originalBytes": 3110372,
+      "outputBytes": 220168,
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/portraits/characters/bramwell-gatehand-portrait-v01.png",
+      "original": "assets/reference/source-art/assets/portraits/characters/bramwell-gatehand-portrait-v01.png",
+      "output": "assets/portraits/characters/bramwell-gatehand-portrait-v01.webp",
+      "format": "webp",
+      "originalBytes": 2958606,
+      "outputBytes": 159280,
       "width": 1024,
       "height": 1536,
       "hasAlpha": false
@@ -642,6 +697,17 @@
       "hasAlpha": false
     },
     {
+      "source": "assets/portraits/characters/noma-greenstill-portrait-v02.png",
+      "original": "assets/reference/source-art/assets/portraits/characters/noma-greenstill-portrait-v02.png",
+      "output": "assets/portraits/characters/noma-greenstill-portrait-v02.webp",
+      "format": "webp",
+      "originalBytes": 3153426,
+      "outputBytes": 239116,
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": false
+    },
+    {
       "source": "assets/portraits/characters/pibble-portrait-v01.webp",
       "original": "assets/reference/source-art/assets/portraits/characters/pibble-portrait-v01.png",
       "output": "assets/portraits/characters/pibble-portrait-v01.webp",
@@ -650,6 +716,17 @@
       "outputBytes": 168062,
       "width": 1122,
       "height": 1402,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/portraits/characters/quill-pebbleturn-portrait-v01.png",
+      "original": "assets/reference/source-art/assets/portraits/characters/quill-pebbleturn-portrait-v01.png",
+      "output": "assets/portraits/characters/quill-pebbleturn-portrait-v01.webp",
+      "format": "webp",
+      "originalBytes": 3156341,
+      "outputBytes": 204880,
+      "width": 1024,
+      "height": 1536,
       "hasAlpha": false
     },
     {
@@ -697,6 +774,17 @@
       "hasAlpha": false
     },
     {
+      "source": "assets/portraits/characters/westroot-rootbread-child-portrait-v02.png",
+      "original": "assets/reference/source-art/assets/portraits/characters/westroot-rootbread-child-portrait-v02.png",
+      "output": "assets/portraits/characters/westroot-rootbread-child-portrait-v02.webp",
+      "format": "webp",
+      "originalBytes": 2694246,
+      "outputBytes": 160244,
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": false
+    },
+    {
       "source": "assets/portraits/characters/worried-road-traveler-portrait-v01.webp",
       "original": "assets/reference/source-art/assets/portraits/characters/worried-road-traveler-portrait-v01.png",
       "output": "assets/portraits/characters/worried-road-traveler-portrait-v01.webp",
@@ -714,6 +802,17 @@
       "format": "webp",
       "originalBytes": 2989020,
       "outputBytes": 261046,
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/portraits/enemies/briar-cargo-runner-v01.png",
+      "original": "assets/reference/source-art/assets/portraits/enemies/briar-cargo-runner-v01.png",
+      "output": "assets/portraits/enemies/briar-cargo-runner-v01.webp",
+      "format": "webp",
+      "originalBytes": 2785964,
+      "outputBytes": 240224,
       "width": 1254,
       "height": 1254,
       "hasAlpha": false
@@ -758,6 +857,17 @@
       "format": "webp",
       "originalBytes": 2705339,
       "outputBytes": 226840,
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/portraits/enemies/seal-forged-sentry-v01.png",
+      "original": "assets/reference/source-art/assets/portraits/enemies/seal-forged-sentry-v01.png",
+      "output": "assets/portraits/enemies/seal-forged-sentry-v01.webp",
+      "format": "webp",
+      "originalBytes": 2879065,
+      "outputBytes": 260046,
       "width": 1254,
       "height": 1254,
       "hasAlpha": false
@@ -1038,6 +1148,17 @@
       "hasAlpha": true
     },
     {
+      "source": "assets/scenes/cargo-siding-evidence-scene-v01.png",
+      "original": "assets/reference/source-art/assets/scenes/cargo-siding-evidence-scene-v01.png",
+      "output": "assets/scenes/cargo-siding-evidence-scene-v01.webp",
+      "format": "webp",
+      "originalBytes": 3128460,
+      "outputBytes": 347908,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
       "source": "assets/scenes/crown-door-closeup-v01.webp",
       "original": "assets/reference/source-art/assets/scenes/crown-door-closeup-v01.png",
       "output": "assets/scenes/crown-door-closeup-v01.webp",
@@ -1071,6 +1192,17 @@
       "hasAlpha": false
     },
     {
+      "source": "assets/scenes/mossgarden-closing-mark-scene-v01.png",
+      "original": "assets/reference/source-art/assets/scenes/mossgarden-closing-mark-scene-v01.png",
+      "output": "assets/scenes/mossgarden-closing-mark-scene-v01.webp",
+      "format": "webp",
+      "originalBytes": 2880597,
+      "outputBytes": 301934,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
       "source": "assets/scenes/no-handle-door-closeup-v01.webp",
       "original": "assets/reference/source-art/assets/scenes/no-handle-door-closeup-v01.png",
       "output": "assets/scenes/no-handle-door-closeup-v01.webp",
@@ -1079,6 +1211,28 @@
       "outputBytes": 203808,
       "width": 1600,
       "height": 1200,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/scenes/rootbread-promise-scene-v01.png",
+      "original": "assets/reference/source-art/assets/scenes/rootbread-promise-scene-v01.png",
+      "output": "assets/scenes/rootbread-promise-scene-v01.webp",
+      "format": "webp",
+      "originalBytes": 2828796,
+      "outputBytes": 276126,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/scenes/split-hall-resolution-scene-v03.png",
+      "original": "assets/reference/source-art/assets/scenes/split-hall-resolution-scene-v03.png",
+      "output": "assets/scenes/split-hall-resolution-scene-v03.webp",
+      "format": "webp",
+      "originalBytes": 3054262,
+      "outputBytes": 335756,
+      "width": 1672,
+      "height": 941,
       "hasAlpha": false
     },
     {
@@ -1093,6 +1247,17 @@
       "hasAlpha": false
     },
     {
+      "source": "assets/scenes/westroot-arrival-scene-v01.png",
+      "original": "assets/reference/source-art/assets/scenes/westroot-arrival-scene-v01.png",
+      "output": "assets/scenes/westroot-arrival-scene-v01.webp",
+      "format": "webp",
+      "originalBytes": 3244842,
+      "outputBytes": 391334,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
       "source": "assets/scenes/westroot-threshold-opening-v02.webp",
       "original": "assets/reference/source-art/assets/scenes/westroot-threshold-opening-v02.png",
       "output": "assets/scenes/westroot-threshold-opening-v02.webp",
@@ -1102,7 +1267,55 @@
       "width": 1672,
       "height": 941,
       "hasAlpha": false
+    },
+    {
+      "source": "assets/scenes/witness-stones-scene-v01.png",
+      "original": "assets/reference/source-art/assets/scenes/witness-stones-scene-v01.png",
+      "output": "assets/scenes/witness-stones-scene-v01.webp",
+      "format": "webp",
+      "originalBytes": 3191789,
+      "outputBytes": 385584,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
     }
   ],
-  "movedAlternates": []
+  "movedAlternates": [
+    {
+      "source": "assets/portraits/characters/auntie-lume-portrait-v01.png",
+      "destination": "assets/reference/alternates/assets/portraits/characters/auntie-lume-portrait-v01.png"
+    },
+    {
+      "source": "assets/portraits/characters/noma-greenstill-portrait-v01.png",
+      "destination": "assets/reference/alternates/assets/portraits/characters/noma-greenstill-portrait-v01.png"
+    },
+    {
+      "source": "assets/portraits/characters/westroot-rootbread-child-portrait-v01.png",
+      "destination": "assets/reference/alternates/assets/portraits/characters/westroot-rootbread-child-portrait-v01.png"
+    },
+    {
+      "source": "assets/scenes/split-hall-resolution-scene-v01.png",
+      "destination": "assets/reference/alternates/assets/scenes/split-hall-resolution-scene-v01.png"
+    },
+    {
+      "source": "assets/scenes/split-hall-resolution-scene-v02.png",
+      "destination": "assets/reference/alternates/assets/scenes/split-hall-resolution-scene-v02.png"
+    },
+    {
+      "source": "assets/icons/items/cargo-transfer-tag-icon-v01.png",
+      "destination": "assets/reference/alternates/assets/icons/items/cargo-transfer-tag-icon-v01.png"
+    },
+    {
+      "source": "assets/icons/items/ch3-icons-v02.png",
+      "destination": "assets/reference/alternates/assets/icons/items/ch3-icons-v02.png"
+    },
+    {
+      "source": "assets/icons/items/chapter-3-sheet.png",
+      "destination": "assets/reference/alternates/assets/icons/items/chapter-3-sheet.png"
+    },
+    {
+      "source": "assets/icons/items/witness-stone-rubbing-icon-v01.png",
+      "destination": "assets/reference/alternates/assets/icons/items/witness-stone-rubbing-icon-v01.png"
+    }
+  ]
 }

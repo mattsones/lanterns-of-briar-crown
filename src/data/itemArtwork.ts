@@ -33,6 +33,15 @@ const fizzberryHandpieIcon = new URL("../../assets/icons/items/fizzberry-handpie
 const bubbleburstTonicIcon = new URL("../../assets/icons/items/bubbleburst-tonic-icon-v01.png", import.meta.url).href;
 const moonmintIcon = new URL("../../assets/icons/items/moonmint-icon-v01.png", import.meta.url).href;
 const bubblecapMushroomIcon = new URL("../../assets/icons/items/bubblecap-mushroom-icon-v01.png", import.meta.url).href;
+const rootbreadCharmIcon = new URL("../../assets/icons/items/rootbread-charm-icon-v01.png", import.meta.url).href;
+const witnessStoneRubbingIcon = new URL(
+  "../../assets/icons/items/witness-stone-rubbing-icon-v02.png",
+  import.meta.url,
+).href;
+const cargoTransferTagIcon = new URL(
+  "../../assets/icons/items/cargo-transfer-tag-icon-v02.png",
+  import.meta.url,
+).href;
 
 // Production item icons should live in assets/icons/items/ and be registered here.
 // Keep ITEM_DB emoji values as fallbacks for missing or broken artwork.
@@ -132,6 +141,18 @@ export const ITEM_ARTWORK: Record<string, ItemArtwork> = {
   bubblecap: {
     src: bubblecapMushroomIcon,
     alt: "Painted icon of the Bubblecap Mushroom",
+  },
+  rootbread_charm: {
+    src: rootbreadCharmIcon,
+    alt: "Painted icon of the Rootbread Charm",
+  },
+  witness_stone_rubbing: {
+    src: witnessStoneRubbingIcon,
+    alt: "Painted icon of the Witness Stone Rubbing",
+  },
+  cargo_transfer_tag: {
+    src: cargoTransferTagIcon,
+    alt: "Painted icon of the Cargo Transfer Tag",
   },
 };
 
