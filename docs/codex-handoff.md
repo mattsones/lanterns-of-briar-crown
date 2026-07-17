@@ -1234,3 +1234,88 @@ If the branch does not exist locally yet, use `git switch --track origin/codex/c
 ### Next Recommended Slice
 
 Use `docs/playtest-notes/2026-07-16-playtest-handoff.md` as the source of truth. The first priorities are narrow-mobile human QA, a full Chapter 3 pacing playtest, and completing the remaining stock-dialogue-art migration without disturbing the working Chapter 1 baseline.
+
+## Current Handoff - Chapter 1 Road And Notice Follow-Up
+
+Last updated: 2026-07-16
+
+Branch: `codex/chapter-3-vertical-slice`
+
+### What Changed
+
+- Rewrote the worried traveler's follow-up so he fully believes and obeys the apparent Crown order rather than diagnosing the forgery.
+- Made the Lantern Road bandit encounter trigger across the eastern road corridor after the planted order is found. Missing the hidden battle tile no longer allows the player to bypass the ambush.
+- Kept Lantern Road on its tuned grid movement model; a full hand-authored graph remains optional rather than necessary for this fix.
+- Moved the Bramblecross notice board from logical tile `7,4` to `7,5` while preserving its painted-map anchor. It is now accessible from below and the left, matching the artwork.
+- Removed the unwanted seal-analysis sentence from the public notice board, separated Ada's side-quest notice from the cellar evidence collection, and expanded Hollis's explanation of why the player needs the public notices before entering the cellar.
+- Updated the Chapter 1 canonical story script and focused regression coverage for these behaviors.
+
+### Stock-Icon Replacement Follow-Up
+
+- Replaced the Watchhouse evidence-card emoji with existing scene crops, map crops, the courier satchel scene, and the Briar Crown mark. Empty evidence slots are now deliberate text-only placeholders.
+- Added portrait-led Watchhouse controls for Enna and Hollis, removed the generic interior subtitle, and staged Hollis's concern about Edden so the door is not named before the player knows him.
+- Replaced direct companion emoji in the Companion menu and battle party card with existing portraits.
+- Registered existing artwork for the Split Crown Slat, Briar Signmaker's Ledger, and Cleaned Lantern Mark.
+- Added and wired five transparent level-up emblems. The original growth emoji remain only as image-error fallbacks; Craft uses `level-up-craft-v02.png`.
+- Saved the generation handoff in `docs/art/prompts/dialog-stock-icon-replacement-prompt-pack.md` and updated `docs/dialog-stock-icon-replacement-plan.md` with the completed and remaining audit work.
+
+### Verification
+
+- `npm.cmd run build` passed.
+- `npm.cmd run test:rules` passed: 25 tests.
+- `npm.cmd run playtest:chapter1` passed: 14 tests (13 in the full run plus the corrected golden-path selector rerun).
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `npm.cmd run optimize:assets` produced 512 px runtime emblems and preserved their full-size true-alpha sources.
+- `npm.cmd run audit:assets -- --limit=10` passed: 125 production images scanned, with no over-target assets.
+- `git diff --check` passed with normal Windows LF-to-CRLF warnings only.
+
+## Current Handoff — Bramblecross V2 And Responsive Gameplay Shell
+
+Last updated: 2026-07-17
+
+### What Changed
+
+- Promoted the user-generated Bramblecross town map v2, optimized it to `assets/maps/bramblecross-town-map-v02.webp`, and preserved the full PNG source under `assets/reference/source-art/`.
+- Moved the Old Root Cellar interaction from `(5,6)` to `(3,5)` and focused its painted-map point at `(25.2%, 49.7%)`, on the new visible cellar steps. The former cellar tile is ordinary road again.
+- Repaired the cramped Adventure Menus presentation: tabs now sit below the heading, and inventory items use readable full-width cards instead of two squeezed columns.
+- Completed the functional combat-responsive pass with a persistent action dock below the `2xl` breakpoint. It keeps hero HP, selected-target HP, skills, items, and companion command together while the battlefield scrolls.
+- Added `docs/gameplay-ux-redesign-plan.md` with the recommended map-first shell, desktop menu drawer, mobile bottom sheet, and phased implementation plan.
+- Recorded the user's Paint.NET alpha-cleaned level-up files as the authoritative sources; do not replace them with the earlier cleanup working files.
+
+### Verification
+
+- `npm.cmd run optimize:assets` passed: 125 imported assets optimized; Bramblecross v1 moved to reference alternates.
+- `npm.cmd run build` passed.
+- `npm.cmd run test:rules` passed: 25 tests.
+- Focused Chapter 1 responsive/map tests passed: 3 tests.
+- `npm.cmd run playtest:chapter1` passed: 16 tests.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `npm.cmd run audit:assets -- --limit=10` passed: Bramblecross v2 is 1448×1086 WebP at approximately 433 KB and within target.
+
+## Current Handoff — Willowmark V2 And Room-Aware Cellar Fog
+
+Last updated: 2026-07-17
+
+### What Changed
+
+- Selected `willowmark-seal-v02.png` for the completed Watchhouse case wall. Its defect is a lens-level nick in the left leaf; v1 is retained under reference alternates.
+- Optimized the selected 1448×1086 source into a 512 px runtime PNG while preserving the full-resolution v2 under source art.
+- Updated Ada's runtime and canonical Chapter 2 wording so the identifying nick consistently belongs to the left leaf.
+- Added eight authored Root Cellar fog-reveal areas. Corridors retain narrow path visibility, while entering a chamber reveals most of that room and keeps it discovered.
+- Made Smith Orin's weapon complete the main **Prepare for the road** objective. The old hatchet remains optional backup equipment and no longer outranks later story objectives when left at home.
+- Updated older Chapter 2 and Chapter 3 location assertions to use accessible map interaction names after removal of the former below-map location sentence.
+
+### Verification
+
+- `npm.cmd run optimize:assets` passed: 126 imported assets; Willowmark v1 moved to reference alternates.
+- `npm.cmd run audit:assets -- --limit=10` passed: 126 production images scanned.
+- `npm.cmd run build` passed.
+- `npm.cmd run test:rules` passed: 26 tests.
+- `npm.cmd run playtest:chapter1` passed: 19 tests.
+- `npm.cmd run playtest:chapter2` passed: 19 tests.
+- `npm.cmd run playtest:chapter3` passed: 2 tests.
+- Desktop and narrow-width browser QA confirmed that room masks expand coherently while untouched rooms remain obscured.
+
+### Canonical Pickup
+
+Use `docs/playtest-notes/2026-07-17-current-status.md` for the concise current state, verified commands, and prioritized remaining work. This file remains the chronological implementation history.

@@ -1,5 +1,7 @@
 # Playtest Handoff — 2026-07-16
 
+> Superseded by `docs/playtest-notes/2026-07-17-current-status.md`. Keep this file as the detailed record of the original queued Chapter 1 playtest pass.
+
 This is the concise pickup point for the large Chapter 1 playtest-polish pass on `codex/chapter-3-vertical-slice`.
 
 ## Completed And Decided
@@ -18,12 +20,22 @@ This is the concise pickup point for the large Chapter 1 playtest-polish pass on
 - Bramblecross now points the player to Enna inside the watchhouse. The notice-board interaction matches the painted board.
 - Hollis recommends recruiting at the inn and leads the player directly to the Root Cellar. Regenerating the Bramblecross map for a more obvious cellar entrance is not currently necessary.
 - The worried traveler uses his portrait and is convincingly fooled by the royal-looking seal rather than diagnosing the forgery himself.
+- The Lantern Road bandits now ambush anyone carrying the planted order through the eastern road corridor. The encounter can no longer be bypassed by missing the hidden battle tile.
+- Lantern Road remains on its tuned painted-map grid for now. Unlike the Root Cellar and Westroot Trail, its route is still readable without a hand-authored graph; the corridor trigger solves the immediate encounter problem without destabilizing the working route and smoke coverage.
+- The Bramblecross notice-board interaction now lives at logical tile `7,5`, matching the painted board and allowing approach from `7,6` or `6,5`; the misleading `6,4` approach is blocked.
+- Ada's missing-crate notice and the cellar/route notices are independent pickups. Hollis now explains that Edden returned shaken while his two companions did not, and asks the player to collect the public notices to understand the full pattern before going below.
 - The Root Cellar Route Mural is reachable again; its previously orphaned graph node is linked to the main path.
 - Dialogue art A1–A4 is selected and wired:
   - Courier Satchel evidence scene.
   - Watchhouse case-wall master, reused for the evidence board, duty ledger, wall map, and forged-order file.
   - Root Cellar evidence-wall master, reused for the Root Sigil and Route Mural.
   - True-alpha Briar Crown primary mark, used for the cellar discovery and report-back reveal.
+- The Watchhouse evidence cards now use those scenes, map crops, and the Crown mark instead of stock symbols; Enna and Hollis have portrait-led talk controls inside the Watchhouse.
+- Companion menus and battle cards use existing portraits in normal play, with stored emoji retained only as image-error fallbacks.
+- All five level-up choices use a coordinated transparent emblem set. The decorative header sparkle is gone, and the growth emoji are fallback-only.
+- Bramblecross town map v2 is the active production map. Its new visible cellar entrance is aligned to tile `(3,5)` and approachable from the road below or beside it.
+- Adventure-menu tabs and inventory cards have been stabilized at narrow widths. Combat now keeps a persistent action/health dock visible on phone and ordinary laptop widths.
+- The broader map-first redesign proposal is documented in `docs/gameplay-ux-redesign-plan.md`.
 
 ## Remaining Work
 
@@ -37,11 +49,10 @@ This is the concise pickup point for the large Chapter 1 playtest-polish pass on
 
 The full inventory and recommended replacements live in `docs/dialog-stock-icon-replacement-plan.md`. A1–A4 cover the highest-value gaps, not every generic symbol in Chapters 1–3.
 
-1. Add the remaining existing map crops and scene aliases before generating more art.
-2. Remove stock emoji from normal dialogue rendering wherever a named portrait, enemy image, map crop, or existing scene is already available.
-3. Decide deliberately which abstract/system dialogues should be text-only.
-4. Add regression coverage proving every production `artKey` resolves, broken images leave dialogue usable, and normal covered paths do not expose their stock fallback.
-5. Optional new closeups should only be generated if in-game crops fail: Bramblecross notice board, exterior Root Cellar entrance, and dropped forged orders.
+1. Continue through the lower-priority dialogue inventory using existing map crops and scene aliases before generating more art.
+2. Decide deliberately which remaining abstract/system dialogues should be text-only.
+3. Add broader regression coverage proving every production `artKey` resolves and broken images leave dialogue usable.
+4. Optional new closeups should only be generated if in-game crops fail: Bramblecross notice board, exterior Root Cellar entrance, and dropped forged orders.
 
 ### Priority 3 — Story And Content Follow-Ups
 
