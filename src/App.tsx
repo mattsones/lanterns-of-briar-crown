@@ -33,6 +33,7 @@ import {
   rotateEnemyIntent,
   tickCooldowns,
 } from "./game/battle";
+import { getCompanionCommandAbility } from "./game/companions";
 import { getChapterProgress } from "./game/chapterProgress";
 import { checkSummary, resolveRoll, resolveSkillCheck } from "./game/dice";
 import { getActiveGuestNpc } from "./game/guestNpcs";
@@ -280,13 +281,13 @@ function getVillageNpcDialogue(tile, flags) {
   const lines = {
     baker: flags.metElder
       ? 'Nella has flour dust on one cheek and three half-shaped loaves abandoned on the table behind her. The ovens are still hot, but the bakery has gone quiet in the strange way busy places do when everyone is listening for bad news. "I was baking for the road crews," she says, lowering her voice. "Then the bells started, and folk stopped coming through. If that courier truly vanished, someone out there is not just scaring us. They\'re cutting us off."'
-      : 'Nella the Baker keeps glancing toward the south gate while pretending to rearrange a tray of pear rolls. "The ovens are hot, the bread is rising, and nobody has come by to make fun of my lopsided crusts. That is how I know the morning has gone wrong. Elder Mira has the face she wears when bad news has boots on. Go find her, dear."',
+      : 'Nella the Baker keeps glancing toward the south gate while pretending to rearrange a tray of pear rolls. "The ovens are hot, the bread is rising, and nobody has come by to make fun of my lopsided crusts. That is how I know the morning has gone wrong. Elder Brynn has the face she wears when bad news has boots on. Go find her, dear."',
     farmer: flags.metElder
       ? "Toma Fielding grips his rake like it might become a spear if the day gets any worse. \"Boars I understand. Boars with satchels? Couriers gone missing? That's not field trouble. That's road trouble. If you go out there, watch the ditches. Trouble loves a ditch.\""
-      : 'Toma Fielding squints toward the road beyond the trees. "My turnips are nervous, and turnips are famously calm. Elder Mira\'s been watching the gate since sunrise. Best talk with her before you go poking at anything tusked."',
+      : 'Toma Fielding squints toward the road beyond the trees. "My turnips are nervous, and turnips are famously calm. Elder Brynn\'s been watching the gate since sunrise. Best talk with her before you go poking at anything tusked."',
     weaver: flags.metElder
-      ? 'Miri of the Loom holds up a half-finished sash patterned with little lanterns. "Threads tell you when they\'ve been tugged," she says. "This whole village feels tugged today. If you find who is pulling, don\'t just cut the thread. Find the hand."'
-      : 'Miri of the Loom sits outside her cottage, shuttle paused in midair. "The south road should be noisy by now. Carts, bells, bad singing. Instead it is listening. Roads should not listen. Find Mira, love."',
+      ? 'Sela of the Loom holds up a half-finished sash patterned with little lanterns. "Threads tell you when they\'ve been tugged," she says. "This whole village feels tugged today. If you find who is pulling, don\'t just cut the thread. Find the hand."'
+      : 'Sela of the Loom sits outside her cottage, shuttle paused in midair. "The south road should be noisy by now. Carts, bells, bad singing. Instead it is listening. Roads should not listen. Find Elder Brynn, love."',
   };
   return (
     lines[tile] ||
@@ -345,7 +346,7 @@ function CrownDenTension({ level, text }) {
 
 function getMayorDialogue(flags) {
   if (!flags.ennaBriefed)
-    return 'Mayor Anwen stands beside a stack of unread petitions, but her eyes keep moving to the road. "We have missing porters, forged notices, delayed carts, and families asking whether to bolt their doors. I can calm a crowd for an hour. I cannot calm a lie unless someone brings me its shape. Take your road report to Enna. She sees patterns before the rest of us admit they exist."';
+    return 'Mayor Anwen stands beside a stack of unread petitions, but her eyes keep moving to the road. "We have missing porters, forged notices, delayed carts, and families asking whether to bolt their doors. I can calm a crowd for an hour. I cannot calm a lie unless someone brings me its shape. Take your road report to Enna inside the watchhouse—the large stone building at the north end of the square. She sees patterns before the rest of us admit they exist."';
   if (!flags.gotDungeonLead)
     return 'Mayor Anwen studies the watchhouse windows. "Enna says your report turned scattered worries into a route case. Good. That means we\'re not losing our minds. Bad, because it means someone else is using theirs. Read what the town knows, then speak with Hollis."';
   return 'Mayor Anwen nods toward the old cellar ways. "If Hollis is sending you below, then Bramblecross is past pretending this is only paperwork. Go carefully. Towns are built on foundations, and foundations remember things."';
@@ -367,7 +368,7 @@ export default function LiamsGamePrototype() {
   const [companion, setCompanion] = useState(buildDefaultCompanion());
   const [flags, setFlags] = useState(buildDefaultFlags());
   const [quest, setQuest] = useState({
-    title: "Talk to Elder Mira",
+    title: "Talk to Elder Brynn",
     description: "Something strange is happening in Hearthhollow.",
   });
   const [toast, setToast] = useState("Welcome to Hearthhollow.");
@@ -376,6 +377,7 @@ export default function LiamsGamePrototype() {
   const [shopOpen, setShopOpen] = useState(false);
   const [shopMode, setShopMode] = useState("smith");
   const [craftOpen, setCraftOpen] = useState(false);
+  const [craftContext, setCraftContext] = useState("potionShed");
   const [interiorScene, setInteriorScene] = useState(null);
   const [battle, setBattle] = useState(null);
   const [tab, setTab] = useState("quests");
@@ -588,9 +590,10 @@ export default function LiamsGamePrototype() {
       setPlayer((prev) => (prev ? { ...prev, checkpointLabel } : prev));
     setToast(message || `You arrive at ${MAPS[nextRegion].name}.`);
   };
-  const openEnterPrompt = (name, text, onEnter) =>
+  const openEnterPrompt = (name, text, onEnter, mapVignette) =>
     setDialogue({
       portrait: "🚪",
+      mapVignette,
       name,
       text,
       choices: [
@@ -604,7 +607,11 @@ export default function LiamsGamePrototype() {
         { label: "Stay outside", effect: () => setDialogue(null) },
       ],
     });
-  const buildCurrentSavePayload = (payloadToast = "Save loaded.", playerSnapshot = player) => {
+  const buildCurrentSavePayload = (
+    payloadToast = "Save loaded.",
+    playerSnapshot = player,
+    companionSnapshot = companion,
+  ) => {
     if (!playerSnapshot) return null;
     return {
       screen: "play",
@@ -613,7 +620,7 @@ export default function LiamsGamePrototype() {
       region,
       position,
       visited,
-      companion,
+      companion: companionSnapshot,
       guestNpc: getActiveGuestNpc(flags),
       flags,
       quest,
@@ -720,7 +727,7 @@ export default function LiamsGamePrototype() {
     setDialogue({
       portrait: "📖",
       name: "Hearthhollow, Dawn",
-      text: `${hero.name} has always known Hearthhollow as a place of ordinary sounds: Nella's oven door clapping shut, Toma arguing with turnips, Pibble inventing uses for tools nobody requested. This morning, those sounds are missing. People stand in doorways. The south road is too quiet. A courier has not arrived, a royal order does not read like a royal order, and a bramble boar has been seen charging near the gate with a messenger's satchel caught on its tusk. For the first time, home feels less like a shelter and more like the first page of something dangerous.`,
+      text: `${hero.name} has always known Hearthhollow as a place of ordinary sounds: Nella's oven door clapping shut, Toma arguing with turnips, Pibble inventing uses for tools nobody requested. This morning, those sounds are missing. People stand in doorways. The south road is too quiet. A courier has not arrived, and a bramble boar has been seen charging near the gate with a messenger's satchel caught on its tusk. For the first time, home feels less like a shelter and more like the first page of something dangerous.`,
       choices: [
         { label: "Step into the morning", effect: () => setDialogue(null) },
       ],
@@ -734,8 +741,10 @@ export default function LiamsGamePrototype() {
           ? "Your boots vote no on that water."
           : tile === "fenced_yard"
             ? "The fence has made a very convincing argument."
+          : ["neighbor_building", "neighbor2_building"].includes(tile)
+            ? "That cottage is closed for the morning. Hearthhollow has enough trouble without you trying every painted door."
           : tile?.includes("building")
-            ? "That's a wall, not an entrance. Doors remain fashionable for a reason."
+            ? "The building is solid here. Follow the painted path to its proper entrance."
             : "That way is blocked.",
     );
   const isLockedCellarExit = (tile) =>
@@ -796,9 +805,14 @@ export default function LiamsGamePrototype() {
     return false;
   };
   const openVillageWellDialogue = () => {
+    if (flags.wellVisited) {
+      setToast("The village well continues to sit exactly where you left it.");
+      return;
+    }
     setFlags((f) => ({ ...f, wellVisited: true }));
     setDialogue({
       portrait: TILE_META.well.icon,
+      mapVignette: "hearthWell",
       name: "Village Well",
       text: "The village well sits exactly where wells like to sit: in everybody's way and somehow still very useful. You consider climbing onto the rim for a better view, but the well has the solemn confidence of a thing that has already watched three generations make that mistake.",
       choices: [
@@ -813,6 +827,7 @@ export default function LiamsGamePrototype() {
     setFlags((f) => ({ ...f, pondVisited: true }));
     setDialogue({
       portrait: TILE_META.pond.icon,
+      mapVignette: "lanternPond",
       name: "Pond Edge",
       text: flags.pondForaged
         ? "The pond settles back into itself. A frog sits on a stone with the smug expression of someone who knows you have already had your chance."
@@ -846,20 +861,21 @@ export default function LiamsGamePrototype() {
         "Home",
         "Step inside your cozy home? The familiar door sticks in the same place it always has, as if even the house would prefer you stay here where it is safe.",
         () => setInteriorScene("home"),
+        "hearthHome",
       );
     if (tile === "smith_door")
       return openEnterPrompt(
         "Smithy",
-        "Push open the smithy door? Heat rolls under the gap, carrying the smell of coal, iron, and hurried work.",
+        "Step beneath the smithy's open awning? Heat shimmers around the anvil, carrying the smell of coal, iron, and hurried work.",
         () => {
           if (!flags.elderGavePurse)
             return setDialogue({
               portrait: "🛠️",
               name: "Smith Orin",
-              text: "Orin blocks the doorway with a hammer in one hand and a half-made hinge in the other. \"If Elder Mira is sending you, talk to her first. I am not putting road gear into eager hands just because trouble has started shouting. If she says you're the one going, I'll make sure you aren't walking into thorn and teeth with empty pockets.\"",
+              text: "Orin blocks the workbench with a hammer in one hand and a half-made hinge in the other. \"If Elder Brynn is sending you, talk to her first. I am not putting road gear into eager hands just because trouble has started shouting. If she says you're the one going, I'll make sure you aren't walking into thorn and teeth with empty pockets.\"",
               choices: [
                 {
-                  label: "I'll talk to Mira first.",
+                  label: "I'll talk to Brynn first.",
                   effect: () => setDialogue(null),
                 },
               ],
@@ -868,18 +884,24 @@ export default function LiamsGamePrototype() {
           setShopMode("smith");
           setShopOpen(true);
         },
+        "hearthSmithy",
       );
     if (tile === "potion_door")
       return openEnterPrompt(
         "Potion Shed",
         "Head into the potion shed? Something inside fizzes, then giggles, then pretends it did not.",
-        () => setCraftOpen(true),
+        () => {
+          setCraftContext("potionShed");
+          setCraftOpen(true);
+        },
+        "hearthPotionShed",
       );
     if (tile === "bram_inn_door")
       return openEnterPrompt(
         "Bramblecross Inn",
         "Step into the inn and common room? Warm lamplight spills through the doorway, along with the low thunder of worried travelers pretending to relax.",
         () => setInteriorScene("bramInn"),
+        "brambleInn",
       );
     if (tile === "market_door")
       return openEnterPrompt(
@@ -889,12 +911,14 @@ export default function LiamsGamePrototype() {
           setShopMode("market");
           setShopOpen(true);
         },
+        "brambleMarket",
       );
     if (tile === "watch_door")
       return openEnterPrompt(
         "Watchhouse",
         "Enter the watchhouse? The windows glow with lamplight, maps, and the particular smell of ink being used urgently.",
         () => setInteriorScene("watchhouse"),
+        "brambleWatchhouse",
       );
     if (tile === "well") return openVillageWellDialogue();
     if (tile === "pond") return openPondDialogue();
@@ -1064,83 +1088,106 @@ export default function LiamsGamePrototype() {
     }
   }, [player?.hp, battle?.finished]);
 
-  const openElderDialogue = () =>
-    setDialogue({
+  const acceptElderRequest = () => {
+    setFlags((f) => ({
+      ...f,
+      metElder: true,
+      elderGavePurse: true,
+    }));
+    setPlayer((p) => ({
+      ...p,
+      gold: p.gold + 12,
+      xp: p.xp + 4,
+      baseStats: addBonuses(p.baseStats, { Heart: 1 }),
+    }));
+    setDialogue(null);
+    setToast("Brynn gives you 12g and sends word to Orin. Heart +1");
+  };
+  const openElderDialogue = () => {
+    if (!flags.metElder)
+      return setDialogue({
+        portrait: "🧙",
+        name: "Elder Brynn",
+        text: 'Elder Brynn\'s walking stick is planted in the dirt like a little flag of defiance. Around her, Hearthhollow has gone too quiet: ovens left open, shutters half-latched, neighbors whispering without finishing their sentences. "Lio Brindle should have arrived before breakfast," she says. "He did not. Now a bramble boar is charging near the south gate with a courier\'s satchel caught on its tusk. First we protect the village. Then we find out what happened on that road. Will you go?"',
+        choices: [
+          {
+            label: "I'll help. Tell Orin I'm coming to the smithy.",
+            effect: acceptElderRequest,
+          },
+          {
+            label: "This sounds bigger than a boar. Why me?",
+            effect: () =>
+              setDialogue({
+                portrait: "🧙",
+                name: "Elder Brynn",
+                text: '"Because you notice what others step over," Brynn says. "And because when Hearthhollow is afraid, I need someone who will move without becoming careless. Take your own hatchet from home, then see Orin. We will not send you empty-handed."',
+                choices: [{ label: "Then I'll go.", effect: acceptElderRequest }],
+              }),
+          },
+        ],
+      });
+
+    if (!flags.beatGateBattle)
+      return setDialogue({
+        portrait: "🧙",
+        name: "Elder Brynn",
+        text: 'Brynn has not returned to her chair. She stands near the square with one hand on the old bell rope, watching people pretend not to panic. "First the boar," she says. "Then the satchel. Whatever happened to Lio happened on the road, but Hearthhollow needs you here before it needs you chasing answers."',
+        choices: [
+          {
+            label: "I'll stop it and bring back the satchel.",
+            effect: () => setDialogue(null),
+          },
+        ],
+      });
+
+    if (!flags.reportedSatchelToElder)
+      return setDialogue({
+        portrait: "🧙",
+        name: "Elder Brynn",
+        text: `You place Lio's satchel in Brynn's hands and unfold the order beside it. She reads the command once. Then again, slower. Her thumb presses into the crooked crown seal.
+
+"No," she says. "This did not come from the Crown. A true road order names the danger, the people it protects, and the hand responsible for it. This names only panic. Someone forged authority because frightened people obey faster than careful ones."
+
+She looks from Lio's badge to the lunch packet still tied with Mara's blue string.
+
+"Take the satchel and this false order to the watch in Bramblecross. They may know the seal, the phrasing, or where Lio's route was broken. Follow Lantern Road and look for the place the strap was cut. If Lio left any sign behind, find it. If he still walks that road, bring him home."`,
+        choices: [
+          {
+            label: "I'll report it in Bramblecross and look for Lio.",
+            effect: () => {
+              setFlags((f) => ({ ...f, reportedSatchelToElder: true }));
+              setDialogue(null);
+              setToast(
+                "New objective: report the false order in Bramblecross and look for Lio.",
+              );
+            },
+          },
+        ],
+      });
+
+    return setDialogue({
       portrait: "🧙",
-      name: "Elder Mira",
-      text: flags.metElder
-        ? 'Mira has not returned to her chair. She stands near the square with one hand on the old bell rope, watching people pretend not to panic. "You have done the first brave thing," she says. "Now do the harder one: keep asking why. A wild boar may be chance. A missing courier may be tragedy. A forged command is a mind at work. Follow the mind."'
-        : 'Elder Mira\'s walking stick is planted in the dirt like a little flag of defiance. Around her, Hearthhollow has gone too quiet: ovens left open, shutters half-latched, neighbors whispering without finishing their sentences. "The royal message makes no sense," she says. "The courier is missing. A bramble boar tore past the south gate with the courier\'s satchel caught on its tusk. Hearthhollow needs brave feet, yes—but more than that, it needs a clear head. Will you go?"',
-      choices: flags.metElder
-        ? [
-            {
-              label: "I'll follow the mind behind it.",
-              effect: () => setDialogue(null),
-            },
-          ]
-        : [
-            {
-              label: "I'll help. Tell Orin I'm coming to the smithy.",
-              effect: () => {
-                setFlags((f) => ({
-                  ...f,
-                  metElder: true,
-                  elderGavePurse: true,
-                }));
-                setPlayer((p) => ({
-                  ...p,
-                  gold: p.gold + 12,
-                  xp: p.xp + 4,
-                  baseStats: addBonuses(p.baseStats, { Heart: 1 }),
-                }));
-                setDialogue(null);
-                setToast("Mira gives you 12g and sends word to Orin. Heart +1");
-              },
-            },
-            {
-              label: "This sounds bigger than a boar. Why me?",
-              effect: () =>
-                setDialogue({
-                  portrait: "🧙",
-                  name: "Elder Mira",
-                  text: '"Because you notice what others step over," Mira says. "And because when Hearthhollow is afraid, I need someone who will move without becoming careless. Take your own hatchet from home, then see Orin. We will not send you empty-handed."',
-                  choices: [
-                    {
-                      label: "Then I'll go.",
-                      effect: () => {
-                        setFlags((f) => ({
-                          ...f,
-                          metElder: true,
-                          elderGavePurse: true,
-                        }));
-                        setPlayer((p) => ({
-                          ...p,
-                          gold: p.gold + 12,
-                          xp: p.xp + 4,
-                          baseStats: addBonuses(p.baseStats, { Heart: 1 }),
-                        }));
-                        setDialogue(null);
-                        setToast(
-                          "Mira gives you 12g and sends word to Orin. Heart +1",
-                        );
-                      },
-                    },
-                  ],
-                }),
-            },
-          ],
+      name: "Elder Brynn",
+      text: 'Brynn keeps one hand on the bell rope and looks south. "The false order belongs in front of people who know Bramblecross records," she says. "But Lio belongs to more than a case file. Watch the road for his marks, and do not let the paper make you forget the person."',
+      choices: [
+        {
+          label: "I'll keep looking for him.",
+          effect: () => setDialogue(null),
+        },
+      ],
     });
+  };
   const openPibbleDialogue = () =>
     setDialogue({
       portrait: "🧰",
       name: "Pibble Thatch",
       text: flags.gotPibbleTip
-        ? 'Pibble has three tools in hand and is using none of them correctly. "I keep thinking about the satchel," he says. "A boar doesn\'t steal mail. A boar doesn\'t care about road orders. So either the boar crashed through someone else\'s plan, or someone used the boar to hide one. I hate both of those options."'
+        ? 'Pibble has three tools in hand and is using none of them correctly. "I keep thinking about the satchel," he says. "A boar doesn\'t steal mail, and that strap was cut before it ever touched a tusk. Whatever happened to Lio happened first. The boar only carried the evidence home."'
         : 'Pibble is crouched beside a smear of mud, measuring it with a spoon for reasons known only to Pibble. "I saw it," he says before you ask. "Bramble boar. Tusks like bent fence nails. But the strange part was the satchel snagged on it—rider\'s leather, stamped for courier use. That means the courier didn\'t just run late. Something happened out there."',
       choices: flags.gotPibbleTip
         ? [
             {
-              label: "A boar hiding a plan. That's... upsettingly useful.",
+              label: "So the trail starts before the boar.",
               effect: () => setDialogue(null),
             },
           ]
@@ -1182,7 +1229,7 @@ export default function LiamsGamePrototype() {
     });
   const openGateEvent = () => {
     if (!flags.metElder)
-      return setToast("Talk to Elder Mira before leaving town.");
+      return setToast("Talk to Elder Brynn before leaving town.");
     const hasWeaponReady =
       !!player.equipment?.weapon ||
       (Object.entries(player.inventory || {}) as [string, number][]).some(
@@ -1190,20 +1237,29 @@ export default function LiamsGamePrototype() {
       );
     if (!flags.homeStashClaimed && !hasWeaponReady)
       return setToast(
-        "Mira wanted you to take your old hatchet from home before facing the road.",
+        "Brynn wanted you to take your old hatchet from home before facing the road.",
       );
     if (!flags.gotSmithGift)
       return setToast(
         "The south road looks dangerous. Visit Smith Orin before leaving town.",
       );
+    if (flags.beatGateBattle && !flags.reportedSatchelToElder)
+      return setToast(
+        "Take Lio's satchel and the false order to Elder Brynn before leaving Hearthhollow.",
+      );
     if (flags.beatGateBattle)
       return setDialogue({
         portrait: "🚪",
+        mapVignette: "hearthSouthGate",
         name: "South Gate",
-        text: "The gate no longer shakes under tusks and panic, but no one treats the road as safe. Beyond it, Lantern Road bends between the trees, carrying cart-ruts, scattered feathers, and the uncomfortable feeling that someone has been arranging fear like furniture. Mira touches the brass courier badge once before handing it back to you. “Find the road that took him,” she says. “And if Lio still walks it, bring him home.”",
+        text: `The gate no longer shakes under tusks and panic, but no one treats the road as safe. Beyond it, Lantern Road bends between the trees, carrying cart-ruts, scattered feathers, and the uncomfortable feeling that someone has been arranging fear like furniture.
+
+You check the satchel strap and feel the folded false order inside. Hearthhollow is behind you. Lio is somewhere ahead—if you're lucky.
+
+Deep breath. Am I really ready for this?`,
         choices: [
           {
-            label: "Head onto Lantern Road.",
+            label: "Take a deep breath and step onto Lantern Road.",
             effect: () => {
               setDialogue(null);
               travelToRegion(
@@ -1214,12 +1270,16 @@ export default function LiamsGamePrototype() {
               );
             },
           },
+          {
+            label: "Not yet. Stay in Hearthhollow.",
+            effect: () => setDialogue(null),
+          },
         ],
       });
     setDialogue({
       portrait: "🐗",
       name: "Bramble Boar",
-      text: "The south gate bursts with shouting. A Bramble Boar crashes out of the brush, wild-eyed and foaming, a courier satchel twisted around one tusk. It is not attacking like a hungry beast. It is running like something has driven it mad. The satchel thumps against its jaw with every charge. A brass courier badge flashes once in the dust, bright enough for someone nearby to gasp. “That's Lio Brindle's route badge,” Nella whispers from behind a shutter. “He was due before breakfast.” The boar lowers its head toward the square. If it breaks through, people will be hurt—and whatever happened to Lio will vanish down the road behind it.",
+      text: "The south gate bursts with shouting. A Bramble Boar crashes out of the brush, wild-eyed and foaming, a courier satchel twisted around one tusk. It is not attacking like a hungry beast. It is running like something has driven it mad. The satchel thumps against its jaw with every charge. A brass courier badge flashes once in the dust. Even at a glance, you recognize Lio Brindle's route badge—the one he wore on every Hearthhollow run. He was due before breakfast. The boar lowers its head toward the square. If it breaks through, people will be hurt—and whatever happened to Lio will vanish down the road behind it.",
       choices: [
         {
           label: "Stand and fight before it reaches the square.",
@@ -1310,6 +1370,7 @@ export default function LiamsGamePrototype() {
     if (!flags.metNix)
       return setDialogue({
         portrait: "🗿",
+        mapVignette: "lanternMilestone",
         name: "Milestone Ruin",
         text: "The old milestone leans at the edge of the road, carved with distances that weather has nearly swallowed. Someone has scraped fresh mud around its base, but without Nix's road-scout eye you cannot tell whether that means accident, hiding place, or merely a very ambitious worm.",
         choices: [
@@ -1322,6 +1383,7 @@ export default function LiamsGamePrototype() {
     if (flags.foundRuinNote)
       return setDialogue({
         portrait: "🗿",
+        mapVignette: "lanternMilestone",
         name: "Milestone Ruin",
         text: "The hidden shelf behind the milestone is empty now. The stone still feels like a stage after the actor has left: ordinary from the road, suspicious once you know where to look.",
         choices: [{ label: "Move on.", effect: () => setDialogue(null) }],
@@ -1330,8 +1392,9 @@ export default function LiamsGamePrototype() {
     setPlayer((p) => ({ ...p, xp: p.xp + 8 }));
     setDialogue({
       portrait: "🗿",
+      mapVignette: "lanternMilestone",
       name: "Milestone Ruin",
-      text: "You kneel where Nix pointed and find a narrow shelf hidden behind the milestone's cracked base. Inside waits a folded order, too dry for the damp stone and too clean for something supposedly lost. It reads: HOLD BRAMBLECROSS. DELAY NEWS. KEEP THE CROWN NERVOUS. The seal tries to look royal, but the crown points are wrong. Whoever planted this knew how fear reads faster than ink.",
+      text: "You kneel where Nix pointed and find a narrow shelf hidden behind the milestone's cracked base. Inside waits a folded order, too dry for the damp stone and too clean for something supposedly lost. It reads: HOLD BRAMBLECROSS. SUSPEND OUTBOUND COURIERS. AWAIT CROWN INSPECTION. The seal tries to look royal, but the crown points are wrong. Whoever planted this knew how fear reads faster than ink.",
       choices: [
         { label: "Take the planted order.", effect: () => setDialogue(null) },
       ],
@@ -1405,6 +1468,7 @@ export default function LiamsGamePrototype() {
     }
     setDialogue({
       portrait: "🏘️",
+      mapVignette: "brambleGate",
       name: "Road to Bramblecross",
       text: "The trees thin, and Bramblecross rises ahead: market roofs, watchhouse stone, chimney smoke, and the kind of nervous movement that says a town is trying very hard to look normal. You are arriving with news Hearthhollow did not have and proof Bramblecross has not yet seen.",
       choices: [
@@ -1496,7 +1560,7 @@ export default function LiamsGamePrototype() {
           {
             speaker: player.name,
             side: "right",
-            text: "Nix found the panic too neat. At the milestone ruin I found a planted order telling someone to hold Bramblecross, delay news, and keep the crown nervous.",
+            text: "Nix found the panic too neat. At the milestone ruin I found a planted order telling Bramblecross to suspend outbound couriers and await a Crown inspection that was never coming.",
           },
           {
             speaker: "Enna",
@@ -1529,11 +1593,48 @@ export default function LiamsGamePrototype() {
     setDialogue({
       portrait: "🗂️",
       name: "Watch Clerk Enna",
-      text: "Enna taps two pins on the board without looking up. “The shape still holds: false authority above ground, missing workers below ground, and a road being trained to fear the wrong thing. The old shrine had it right: a road is safest when truth walks it first. Study the wall if you need the full pattern. Hollis will not move until you understand why the cellar matters.”",
+      text: `Enna taps two pins on the board without looking up. "The shape still holds: false authority above ground, missing workers below ground, and a road being trained to fear the wrong thing. The old shrine had it right: a road is safest when truth walks it first. Study the wall if you need the full pattern. Hollis will not move until you understand why the cellar matters."${companion.recruited ? "" : '\n\nShe nods toward the square. "Before you go below, consider taking another pair of eyes. Rowan, Tilda, and Moss are staying at the Bramblecross Inn."'}`,
       choices: [
         {
           label: "I'll study the wall, then speak with Hollis.",
           effect: () => setDialogue(null),
+        },
+      ],
+    });
+  };
+  const enterRootCellarWithHollis = () => {
+    setFlags((f) => ({
+      ...f,
+      gotDungeonLead: true,
+      enteredRootCellar: true,
+    }));
+    setDialogue(null);
+    setInteriorScene(null);
+    travelToRegion(
+      "rootCellar",
+      MAPS.rootCellar.start,
+      "Old Root Cellar",
+      "Hollis leads you behind the watchhouse, unlocks the Old Root Cellar, and watches until your lantern disappears below.",
+    );
+  };
+  const beginRootCellarDeparture = () => {
+    setFlags((f) => ({ ...f, gotDungeonLead: true }));
+    if (companion.recruited) return enterRootCellarWithHollis();
+    setDialogue({
+      portrait: "🛡️",
+      name: "Captain Hollis",
+      text: 'Hollis closes his hand around the cellar key. "I will not order you to take help, but I would rather not send another person below alone. Rowan, Tilda, and Moss are staying at the Bramblecross Inn. Any one of them would give you another pair of eyes—and someone to pull you back if the old roots shift."',
+      choices: [
+        {
+          label: "I'll recruit someone at the Bramblecross Inn first.",
+          effect: () => {
+            setDialogue(null);
+            setToast("Potential companions are waiting inside the Bramblecross Inn.");
+          },
+        },
+        {
+          label: "I'll go alone. Take me to the cellar.",
+          effect: enterRootCellarWithHollis,
         },
       ],
     });
@@ -1580,8 +1681,10 @@ export default function LiamsGamePrototype() {
         text: 'Hollis keeps the cellar key ready on the desk. The questions are not gone, but the permission is settled. "You know what the wall shows," he says. "Go below when you are ready, and come back with truth instead of rumors."',
         choices: [
           {
-            label: "I'm heading to the Root Cellar.",
-            effect: () => setDialogue(null),
+            label: companion.recruited
+              ? "We're ready. Take us to the Root Cellar."
+              : "I'm ready to go below.",
+            effect: beginRootCellarDeparture,
           },
         ],
       });
@@ -1592,12 +1695,10 @@ export default function LiamsGamePrototype() {
         text: 'Hollis sees you return and rests one hand beside the key. He does not make you ask about Edden again. "You have the shape of it now: missing porters, altered routes, and a runner who came back speaking old road names. If you are ready, take the key and go carefully."',
         choices: [
           {
-            label: "I'll investigate the Root Cellar.",
-            effect: () => {
-              setFlags((f) => ({ ...f, gotDungeonLead: true }));
-              setDialogue(null);
-              setToast("Hollis authorizes the Root Cellar investigation.");
-            },
+            label: companion.recruited
+              ? "We're ready. Take us to the Root Cellar."
+              : "I'm ready to go below.",
+            effect: beginRootCellarDeparture,
           },
           {
             label: "I still need a moment.",
@@ -1612,11 +1713,7 @@ export default function LiamsGamePrototype() {
       choices: [
         {
           label: "I'll investigate the Root Cellar.",
-          effect: () => {
-            setFlags((f) => ({ ...f, gotDungeonLead: true }));
-            setDialogue(null);
-            setToast("Hollis authorizes the Root Cellar investigation.");
-          },
+          effect: beginRootCellarDeparture,
         },
         {
           label: "Tell me more about Edden first.",
@@ -1628,18 +1725,10 @@ export default function LiamsGamePrototype() {
               text: "Hollis looks at the cracked lantern again. “Edden is seventeen. Fast runner. Terrible at cards. Good at remembering details. He went below joking that cellar ghosts would have to file a complaint if they wanted his attention. When we found him, he kept repeating three phrases: hold the root, misdirect the road, and the old way still listens. We thought it was shock-talk until your road report gave two of those words weight. So no, I am not being cautious because I doubt you. I am being cautious because I believe the danger is smarter than it first looked.”",
               choices: [
                 {
-                  label: "Then I'll bring back the truth.",
-                  effect: () => {
-                    setFlags((f) => ({
-                      ...f,
-                      askedHollisAboutEdden: true,
-                      gotDungeonLead: true,
-                    }));
-                    setDialogue(null);
-                    setToast(
-                      "Hollis authorizes the Root Cellar investigation.",
-                    );
-                  },
+                  label: companion.recruited
+                    ? "Then take us to the Root Cellar."
+                    : "Then I'm ready to go below.",
+                  effect: beginRootCellarDeparture,
                 },
                 {
                   label: "I need a moment before going below.",
@@ -1751,6 +1840,7 @@ export default function LiamsGamePrototype() {
         "The cart is a mess of mud, splinters, and bent iron. You gather enough paint flakes and crate-lid splinters for Ada to inspect, but the road marks blur together before they give up anything more certain.";
       setDialogue({
         portrait: "🛒",
+        mapVignette: "lanternCart",
         name: "Cart Tracks",
         text: `${checkSummary(check)}
 
@@ -1778,6 +1868,7 @@ ${check.success ? successText : failText}`,
     if (flags.boardQuestCompleted)
       return setDialogue({
         portrait: "🛒",
+        mapVignette: "lanternCart",
         name: "Broken Cart",
         text: "The broken cart is still here, but now it feels less like a mystery and more like a witness that has finally been believed. The green paint flakes, cut spice seal, and missing crate all point back to Ada's account: someone intercepted Bramblecross goods and tried to erase the trail.",
         choices: [{ label: "Move on.", effect: () => setDialogue(null) }],
@@ -1785,6 +1876,7 @@ ${check.success ? successText : failText}`,
     if (flags.boardQuestAccepted && !flags.cartRecoveredForAda)
       return setDialogue({
         portrait: "🛒",
+        mapVignette: "lanternCart",
         name: "Broken Cart",
         text: "Now that Ada's notice is in your head, the cart changes from roadside clutter into evidence. Green paint flakes cling to the axle. A spice seal shaped like three leaves has been cut from a crate lid, not broken off. Someone did not merely raid the cart. They removed the parts that would prove where it came from.",
         choices: [
@@ -1810,6 +1902,7 @@ ${check.success ? successText : failText}`,
       });
     setDialogue({
       portrait: "🛒",
+      mapVignette: "lanternCart",
       name: "Broken Cart",
       text: flags.searchedCart
         ? "The broken cart has nothing left to give except questions. The missing crate still bothers you: smashed goods scatter loudly, but stolen goods disappear quietly."
@@ -1840,6 +1933,7 @@ ${check.success ? successText : failText}`,
                 const check = resolveSkillCheck(derivedStats, "Instinct", 10);
                 setDialogue({
                   portrait: "🛒",
+                  mapVignette: "lanternCart",
                   name: "Broken Cart",
                   text: `${checkSummary(check)}
 
@@ -1865,6 +1959,7 @@ ${check.success ? "You find a scrape of green paint, a cut mark where a seal use
     if (flags.usedShrine)
       return setDialogue({
         portrait: "✨",
+        mapVignette: "lanternShrine",
         name: "Lantern Shrine",
         text: `The roadside shrine glows with a quieter light now. The little bronze lantern above it has stopped swinging, but warmth still lingers in the stone. The false crown mark is gone. Beneath it, the true road signs remain: shelter, water, warning, witness. Around the base, the old traveler saying holds steady:
 
@@ -1878,6 +1973,7 @@ A road is safest when truth walks it first.`,
       });
     setDialogue({
       portrait: "✨",
+      mapVignette: "lanternShrine",
       name: "Lantern Shrine",
       text: `A waist-high shrine stands where Lantern Road dips between two old stones, half-hidden by violet moss and old candle-stubs. The bronze lantern inside is unlit, but the glass catches sunlight that is not falling from the sky. Scratched names cover the shrine: drivers, couriers, pilgrims, market children practicing letters, and little route marks carved by people who needed the road to remember them kindly. Around the base, worn almost smooth by weather and touch, is an old traveler saying:
 
@@ -1909,6 +2005,7 @@ But one fresh mark cuts across the older names: a false crown seal, copied badly
             const check = resolveSkillCheck(derivedStats, "Will", 10);
             setDialogue({
               portrait: "✨",
+              mapVignette: "lanternShrine",
               name: "Lantern Shrine",
               text: `${checkSummary(check)}
 
@@ -1954,12 +2051,14 @@ ${check.success ? "The marks settle into meaning as you trace them: water here, 
     if (flags.openedWildChest)
       return setDialogue({
         portrait: "📦",
+        mapVignette: "lanternCache",
         name: "Road Cache",
         text: "The road cache is open and empty now, except for a cedar smell and a polite note reminding travelers not to store fish in shared emergency boxes again.",
         choices: [{ label: "Fair rule.", effect: () => setDialogue(null) }],
       });
     setDialogue({
       portrait: "📦",
+      mapVignette: "lanternCache",
       name: "Road Cache",
       text: "A cedar road cache is tucked under roots beside the path. It bears a faded lantern mark: public supplies for travelers in trouble. The latch is stiff, but not locked. Someone has already taken the obvious food and left the practical gear behind, which says a lot about their priorities.",
       choices: [
@@ -1982,6 +2081,7 @@ ${check.success ? "The marks settle into meaning as you trace them: water here, 
   const openRootSigilDialogue = () =>
     setDialogue({
       portrait: "✶",
+      artKey: "rootCellarSigil",
       name: "Root Sigil",
       text: flags.readCellarSigil
         ? "The sigil no longer flickers, but its message remains scratched into your memory: HOLD THE ROOT. MISDIRECT THE ROAD."
@@ -2002,6 +2102,7 @@ ${check.success ? "The marks settle into meaning as you trace them: water here, 
   const openRootMuralDialogue = () =>
     setDialogue({
       portrait: "🧱",
+      artKey: "rootCellarMural",
       name: "Route Mural",
       text: flags.readCellarMural
         ? "The mural's faded arrows still show the same hidden logic: food above, routes below, and Bramblecross built over more passages than its people remember."
@@ -2180,6 +2281,7 @@ ${check.success ? "The marks settle into meaning as you trace them: water here, 
     if (!flags.beatCellarBoss)
       return setDialogue({
         portrait: "🚪",
+        mapVignette: "rootCellarDoor",
         name: "Sealed Iron Door",
         text: CHAPTER_1_STORY.rootCellar.sealedDoorBeforeWarden,
         choices: [{ label: "Step back.", effect: () => setDialogue(null) }],
@@ -2187,12 +2289,14 @@ ${check.success ? "The marks settle into meaning as you trace them: water here, 
     if (flags.chapterOneClear)
       return setDialogue({
         portrait: "🚪",
+        mapVignette: "rootCellarDoor",
         name: "Sealed Iron Door",
         text: CHAPTER_1_STORY.rootCellar.repeatAfterDiscovery,
         choices: [{ label: "Step back.", effect: () => setDialogue(null) }],
       });
     setDialogue({
       portrait: "🚪",
+      mapVignette: "rootCellarDoor",
       name: "Sealed Iron Door",
       text: CHAPTER_1_STORY.rootCellar.sealedDoorAfterWarden,
       choices: [
@@ -2202,7 +2306,8 @@ ${check.success ? "The marks settle into meaning as you trace them: water here, 
           effect: () => {
             const check = resolveSkillCheck(derivedStats, "Will", 12);
             setDialogue({
-              portrait: "🚪",
+              portrait: "👑",
+              artKey: "briarCrownMark",
               name: "Briar Crown Mark",
               text: `${checkSummary(check)}
 
@@ -2289,6 +2394,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           effect: () =>
             setDialogue({
               portrait: "👑",
+              artKey: "briarCrownMark",
               name: "The Briar Crown",
               text: CHAPTER_1_STORY.reportBack.briarCrownInterpretation,
               choices: [
@@ -4464,6 +4570,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         setFlags((f) => ({ ...f, sawRoadCamp: true }));
         setDialogue({
           portrait: "⛺",
+          mapVignette: "lanternCamp",
           name: "Road Camp",
           text: flags.helpedTraveler
             ? "The little camp is no longer empty. The traveler you guided here sits near the coals with both hands wrapped around a tin cup, looking steadier than before. He gives you a grateful nod, then points to a flat stone where someone has been mixing road herbs."
@@ -4472,16 +4579,52 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             {
               label: "Rest",
               effect: () => {
-                setPlayer((p) => ({ ...p, hp: p.maxHp }));
-                setCompanion((c) => (c.recruited ? { ...c, hp: c.maxHp } : c));
-                saveGame("Road Camp");
-                setDialogue(null);
+                const heroRecovered = Math.max(0, player.maxHp - player.hp);
+                const companionRecovered = companion.recruited
+                  ? Math.max(0, companion.maxHp - companion.hp)
+                  : 0;
+                const restedPlayer = {
+                  ...player,
+                  hp: player.maxHp,
+                  checkpointLabel: "Road Camp",
+                };
+                const restedCompanion = companion.recruited
+                  ? { ...companion, hp: companion.maxHp }
+                  : companion;
+                const recovery = [
+                  heroRecovered > 0
+                    ? `${player.name} recovers ${heroRecovered} HP.`
+                    : `${player.name} is already at full health.`,
+                  companion.recruited
+                    ? companionRecovered > 0
+                      ? `${companion.name} recovers ${companionRecovered} HP.`
+                      : `${companion.name} is already at full health.`
+                    : null,
+                  "Checkpoint saved at Road Camp.",
+                ]
+                  .filter(Boolean)
+                  .join(" ");
+
+                setPlayer(restedPlayer);
+                setCompanion(restedCompanion);
+                const payload = buildCurrentSavePayload(
+                  "Checkpoint reached: Road Camp",
+                  restedPlayer,
+                  restedCompanion,
+                );
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+                setToast("Checkpoint reached: Road Camp");
+                setDialogue((current) =>
+                  current?.name === "Road Camp"
+                    ? { ...current, feedback: recovery }
+                    : current,
+                );
               },
             },
             {
               label: "Craft",
               effect: () => {
-                setDialogue(null);
+                setCraftContext("roadCamp");
                 setCraftOpen(true);
               },
             },
@@ -4494,12 +4637,15 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       if (tile === "traveler")
         setDialogue({
           portrait: "🧳",
+          portraitName: flags.helpedTraveler
+            ? undefined
+            : "Worried Road Traveler",
           name: flags.helpedTraveler ? "Traveler's Tracks" : "Worried Traveler",
           text: flags.helpedTraveler
             ? "The traveler is no longer standing in the open road. A few hurried footprints lead north through the grass toward the camp you pointed out."
             : flags.sawRoadCamp
-              ? 'The traveler clutches a satchel so tightly the leather creaks. His hat is on sideways, and he keeps glancing at the trees as though they might be reading his mail. "I passed two men arguing over a folded order near the ditch," he says. "Then one saw me looking and smiled like a locked door. I have never trusted doors that smile. Is there anywhere safe off this road?"'
-              : 'The traveler clutches a satchel so tightly the leather creaks. His hat is on sideways, and he keeps glancing at the trees as though they might be reading his mail. "I passed two men arguing over a folded order near the ditch," he says. "Then one saw me looking and smiled like a locked door. I have never trusted doors that smile. I need to get off the road, but I don\'t know where safe is."',
+              ? 'The traveler clutches a satchel so tightly the leather creaks. His hat is on sideways, and he keeps glancing at the trees as though they might be reading his mail. "I passed two men near the ditch with a folded order," he says. "It had the royal crown pressed into red wax. They said the road was under Crown inspection. Then one saw me listening and smiled like a locked door. I have never trusted doors that smile. Is there anywhere safe off this road?"'
+              : 'The traveler clutches a satchel so tightly the leather creaks. His hat is on sideways, and he keeps glancing at the trees as though they might be reading his mail. "I passed two men near the ditch with a folded order," he says. "It had the royal crown pressed into red wax. They said the road was under Crown inspection. Then one saw me listening and smiled like a locked door. I have never trusted doors that smile. I need to get off the road, but I don\'t know where safe is."',
           choices: flags.helpedTraveler
             ? [
                 {
@@ -4520,15 +4666,16 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                     },
                   },
                   {
-                    label: "What did the order look like?",
+                    label: "Did you get a look at the order?",
                     effect: () =>
                       setDialogue({
                         portrait: "🧳",
+                        portraitName: "Worried Road Traveler",
                         name: "Worried Traveler",
-                        text: '"Too clean," he says. "Royal words, maybe, but written like someone had copied the shape of command without knowing the weight of it. They tucked it away when they noticed me. That\'s when I decided my errand could wait until my knees stopped humming."',
+                        text: '"A look? I barely breathed near it," he says. "I saw the crown seal. They said Bramblecross was being held and no couriers could leave until a Crown inspection. That sounded official to me. It was official, wasn\'t it? Then they tucked the order away and started asking why I was still on the road. That\'s when I decided my errand could wait until my knees stopped humming."',
                         choices: [
                           {
-                            label: "Get to the camp. I'll look into it.",
+                            label: "The seal may be false. Get to the camp.",
                             effect: () => {
                               setFlags((f) => ({ ...f, helpedTraveler: true }));
                               setPlayer((p) => ({ ...p, xp: p.xp + 5 }));
@@ -4561,12 +4708,13 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                     effect: () =>
                       setDialogue({
                         portrait: "🧳",
+                        portraitName: "Worried Road Traveler",
                         name: "Worried Traveler",
-                        text: '"Two men near the ditch," he whispers. "One had a folded order. The other had a dog made mostly of thorns and bad intentions. They were not robbing the road. They were watching it. That\'s worse, isn\'t it?"',
+                        text: '"Two men near the ditch," he whispers. "One held a folded order with the royal crown stamped into red wax. He said the road was under Crown inspection. The other had a dog made mostly of thorns and bad intentions. I thought they were Crown men, but then they started watching me instead of the road. They were Crown men, weren\'t they?"',
                         choices: [
                           {
                             label:
-                              "Yes. Stay out of sight until I find somewhere safe.",
+                              "I don't think so. Stay hidden while I find somewhere safe.",
                             effect: () => setDialogue(null),
                           },
                         ],
@@ -4592,7 +4740,9 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           text: getMayorDialogue(flags),
           choices: [
             {
-              label: "I'll look into it.",
+              label: flags.ennaBriefed
+                ? "I'll look into it."
+                : "I'll find Enna in the watchhouse.",
               effect: () => {
                 setFlags((f) => ({ ...f, metMayor: true }));
                 setDialogue(null);
@@ -4842,27 +4992,73 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     setBattle((prev) => (prev ? { ...prev, turn: "companion" } : prev));
     window.setTimeout(() => {
       let allEnemiesDefeated = false;
+      const ability = getCompanionCommandAbility(companion);
+      const roll = ability?.effect.damage
+        ? resolveRoll(ability.effect.damage)
+        : null;
+      const damage = roll?.total || 0;
+
+      if (ability?.effect.heroHeal) {
+        setPlayer((current) => ({
+          ...current,
+          hp: Math.min(
+            current.maxHp,
+            current.hp + (ability.effect.heroHeal || 0),
+          ),
+        }));
+      }
+      if (ability?.effect.companionHeal) {
+        setCompanion((current) => ({
+          ...current,
+          hp: Math.min(
+            current.maxHp,
+            current.hp + (ability.effect.companionHeal || 0),
+          ),
+        }));
+      }
+
       setBattle((prev) => {
         if (!prev || prev.finished || !companion.recruited || companion.hp <= 0)
           return prev;
         const target = getSelectedBattleEnemy(prev.enemies, prev.selectedTargetId);
         if (!target) return advanceToNextEnemyOrVictory(prev);
-        const roll = resolveRoll({
-          count: 1,
-          sides: companion.style === "skirmisher" ? 6 : 4,
-          bonus: companion.style === "guardian" ? 2 : 1,
-        });
-        const nextEnemies = damageBattleEnemy(prev.enemies, target.battleId, roll.total, {
-          weaken: companion.command !== "Attack Freely",
-        });
+        if (!ability) return { ...prev, turn: "enemy" };
+
+        const nextEnemies =
+          damage || ability.effect.weaken
+            ? damageBattleEnemy(prev.enemies, target.battleId, damage, {
+                weaken: ability.effect.weaken,
+              })
+            : prev.enemies;
         allEnemiesDefeated = !getLivingEnemies(nextEnemies).length;
+        const effectSummary = [
+          roll ? `${damage} damage (${roll.notation})` : null,
+          ability.effect.heroGuard
+            ? `${ability.effect.heroGuard} Guard for ${player.name}`
+            : null,
+          ability.effect.weaken
+            ? `${target.name}'s next attack is reduced by 2`
+            : null,
+          ability.effect.heroHeal
+            ? `restores up to ${ability.effect.heroHeal} HP to ${player.name}`
+            : null,
+          ability.effect.companionHeal
+            ? `restores up to ${ability.effect.companionHeal} HP to ${companion.name}`
+            : null,
+        ].filter(Boolean);
         const updated = {
           ...prev,
           enemies: nextEnemies,
+          heroGuard: Math.max(
+            prev.heroGuard || 0,
+            ability.effect.heroGuard || 0,
+          ),
           log: [
             ...prev.log.slice(-7),
-            `${companion.name} strikes ${target.name} for ${roll.total} damage (${roll.notation}).`,
-            ...(target.hp - roll.total <= 0 ? [`${target.name} falls!`] : []),
+            `${companion.name} uses ${ability.name}: ${effectSummary.join(", ")}.`,
+            ...(damage > 0 && target.hp - damage <= 0
+              ? [`${target.name} falls!`]
+              : []),
           ].slice(-8),
         };
         if (allEnemiesDefeated) return advanceToNextEnemyOrVictory(updated);
@@ -4933,9 +5129,16 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         companionReward = { gained: 8, xp: (companion.xp || 0) + 8 };
         setCompanion((c) => ({ ...c, xp: (c.xp || 0) + 8 }));
       }
-      const { item, extraItems = [], gold, xp, flagUpdate, name, text } = getBattleReward(
-        battle.rewardKey,
-      );
+      const {
+        item,
+        extraItems = [],
+        gold,
+        xp,
+        flagUpdate,
+        artKey,
+        name,
+        text,
+      } = getBattleReward(battle.rewardKey);
       const rewardItems = [item, ...extraItems].filter(Boolean);
       rewardItems.forEach((rewardItem) => gainItem(setPlayer, rewardItem, 1));
       setPlayer((p) => ({ ...p, gold: p.gold + gold, xp: p.xp + xp }));
@@ -4957,6 +5160,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       }));
       setDialogue({
         portrait: "📜",
+        artKey,
         name,
         text: companionReward
           ? `${text}\n\n${companion.name} gains ${companionReward.gained} companion XP.`
@@ -4973,7 +5177,15 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                   effect: () => resolveCargoBattleOutcome("escaped"),
                 },
               ]
-            : [{ label: "Continue", effect: () => setDialogue(null) }],
+            : [
+                {
+                  label:
+                    battle.rewardKey === "boar"
+                      ? "Take the satchel to Elder Brynn."
+                      : "Continue",
+                  effect: () => setDialogue(null),
+                },
+              ],
       });
       announce("Victory!", rewardItems.map((rewardItem) => ({ id: rewardItem, qty: 1 })));
     } else {
@@ -5084,6 +5296,17 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     );
     gainItem(setPlayer, recipe.resultId, recipe.resultQty);
     setFlags((f) => ({ ...f, craftedPotion: true }));
+    if (craftContext === "roadCamp") {
+      const resultName = ITEM_DB[recipe.resultId]?.name || recipe.name;
+      setDialogue((current) =>
+        current?.name === "Road Camp"
+          ? {
+              ...current,
+              feedback: `You craft ${resultName} ×${recipe.resultQty}. It has been added to your pack.`,
+            }
+          : current,
+      );
+    }
     announce(`You craft ${recipe.name}.`, [
       { id: recipe.resultId, qty: recipe.resultQty },
     ]);
@@ -5243,6 +5466,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     setFlags((f) => ({
       ...f,
       beatGateBattle: false,
+      reportedSatchelToElder: false,
       clearedWildBattle: false,
       beatCellarSkulk: false,
       beatCellarBoss: false,
@@ -5354,7 +5578,6 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent" />
               <figcaption className="absolute bottom-4 left-4 right-4 text-left text-sm text-amber-50/80">Every road begins at somebody's front door.</figcaption>
             </figure>
-            <div className="mb-4 text-6xl">🗺️🗡️✨</div>
             <h1 className="text-4xl font-bold sm:text-6xl">
               Lanterns of Briar Crown
             </h1>
@@ -5579,12 +5802,6 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             <Button onClick={() => setScreen("title")}>Title</Button>
           </div>
         </div>
-        <div className="mb-4 rounded-3xl border border-amber-300/20 bg-amber-400/10 px-4 py-3 text-sm shadow-lg">
-          <div className="font-semibold text-amber-200">Latest update</div>
-          <div className="mt-1 text-white/85">
-            {toast || `You are standing on: ${currentTileLabel}.`}
-          </div>
-        </div>
         {showCrownDenTension ? (
           <CrownDenTension
             level={crownDenAlertLevel}
@@ -5626,22 +5843,35 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             <div className="mb-3 text-sm text-white/75">
               Goal: {questJournal.currentMain.title}
             </div>
-            <MapStage
-              region={region}
-              map={currentMap}
-              backgroundImage={mapBackgroundImage}
-              position={position}
-              player={player}
-              exploredMap={exploredMap}
-              getStoryTile={getStoryTile}
-              getTokenState={getMapTokenState}
-              onNodeClick={handleMapNodeClick}
-              debug={mapDebug}
-              fogComplete={
-                (region === "rootCellar" && !!flags.chapterOneClear) ||
-                (region === "crownDoorDen" && !!flags.crownDoorDungeonCleared)
-              }
-            />
+            <div className="map-stage-shell">
+              <MapStage
+                region={region}
+                map={currentMap}
+                backgroundImage={mapBackgroundImage}
+                position={position}
+                player={player}
+                exploredMap={exploredMap}
+                getStoryTile={getStoryTile}
+                getTokenState={getMapTokenState}
+                onNodeClick={handleMapNodeClick}
+                debug={mapDebug}
+                fogComplete={
+                  (region === "rootCellar" && !!flags.chapterOneClear) ||
+                  (region === "crownDoorDen" && !!flags.crownDoorDungeonCleared)
+                }
+              />
+              <div
+                data-testid="map-status-overlay"
+                className="map-status-overlay"
+                role="status"
+                aria-live="polite"
+              >
+                <span className="map-status-label">Latest update</span>
+                <span className="map-status-message">
+                  {toast || `You are standing on: ${currentTileLabel}.`}
+                </span>
+              </div>
+            </div>
             <div className="mt-3 rounded-2xl bg-white/5 px-3 py-2 text-sm">
               You are standing on: {currentTileLabel}.
             </div>
@@ -5860,7 +6090,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           choose={chooseHeroGrowth}
         />
       ) : null}
-      {dialogue ? (
+      {dialogue && !craftOpen ? (
         <DialogueModal dialogue={dialogue} close={() => setDialogue(null)} />
       ) : null}
       {interiorScene ? (
@@ -5903,6 +6133,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           player={player}
           close={() => setCraftOpen(false)}
           craftRecipe={craftRecipe}
+          context={craftContext}
         />
       ) : null}
       {lootBanner ? (

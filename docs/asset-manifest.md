@@ -124,6 +124,9 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Cargo Siding evidence | `cargo-siding-evidence-scene-v01.webp` | Chapter 3 cargo inspection scene; false Willow cargo and the evidence crate are legible. |
 | Split Hall resolution | `split-hall-resolution-scene-v03.webp` | Selected Chapter 3 resolution scene; Bramwell, Noma, Auntie Lume, Mara, Mossbacks, and Stonekin gather around the evidence table. |
 | Mossgarden closing mark | `mossgarden-closing-mark-scene-v01.webp` | Chapter 3 closing scene; Mara and Noma restore a courier mark without relying on baked-in text. |
+| Courier Satchel evidence | `courier-satchel-evidence-scene-v01.webp` | Selected Chapter 1 boar-reward scene; Lio's scuffed satchel, crooked false seal, brass badge, and blue-string lunch packet remain legible in the dialogue modal. |
+| Bramblecross Watchhouse case wall | `bramblecross-watchhouse-case-wall-scene-v01.webp` | Selected shared evidence master; full scene and focused crops cover the evidence board, duty ledger, wall map, and forged-orders file. |
+| Root Cellar evidence wall | `root-cellar-evidence-wall-scene-v01.webp` | Selected shared evidence master; separate crops distinguish the recent coercive Root Sigil from the older communal Route Mural. |
 
 ## Map Tokens
 
@@ -146,7 +149,7 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 
 | Character | Suggested filename | Notes |
 |---|---|---|
-| Elder Mira | `mira-portrait-v01.webp` | Warm, wise Hearthhollow elder. |
+| Elder Brynn | `mira-portrait-v01.webp` | Warm, wise Hearthhollow elder. |
 | Enna | `enna-portrait-v02.webp` | Black woman, darker skin, tough and focused. |
 | Captain Hollis | `hollis-portrait-v01.webp` | Worn, responsible watch captain. |
 | Nix Fernwhistle | `nix-portrait-v01.webp` | Wiry road-scout, Lantern Road guide. |
@@ -160,7 +163,7 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Mayor Anwen | `mayor-anwen-portrait-v01.webp` | Production portrait; Bramblecross civic leader. |
 | Nella the Baker | `nella-portrait-v03.webp` | Selected Tideborn/water-person baker direction. |
 | Toma Fielding | `toma-fielding-portrait-v02.webp` | Selected farmer portrait with clearer tool silhouette. |
-| Miri of the Loom | `miri-portrait-v02.webp` | Selected loom/thread portrait with stronger face variety. |
+| Sela of the Loom | `miri-portrait-v02.webp` | Selected loom/thread portrait with stronger face variety. |
 | Mara Brindle | `mara-brindle-portrait-v01.webp` | Production portrait for Chapter 2 protected guest role. |
 | Edden Vale | `edden-vale-portrait-v01.webp` | Production portrait for the recovery-room witness. |
 | Lio Brindle | `lio-brindle-portrait-v01.webp` | Pre-rescue or remembered courier portrait; generate a later rescued variant if needed. |
@@ -195,6 +198,7 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | First busier Chapter 1 key art | Too many lanterns/lights; useful style reference. |
 | First Hearthhollow concept map with baked-in labels | Nice concept, but too much text for gameplay map. |
 | Hearthhollow map with boar sign above gate | Rejected; south gate should not have permanent boar warning sign. |
+| Earlier `briar-crown-primary-mark-v01.png` candidate from 2026-07-16 | Rejected; strong silhouette, but the checkerboard was painted into an opaque RGB image. Superseded by the selected true-alpha regeneration. |
 | Hearthhollow gameplay map v03 | Preserved as concept/reference; replaced in production by icon-free v04. |
 | Lantern Road gameplay map v01 | Preserved as concept/reference; replaced in production by icon-free v02. |
 | First Rowan human portrait | Too human/soft for defensive non-human companion. |
@@ -222,7 +226,7 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 
 ## Symbols / UI
 
-- Briar Crown symbol sheet
+- Optional expanded Briar Crown symbol sheet; the primary production mark is complete
 - Lantern Road symbol sheet
 - custom item icon set
 - skill icon sheet
@@ -232,6 +236,7 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 
 | Asset | Suggested filename | Notes |
 |---|---|---|
+| Briar Crown primary mark | `assets/icons/ui/briar-crown-primary-mark-v01.png` | Selected true-alpha PNG wired into the Root Cellar discovery and Bramblecross report-back dialogues. Full-size source is preserved under `assets/reference/source-art/`. |
 | Crown Den distant scratching icon | `assets/icons/ui/crown-den-distant-scratching-icon-v01.png` | Transparent PNG wired into the Crown Door Den tension strip. |
 | Crown Den chain drag icon | `assets/icons/ui/crown-den-chain-drag-icon-v01.png` | Transparent PNG wired into the Crown Door Den tension strip. |
 | Crown Den hound warning icon | `assets/icons/ui/crown-den-hound-warning-icon-v01.png` | Transparent PNG wired into the Crown Door Den tension strip. Reads primarily as the thorn collar, which fits the false-command beat. |

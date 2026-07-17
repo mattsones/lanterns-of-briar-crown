@@ -9,8 +9,8 @@ const lioPortrait = new URL("../../assets/portraits/characters/lio-brindle-portr
 const maraPortrait = new URL("../../assets/portraits/characters/mara-brindle-portrait-v01.webp", import.meta.url).href;
 const mayorAnwenPortrait = new URL("../../assets/portraits/characters/mayor-anwen-portrait-v01.webp", import.meta.url)
   .href;
-const miraPortrait = new URL("../../assets/portraits/characters/mira-portrait-v01.webp", import.meta.url).href;
-const miriPortrait = new URL("../../assets/portraits/characters/miri-portrait-v02.webp", import.meta.url).href;
+const elderBrynnPortrait = new URL("../../assets/portraits/characters/mira-portrait-v01.webp", import.meta.url).href;
+const selaPortrait = new URL("../../assets/portraits/characters/miri-portrait-v02.webp", import.meta.url).href;
 const mossPortrait = new URL("../../assets/portraits/characters/moss-portrait-v01.webp", import.meta.url).href;
 const nellaPortrait = new URL("../../assets/portraits/characters/nella-portrait-v03.webp", import.meta.url).href;
 const nixPortrait = new URL("../../assets/portraits/characters/nix-portrait-v01.webp", import.meta.url).href;
@@ -44,16 +44,20 @@ const westrootRootbreadChildPortrait = new URL(
   "../../assets/portraits/characters/westroot-rootbread-child-portrait-v02.webp",
   import.meta.url,
 ).href;
+const brambleBoarPortrait = new URL(
+  "../../assets/portraits/enemies/bramble-boar-v01.webp",
+  import.meta.url,
+).href;
 
 export const DIALOGUE_PORTRAITS = {
-  "Elder Mira": { src: miraPortrait, alt: "Portrait of Elder Mira" },
+  "Elder Brynn": { src: elderBrynnPortrait, alt: "Portrait of Elder Brynn" },
   "Pibble Thatch": { src: pibblePortrait, alt: "Portrait of Pibble Thatch" },
   "Nix Fernwhistle": { src: nixPortrait, alt: "Portrait of Nix Fernwhistle" },
   "Smith Orin": { src: smithOrinPortrait, alt: "Portrait of Smith Orin" },
   "Mayor Anwen": { src: mayorAnwenPortrait, alt: "Portrait of Mayor Anwen" },
   "Nella the Baker": { src: nellaPortrait, alt: "Portrait of Nella the Baker" },
   "Toma Fielding": { src: tomaPortrait, alt: "Portrait of Toma Fielding" },
-  "Miri of the Loom": { src: miriPortrait, alt: "Portrait of Miri of the Loom" },
+  "Sela of the Loom": { src: selaPortrait, alt: "Portrait of Sela of the Loom" },
   "Ada Willowmarket": { src: adaPortrait, alt: "Portrait of Ada Willowmarket" },
   "Ada Willowmarket No Lens": {
     src: adaNoLensPortrait,
@@ -78,6 +82,7 @@ export const DIALOGUE_PORTRAITS = {
   "Rowan Reedshield": { src: rowanPortrait, alt: "Portrait of Rowan Reedshield" },
   "Tilda Quickstep": { src: tildaPortrait, alt: "Portrait of Tilda Quickstep" },
   "Moss Fenmere": { src: mossPortrait, alt: "Portrait of Moss Fenmere" },
+  "Bramble Boar": { src: brambleBoarPortrait, alt: "Portrait of the charging Bramble Boar" },
 };
 
 export function getDialoguePortrait(name = "") {

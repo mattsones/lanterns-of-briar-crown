@@ -382,7 +382,7 @@ Avoid making every NPC too similar. Silhouette, skin tone, build, posture, costu
 
 # 10. Chapter 1 Character Notes
 
-## Elder Mira
+## Elder Brynn
 
 Role: emotional center of Hearthhollow
 
@@ -422,10 +422,10 @@ Mood:
 - intelligent
 - no-nonsense
 - guarded
-- not soft like Mira
+- not soft like Brynn
 - sees the pattern before others want to admit it
 
-Avoid making Enna feel like a younger Mira. She should feel harder, sharper, and more Bramblecross than Hearthhollow.
+Avoid making Enna feel like a younger Brynn. She should feel harder, sharper, and more Bramblecross than Hearthhollow.
 
 ## Captain Hollis
 
@@ -577,7 +577,7 @@ Selected direction:
 - cozy forest village clearing
 - central well
 - warm cottages
-- smithy, home, potion shed, supply cache, Mira location
+- smithy, home, potion shed, supply cache, Brynn location
 - south gate as actual exit
 - no permanent boar warning sign over gate
 - icons/labels can be UI overlays

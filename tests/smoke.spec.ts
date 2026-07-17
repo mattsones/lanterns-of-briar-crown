@@ -25,16 +25,28 @@ test("starts a new adventure and passes built-in QA checks", async ({
     page.getByRole("button", { name: "Step into the morning" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Step into the morning" }).click();
-  await expect(page.getByText("Goal: Speak with Elder Mira")).toBeVisible();
+  await expect(page.getByText("Goal: Speak with Elder Brynn")).toBeVisible();
 
   const mapStage = page.getByTestId("map-stage");
+  const mapStatusOverlay = page.getByTestId("map-status-overlay");
   const heroToken = page.getByTestId("hero-token");
   await expect(mapStage).toBeVisible();
+  await expect(mapStatusOverlay).toBeVisible();
+  await expect(mapStatusOverlay).toHaveCSS("position", "absolute");
+  await expect(mapStatusOverlay).toHaveCSS("pointer-events", "none");
+  const mapBox = await mapStage.boundingBox();
+  const statusBox = await mapStatusOverlay.boundingBox();
+  expect(mapBox).not.toBeNull();
+  expect(statusBox).not.toBeNull();
+  expect(statusBox!.y).toBeGreaterThanOrEqual(mapBox!.y);
+  expect(statusBox!.y + statusBox!.height).toBeLessThan(mapBox!.y + mapBox!.height);
   await expect(mapStage.getByTestId("map-background")).toBeVisible();
   await expect(heroToken).toBeVisible();
   await expect(heroToken.getByTestId("hero-token-art")).toBeVisible();
   await expect(page.getByTestId("map-grid")).toHaveCount(0);
   await expect(mapStage.locator("text=?")).toHaveCount(0);
+  await expect(mapStage.locator(".map-token:not(.has-artwork)")).toHaveCount(0);
+  await expect(mapStage.locator(".map-token--npc.has-artwork")).toHaveCount(5);
 
   const getHeroBox = async () => {
     const box = await heroToken.boundingBox();
@@ -52,6 +64,8 @@ test("starts a new adventure and passes built-in QA checks", async ({
   await page.waitForTimeout(250);
   const secondRightBox = await getHeroBox();
   expect(secondRightBox.x).toBeGreaterThan(rightBox.x);
+  await expect(page.getByRole("dialog", { name: "Sela of the Loom" })).toBeVisible();
+  await page.getByRole("button", { name: "I'll be careful." }).click();
 
   await page.getByTestId("move-down").click();
   await page.waitForTimeout(250);
@@ -62,11 +76,45 @@ test("starts a new adventure and passes built-in QA checks", async ({
   await page.waitForTimeout(250);
   const upBox = await getHeroBox();
   expect(upBox.y).toBeLessThan(downBox.y);
+  await expect(page.getByRole("dialog", { name: "Sela of the Loom" })).toBeVisible();
+  await page.getByRole("button", { name: "I'll be careful." }).click();
 
   await page.getByTestId("move-left").click();
   await page.waitForTimeout(250);
   const leftBox = await getHeroBox();
   expect(leftBox.x).toBeLessThan(upBox.x);
+
+  await page.getByTestId("move-up").click();
+  await page.getByTestId("move-up").click();
+  await expect(page.getByText("Step inside your cozy home?")).toBeVisible();
+  await expect(page.getByTestId("dialogue-map-vignette")).toHaveAttribute(
+    "aria-label",
+    /Hearthhollow home entrance/,
+  );
+  await expect(page.getByTestId("dialogue-map-vignette").locator("img")).toHaveAttribute(
+    "src",
+    /hearthhollow-gameplay-map-v04/,
+  );
+  await expect(page.getByRole("dialog").getByText("🚪", { exact: true })).toHaveCount(0);
+  await page.getByRole("button", { name: "Stay outside" }).click();
+
+  await page.getByTestId("move-down").click();
+  await page.getByTestId("move-down").click();
+  await page.getByTestId("move-down").click();
+  await page.getByTestId("move-left").click();
+  await page.getByTestId("move-left").click();
+  await expect(page.getByText("Head into the potion shed?")).toBeVisible();
+  await expect(page.getByTestId("dialogue-map-vignette")).toHaveAttribute(
+    "aria-label",
+    /potion shed/,
+  );
+  await page.getByRole("button", { name: "Enter" }).click();
+  await expect(page.getByText("Potion Shed", { exact: true })).toBeVisible();
+  await expect(page.getByText("What it does", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Restores 10 HP", { exact: true })).toBeVisible();
+  await expect(page.getByText("Restores 6 HP", { exact: true })).toBeVisible();
+  await expect(page.getByText("Restores 4 HP", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Close", exact: true }).click();
 
   await page.getByRole("button", { name: "Save Slot" }).click();
   await expect(page.getByText("Save Slots")).toBeVisible();

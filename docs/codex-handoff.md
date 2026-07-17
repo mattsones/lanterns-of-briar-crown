@@ -1178,3 +1178,59 @@ Latest local results:
 
 1. Do one human visual playtest of Chapter 3 at desktop and narrow-mobile widths, focusing on dialogue scrolling around the six illustrations.
 2. When Chapter 4 art is ready, use the same source-art/alternate/runtime split and retain the existing fallback UI.
+
+## Current Handoff - Chapter 1 Playtest Polish And Dialogue Art
+
+Last updated: 2026-07-16
+
+Branch: `codex/chapter-3-vertical-slice`
+
+### What Changed
+
+- Applied the queued Chapter 1 human-playtest pass covering story sequencing, map interactions, camp behavior, crafting copy, companion-command clarity, narrow battle layout, and dialogue presentation.
+- Kept the forged-order reveal after the Bramble Boar fight and made Elder Brynn the report-back authority before the player leaves Hearthhollow.
+- Made the Hearthhollow well a one-time walk-on discovery, moved Sela of the Loom near the well crowd, aligned the Bramblecross notice board, and made Hollis lead the player directly to the Root Cellar.
+- Reworked the latest-update presentation, camp feedback, recipe benefit copy, worried-traveler testimony, and Chapter 1 naming/exit-gate continuity.
+- Replaced the highest-value generic dialogue symbols with intentional production art: Courier Satchel evidence, the complete Watchhouse case wall and four crops, the Root Sigil and Route Mural crops, and a true-alpha Briar Crown mark.
+- Reconnected the formerly orphaned Route Mural node to the Root Cellar navigation graph.
+- Added focused Chapter 1 and rules coverage for the revised story, interactions, companion commands, and dialogue art.
+- Added `docs/playtest-notes/2026-07-16-playtest-handoff.md` as the concise completed-work and remaining-work checkpoint.
+
+### Asset Result
+
+- The three opaque dialogue masters are optimized WebP runtime scenes with full-size PNG sources under `assets/reference/source-art/`.
+- The Briar Crown mark is a 512×512 true-alpha runtime PNG; its 1254×1254 source is preserved under `assets/reference/source-art/`.
+- `src/data/dialogueArt.ts` is the reusable registry for full scenes, focused crops, and transparent emblem presentation.
+
+### Resume On Another Machine
+
+```bash
+git fetch --all --prune
+git switch codex/chapter-3-vertical-slice
+git pull --ff-only
+npm install
+npm.cmd run build
+npm.cmd run test:rules
+npm.cmd run playtest:chapter1
+npm.cmd run playtest:chapter2
+npm.cmd run playtest:chapter3
+npm.cmd run playtest:smoke
+```
+
+If the branch does not exist locally yet, use `git switch --track origin/codex/chapter-3-vertical-slice`.
+
+### Verification Run
+
+- `npm.cmd run optimize:assets` passed: 120 imported assets; no selected asset was archived.
+- `npm.cmd run audit:assets -- --limit=10` passed: 120 production images scanned.
+- `npm.cmd run build` passed; the existing slightly-over-500-KB JavaScript chunk warning remains documented as follow-up work.
+- `npm.cmd run test:rules` passed: 24 tests.
+- `npm.cmd run playtest:chapter1` passed: 11 tests.
+- `npm.cmd run playtest:chapter2` passed: 19 tests.
+- `npm.cmd run playtest:chapter3` passed: 2 tests.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `git diff --check` passed with normal Windows LF-to-CRLF warnings only.
+
+### Next Recommended Slice
+
+Use `docs/playtest-notes/2026-07-16-playtest-handoff.md` as the source of truth. The first priorities are narrow-mobile human QA, a full Chapter 3 pacing playtest, and completing the remaining stock-dialogue-art migration without disturbing the working Chapter 1 baseline.

@@ -20,20 +20,20 @@ Confirm Chapter 1 can be completed from a fresh game without broken state, block
 Expected:
 - Opening narration appears.
 - Player begins in Hearthhollow.
-- Current objective: speak with Elder Mira.
+- Current objective: speak with Elder Brynn.
 
 ---
 
 # Hearthhollow
 
-## Elder Mira
+## Elder Brynn
 
-1. Talk to Mira.
+1. Talk to Brynn.
 2. Ask “Why me?” if desired.
 3. Accept the quest.
 
 Expected:
-- Mira gives gold.
+- Brynn gives gold.
 - Heart +1 is applied.
 - Smith discount is unlocked.
 - Objective updates to prepare for the road.
@@ -49,14 +49,14 @@ Expected:
 
 ## Smithy
 
-1. Visit Smith Orin after speaking with Mira.
+1. Visit Smith Orin after speaking with Brynn.
 2. Verify shop opens.
 3. Verify starter discount is available.
 4. Buy/equip if desired.
 
 Expected:
 - Discount applies only to equipment, not consumables.
-- Orin gives appropriate “talk to Mira first” message if visited too early.
+- Orin gives appropriate “talk to Brynn first” message if visited too early.
 
 ## Optional Pibble
 
@@ -80,7 +80,23 @@ Expected:
 - Enemy does not attack after reaching 0 HP.
 - Courier satchel reward appears.
 - Lio Brindle thread begins.
-- Road to Lantern Road opens.
+- Current objective becomes `Bring Lio's Satchel to Elder Brynn`.
+
+## Report the Satchel to Brynn
+
+1. Try the south gate before returning to Brynn.
+2. Confirm the road remains closed and the game directs you back to Brynn.
+3. Return to Elder Brynn with the satchel.
+4. Accept her request to report the false order in Bramblecross and look for Lio.
+5. Return to the south gate.
+
+Expected:
+- Brynn learns about the false order only in this post-boar conversation.
+- Brynn identifies the order as forged authority and gives the Bramblecross reporting objective.
+- The departure at the south gate is an internal pause, not a conversation with an NPC who followed the player there.
+- Choosing `Not yet. Stay in Hearthhollow.` closes the gate dialog without leaving town.
+- The quest advances to `Find What Happened to Lio Brindle` only after the report.
+- Road to Lantern Road opens after the report.
 
 ---
 
@@ -171,6 +187,8 @@ Expected:
 3. Take Ada notice.
 
 Expected:
+- The Mayor explicitly says Enna is inside the watchhouse at the north end of the square.
+- The notice-board interaction is positioned over the painted notice board near the center of town.
 - Ada side quest appears only after notice board.
 - Notice board reveals cellar warnings and route order concerns.
 
@@ -203,10 +221,12 @@ Expected:
 3. Study wall/notice board as required.
 4. Get authorization for Root Cellar.
 5. Ask about Edden if desired.
+6. Confirm Hollis recommends recruiting Rowan, Tilda, or Moss at the Bramblecross Inn when the player is alone.
+7. Choose to proceed with a companion or explicitly go alone.
 
 Expected:
 - Hollis gatekeeping feels story-motivated.
-- Root Cellar entrance unlocks after authorization.
+- Hollis personally leads the player to the Root Cellar and the game transitions below without a hidden-map search.
 
 ## Ada
 
@@ -239,12 +259,15 @@ Expected:
 
 ## Entrance
 
-1. Try before authorization.
-2. Enter after authorization.
+1. Reach Hollis's authorization conversation without a companion.
+2. Confirm the inn recommendation appears.
+3. Recruit a companion or explicitly choose to proceed alone.
+4. Confirm Hollis leads the player directly into the Root Cellar.
 
 Expected:
-- Unauthorized entrance is blocked.
-- Authorized entrance works.
+- The cellar remains inaccessible before Hollis authorizes the investigation.
+- The guided transition sets the authorization and entered-cellar flags.
+- The old map hotspot remains a fallback for re-entry, not the primary discovery path.
 
 ## Cellar Interactables
 

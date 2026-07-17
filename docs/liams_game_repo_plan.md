@@ -395,7 +395,7 @@ Keep concept versions so we can revisit earlier iterations.
 
 ### Character portraits
 
-- Elder Mira
+- Elder Brynn
 - Enna
 - Captain Hollis
 - Nix Fernwhistle
@@ -411,7 +411,7 @@ Keep concept versions so we can revisit earlier iterations.
 - Mayor Anwen
 - Nella the Baker
 - Toma Fielding
-- Miri of the Loom
+- Sela of the Loom
 - Bramble Boar
 - Thorncoat Ruffian
 - Thorny Hound

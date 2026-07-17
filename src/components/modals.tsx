@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { HERO_GROWTH_OPTIONS } from "../data/character";
 import { COMPANION_OPTIONS } from "../data/companions";
+import { getDialogueSceneArt } from "../data/dialogueArt";
 import { BATTLE_CONSUMABLES, ITEM_DB } from "../data/items";
+import { MAPS } from "../data/maps";
 import { getDialoguePortrait } from "../data/portraits";
 import { RECIPE_DB } from "../data/recipes";
 import { getCompanionCommandHint } from "../game/companions";
@@ -76,6 +78,146 @@ const noHandleDoorCloseupScene = new URL(
   "../../assets/scenes/no-handle-door-closeup-v01.webp",
   import.meta.url,
 ).href;
+
+type MapInteractionVignetteConfig = {
+  src: string;
+  alt: string;
+  fallback: string;
+  focusX: number;
+  focusY: number;
+  zoom: number;
+};
+
+const MAP_INTERACTION_VIGNETTES: Record<string, MapInteractionVignetteConfig> = {
+  hearthHome: {
+    src: MAPS.hearthhollow.backgroundImage,
+    alt: "Painted map detail of the familiar Hearthhollow home entrance",
+    fallback: "Home entrance",
+    focusX: 27,
+    focusY: 27,
+    zoom: 230,
+  },
+  hearthSmithy: {
+    src: MAPS.hearthhollow.backgroundImage,
+    alt: "Painted map detail of the smithy's anvil and glowing entrance",
+    fallback: "Smithy entrance",
+    focusX: 74,
+    focusY: 33,
+    zoom: 215,
+  },
+  hearthPotionShed: {
+    src: MAPS.hearthhollow.backgroundImage,
+    alt: "Painted map detail of the potion shed and its outdoor bottles",
+    fallback: "Potion shed",
+    focusX: 12,
+    focusY: 56,
+    zoom: 225,
+  },
+  hearthWell: {
+    src: MAPS.hearthhollow.backgroundImage,
+    alt: "Painted map detail of the stone village well",
+    fallback: "Village well",
+    focusX: 50,
+    focusY: 44,
+    zoom: 235,
+  },
+  hearthSouthGate: {
+    src: MAPS.hearthhollow.backgroundImage,
+    alt: "Painted map detail of Hearthhollow's lantern-lit south gate",
+    fallback: "South gate",
+    focusX: 50,
+    focusY: 80,
+    zoom: 210,
+  },
+  lanternPond: {
+    src: MAPS.lanternRoad.backgroundImage,
+    alt: "Painted map detail of the water and reeds beside Lantern Road",
+    fallback: "Pond edge",
+    focusX: 18,
+    focusY: 72,
+    zoom: 185,
+  },
+  lanternMilestone: {
+    src: MAPS.lanternRoad.backgroundImage,
+    alt: "Painted map detail of the ruined milestone beside Lantern Road",
+    fallback: "Milestone ruin",
+    focusX: 57,
+    focusY: 18,
+    zoom: 210,
+  },
+  lanternCart: {
+    src: MAPS.lanternRoad.backgroundImage,
+    alt: "Painted map detail of the abandoned cart on Lantern Road",
+    fallback: "Broken cart",
+    focusX: 84,
+    focusY: 22,
+    zoom: 210,
+  },
+  lanternCamp: {
+    src: MAPS.lanternRoad.backgroundImage,
+    alt: "Painted map detail of the sheltered road camp and firepit",
+    fallback: "Road camp",
+    focusX: 51,
+    focusY: 48,
+    zoom: 205,
+  },
+  lanternShrine: {
+    src: MAPS.lanternRoad.backgroundImage,
+    alt: "Painted map detail of the lantern shrine in the trees",
+    fallback: "Lantern shrine",
+    focusX: 24,
+    focusY: 18,
+    zoom: 215,
+  },
+  lanternCache: {
+    src: MAPS.lanternRoad.backgroundImage,
+    alt: "Painted map detail of the roadside supply cache",
+    fallback: "Road cache",
+    focusX: 83,
+    focusY: 47,
+    zoom: 215,
+  },
+  brambleInn: {
+    src: MAPS.bramblecross.backgroundImage,
+    alt: "Painted map detail of the Bramblecross inn entrance",
+    fallback: "Bramblecross Inn",
+    focusX: 20,
+    focusY: 25,
+    zoom: 220,
+  },
+  brambleWatchhouse: {
+    src: MAPS.bramblecross.backgroundImage,
+    alt: "Painted map detail of the Bramblecross watchhouse entrance",
+    fallback: "Watchhouse",
+    focusX: 50,
+    focusY: 24,
+    zoom: 220,
+  },
+  brambleMarket: {
+    src: MAPS.bramblecross.backgroundImage,
+    alt: "Painted map detail of the Willow Market entrance",
+    fallback: "Willow Market",
+    focusX: 79,
+    focusY: 26,
+    zoom: 220,
+  },
+  brambleGate: {
+    src: MAPS.bramblecross.backgroundImage,
+    alt: "Painted map detail of the main gate into Bramblecross",
+    fallback: "Bramblecross gate",
+    focusX: 50,
+    focusY: 82,
+    zoom: 190,
+  },
+  rootCellarDoor: {
+    src: MAPS.rootCellar.backgroundImage,
+    alt: "Painted map detail of the sealed iron door in the Old Root Cellar",
+    fallback: "Sealed iron door",
+    focusX: 86,
+    focusY: 42,
+    zoom: 225,
+  },
+};
 
 export function LevelUpModal({ player, target, choose }) {
   const modalRef = useModalAccessibility();
@@ -195,14 +337,64 @@ function DialogueVisual({ kind }) {
 function DialogueSceneImage({ image }) {
   if (!image?.src) return null;
 
+  const focusX = image.focusX ?? 50;
+  const focusY = image.focusY ?? 50;
+  const zoom = image.zoom ?? 100;
+  const isEmblem = image.presentation === "emblem";
+
   return (
-    <figure className="mt-4 overflow-hidden rounded-xl border border-white/10 bg-black/20">
+    <figure
+      data-art-key={image.id}
+      className={`relative mt-4 overflow-hidden rounded-xl border border-white/10 ${isEmblem ? "aspect-[5/2] bg-[radial-gradient(circle_at_center,_rgba(127,29,29,0.28),_rgba(2,6,23,0.72)_68%)]" : "aspect-video bg-black/20"}`}
+    >
       <img
         data-testid="dialogue-scene-image"
         src={image.src}
         alt={image.alt || ""}
-        className="aspect-video w-full object-cover object-[center_62%]"
+        className={isEmblem ? "absolute inset-0 h-full w-full object-contain p-5 sm:p-7" : "absolute left-1/2 top-1/2 h-auto max-w-none"}
+        style={isEmblem ? undefined : {
+          width: `${zoom}%`,
+          transform: `translate(-${focusX}%, -${focusY}%)`,
+        }}
       />
+      <div className={`pointer-events-none absolute inset-0 ${isEmblem ? "bg-gradient-to-t from-slate-950/20 via-transparent to-red-950/10" : "bg-gradient-to-t from-slate-950/20 via-transparent to-black/10"}`} />
+    </figure>
+  );
+}
+
+function DialogueMapVignette({ kind }) {
+  const [imageFailed, setImageFailed] = useState(false);
+  const vignette = MAP_INTERACTION_VIGNETTES[kind];
+
+  useEffect(() => setImageFailed(false), [kind]);
+
+  if (!vignette) return null;
+
+  return (
+    <figure
+      data-testid="dialogue-map-vignette"
+      role="img"
+      aria-label={vignette.alt}
+      className="relative mt-3 h-32 overflow-hidden rounded-2xl border border-amber-100/15 bg-slate-950 shadow-inner sm:h-52"
+    >
+      {imageFailed ? (
+        <div className="flex h-full items-center justify-center bg-amber-950/30 px-4 text-center text-sm font-semibold text-amber-100/70">
+          {vignette.fallback}
+        </div>
+      ) : (
+        <img
+          src={vignette.src}
+          alt=""
+          aria-hidden="true"
+          onError={() => setImageFailed(true)}
+          className="absolute left-1/2 top-1/2 h-auto max-w-none"
+          style={{
+            width: `${vignette.zoom}%`,
+            transform: `translate(-${vignette.focusX}%, -${vignette.focusY}%)`,
+          }}
+        />
+      )}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/45 via-transparent to-black/10" />
     </figure>
   );
 }
@@ -210,28 +402,33 @@ function DialogueSceneImage({ image }) {
 export function DialogueModal({ dialogue, close }) {
   const portraitAsset = getDialoguePortrait(dialogue.portraitName || dialogue.name);
   const portraitImage = dialogue.portraitImage;
-  const widthClass = dialogue.size === "wide" || dialogue.visual || dialogue.sceneImage ? "max-w-5xl" : "max-w-3xl";
+  const sceneImage = dialogue.sceneImage || getDialogueSceneArt(dialogue.artKey);
+  const hasMapVignette = Boolean(MAP_INTERACTION_VIGNETTES[dialogue.mapVignette]);
+  const showPortrait = Boolean(portraitImage || portraitAsset) && !hasMapVignette && !dialogue.visual && !sceneImage;
+  const widthClass = dialogue.size === "wide" || dialogue.visual || sceneImage ? "max-w-5xl" : "max-w-3xl";
   const scrollRef = useRef(null);
   const modalRef = useModalAccessibility(close);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: 0 });
-  }, [dialogue.name, dialogue.text, dialogue.visual, dialogue.sceneImage?.src, dialogue.messages?.length]);
+  }, [dialogue.name, dialogue.text, dialogue.feedback, dialogue.visual, dialogue.mapVignette, sceneImage?.src, dialogue.messages?.length]);
 
   return <div className="fixed inset-0 z-[80] flex items-end justify-center bg-black/60 p-4 sm:items-center">
     <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="dialogue-title" tabIndex={-1} className={`flex max-h-[85vh] w-full ${widthClass} flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900 p-5 shadow-2xl`}>
       <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto pr-1">
-        <div className="flex items-start gap-4">
-          <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-3xl bg-white/10 text-4xl">
+        <div className={showPortrait ? "flex items-start gap-4" : "block"}>
+          {showPortrait ? <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-3xl bg-white/10 text-4xl">
             <span className={portraitImage || portraitAsset ? "opacity-0" : ""}>{dialogue.portrait}</span>
             {portraitImage ? <img src={portraitImage.src} alt={portraitImage.alt || ""} onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.previousElementSibling?.classList.remove("opacity-0"); }} className="absolute inset-0 h-full w-full object-contain p-2" /> : null}
             {!portraitImage && portraitAsset ? <img src={portraitAsset.src} alt={portraitAsset.alt} onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.previousElementSibling?.classList.remove("opacity-0"); }} className="absolute inset-0 h-full w-full object-cover" /> : null}
-          </div>
+          </div> : null}
           <div className="min-w-0 flex-1">
             <div id="dialogue-title" className="text-xl font-semibold">{dialogue.name}</div>
-            {dialogue.sceneImage ? <DialogueSceneImage image={dialogue.sceneImage} /> : null}
+            {hasMapVignette ? <DialogueMapVignette kind={dialogue.mapVignette} /> : null}
+            {sceneImage ? <DialogueSceneImage image={sceneImage} /> : null}
             {dialogue.visual ? <DialogueVisual kind={dialogue.visual} /> : null}
             {dialogue.messages ? <div className="mt-3 space-y-2">{dialogue.messages.map((m, i) => <div key={`${m.speaker}-${i}`} className={`flex ${m.side === "right" ? "justify-end" : "justify-start"}`}><div className={`max-w-[85%] rounded-2xl px-4 py-3 text-base leading-7 ${m.side === "right" ? "bg-emerald-500/20" : "bg-white/10 text-white/85"}`}><div className="mb-1 text-[10px] uppercase tracking-wide text-white/50">{m.speaker}</div><div>{m.text}</div></div></div>)}</div> : <div className="mt-2 whitespace-pre-line text-base leading-7 text-white/85">{dialogue.text}</div>}
+            {dialogue.feedback ? <div role="status" data-testid="dialogue-feedback" className="mt-4 rounded-2xl border border-emerald-300/20 bg-emerald-500/10 px-4 py-3 text-sm leading-6 text-emerald-100">{dialogue.feedback}</div> : null}
           </div>
         </div>
       </div>
@@ -316,6 +513,7 @@ ${scene.ask}`, choices: [
         </div>
         <div className="rounded-3xl border border-amber-300/20 bg-amber-400/10 p-4 text-sm text-white/85">Enna notices the road dust on your boots. Talk to her at the clerk's desk before trusting the wall as complete.</div>
       </> : <>
+        <DialogueSceneImage image={getDialogueSceneArt("watchhouseCaseWall")} />
         <div className="rounded-3xl border border-emerald-300/20 bg-emerald-400/10 p-5">
           <div className="text-sm uppercase tracking-wide text-emerald-200/80">Completed Case Wall</div>
           <div className="mt-2 text-2xl font-semibold">False authority growing over true roads</div>
@@ -331,16 +529,16 @@ ${scene.ask}`, choices: [
         <div className="grid gap-3 sm:grid-cols-2">
           <Button className="justify-start text-left" onClick={() => { setFlags((f) => ({ ...f, watchEvidenceRead: true })); const check = resolveSkillCheck(getDerivedStats(player), "Wit", 10); const boardText = `${checkSummary(check)}
 
-${check.success ? "The red string no longer runs from clue to clue. It runs from system to system: road signs, cargo marks, public notices, old cellars, and frightened people. The pattern is not theft or random monster trouble. It is misdirection built to make ordinary systems lie." : "The board is dense and crowded. Hearthhollow, Lantern Road, Bramblecross, and the cellar all have strings on them, but following the full shape yourself makes the room feel louder. Enna has clearly seen something here; you have the pieces, not the pattern."}`; setDialogue({ portrait: "🧷", name: "Evidence Board", text: appendChapter1CompanionReaction(boardText, companion?.recruited ? companion.id : null, "caseWall"), choices: [{ label: check.success ? "That pattern matters." : "Keep the board in mind.", effect: () => setDialogue(null) }] }); }}>🧷 Study the completed evidence board</Button>
+${check.success ? "The red string no longer runs from clue to clue. It runs from system to system: road signs, cargo marks, public notices, old cellars, and frightened people. The pattern is not theft or random monster trouble. It is misdirection built to make ordinary systems lie." : "The board is dense and crowded. Hearthhollow, Lantern Road, Bramblecross, and the cellar all have strings on them, but following the full shape yourself makes the room feel louder. Enna has clearly seen something here; you have the pieces, not the pattern."}`; setDialogue({ portrait: "🧷", artKey: "watchhouseEvidenceBoard", name: "Evidence Board", text: appendChapter1CompanionReaction(boardText, companion?.recruited ? companion.id : null, "caseWall"), choices: [{ label: check.success ? "That pattern matters." : "Keep the board in mind.", effect: () => setDialogue(null) }] }); }}>Study the completed evidence board</Button>
           <Button className="justify-start text-left" onClick={() => { setFlags((f) => ({ ...f, watchEvidenceRead: true, watchLedgerRead: true })); const check = resolveSkillCheck(getDerivedStats(player), "Wit", 10); setDialogue({ portrait: "📚", name: "Duty Ledger", text: `${checkSummary(check)}
 
-${check.success ? "The missing porters were last assigned near the old root cellar. Someone altered the route notes afterward, turning an ordinary storage shift into a blind corner in the records. The changed handwriting is trying to imitate the clerk's shorthand, but the route marks are copied backward." : "You find the missing porters' names and their last root-cellar assignment. After that, the corrections, arrows, and shorthand marks crowd together until the page looks more anxious than informative."}`, choices: [{ label: check.success ? "Useful." : "Set the ledger back.", effect: () => setDialogue(null) }] }); }}>📚 Read the duty ledger</Button>
+${check.success ? "The missing porters were last assigned near the old root cellar. Someone altered the route notes afterward, turning an ordinary storage shift into a blind corner in the records. The changed handwriting is trying to imitate the clerk's shorthand, but the route marks are copied backward." : "You find the missing porters' names and their last root-cellar assignment. After that, the corrections, arrows, and shorthand marks crowd together until the page looks more anxious than informative."}`, artKey: "watchhouseDutyLedger", choices: [{ label: check.success ? "Useful." : "Set the ledger back.", effect: () => setDialogue(null) }] }); }}>Read the duty ledger</Button>
           <Button className="justify-start text-left" onClick={() => { setFlags((f) => ({ ...f, watchEvidenceRead: true, watchMapRead: true })); const check = resolveSkillCheck(getDerivedStats(player), "Instinct", 10); setDialogue({ portrait: "🗺️", name: "Wall Map", text: `${checkSummary(check)}
 
-${check.success ? "Pins connect Hearthhollow, Lantern Road, Bramblecross, and cellar paths under the warehouses. Some lines are public roads. Some are older, half-erased routes that still match the marks at the Lantern Shrine. One faded line bends west into a cluster of obsolete marks Enna has circled twice." : "Pins connect Hearthhollow, Lantern Road, Bramblecross, and cellar paths under the warehouses. You can follow the public roads, but the older half-erased lines fade into smudges before they tell you where they go."}`, choices: [{ label: check.success ? "Memorize it." : "Step back from the map.", effect: () => setDialogue(null) }] }); }}>🗺️ Examine the wall map</Button>
+${check.success ? "Pins connect Hearthhollow, Lantern Road, Bramblecross, and cellar paths under the warehouses. Some lines are public roads. Some are older, half-erased routes that still match the marks at the Lantern Shrine. One faded line bends west into a cluster of obsolete marks Enna has circled twice." : "Pins connect Hearthhollow, Lantern Road, Bramblecross, and cellar paths under the warehouses. You can follow the public roads, but the older half-erased lines fade into smudges before they tell you where they go."}`, artKey: "watchhouseWallMap", choices: [{ label: check.success ? "Memorize it." : "Step back from the map.", effect: () => setDialogue(null) }] }); }}>Examine the wall map</Button>
           <Button className="justify-start text-left" onClick={() => { setFlags((f) => ({ ...f, watchEvidenceRead: true, watchOrdersRead: true })); const check = resolveSkillCheck(getDerivedStats(player), "Will", 10); setDialogue({ portrait: "📄", name: "Forged Orders File", text: `${checkSummary(check)}
 
-${check.success ? "The copied orders borrow royal language but push fear instead of wise command. Enna has underlined the verbs: delay, hold, misdirect, recover. Whoever wrote them thinks in routes and pressure points. The tone feels like a crown without care: command stripped of responsibility." : "The copied orders use heavy royal phrasing. Enna has underlined the verbs: delay, hold, misdirect, recover. You can feel the pressure in the wording, but what that pressure proves keeps slipping away."}`, choices: [{ label: check.success ? "The tone itself is fake." : "Set the file aside.", effect: () => setDialogue(null) }] }); }}>📄 Read the forged orders file</Button>
+${check.success ? "The copied orders borrow royal language but push fear instead of wise command. Enna has underlined the verbs: delay, hold, misdirect, recover. Whoever wrote them thinks in routes and pressure points. The tone feels like a crown without care: command stripped of responsibility." : "The copied orders use heavy royal phrasing. Enna has underlined the verbs: delay, hold, misdirect, recover. You can feel the pressure in the wording, but what that pressure proves keeps slipping away."}`, artKey: "watchhouseForgedOrders", choices: [{ label: check.success ? "The tone itself is fake." : "Set the file aside.", effect: () => setDialogue(null) }] }); }}>Read the forged orders file</Button>
         </div>
         <div className="rounded-3xl border border-white/10 bg-black/20 p-4 text-sm text-white/75">Enna has left a note in the corner: <span className="italic text-white">“A road is safest when truth walks it first. Someone is making lies walk first.”</span></div>
       </>}
@@ -374,7 +572,69 @@ function ShopkeeperPortrait({ shopMode, flags }) {
 }
 
 export function ShopModal({ shop, player, close, buyItem, sellItem, shopMode, flags }) { return <div className="fixed inset-0 z-30 overflow-y-auto bg-black/50 p-4"><div className="mx-auto my-8 max-w-3xl rounded-[2rem] border border-white/10 bg-slate-900 p-5"><div className="mb-4 flex justify-between gap-4"><div className="flex min-w-0 items-center gap-4"><ShopkeeperPortrait shopMode={shopMode} flags={flags} /><div><div className="text-2xl font-semibold">{shop.title}</div><div className="text-sm text-yellow-300">Gold: {player.gold}</div>{shopMode === "smith" && flags.elderGavePurse && !flags.smithStarterDiscountUsed ? <div className="text-sm text-emerald-300">Starter discount available.</div> : null}</div></div><Button onClick={close}>Close</Button></div><div className="grid gap-5 lg:grid-cols-2"><div><div className="mb-2 text-sm font-semibold text-emerald-300">Buy</div><div className="grid gap-3">{shop.inventory.map((id) => { const item = ITEM_DB[id]; const discount = shopMode === "smith" && item?.slot && flags.elderGavePurse && !flags.smithStarterDiscountUsed ? 4 : shopMode === "market" && flags.marketDiscount ? 2 : 0; const cost = Math.max(1, getBuyPrice(id) - discount); return <div key={id} className="rounded-2xl border border-white/10 bg-white/5 p-3"><div className="flex justify-between gap-3"><div className="flex min-w-0 items-start gap-3"><ItemIcon item={item} size="sm" /><div className="min-w-0"><div className="font-medium">{item.name}</div><div className="mt-1 text-xs text-white/70">{item.description}</div>{getItemHighlights(item).slice(0, 2).map((line) => <div key={line} className="mt-1 text-[11px] text-emerald-300/90">{line}</div>)}</div></div><Button onClick={() => buyItem(id)} disabled={player.gold < cost}>Buy • {cost}g</Button></div></div>; })}</div></div><div><div className="mb-2 text-sm font-semibold text-amber-300">Sell</div><div className="grid gap-3">{(Object.entries(player.inventory) as [string, number][]).filter(([, c]) => c > 0).map(([id, count]) => <div key={id} className="rounded-2xl border border-white/10 bg-white/5 p-3"><div className="flex justify-between gap-3"><div className="flex min-w-0 items-center gap-2"><ItemIcon item={ITEM_DB[id]} size="sm" /><span>{ITEM_DB[id]?.name} <span className="text-xs text-white/60">x{count}</span></span></div><Button onClick={() => sellItem(id)}>Sell • {getSellPrice(id)}g</Button></div></div>)}</div></div></div></div></div>; }
-export function CraftModal({ player, close, craftRecipe }) { return <div className="fixed inset-0 z-30 overflow-y-auto bg-black/50 p-4"><div className="mx-auto my-8 max-w-2xl rounded-[2rem] border border-white/10 bg-slate-900 p-5"><div className="mb-4 flex justify-between"><div><div className="text-2xl font-semibold">Potion Shed</div><div className="text-sm text-white/70">Brew something useful or memorable.</div></div><Button onClick={close}>Close</Button></div><div className="space-y-3">{Object.values(RECIPE_DB).map((recipe) => { const item = ITEM_DB[recipe.resultId]; return <div key={recipe.id} className="rounded-2xl border border-white/10 bg-white/5 p-4"><div className="flex justify-between gap-3"><div className="flex min-w-0 items-start gap-3"><ItemIcon item={item} /><div className="min-w-0"><div className="font-medium">{recipe.name}</div><div className="mt-1 text-sm text-white/75">{recipe.note}</div><div className="mt-2 text-xs text-white/60">Ingredients: {formatIngredients(recipe.ingredients)}</div></div></div><Button onClick={() => craftRecipe(recipe.id)} disabled={!canCraftRecipe(player, recipe)}>Craft</Button></div></div>; })}</div></div></div>; }
+export function CraftModal({ player, close, craftRecipe, context = "potionShed" }) {
+  const isRoadCamp = context === "roadCamp";
+  return (
+    <div className="fixed inset-0 z-30 overflow-y-auto bg-black/50 p-4">
+      <div className="mx-auto my-8 max-w-2xl rounded-[2rem] border border-white/10 bg-slate-900 p-5">
+        <div className="mb-4 flex justify-between gap-4">
+          <div>
+            <div className="text-2xl font-semibold">{isRoadCamp ? "Camp Crafting" : "Potion Shed"}</div>
+            <div className="text-sm text-white/70">
+              {isRoadCamp
+                ? "Mix road supplies beside the fire."
+                : "Brew something useful or memorable."}
+            </div>
+          </div>
+          <Button onClick={close}>Close</Button>
+        </div>
+        <div className="space-y-3">
+          {Object.values(RECIPE_DB).map((recipe) => {
+            const item = ITEM_DB[recipe.resultId];
+            const effectText = item.effectText?.replace(
+              /^Use: Restore /,
+              "Restores ",
+            );
+
+            return (
+              <div
+                key={recipe.id}
+                className="rounded-2xl border border-white/10 bg-white/5 p-4"
+              >
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="flex min-w-0 items-start gap-3">
+                    <ItemIcon item={item} />
+                    <div className="min-w-0">
+                      <div className="font-medium">{recipe.name}</div>
+                      <div className="mt-1 text-sm text-white/75">
+                        {recipe.note}
+                      </div>
+                      {effectText ? (
+                        <div className="mt-2 text-sm font-medium text-emerald-300">
+                          {effectText}
+                        </div>
+                      ) : null}
+                      <div className="mt-2 text-xs text-white/60">
+                        Ingredients: {formatIngredients(recipe.ingredients)}
+                      </div>
+                    </div>
+                  </div>
+                  <Button
+                    className="w-full sm:w-auto"
+                    onClick={() => craftRecipe(recipe.id)}
+                    disabled={!canCraftRecipe(player, recipe)}
+                  >
+                    Craft
+                  </Button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
 function EnemyPortrait({ enemy }) {
   const [artFailed, setArtFailed] = useState(false);
 

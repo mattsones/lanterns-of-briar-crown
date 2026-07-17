@@ -77,7 +77,7 @@ export const MAP_ARTWORK_PLAN: Record<string, ArtworkPlanEntry> = {
 };
 
 export const PORTRAIT_ARTWORK_PLAN: Record<string, ArtworkPlanEntry> = {
-  mira: entry("mira", "Elder Mira", "portrait", 1, "dialogue emoji", "available"),
+  elder_brynn: entry("elder_brynn", "Elder Brynn", "portrait", 1, "dialogue emoji", "available"),
   enna: entry("enna", "Watch Clerk Enna", "portrait", 1, "dialogue emoji", "available"),
   hollis: entry("hollis", "Captain Hollis", "portrait", 1, "dialogue emoji", "available"),
   nix: entry("nix", "Nix Fernwhistle", "portrait", 1, "dialogue emoji", "available"),
@@ -90,7 +90,7 @@ export const PORTRAIT_ARTWORK_PLAN: Record<string, ArtworkPlanEntry> = {
   anwen: entry("anwen", "Mayor Anwen", "portrait", 1, "dialogue emoji", "available"),
   nella: entry("nella", "Nella the Baker", "portrait", 1, "dialogue emoji", "available"),
   toma: entry("toma", "Toma Fielding", "portrait", 1, "dialogue emoji", "available"),
-  miri: entry("miri", "Miri of the Loom", "portrait", 1, "dialogue emoji", "available"),
+  sela: entry("sela", "Sela of the Loom", "portrait", 1, "dialogue emoji", "available"),
   mara: entry("mara", "Mara Brindle", "portrait", 2, "dialogue emoji", "available"),
   edden: entry("edden", "Edden Vale", "portrait", 2, "dialogue emoji", "available"),
   lio: entry("lio", "Lio Brindle", "portrait", 5, "dialogue emoji", "available"),
@@ -137,7 +137,15 @@ export const ITEM_ARTWORK_BACKLOG: Record<string, ArtworkPlanEntry> = {
 
 export const SYMBOL_UI_ARTWORK_PLAN: Record<string, ArtworkPlanEntry> = {
   lantern_road_symbols: entry("lantern_road_symbols", "Lantern Road Symbol Sheet", "symbol-ui", "shared", "text labels"),
-  briar_crown_symbols: entry("briar_crown_symbols", "Briar Crown Symbol Sheet", "symbol-ui", "shared", "text labels"),
+  briar_crown_symbols: entry(
+    "briar_crown_symbols",
+    "Briar Crown Primary Mark",
+    "symbol-ui",
+    "shared",
+    "crown emoji",
+    "available",
+    "Selected true-alpha Briar Crown mark is wired into the Chapter 1 discovery and report-back dialogues.",
+  ),
   willow_seal_reference: entry("willow_seal_reference", "Willow Seal Reference Sheet", "symbol-ui", "shared", "text labels"),
   parchment_panels: entry("parchment_panels", "Parchment UI Panel Treatment", "symbol-ui", "shared", "CSS panels"),
 };

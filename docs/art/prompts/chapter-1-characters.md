@@ -16,10 +16,10 @@ No photorealism, no 3D-rendered look, no glossy digital game art, no anime style
 
 ---
 
-# Elder Mira
+# Elder Brynn
 
 ```text
-Create a half-body storybook fantasy portrait of Elder Mira, an important village elder from Hearthhollow. She should appear wise, steady, warm, and quietly burdened by responsibility. Her expression should suggest both kindness and urgency. She should look like someone people trust in a crisis.
+Create a half-body storybook fantasy portrait of Elder Brynn, an important village elder from Hearthhollow. She should appear wise, steady, warm, and quietly burdened by responsibility. Her expression should suggest both kindness and urgency. She should look like someone people trust in a crisis.
 
 Her clothing should be simple but dignified village attire with subtle fantasy touches, practical rather than regal. Include warm Hearthhollow background hints: lantern light, cottage textures, herbs, books, village signs, or a cozy path.
 
@@ -37,7 +37,7 @@ Create a half-body storybook fantasy portrait of Enna, a sharp and capable Bramb
 
 She should look intelligent, organized, and slightly intense, like someone assembling clues faster than everyone around her. Include papers, pins, route notes, ledgers, a wall map, and Bramblecross watch details. Her clothing should be practical investigative fantasy attire, structured and functional.
 
-Mood: no-nonsense, guarded, precise, and mentally tough. She should not feel like a younger version of Elder Mira.
+Mood: no-nonsense, guarded, precise, and mentally tough. She should not feel like a younger version of Elder Brynn.
 
 Use the master style block.
 ```
@@ -151,7 +151,7 @@ Use the master style block.
 ```text
 Create a half-body storybook fantasy portrait of Smith Orin, Hearthhollow’s blacksmith. Orin should be an Emberling, one of the firepeople of Liam's Game: sturdy, practical, warm but blunt, and completely comfortable around open flame. He should read clearly as an Emberling at first glance, not as a human blacksmith lit by orange forge light.
 
-Use visible Emberling traits: ember-orange or coal-red skin, coal-glow freckles, faint inner heat at the cheeks and knuckles, cinder-dark or flame-colored hair, and eyes that catch like banked coals. Show coal-smudged hands, a hammer, leather apron, and forge light behind him. He should look like someone who will not give road gear to eager hands until Elder Mira says it is time. His design should be grounded village fantasy: a fireperson who is also a working village smith, not ornate knightly armor and not a disembodied fire elemental.
+Use visible Emberling traits: ember-orange or coal-red skin, coal-glow freckles, faint inner heat at the cheeks and knuckles, cinder-dark or flame-colored hair, and eyes that catch like banked coals. Show coal-smudged hands, a hammer, leather apron, and forge light behind him. He should look like someone who will not give road gear to eager hands until Elder Brynn says it is time. His design should be grounded village fantasy: a fireperson who is also a working village smith, not ornate knightly armor and not a disembodied fire elemental.
 
 Mood: protective, practical, no-nonsense, caring beneath gruffness, forge-warm.
 

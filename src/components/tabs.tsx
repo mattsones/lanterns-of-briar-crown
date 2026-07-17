@@ -5,6 +5,7 @@ import { RECIPE_DB } from "../data/recipes";
 import {
   getCompanionAbilityCards,
   getCompanionCommandHint,
+  getCompanionCommandOptions,
 } from "../game/companions";
 import { titleCase } from "../game/format";
 import {
@@ -417,20 +418,36 @@ export function CompanionTab({ companion, setCompanion, flags, dismiss }) {
               label={`${companion.name} HP`}
               colorClass="bg-rose-400"
             />
-            <select
-              className="w-full rounded-2xl border border-white/10 bg-black/20 px-3 py-2"
-              value={companion.command}
-              onChange={(e) =>
-                setCompanion((c) => ({ ...c, command: e.target.value }))
-              }
+            <label className="block">
+              <span className="mb-2 block text-xs font-semibold uppercase tracking-wide text-white/55">
+                Battle order
+              </span>
+              <select
+                aria-label="Companion battle order"
+                className="w-full rounded-2xl border border-white/10 bg-black/20 px-3 py-2"
+                value={companion.command}
+                onChange={(e) =>
+                  setCompanion((c) => ({ ...c, command: e.target.value }))
+                }
+              >
+                {getCompanionCommandOptions(companion).map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                    className="bg-slate-900"
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div
+              data-testid="companion-command-preview"
+              className="rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-3 text-sm text-white/80"
             >
-              {["Attack Freely", "Defend Me", "Use Support Skills"].map((o) => (
-                <option key={o} className="bg-slate-900">
-                  {o}
-                </option>
-              ))}
-            </select>
-            <div className="rounded-2xl bg-white/5 p-3 text-sm text-white/75">
+              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-emerald-300">
+                Will use in battle
+              </div>
               {getCompanionCommandHint(companion)}
             </div>
             <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-sm">
@@ -450,21 +467,32 @@ export function CompanionTab({ companion, setCompanion, flags, dismiss }) {
       </div>
       <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
         <div className="mb-3 text-sm font-semibold">
-          Abilities & Future Growth
+          Abilities by Battle Order
         </div>
         {companion.recruited ? (
           <div className="space-y-3">
             {getCompanionAbilityCards(companion).map((a) => (
               <div
                 key={a.name}
-                className="rounded-2xl border border-white/10 bg-black/20 p-3"
+                aria-current={a.command === companion.command ? "true" : undefined}
+                className={`rounded-2xl border p-3 ${
+                  a.command === companion.command
+                    ? "border-emerald-300/40 bg-emerald-400/10"
+                    : "border-white/10 bg-black/20"
+                }`}
               >
-                <div className="font-medium">{a.name}</div>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="font-medium">{a.name}</div>
+                  <div className="rounded-full bg-white/10 px-2 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-200">
+                    {a.commandLabel}
+                  </div>
+                </div>
                 <div className="mt-1 text-sm text-white/75">
                   {a.description}
                 </div>
               </div>
             ))}
+            <div className="pt-2 text-sm font-semibold">Future Growth</div>
             {(
               companion.futurePathOptions ||
               getCompanionGrowthPreview(flags.companionChoice)
@@ -509,6 +537,10 @@ export function RecipesTab({ player }) {
       </div>
       {Object.values(RECIPE_DB).map((recipe) => {
         const item = ITEM_DB[recipe.resultId];
+        const effectText = item.effectText?.replace(
+          /^Use: Restore /,
+          "Restores ",
+        );
         return (
           <div
             key={recipe.id}
@@ -519,6 +551,11 @@ export function RecipesTab({ player }) {
               <div className="min-w-0">
                 <div className="font-medium">{recipe.name}</div>
                 <div className="mt-1 text-sm text-white/75">{recipe.note}</div>
+                {effectText ? (
+                  <div className="mt-2 text-sm font-medium text-emerald-300">
+                    {effectText}
+                  </div>
+                ) : null}
                 <div className="mt-2 text-xs text-white/60">
                   Ingredients: {formatIngredients(recipe.ingredients)}
                 </div>

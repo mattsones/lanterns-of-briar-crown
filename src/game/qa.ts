@@ -86,6 +86,9 @@ export function runGameQaChecks({
       MAPS.hearthhollow.tiles[5][10] === "tree" &&
       MAPS.hearthhollow.tiles[5][11] === "tree" &&
       MAPS.hearthhollow.tiles[4][6] === "well" &&
+      MAPS.hearthhollow.tiles[4][4] === "weaver" &&
+      MAPS.hearthhollow.tiles[8][10] === "grass" &&
+      MAPS.hearthhollow.tiles[8][11] === "grass" &&
       MAPS.hearthhollow.tiles[9].every(
         (tile, x) => x === 6 ? tile === "gate" : TILE_META[tile]?.blocked,
       ) &&
@@ -95,7 +98,7 @@ export function runGameQaChecks({
       !TILE_META.pond?.blocked &&
       !isBlockedInteractionTile("pond"),
     "Hearthhollow placement tweaks are tuned",
-    "Doors, chest, quiet well/pond landmarks, upper-right trees, and south-row gate boundary match the latest map pass.",
+    "Doors, chest, Sela's gathering spot left of the well, quiet well/pond landmarks, upper-right trees, and south-row gate boundary match the latest map pass.",
   );
 
   const shopIds = [

@@ -63,6 +63,7 @@ export function buildDefaultFlags(): GameFlags {
     craftedPotion: false,
     gotPibbleTip: false,
     beatGateBattle: false,
+    reportedSatchelToElder: false,
     metNix: false,
     foundRuinNote: false,
     clearedWildBattle: false,

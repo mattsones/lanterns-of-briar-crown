@@ -24,7 +24,7 @@ Inside, you find a folded order bearing a crown seal that looks right until you 
 
 The order reads:
 
-DELAY ROADS. STIR PANIC. HOLD ALL MESSENGERS.
+RESTRICT SOUTH ROAD. HOLD ALL COURIERS FOR INSPECTION. AWAIT CROWN AUTHORITY.
 
 Beneath it is something worse than the order: a small lunch packet, still tied with blue string. Someone has tucked a note under the knot in a careful hand:
 

@@ -268,10 +268,61 @@ textarea {
   object-fit: cover;
 }
 
-.map-token-portrait {
-  object-position: center 8%;
-  transform: scale(2.7);
-  transform-origin: center 8%;
+.map-token .map-token-portrait {
+  inset: auto;
+  left: var(--map-token-portrait-left, 50%);
+  top: var(--map-token-portrait-top, 110%);
+  width: var(--map-token-portrait-size, 175%);
+  height: auto;
+  max-width: none;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+}
+
+.map-stage-shell {
+  position: relative;
+}
+
+.map-status-overlay {
+  position: absolute;
+  z-index: 20;
+  top: clamp(0.55rem, 1.8vw, 0.9rem);
+  left: clamp(0.55rem, 1.8vw, 0.9rem);
+  right: clamp(0.55rem, 1.8vw, 0.9rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.55rem 0.75rem;
+  pointer-events: none;
+  border: 1px solid rgb(252 211 77 / 0.3);
+  border-radius: 1rem;
+  background: rgb(2 6 23 / 0.76);
+  box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.22);
+  backdrop-filter: blur(10px) saturate(1.15);
+}
+
+.map-status-label {
+  flex: 0 0 auto;
+  color: rgb(253 230 138);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.map-status-message {
+  min-width: 0;
+  color: rgb(255 255 255 / 0.9);
+  font-size: clamp(0.72rem, 1.6vw, 0.85rem);
+  line-height: 1.35;
+}
+
+@media (max-width: 520px) {
+  .map-status-overlay {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
 }
 
 .map-token-fallback {

@@ -32,6 +32,7 @@ export type DiskSaveFile = {
 };
 
 const RENAMED_FLAG_KEYS: Partial<Record<string, GameFlagKey>> = {
+  reportedSatchelToMira: "reportedSatchelToElder",
   westrootGateClear: "westrootGateOpened",
   crownDenCleared: "crownDoorDungeonCleared",
   roadwatcherCleared: "roadwatcherDefeated",
@@ -129,8 +130,23 @@ export function migrateFlags(flags: Flags | Record<string, unknown> = {}): GameF
 }
 
 export function migrateSavePayload(payload: SavePayload, sourceVersion = SAVE_FILE_VERSION): SavePayload {
+  const sourceFlags = (payload.flags || {}) as Record<string, unknown>;
   const flags = migrateFlags(payload.flags || {});
   const region = normalizeRegionId(payload.region);
+  if (
+    sourceFlags.reportedSatchelToElder === undefined &&
+    sourceFlags.reportedSatchelToMira === undefined &&
+    ((flags.beatGateBattle && region !== "hearthhollow") ||
+      flags.metNix ||
+      flags.foundRuinNote ||
+      flags.clearedWildBattle ||
+      flags.reachedBramblecross ||
+      flags.chapterReported ||
+      flags.chapterTwoStarted ||
+      flags.chapterTwoClear)
+  ) {
+    flags.reportedSatchelToElder = true;
+  }
   const position = normalizeMapPosition(region, payload.position || MAPS[region].start);
   const player = normalizePlayerData({
     ...payload.player,

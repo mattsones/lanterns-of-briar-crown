@@ -11,7 +11,7 @@ It is organized by location, scene, and state. Button labels are included where 
 ### Hearthhollow, Dawn
 **Text**
 
-`[Hero Name] has always known Hearthhollow as a place of ordinary sounds: Nella's oven door clapping shut, Toma arguing with turnips, Pibble inventing uses for tools nobody requested. This morning, those sounds are missing. People stand in doorways. The south road is too quiet. A courier has not arrived, a royal order does not read like a royal order, and a bramble boar has been seen charging near the gate with a messenger's satchel caught on its tusk. For the first time, home feels less like a shelter and more like the first page of something dangerous.`
+`[Hero Name] has always known Hearthhollow as a place of ordinary sounds: Nella's oven door clapping shut, Toma arguing with turnips, Pibble inventing uses for tools nobody requested. This morning, those sounds are missing. People stand in doorways. The south road is too quiet. A courier has not arrived, and a bramble boar has been seen charging near the gate with a messenger's satchel caught on its tusk. For the first time, home feels less like a shelter and more like the first page of something dangerous.`
 
 **Choice**
 - Step into the morning
@@ -20,12 +20,12 @@ It is organized by location, scene, and state. Button labels are included where 
 
 # Hearthhollow
 
-## Elder Mira
+## Elder Brynn
 
 ### First conversation
 **Text**
 
-Elder Mira's walking stick is planted in the dirt like a little flag of defiance. Around her, Hearthhollow has gone too quiet: ovens left open, shutters half-latched, neighbors whispering without finishing their sentences. "The royal message makes no sense," she says. "The courier is missing. A bramble boar tore past the south gate with the courier's satchel caught on its tusk. Hearthhollow needs brave feet, yes—but more than that, it needs a clear head. Will you go?"
+Elder Brynn's walking stick is planted in the dirt like a little flag of defiance. Around her, Hearthhollow has gone too quiet: ovens left open, shutters half-latched, neighbors whispering without finishing their sentences. "Lio Brindle should have arrived before breakfast," she says. "He did not. Now a bramble boar is charging near the south gate with a courier's satchel caught on its tusk. First we protect the village. Then we find out what happened on that road. Will you go?"
 
 **Choices**
 - I'll help. Tell Orin I'm coming to the smithy.
@@ -34,23 +34,23 @@ Elder Mira's walking stick is planted in the dirt like a little flag of defiance
 ### If player asks, “Why me?”
 **Text**
 
-"Because you notice what others step over," Mira says. "And because when Hearthhollow is afraid, I need someone who will move without becoming careless. Take your own hatchet from home, then see Orin. We will not send you empty-handed."
+"Because you notice what others step over," Brynn says. "And because when Hearthhollow is afraid, I need someone who will move without becoming careless. Take your own hatchet from home, then see Orin. We will not send you empty-handed."
 
 **Choice**
 - Then I'll go.
 
 **Outcome**
-- Mira gives the player 12g.
-- Mira sends word to Orin.
+- Brynn gives the player 12g.
+- Brynn sends word to Orin.
 - Player gains Heart +1.
 
 ### Repeat conversation after accepting quest
 **Text**
 
-Mira has not returned to her chair. She stands near the square with one hand on the old bell rope, watching people pretend not to panic. "You have done the first brave thing," she says. "Now do the harder one: keep asking why. A wild boar may be chance. A missing courier may be tragedy. A forged command is a mind at work. Follow the mind."
+Brynn has not returned to her chair. She stands near the square with one hand on the old bell rope, watching people pretend not to panic. "First the boar," she says. "Then the satchel. Whatever happened to Lio happened on the road, but Hearthhollow needs you here before it needs you chasing answers."
 
 **Choice**
-- I'll follow the mind behind it.
+- I'll stop it and bring back the satchel.
 
 ---
 
@@ -79,24 +79,24 @@ Pibble is crouched beside a smear of mud, measuring it with a spoon for reasons 
 ### Repeat conversation
 **Text**
 
-Pibble has three tools in hand and is using none of them correctly. "I keep thinking about the satchel," he says. "A boar doesn't steal mail. A boar doesn't care about road orders. So either the boar crashed through someone else's plan, or someone used the boar to hide one. I hate both of those options."
+Pibble has three tools in hand and is using none of them correctly. "I keep thinking about the satchel," he says. "A boar doesn't steal mail, and that strap was cut before it ever touched a tusk. Whatever happened to Lio happened first. The boar only carried the evidence home."
 
 **Choice**
-- A boar hiding a plan. That's... upsettingly useful.
+- So the trail starts before the boar.
 
 ---
 
 ## Nella the Baker
 
-### Before talking to Mira
+### Before talking to Brynn
 **Text**
 
-Nella the Baker keeps glancing toward the south gate while pretending to rearrange a tray of pear rolls. "The ovens are hot, the bread is rising, and nobody has come by to make fun of my lopsided crusts. That is how I know the morning has gone wrong. Elder Mira has the face she wears when bad news has boots on. Go find her, dear."
+Nella the Baker keeps glancing toward the south gate while pretending to rearrange a tray of pear rolls. "The ovens are hot, the bread is rising, and nobody has come by to make fun of my lopsided crusts. That is how I know the morning has gone wrong. Elder Brynn has the face she wears when bad news has boots on. Go find her, dear."
 
 **Choice**
 - I'll be careful.
 
-### After talking to Mira
+### After talking to Brynn
 **Text**
 
 Nella has flour dust on one cheek and three half-shaped loaves abandoned on the table behind her. The ovens are still hot, but the bakery has gone quiet in the strange way busy places do when everyone is listening for bad news. "I was baking for the road crews," she says, lowering her voice. "Then the bells started, and folk stopped coming through. If that courier truly vanished, someone out there is not just scaring us. They're cutting us off."
@@ -108,15 +108,15 @@ Nella has flour dust on one cheek and three half-shaped loaves abandoned on the 
 
 ## Toma Fielding
 
-### Before talking to Mira
+### Before talking to Brynn
 **Text**
 
-Toma Fielding squints toward the road beyond the trees. "My turnips are nervous, and turnips are famously calm. Elder Mira's been watching the gate since sunrise. Best talk with her before you go poking at anything tusked."
+Toma Fielding squints toward the road beyond the trees. "My turnips are nervous, and turnips are famously calm. Elder Brynn's been watching the gate since sunrise. Best talk with her before you go poking at anything tusked."
 
 **Choice**
 - I'll be careful.
 
-### After talking to Mira
+### After talking to Brynn
 **Text**
 
 Toma Fielding grips his rake like it might become a spear if the day gets any worse. "Boars I understand. Boars with satchels? Couriers gone missing? That's not field trouble. That's road trouble. If you go out there, watch the ditches. Trouble loves a ditch."
@@ -126,20 +126,20 @@ Toma Fielding grips his rake like it might become a spear if the day gets any wo
 
 ---
 
-## Miri of the Loom
+## Sela of the Loom
 
-### Before talking to Mira
+### Before talking to Brynn
 **Text**
 
-Miri of the Loom sits outside her cottage, shuttle paused in midair. "The south road should be noisy by now. Carts, bells, bad singing. Instead it is listening. Roads should not listen. Find Mira, love."
+Sela of the Loom sits outside her cottage, shuttle paused in midair. "The south road should be noisy by now. Carts, bells, bad singing. Instead it is listening. Roads should not listen. Find Elder Brynn, love."
 
 **Choice**
 - I'll be careful.
 
-### After talking to Mira
+### After talking to Brynn
 **Text**
 
-Miri of the Loom holds up a half-finished sash patterned with little lanterns. "Threads tell you when they've been tugged," she says. "This whole village feels tugged today. If you find who is pulling, don't just cut the thread. Find the hand."
+Sela of the Loom holds up a half-finished sash patterned with little lanterns. "Threads tell you when they've been tugged," she says. "This whole village feels tugged today. If you find who is pulling, don't just cut the thread. Find the hand."
 
 **Choice**
 - I'll be careful.
@@ -182,24 +182,24 @@ You gather your old village hatchet from home.
 
 ## Smithy / Smith Orin
 
-### Door prompt
+### Entrance prompt
 **Text**
 
-Push open the smithy door? Heat rolls under the gap, carrying the smell of coal, iron, and hurried work.
+Step beneath the smithy's open awning? Heat shimmers around the anvil, carrying the smell of coal, iron, and hurried work.
 
 **Choices**
 - Enter
 - Stay outside
 
-### If player has not spoken with Mira
+### If player has not spoken with Brynn
 **Text**
 
-Orin blocks the doorway with a hammer in one hand and a half-made hinge in the other. "If Elder Mira is sending you, talk to her first. I am not putting road gear into eager hands just because trouble has started shouting. If she says you're the one going, I'll make sure you aren't walking into thorn and teeth with empty pockets."
+Orin blocks the workbench with a hammer in one hand and a half-made hinge in the other. "If Elder Brynn is sending you, talk to her first. I am not putting road gear into eager hands just because trouble has started shouting. If she says you're the one going, I'll make sure you aren't walking into thorn and teeth with empty pockets."
 
 **Choice**
-- I'll talk to Mira first.
+- I'll talk to Brynn first.
 
-### If player has spoken with Mira
+### If player has spoken with Brynn
 **Shop opens**
 
 **Shop title**
@@ -283,12 +283,12 @@ The satchel should contain both an official clue and a human detail.
 
 ---
 
-### If player has not spoken to Mira
+### If player has not spoken to Brynn
 **Toast**
 
-Talk to Elder Mira before leaving town.
+Talk to Elder Brynn before leaving town.
 
-### If player has not visited smithy after Mira
+### If player has not visited smithy after Brynn
 **Toast**
 
 The south road looks dangerous. Better get equipped first.
@@ -344,7 +344,7 @@ Inside, you find a folded order bearing a crown seal that looks right until you 
 
 The order reads:
 
-**DELAY ROADS. STIR PANIC. HOLD ALL MESSENGERS.**
+**RESTRICT SOUTH ROAD. HOLD ALL COURIERS FOR INSPECTION. AWAIT CROWN AUTHORITY.**
 
 Beneath it is something worse than the order: a small lunch packet, still tied with blue string. Someone has tucked a note under the knot in a careful hand:
 
@@ -353,7 +353,7 @@ Beneath it is something worse than the order: a small lunch packet, still tied w
 Whoever carried this satchel expected to reach Hearthhollow today. Whoever cut it loose did not want him arriving at all.
 
 **Choice**
-- Take the order and the badge to follow the trail.
+- Take the satchel to Elder Brynn.
 
 **Loot / Rewards**
 - Bubblecap
@@ -367,19 +367,39 @@ Whoever carried this satchel expected to reach Hearthhollow today. Whoever cut i
 
 ---
 
-### After boar is defeated
+### After boar is defeated, before reporting to Brynn
+**Objective**
+
+Bring Lio's satchel to Elder Brynn. The south gate will not open onto Lantern Road until she has seen what the boar carried.
+
+### Report the satchel to Elder Brynn
+**Text**
+
+You place Lio's satchel in Brynn's hands and unfold the order beside it. She reads the command once. Then again, slower. Her thumb presses into the crooked crown seal.
+
+"No," she says. "This did not come from the Crown. A true road order names the danger, the people it protects, and the hand responsible for it. This names only panic. Someone forged authority because frightened people obey faster than careful ones."
+
+She looks from Lio's badge to the lunch packet still tied with Mara's blue string.
+
+"Take the satchel and this false order to the watch in Bramblecross. They may know the seal, the phrasing, or where Lio's route was broken. Follow Lantern Road and look for the place the strap was cut. If Lio left any sign behind, find it. If he still walks that road, bring him home."
+
+**Choice**
+- I'll report it in Bramblecross and look for Lio.
+
+### South Gate after reporting to Brynn
 **Text**
 
 The gate no longer shakes under tusks and panic, but no one treats the road as safe.
 
 Beyond the gate, Lantern Road bends between the trees, carrying cart-ruts, scattered feathers, and the uncomfortable feeling that someone has been arranging fear like furniture.
 
-Mira touches the brass courier badge once before handing it back to you.
+You check the satchel strap and feel the folded false order inside. Hearthhollow is behind you. Lio is somewhere ahead—if you're lucky.
 
-“Find the road that took him,” she says. “And if Lio still walks it, bring him home.”
+Deep breath. Am I really ready for this?
 
 **Choice**
-- Head onto Lantern Road.
+- Take a deep breath and step onto Lantern Road.
+- Not yet. Stay in Hearthhollow.
 
 ---
 
@@ -438,7 +458,7 @@ The old milestone leans at the edge of the road, carved with distances that weat
 ### First search after meeting Nix
 **Text**
 
-You kneel where Nix pointed and find a narrow shelf hidden behind the milestone's cracked base. Inside waits a folded order, too dry for the damp stone and too clean for something supposedly lost. It reads: HOLD BRAMBLECROSS. DELAY NEWS. KEEP THE CROWN NERVOUS. The seal tries to look royal, but the crown points are wrong. Whoever planted this knew how fear reads faster than ink.
+You kneel where Nix pointed and find a narrow shelf hidden behind the milestone's cracked base. Inside waits a folded order, too dry for the damp stone and too clean for something supposedly lost. It reads: HOLD BRAMBLECROSS. SUSPEND OUTBOUND COURIERS. AWAIT CROWN INSPECTION. The seal tries to look royal, but the crown points are wrong. Whoever planted this knew how fear reads faster than ink.
 
 **Choice**
 - Take the planted order.
@@ -486,7 +506,7 @@ The little camp is no longer empty. The traveler you guided here sits near the c
 ### Before camp has been discovered
 **Text**
 
-The traveler clutches a satchel so tightly the leather creaks. His hat is on sideways, and he keeps glancing at the trees as though they might be reading his mail. "I passed two men arguing over a folded order near the ditch," he says. "Then one saw me looking and smiled like a locked door. I have never trusted doors that smile. I need to get off the road, but I don't know where safe is."
+The traveler clutches a satchel so tightly the leather creaks. His hat is on sideways, and he keeps glancing at the trees as though they might be reading his mail. "I passed two men near the ditch with a folded order," he says. "It had the royal crown pressed into red wax. They said the road was under Crown inspection. Then one saw me listening and smiled like a locked door. I have never trusted doors that smile. I need to get off the road, but I don't know where safe is."
 
 **Choices**
 - I haven't found a safe place yet. Stay low while I look.
@@ -495,28 +515,28 @@ The traveler clutches a satchel so tightly the leather creaks. His hat is on sid
 ### If player asks what scared him before finding camp
 **Text**
 
-"Two men near the ditch," he whispers. "One had a folded order. The other had a dog made mostly of thorns and bad intentions. They were not robbing the road. They were watching it. That's worse, isn't it?"
+"Two men near the ditch," he whispers. "One held a folded order with the royal crown stamped into red wax. He said the road was under Crown inspection. The other had a dog made mostly of thorns and bad intentions. I thought they were Crown men, but then they started watching me instead of the road. They were Crown men, weren't they?"
 
 **Choice**
-- Yes. Stay out of sight until I find somewhere safe.
+- I don't think so. Stay hidden while I find somewhere safe.
 
 ### After camp has been discovered
 **Text**
 
-The traveler clutches a satchel so tightly the leather creaks. His hat is on sideways, and he keeps glancing at the trees as though they might be reading his mail. "I passed two men arguing over a folded order near the ditch," he says. "Then one saw me looking and smiled like a locked door. I have never trusted doors that smile. Is there anywhere safe off this road?"
+The traveler clutches a satchel so tightly the leather creaks. His hat is on sideways, and he keeps glancing at the trees as though they might be reading his mail. "I passed two men near the ditch with a folded order," he says. "It had the royal crown pressed into red wax. They said the road was under Crown inspection. Then one saw me listening and smiled like a locked door. I have never trusted doors that smile. Is there anywhere safe off this road?"
 
 **Choices**
 - I found a camp north of the road. Head there and keep low.
-- What did the order look like?
+- Did you get a look at the order?
 - Stay hidden for now.
 
 ### If player asks what the order looked like
 **Text**
 
-"Too clean," he says. "Royal words, maybe, but written like someone had copied the shape of command without knowing the weight of it. They tucked it away when they noticed me. That's when I decided my errand could wait until my knees stopped humming."
+"A look? I barely breathed near it," he says. "I saw the crown seal. They said Bramblecross was being held and no couriers could leave until a Crown inspection. That sounded official to me. It was official, wasn't it? Then they tucked the order away and started asking why I was still on the road. That's when I decided my errand could wait until my knees stopped humming."
 
 **Choices**
-- Get to the camp. I'll look into it.
+- The seal may be false. Get to the camp.
 - Stay hidden for now.
 
 ### After helping traveler
@@ -795,10 +815,10 @@ You head back onto Lantern Road.
 ### Before Enna has been briefed
 **Text**
 
-Mayor Anwen stands beside a stack of unread petitions, but her eyes keep moving to the road. "We have missing porters, forged notices, delayed carts, and families asking whether to bolt their doors. I can calm a crowd for an hour. I cannot calm a lie unless someone brings me its shape. Take your road report to Enna. She sees patterns before the rest of us admit they exist."
+Mayor Anwen stands beside a stack of unread petitions, but her eyes keep moving to the road. "We have missing porters, forged notices, delayed carts, and families asking whether to bolt their doors. I can calm a crowd for an hour. I cannot calm a lie unless someone brings me its shape. Take your road report to Enna inside the watchhouse—the large stone building at the north end of the square. She sees patterns before the rest of us admit they exist."
 
 **Choice**
-- I'll look into it.
+- I'll find Enna in the watchhouse.
 
 ### After Enna briefed, before dungeon lead
 **Text**
@@ -848,7 +868,7 @@ Text-message style investigation exchange.
 
 **Enna:** Cut strap. So the satchel was removed before the animal carried it. That puts the courier incident before the village panic.
 
-**Player:** Nix found the panic too neat. At the milestone ruin I found a planted order telling someone to hold Bramblecross, delay news, and keep the crown nervous.
+**Player:** Nix found the panic too neat. At the milestone ruin I found a planted order telling Bramblecross to suspend outbound couriers and await a Crown inspection that was never coming.
 
 **Enna:** Planted for discovery. Public enough to scare travelers, hidden enough to feel secret. Useful fear. Go on.
 
@@ -867,6 +887,8 @@ Enna adds your report to the case wall. XP +6
 **Text**
 
 Enna taps two pins on the board without looking up. "The shape still holds: false authority above ground, missing workers below ground, and a road being trained to fear the wrong thing. The old shrine had it right: a road is safest when truth walks it first. Study the wall if you need the full pattern. Hollis will not move until you understand why the cellar matters."
+
+If the player has no companion, she adds: "Before you go below, consider taking another pair of eyes. Rowan, Tilda, and Moss are staying at the Bramblecross Inn."
 
 **Choice**
 - I'll study the wall, then speak with Hollis.
@@ -1014,6 +1036,16 @@ After a pause, he adds more quietly:
 - I'll investigate the Root Cellar.
 - Tell me more about Edden first.
 
+**If the player has no companion**
+
+Hollis closes his hand around the cellar key. "I will not order you to take help, but I would rather not send another person below alone. Rowan, Tilda, and Moss are staying at the Bramblecross Inn. Any one of them would give you another pair of eyes—and someone to pull you back if the old roots shift."
+
+**Choices**
+- I'll recruit someone at the Bramblecross Inn first.
+- I'll go alone. Take me to the cellar.
+
+If the player is already traveling with a companion—or explicitly chooses to go alone—Hollis leads the party behind the watchhouse, unlocks the Old Root Cellar, and the game transitions directly below. The player does not need to locate a hidden cellar hotspot on the town map.
+
 ---
 
 ### Optional: Ask about Edden
@@ -1037,7 +1069,7 @@ He pushes the key closer.
 
 **Outcome if accepting**
 
-Hollis authorizes the Root Cellar investigation.
+Hollis authorizes the Root Cellar investigation. If the player is ready, he leads them directly to the entrance and unlocks it.
 
 ---
 
@@ -1976,14 +2008,14 @@ These entries translate the story flow into player-facing quest text. The goal i
 
 ## Main Quest: The Road That Lied
 
-### Step 1 — Speak with Elder Mira
+### Step 1 — Speak with Elder Brynn
 **Objective title**
 
-Speak with Elder Mira
+Speak with Elder Brynn
 
 **Objective detail**
 
-Hearthhollow has gone quiet, the courier is missing, and the south gate is in danger. Find out what Mira knows before leaving the village.
+Hearthhollow has gone quiet, the courier is missing, and the south gate is in danger. Find out what Brynn knows before leaving the village.
 
 ---
 
@@ -1994,7 +2026,7 @@ Prepare for the Road
 
 **Objective detail**
 
-Take your old hatchet from home, then visit Smith Orin with Mira's backing. Hearthhollow is afraid, but it will not send you out empty-handed.
+Take your old hatchet from home, then visit Smith Orin with Brynn's backing. Hearthhollow is afraid, but it will not send you out empty-handed.
 
 ---
 
@@ -2009,14 +2041,25 @@ The boar at the south gate is carrying Lio Brindle's courier satchel. Stop it be
 
 ---
 
-### Step 4 — Find What Happened to Lio Brindle
+### Step 4 — Bring Lio's Satchel to Elder Brynn
+**Objective title**
+
+Bring Lio's Satchel to Elder Brynn
+
+**Objective detail**
+
+The satchel held a false order, Lio's courier badge, and a lunch packet tied by Mara. Show Brynn what the boar carried before taking the evidence onto the road.
+
+---
+
+### Step 5 — Find What Happened to Lio Brindle
 **Objective title**
 
 Find What Happened to Lio Brindle
 
 **Objective detail**
 
-Lio's satchel held a forged order and a lunch packet from Mara. He was expected in Hearthhollow before noon. Follow Lantern Road and find where the satchel was cut loose.
+Brynn recognized the order as false and asked you to report it in Bramblecross. Follow Lantern Road, find where Lio's satchel was cut loose, and look for any sign that he survived.
 
 **Journal update after Pibble clue**
 
@@ -2024,7 +2067,7 @@ Pibble noticed the satchel strap was cut, not torn. The boar may have carried th
 
 **Journal update after milestone ruin**
 
-A planted order at the milestone says: HOLD BRAMBLECROSS. DELAY NEWS. KEEP THE CROWN NERVOUS. Someone wanted travelers to discover fear in the shape of authority.
+A planted order at the milestone says: HOLD BRAMBLECROSS. SUSPEND OUTBOUND COURIERS. AWAIT CROWN INSPECTION. Someone wanted travelers to discover fear in the shape of authority.
 
 **Journal update after ambush**
 
@@ -2032,7 +2075,7 @@ The ambushers guarded the false orders like evidence, not treasure. Lio's trail 
 
 ---
 
-### Step 5 — Bring the Road Report to Enna
+### Step 6 — Bring the Road Report to Enna
 **Objective title**
 
 Brief Enna at the Watchhouse
@@ -2043,7 +2086,7 @@ You have road-side evidence Bramblecross does not have yet: Lio's satchel, the p
 
 ---
 
-### Step 6 — Study the Completed Case Wall
+### Step 7 — Study the Completed Case Wall
 **Objective title**
 
 Study the Completed Case Wall
@@ -2054,7 +2097,7 @@ Enna has connected Hearthhollow, Lantern Road, missing cargo, false orders, and 
 
 ---
 
-### Step 7 — Get Hollis's Authorization
+### Step 8 — Get Hollis's Authorization
 **Objective title**
 
 Speak with Captain Hollis
@@ -2065,7 +2108,7 @@ Hollis will not send anyone into the old cellar on courage alone. Show that you 
 
 ---
 
-### Step 8 — Investigate the Old Root Cellar
+### Step 9 — Investigate the Old Root Cellar
 **Objective title**
 
 Investigate the Old Root Cellar
@@ -2074,9 +2117,13 @@ Investigate the Old Root Cellar
 
 The missing porters, Edden's broken testimony, and the false route orders all point beneath Bramblecross. Find what is using the old ways.
 
+**After Hollis authorizes the investigation**
+
+Return to Hollis in the watchhouse when you are ready. He will lead you to the entrance and unlock it. If you are traveling alone, he recommends recruiting a companion at the Bramblecross Inn first.
+
 ---
 
-### Step 9 — Report What the Cellar Revealed
+### Step 10 — Report What the Cellar Revealed
 **Objective title**
 
 Report Back to Hollis and Enna
@@ -2201,4 +2248,3 @@ These are the biggest story-review questions suggested by the script:
 8. Does the Root Cellar reveal enough about the wider Chapter 2 mystery without overexplaining?
 9. Do Rowan, Tilda, and Moss need richer recruitment conversations before art pass?
 10. Does the title “Lanterns of Briar Crown” feel supported by the shrine/road/cellar imagery?
-

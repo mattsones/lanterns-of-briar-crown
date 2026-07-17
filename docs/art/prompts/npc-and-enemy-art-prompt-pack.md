@@ -66,7 +66,7 @@ No photorealism, no 3D-rendered look, no glossy digital game art, no anime style
 
 Selected production portraits already exist for:
 
-- Elder Mira
+- Elder Brynn
 - Watch Clerk Enna
 - Captain Hollis
 - Nix Fernwhistle
@@ -98,7 +98,7 @@ These are the best first character batch because they are present in current Cha
 | Mayor Anwen | 1 | `anwen-portrait-v01.png` | Bramblecross civic voice. |
 | Nella the Baker | 1 | `nella-portrait-v01.png` | Humanizes Lio's route and Hearthhollow worry. |
 | Toma Fielding | 1 | `toma-portrait-v01.png` | Hearthhollow villager flavor. |
-| Miri of the Loom | 1 | `miri-portrait-v01.png` | Hearthhollow villager flavor and thread/truth motif. |
+| Sela of the Loom | 1 | `miri-portrait-v01.png` | Hearthhollow villager flavor and thread/truth motif. |
 | Lio Brindle | 5, but foreshadowed earlier | `lio-portrait-v01.png` | Useful to establish now, even if his in-game reveal lands later. |
 
 ### Priority B - Enemy Art Needed Now
@@ -165,7 +165,7 @@ Do not start here if the goal is NPC/enemy coverage first, but keep this scope v
 1. Mara Brindle, Edden Vale, Ada Willowmarket.
 2. Briar Roadwatcher, Thorn-Collared Hound, False Sign Scratcher.
 3. Bramble Boar, Thorncoat Ruffian, Thorny Hound, Rustroot Skulk, Briar Knot Warden.
-4. Smith Orin, Mayor Anwen, Nella, Toma, Miri.
+4. Smith Orin, Mayor Anwen, Nella, Toma, Sela.
 5. Lio Brindle and Bracken Voss as future identity anchors.
 6. Westroot Chapter 3 NPC set.
 7. Chapter 4-5 enemy set.
@@ -213,7 +213,7 @@ Use the master style block.
 ```text
 Create a vertical half-body storybook fantasy portrait of Smith Orin, Hearthhollow's blacksmith. Orin should be an Emberling, one of the firepeople of Liam's Game: sturdy, practical, warm but blunt, and completely comfortable around open flame. He should read clearly as an Emberling at first glance, not as a human blacksmith lit by orange forge light.
 
-Use visible Emberling traits: ember-orange or coal-red skin, coal-glow freckles, faint inner heat at the cheeks and knuckles, cinder-dark or flame-colored hair, and eyes that catch like banked coals. Show coal-smudged hands, a leather apron, a working hammer, and forge light behind him. He should look like someone who will not put road gear into eager hands until Elder Mira says it is time. His design should be grounded village fantasy: a fireperson who is also a working village smith, not ornate knightly armor and not a disembodied fire elemental. Include smithy details: tools, half-made hinges, warm coals, iron hooks, and rough wooden beams.
+Use visible Emberling traits: ember-orange or coal-red skin, coal-glow freckles, faint inner heat at the cheeks and knuckles, cinder-dark or flame-colored hair, and eyes that catch like banked coals. Show coal-smudged hands, a leather apron, a working hammer, and forge light behind him. He should look like someone who will not put road gear into eager hands until Elder Brynn says it is time. His design should be grounded village fantasy: a fireperson who is also a working village smith, not ornate knightly armor and not a disembodied fire elemental. Include smithy details: tools, half-made hinges, warm coals, iron hooks, and rough wooden beams.
 
 Mood: protective, no-nonsense, caring beneath gruffness, forge-warm, village-made rather than epic.
 
@@ -256,10 +256,10 @@ Mood: grounded, worried, wry, useful, protective of home.
 Use the master style block.
 ```
 
-### Miri of the Loom
+### Sela of the Loom
 
 ```text
-Create a vertical half-body storybook fantasy portrait of Miri of the Loom, a Hearthhollow weaver who senses when the village's threads have been tugged. She should be seated or standing near a loom or half-finished sash patterned with little lanterns. Her shuttle may be paused in midair, as if she stopped working to listen to the quiet road.
+Create a vertical half-body storybook fantasy portrait of Sela of the Loom, a Hearthhollow weaver who senses when the village's threads have been tugged. She should be seated or standing near a loom or half-finished sash patterned with little lanterns. Her shuttle may be paused in midair, as if she stopped working to listen to the quiet road.
 
 Use warm Hearthhollow light, woven textures, thread spools, cloth strips, and cottage details. Her expression should be gentle, perceptive, worried, and quietly poetic.
 

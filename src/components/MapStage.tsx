@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { TILE_META } from "../data/maps";
 import {
   areMapNodesConnected,
@@ -64,19 +65,64 @@ const MAP_TOKEN_CONFIG: Record<
     artworkSrc?: string;
     spentArtworkSrc?: string;
     artworkAlt?: string;
+    portraitFocus?: { x: number; y: number; scale?: number };
   }
 > = {
-  elder: { kind: "npc", portraitName: "Elder Mira" },
-  pibble: { kind: "npc", portraitName: "Pibble Thatch" },
-  baker: { kind: "npc" },
-  farmer: { kind: "npc" },
-  weaver: { kind: "npc" },
-  ranger: { kind: "npc", portraitName: "Nix Fernwhistle" },
-  traveler: { kind: "npc" },
-  mayor: { kind: "npc" },
-  captain: { kind: "npc", portraitName: "Captain Hollis" },
-  merchant: { kind: "npc" },
-  clerk: { kind: "npc", portraitName: "Watch Clerk Enna" },
+  elder: {
+    kind: "npc",
+    portraitName: "Elder Brynn",
+    portraitFocus: { x: 56, y: 27, scale: 1.7 },
+  },
+  pibble: {
+    kind: "npc",
+    portraitName: "Pibble Thatch",
+    portraitFocus: { x: 55, y: 25, scale: 1.75 },
+  },
+  baker: {
+    kind: "npc",
+    portraitName: "Nella the Baker",
+    portraitFocus: { x: 59, y: 22, scale: 1.65 },
+  },
+  farmer: {
+    kind: "npc",
+    portraitName: "Toma Fielding",
+    portraitFocus: { x: 51, y: 24, scale: 1.7 },
+  },
+  weaver: {
+    kind: "npc",
+    portraitName: "Sela of the Loom",
+    portraitFocus: { x: 44, y: 27, scale: 1.9 },
+  },
+  ranger: {
+    kind: "npc",
+    portraitName: "Nix Fernwhistle",
+    portraitFocus: { x: 50, y: 26, scale: 1.7 },
+  },
+  traveler: {
+    kind: "npc",
+    portraitName: "Road Traveler",
+    portraitFocus: { x: 53, y: 24, scale: 1.75 },
+  },
+  mayor: {
+    kind: "npc",
+    portraitName: "Mayor Anwen",
+    portraitFocus: { x: 53, y: 25, scale: 1.75 },
+  },
+  captain: {
+    kind: "npc",
+    portraitName: "Captain Hollis",
+    portraitFocus: { x: 55, y: 23, scale: 1.75 },
+  },
+  merchant: {
+    kind: "npc",
+    portraitName: "Ada Willowmarket",
+    portraitFocus: { x: 54, y: 24, scale: 1.75 },
+  },
+  clerk: {
+    kind: "npc",
+    portraitName: "Watch Clerk Enna",
+    portraitFocus: { x: 57, y: 26, scale: 1.65 },
+  },
   home_door: { kind: "action" },
   potion_door: { kind: "action" },
   smith_door: { kind: "action" },
@@ -170,6 +216,20 @@ function getDebugState(tile: string) {
   if (MAP_TOKEN_CONFIG[tile]?.kind === "threat") return "threat";
   if (MAP_TOKEN_CONFIG[tile]) return "interactable";
   return "open";
+}
+
+function getPortraitTokenStyle(
+  focus: { x: number; y: number; scale?: number } | undefined,
+) {
+  const scale = focus?.scale ?? 1.75;
+  const focusX = focus?.x ?? 50;
+  const focusY = focus?.y ?? 25;
+
+  return {
+    "--map-token-portrait-size": `${scale * 100}%`,
+    "--map-token-portrait-left": `${50 - (focusX - 50) * scale}%`,
+    "--map-token-portrait-top": `${50 - (focusY - 50) * scale * 1.5}%`,
+  } as CSSProperties;
 }
 
 export function MapStage({
@@ -405,6 +465,11 @@ export function MapStage({
                 }
               : null;
 
+          // Painted maps carry ordinary doors and landmarks themselves. Only
+          // bespoke artwork and character portraits need a visible overlay;
+          // every movement/interaction node remains active underneath.
+          if (!artwork) return null;
+
           return (
             <div
               key={`token-${node.key}`}
@@ -420,10 +485,16 @@ export function MapStage({
                   src={artwork.src}
                   alt={artwork.alt}
                   className={artwork.className}
+                  style={
+                    artwork.className === "map-token-portrait"
+                      ? getPortraitTokenStyle(config.portraitFocus)
+                      : undefined
+                  }
                   onError={(event) => {
                     event.currentTarget.style.display = "none";
-                    event.currentTarget.parentElement?.classList.remove(
-                      "has-artwork",
+                    event.currentTarget.parentElement?.style.setProperty(
+                      "display",
+                      "none",
                     );
                   }}
                 />

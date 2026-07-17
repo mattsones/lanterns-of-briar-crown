@@ -17,6 +17,7 @@ export type GameFlags = {
   craftedPotion: boolean;
   gotPibbleTip: boolean;
   beatGateBattle: boolean;
+  reportedSatchelToElder: boolean;
   metNix: boolean;
   foundRuinNote: boolean;
   clearedWildBattle: boolean;

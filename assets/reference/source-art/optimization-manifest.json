@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-13T04:14:29.393Z",
+  "generatedAt": "2026-07-17T02:52:02.467Z",
   "sourceArtRoot": "assets/reference/source-art",
   "alternatesRoot": "assets/reference/alternates",
   "conversions": [
@@ -411,6 +411,17 @@
       "hasAlpha": true
     },
     {
+      "source": "assets/icons/ui/briar-crown-primary-mark-v01.png",
+      "original": "assets/reference/source-art/assets/icons/ui/briar-crown-primary-mark-v01.png",
+      "output": "assets/icons/ui/briar-crown-primary-mark-v01.png",
+      "format": "png",
+      "originalBytes": 940000,
+      "outputBytes": 62033,
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true
+    },
+    {
       "source": "assets/icons/ui/crown-den-chain-drag-icon-v01.png",
       "original": "assets/reference/source-art/assets/icons/ui/crown-den-chain-drag-icon-v01.png",
       "output": "assets/icons/ui/crown-den-chain-drag-icon-v01.png",
@@ -554,7 +565,7 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/auntie-lume-portrait-v02.png",
+      "source": "assets/portraits/characters/auntie-lume-portrait-v02.webp",
       "original": "assets/reference/source-art/assets/portraits/characters/auntie-lume-portrait-v02.png",
       "output": "assets/portraits/characters/auntie-lume-portrait-v02.webp",
       "format": "webp",
@@ -565,7 +576,7 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/bramwell-gatehand-portrait-v01.png",
+      "source": "assets/portraits/characters/bramwell-gatehand-portrait-v01.webp",
       "original": "assets/reference/source-art/assets/portraits/characters/bramwell-gatehand-portrait-v01.png",
       "output": "assets/portraits/characters/bramwell-gatehand-portrait-v01.webp",
       "format": "webp",
@@ -697,7 +708,7 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/noma-greenstill-portrait-v02.png",
+      "source": "assets/portraits/characters/noma-greenstill-portrait-v02.webp",
       "original": "assets/reference/source-art/assets/portraits/characters/noma-greenstill-portrait-v02.png",
       "output": "assets/portraits/characters/noma-greenstill-portrait-v02.webp",
       "format": "webp",
@@ -719,7 +730,7 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/quill-pebbleturn-portrait-v01.png",
+      "source": "assets/portraits/characters/quill-pebbleturn-portrait-v01.webp",
       "original": "assets/reference/source-art/assets/portraits/characters/quill-pebbleturn-portrait-v01.png",
       "output": "assets/portraits/characters/quill-pebbleturn-portrait-v01.webp",
       "format": "webp",
@@ -774,7 +785,7 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/westroot-rootbread-child-portrait-v02.png",
+      "source": "assets/portraits/characters/westroot-rootbread-child-portrait-v02.webp",
       "original": "assets/reference/source-art/assets/portraits/characters/westroot-rootbread-child-portrait-v02.png",
       "output": "assets/portraits/characters/westroot-rootbread-child-portrait-v02.webp",
       "format": "webp",
@@ -807,7 +818,7 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/enemies/briar-cargo-runner-v01.png",
+      "source": "assets/portraits/enemies/briar-cargo-runner-v01.webp",
       "original": "assets/reference/source-art/assets/portraits/enemies/briar-cargo-runner-v01.png",
       "output": "assets/portraits/enemies/briar-cargo-runner-v01.webp",
       "format": "webp",
@@ -862,7 +873,7 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/enemies/seal-forged-sentry-v01.png",
+      "source": "assets/portraits/enemies/seal-forged-sentry-v01.webp",
       "original": "assets/reference/source-art/assets/portraits/enemies/seal-forged-sentry-v01.png",
       "output": "assets/portraits/enemies/seal-forged-sentry-v01.webp",
       "format": "webp",
@@ -1148,12 +1159,34 @@
       "hasAlpha": true
     },
     {
-      "source": "assets/scenes/cargo-siding-evidence-scene-v01.png",
+      "source": "assets/scenes/bramblecross-watchhouse-case-wall-scene-v01.webp",
+      "original": "assets/reference/source-art/assets/scenes/bramblecross-watchhouse-case-wall-scene-v01.png",
+      "output": "assets/scenes/bramblecross-watchhouse-case-wall-scene-v01.webp",
+      "format": "webp",
+      "originalBytes": 3048917,
+      "outputBytes": 328896,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/scenes/cargo-siding-evidence-scene-v01.webp",
       "original": "assets/reference/source-art/assets/scenes/cargo-siding-evidence-scene-v01.png",
       "output": "assets/scenes/cargo-siding-evidence-scene-v01.webp",
       "format": "webp",
       "originalBytes": 3128460,
       "outputBytes": 347908,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/scenes/courier-satchel-evidence-scene-v01.webp",
+      "original": "assets/reference/source-art/assets/scenes/courier-satchel-evidence-scene-v01.png",
+      "output": "assets/scenes/courier-satchel-evidence-scene-v01.webp",
+      "format": "webp",
+      "originalBytes": 2969323,
+      "outputBytes": 271682,
       "width": 1672,
       "height": 941,
       "hasAlpha": false
@@ -1192,7 +1225,7 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/scenes/mossgarden-closing-mark-scene-v01.png",
+      "source": "assets/scenes/mossgarden-closing-mark-scene-v01.webp",
       "original": "assets/reference/source-art/assets/scenes/mossgarden-closing-mark-scene-v01.png",
       "output": "assets/scenes/mossgarden-closing-mark-scene-v01.webp",
       "format": "webp",
@@ -1214,7 +1247,18 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/scenes/rootbread-promise-scene-v01.png",
+      "source": "assets/scenes/root-cellar-evidence-wall-scene-v01.webp",
+      "original": "assets/reference/source-art/assets/scenes/root-cellar-evidence-wall-scene-v01.png",
+      "output": "assets/scenes/root-cellar-evidence-wall-scene-v01.webp",
+      "format": "webp",
+      "originalBytes": 3006660,
+      "outputBytes": 330424,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/scenes/rootbread-promise-scene-v01.webp",
       "original": "assets/reference/source-art/assets/scenes/rootbread-promise-scene-v01.png",
       "output": "assets/scenes/rootbread-promise-scene-v01.webp",
       "format": "webp",
@@ -1225,7 +1269,7 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/scenes/split-hall-resolution-scene-v03.png",
+      "source": "assets/scenes/split-hall-resolution-scene-v03.webp",
       "original": "assets/reference/source-art/assets/scenes/split-hall-resolution-scene-v03.png",
       "output": "assets/scenes/split-hall-resolution-scene-v03.webp",
       "format": "webp",
@@ -1247,7 +1291,7 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/scenes/westroot-arrival-scene-v01.png",
+      "source": "assets/scenes/westroot-arrival-scene-v01.webp",
       "original": "assets/reference/source-art/assets/scenes/westroot-arrival-scene-v01.png",
       "output": "assets/scenes/westroot-arrival-scene-v01.webp",
       "format": "webp",
@@ -1269,7 +1313,7 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/scenes/witness-stones-scene-v01.png",
+      "source": "assets/scenes/witness-stones-scene-v01.webp",
       "original": "assets/reference/source-art/assets/scenes/witness-stones-scene-v01.png",
       "output": "assets/scenes/witness-stones-scene-v01.webp",
       "format": "webp",
@@ -1280,42 +1324,5 @@
       "hasAlpha": false
     }
   ],
-  "movedAlternates": [
-    {
-      "source": "assets/portraits/characters/auntie-lume-portrait-v01.png",
-      "destination": "assets/reference/alternates/assets/portraits/characters/auntie-lume-portrait-v01.png"
-    },
-    {
-      "source": "assets/portraits/characters/noma-greenstill-portrait-v01.png",
-      "destination": "assets/reference/alternates/assets/portraits/characters/noma-greenstill-portrait-v01.png"
-    },
-    {
-      "source": "assets/portraits/characters/westroot-rootbread-child-portrait-v01.png",
-      "destination": "assets/reference/alternates/assets/portraits/characters/westroot-rootbread-child-portrait-v01.png"
-    },
-    {
-      "source": "assets/scenes/split-hall-resolution-scene-v01.png",
-      "destination": "assets/reference/alternates/assets/scenes/split-hall-resolution-scene-v01.png"
-    },
-    {
-      "source": "assets/scenes/split-hall-resolution-scene-v02.png",
-      "destination": "assets/reference/alternates/assets/scenes/split-hall-resolution-scene-v02.png"
-    },
-    {
-      "source": "assets/icons/items/cargo-transfer-tag-icon-v01.png",
-      "destination": "assets/reference/alternates/assets/icons/items/cargo-transfer-tag-icon-v01.png"
-    },
-    {
-      "source": "assets/icons/items/ch3-icons-v02.png",
-      "destination": "assets/reference/alternates/assets/icons/items/ch3-icons-v02.png"
-    },
-    {
-      "source": "assets/icons/items/chapter-3-sheet.png",
-      "destination": "assets/reference/alternates/assets/icons/items/chapter-3-sheet.png"
-    },
-    {
-      "source": "assets/icons/items/witness-stone-rubbing-icon-v01.png",
-      "destination": "assets/reference/alternates/assets/icons/items/witness-stone-rubbing-icon-v01.png"
-    }
-  ]
+  "movedAlternates": []
 }

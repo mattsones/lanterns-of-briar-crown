@@ -6,6 +6,7 @@ export const BATTLE_REWARDS = {
     gold: 12,
     xp: 12,
     flagUpdate: { beatGateBattle: true },
+    artKey: "courierSatchel",
     name: CHAPTER_1_STORY.battleRewards.boar.name,
     text: CHAPTER_1_STORY.battleRewards.boar.text,
   },

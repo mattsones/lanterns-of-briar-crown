@@ -22,7 +22,7 @@ The main production goals are:
 The batch is strong. Most assets are production-usable now, especially if the first wiring pass preserves emoji fallbacks. The biggest remaining art-direction checks are optimization and keeping the Briar enemy roles visually distinct:
 
 - Orin v2 and Nella v3 are good moves toward clear fantasy ancestry reads.
-- Miri v2 is better than v1 for human variety.
+- Sela v2 is better than v1 for human variety.
 - Roadwatcher v2 fixes the earlier Warden overlap and should replace v1.
 - False Sign Scratcher v2 completes the Chapter 2 enemy set and is the cleaner keeper.
 - The two hound enemies are distinct enough in pose and story role, but both occupy the same thorny canine family.
@@ -38,7 +38,7 @@ Before shipping many of these in a web build, run an optimization pass. Most new
 | Lio Brindle | `assets/portraits/characters/lio-brindle-portrait-v01.png` | Ready with note | Warm and appealing. Could use a future post-captivity variant for Chapter 5. |
 | Mara Brindle | `assets/portraits/characters/mara-brindle-portrait-v01.png` | Ready | Excellent. Pear roll, blue string, map, posture, and expression all land. |
 | Mayor Anwen | `assets/portraits/characters/mayor-anwen-portrait-v01.png` | Ready with note | Strong civic leader. Slightly ornate/official, but fits Bramblecross. |
-| Miri of the Loom | `assets/portraits/characters/miri-portrait-v02.png` | Ready | Prefer v2 for distinctiveness. Keeps loom/sash story read and improves humanoid variety. |
+| Sela of the Loom | `assets/portraits/characters/miri-portrait-v02.png` | Ready | Prefer v2 for distinctiveness. Keeps loom/sash story read and improves humanoid variety. |
 | Nella the Baker | `assets/portraits/characters/nella-portrait-v03.png` | Ready | Best Tideborn/water-person read; use this bolder fantasy direction. |
 | Smith Orin | `assets/portraits/characters/smith-orin-portrait-v02.png` | Ready | Best choice for a clear Emberling/fireperson identity. |
 | Toma Fielding | `assets/portraits/characters/toma-fielding-portrait-v02.png` | Ready with note | Better prop/silhouette than v1. Still reads human/generic. |
@@ -69,7 +69,7 @@ Use v2. The clear fire-person read is the point; Emberlings should not collapse 
 
 Use v3. Tideborn should read as water-people, not humans with blue accents.
 
-### Miri of the Loom
+### Sela of the Loom
 
 - `miri-portrait-v01.png`: production-usable and bright, but closer to a default fair village portrait.
 - `miri-portrait-v02.png`: recommended. Better distinctiveness, stronger face variety, and still excellent loom/sash storytelling.
@@ -145,7 +145,7 @@ Use v2. It strongly supports your desire for more distinct humanoid types. The E
 
 Use v2. It is production-ready as a human farmer with a clearer tool silhouette. Consider a future ancestry-specific redraw only if you want all Hearthhollow NPCs to become ancestry anchors.
 
-### Miri of the Loom
+### Sela of the Loom
 
 Use v2. It gives better visual variety than v1 while preserving the loom, shuttle, lantern-sash, and thread motif. Production-ready.
 

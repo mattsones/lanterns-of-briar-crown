@@ -51,6 +51,7 @@ const ROOT_CELLAR_NAV_CONNECTIONS: NavConnection[] = [
   { from: "3,1", to: "3,2", direction: "down" },
   { from: "3,2", to: "3,3", direction: "down" },
   { from: "3,3", to: "3,4", direction: "down" },
+  { from: "3,4", to: "1,4", direction: "left" },
   { from: "3,4", to: "3,5", direction: "down" },
   { from: "3,5", to: "4,5", direction: "right" },
   { from: "4,5", to: "5,5", direction: "right" },
@@ -207,6 +208,11 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
     aspectRatio: "1 / 1",
     navBounds: { left: 9, top: 13, width: 82, height: 76 },
     revealAll: true,
+    pointOverrides: {
+      "3,2": { x: 31, y: 31 },
+      "10,3": { x: 76.5, y: 36 },
+      "1,6": { x: 18.5, y: 58.5 },
+    },
   },
   lanternRoad: {
     aspectRatio: "4 / 3",
@@ -218,6 +224,9 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
     navBounds: { left: 7, top: 8, width: 86, height: 78 },
     revealAll: true,
     fogRadius: 7,
+    pointOverrides: {
+      "7,4": { x: 54.8, y: 47.5 },
+    },
   },
   westrootTrail: {
     aspectRatio: "16 / 9",

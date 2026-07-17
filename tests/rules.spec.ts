@@ -22,8 +22,10 @@ import { ITEM_DB } from "../src/data/items";
 import { ITEM_ARTWORK } from "../src/data/itemArtwork";
 import { MAPS, TILE_META } from "../src/data/maps";
 import { DIALOGUE_PORTRAITS } from "../src/data/portraits";
+import { buildQuestJournal } from "../src/data/quests";
 import {
   areMapNodesConnected,
+  getMapNodePoint,
   getMapVisualConfig,
   getNavigationDestination,
   getNavigationNodeKeys,
@@ -36,9 +38,15 @@ import {
   buildPlayer,
 } from "../src/game/state";
 import { getHeroXpTarget } from "../src/game/progression";
+import {
+  getCompanionAbilityCards,
+  getCompanionCommandAbility,
+  getCompanionCommandOptions,
+} from "../src/game/companions";
 import { getVisitedKey, isBlockedInteractionTile } from "../src/game/map";
 import { addBonuses } from "../src/game/stats";
 import { BATTLE_REWARDS } from "../src/data/battleRewards";
+import { DIALOGUE_SCENE_ART } from "../src/data/dialogueArt";
 import {
   CHAPTER_DEFINITIONS,
   getChapterProgress,
@@ -237,6 +245,58 @@ test("Chapter 3 scaffold has explicit entry, hub, and completion contracts", () 
   );
 });
 
+test("companion commands select named abilities with distinct battle effects", () => {
+  const tilda = {
+    ...buildDefaultCompanion(),
+    recruited: true,
+    name: "Tilda Quickstep",
+    style: "skirmisher",
+    command: "Attack Freely",
+  };
+
+  expect(getCompanionCommandOptions(tilda).map((option) => option.label)).toEqual([
+    "Attack: Quick Feint",
+    "Defend: Spoil the Timing",
+    "Support: Pocket Tricks",
+  ]);
+  expect(getCompanionAbilityCards(tilda).map((ability) => ability.commandLabel)).toEqual([
+    "Attack",
+    "Defend",
+    "Support",
+  ]);
+  expect(getCompanionCommandAbility(tilda)).toMatchObject({
+    name: "Quick Feint",
+    effect: { damage: { count: 1, sides: 6, bonus: 1 } },
+  });
+  expect(getCompanionCommandAbility(tilda, "Defend Me")).toMatchObject({
+    name: "Spoil the Timing",
+    effect: { weaken: true },
+  });
+  expect(getCompanionCommandAbility(tilda, "Use Support Skills")).toMatchObject({
+    name: "Pocket Tricks",
+    effect: {
+      damage: { count: 1, sides: 4 },
+      heroGuard: 2,
+    },
+  });
+
+  expect(
+    getCompanionCommandAbility(
+      { ...tilda, style: "guardian" },
+      "Defend Me",
+    ),
+  ).toMatchObject({ name: "Shielding Step", effect: { heroGuard: 4 } });
+  expect(
+    getCompanionCommandAbility(
+      { ...tilda, style: "sage" },
+      "Use Support Skills",
+    ),
+  ).toMatchObject({
+    name: "Field Mending",
+    effect: { heroHeal: 4, companionHeal: 2 },
+  });
+});
+
 test("Chapter 3 Westroot placeholder hub and cargo encounter preserve the vertical-slice contract", () => {
   expect(MAPS.westrootHub).toMatchObject({
     name: "Westroot",
@@ -265,6 +325,7 @@ test("Chapter 3 Westroot placeholder hub and cargo encounter preserve the vertic
 });
 
 test("Chapter 3 production artwork is selected and fallback-safe", () => {
+  expect(DIALOGUE_PORTRAITS["Bramble Boar"].src).toContain("bramble-boar-v01");
   expect(DIALOGUE_PORTRAITS["Bramwell Gatehand"].src).toContain("bramwell-gatehand-portrait-v01");
   expect(DIALOGUE_PORTRAITS["Quill Pebbleturn"].src).toContain("quill-pebbleturn-portrait-v01");
   expect(DIALOGUE_PORTRAITS["Auntie Lume"].src).toContain("auntie-lume-portrait-v02");
@@ -298,6 +359,7 @@ test("checked-in Chapter 2 complete save is Chapter 3 ready", () => {
     region: "westrootHub",
     position: { x: 1, y: 3 },
     flags: {
+      reportedSatchelToElder: true,
       chapterReported: true,
       chapterTwoStarted: true,
       chapterTwoClear: true,
@@ -344,6 +406,7 @@ test("save migrations normalize older payloads before load", () => {
     visited: {},
     companion: buildDefaultCompanion(),
     flags: {
+      reportedSatchelToMira: true,
       chapterReported: true,
       chapterTwoClear: true,
       roadwatcherCleared: true,
@@ -360,6 +423,7 @@ test("save migrations normalize older payloads before load", () => {
   expect(migrated.player.humanHeritageId).toBe(DEFAULT_HUMAN_HERITAGE_ID);
   expect(migrated.player.appearanceId).toBe("default");
   expect(migrated.flags).toMatchObject({
+    reportedSatchelToElder: true,
     chapterTwoClear: true,
     chapterTwoStarted: true,
     westrootGateOpened: true,
@@ -402,6 +466,9 @@ test("progression and default map state stay compatible with chapter one", () =>
   expect(MAPS.hearthhollow.tiles[5][10]).toBe("tree");
   expect(MAPS.hearthhollow.tiles[5][11]).toBe("tree");
   expect(MAPS.hearthhollow.tiles[4][6]).toBe("well");
+  expect(MAPS.hearthhollow.tiles[4][4]).toBe("weaver");
+  expect(MAPS.hearthhollow.tiles[8][10]).toBe("grass");
+  expect(MAPS.hearthhollow.tiles[8][11]).toBe("grass");
   expect(
     MAPS.hearthhollow.tiles[9].every((tile, x) =>
       x === 6 ? tile === "gate" : TILE_META[tile]?.blocked,
@@ -410,6 +477,16 @@ test("progression and default map state stay compatible with chapter one", () =>
   expect(TILE_META.well.blocked).toBe(false);
   expect(isBlockedInteractionTile("well")).toBe(false);
   expect(MAPS.bramblecross.tiles[2][6]).toBe("watch_door");
+  expect(MAPS.bramblecross.tiles[4][7]).toBe("board");
+  expect(
+    getMapNodePoint(
+      "bramblecross",
+      7,
+      4,
+      MAPS.bramblecross.tiles[0].length,
+      MAPS.bramblecross.tiles.length,
+    ),
+  ).toEqual({ x: 54.8, y: 47.5 });
   [
     ...Array.from({ length: 9 }, (_, index) => [3 + index, 9]),
     ...Array.from({ length: 9 }, (_, index) => [3 + index, 6]),
@@ -433,7 +510,7 @@ test("progression and default map state stay compatible with chapter one", () =>
     [8, 7],
     [8, 8],
     [5, 4],
-    [7, 4],
+    [3, 4],
     [8, 4],
     [8, 5],
     [8, 2],
@@ -480,7 +557,36 @@ test("chapter one story script beats stay wired into data", () => {
   expect(BATTLE_REWARDS.boar.text).toBe(CHAPTER_1_STORY.battleRewards.boar.text);
   expect(BATTLE_REWARDS.boar.text).toContain("pine pitch");
   expect(BATTLE_REWARDS.boar.text).toContain(
+    "HOLD ALL COURIERS FOR INSPECTION. AWAIT CROWN AUTHORITY.",
+  );
+  expect(BATTLE_REWARDS.boar.text).not.toContain("STIR PANIC");
+  expect(BATTLE_REWARDS.boar.text).toContain(
     "Whoever cut it loose did not want him arriving at all.",
+  );
+  expect(BATTLE_REWARDS.boar.artKey).toBe("courierSatchel");
+  expect(DIALOGUE_SCENE_ART.courierSatchel.src).toContain(
+    "courier-satchel-evidence-scene-v01",
+  );
+  expect(DIALOGUE_SCENE_ART.watchhouseEvidenceBoard).toMatchObject({
+    id: "watchhouse-evidence-board",
+    focusX: 25,
+    zoom: 175,
+  });
+  expect(DIALOGUE_SCENE_ART.watchhouseWallMap.src).toBe(
+    DIALOGUE_SCENE_ART.watchhouseEvidenceBoard.src,
+  );
+  expect(DIALOGUE_SCENE_ART.rootCellarSigil.src).toContain(
+    "root-cellar-evidence-wall-scene-v01",
+  );
+  expect(DIALOGUE_SCENE_ART.rootCellarMural.src).toBe(
+    DIALOGUE_SCENE_ART.rootCellarSigil.src,
+  );
+  expect(DIALOGUE_SCENE_ART.briarCrownMark).toMatchObject({
+    id: "briar-crown-mark",
+    presentation: "emblem",
+  });
+  expect(DIALOGUE_SCENE_ART.briarCrownMark.src).toContain(
+    "briar-crown-primary-mark-v01",
   );
 
   expect(CHAPTER_1_STORY.reportBack.hollisReceivesClothMessages.map((m) => m.text)).toContain(
@@ -498,6 +604,43 @@ test("chapter one story script beats stay wired into data", () => {
   expect(
     appendChapter1CompanionReaction("Base text", "rowan", "reportBack"),
   ).toContain("One route at a time");
+});
+
+test("the boar reveal must be reported to Elder Brynn before the Lio search begins", () => {
+  const companion = buildDefaultCompanion();
+  const afterBoar = buildQuestJournal(
+    {
+      ...buildDefaultFlags(),
+      metElder: true,
+      homeStashClaimed: true,
+      gotSmithGift: true,
+      beatGateBattle: true,
+    },
+    companion,
+  );
+
+  expect(afterBoar.currentMain).toMatchObject({
+    id: "elder-report",
+    title: "Bring Lio's Satchel to Elder Brynn",
+  });
+
+  const afterElder = buildQuestJournal(
+    {
+      ...buildDefaultFlags(),
+      metElder: true,
+      homeStashClaimed: true,
+      gotSmithGift: true,
+      beatGateBattle: true,
+      reportedSatchelToElder: true,
+    },
+    companion,
+  );
+
+  expect(afterElder.currentMain).toMatchObject({
+    id: "lio",
+    title: "Find What Happened to Lio Brindle",
+  });
+  expect(afterElder.currentMain.detail).toContain("report it in Bramblecross");
 });
 
 test("chapter progress derives current chapter from stable flags", () => {
@@ -596,7 +739,10 @@ test("art backlog tracks full illustrated prototype scope", () => {
   expect(ARTWORK_PLAN_GROUPS.portraits.mara.status).toBe("available");
   expect(ARTWORK_PLAN_GROUPS.enemies.false_sign_scratcher.status).toBe("available");
   expect(ARTWORK_PLAN_GROUPS.maps.briarhold_waystation.chapter).toBe(5);
-  expect(ARTWORK_PLAN_GROUPS.symbols.briar_crown_symbols.fallback).toBe("text labels");
+  expect(ARTWORK_PLAN_GROUPS.symbols.briar_crown_symbols).toMatchObject({
+    fallback: "crown emoji",
+    status: "available",
+  });
   expect(getArtworkBacklog().some((entry) => entry.category === "hero")).toBe(false);
   expect(getArtworkBacklog().some((entry) => entry.id === "bracken_voss")).toBe(true);
 });
