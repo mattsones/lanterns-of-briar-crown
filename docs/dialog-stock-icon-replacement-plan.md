@@ -10,7 +10,7 @@ Remove stock emoji and symbol art from the normal presentation of the game's sto
 4. a bespoke scene or object close-up when the physical clue matters to the story; or
 5. no thumbnail at all when the dialogue is a chapter transition, system message, or abstract summary.
 
-This audit covers `DialogueModal` calls in `src/App.tsx` and `src/components/modals.tsx`. It does not include inventory and crafting icons, combat ability icons, map tokens, the level-up star, or emoji in interior action buttons. Those are separate UI surfaces and should be audited separately if they are also meant to become fully illustrated.
+This document began as an audit of `DialogueModal` calls in `src/App.tsx` and `src/components/modals.tsx`. The whole-code audit dated 2026-07-16 expands it to every emoji-like literal in `src/`, including interiors, evidence cards, companions, inventory, enemies, level-up choices, map metadata, and semantic UI symbols.
 
 ## Audit Snapshot
 
@@ -22,6 +22,134 @@ This audit covers `DialogueModal` calls in `src/App.tsx` and `src/components/mod
 The current renderer already avoids drawing an empty stock-icon tile when no real art resolves. That is a useful safety behavior, but it does not solve the underlying data problem: battle rewards all receive the same scroll, exact title matching is fragile, and several important evidence moments have no intentional visual assignment.
 
 Project rules require emoji fallbacks to remain available while assets are being integrated. The polished path should therefore never show them, while the fallback data remains behind the image-error path until every replacement has been tested.
+
+## Whole-Code Emoji Audit — 2026-07-16
+
+The source scan found 230 emoji-bearing lines across nine files. That number substantially overstates the visible problem: most matches are deliberately retained fallback data behind production artwork, or map metadata that the painted-map renderer does not draw. The goal is not to delete every emoji literal. It is to prevent stock emoji from appearing during normal play while preserving useful image-error and development fallbacks.
+
+**Implementation update:** The Watchhouse environment and evidence cards, companion surfaces, three reachable Chapter 2 item placeholders, and all five level-up growth choices were converted to production art on 2026-07-16. The level-up sparkle was removed, the bespoke growth emblems are wired with emoji retained only as image-error fallbacks, and the later-chapter art backlog remains unfinished by design.
+
+### Rendering audit
+
+| Surface | Raw source matches | Normal presentation | Decision |
+|---|---:|---|---|
+| Dialogue definitions in `src/App.tsx` and `src/story/chapter2.ts` | 107 | Named portraits, enemy art, vignettes, scene art, or text-only dialogue | Keep `portrait` values as fallback data; finish the explicit art-key work documented below. |
+| Painted-map metadata in `src/data/maps.ts` | 53 | Map art, real character portraits, and real token art; ordinary action-token emoji are not drawn | Keep as fallback/debug metadata. Do not add stock markers back to painted maps. |
+| Item records in `src/data/items.ts` | 34 item icons | `ItemIcon` uses production artwork first | Replace the three currently reachable Chapter 2 placeholders; retain fallback values. Generate five later-chapter items when those chapters become playable. |
+| Enemy records in `src/data/enemies.ts` | 15 enemy icons | Ten use production enemy art; five later-chapter enemies still use their fallback | Generate the five Chapter 4–5 enemies before enabling those encounters. |
+| Companion records and UI | 3 companion icons plus direct render sites | Portraits exist, but three UI surfaces still print the emoji directly | Replace those direct render sites with existing portraits. |
+| Watchhouse evidence cards | 9 direct icons | Stock emoji are always visible | Replace all nine in the next Watchhouse pass. |
+| Level-up modal | 6 direct icons | Five bespoke transparent emblems; no header ornament | Complete. Keep the five stored emoji only as image-error fallbacks. |
+| Quest, QA, and navigation state | check, warning, play, arrows, bullets, close marks | Compact semantic controls | Keep. These communicate interface state rather than pretending to be story artwork. |
+
+### Priority 1: Watchhouse environment and evidence cards
+
+The Watchhouse is the most concentrated current-play stock-icon surface and the one shown in the 2026-07-16 playtest screenshot. It should be updated as one coherent environment pass.
+
+#### People inside
+
+Replace the plain **Talk with Enna** and **Talk with Hollis** buttons at the Watchhouse table with two compact portrait-led talk cards:
+
+| Control | Existing art | Treatment |
+|---|---|---|
+| Talk with Enna | `enna-portrait-v02.webp` | Face-forward crop, name, role label **Watch Clerk**, and a clear **Talk** action. |
+| Talk with Hollis | `hollis-portrait-v01.webp` | Face-forward crop, name, role label **Captain**, and a clear **Talk** action. |
+
+Keep the cards beside one another on wider screens and stack them on mobile. The portraits should use the same focal-position treatment as map portrait tokens so faces remain centered. Keep the Westroot briefing and later case actions as ordinary text buttons below the two people; they are tasks, not characters. The existing emoji stored on Enna and Hollis dialogue objects remains fallback-only.
+
+Remove the generic **A focused interior scene.** subtitle from the shared interior header. It adds no information in the Watchhouse and is equally unnecessary in the other named interiors.
+
+Stage the Watchhouse table description with the player's knowledge of Edden:
+
+- Before Edden has been introduced: **Enna keeps the maps pinned down with inkpots and impatience. Hollis stands near the case wall, glancing with grave concern toward a closed door farther down the hall.**
+- After the Edden reveal: identify it as Edden's door and let Hollis's watchfulness carry its intended meaning.
+
+The earlier version named Edden before the player had the context to understand why Hollis was watching his door; the environment should foreshadow that concern without prematurely labeling it.
+
+#### Incomplete case wall
+
+| Card | Replacement | New art? |
+|---|---|---|
+| Missing Porters | Tight detail from the existing Watchhouse duty-ledger art | No |
+| Copied Orders | Tight paper-and-seal detail from the existing forged-orders file art | No |
+| Supply Delays | Cargo/basket detail cropped from the Bramblecross Willow Market area | No |
+| Road-Side Evidence Missing | Text-only dashed placeholder labeled **Awaiting field evidence** | No |
+
+#### Completed case wall
+
+| Card | Replacement | New art? |
+|---|---|---|
+| Lio's Satchel | Existing courier-satchel close-up | No |
+| Planted Order | Existing Lantern Road milestone/hidden-order crop | No |
+| Willow Seal | Selected `assets/icons/ui/willowmark-seal-v02.png`; Ada's green three-leaf mark is shown on a crate lid with a deliberately tiny nick in the left leaf | No — v2 selected and wired; v1 retained as an alternate |
+| Root Cellar | Existing Bramblecross cellar entrance or Root Cellar stair crop | No |
+| False Crown? | Existing transparent Briar Crown mark | No |
+
+Implement these through a small reusable evidence-thumbnail/card component that accepts an existing dialogue-art key or a map crop. If a crop is illegible at card size, prefer a deliberate text-only card over another stock symbol. The completed case-wall illustration remains the wide establishing image above the individual clues.
+
+### Priority 2: Companion surfaces
+
+Existing portraits are sufficient; no generation is needed.
+
+1. In the Companion tab, replace the large active-companion emoji with the companion portrait.
+2. In the unrecruited-companion list, replace the inline emoji/name row with a small portrait and name.
+3. In the battle party card, replace the large companion emoji with the same portrait treatment used for the hero and enemies.
+4. Retain `COMPANION_OPTIONS.icon` only as an image-error fallback.
+
+### Priority 3: currently reachable item placeholders
+
+Three Chapter 2 items lack an `ITEM_ARTWORK` entry and therefore expose text or emoji-like placeholders during normal play. Existing art can cover all three:
+
+| Item | Replacement source |
+|---|---|
+| Split Crown Slat | `crown-den-slat-rack-broken-token-v01.png` |
+| Briar Signmaker's Ledger | `crown-den-witness-ledger-token-v01.png` |
+| Cleaned Lantern Mark | `crown-den-false-map-cleared-token-v01.png` |
+
+Register focused variants or reuse the source directly, depending on legibility at inventory size. Keep the item record's `icon` as the failure fallback.
+
+### Priority 4: level-up presentation
+
+The decorative sparkle beside the level-up title has been removed; the modal does not need an ornamental substitute. The five growth choices now use one coherent set of small, transparent, storybook-painted emblems:
+
+| Growth | Emblem direction |
+|---|---|
+| Power | Hatchet or blade striking through a briar |
+| Resolve | Roadwarden shield braced against roots |
+| Cleverness | Open route map with one honest path illuminated |
+| Heart | Warm lantern held between two hands |
+| Craft | Well-used handcrafting tools |
+
+Production files live at `assets/icons/ui/level-up-*.png` and are registered in `src/data/growthArtwork.ts`. The source emoji remain only as resilient image-error fallbacks, per the project fallback rule.
+
+### Priority 5: later-chapter art backlog
+
+These records are not defects in the current Chapter 1–3 play path, but their fallback icons will become visible when their content is enabled. They are already represented in `src/data/artworkPlan.ts` and should remain on the production-art backlog.
+
+| Type | Needs artwork before normal play |
+|---|---|
+| Chapter 4–5 items | Folded Map Scrap, Lanternwell Drop, True Seal Fragment, Briar Chain Link, Lio's Courier Knot |
+| Chapter 4–5 enemies | Briar Relay Guard, Crown Whisperer, Bracken Voss, Thornseal Guard, Thornroot Sentry |
+
+### Approved fallback and symbol allowlist
+
+Emoji-like source literals may remain only when they meet one of these conditions:
+
+- hidden beneath a real portrait, enemy image, item image, or map token and used only if that image fails;
+- retained as non-rendered tile metadata for map debugging or accessibility support;
+- used as a compact semantic UI state such as a check, warning, current-step marker, directional arrow, bullet, or close control; or
+- attached to content that is not yet enabled, with a named production-art backlog item that must be completed before release.
+
+They should not appear as decoration, evidence thumbnails, character identity, dialogue subject art, level-up decoration, or normal item/enemy presentation.
+
+### Verification plan
+
+1. Add a source-audit rule that flags emoji-like literals outside approved fallback fields and semantic control components.
+2. Require an artwork registry entry for every item obtainable in the currently enabled chapters.
+3. Require production artwork for every enemy referenced by an enabled encounter.
+4. Add browser coverage asserting that the Watchhouse, Companion tab, companion battle card, and level-up modal show no stock emoji during their normal render path.
+5. Retain targeted image-error tests proving that approved fallbacks still prevent broken-image holes.
+6. Acceptance criterion: no stock emoji is visible in an ordinary Chapter 1–3 playthrough, including interiors and secondary menus.
 
 ## Visual Rules
 

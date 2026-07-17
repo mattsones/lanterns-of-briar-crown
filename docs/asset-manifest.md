@@ -102,7 +102,7 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 |---|---|---|
 | Hearthhollow gameplay map | `hearthhollow-gameplay-map-v04.webp` | Current clean production map; icon-free version of the cozy village layout. |
 | Lantern Road gameplay map | `lantern-road-gameplay-map-v02.webp` | Current clean production map; icon-free version of the winding road layout. |
-| Bramblecross town gameplay map | `bramblecross-town-map-v01.webp` | Practical, square, guarded town layout. |
+| Bramblecross town gameplay map | `bramblecross-town-map-v02.webp` | Practical, square, guarded town layout with a clearly painted cellar entrance in the left-center building. The interaction is aligned to logical tile `(3,5)`. |
 | Root Cellar gameplay map | `root-cellar-map-v01.webp` | Strong layout; Warden visibly blocks sealed door. |
 | Westroot Trail gameplay map | `westroot-trail-map-v04.webp` | Current Chapter 2 production map; readable Shelter Nook, false notice, Three-Sign Hollow, Roadwatcher bend, and First Westroot Gate. |
 | Crown Door Den gameplay map | `crown-door-den-map-v01.webp` | Current Chapter 2 production map for the Roadwatcher signworks behind the Crown Door. Prompt lives in `docs/art/prompts/chapter-2-crown-door-and-three-doors.md`. |
@@ -242,6 +242,11 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Crown Den hound warning icon | `assets/icons/ui/crown-den-hound-warning-icon-v01.png` | Transparent PNG wired into the Crown Door Den tension strip. Reads primarily as the thorn collar, which fits the false-command beat. |
 | Crown Den patrol caught up icon | `assets/icons/ui/crown-den-patrol-caught-up-icon-v01.png` | Transparent PNG wired into the Crown Door Den tension strip. |
 | Crown Den pursuit tension master sheet | `assets/icons/ui/crown-den-pursuit-tension-master-sheet-v01.png` | Reference-only sheet for the tension icon generation. The individual transparent PNGs are the production assets. |
+| Level-up Power emblem | `assets/icons/ui/level-up-power-v01.png` | Optimized 512 px true-alpha storybook emblem; hatchet cutting through briar. |
+| Level-up Resolve emblem | `assets/icons/ui/level-up-resolve-v01.png` | Optimized 512 px true-alpha storybook emblem; roadwarden shield braced against roots. |
+| Level-up Cleverness emblem | `assets/icons/ui/level-up-cleverness-v01.png` | Optimized 512 px true-alpha storybook emblem; map revealing the honest route. |
+| Level-up Heart emblem | `assets/icons/ui/level-up-heart-v01.png` | Optimized 512 px true-alpha storybook emblem; hands sheltering a road lantern. |
+| Level-up Craft emblem | `assets/icons/ui/level-up-craft-v02.png` | Optimized 512 px true-alpha storybook emblem; well-used handcrafting tools. Full-size masters, the earlier Craft choice, and checkerboard source deliveries are preserved under `assets/reference/`. |
 
 ## Hero Assets
 
@@ -339,6 +344,12 @@ These have also been cleaned and promoted into the item-art registry so Chapter 
 | Pine-Pitch Wax | `assets/icons/items/pine-pitch-wax-icon-v01.png` | Production-ready; amber resin and twine give it a useful material read. |
 | No-Handle Token | `assets/icons/items/no-handle-token-icon-v01.png` | Production-ready; the missing handle reads clearly even small. |
 | Witness Note for Bramblecross | `assets/icons/items/witness-note-for-bramblecross-icon-v01.png` | Production-ready; official note shape and blue watch detail are clear. |
+
+## Selected Shared Evidence Art
+
+| Evidence | Selected asset | Notes |
+|---|---|---|
+| Willowmark Seal | `assets/icons/ui/willowmark-seal-v02.png` | Selected over v1 because the maker's nick in the left leaf is subtle enough to reward Ada's Willowmark Lens instead of announcing the defect at ordinary viewing size. Used on the completed Watchhouse case wall. |
 
 ---
 

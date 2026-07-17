@@ -13,6 +13,16 @@ type MapVisualConfig = {
   revealAll?: boolean;
   fogRadius?: number;
   fogPathWidth?: number;
+  fogRevealAreas?: Array<{
+    id: string;
+    nodeKeys: string[];
+    minVisitedNodes?: number;
+    x: number;
+    y: number;
+    radiusX: number;
+    radiusY: number;
+    rotation?: number;
+  }>;
   completedFogOpacity?: number;
   nodeHitboxSize?: string;
   pointGrid?: {
@@ -225,7 +235,8 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
     revealAll: true,
     fogRadius: 7,
     pointOverrides: {
-      "7,4": { x: 54.8, y: 47.5 },
+      "3,5": { x: 25.2, y: 49.7 },
+      "7,5": { x: 54.8, y: 47.5 },
     },
   },
   westrootTrail: {
@@ -317,6 +328,84 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
     navBounds: { left: 6, top: 6, width: 88, height: 86 },
     fogRadius: 5.8,
     fogPathWidth: 10.5,
+    fogRevealAreas: [
+      {
+        id: "entrance-alcove",
+        nodeKeys: ["0,1", "1,1"],
+        minVisitedNodes: 2,
+        x: 15,
+        y: 15,
+        radiusX: 10,
+        radiusY: 11,
+        rotation: -20,
+      },
+      {
+        id: "root-sigil-chamber",
+        nodeKeys: ["2,1", "3,1", "4,1", "5,1", "6,1", "3,2", "3,3"],
+        minVisitedNodes: 2,
+        x: 38,
+        y: 25,
+        radiusX: 24,
+        radiusY: 14,
+      },
+      {
+        id: "upper-store-room",
+        nodeKeys: ["7,1", "8,1", "7,2"],
+        minVisitedNodes: 2,
+        x: 64,
+        y: 16,
+        radiusX: 13,
+        radiusY: 11,
+        rotation: -12,
+      },
+      {
+        id: "route-mural-room",
+        nodeKeys: ["1,4", "1,5", "1,6"],
+        minVisitedNodes: 2,
+        x: 16,
+        y: 43,
+        radiusX: 12,
+        radiusY: 14,
+      },
+      {
+        id: "glowcap-chamber",
+        nodeKeys: ["3,4", "3,5", "4,5", "5,5", "4,6", "5,6"],
+        minVisitedNodes: 2,
+        x: 41,
+        y: 50,
+        radiusX: 15,
+        radiusY: 14,
+        rotation: -8,
+      },
+      {
+        id: "cellar-cache-room",
+        nodeKeys: ["1,6", "2,6", "1,7", "2,7", "3,7"],
+        minVisitedNodes: 2,
+        x: 22,
+        y: 69,
+        radiusX: 15,
+        radiusY: 14,
+      },
+      {
+        id: "lower-root-chamber",
+        nodeKeys: ["4,6", "5,6", "6,6", "4,7", "5,7", "6,7", "4,8", "5,8", "6,8"],
+        minVisitedNodes: 2,
+        x: 48,
+        y: 71,
+        radiusX: 21,
+        radiusY: 15,
+      },
+      {
+        id: "guardian-vault",
+        nodeKeys: ["7,4", "7,5", "7,6", "8,5", "8,6", "9,4", "9,5", "9,6", "10,4"],
+        minVisitedNodes: 2,
+        x: 78,
+        y: 50,
+        radiusX: 20,
+        radiusY: 21,
+        rotation: -8,
+      },
+    ],
     completedFogOpacity: 0.52,
     nodeHitboxSize: "clamp(1.25rem, 3.8%, 2.15rem)",
     navigationLinks: buildNavigationLinks(ROOT_CELLAR_NAV_CONNECTIONS),

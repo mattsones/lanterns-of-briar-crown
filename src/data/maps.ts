@@ -1,5 +1,5 @@
 const bramblecrossTownMap = new URL(
-  "../../assets/maps/bramblecross-town-map-v01.webp",
+  "../../assets/maps/bramblecross-town-map-v02.webp",
   import.meta.url,
 ).href;
 const hearthhollowMap = new URL(
@@ -418,7 +418,7 @@ export const MAPS = {
         "mayor",
         "fenced_yard",
         "road",
-        "board",
+        "fenced_yard",
         "fenced_yard",
         "merchant",
         "road",
@@ -429,11 +429,11 @@ export const MAPS = {
         "tree",
         "fenced_yard",
         "fenced_yard",
-        "fenced_yard",
+        "cellar",
         "road",
         "fenced_yard",
         "road",
-        "fenced_yard",
+        "board",
         "fenced_yard",
         "fenced_yard",
         "road",
@@ -446,7 +446,7 @@ export const MAPS = {
         "fenced_yard",
         "road",
         "road",
-        "cellar",
+        "road",
         "road",
         "road",
         "road",

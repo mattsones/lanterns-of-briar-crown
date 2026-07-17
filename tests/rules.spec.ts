@@ -20,6 +20,7 @@ import {
 import { PLAYER_HERO_ARTWORK, getPlayerArtworkBySelection } from "../src/data/playerArtwork";
 import { ITEM_DB } from "../src/data/items";
 import { ITEM_ARTWORK } from "../src/data/itemArtwork";
+import { HERO_GROWTH_ARTWORK } from "../src/data/growthArtwork";
 import { MAPS, TILE_META } from "../src/data/maps";
 import { DIALOGUE_PORTRAITS } from "../src/data/portraits";
 import { buildQuestJournal } from "../src/data/quests";
@@ -338,10 +339,28 @@ test("Chapter 3 production artwork is selected and fallback-safe", () => {
   expect(ITEM_ARTWORK.rootbread_charm?.src).toContain("rootbread-charm-icon-v01");
   expect(ITEM_ARTWORK.witness_stone_rubbing?.src).toContain("witness-stone-rubbing-icon-v02");
   expect(ITEM_ARTWORK.cargo_transfer_tag?.src).toContain("cargo-transfer-tag-icon-v02");
+  expect(ITEM_ARTWORK.split_crown_slat?.src).toContain("crown-den-slat-rack-broken-token-v01");
+  expect(ITEM_ARTWORK.briar_signmaker_ledger?.src).toContain("crown-den-witness-ledger-token-v01");
+  expect(ITEM_ARTWORK.cleaned_lantern_mark?.src).toContain("crown-den-false-map-cleared-token-v01");
   expect(ARTWORK_PLAN_GROUPS.portraits.westroot_npcs.status).toBe("available");
   expect(ARTWORK_PLAN_GROUPS.enemies.briar_cargo_runner.status).toBe("available");
   expect(ARTWORK_PLAN_GROUPS.enemies.seal_forged_sentry.status).toBe("available");
   expect(ARTWORK_PLAN_GROUPS.items.cargo_transfer_tag.status).toBe("available");
+});
+
+test("level-up growth choices use the coordinated production emblem set", () => {
+  expect(Object.keys(HERO_GROWTH_ARTWORK)).toEqual([
+    "power",
+    "resolve",
+    "cleverness",
+    "heart",
+    "craft",
+  ]);
+  expect(HERO_GROWTH_ARTWORK.power.src).toContain("level-up-power-v01");
+  expect(HERO_GROWTH_ARTWORK.resolve.src).toContain("level-up-resolve-v01");
+  expect(HERO_GROWTH_ARTWORK.cleverness.src).toContain("level-up-cleverness-v01");
+  expect(HERO_GROWTH_ARTWORK.heart.src).toContain("level-up-heart-v01");
+  expect(HERO_GROWTH_ARTWORK.craft.src).toContain("level-up-craft-v02");
 });
 
 test("checked-in Chapter 2 complete save is Chapter 3 ready", () => {
@@ -457,6 +476,16 @@ test("progression and default map state stay compatible with chapter one", () =>
   expect(getMapVisualConfig("bramblecross").revealAll).toBe(true);
   expect(getMapVisualConfig("lanternRoad").revealAll).toBeUndefined();
   expect(getMapVisualConfig("lanternRoad").pointOverrides).toBeUndefined();
+  expect(getMapVisualConfig("rootCellar").fogRevealAreas?.map((area) => area.id)).toEqual([
+    "entrance-alcove",
+    "root-sigil-chamber",
+    "upper-store-room",
+    "route-mural-room",
+    "glowcap-chamber",
+    "cellar-cache-room",
+    "lower-root-chamber",
+    "guardian-vault",
+  ]);
   expect(MAPS.hearthhollow.tiles[4][2]).toBe("grass");
   expect(MAPS.hearthhollow.tiles[2][5]).toBe("baker");
   expect(MAPS.hearthhollow.tiles[2][3]).toBe("home_door");
@@ -477,12 +506,14 @@ test("progression and default map state stay compatible with chapter one", () =>
   expect(TILE_META.well.blocked).toBe(false);
   expect(isBlockedInteractionTile("well")).toBe(false);
   expect(MAPS.bramblecross.tiles[2][6]).toBe("watch_door");
-  expect(MAPS.bramblecross.tiles[4][7]).toBe("board");
+  expect(MAPS.bramblecross.backgroundImage).toContain("bramblecross-town-map-v02");
+  expect(MAPS.bramblecross.tiles[4][7]).toBe("fenced_yard");
+  expect(MAPS.bramblecross.tiles[5][7]).toBe("board");
   expect(
     getMapNodePoint(
       "bramblecross",
       7,
-      4,
+      5,
       MAPS.bramblecross.tiles[0].length,
       MAPS.bramblecross.tiles.length,
     ),
@@ -496,7 +527,7 @@ test("progression and default map state stay compatible with chapter one", () =>
   ].forEach(([x, y]) => {
     const tile = MAPS.bramblecross.tiles[y][x];
     expect(TILE_META[tile]?.blocked).toBe(false);
-    if (!(x === 5 && y === 6) && !(x === 6 && y === 9)) {
+    if (!(x === 6 && y === 9)) {
       expect(tile).toBe("road");
     }
   });
@@ -519,7 +550,17 @@ test("progression and default map state stay compatible with chapter one", () =>
     expect(tile).toBe("fenced_yard");
     expect(TILE_META[tile]?.blocked).toBe(true);
   });
-  expect(MAPS.bramblecross.tiles[6][5]).toBe("cellar");
+  expect(MAPS.bramblecross.tiles[5][3]).toBe("cellar");
+  expect(MAPS.bramblecross.tiles[6][5]).toBe("road");
+  expect(
+    getMapNodePoint(
+      "bramblecross",
+      3,
+      5,
+      MAPS.bramblecross.tiles[0].length,
+      MAPS.bramblecross.tiles.length,
+    ),
+  ).toEqual({ x: 25.2, y: 49.7 });
   expect(TILE_META[MAPS.bramblecross.tiles[7][5]].blocked).toBe(true);
   expect(TILE_META[MAPS.bramblecross.tiles[8][2]].blocked).toBe(true);
   expect(MAPS.lanternRoad.start).toEqual({ x: 0, y: 7 });
@@ -641,6 +682,27 @@ test("the boar reveal must be reported to Elder Brynn before the Lio search begi
     title: "Find What Happened to Lio Brindle",
   });
   expect(afterElder.currentMain.detail).toContain("report it in Bramblecross");
+});
+
+test("Smith Orin's weapon supersedes the optional hatchet pickup", () => {
+  const journal = buildQuestJournal(
+    {
+      ...buildDefaultFlags(),
+      metElder: true,
+      homeStashClaimed: false,
+      gotSmithGift: true,
+    },
+    buildDefaultCompanion(),
+  );
+
+  expect(journal.mainSteps.find((step) => step.id === "prepare")).toMatchObject({
+    done: true,
+    active: false,
+  });
+  expect(journal.currentMain).toMatchObject({
+    id: "boar",
+    title: "Stop the Bramble Boar",
+  });
 });
 
 test("chapter progress derives current chapter from stable flags", () => {

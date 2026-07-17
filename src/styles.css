@@ -439,3 +439,267 @@ textarea {
 img[alt^="Portrait of "] {
   object-position: center 42%;
 }
+
+.adventure-workspace-backdrop {
+  position: fixed;
+  z-index: 38;
+  inset: 0;
+  display: flex;
+  justify-content: flex-end;
+  background: rgb(2 6 23 / 0.68);
+  backdrop-filter: blur(3px);
+}
+
+.adventure-workspace {
+  width: min(48rem, 62vw);
+  height: 100dvh;
+  overflow-y: auto;
+  border-left: 1px solid rgb(253 230 138 / 0.18);
+  background:
+    radial-gradient(circle at 15% 0%, rgb(88 116 78 / 0.24), transparent 26rem),
+    linear-gradient(160deg, rgb(30 41 45 / 0.99), rgb(15 23 42 / 0.99));
+  box-shadow: -1.5rem 0 4rem rgb(0 0 0 / 0.42);
+  outline: none;
+  animation: adventure-drawer-in 180ms ease-out;
+}
+
+.adventure-workspace-header {
+  position: sticky;
+  z-index: 3;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.1rem 0.9rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+  background: rgb(15 23 42 / 0.94);
+  backdrop-filter: blur(14px);
+}
+
+.adventure-workspace-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  overflow-x: auto;
+  padding: 0.8rem 1.1rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  scrollbar-width: thin;
+}
+
+.adventure-workspace-tabs > button,
+.adventure-workspace-more > summary,
+.adventure-workspace-more > button {
+  flex: 0 0 auto;
+  cursor: pointer;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.05);
+  padding: 0.45rem 0.8rem;
+  color: rgb(255 255 255 / 0.68);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  list-style: none;
+}
+
+.adventure-workspace-tabs > button:hover,
+.adventure-workspace-more > summary:hover,
+.adventure-workspace-more > button:hover,
+.adventure-workspace-tabs > button.is-active,
+.adventure-workspace-tabs [aria-current="page"] {
+  border-color: rgb(253 230 138 / 0.24);
+  background: rgb(245 158 11 / 0.16);
+  color: white;
+}
+
+.adventure-workspace-more {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.adventure-workspace-more > summary::-webkit-details-marker {
+  display: none;
+}
+
+.adventure-workspace-more[open] > button {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 0.35rem);
+  right: 0;
+  width: max-content;
+  border-radius: 0.8rem;
+  background: rgb(15 23 42 / 0.98);
+  box-shadow: 0 0.8rem 2rem rgb(0 0 0 / 0.4);
+}
+
+.adventure-workspace-content {
+  padding: 1.1rem;
+}
+
+.mobile-adventure-bar {
+  position: fixed;
+  z-index: 25;
+  right: 0.5rem;
+  bottom: max(0.5rem, env(safe-area-inset-bottom));
+  left: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem;
+  border: 1px solid rgb(253 230 138 / 0.18);
+  border-radius: 1.25rem;
+  background: rgb(15 23 42 / 0.94);
+  box-shadow: 0 1rem 3rem rgb(0 0 0 / 0.46);
+  backdrop-filter: blur(14px);
+}
+
+.game-actions-menu > summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.game-actions-menu > summary::-webkit-details-marker {
+  display: none;
+}
+
+.map-movement-overlay {
+  position: absolute;
+  z-index: 21;
+  right: clamp(0.5rem, 1.6vw, 0.85rem);
+  bottom: clamp(0.5rem, 1.6vw, 0.85rem);
+  left: clamp(0.5rem, 1.6vw, 0.85rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.map-movement-context,
+.map-movement-controls {
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 1rem;
+  background: rgb(2 6 23 / 0.76);
+  box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.24);
+  backdrop-filter: blur(10px);
+  pointer-events: auto;
+}
+
+.map-movement-context {
+  min-width: 0;
+  max-width: 17rem;
+  padding: 0.55rem 0.75rem;
+  color: rgb(255 255 255 / 0.72);
+  font-size: 0.72rem;
+  line-height: 1.2;
+}
+
+.map-movement-controls {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.3rem;
+  padding: 0.35rem;
+}
+
+.map-movement-controls .storybook-button {
+  min-width: 2.35rem;
+  padding: 0.45rem 0.65rem;
+  background: rgb(255 255 255 / 0.1);
+}
+
+.map-movement-controls .map-inspect-button {
+  min-width: 5.25rem;
+  border-color: rgb(253 230 138 / 0.28);
+  background: rgb(245 158 11 / 0.18);
+}
+
+@keyframes adventure-drawer-in {
+  from {
+    transform: translateX(2rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mobile-adventure-bar {
+    display: none;
+  }
+}
+
+@media (max-width: 1023px) {
+  .adventure-workspace-backdrop {
+    align-items: flex-end;
+  }
+
+  .adventure-workspace {
+    width: 100%;
+    height: min(88dvh, 54rem);
+    border-top: 1px solid rgb(253 230 138 / 0.18);
+    border-left: 0;
+    border-radius: 1.75rem 1.75rem 0 0;
+    animation-name: adventure-sheet-in;
+  }
+
+  .adventure-workspace::before {
+    display: block;
+    width: 3rem;
+    height: 0.3rem;
+    margin: 0.45rem auto 0;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.22);
+    content: "";
+  }
+
+  .adventure-workspace-header {
+    padding-top: 0.55rem;
+  }
+
+  .adventure-workspace-content {
+    padding-bottom: max(1.2rem, env(safe-area-inset-bottom));
+  }
+
+  @keyframes adventure-sheet-in {
+    from {
+      transform: translateY(2rem);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .map-status-overlay {
+    max-height: 4.35rem;
+    overflow: hidden;
+  }
+
+  .map-movement-overlay {
+    align-items: flex-end;
+  }
+
+  .map-movement-context {
+    display: none;
+  }
+
+  .map-movement-controls {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .map-movement-controls .storybook-button {
+    min-width: 2.6rem;
+    min-height: 2.6rem;
+    padding: 0.45rem;
+  }
+
+  .map-movement-controls .map-inspect-button {
+    min-width: 6.4rem;
+  }
+}

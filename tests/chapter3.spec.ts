@@ -64,7 +64,7 @@ test("Chapter 3 keeps the Rootbread Promise and Witness Stones fail-forward sequ
 
   await expect(page.getByRole("heading", { name: MAPS.westrootHub.name })).toBeVisible();
   await expect(page.getByText("Goal: Enter Westroot")).toBeVisible();
-  await expect(page.getByText("You are standing on: First Westroot Gate.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Inspect First Westroot Gate", exact: true })).toBeVisible();
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
   await expect(page.getByText("Who opened my gate?")).toBeVisible();
@@ -137,7 +137,7 @@ test("Chapter 3 Cargo Siding resolves into Split Hall and the westward handoff",
   );
   await page.goto("/");
   await page.getByRole("button", { name: "Continue Checkpoint" }).click();
-  await expect(page.getByText("You are standing on: Cargo Siding.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Inspect Cargo Siding", exact: true })).toBeVisible();
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
   await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute(

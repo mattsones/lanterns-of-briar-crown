@@ -293,6 +293,10 @@ export function MapStage({
     : nodes;
   const fogNodes = renderedNodes.filter((node) => node.explored);
   const fogNodeKeys = new Set(fogNodes.map((node) => `${node.x},${node.y}`));
+  const fogRevealAreas = (visual.fogRevealAreas || []).filter((area) => {
+    const visitedNodeCount = area.nodeKeys.filter((key) => fogNodeKeys.has(key)).length;
+    return visitedNodeCount >= (area.minVisitedNodes ?? 1);
+  });
   const navigationNodeKeys = usesNavigationGraph
     ? getNavigationNodeKeys(region)
     : [];
@@ -380,6 +384,22 @@ export function MapStage({
             >
               <rect width="100" height="100" fill="white" />
               <g filter={`url(#${fogBlurId})`}>
+                {fogRevealAreas.map((area) => (
+                  <ellipse
+                    key={`fog-area-${area.id}`}
+                    data-fog-area={area.id}
+                    cx={area.x}
+                    cy={area.y}
+                    rx={area.radiusX}
+                    ry={area.radiusY}
+                    fill="black"
+                    transform={
+                      area.rotation
+                        ? `rotate(${area.rotation} ${area.x} ${area.y})`
+                        : undefined
+                    }
+                  />
+                ))}
                 {fogEdges.map((edge) => (
                   <line
                     key={edge.key}

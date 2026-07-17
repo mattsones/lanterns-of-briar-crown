@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-17T02:52:02.467Z",
+  "generatedAt": "2026-07-17T05:12:50.010Z",
   "sourceArtRoot": "assets/reference/source-art",
   "alternatesRoot": "assets/reference/alternates",
   "conversions": [
@@ -466,12 +466,78 @@
       "hasAlpha": true
     },
     {
-      "source": "assets/maps/bramblecross-town-map-v01.webp",
-      "original": "assets/reference/source-art/assets/maps/bramblecross-town-map-v01.png",
-      "output": "assets/maps/bramblecross-town-map-v01.webp",
+      "source": "assets/icons/ui/level-up-cleverness-v01.png",
+      "original": "assets/reference/source-art/assets/icons/ui/level-up-cleverness-v01.png",
+      "output": "assets/icons/ui/level-up-cleverness-v01.png",
+      "format": "png",
+      "originalBytes": 1754534,
+      "outputBytes": 112141,
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true
+    },
+    {
+      "source": "assets/icons/ui/level-up-craft-v02.png",
+      "original": "assets/reference/source-art/assets/icons/ui/level-up-craft-v02.png",
+      "output": "assets/icons/ui/level-up-craft-v02.png",
+      "format": "png",
+      "originalBytes": 1279859,
+      "outputBytes": 81376,
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true
+    },
+    {
+      "source": "assets/icons/ui/level-up-heart-v01.png",
+      "original": "assets/reference/source-art/assets/icons/ui/level-up-heart-v01.png",
+      "output": "assets/icons/ui/level-up-heart-v01.png",
+      "format": "png",
+      "originalBytes": 1323059,
+      "outputBytes": 83987,
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true
+    },
+    {
+      "source": "assets/icons/ui/level-up-power-v01.png",
+      "original": "assets/reference/source-art/assets/icons/ui/level-up-power-v01.png",
+      "output": "assets/icons/ui/level-up-power-v01.png",
+      "format": "png",
+      "originalBytes": 1146156,
+      "outputBytes": 73182,
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true
+    },
+    {
+      "source": "assets/icons/ui/level-up-resolve-v01.png",
+      "original": "assets/reference/source-art/assets/icons/ui/level-up-resolve-v01.png",
+      "output": "assets/icons/ui/level-up-resolve-v01.png",
+      "format": "png",
+      "originalBytes": 1782625,
+      "outputBytes": 110126,
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true
+    },
+    {
+      "source": "assets/icons/ui/willowmark-seal-v02.png",
+      "original": "assets/reference/source-art/assets/icons/ui/willowmark-seal-v02.png",
+      "output": "assets/icons/ui/willowmark-seal-v02.png",
+      "format": "png",
+      "originalBytes": 3103521,
+      "outputBytes": 164200,
+      "width": 1448,
+      "height": 1086,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/bramblecross-town-map-v02.webp",
+      "original": "assets/reference/source-art/assets/maps/bramblecross-town-map-v02.png",
+      "output": "assets/maps/bramblecross-town-map-v02.webp",
       "format": "webp",
-      "originalBytes": 3489595,
-      "outputBytes": 505582,
+      "originalBytes": 3334812,
+      "outputBytes": 443448,
       "width": 1448,
       "height": 1086,
       "hasAlpha": false
@@ -1324,5 +1390,10 @@
       "hasAlpha": false
     }
   ],
-  "movedAlternates": []
+  "movedAlternates": [
+    {
+      "source": "assets/icons/ui/willowmark-seal-v01.png",
+      "destination": "assets/reference/alternates/assets/icons/ui/willowmark-seal-v01.png"
+    }
+  ]
 }

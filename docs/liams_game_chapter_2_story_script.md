@@ -802,7 +802,7 @@ At first glance, they look nearly identical: three leaves inside a circle.
 
 Then Ada taps the honest one.
 
-“My stamp has one nick in the lower leaf. See it? Tiny. Annoying. Mine.”
+“My stamp has one nick in the left leaf. See it? Tiny. Annoying. Mine.”
 
 She taps the copied one.
 
@@ -882,7 +882,7 @@ Mara nods once.
 
 Ada wipes her counter with the force of someone imagining the counter is personally responsible for forged paperwork.
 
-“Remember,” she says. “My honest mark has a nick in the lower leaf. Copied marks are often too smooth. Altered marks often have fresh scraping around the circle.”
+“Remember,” she says. “My honest mark has a nick in the left leaf. Copied marks are often too smooth. Altered marks often have fresh scraping around the circle.”
 
 She pauses.
 
@@ -2436,4 +2436,3 @@ By the end of Chapter 2:
 - Lio is confirmed alive beyond the First Westroot Gate.
 - The old Lantern Road opens to truth rather than force.
 - Chapter 3 is set up: Westroot is waiting beneath the hill.
-

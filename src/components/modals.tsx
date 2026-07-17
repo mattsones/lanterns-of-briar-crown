@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { HERO_GROWTH_OPTIONS } from "../data/character";
 import { COMPANION_OPTIONS } from "../data/companions";
 import { getDialogueSceneArt } from "../data/dialogueArt";
+import { getHeroGrowthArtwork } from "../data/growthArtwork";
 import { BATTLE_CONSUMABLES, ITEM_DB } from "../data/items";
 import { MAPS } from "../data/maps";
 import { getDialoguePortrait } from "../data/portraits";
@@ -14,6 +15,12 @@ import { formatBonuses, getDerivedStats } from "../game/stats";
 import { appendChapter1CompanionReaction } from "../story/chapter1";
 import { Button, ChoiceButton, ItemIcon, Meter } from "./ui";
 import { HeroArtwork } from "./HeroArtwork";
+import { CompanionPortrait } from "./CompanionPortrait";
+
+const willowmarkSeal = new URL(
+  "../../assets/icons/ui/willowmark-seal-v02.png",
+  import.meta.url,
+).href;
 
 function useModalAccessibility(close?: () => void) {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -219,22 +226,88 @@ const MAP_INTERACTION_VIGNETTES: Record<string, MapInteractionVignetteConfig> = 
   },
 };
 
+function dialogueArtCrop(artKey, id, focusX, focusY, zoom) {
+  const art = getDialogueSceneArt(artKey);
+  return art ? { ...art, id, focusX, focusY, zoom } : null;
+}
+
+const WATCHHOUSE_EVIDENCE_ART = {
+  missingPorters: dialogueArtCrop("watchhouseDutyLedger", "watchhouse-card-missing-porters", 38, 76, 230),
+  copiedOrders: dialogueArtCrop("watchhouseForgedOrders", "watchhouse-card-copied-orders", 72, 78, 230),
+  supplyDelays: {
+    id: "watchhouse-card-supply-delays",
+    src: MAPS.bramblecross.backgroundImage,
+    alt: "Carts, crates, and market stalls in Bramblecross",
+    focusX: 77,
+    focusY: 48,
+    zoom: 270,
+  },
+  lioSatchel: dialogueArtCrop("courierSatchel", "watchhouse-card-lio-satchel", 66, 50, 145),
+  plantedOrder: {
+    id: "watchhouse-card-planted-order",
+    src: MAPS.lanternRoad.backgroundImage,
+    alt: "The ruined milestone where a planted order was hidden",
+    focusX: 57,
+    focusY: 18,
+    zoom: 275,
+  },
+  willowSeal: {
+    id: "watchhouse-card-willow-seal",
+    src: willowmarkSeal,
+    alt: "Ada Willowmarket's green three-leaf cargo seal on a crate, with a tiny identifying nick in the left leaf",
+    focusX: 50,
+    focusY: 48,
+    zoom: 112,
+  },
+  rootCellar: {
+    id: "watchhouse-card-root-cellar",
+    src: MAPS.rootCellar.backgroundImage,
+    alt: "The lantern-lit entrance stairs into the Old Root Cellar",
+    focusX: 14,
+    focusY: 13,
+    zoom: 285,
+  },
+  falseCrown: getDialogueSceneArt("briarCrownMark"),
+};
+
+function GrowthEmblem({ growth }) {
+  const artwork = getHeroGrowthArtwork(growth.id);
+  const [imageFailed, setImageFailed] = useState(false);
+
+  useEffect(() => setImageFailed(false), [growth.id, artwork?.src]);
+
+  return (
+    <div className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-slate-950/55 text-3xl md:h-24 md:w-full">
+      {!artwork || imageFailed ? <span aria-hidden="true">{growth.icon}</span> : null}
+      {artwork && !imageFailed ? (
+        <img
+          src={artwork.src}
+          alt={artwork.alt}
+          className="absolute inset-0 h-full w-full object-contain p-1.5"
+          onError={() => setImageFailed(true)}
+        />
+      ) : null}
+    </div>
+  );
+}
+
 export function LevelUpModal({ player, target, choose }) {
   const modalRef = useModalAccessibility();
   return <div className="fixed inset-0 z-[90] flex items-end justify-center bg-black/70 p-4 sm:items-center">
-    <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="level-up-title" tabIndex={-1} className="w-full max-w-4xl rounded-[2rem] border border-sky-300/20 bg-slate-900 p-5 shadow-2xl">
+    <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="level-up-title" tabIndex={-1} className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-[2rem] border border-sky-300/20 bg-slate-900 p-5 shadow-2xl">
       <div className="text-center">
-        <div className="text-5xl">✨</div>
-        <div id="level-up-title" className="mt-2 text-3xl font-bold">Level Up!</div>
+        <div id="level-up-title" className="text-3xl font-bold">Level Up!</div>
         <div className="mt-1 text-white/70">{player.name} reached Level {(player.level || 1) + 1}. XP {player.xp}/{target}</div>
         <div className="mt-3 rounded-2xl border border-sky-300/20 bg-sky-400/10 p-3 text-sm text-white/80">Every level gives <span className="font-semibold text-sky-200">Max HP +4</span> and <span className="font-semibold text-sky-200">Current HP +4</span>. Choose how your hero grows.</div>
       </div>
       <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
-        {HERO_GROWTH_OPTIONS.map((growth) => <button key={growth.id} onClick={() => choose(growth)} className="rounded-3xl border border-white/10 bg-white/5 p-4 text-left transition hover:border-sky-300/40 hover:bg-sky-400/10">
-          <div className="text-3xl">{growth.icon}</div>
-          <div className="mt-2 text-lg font-semibold">{growth.name}</div>
-          <div className="mt-1 text-sm text-emerald-300">{formatBonuses(growth.bonuses)}</div>
-          <div className="mt-2 text-xs leading-5 text-white/70">{growth.description}</div>
+        {HERO_GROWTH_OPTIONS.map((growth) => <button key={growth.id} onClick={() => choose(growth)} className="flex items-center gap-3 rounded-3xl border border-white/10 bg-white/5 p-3 text-left transition hover:border-sky-300/40 hover:bg-sky-400/10 md:block md:p-4">
+          <GrowthEmblem growth={growth} />
+          <div className="min-w-0 md:mt-3">
+            <div className="text-lg font-semibold">{growth.name}</div>
+            <div className="mt-1 text-sm text-emerald-300">{formatBonuses(growth.bonuses)}</div>
+            <div className="mt-2 text-xs leading-5 text-white/70">{growth.description}</div>
+          </div>
         </button>)}
       </div>
     </div>
@@ -436,8 +509,96 @@ export function DialogueModal({ dialogue, close }) {
     </div>
   </div>;
 }
+
+function WatchhousePersonButton({ portraitName, displayName = portraitName, role, fallback, onClick, testId }) {
+  const portrait = getDialoguePortrait(portraitName);
+  return (
+    <button
+      type="button"
+      data-testid={testId}
+      aria-label={`Talk with ${displayName}`}
+      onClick={onClick}
+      className="storybook-button flex min-w-0 items-center gap-3 rounded-2xl border border-white/10 bg-white/10 p-3 text-left text-white transition hover:border-emerald-200/25 hover:bg-white/15"
+    >
+      <span className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-slate-950/70 text-2xl">
+        <span aria-hidden="true" className={portrait ? "opacity-0" : ""}>{fallback}</span>
+        {portrait ? (
+          <img
+            src={portrait.src}
+            alt={portrait.alt}
+            className="absolute inset-0 h-full w-full object-cover object-top"
+            onError={(event) => {
+              event.currentTarget.style.display = "none";
+              event.currentTarget.previousElementSibling?.classList.remove("opacity-0");
+            }}
+          />
+        ) : null}
+      </span>
+      <span className="min-w-0">
+        <span className="block text-base font-semibold">{displayName}</span>
+        <span className="mt-0.5 block text-xs uppercase tracking-wide text-emerald-200/75">{role}</span>
+        <span className="mt-2 block text-sm text-white/75">Talk with {displayName}</span>
+      </span>
+    </button>
+  );
+}
+
+function EvidenceThumbnail({ image, fallback }) {
+  if (!image?.src) {
+    return <div className="flex h-20 items-center justify-center rounded-2xl border border-dashed border-white/15 bg-black/15 px-3 text-center text-xs font-semibold uppercase tracking-wide text-white/40">{fallback}</div>;
+  }
+
+  const focusX = image.focusX ?? 50;
+  const focusY = image.focusY ?? 50;
+  const zoom = image.zoom ?? 100;
+  const isEmblem = image.presentation === "emblem";
+
+  return (
+    <figure
+      data-art-key={image.id}
+      role="img"
+      aria-label={image.alt || fallback}
+      className={`relative h-20 overflow-hidden rounded-2xl border border-white/10 ${isEmblem ? "bg-[radial-gradient(circle_at_center,_rgba(127,29,29,0.28),_rgba(2,6,23,0.8)_68%)]" : "bg-black/20"}`}
+    >
+      <span className="absolute inset-0 flex items-center justify-center px-3 text-center text-xs text-white/35 opacity-0">{fallback}</span>
+      <img
+        src={image.src}
+        alt=""
+        className={isEmblem ? "absolute inset-0 h-full w-full object-contain p-2" : "absolute left-1/2 top-1/2 h-auto max-w-none"}
+        style={isEmblem ? undefined : {
+          width: `${zoom}%`,
+          transform: `translate(-${focusX}%, -${focusY}%)`,
+        }}
+        onError={(event) => {
+          event.currentTarget.style.display = "none";
+          event.currentTarget.previousElementSibling?.classList.remove("opacity-0");
+        }}
+      />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/35 via-transparent to-black/10" />
+    </figure>
+  );
+}
+
+function EvidenceCard({ title, description, image = null, placeholder = null, accent = false }) {
+  return (
+    <article className={`rounded-3xl border p-4 ${accent ? "border-fuchsia-300/20 bg-fuchsia-400/10" : "border-white/10 bg-black/20"}`}>
+      <EvidenceThumbnail image={image} fallback={placeholder || title} />
+      <div className="mt-3 font-semibold">{title}</div>
+      <div className="mt-1 text-xs text-white/60">{description}</div>
+    </article>
+  );
+}
+
 export function InteriorModal({ scene, close, flags, setFlags, player, setPlayer, companion, setCompanion, setActiveCompanion, dismissCompanion, saveGame, announce, setShopOpen, setCraftOpen, setDialogue, openClerkDialogue, openCaptainDialogue, openChapter2Briefing, openMaraChapter2Dialogue, openEddenRecoveryDialogue }) {
   const modalRef = useModalAccessibility(close);
+  const knowsEdden = Boolean(
+    flags.heardAboutEdden ||
+    flags.askedHollisAboutEdden ||
+    flags.gotDungeonLead ||
+    flags.enteredRootCellar ||
+    flags.chapterOneClear ||
+    flags.chapterReported,
+  );
   const getRecruitmentScene = (option) => {
     const scenes = {
       rowan: { opening: "Rowan Reedshield sits near the inn's side wall, not at a table but beside it, where he can see both the front door and the stairs. A scratched shield rests across his knees. He is polishing out a dent slowly, not because the shield needs polish, but because the work gives his hands somewhere calm to be. When a cart-driver bumps into a serving girl, Rowan rises halfway before anyone else notices. The girl steadies the tray, the driver apologizes, and Rowan sits again without asking to be thanked.", ask: "He looks up when you approach. “If you're looking for someone to swing first and think later, keep walking. If you're looking for someone to make sure people come home, sit down.”", goodLabel: "People are in danger. I need someone who protects first and boasts never.", goodReply: "Rowan studies you for a long moment, then sets the shield strap properly across his shoulder. “Good answer. Trouble is loud enough without us adding noise. I'll come. If the road is being trained to fear the wrong thing, then we keep our heads, keep our line, and bring people home.”", badLabel: "I need someone sturdy enough to stand in front of me.", badReply: "Rowan's expression closes like a gate. “A shield is not furniture, and neither am I. Come back when you are asking for a companion, not a wall with boots.”", neutralLabel: "What kind of trouble are you expecting?", neutralReply: "“The organized kind,” Rowan says. “The kind that counts on frightened people shoving each other aside. That's when someone steady matters most. Ask me straight if you want me with you.”" },
@@ -479,7 +640,7 @@ ${scene.ask}`, choices: [
     ] });
   };
 
-  return <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/50 p-4 sm:items-center"><div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="interior-title" tabIndex={-1} className="max-h-[88vh] w-full max-w-5xl overflow-y-auto rounded-[2rem] border border-white/10 bg-slate-900 p-5 shadow-2xl"><div className="mb-4 flex items-center justify-between gap-3"><div><div id="interior-title" className="text-2xl font-semibold">{scene === "home" ? "Inside Your Home" : scene === "bramInn" ? "Inside the Bramblecross Inn" : scene === "watchhouse" ? "Inside the Watchhouse" : "Interior"}</div><div className="text-sm text-white/70">{scene === "watchhouse" && !flags.ennaBriefed ? "An incomplete case wall waits for your road report." : "A focused interior scene."}</div></div><Button onClick={close}>Leave</Button></div>
+  return <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/50 p-4 sm:items-center"><div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="interior-title" tabIndex={-1} className="max-h-[88vh] w-full max-w-5xl overflow-y-auto rounded-[2rem] border border-white/10 bg-slate-900 p-5 shadow-2xl"><div className="mb-4 flex items-center justify-between gap-3"><div><div id="interior-title" className="text-2xl font-semibold">{scene === "home" ? "Inside Your Home" : scene === "bramInn" ? "Inside the Bramblecross Inn" : scene === "watchhouse" ? "Inside the Watchhouse" : "Interior"}</div>{scene === "watchhouse" && !flags.ennaBriefed ? <div className="text-sm text-white/70">An incomplete case wall waits for your road report.</div> : null}</div><Button onClick={close}>Leave</Button></div>
     {scene === "home" ? <div className="space-y-4"><div className="rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-white/80">A warm, familiar room. Your own things suddenly feel more important now that the road has gone dangerous.</div><div className="flex flex-wrap gap-2"><Button onClick={() => { setPlayer((p) => ({ ...p, hp: Math.min(p.maxHp, p.hp + 6) })); }}>Rest a little</Button>{!flags.homeStashClaimed ? <Button onClick={() => { gainItem(setPlayer, "old_hatchet", 1); setFlags((f) => ({ ...f, homeStashClaimed: true })); announce("You gather your old village hatchet from home.", [{ id: "old_hatchet", qty: 1 }]); }}>Take your old hatchet</Button> : null}</div></div> : null}
     {scene === "bramInn" ? <div className="space-y-4"><div className="rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-white/80">The Bramblecross Inn is trying very hard to feel ordinary. Mugs clink, someone laughs too loudly, and every traveler in the room seems to be listening for news from the road. Three capable strangers stand out—not because they are waiting to be hired, but because each of them is already responding to the crisis in their own way. Recruitment is conversation-driven: the way you speak to them matters.</div><div className="flex flex-wrap gap-2">{companion.recruited ? <Button onClick={dismissCompanion}>Ask current companion to wait here</Button> : null}<Button onClick={() => { setPlayer((p) => ({ ...p, hp: p.maxHp })); setCompanion((c) => c.recruited ? { ...c, hp: c.maxHp } : c); saveGame("Bramblecross Inn"); }}>Rest for the night</Button></div><div className="grid gap-3 md:grid-cols-3">{Object.values(COMPANION_OPTIONS).map((o) => <div key={o.id} className="rounded-3xl border border-white/10 bg-white/5 p-4"><div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl bg-white/10 text-4xl"><span>{o.icon}</span>{o.portraitSrc ? <img src={o.portraitSrc} alt={`Portrait of ${o.name}`} onError={(event) => { event.currentTarget.style.display = "none"; }} className="absolute inset-0 h-full w-full object-cover" /> : null}</div><div className="mt-2 text-lg font-semibold">{o.name}</div><div className="text-sm text-emerald-300">{o.role}</div><div className="mt-2 text-sm text-white/75">{o.description}</div><div className="mt-2 text-xs text-white/55">{o.id === "rowan" ? "Polishing a dented shield while watching the door." : o.id === "tilda" ? "Making apple seeds land where apple seeds should not." : "Listening to the fire as if it is telling the truth slowly."}</div><div className="mt-4"><Button onClick={() => recruitConversation(o)}>{companion.id === o.id ? "Traveling" : "Talk"}</Button></div></div>)}</div></div> : null}
     {scene === "watchhouse" ? <div className="space-y-4">
@@ -487,11 +648,15 @@ ${scene.ask}`, choices: [
         <div className="text-sm uppercase tracking-wide text-white/50">People Inside</div>
         <div className="mt-2 text-xl font-semibold">Watchhouse Table</div>
         <div className="mt-2 text-sm leading-6 text-white/75">
-          Enna keeps the maps pinned down with inkpots and impatience. Hollis stands close enough to the case wall to look official, but not close enough to stop watching Edden's door.
+          {knowsEdden
+            ? "Enna keeps the maps pinned down with inkpots and impatience. Hollis stands close enough to the case wall to look official, but not close enough to stop watching Edden's door."
+            : "Enna keeps the maps pinned down with inkpots and impatience. Hollis stands near the case wall, glancing with grave concern toward a closed door farther down the hall."}
         </div>
-        <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-          <Button className="justify-start text-left" onClick={() => openClerkDialogue?.()}>Talk with Enna</Button>
-          <Button className="justify-start text-left" onClick={() => openCaptainDialogue?.()}>Talk with Hollis</Button>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <WatchhousePersonButton portraitName="Enna" role="Watch Clerk" fallback="E" testId="watchhouse-enna" onClick={() => openClerkDialogue?.()} />
+          <WatchhousePersonButton portraitName="Captain Hollis" displayName="Hollis" role="Captain" fallback="H" testId="watchhouse-hollis" onClick={() => openCaptainDialogue?.()} />
+        </div>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {flags.chapterReported && !flags.chapterTwoClear ? <Button className="justify-start text-left" onClick={() => openChapter2Briefing?.()}>Review the Westroot briefing</Button> : null}
           {flags.chapterTwoBriefed && !flags.maraJoined ? <Button className="justify-start text-left" onClick={() => openMaraChapter2Dialogue?.()}>Call Mara to the table</Button> : null}
           {flags.chapterTwoBriefed ? <Button className="justify-start text-left" onClick={() => openEddenRecoveryDialogue?.({ allowPreBriefing: true })}>Visit Edden's recovery room</Button> : null}
@@ -505,10 +670,10 @@ ${scene.ask}`, choices: [
             <div className="mt-3 rounded-2xl border border-amber-300/20 bg-amber-400/10 p-4 text-sm text-white/80">The watchhouse wall is full of Bramblecross-only fragments. Enna has pins, string, and worried handwriting—but your Hearthhollow and Lantern Road discoveries are still missing.</div>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-3xl border border-white/10 bg-black/20 p-4"><div className="text-2xl">📦</div><div className="mt-2 font-semibold">Missing Porters</div><div className="mt-1 text-sm text-white/65">Last assigned near the old root cellar.</div></div>
-            <div className="rounded-3xl border border-white/10 bg-black/20 p-4"><div className="text-2xl">📄</div><div className="mt-2 font-semibold">Copied Orders</div><div className="mt-1 text-sm text-white/65">The seal looks official until someone reads closely.</div></div>
-            <div className="rounded-3xl border border-white/10 bg-black/20 p-4"><div className="text-2xl">🧺</div><div className="mt-2 font-semibold">Supply Delays</div><div className="mt-1 text-sm text-white/65">Carts and crates arriving late, wrong, or not at all.</div></div>
-            <div className="rounded-3xl border border-dashed border-white/20 bg-black/10 p-4"><div className="text-2xl">❓</div><div className="mt-2 font-semibold">Road-Side Evidence Missing</div><div className="mt-1 text-sm text-white/65">Report to Enna to complete the picture.</div></div>
+            <EvidenceCard title="Missing Porters" description="Last assigned near the old root cellar." image={WATCHHOUSE_EVIDENCE_ART.missingPorters} />
+            <EvidenceCard title="Copied Orders" description="The seal looks official until someone reads closely." image={WATCHHOUSE_EVIDENCE_ART.copiedOrders} />
+            <EvidenceCard title="Supply Delays" description="Carts and crates arriving late, wrong, or not at all." image={WATCHHOUSE_EVIDENCE_ART.supplyDelays} />
+            <EvidenceCard title="Road-Side Evidence Missing" description="Report to Enna to complete the picture." placeholder="Awaiting field evidence" />
           </div>
         </div>
         <div className="rounded-3xl border border-amber-300/20 bg-amber-400/10 p-4 text-sm text-white/85">Enna notices the road dust on your boots. Talk to her at the clerk's desk before trusting the wall as complete.</div>
@@ -520,11 +685,11 @@ ${scene.ask}`, choices: [
           <div className="mt-2 text-sm leading-6 text-white/80">Your field report has changed the shape of the investigation. Bramblecross paperwork, Hearthhollow panic, Lantern Road evidence, missing cargo, and cellar rumors now point to one route-based pattern.</div>
         </div>
         <div className="grid gap-3 lg:grid-cols-5">
-          <div className="rounded-3xl border border-white/10 bg-black/20 p-4"><div className="text-2xl">🐗</div><div className="mt-2 font-semibold">Lio's Satchel</div><div className="mt-1 text-xs text-white/60">Cut loose before the village panic.</div></div>
-          <div className="rounded-3xl border border-white/10 bg-black/20 p-4"><div className="text-2xl">🗿</div><div className="mt-2 font-semibold">Planted Order</div><div className="mt-1 text-xs text-white/60">Meant to be discovered at the milestone.</div></div>
-          <div className="rounded-3xl border border-white/10 bg-black/20 p-4"><div className="text-2xl">🧺</div><div className="mt-2 font-semibold">Willow Seal</div><div className="mt-1 text-xs text-white/60">Trusted cargo mark may be stolen.</div></div>
-          <div className="rounded-3xl border border-white/10 bg-black/20 p-4"><div className="text-2xl">🕳️</div><div className="mt-2 font-semibold">Root Cellar</div><div className="mt-1 text-xs text-white/60">Missing porters and old routes below town.</div></div>
-          <div className="rounded-3xl border border-fuchsia-300/20 bg-fuchsia-400/10 p-4"><div className="text-2xl">👑</div><div className="mt-2 font-semibold">False Crown?</div><div className="mt-1 text-xs text-white/60">Not a royal seal. Not random.</div></div>
+          <EvidenceCard title="Lio's Satchel" description="Cut loose before the village panic." image={WATCHHOUSE_EVIDENCE_ART.lioSatchel} />
+          <EvidenceCard title="Planted Order" description="Meant to be discovered at the milestone." image={WATCHHOUSE_EVIDENCE_ART.plantedOrder} />
+          <EvidenceCard title="Willow Seal" description="Trusted cargo mark may be stolen." image={WATCHHOUSE_EVIDENCE_ART.willowSeal} />
+          <EvidenceCard title="Root Cellar" description="Missing porters and old routes below town." image={WATCHHOUSE_EVIDENCE_ART.rootCellar} />
+          <EvidenceCard title="False Crown?" description="Not a royal seal. Not random." image={WATCHHOUSE_EVIDENCE_ART.falseCrown} accent />
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
           <Button className="justify-start text-left" onClick={() => { setFlags((f) => ({ ...f, watchEvidenceRead: true })); const check = resolveSkillCheck(getDerivedStats(player), "Wit", 10); const boardText = `${checkSummary(check)}
@@ -635,7 +800,7 @@ export function CraftModal({ player, close, craftRecipe, context = "potionShed" 
     </div>
   );
 }
-function EnemyPortrait({ enemy }) {
+function EnemyPortrait({ enemy, className = "ml-auto aspect-[4/3] w-full max-w-64" }) {
   const [artFailed, setArtFailed] = useState(false);
 
   useEffect(() => {
@@ -645,7 +810,7 @@ function EnemyPortrait({ enemy }) {
   const showArtwork = !!enemy?.artwork?.src && !artFailed;
 
   return (
-    <div className="relative ml-auto flex aspect-[4/3] w-full max-w-64 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-slate-950/70 text-6xl">
+    <div className={`relative flex items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-slate-950/70 text-5xl ${className}`}>
       {!showArtwork ? <span>{enemy?.icon}</span> : null}
       {showArtwork ? (
         <img
@@ -683,7 +848,7 @@ export function BattleModal({ battle, player, companion, heroSkills, heroAttack,
 
   return (
     <div className="fixed inset-0 z-50 flex items-stretch justify-center overflow-y-auto bg-slate-950/90 p-2 sm:items-center sm:p-4">
-      <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="battle-title" tabIndex={-1} className="max-h-[calc(100vh-1rem)] w-full max-w-7xl overflow-y-auto rounded-[2rem] border border-amber-100/15 bg-slate-900 p-4 shadow-2xl sm:p-5">
+      <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="battle-title" tabIndex={-1} className="max-h-[calc(100vh-1rem)] w-full max-w-7xl overflow-y-auto rounded-[2rem] border border-amber-100/15 bg-slate-900 p-4 pb-64 shadow-2xl sm:p-5 sm:pb-64 2xl:pb-5">
         <header className="sticky top-0 z-20 mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/95 p-3 backdrop-blur">
           <div>
             <h2 id="battle-title" className="text-2xl font-bold">Battle • {selectedEnemy?.name || "Enemy side"}</h2>
@@ -694,42 +859,46 @@ export function BattleModal({ battle, player, companion, heroSkills, heroAttack,
           </Button>
         </header>
 
-        <div className="battlefield-grid grid gap-5 lg:grid-cols-[0.9fr_1.35fr]">
-          <section aria-labelledby="party-side-title" className="rounded-3xl border border-emerald-200/15 bg-emerald-950/20 p-4">
-            <h3 id="party-side-title" className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-emerald-200/80">Your party</h3>
-            <div className={`grid gap-3 ${companion.recruited ? "sm:grid-cols-2 lg:grid-cols-1" : ""}`}>
-              <article className="rounded-3xl border border-white/10 bg-black/20 p-4">
-                <HeroArtwork player={player} variant="portrait" className="mx-auto h-36 w-full max-w-40" />
-                <div className="mt-2 text-xl font-semibold">{player.name}</div>
-                <div className="mt-3"><Meter value={player.hp} max={player.maxHp} label="Hero HP" /></div>
+        <div className="battlefield-grid grid gap-3 xl:grid-cols-[0.72fr_1.28fr]">
+          <section aria-labelledby="party-side-title" className="rounded-3xl border border-emerald-200/15 bg-emerald-950/20 p-3">
+            <h3 id="party-side-title" className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200/80">Your party</h3>
+            <div className={`grid gap-2 ${companion.recruited ? "sm:grid-cols-2 xl:grid-cols-1" : ""}`}>
+              <article className="grid grid-cols-[4.5rem_minmax(0,1fr)] items-center gap-3 rounded-2xl border border-white/10 bg-black/20 p-3">
+                <HeroArtwork player={player} variant="portrait" className="h-24 w-[4.5rem]" />
+                <div className="min-w-0">
+                  <div className="truncate text-lg font-semibold">{player.name}</div>
+                  <div className="mt-2"><Meter value={player.hp} max={player.maxHp} label="Hero HP" /></div>
+                </div>
               </article>
               {companion.recruited ? (
-                <article className={`rounded-3xl border border-white/10 bg-black/20 p-4 ${companion.hp <= 0 ? "opacity-50 grayscale" : ""}`}>
-                  <div className="flex h-36 items-center justify-center text-6xl" aria-hidden="true">{companion.icon}</div>
-                  <div className="mt-2 text-xl font-semibold">{companion.name}</div>
-                  <div className="text-xs text-white/55">{companion.role}</div>
-                  <div className="mt-3"><Meter value={companion.hp} max={companion.maxHp} label="Companion HP" colorClass="bg-rose-400" /></div>
+                <article className={`grid grid-cols-[4.5rem_minmax(0,1fr)] items-center gap-3 rounded-2xl border border-white/10 bg-black/20 p-3 ${companion.hp <= 0 ? "opacity-50 grayscale" : ""}`}>
+                  <CompanionPortrait companion={companion} className="h-24 w-[4.5rem]" />
+                  <div className="min-w-0">
+                    <div className="truncate text-lg font-semibold">{companion.name}</div>
+                    <div className="text-xs text-white/55">{companion.role}</div>
+                    <div className="mt-2"><Meter value={companion.hp} max={companion.maxHp} label="Companion HP" colorClass="bg-rose-400" /></div>
+                  </div>
                 </article>
               ) : null}
             </div>
           </section>
 
-          <section aria-labelledby="enemy-side-title" className="rounded-3xl border border-orange-200/15 bg-orange-950/15 p-4">
-            <h3 id="enemy-side-title" className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-orange-200/80">Enemy side • select a target</h3>
-            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          <section aria-labelledby="enemy-side-title" className="rounded-3xl border border-orange-200/15 bg-orange-950/15 p-3">
+            <h3 id="enemy-side-title" className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-orange-200/80">Enemy side • select a target</h3>
+            <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
               {battle.enemies.map((enemy) => {
                 const selected = enemy.battleId === selectedEnemy?.battleId && enemy.hp > 0;
                 const defeated = enemy.hp <= 0;
                 return (
-                  <button key={enemy.battleId} type="button" onClick={() => selectTarget(enemy.battleId)} disabled={defeated || battle.finished} aria-pressed={selected} className={`relative rounded-3xl border p-4 text-left transition ${selected ? "border-amber-300 bg-amber-400/10 ring-2 ring-amber-300/30" : "border-white/10 bg-black/20 hover:border-orange-200/35"} ${defeated ? "opacity-45 grayscale" : ""}`}>
-                    <EnemyPortrait enemy={enemy} />
+                  <button key={enemy.battleId} type="button" onClick={() => selectTarget(enemy.battleId)} disabled={defeated || battle.finished} aria-pressed={selected} className={`relative rounded-2xl border p-3 text-left transition ${selected ? "border-amber-300 bg-amber-400/10 ring-2 ring-amber-300/30" : "border-white/10 bg-black/20 hover:border-orange-200/35"} ${defeated ? "opacity-45 grayscale" : ""}`}>
+                    <EnemyPortrait enemy={enemy} className="aspect-[16/9] w-full" />
                     <div className="mt-2 flex items-start justify-between gap-2">
                       <div className="font-semibold">{enemy.name}</div>
                       {selected ? <span className="rounded-full bg-amber-300/20 px-2 py-1 text-[10px] uppercase tracking-wide text-amber-100">Target</span> : null}
                       {defeated ? <span className="text-xs text-white/50">Defeated</span> : null}
                     </div>
                     <div className="mt-2"><Meter value={enemy.hp} max={enemy.maxHp} label="HP" colorClass="bg-orange-400" /></div>
-                    <div className="mt-3 rounded-xl bg-white/5 px-3 py-2 text-xs text-white/65">Intent: <span className="text-orange-100">{enemy.intent}</span></div>
+                    <div className="mt-2 rounded-xl bg-white/5 px-3 py-2 text-xs text-white/65">Intent: <span className="text-orange-100">{enemy.intent}</span></div>
                   </button>
                 );
               })}
@@ -737,21 +906,27 @@ export function BattleModal({ battle, player, companion, heroSkills, heroAttack,
           </section>
         </div>
 
-        <div className="mt-5 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-          <section className="rounded-3xl border border-white/10 bg-black/20 p-4">
-            <h3 className="mb-3 text-lg font-semibold">Actions</h3>
-            <div className="mb-3 text-sm text-white/70">{turnText}</div>
-            <div className="grid gap-2 sm:grid-cols-2">
+        <div className="mt-4 space-y-3">
+          <section data-testid="battle-action-dock" aria-label="Battle actions and current health" className="fixed inset-x-2 bottom-2 z-30 max-h-[48vh] overflow-y-auto rounded-3xl border border-sky-200/20 bg-slate-900/95 p-3 shadow-2xl backdrop-blur sm:inset-x-4 sm:p-4 2xl:static 2xl:max-h-none 2xl:overflow-visible 2xl:border-white/10 2xl:bg-black/20 2xl:shadow-none">
+            <div className="mb-3 grid grid-cols-2 gap-3 2xl:hidden">
+              <Meter value={player.hp} max={player.maxHp} label={`${player.name} HP`} />
+              <Meter value={selectedEnemy?.hp || 0} max={selectedEnemy?.maxHp || 1} label={`${selectedEnemy?.name || "Target"} HP`} colorClass="bg-orange-400" />
+            </div>
+            <div className="mb-3 flex flex-wrap items-end justify-between gap-2">
+              <h3 className="text-lg font-semibold">Actions</h3>
+              <div className="text-xs text-white/65 sm:text-sm">{turnText}</div>
+            </div>
+            <div className="grid grid-cols-2 gap-2 lg:grid-cols-5 2xl:grid-cols-2">
               {heroSkills.map((skill) => {
                 const cooldownRemaining = battle.cooldowns?.[skill.id] || 0;
                 return (
-                  <button key={skill.name} onClick={() => heroAttack(skill)} disabled={battle.turn !== "hero" || battle.finished || cooldownRemaining > 0} className="rounded-2xl border border-white/10 bg-white/10 px-3 py-3 text-left hover:bg-white/20 disabled:opacity-40">
+                  <button key={skill.name} onClick={() => heroAttack(skill)} disabled={battle.turn !== "hero" || battle.finished || cooldownRemaining > 0} className="min-h-14 rounded-2xl border border-white/10 bg-white/10 px-3 py-2 text-left hover:bg-white/20 disabled:opacity-40 sm:py-3">
                     <div className="flex items-center justify-between gap-2"><span className="font-medium">{skill.name}</span>{cooldownRemaining > 0 ? <span className="text-[10px] text-sky-200">Ready in {cooldownRemaining}</span> : null}</div>
-                    <div className="mt-1 text-xs text-white/70">{skill.description}</div>
+                    <div className="mt-1 hidden text-xs text-white/70 lg:block 2xl:block">{skill.description}</div>
                   </button>
                 );
               })}
-              <Button onClick={() => setBattleItemsOpen((open) => !open)} disabled={battle.turn !== "hero" || battle.finished}>{battleItemsOpen ? "Hide Items" : "Items"}</Button>
+              <Button className="min-h-14" onClick={() => setBattleItemsOpen((open) => !open)} disabled={battle.turn !== "hero" || battle.finished}>{battleItemsOpen ? "Hide Items" : "Items"}</Button>
             </div>
             {battleItemsOpen ? (
               <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-3">
@@ -768,10 +943,15 @@ export function BattleModal({ battle, player, companion, heroSkills, heroAttack,
             {companion.recruited ? <div className="mt-4 text-xs text-white/60">Companion command: <span className="text-white">{companion.command}</span> • {getCompanionCommandHint(companion)}</div> : null}
           </section>
 
-          <section aria-live="polite" className="rounded-3xl border border-white/10 bg-black/20 p-4">
-            <h3 className="mb-3 text-lg font-semibold">Battle Log</h3>
-            <div className="space-y-2 text-sm text-white/75">{battle.log.map((entry, index) => <div key={`${entry}-${index}`} className="rounded-2xl bg-white/5 px-3 py-2">{entry}</div>)}</div>
-          </section>
+          <details className="rounded-3xl border border-white/10 bg-black/20 p-4">
+            <summary className="cursor-pointer list-none">
+              <div className="flex items-center justify-between gap-4">
+                <h3 className="text-lg font-semibold">Recent Events</h3>
+                <span className="max-w-[70%] truncate text-right text-xs text-white/55">{battle.log[battle.log.length - 1]}</span>
+              </div>
+            </summary>
+            <div aria-live="polite" className="mt-3 space-y-2 text-sm text-white/75">{[...battle.log].reverse().map((entry, index) => <div key={`${entry}-${index}`} className="rounded-2xl bg-white/5 px-3 py-2">{entry}</div>)}</div>
+          </details>
         </div>
       </div>
     </div>

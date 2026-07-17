@@ -90,7 +90,7 @@ async function loadChapter2Checkpoint(page, flagOverrides = {}, options = {}) {
   await page.goto("/");
   await page.getByRole("button", { name: "Continue Checkpoint" }).click();
   await expect(page.getByRole("heading", { name: MAPS.westrootTrail.name })).toBeVisible();
-  await expect(page.getByText(`You are standing on: ${expectedTile}.`)).toBeVisible();
+  await expect(page.getByRole("button", { name: `Inspect ${expectedTile}`, exact: true })).toBeVisible();
   await expect(page.getByTestId("map-background")).toBeVisible();
   await expect(page.getByTestId("map-background")).toHaveAttribute("src", /westroot-trail-map-v04/);
   await expect(page.getByTestId("hero-token")).toBeVisible();
@@ -106,7 +106,7 @@ async function loadChapter2BriefingCheckpoint(page) {
   await page.goto("/");
   await page.getByRole("button", { name: "Continue Checkpoint" }).click();
   await expect(page.getByRole("heading", { name: MAPS.bramblecross.name })).toBeVisible();
-  await expect(page.getByText("You are standing on: Road.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Inspect Road", exact: true })).toBeVisible();
 }
 
 test("title screen loads the checked-in Chapter 2 playtest save", async ({ page }) => {
@@ -116,7 +116,7 @@ test("title screen loads the checked-in Chapter 2 playtest save", async ({ page 
 
   await expect(page.getByRole("heading", { name: MAPS.bramblecross.name })).toBeVisible();
   await expect(page.getByText("Goal: Return to the Watchhouse")).toBeVisible();
-  await expect(page.getByText("You are standing on: Road.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Inspect Road", exact: true })).toBeVisible();
   await expect(page.getByText("Chapter 2: The Westroot Trail")).toBeVisible();
 });
 
@@ -126,7 +126,7 @@ test("title screen loads the checked-in Chapter 3 ready save", async ({ page }) 
   await page.getByRole("button", { name: "Load Chapter 3 Ready Save" }).click();
 
   await expect(page.getByRole("heading", { name: MAPS.westrootHub.name })).toBeVisible();
-  await expect(page.getByText("You are standing on: First Westroot Gate.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Inspect First Westroot Gate", exact: true })).toBeVisible();
   await expect(page.getByText("Chapter 3: The Hidden Root", { exact: true })).toBeVisible();
   await expect(page.getByText("Goal: Enter Westroot")).toBeVisible();
 });
@@ -176,7 +176,7 @@ test("chapter two loaded saves refresh fog after westroot node normalization", a
   await page.getByRole("button", { name: "Continue Checkpoint" }).click();
 
   await expect(page.getByRole("heading", { name: MAPS.westrootTrail.name })).toBeVisible();
-  await expect(page.getByText("You are standing on: Three-Door Threshold.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Inspect Three-Door Threshold", exact: true })).toBeVisible();
 
   const stored = await page.evaluate((key) => {
     const raw = window.localStorage.getItem(key);
@@ -221,10 +221,10 @@ test("chapter two Ada pre-briefing interaction opens a dialog", async ({ page })
   );
   await page.goto("/");
   await page.getByRole("button", { name: "Continue Checkpoint" }).click();
-  await expect(page.getByText("You are standing on: Ada Willowmarket.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Inspect Ada Willowmarket", exact: true })).toBeVisible();
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
-  await expect(page.getByText("Ada Willowmarket", { exact: true })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Ada Willowmarket", exact: true })).toBeVisible();
   await expect(page.getByText("Bring me the watchhouse shape of it")).toBeVisible();
   await expect(page.getByAltText("Portrait of Ada Willowmarket")).toBeVisible();
 });
@@ -248,7 +248,7 @@ test("chapter two Ada seal lesson swaps to no-lens portrait immediately", async 
   );
   await page.goto("/");
   await page.getByRole("button", { name: "Continue Checkpoint" }).click();
-  await expect(page.getByText("You are standing on: Ada Willowmarket.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Inspect Ada Willowmarket", exact: true })).toBeVisible();
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
   await expect(page.getByText("Ada's Seal Lesson", { exact: true })).toBeVisible();
@@ -256,7 +256,7 @@ test("chapter two Ada seal lesson swaps to no-lens portrait immediately", async 
   await expect(page.getByAltText("Portrait of Ada Willowmarket without the Willowmark Lens")).toHaveCount(0);
 
   await page.getByRole("button", { name: "Borrow the Willowmark Lens." }).click();
-  await expect(page.getByText("Ada Willowmarket", { exact: true })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Ada Willowmarket", exact: true })).toBeVisible();
   await expect(page.getByText("empty place on her work strap")).toBeVisible();
   await expect(page.getByAltText("Portrait of Ada Willowmarket without the Willowmark Lens")).toBeVisible();
   await expect(page.getByRole("button", { name: "I'll bring it back." })).toBeVisible();
@@ -278,7 +278,7 @@ test("chapter two skipped Ada lesson hides Willowmark Lens choices", async ({ pa
   );
   await page.goto("/");
   await page.getByRole("button", { name: "Continue Checkpoint" }).click();
-  await expect(page.getByText("You are standing on: False Detour Notice.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Inspect False Detour Notice", exact: true })).toBeVisible();
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
   await expect(page.getByRole("button", { name: "Use the Willowmark Lens on the seal." })).not.toBeVisible();
@@ -395,7 +395,7 @@ test("chapter two Roadwatcher slat opens the Crown Door den", async ({ page }) =
 
   await page.getByRole("button", { name: "Open the Crown Door with the split slat." }).click();
   await expect(page.getByRole("heading", { name: "Crown Door Den" })).toBeVisible();
-  await expect(page.getByText("You are standing on: Crown Vestibule.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Inspect Crown Vestibule", exact: true })).toBeVisible();
   await expect(page.getByTestId("map-background")).toBeVisible();
 });
 
@@ -482,7 +482,7 @@ test("chapter two false map room clears the Crown Door den", async ({ page }) =>
   await page.goto("/");
   await page.getByRole("button", { name: "Continue Checkpoint" }).click();
   await expect(page.getByRole("heading", { name: "Crown Door Den" })).toBeVisible();
-  await expect(page.getByText("You are standing on: False Map Room.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Inspect False Map Room", exact: true })).toBeVisible();
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
   await expect(page.getByText("it looks like a confession")).toBeVisible();
@@ -527,5 +527,5 @@ test("chapter two roadwatcher back away returns to the previous trail node", asy
   await expect(page.getByText("Briar Roadwatcher", { exact: true })).toBeVisible();
 
   await page.getByRole("button", { name: "Back away." }).click();
-  await expect(page.getByText("You are standing on: Road.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Inspect Road", exact: true })).toBeVisible();
 });

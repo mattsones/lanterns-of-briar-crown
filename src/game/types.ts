@@ -33,6 +33,7 @@ export type GameFlags = {
   watchLedgerRead: boolean;
   watchMapRead: boolean;
   watchOrdersRead: boolean;
+  heardAboutEdden: boolean;
   askedHollisAboutEdden: boolean;
   gotDungeonLead: boolean;
   enteredRootCellar: boolean;

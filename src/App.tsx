@@ -1,4 +1,10 @@
 import React, { Suspense, useEffect, useMemo, useState } from "react";
+import {
+  AdventureStatusRail,
+  AdventureWorkspace,
+  CharacterWorkspace,
+  MobileAdventureBar,
+} from "./components/AdventureShell";
 import { MapStage } from "./components/MapStage";
 import { Button, ItemIcon, Meter, Panel, StatBadge } from "./components/ui";
 import { getBattleReward } from "./data/battleRewards";
@@ -159,6 +165,20 @@ const BattleModal = React.lazy(() =>
 const SaveModal = React.lazy(() =>
   import("./components/modals").then((module) => ({ default: module.SaveModal })),
 );
+
+function shouldTriggerLanternRoadAmbush(
+  region: string,
+  flags: Flags,
+  position: Position,
+) {
+  return (
+    region === "lanternRoad" &&
+    flags.foundRuinNote &&
+    !flags.clearedWildBattle &&
+    position.x >= 7 &&
+    position.y >= 6
+  );
+}
 
 const threeDoorsThresholdScene = new URL(
   "../assets/scenes/three-doors-threshold-v01.webp",
@@ -381,6 +401,7 @@ export default function LiamsGamePrototype() {
   const [interiorScene, setInteriorScene] = useState(null);
   const [battle, setBattle] = useState(null);
   const [tab, setTab] = useState("quests");
+  const [adventureMenuOpen, setAdventureMenuOpen] = useState(false);
   const [mapDebug, setMapDebug] = useState(false);
   const [equipmentFocusSlot, setEquipmentFocusSlot] = useState("weapon");
   const [pouchFocusSlot, setPouchFocusSlot] = useState("slot1");
@@ -967,6 +988,10 @@ export default function LiamsGamePrototype() {
     revealArea(region, nx, ny);
     if (region === "crownDoorDen" && tile !== "crown_den_exit" && advanceCrownDenThreat())
       return;
+    if (shouldTriggerLanternRoadAmbush(region, flags, { x: nx, y: ny })) {
+      openWildBattleDialogue();
+      return;
+    }
     inspectTile(tile, { auto: true, previousPosition });
   };
 
@@ -978,6 +1003,20 @@ export default function LiamsGamePrototype() {
         ["input", "textarea", "select"].includes(tagName) ||
         event.target?.isContentEditable;
       if (isTextEntry) return;
+      if (event.key === "m" || event.key === "M") {
+        event.preventDefault();
+        if (
+          !dialogue &&
+          !battle &&
+          !shopOpen &&
+          !craftOpen &&
+          !interiorScene &&
+          !saveModalMode
+        )
+          setAdventureMenuOpen((open) => !open);
+        return;
+      }
+      if (adventureMenuOpen) return;
       const keyMap: Record<string, [number, number]> = {
         ArrowUp: [0, -1],
         w: [0, -1],
@@ -1026,6 +1065,7 @@ export default function LiamsGamePrototype() {
     craftOpen,
     interiorScene,
     saveModalMode,
+    adventureMenuOpen,
     flags,
     companion,
   ]);
@@ -1420,7 +1460,7 @@ Deep breath. Am I really ready for this?`,
     setDialogue({
       portrait: "⚔️",
       name: "Roadside Ambush",
-      text: 'The moment your hand touches the forged order, the roadside act falls apart. A thorn-cloaked ruffian steps from the brambles, knife low and smile lower. Beside him, a thorny hound growls like a hedge with teeth. "That paper isn\'t yours," the ruffian says. He sounds less angry than inconvenienced.',
+      text: 'The road narrows between two banks of bramble. The ruffian and his thorny hound wait until you are committed to the bend, then step out behind you and close the road back. A second shape blocks the way ahead. "That paper isn\'t yours," the ruffian says, knife low and smile lower. They were never guarding one spot on the map. They were waiting to ambush whoever carried the order east.',
       choices: [
         {
           label: "Break up the ambush.",
@@ -1499,15 +1539,20 @@ Deep breath. Am I really ready for this?`,
         ? "The Bramblecross notice board still rustles with cellar warnings and copied route orders. Ada's crate notice is gone from the corner because it is already folded in your pack."
         : flags.readBoard
           ? "The Bramblecross notice board looks a little less like a paper storm now that you know which warnings matter. You have already noted the cellar reports and forged route order. Near the bottom, Ada Willowmarket's missing crate notice still waits in a cramped, increasingly angry hand."
-          : 'The Bramblecross notice board is crowded enough to look like a paper storm nailed to wood. One notice reports missing cellar porters. Another warns of odd knocking beneath the old root storage rooms. A third insists all road traffic should wait for "updated crown direction," but the seal is copied too cleanly, like someone traced authority without understanding it. Near the bottom, Ada Willowmarket has pinned a practical little note about a missing spice crate, written in an increasingly less practical hand.';
+          : 'The Bramblecross notice board is crowded enough to look like a paper storm nailed to wood. One notice reports missing cellar porters. Another warns of odd knocking beneath the old root storage rooms. A third insists all road traffic should wait for "updated crown direction." Near the bottom, Ada Willowmarket has pinned a practical little note about a missing spice crate, written in an increasingly less practical hand.';
     const boardChoices = [
       {
         label: flags.readBoard
-          ? "Review the cellar warning and forged route order."
-          : "Note the cellar warning and forged route order.",
+          ? "Review the collected cellar notices and route order."
+          : "Collect the cellar notices and route order.",
         effect: () => {
           setFlags((f) => ({ ...f, readBoard: true }));
           setDialogue(null);
+          setToast(
+            flags.readBoard
+              ? "You review the cellar reports and route order."
+              : "You collect the cellar reports and route order for review.",
+          );
         },
       },
     ];
@@ -1517,7 +1562,6 @@ Deep breath. Am I really ready for this?`,
         effect: () => {
           setFlags((f) => ({
             ...f,
-            readBoard: true,
             boardQuestAccepted: true,
           }));
           setDialogue(null);
@@ -1655,6 +1699,8 @@ Deep breath. Am I really ready for this?`,
           { label: "I'll report to Enna.", effect: () => setDialogue(null) },
         ],
       });
+    if (!flags.heardAboutEdden)
+      setFlags((f) => ({ ...f, heardAboutEdden: true }));
     if (!flags.watchEvidenceRead)
       return setDialogue({
         portrait: "🛡️",
@@ -1671,8 +1717,13 @@ Deep breath. Am I really ready for this?`,
       return setDialogue({
         portrait: "🛡️",
         name: "Captain Hollis",
-        text: "Hollis nods toward the public square. “Read the notice board too. Enna's wall shows the pattern. The notices show what people are afraid of. Good investigators know the difference. The forged orders are not only moving carts. They are moving people.”",
-        choices: [{ label: "Fair enough.", effect: () => setDialogue(null) }],
+        text: "Hollis nods toward the public square. “Before you decide whether to brave the cellar, collect every notice about it from the board. When the first porter vanished, I sent Edden Vale below with two others. Edden came back badly shaken. The other two did not. Each notice caught a different piece of what happened before and after they went down—the knocking, the missing workers, the changed routes. I want you to see the full shape of this, not walk into it on the strength of one official report.”",
+        choices: [
+          {
+            label: "I'll collect every cellar notice, then come back.",
+            effect: () => setDialogue(null),
+          },
+        ],
       });
     if (flags.gotDungeonLead)
       return setDialogue({
@@ -2655,14 +2706,14 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         portrait: "🔍",
         portraitName: "Ada Willowmarket No Lens",
         name: "Ada Willowmarket",
-        text: "Ada taps the Willowmark Lens. \"Remember: honest marks have familiar flaws. Mine has a nick in the lower leaf. Copied marks are often too smooth. Altered marks have fresh scraping around the circle.\"",
+        text: "Ada taps the Willowmark Lens. \"Remember: honest marks have familiar flaws. Mine has a nick in the left leaf. Copied marks are often too smooth. Altered marks have fresh scraping around the circle.\"",
         choices: [{ label: "I'll watch for that.", effect: () => setDialogue(null) }],
       });
     setDialogue({
       portrait: "🔍",
       portraitName: "Ada Willowmarket",
       name: "Ada's Seal Lesson",
-      text: "Ada turns a practice crate-mark under a small brass lens. \"Trust is a tool,\" she says. \"A good seal lets tired people move food, oil, bandages, and news without arguing over every box. A copied seal steals that trust.\"\n\nUnder the lens, her honest Willow mark shows a tiny nick in the lower leaf. \"That flaw is mine. If you see a mark too perfect, or stamped over scraped wax, be suspicious.\"",
+      text: "Ada turns a practice crate-mark under a small brass lens. \"Trust is a tool,\" she says. \"A good seal lets tired people move food, oil, bandages, and news without arguing over every box. A copied seal steals that trust.\"\n\nUnder the lens, her honest Willow mark shows a tiny nick in the left leaf. \"That flaw is mine. If you see a mark too perfect, or stamped over scraped wax, be suspicious.\"",
       choices: [
         {
           label: "Borrow the Willowmark Lens.",
@@ -2674,7 +2725,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               portrait: "🔍",
               portraitName: "Ada Willowmarket No Lens",
               name: "Ada Willowmarket",
-              text: "Ada folds your fingers around the Willowmark Lens, and her own hand goes instinctively to the empty place on her work strap. \"Bring it back with fewer scratches than you bring back yourself,\" she says. \"And remember the nick in the lower leaf. A perfect mark is often the most suspicious thing in the room.\"",
+              text: "Ada folds your fingers around the Willowmark Lens, and her own hand goes instinctively to the empty place on her work strap. \"Bring it back with fewer scratches than you bring back yourself,\" she says. \"And remember the nick in the left leaf. A perfect mark is often the most suspicious thing in the room.\"",
               choices: [{ label: "I'll bring it back.", effect: () => setDialogue(null) }],
             });
             announce("Ada lends you the Willowmark Lens. XP +6", [{ id: "willowmark_lens", qty: 1 }]);
@@ -4672,7 +4723,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                         portrait: "🧳",
                         portraitName: "Worried Road Traveler",
                         name: "Worried Traveler",
-                        text: '"A look? I barely breathed near it," he says. "I saw the crown seal. They said Bramblecross was being held and no couriers could leave until a Crown inspection. That sounded official to me. It was official, wasn\'t it? Then they tucked the order away and started asking why I was still on the road. That\'s when I decided my errand could wait until my knees stopped humming."',
+                        text: '"I saw enough," he insists. "The royal crown was pressed right into the red wax. The order said Bramblecross was being held and no couriers could leave until a Crown inspection. So I obeyed it. You obey a Crown seal like that—everyone knows that. Then the men started asking why I was still on the road, and I decided obedience could include leaving quickly."',
                         choices: [
                           {
                             label: "The seal may be false. Get to the camp.",
@@ -4829,6 +4880,10 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         const previousPosition = { x: position.x, y: position.y };
         setPosition({ x, y });
         revealArea(region, x, y);
+        if (shouldTriggerLanternRoadAmbush(region, flags, { x, y })) {
+          openWildBattleDialogue();
+          return;
+        }
         inspectTile(tile, { auto: true, previousPosition });
       }
     } else if (isCurrentNode) inspectTile(tile);
@@ -5785,22 +5840,33 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     !flags.crownDenPatrolEscaped;
 
   return (
-    <div className="storybook-shell min-h-screen p-4 text-white sm:p-6">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+    <div className="storybook-shell min-h-screen p-3 pb-28 text-white sm:p-5 lg:pb-5">
+      <div className="mx-auto max-w-[96rem]">
+        <div className="relative mb-3 flex items-center justify-between gap-3">
           <div>
-            <h1 className="text-3xl font-bold">Lanterns of Briar Crown</h1>
-            <div className="mt-1 text-sm text-white/70">
-              Prototype slice • {currentRegionInfo.name} •{" "}
-              {currentRegionInfo.subtitle}
+            <h1 className="text-xl font-bold sm:text-3xl">Lanterns of Briar Crown</h1>
+            <div className="mt-0.5 text-xs text-white/65 sm:mt-1 sm:text-sm">
+              <span className="sm:hidden">{currentRegionInfo.name}</span>
+              <span className="hidden sm:inline">Prototype slice • {currentRegionInfo.name} • {currentRegionInfo.subtitle}</span>
             </div>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="hidden flex-wrap gap-2 sm:flex">
             <Button onClick={openSaveSlotModal}>Save Slot</Button>
             <Button onClick={openLoadSlotModal}>Load Slot</Button>
             <Button onClick={loadGame}>Load Checkpoint</Button>
             <Button onClick={() => setScreen("title")}>Title</Button>
           </div>
+          <details className="game-actions-menu sm:hidden">
+            <summary className="storybook-button rounded-2xl border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white">
+              Game
+            </summary>
+            <div className="absolute right-0 top-[calc(100%+0.4rem)] z-30 grid w-48 gap-2 rounded-2xl border border-white/10 bg-slate-900/95 p-2 shadow-2xl">
+              <Button onClick={openSaveSlotModal}>Save Slot</Button>
+              <Button onClick={openLoadSlotModal}>Load Slot</Button>
+              <Button onClick={loadGame}>Load Checkpoint</Button>
+              <Button onClick={() => setScreen("title")}>Title</Button>
+            </div>
+          </details>
         </div>
         {showCrownDenTension ? (
           <CrownDenTension
@@ -5809,7 +5875,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           />
         ) : null}
         {flags.chapterOneClear ? (
-          <div className="mb-4 rounded-3xl border border-emerald-300/20 bg-emerald-400/10 px-4 py-3 text-sm">
+          <div className="mb-3 rounded-3xl border border-emerald-300/20 bg-emerald-400/10 px-3 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm">
             <div className="font-semibold text-emerald-200">
               {chapterProgress.currentChapterId >= 2
                 ? flags.chapterThreeClear
@@ -5823,7 +5889,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                   ? "Chapter 1 complete: The Road That Lied"
                   : "Root Cellar discovery complete"}
             </div>
-            <div>
+            <div className="mt-0.5 hidden sm:block">
               {chapterProgress.currentChapterId >= 2
                 ? flags.chapterThreeClear
                   ? "Westroot will not let lies travel unchallenged. The old road now points deeper west."
@@ -5838,11 +5904,15 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             </div>
           </div>
         ) : null}
-        <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-          <Panel title={currentRegionInfo.name}>
-            <div className="mb-3 text-sm text-white/75">
-              Goal: {questJournal.currentMain.title}
-            </div>
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_19rem] xl:grid-cols-[minmax(0,1fr)_20rem]">
+          <Panel
+            title={currentRegionInfo.name}
+            right={
+              <div className="hidden max-w-[24rem] truncate text-right text-xs text-white/60 sm:block">
+                Goal: {questJournal.currentMain.title}
+              </div>
+            }
+          >
             <div className="map-stage-shell">
               <MapStage
                 region={region}
@@ -5871,190 +5941,140 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                   {toast || `You are standing on: ${currentTileLabel}.`}
                 </span>
               </div>
-            </div>
-            <div className="mt-3 rounded-2xl bg-white/5 px-3 py-2 text-sm">
-              You are standing on: {currentTileLabel}.
-            </div>
-            <div className="mt-3 flex gap-2">
-              <Button data-testid="move-up" onClick={() => movePlayer(0, -1)}>
-                ↑
-              </Button>
-              <Button data-testid="move-left" onClick={() => movePlayer(-1, 0)}>
-                ←
-              </Button>
-              <Button onClick={() => inspectTile(currentTile)}>Inspect</Button>
-              <Button data-testid="move-right" onClick={() => movePlayer(1, 0)}>
-                →
-              </Button>
-              <Button data-testid="move-down" onClick={() => movePlayer(0, 1)}>
-                ↓
-              </Button>
+              <div className="map-movement-overlay" aria-label="Map movement controls">
+                <div className="map-movement-context">
+                  Standing on <span className="font-semibold text-white/90">{currentTileLabel}</span>
+                </div>
+                <div className="map-movement-controls">
+                  <Button aria-label="Move up" data-testid="move-up" onClick={() => movePlayer(0, -1)}>↑</Button>
+                  <Button aria-label="Move left" data-testid="move-left" onClick={() => movePlayer(-1, 0)}>←</Button>
+                  <Button className="map-inspect-button" onClick={() => inspectTile(currentTile)}>Inspect</Button>
+                  <Button aria-label="Move right" data-testid="move-right" onClick={() => movePlayer(1, 0)}>→</Button>
+                  <Button aria-label="Move down" data-testid="move-down" onClick={() => movePlayer(0, 1)}>↓</Button>
+                </div>
+              </div>
             </div>
           </Panel>
-          <div className="grid gap-4">
-            <Panel
-              title={`${player.name} • Lv ${player.level}`}
-              right={
-                <div className="text-sm text-white/70">
-                  {playerAncestryLabel} • {race.trait}
-                </div>
-              }
-            >
-              <div className="grid gap-4 md:grid-cols-[0.8fr_1.2fr]">
-                <div className="rounded-3xl border border-white/10 bg-black/20 p-4 text-center">
-                  <HeroArtwork
-                    player={player}
-                    variant="portrait"
-                    className="mx-auto h-44 w-full max-w-36"
-                  />
-                  <div className="mt-3 text-sm text-white/80">
-                    {player.gender}
-                  </div>
-                  <div className="mt-3 text-xs text-white/60">
-                    Checkpoint: {player.checkpointLabel}
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  <Meter value={player.hp} max={player.maxHp} label="HP" />
-                  <Meter
-                    value={
-                      heroXpTarget
-                        ? Math.min(player.xp, heroXpTarget)
-                        : player.xp
-                    }
-                    max={heroXpTarget || player.xp || 1}
-                    label={heroXpTarget ? "XP to next level" : "Max level XP"}
-                    colorClass="bg-sky-400"
-                  />
-                  <div className="rounded-2xl bg-white/5 p-3 text-sm text-white/80">
-                    {questJournal.currentMain.detail}
-                  </div>
-                  <div className="text-sm text-yellow-300">
-                    Gold: {player.gold}
-                  </div>
-                </div>
-              </div>
-              <div className="mt-4 grid grid-cols-3 gap-2 lg:grid-cols-4">
-                {STAT_ORDER.map((stat) => (
-                  <StatBadge
-                    key={stat}
-                    label={stat}
-                    value={derivedStats[stat]}
-                    bonus={Math.max(
-                      0,
-                      (derivedStats[stat] || 0) - (player.baseStats[stat] || 0),
-                    )}
-                  />
-                ))}
-              </div>
-            </Panel>
-            <Panel
-              title="Adventure Menus"
-              right={
-                <div className="flex flex-wrap gap-2 text-xs">
-                  {[
-                    ["quests", "Quests"],
-                    ["inventory", "Inventory"],
-                    ["equipment", "Equipment"],
-                    ["pouch", "Battle Pouch"],
-                    ["companion", "Companion"],
-                    ["crafting", "Recipes"],
-                    ["dev", "Dev Tools"],
-                  ].map(([id, label]) => (
-                    <button
-                      key={id}
-                      onClick={() => setTab(id)}
-                      className={`rounded-full px-3 py-1 ${tab === id ? "bg-white/20 text-white" : "bg-white/5 text-white/70"}`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              }
-            >
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-sm text-white/75">
-                {companion.recruited
-                  ? `Active companion: ${companion.name} • ${companion.role} • HP ${companion.hp}/${companion.maxHp}`
-                  : "No active companion. Visit inns to recruit, swap, or dismiss companions."}
-              </div>
-              <Suspense
-                fallback={
-                  <div className="mt-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/70" role="status">
-                    Opening adventure menu…
-                  </div>
-                }
-              >
-                {tab === "quests" ? <QuestTab journal={questJournal} /> : null}
-                {tab === "inventory" ? (
-                  <InventoryTab
-                    sections={inventorySections}
-                    player={player}
-                    equipItem={equipItem}
-                    setTab={setTab}
-                    setEquipmentFocusSlot={setEquipmentFocusSlot}
-                    setPouchFocusSlot={setPouchFocusSlot}
-                    useFieldItem={useFieldItem}
-                  />
-                ) : null}
-                {tab === "equipment" ? (
-                  <EquipmentTab
-                    player={player}
-                    focusSlot={equipmentFocusSlot}
-                    setFocusSlot={setEquipmentFocusSlot}
-                    equipItemToSlot={equipItemToSlot}
-                    unequipSlot={unequipSlot}
-                  />
-                ) : null}
-                {tab === "pouch" ? (
-                  <PouchTab
-                    player={player}
-                    focusSlot={pouchFocusSlot}
-                    setFocusSlot={setPouchFocusSlot}
-                    assign={assignBattlePouchItem}
-                    clear={(slot) =>
-                      setPlayer((p) => ({
-                        ...p,
-                        battlePouch: { ...p.battlePouch, [slot]: null },
-                      }))
-                    }
-                  />
-                ) : null}
-                {tab === "companion" ? (
-                  <CompanionTab
-                    companion={companion}
-                    setCompanion={setCompanion}
-                    flags={flags}
-                    dismiss={dismissCompanion}
-                  />
-                ) : null}
-                {tab === "crafting" ? <RecipesTab player={player} /> : null}
-                {tab === "dev" ? (
-                  <DevTab
-                    qaResults={qaResults}
-                    runQaChecks={runQaChecks}
-                    giveSupplies={devGiveTestSupplies}
-                    heal={devHealParty}
-                    reset={devResetCombatFlags}
-                    startTestBattle={() =>
-                      startBattle(
-                        buildEncounterEnemies("roadwatcherHard"),
-                        "roadwatcherHard",
-                      )
-                    }
-                    jump={devJumpTo}
-                    player={player}
-                    position={position}
-                    region={region}
-                    companion={companion}
-                    mapDebug={mapDebug}
-                    setMapDebug={setMapDebug}
-                  />
-                ) : null}
-              </Suspense>
-            </Panel>
-          </div>
+          <AdventureStatusRail
+            player={player}
+            ancestryLabel={playerAncestryLabel}
+            raceTrait={race.trait}
+            heroXpTarget={heroXpTarget}
+            questJournal={questJournal}
+            companion={companion}
+            derivedStats={derivedStats}
+            openWorkspace={() => setAdventureMenuOpen(true)}
+            openCharacter={() => {
+              setTab("character");
+              setAdventureMenuOpen(true);
+            }}
+          />
         </div>
       </div>
+
+      <MobileAdventureBar
+        player={player}
+        objective={questJournal.currentMain.title}
+        openWorkspace={() => setAdventureMenuOpen(true)}
+      />
+
+      <AdventureWorkspace
+        open={adventureMenuOpen}
+        tab={tab}
+        setTab={setTab}
+        close={() => setAdventureMenuOpen(false)}
+        companion={companion}
+      >
+        <Suspense
+          fallback={
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/70" role="status">
+              Opening adventure menu…
+            </div>
+          }
+        >
+          {tab === "character" ? (
+            <CharacterWorkspace
+              player={player}
+              ancestryLabel={playerAncestryLabel}
+              raceTrait={race.trait}
+              heroXpTarget={heroXpTarget}
+              questJournal={questJournal}
+              derivedStats={derivedStats}
+              statOrder={STAT_ORDER}
+            />
+          ) : null}
+          {tab === "quests" ? <QuestTab journal={questJournal} /> : null}
+          {tab === "inventory" ? (
+            <InventoryTab
+              sections={inventorySections}
+              player={player}
+              equipItem={equipItem}
+              setTab={setTab}
+              setEquipmentFocusSlot={setEquipmentFocusSlot}
+              setPouchFocusSlot={setPouchFocusSlot}
+              useFieldItem={useFieldItem}
+            />
+          ) : null}
+          {tab === "equipment" ? (
+            <EquipmentTab
+              player={player}
+              focusSlot={equipmentFocusSlot}
+              setFocusSlot={setEquipmentFocusSlot}
+              equipItemToSlot={equipItemToSlot}
+              unequipSlot={unequipSlot}
+            />
+          ) : null}
+          {tab === "pouch" ? (
+            <PouchTab
+              player={player}
+              focusSlot={pouchFocusSlot}
+              setFocusSlot={setPouchFocusSlot}
+              assign={assignBattlePouchItem}
+              clear={(slot) =>
+                setPlayer((p) => ({
+                  ...p,
+                  battlePouch: { ...p.battlePouch, [slot]: null },
+                }))
+              }
+            />
+          ) : null}
+          {tab === "companion" ? (
+            <CompanionTab
+              companion={companion}
+              setCompanion={setCompanion}
+              flags={flags}
+              dismiss={dismissCompanion}
+            />
+          ) : null}
+          {tab === "crafting" ? <RecipesTab player={player} /> : null}
+          {tab === "dev" ? (
+            <DevTab
+              qaResults={qaResults}
+              runQaChecks={runQaChecks}
+              giveSupplies={devGiveTestSupplies}
+              heal={devHealParty}
+              reset={devResetCombatFlags}
+              startTestBattle={() =>
+                startBattle(
+                  buildEncounterEnemies("roadwatcherHard"),
+                  "roadwatcherHard",
+                )
+              }
+              jump={(destination) => {
+                devJumpTo(destination);
+                setAdventureMenuOpen(false);
+              }}
+              player={player}
+              position={position}
+              region={region}
+              companion={companion}
+              mapDebug={mapDebug}
+              setMapDebug={setMapDebug}
+            />
+          ) : null}
+        </Suspense>
+      </AdventureWorkspace>
+
       <Suspense
         fallback={
           <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4" role="status">

@@ -124,6 +124,8 @@ test("starts a new adventure and passes built-in QA checks", async ({
   await expect(page.getByText("Load Save Slot")).toBeVisible();
   await page.getByRole("button", { name: "Close" }).click();
 
+  await page.getByTestId("open-adventure-menu").click();
+  await page.getByText("More", { exact: true }).click();
   await page.getByRole("button", { name: "Dev Tools" }).click();
   await page.getByRole("button", { name: "Show Map Debug" }).click();
   await expect(page.getByTestId("map-debug-bounds")).toBeVisible();

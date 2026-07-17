@@ -842,7 +842,7 @@ At first glance, they look nearly identical: three leaves inside a circle.
 
 Then Ada taps the honest one.
 
-“My stamp has one nick in the lower leaf. See it? Tiny. Annoying. Mine.”
+“My stamp has one nick in the left leaf. See it? Tiny. Annoying. Mine.”
 
 She taps the copied one.
 
@@ -860,7 +860,7 @@ She picks up a scrap of green-painted crate wood and presses a false crown stamp
 
 At a glance, the crown looks official.
 
-Through the lens, the lower leaf of Ada’s mark still shows beneath the wax: nicked, scraped, and stubborn.
+Through the lens, the left leaf of Ada’s mark still shows beneath the wax: nicked, scraped, and stubborn.
 
 Mara leans in.
 
@@ -944,7 +944,7 @@ Mara nods once.
 
 Ada wipes her counter with the force of someone imagining the counter is personally responsible for forged paperwork.
 
-“Remember,” she says. “My honest mark has a nick in the lower leaf. Copied marks are often too smooth. Altered marks often have fresh scraping around the circle.”
+“Remember,” she says. “My honest mark has a nick in the left leaf. Copied marks are often too smooth. Altered marks often have fresh scraping around the circle.”
 
 She pauses.
 
@@ -1503,7 +1503,7 @@ The crown wax has been pressed over something green.
 
 You tilt the lens.
 
-There: beneath the lower edge of the crown, half-scraped but still visible, is the nicked lower leaf of Ada Willowmarket’s honest mark.
+There: beneath the lower edge of the crown, half-scraped but still visible, is the nicked left leaf of Ada Willowmarket’s honest mark.
 
 Someone used Willow shipping wax as the base for a false road order.
 
@@ -1902,7 +1902,7 @@ Middle layer: pine pitch, used to soften and reset the stamp.
 
 Underlayer: green shipping wax.
 
-And there, almost erased, the nick in Ada’s lower leaf.
+And there, almost erased, the nick in Ada’s left leaf.
 
 This order was not carried by a royal roadwarden.
 

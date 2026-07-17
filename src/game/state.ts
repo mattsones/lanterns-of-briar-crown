@@ -79,6 +79,7 @@ export function buildDefaultFlags(): GameFlags {
     watchLedgerRead: false,
     watchMapRead: false,
     watchOrdersRead: false,
+    heardAboutEdden: false,
     askedHollisAboutEdden: false,
     gotDungeonLead: false,
     enteredRootCellar: false,

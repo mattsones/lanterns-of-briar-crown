@@ -20,6 +20,7 @@ import {
   getCompanionXpTarget,
 } from "../game/progression";
 import { Button, ItemIcon, Meter } from "./ui";
+import { CompanionPortrait } from "./CompanionPortrait";
 
 export function QuestTab({ journal }) {
   return (
@@ -105,7 +106,7 @@ export function InventoryTab({
             className="rounded-3xl border border-white/10 bg-white/5 p-4"
           >
             <div className="mb-3 text-sm font-semibold">{title}</div>
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div data-testid="inventory-grid" className="grid gap-3">
               {entries.map(([itemId, count]) => {
                 const item = ITEM_DB[itemId];
                 const equippedCount = getEquippedCount(player, itemId);
@@ -115,9 +116,10 @@ export function InventoryTab({
                 return (
                   <div
                     key={itemId}
+                    data-testid="inventory-item-card"
                     className="rounded-2xl border border-white/10 bg-black/20 p-3"
                   >
-                    <div className="flex items-start justify-between gap-3">
+                    <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
                       <div className="flex min-w-0 items-start gap-3">
                         <ItemIcon item={item} />
                         <div className="min-w-0">
@@ -151,7 +153,7 @@ export function InventoryTab({
                         ))}
                         </div>
                       </div>
-                      <div className="flex flex-wrap justify-end gap-2">
+                      <div className="flex flex-wrap gap-2 sm:flex-col sm:items-stretch">
                         {item.slot ? (
                           <>
                             <Button
@@ -405,11 +407,13 @@ export function CompanionTab({ companion, setCompanion, flags, dismiss }) {
         <div className="mb-3 text-sm font-semibold">Active Companion</div>
         {companion.recruited ? (
           <div className="space-y-4">
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <div className="text-3xl">{companion.icon}</div>
-              <div className="mt-2 text-lg font-semibold">{companion.name}</div>
-              <div className="text-sm text-emerald-300">
-                {companion.role} • Lv {companion.level || 1}
+            <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-black/20 p-4">
+              <CompanionPortrait companion={companion} className="h-24 w-24" />
+              <div className="min-w-0">
+                <div className="text-lg font-semibold">{companion.name}</div>
+                <div className="text-sm text-emerald-300">
+                  {companion.role} • Lv {companion.level || 1}
+                </div>
               </div>
             </div>
             <Meter
@@ -509,16 +513,14 @@ export function CompanionTab({ companion, setCompanion, flags, dismiss }) {
         ) : (
           <div className="space-y-3">
             {Object.values(COMPANION_OPTIONS).map((o) => (
-              <div
-                key={o.id}
-                className="rounded-2xl border border-white/10 bg-black/20 p-3"
-              >
-                <div className="font-medium">
-                  {o.icon} {o.name}
-                </div>
-                <div className="text-sm text-emerald-300">{o.role}</div>
-                <div className="mt-1 text-sm text-white/75">
-                  {o.description}
+              <div key={o.id} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/20 p-3">
+                <CompanionPortrait companion={o} className="h-16 w-16" />
+                <div className="min-w-0">
+                  <div className="font-medium">{o.name}</div>
+                  <div className="text-sm text-emerald-300">{o.role}</div>
+                  <div className="mt-1 text-sm text-white/75">
+                    {o.description}
+                  </div>
                 </div>
               </div>
             ))}

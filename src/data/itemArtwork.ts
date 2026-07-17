@@ -42,6 +42,18 @@ const cargoTransferTagIcon = new URL(
   "../../assets/icons/items/cargo-transfer-tag-icon-v02.png",
   import.meta.url,
 ).href;
+const splitCrownSlatIcon = new URL(
+  "../../assets/icons/map-tokens/crown-den-slat-rack-broken-token-v01.png",
+  import.meta.url,
+).href;
+const briarSignmakerLedgerIcon = new URL(
+  "../../assets/icons/map-tokens/crown-den-witness-ledger-token-v01.png",
+  import.meta.url,
+).href;
+const cleanedLanternMarkIcon = new URL(
+  "../../assets/icons/map-tokens/crown-den-false-map-cleared-token-v01.png",
+  import.meta.url,
+).href;
 
 // Production item icons should live in assets/icons/items/ and be registered here.
 // Keep ITEM_DB emoji values as fallbacks for missing or broken artwork.
@@ -153,6 +165,18 @@ export const ITEM_ARTWORK: Record<string, ItemArtwork> = {
   cargo_transfer_tag: {
     src: cargoTransferTagIcon,
     alt: "Painted icon of the Cargo Transfer Tag",
+  },
+  split_crown_slat: {
+    src: splitCrownSlatIcon,
+    alt: "Painted token of the broken Split Crown Slat",
+  },
+  briar_signmaker_ledger: {
+    src: briarSignmakerLedgerIcon,
+    alt: "Painted token of the Briar Signmaker's Ledger",
+  },
+  cleaned_lantern_mark: {
+    src: cleanedLanternMarkIcon,
+    alt: "Painted token of the Cleaned Lantern Mark",
   },
 };
 

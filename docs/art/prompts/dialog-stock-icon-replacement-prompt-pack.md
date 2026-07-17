@@ -12,6 +12,7 @@ The implementation audit and reuse plan live in `docs/dialog-stock-icon-replacem
 | 2 | Bramblecross Watchhouse Case Wall | One master covers the evidence board, duty ledger, wall map, forged orders, and briefing recaps. |
 | 3 | Root Cellar Evidence Wall | One master covers the recent Root Sigil and the much older Route Mural. |
 | 4 | Briar Crown Primary Mark | Gives the antagonist's identity a consistent bespoke visual instead of a crown emoji. |
+| 5 | Willow Market Seal on Crate | Establishes Ada's trusted cargo mark clearly enough for the Watchhouse clue card and later Willow-marked cargo. |
 
 Generate the optional prompts only if an in-game crop from the existing map fails visual QA.
 
@@ -21,8 +22,9 @@ When ChatGPT allows image references, attach the relevant files with the prompt:
 
 - Overall style: `assets/maps/hearthhollow-gameplay-map-v04.webp`
 - Courier Satchel: `assets/portraits/enemies/bramble-boar-v01.webp`
-- Bramblecross architecture and palette: `assets/maps/bramblecross-town-map-v01.webp`
+- Bramblecross architecture and palette: `assets/maps/bramblecross-town-map-v02.webp`
 - Watchhouse characters, if any figures appear: `assets/portraits/characters/enna-portrait-v02.webp` and `assets/portraits/characters/hollis-portrait-v01.webp`
+- Willow Market seal and cargo: `assets/portraits/characters/ada-willowmarket-portrait-v01.webp` and `assets/maps/bramblecross-town-map-v02.webp`
 - Root Cellar materials and palette: `assets/maps/root-cellar-map-v01.webp`
 - Briar Crown context: `assets/scenes/crown-door-closeup-v01.webp` and `assets/portraits/enemies/briar-roadwatcher-v02.webp`
 
@@ -165,13 +167,39 @@ Generate exactly one primary mark, not a sheet of alternatives. No words, letter
 - The background is genuinely transparent, not a checkerboard painted into the pixels.
 - The silhouette remains legible at small UI size.
 
+## A5. Willow Market Seal on Crate
+
+**Suggested source filename:** `willow-market-seal-crate-detail-v01.png`
+**Target runtime filename:** `assets/scenes/willow-market-seal-crate-detail-v01.webp`
+**Format:** opaque square or 4:3 image, ideally 1536 x 1536 or larger
+
+Attach Ada's portrait and the Bramblecross town map for palette continuity, then use the shared style and negative blocks with this prompt:
+
+```text
+Paint a close, highly readable object study of Ada Willowmarket's genuine cargo seal on a sturdy spice-crate lid. The crate is made from practical, weathered honey-brown timber with worn traces of muted Willow green paint, a little spice dust in the grain, and the scuffs of ordinary merchant use.
+
+The central subject is the impression made by Ada's small Willow Market stamp in muted green merchant sealing wax: three natural willow leaves enclosed by one simple circle. The mark is a hand-pressed working merchant's seal, not a polished heraldic logo. Make the left leaf carry one tiny but clearly intentional nick in its edge. This familiar flaw is how Ada recognizes the honest stamp; the other two leaves should remain intact. Keep the circle slightly uneven and the impression tactile, with modest hand-made pressure variation rather than perfect symmetry.
+
+Show the mark intact on the crate lid and large enough to remain recognizable at 64 to 96 pixels. Use a close three-quarter or near top-down view, with the seal near the center and only enough surrounding wood, green paint, crate hardware, twine, and spice residue to establish that this is trusted working cargo. The object should feel dependable, ordinary, and worth protecting because tired guards, porters, and clerks recognize it at a glance.
+
+This is the clean canonical Willow seal. Do not add a crown, red royal wax, pine pitch, over-stamping, a missing cut-out section, readable writing, letters, a decorative shield, or ornate noble imagery. Generate one finished image, not a reference sheet or set of alternatives.
+```
+
+### Selection check
+
+- The mark unmistakably reads as three willow leaves inside one circle.
+- The tiny nick is on the left leaf only and survives a small Watchhouse-card crop.
+- The green mark and green-painted cargo identity are clear without looking neon or magical.
+- It looks like an honest, frequently used merchant's mark rather than a heraldic badge.
+- No crown-red wax or forgery materials appear in this clean reference image.
+
 ---
 
 # Optional After Crop QA
 
 ## B1. Bramblecross Notice Board Close-up
 
-Generate this only if the notice board cannot be isolated cleanly from `bramblecross-town-map-v01.webp`.
+Generate this only if the notice board cannot be isolated cleanly from `bramblecross-town-map-v02.webp`.
 
 **Suggested source filename:** `bramblecross-notice-board-scene-v01.png`
 **Target runtime filename:** `assets/scenes/bramblecross-notice-board-scene-v01.webp`
@@ -204,6 +232,54 @@ Generate this only if using the Thorncoat Ruffian art in the post-battle dialogu
 ```text
 Paint a small evidence close-up on a muddy roadside after an ambush: several dropped order sheets, a snapped sign slat, cheap binding cord, a pouch with a few coins, and copied wax seals that imitate authority badly. The papers should use non-readable lines and route pictograms only. Make the organization and funding visible through repeated materials and matching seal wax, while keeping the scene humble and grounded rather than treasure-like. No defeated figures, weapons posed as trophies, or violence.
 ```
+
+## B4. Cut-Away Willow Seal Evidence
+
+Generate this after A5 only if a separate Broken Cart or Ada evidence close-up is needed. Attach the selected A5 image so the three-leaf design and nick remain identical.
+
+**Suggested source filename:** `willow-market-cut-seal-evidence-v01.png`
+**Target runtime filename:** `assets/scenes/willow-market-cut-seal-evidence-v01.webp`
+**Format:** opaque 4:3 landscape, 1536 x 1152 or larger
+
+```text
+Paint the recovered fragment of Ada Willowmarket's missing green-painted spice-crate lid as a close evidence study. Preserve the exact Willow seal design from the attached approved reference: three leaves inside a circle, with one tiny nick in the left leaf. Someone has deliberately carved the marked section out of the crate lid rather than smashing it. Show the careful cut around the seal area, exposed pale wood, a few green paint flakes, knife or narrow-saw scoring, and the remaining partial outline that makes the theft legible. Place the fragment beside a simple charcoal rubbing cloth or paper impression with non-readable marks only.
+
+The image should communicate planning: the thief wanted the trusted mark itself, not the spices. Keep the scene practical and forensic rather than dramatic. No crown, red royal wax, pine pitch, readable text, treasure styling, violence, or characters.
+```
+
+---
+
+# C. Level-Up Growth Emblems
+
+Generate these as five separate assets, one per request. Use the following handoff prompt to establish the set and ask ChatGPT to begin with Power:
+
+```text
+Please create a coordinated set of five level-up emblems for a whimsical storybook fantasy game. Generate them as five separate square PNG images with true transparent backgrounds, not a combined sheet. Keep the same visual language, scale, lighting, edge treatment, and composition across all five.
+
+Art direction: hand-painted storybook fantasy, warm gouache-and-watercolor texture, tactile natural materials, slightly whimsical but heroic, rich moss green, lantern gold, weathered wood, muted steel, and restrained sky-blue accents. Strong, simple silhouettes that remain immediately readable at 64–96 pixels. Each emblem should be centered with generous transparent padding and contain no frame, badge shape, UI panel, drop-shadow rectangle, words, letters, numbers, or extra decorative objects. Avoid emoji, clip art, glossy mobile-game icons, photorealism, and modern vector-logo styling.
+
+The five separate emblems are:
+
+1. Power — a practical village hatchet striking cleanly through a thorny briar stem, with the severed briar curling away. Energetic diagonal composition; strength and decisive action, not aggression or gore.
+2. Resolve — a weathered roadwarden's round shield planted firmly while thick roots press against it and bend aside. Stable, upright composition; endurance, protection, and refusing to yield.
+3. Cleverness — an open, hand-drawn route map with several faint misleading paths, while one honest route glows subtly in warm lantern gold. Clear folded parchment silhouette; insight, observation, and finding the truth.
+4. Heart — two ordinary adventurer's hands sheltering a small, warmly glowing road lantern. Gentle symmetrical composition; courage, compassion, friendship, and keeping hope alive.
+5. Craft — a small smith's hammer beside a freshly repaired wooden road-sign joint, with one neat iron strap and peg visibly holding the split wood together. Practical, ingenious, handmade—not a generic crossed-tools symbol.
+
+Please preserve visual consistency across the set, but give each emblem a distinct silhouette and dominant accent: muted red-brown for Power, cool blue-steel for Resolve, parchment and gold for Cleverness, warm amber for Heart, and weathered wood/iron for Craft.
+
+Begin by generating Power only. After I approve it, I will ask for Resolve, Cleverness, Heart, and Craft one at a time so the designs remain consistent. Each final image must be a standalone transparent PNG.
+```
+
+Suggested runtime filenames:
+
+- `assets/icons/ui/level-up-power-v01.png`
+- `assets/icons/ui/level-up-resolve-v01.png`
+- `assets/icons/ui/level-up-cleverness-v01.png`
+- `assets/icons/ui/level-up-heart-v01.png`
+- `assets/icons/ui/level-up-craft-v02.png`
+
+Implementation note: the user-prepared Paint.NET files are the authoritative true-alpha sources for this set. Optimized runtime copies are checked in under the names above. Earlier checkerboard and cleanup-working files are reference-only and should not be regenerated or promoted over the user-cleaned masters. Craft v02 is the selected production image.
 
 ---
 

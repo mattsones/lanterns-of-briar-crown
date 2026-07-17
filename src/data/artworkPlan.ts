@@ -146,7 +146,15 @@ export const SYMBOL_UI_ARTWORK_PLAN: Record<string, ArtworkPlanEntry> = {
     "available",
     "Selected true-alpha Briar Crown mark is wired into the Chapter 1 discovery and report-back dialogues.",
   ),
-  willow_seal_reference: entry("willow_seal_reference", "Willow Seal Reference Sheet", "symbol-ui", "shared", "text labels"),
+  willow_seal_reference: entry(
+    "willow_seal_reference",
+    "Willow Seal Reference",
+    "symbol-ui",
+    "shared",
+    "text labels",
+    "available",
+    "Selected v2 crate close-up preserves Ada's three-leaf mark with a lens-level nick in the left leaf.",
+  ),
   parchment_panels: entry("parchment_panels", "Parchment UI Panel Treatment", "symbol-ui", "shared", "CSS panels"),
 };
 

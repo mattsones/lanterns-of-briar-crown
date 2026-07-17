@@ -533,7 +533,7 @@ The traveler clutches a satchel so tightly the leather creaks. His hat is on sid
 ### If player asks what the order looked like
 **Text**
 
-"A look? I barely breathed near it," he says. "I saw the crown seal. They said Bramblecross was being held and no couriers could leave until a Crown inspection. That sounded official to me. It was official, wasn't it? Then they tucked the order away and started asking why I was still on the road. That's when I decided my errand could wait until my knees stopped humming."
+"I saw enough," he insists. "The royal crown was pressed right into the red wax. The order said Bramblecross was being held and no couriers could leave until a Crown inspection. So I obeyed it. You obey a Crown seal like that—everyone knows that. Then the men started asking why I was still on the road, and I decided obedience could include leaving quickly."
 
 **Choices**
 - The seal may be false. Get to the camp.
@@ -747,7 +747,9 @@ Two shapes linger near the ditch where the road bends. One pretends to check a b
 ### After finding ruin note
 **Text**
 
-The moment your hand touches the forged order, the roadside act falls apart. A fox-faced ruffian steps from the brambles, knife low and smile lower. Beside him, a thorny hound growls like a hedge with teeth. "That paper isn't yours," the ruffian says. He sounds less angry than inconvenienced.
+The road narrows between two banks of bramble. The ruffian and his thorny hound wait until you are committed to the bend, then step out behind you and close the road back. A second shape blocks the way ahead. "That paper isn't yours," the ruffian says, knife low and smile lower. They were never guarding one spot on the map. They were waiting to ambush whoever carried the order east.
+
+This encounter triggers across the eastern road corridor after the planted order is found, so the player cannot bypass it by missing a hidden interaction node.
 
 **Choices**
 - Break up the ambush.
@@ -842,11 +844,13 @@ Mayor Anwen nods toward the old cellar ways. "If Hollis is sending you below, th
 
 **Text**
 
-The Bramblecross notice board is crowded enough to look like a paper storm nailed to wood. One notice reports missing cellar porters. Another warns of odd knocking beneath the old root storage rooms. A third insists all road traffic should wait for "updated crown direction," but the seal is copied too cleanly, like someone traced authority without understanding it. Near the bottom, Ada Willowmarket has pinned a practical little note about a missing spice crate, written in an increasingly less practical hand.
+The Bramblecross notice board is crowded enough to look like a paper storm nailed to wood. One notice reports missing cellar porters. Another warns of odd knocking beneath the old root storage rooms. A third insists all road traffic should wait for "updated crown direction." Near the bottom, Ada Willowmarket has pinned a practical little note about a missing spice crate, written in an increasingly less practical hand.
 
 **Choices**
-- Note the cellar warning and forged route order.
+- Collect the cellar notices and route order.
 - Take Ada's crate notice too.
+
+These are independent actions. Taking Ada's notice does not also collect the cellar material, and collecting the cellar material does not accept Ada's side quest.
 
 **Outcome if taking Ada’s notice**
 
@@ -1006,14 +1010,10 @@ Hollis meets your eyes.
 
 Hollis nods toward the public square.
 
-"Read the notice board too. Enna's wall shows the pattern. The notices show what people are afraid of. Good investigators know the difference."
-
-He lowers his voice.
-
-"The forged orders are not only moving carts. They are moving people. They make a frightened merchant delay a delivery, make a porter take a different stair, make a mayor answer the wrong question in public. Fear is part of the machinery. If you go below, know what the machinery is doing above."
+"Before you decide whether to brave the cellar, collect every notice about it from the board. When the first porter vanished, I sent Edden Vale below with two others. Edden came back badly shaken. The other two did not. Each notice caught a different piece of what happened before and after they went down—the knocking, the missing workers, the changed routes. I want you to see the full shape of this, not walk into it on the strength of one official report."
 
 **Choice**
-- Fair enough.
+- I'll collect every cellar notice, then come back.
 
 ---
 

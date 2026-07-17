@@ -291,6 +291,122 @@ test("road camp actions return to the camp and report what happened", async ({ p
   await expect(page.getByRole("button", { name: "Leave camp", exact: true })).toBeVisible();
 });
 
+test("narrow combat keeps current health and actions in reach", async ({ page }) => {
+  const checkpoint = buildPostBoarElderCheckpoint();
+  checkpoint.position = { x: 6, y: 8 };
+  checkpoint.flags.beatGateBattle = false;
+  checkpoint.flags.reportedSatchelToElder = false;
+  checkpoint.visited = {
+    hearthhollow: buildVisitedMap("hearthhollow", 6, 8, 10),
+  };
+
+  await page.setViewportSize({ width: 430, height: 932 });
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByTestId("move-down").click();
+  await page
+    .getByRole("button", { name: "Stand and fight before it reaches the square." })
+    .click();
+
+  const dock = page.getByTestId("battle-action-dock");
+  await expect(dock).toBeVisible();
+  await expect(dock.getByText("Liam HP", { exact: true })).toBeVisible();
+  await expect(dock.getByText("Bramble Boar HP", { exact: true })).toBeVisible();
+  await expect(dock.getByRole("button", { name: /Strike/ })).toBeVisible();
+  await expect(dock.getByRole("button", { name: /Focus Step/ })).toBeVisible();
+
+  const box = await dock.boundingBox();
+  expect(box).not.toBeNull();
+  expect((box?.y || 0) + (box?.height || 0)).toBeLessThanOrEqual(932);
+});
+
+test("inventory cards stay readable instead of squeezing into narrow columns", async ({ page }) => {
+  const checkpoint = buildBramblecrossInvestigationCheckpoint();
+  checkpoint.player.inventory = {
+    ...checkpoint.player.inventory,
+    turnipwood_blade: 1,
+    briar_vest: 1,
+  };
+
+  await page.setViewportSize({ width: 894, height: 900 });
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByTestId("open-adventure-menu-mobile").click();
+  await page.getByRole("button", { name: "Inventory" }).click();
+
+  const equipmentGrid = page.getByTestId("inventory-grid").first();
+  const cards = equipmentGrid.getByTestId("inventory-item-card");
+  await expect(cards).toHaveCount(3);
+  const firstBox = await cards.nth(0).boundingBox();
+  const secondBox = await cards.nth(1).boundingBox();
+  expect(firstBox).not.toBeNull();
+  expect(secondBox).not.toBeNull();
+  expect(firstBox?.width || 0).toBeGreaterThan(600);
+  expect(secondBox?.y || 0).toBeGreaterThan((firstBox?.y || 0) + (firstBox?.height || 0));
+});
+
+test("the exploration shell keeps the map primary and opens menus in a drawer", async ({ page }) => {
+  const checkpoint = buildBramblecrossInvestigationCheckpoint();
+
+  await page.setViewportSize({ width: 1400, height: 900 });
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+
+  const mapBox = await page.getByTestId("map-stage").boundingBox();
+  const railBox = await page.getByRole("complementary", { name: "Adventure status" }).boundingBox();
+  expect(mapBox).not.toBeNull();
+  expect(railBox).not.toBeNull();
+  expect(mapBox?.width || 0).toBeGreaterThan((railBox?.width || 0) * 2);
+  await expect(page.getByTestId("adventure-workspace")).toHaveCount(0);
+
+  await page.keyboard.press("m");
+  const workspace = page.getByTestId("adventure-workspace");
+  await expect(workspace).toBeVisible();
+  await expect(page.getByTestId("map-stage")).toBeVisible();
+  await workspace.getByRole("button", { name: "Character", exact: true }).click();
+  await expect(workspace.getByText("Full character stats")).toBeVisible();
+  await workspace.getByRole("button", { name: "Close Adventure Menu" }).click();
+  await expect(workspace).toHaveCount(0);
+});
+
+test("phone exploration uses a bottom status bar and full-width menu sheet", async ({ page }) => {
+  const checkpoint = buildBramblecrossInvestigationCheckpoint();
+
+  await page.setViewportSize({ width: 430, height: 932 });
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+
+  const mobileBar = page.getByLabel("Adventure status and menu");
+  await expect(mobileBar).toBeVisible();
+  await expect(page.getByLabel("Map movement controls")).toBeVisible();
+  const barBox = await mobileBar.boundingBox();
+  expect((barBox?.y || 0) + (barBox?.height || 0)).toBeLessThanOrEqual(932);
+
+  await page.getByTestId("open-adventure-menu-mobile").click();
+  const workspace = page.getByTestId("adventure-workspace");
+  await expect(workspace).toBeVisible();
+  const workspaceBox = await workspace.boundingBox();
+  expect(workspaceBox?.width || 0).toBeGreaterThanOrEqual(420);
+  expect(workspaceBox?.height || 0).toBeLessThanOrEqual(932 * 0.9);
+  await workspace.getByRole("button", { name: "Close Adventure Menu" }).click();
+});
+
 test("the worried traveler portrait and testimony show that the false seal fooled him", async ({ page }) => {
   await page.addInitScript(
     ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
@@ -310,10 +426,11 @@ test("the worried traveler portrait and testimony show that the false seal foole
 
   await page.getByRole("button", { name: "Did you get a look at the order?" }).click();
   travelerDialogue = page.getByRole("dialog", { name: "Worried Traveler" });
-  await expect(travelerDialogue).toContainText("I barely breathed near it");
-  await expect(travelerDialogue).toContainText("That sounded official to me");
-  await expect(travelerDialogue).toContainText("It was official, wasn't it?");
+  await expect(travelerDialogue).toContainText("The royal crown was pressed right into the red wax");
+  await expect(travelerDialogue).toContainText("So I obeyed it");
+  await expect(travelerDialogue).toContainText("You obey a Crown seal like that");
   await expect(travelerDialogue).not.toContainText("copied the shape of command");
+  await expect(travelerDialogue).not.toContainText("too clean");
   await expect(
     travelerDialogue.getByRole("img", { name: "Portrait of a worried road traveler" }),
   ).toBeVisible();
@@ -342,9 +459,137 @@ test("Bramblecross points the player to the watchhouse and aligns the notice boa
   await page.getByTestId("move-up").click();
   await page.getByTestId("move-right").click();
   await page.getByTestId("move-right").click();
-  await page.getByTestId("move-right").click();
   await page.getByTestId("move-down").click();
-  await expect(page.getByRole("dialog", { name: "Notice Board" })).toBeVisible();
+  await page.getByTestId("move-down").click();
+  await page.getByTestId("move-right").click();
+  let boardDialogue = page.getByRole("dialog", { name: "Notice Board" });
+  await expect(boardDialogue).toBeVisible();
+  await expect(boardDialogue).not.toContainText("the seal is copied too cleanly");
+
+  await page.getByRole("button", { name: "Take Ada's crate notice too." }).click();
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  boardDialogue = page.getByRole("dialog", { name: "Notice Board" });
+  await expect(boardDialogue).toContainText("cellar warnings and copied route orders");
+  await expect(
+    page.getByRole("button", { name: "Collect the cellar notices and route order." }),
+  ).toBeVisible();
+});
+
+test("Hollis explains why the cellar notices matter before sending anyone below", async ({ page }) => {
+  const checkpoint = buildBramblecrossInvestigationCheckpoint();
+  checkpoint.flags.readBoard = false;
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+
+  await page.getByTestId("move-up").click();
+  await page.getByRole("button", { name: "Enter" }).click();
+  const watchhouse = page.getByRole("dialog", { name: "Inside the Watchhouse" });
+  await expect(watchhouse).toContainText("a closed door farther down the hall");
+  await expect(watchhouse).not.toContainText("Edden's door");
+  await expect(watchhouse).not.toContainText("A focused interior scene.");
+  await expect(page.getByTestId("watchhouse-enna").getByRole("img", { name: "Portrait of Enna" })).toBeVisible();
+  await expect(page.getByTestId("watchhouse-hollis").getByRole("img", { name: "Portrait of Captain Hollis" })).toBeVisible();
+  for (const artKey of [
+    "watchhouse-card-lio-satchel",
+    "watchhouse-card-planted-order",
+    "watchhouse-card-willow-seal",
+    "watchhouse-card-root-cellar",
+    "briar-crown-mark",
+  ]) {
+    await expect(page.locator(`[data-art-key="${artKey}"]`)).toBeVisible();
+  }
+  await expect(
+    page.locator('[data-art-key="watchhouse-card-willow-seal"] img'),
+  ).toHaveAttribute("src", /willowmark-seal-v02/);
+  await page.getByRole("button", { name: "Talk with Hollis" }).click();
+
+  const hollisDialogue = page.getByRole("dialog", { name: "Captain Hollis" });
+  await expect(hollisDialogue).toContainText("collect every notice about it");
+  await expect(hollisDialogue).toContainText("Edden came back badly shaken");
+  await expect(hollisDialogue).toContainText("The other two did not");
+  await expect(hollisDialogue).toContainText("the full shape of this");
+  await page.getByRole("button", { name: "I'll collect every cellar notice, then come back." }).click();
+  await expect(watchhouse).toContainText("Edden's door");
+});
+
+test("the incomplete Watchhouse case wall uses evidence art and a deliberate empty state", async ({ page }) => {
+  const checkpoint = buildBramblecrossInvestigationCheckpoint();
+  checkpoint.flags.ennaBriefed = false;
+  checkpoint.flags.watchEvidenceRead = false;
+  checkpoint.flags.heardAboutEdden = false;
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByTestId("move-up").click();
+  await page.getByRole("button", { name: "Enter" }).click();
+
+  await expect(page.locator('[data-art-key="watchhouse-card-missing-porters"]')).toBeVisible();
+  await expect(page.locator('[data-art-key="watchhouse-card-copied-orders"]')).toBeVisible();
+  await expect(page.locator('[data-art-key="watchhouse-card-supply-delays"]')).toBeVisible();
+  await expect(page.getByText("Awaiting field evidence", { exact: true })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Inside the Watchhouse" })).not.toContainText("📦");
+});
+
+test("the Root Cellar fog opens whole rooms while passages stay narrow", async ({ page }) => {
+  const checkpoint = buildChapterOneClimaxCheckpoint();
+  checkpoint.position = { x: 1, y: 5 };
+  checkpoint.visited.rootCellar = {
+    "1,4": true,
+    "1,5": true,
+    "1,6": true,
+    "2,5": true,
+  };
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+
+  await expect(page.locator('[data-fog-area="route-mural-room"]')).toHaveCount(1);
+  await expect(page.locator('[data-fog-area="cellar-cache-room"]')).toHaveCount(0);
+
+  await page.getByTestId("move-down").click();
+  await expect(page.locator('[data-fog-area="cellar-cache-room"]')).toHaveCount(1);
+  await expect(page.locator('[data-fog-area="guardian-vault"]')).toHaveCount(0);
+});
+
+test("the Lantern Road ambush catches the player on the road corridor", async ({ page }) => {
+  const checkpoint = buildRoadCampCheckpoint();
+  checkpoint.position = { x: 6, y: 6 };
+  checkpoint.flags.foundRuinNote = true;
+  checkpoint.flags.clearedWildBattle = false;
+  checkpoint.visited = {
+    lanternRoad: buildVisitedMap("lanternRoad", 6, 6, 10),
+  };
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+
+  await page.getByTestId("move-right").click();
+  let ambushDialogue = page.getByRole("dialog", { name: "Roadside Ambush" });
+  await expect(ambushDialogue).toBeVisible();
+  await expect(ambushDialogue).toContainText("waiting to ambush whoever carried the order east");
+  await page.getByRole("button", { name: "Try to run and draw them away." }).click();
+  await page.getByRole("button", { name: "Retreat for now." }).click();
+
+  await page.getByTestId("move-right").click();
+  ambushDialogue = page.getByRole("dialog", { name: "Roadside Ambush" });
+  await expect(ambushDialogue).toBeVisible();
 });
 
 test("Hollis recommends the inn and personally leads the player into the cellar", async ({ page }) => {
@@ -439,7 +684,10 @@ test("the Companion menu connects every battle order to its named ability", asyn
   );
   await page.goto("/");
   await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByTestId("open-adventure-menu").click();
   await page.getByRole("button", { name: "Companion", exact: true }).click();
+
+  await expect(page.getByRole("img", { name: "Portrait of Tilda Quickstep" })).toBeVisible();
 
   const order = page.getByLabel("Companion battle order");
   const preview = page.getByTestId("companion-command-preview");
@@ -473,7 +721,7 @@ test("chapter one golden path completes the Warden, cellar proof, and report-bac
   );
   await page.goto("/");
   await page.getByRole("button", { name: "Continue Checkpoint" }).click();
-  await expect(page.getByText("You are standing on: Cellar Guardian.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Inspect Cellar Guardian", exact: true })).toBeVisible();
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
   await page.getByRole("button", { name: "Stand and fight." }).click();
@@ -492,14 +740,18 @@ test("chapter one golden path completes the Warden, cellar proof, and report-bac
   await expect(page.getByText("Briar Knot Warden", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Continue" }).click();
   await page.getByTestId("move-right").click();
-  await expect(page.getByText("Sealed Iron Door", { exact: true })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Sealed Iron Door", exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Study the Briar Crown mark." }).click();
-  await expect(page.locator('[data-art-key="briar-crown-mark"]')).toBeVisible();
+  await expect(
+    page.getByRole("dialog").locator('[data-art-key="briar-crown-mark"]'),
+  ).toBeVisible();
   await page.getByRole("button", { name: "Take the Warden Chain and Edden's cloth." }).click();
   await expect(
     page.getByText("Chapter 1 discovery complete. Report back to Hollis and Enna.").first(),
   ).toBeVisible();
 
+  await page.getByTestId("open-adventure-menu").click();
+  await page.getByText("More", { exact: true }).click();
   await page.getByRole("button", { name: "Dev Tools" }).click();
   await page.getByRole("button", { name: "Bramblecross", exact: true }).click();
   for (let step = 0; step < 6; step += 1) {
@@ -512,7 +764,11 @@ test("chapter one golden path completes the Warden, cellar proof, and report-bac
   await page.getByRole("button", { name: "Edden reached the door. He left proof." }).click();
   await page.getByRole("button", { name: "Let Enna connect the threads." }).click();
   await page.getByRole("button", { name: "Show them the Briar Crown mark." }).click();
-  await expect(page.locator('[data-art-key="briar-crown-mark"]')).toBeVisible();
+  await expect(
+    page
+      .getByRole("dialog", { name: "The Briar Crown" })
+      .locator('[data-art-key="briar-crown-mark"]'),
+  ).toBeVisible();
   await page.getByRole("button", { name: "Ask about Westroot." }).click();
   await page.getByRole("button", { name: "I'll follow Westroot." }).click();
 
