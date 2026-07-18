@@ -13,7 +13,7 @@ import {
   normalizeMapPosition,
   normalizeRegionId,
 } from "./map";
-import type { Flags, GameFlagKey, GameFlags, Player, SavePayload, SaveSlot } from "./types";
+import type { CompanionId, CompanionRoster, Flags, GameFlagKey, GameFlags, Player, SavePayload, SaveSlot } from "./types";
 
 export const STORAGE_KEY = "liams-game-prototype-v2";
 export const SAVE_SLOTS_KEY = "liams-game-prototype-slots-v1";
@@ -153,6 +153,13 @@ export function migrateSavePayload(payload: SavePayload, sourceVersion = SAVE_FI
     appearanceId: (payload.player as Partial<Player>).appearanceId || DEFAULT_APPEARANCE_ID,
   } as Player) as Player;
   const companion = normalizeCompanionData(payload.companion || buildDefaultCompanion());
+  const companionRoster = Object.fromEntries(
+    Object.entries(payload.companionRoster || {}).map(([id, savedCompanion]) => [
+      id,
+      normalizeCompanionData(savedCompanion),
+    ]),
+  ) as CompanionRoster;
+  if (companion.id) companionRoster[companion.id as CompanionId] = companion;
   const visited = ensureVisitedIncludesPosition(
     payload.visited || buildDefaultVisited(),
     region,
@@ -169,6 +176,7 @@ export function migrateSavePayload(payload: SavePayload, sourceVersion = SAVE_FI
     position,
     visited,
     companion,
+    companionRoster,
     guestNpc: payload.guestNpc || null,
     flags,
     quest:

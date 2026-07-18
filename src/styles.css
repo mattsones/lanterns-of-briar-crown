@@ -339,6 +339,11 @@ textarea {
   filter: drop-shadow(0 0.25rem 0.25rem rgb(0 0 0 / 0.35));
 }
 
+.map-token .map-token-enemy {
+  object-fit: cover;
+  object-position: center 22%;
+}
+
 .map-token.has-artwork.is-spent {
   opacity: 0.84;
   filter: saturate(0.82);

@@ -68,7 +68,7 @@ export const MAP_ARTWORK_PLAN: Record<string, ArtworkPlanEntry> = {
   hearthhollow: entry("hearthhollow", "Hearthhollow Gameplay Map", "map", 1, "painted-map-fallback", "available"),
   lantern_road: entry("lantern_road", "Lantern Road Gameplay Map", "map", 1, "painted-map-fallback", "available"),
   bramblecross: entry("bramblecross", "Bramblecross Town Map", "map", 1, "painted-map-fallback", "available"),
-  root_cellar: entry("root_cellar", "Old Root Cellar Map", "map", 1, "painted-map-fallback", "available"),
+  root_cellar: entry("root_cellar", "Old Root Cellar Map", "map", 1, "painted-map-fallback", "available", "Occupied and post-Warden cleared backgrounds share the same authored navigation alignment."),
   westroot_trail: entry("westroot_trail", "Westroot Trail Map", "map", 2, "painted-map-fallback", "available"),
   crown_door_den: entry("crown_door_den", "Crown Door Den Map", "map", 2, "painted-map-fallback", "available", "Roadwatcher signworks behind the false Crown Door."),
   westroot_hub: entry("westroot_hub", "Westroot Hub Map", "map", 3, "painted-map-fallback", "available", "Westroot Hub v01: gate bridge, Rootmarket, Mossgarden, Witness Stones, Split Hall, and Cargo Siding."),

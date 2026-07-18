@@ -19,6 +19,9 @@ This is the concise pickup document for the current illustrated prototype. Histo
 - Phones keep a fixed compact status bar and thumb-sized movement/Inspect controls at the map edge.
 - Latest-update feedback overlays the map instead of falling below the visible play area.
 - Combat uses compact party/enemy cards plus a persistent action dock with hero and selected-target HP. Recent Events is collapsible.
+- Dialogues can opt into compact semantic choice groups. The Three-Door Threshold uses responsive door and companion-read rows on wider screens while retaining full-width stacked touch targets on phones.
+- Door close-ups use a split art-and-copy presentation on wider screens, eliminating hidden below-image text and redundant image captions. Their actions are grouped by investigation, character read, and consequence.
+- The Three-Door Threshold uses the same split presentation; on phones its required prose moves ahead of the illustration so the scene never depends on noticing an internal scrollbar.
 - Tile and graph movement, save compatibility, and existing story triggers remain intact.
 
 The implementation and decisions are documented in `docs/gameplay-ux-redesign-plan.md`.
@@ -35,6 +38,27 @@ The implementation and decisions are documented in `docs/gameplay-ux-redesign-pl
 - Ada's honest Willowmark uses a subtle nick in the left leaf. `willowmark-seal-v02.png` is the selected reference and Watchhouse evidence image.
 - Camp actions keep the camp open and report results; the village well walk-on dialogue is one-time only.
 - Companion Attack, Defend, and Support orders identify the named ability and mechanical behavior they select.
+- Chapter 1 now formally completes at the sealed-door proof pickup after the Briar Knot Warden fight. The Watchhouse return combines the cellar report, Westroot explanation, and Chapter 2 expedition briefing in one conversation, then activates Mara, Edden, and Ada as the preparation threads without requiring a second conversation with Enna.
+- Claiming the Briar Knot Warden victory now moves directly into a mandatory Sealed Iron Door sequence. The player cannot leave that post-boss reveal before collecting the Warden Chain and Edden's cloth, preventing a defeated-cellar state with Chapter 1 still incomplete.
+- Climbing out of the Root Cellar now returns the hero to the painted Bramblecross cellar entrance at logical tile `(3,5)`.
+- Mayor Anwen stops warning the hero about entering the cellar once it has been cleared, and shifts to the Westroot/Lio lead after the Watchhouse report.
+- Edden's drawing cannot be previewed from the briefing before Edden personally gives it to the player. After the Chapter 1 report, the detailed case-wall controls collapse into a compact archive so Chapter 2's Mara, Edden, and Ada actions own the active Watchhouse table.
+- Downed companions no longer offer cellar story reactions. Living companions can still discuss the sealed door from the Chapter 1 completion tableau after the proof has been collected.
+- A companion's sealed-door reaction is remembered after it is heard and is not offered again at the door or on the Chapter 1 ending tableau.
+- Companion consciousness is now a shared rule across Chapters 1–3. Downed companions do not contribute dialogue, door/threshold reads, physical departure actions, or victory XP; the journal marks them as **Downed** until they recover.
+- Healing a 0-HP companion with a battle item now restores their immediately following companion turn.
+- Companion progress now lives in a persistent roster. A companion sent to the inn keeps HP, XP, level, and learned progress when invited back, while the active companion is shown as **Traveling** rather than recruitable.
+- One-time and reviewable actions now have explicit state: spent searches and story reactions disappear, while evidence reviews retain their original skill-check result without rerolling or awarding repeat XP.
+- Chapter 2 clue order is resilient. The Westward Cut can be copied on the return trip after an outbound study, and Mara's shelter-mark comparison and Edden's drawing comparison remain available if their matching clues are discovered later.
+- Noma's Chapter 3 questions remain independently available until each topic has been asked.
+- The Crown Door remains fully sealed until the Roadwatcher's split slat is found. Trying the door or trusting its false sign no longer previews the Crown Door Den, and stepping back from the Three-Door Threshold now returns to the previous trail node.
+- Lantern Sign cleaning is one-time and becomes a no-XP review afterward. Companion opinions at each threshold door return to that specific door rather than ejecting the player to the main threshold.
+- The user-provided Mossgirl disk save is now covered through the real file-picker load path. It has every repair required to open the No-Handle Door; the intentional second password phrase remains the final action, with explicit ready-state copy and a highlighted opening choice.
+- Map overlays now prioritize encounters: the Roadwatcher, releasable Crown Den hound, fixed den guard, Root Cellar skulk, south-gate boar, and Cargo Siding threat use enemy art. Painted clue stations no longer get map icons, scripted ambushes remain hidden, and the cellar guardian gets no overlay because it is already painted into the map.
+- Westroot Hub navigation now follows the painted entrance road, plaza, and branching paths with shorter waypoints. Fog opens in room-sized areas around Rootmarket, the Mossgarden, Witness Stones, Split Hall, Cargo Siding, and the Rootbread Hatch instead of exposing a thin disconnected tunnel.
+- Bramwell is now a mandatory Chapter 3 entry beat. Entering Westroot opens his introduction, and movement, map-node clicks, or older saves positioned past the gate are routed back to him until `metBramwell` is true; Quill cannot be met first.
+- The lower Westroot approach now follows the stone lane down to the wooden bridge and rises into the open Rootmarket plaza; it no longer cuts across the gorge or places the hero inside the market awning. The Mossgarden branch similarly routes around the hut.
+- Completed Chapter 3 saves now identify the current playable endpoint explicitly. If the Rootbread Promise is unfinished, the persistent objective directs the player to Inspect Rootmarket, speak with Auntie Lume, and continue to the sealed hatch; completed landmarks remain quiet on walk-over but reviewable with **Inspect**.
 
 ## Production Art Status
 
@@ -43,22 +67,23 @@ The implementation and decisions are documented in `docs/gameplay-ux-redesign-pl
 - Enna and Hollis use portraits inside the Watchhouse.
 - Companion cards and level-up choices use production portraits/emblems with fallback symbols retained only for image failure.
 - Willowmark seal v2 is optimized for runtime; the full source is preserved under `assets/reference/source-art/` and v1 is retained under `assets/reference/alternates/`.
-- The optimized runtime asset set currently contains 126 images and passes the asset audit.
+- The Chapter 1 ending tableau is wired into the sealed-door proof pickup, and the Root Cellar switches to a boss-free painted background immediately after the Warden is defeated. Both full-resolution PNG sources are preserved under `assets/reference/source-art/`.
+- The optimized runtime asset set currently contains 128 images and passes the asset audit.
 
 ## Verification At Handoff
 
 ```text
 npm.cmd run build                 passed
-npm.cmd run test:rules            26 passed
-npm.cmd run playtest:chapter1     19 passed
-npm.cmd run playtest:chapter2     19 passed
-npm.cmd run playtest:chapter3      2 passed
+npm.cmd run test:rules            28 passed
+npm.cmd run playtest:chapter1     30 passed
+npm.cmd run playtest:chapter2     31 passed
+npm.cmd run playtest:chapter3      5 passed
 npm.cmd run playtest:smoke         1 passed
-npm.cmd run audit:assets          126 images scanned; largest assets within targets
+npm.cmd run audit:assets          128 images scanned; largest assets within targets
 git diff --check                 passed (Windows line-ending warnings only)
 ```
 
-Browser QA covered desktop exploration at 1400×900, phone exploration at 430×932, the phone menu sheet, compact phone combat, the Willowmark evidence selection, and Root Cellar room-aware fog.
+Browser QA covered desktop exploration at 1400×900, phone exploration at 430×932, the phone menu sheet, compact phone combat, the Willowmark evidence selection, Root Cellar room-aware fog, and the responsive Three-Door close-up/choice layouts.
 
 ## Remaining Work
 
@@ -83,13 +108,17 @@ Use `docs/dialog-stock-icon-replacement-plan.md` as the inventory.
 2. Run a final character-name consistency pass across older planning documents. Runtime intent is Elder Brynn, Sela of the Loom, Mara Brindle, Enna, Hollis, and Ada Willowmarket; legacy asset filenames should not dictate story names.
 3. Human-playtest the Chapter 3 ending before implementing Chapter 4.
 
-### 4. Chapter 4 And 5 Production
+### 4. Future Mechanic Candidates
+
+1. **High-perception ambush discovery:** when the party nears an intentionally hidden encounter, make a hidden Perception/Instinct check. An exceptional result should reveal the enemy marker and offer a pre-ambush choice; ordinary results should preserve the scripted surprise. Offer this as one of the options the next time the user asks **“what’s next?”**
+
+### 5. Chapter 4 And 5 Production
 
 1. Implement the Chapter 4 playable route from the existing Chapter 3 handoff before expanding Chapter 5.
 2. Produce the tracked Chapter 4–5 story-item and enemy art: Folded Map Scrap, Lanternwell Drop, True Seal Fragment, Briar Chain Link, Lio's Courier Knot, Briar Relay Guard, Crown Whisperer, Bracken Voss, Thornseal Guard, and Thornroot Sentry.
 3. Continue using the source-art/alternate/runtime asset workflow and retain fallbacks until each asset passes in-game QA.
 
-### 5. Technical Follow-Ups
+### 6. Technical Follow-Ups
 
 1. The main JavaScript chunk remains slightly above 500 KB. Treat code splitting as a focused performance task.
 2. `src/App.tsx` remains large. Continue the staged extraction in `docs/refactor-roadmap.md`; do not combine a major structural refactor with new story behavior.

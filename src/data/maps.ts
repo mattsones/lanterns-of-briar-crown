@@ -14,6 +14,10 @@ const rootCellarMap = new URL(
   "../../assets/maps/root-cellar-map-v01.webp",
   import.meta.url,
 ).href;
+const rootCellarClearedMap = new URL(
+  "../../assets/maps/root-cellar-no-boss-map-v01.webp",
+  import.meta.url,
+).href;
 const westrootTrailMap = new URL(
   "../../assets/maps/westroot-trail-map-v04.webp",
   import.meta.url,
@@ -522,6 +526,7 @@ export const MAPS = {
     subtitle: "First real dungeon",
     start: { x: 0, y: 1 },
     backgroundImage: rootCellarMap,
+    completedBackgroundImage: rootCellarClearedMap,
     tiles: [
       [
         "wall",
@@ -676,9 +681,9 @@ export const MAPS = {
     start: { x: 1, y: 3 },
     backgroundImage: westrootHubMap,
     tiles: [
-      ["wall", "wall", "wall", "mossgarden", "westroot_path", "wall", "wall", "wall", "wall"],
+      ["wall", "wall", "wall", "mossgarden", "westroot_path", "westroot_path", "wall", "wall", "wall"],
       ["wall", "westroot_path", "westroot_path", "westroot_path", "witness_stones", "westroot_path", "westroot_path", "cargo_siding", "wall"],
-      ["wall", "westroot_path", "rootmarket", "westroot_path", "westroot_path", "split_hall", "westroot_path", "westroot_path", "wall"],
+      ["wall", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "split_hall", "westroot_path", "westroot_path", "wall"],
       ["wall", "westroot_first_gate", "westroot_path", "rootmarket", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "wall"],
       ["wall", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "wall"],
       ["wall", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "rootbread_hatch", "wall"],

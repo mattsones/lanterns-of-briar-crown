@@ -43,6 +43,7 @@ import {
   getCompanionAbilityCards,
   getCompanionCommandAbility,
   getCompanionCommandOptions,
+  isCompanionConscious,
 } from "../src/game/companions";
 import { getVisitedKey, isBlockedInteractionTile } from "../src/game/map";
 import { addBonuses } from "../src/game/stats";
@@ -298,6 +299,30 @@ test("companion commands select named abilities with distinct battle effects", (
   });
 });
 
+test("companion availability distinguishes recruitment from consciousness", () => {
+  const companion = {
+    ...buildDefaultCompanion(),
+    recruited: true,
+    id: "rowan",
+    name: "Rowan Reedshield",
+    hp: 12,
+    maxHp: 12,
+  };
+
+  expect(isCompanionConscious(companion)).toBe(true);
+  expect(isCompanionConscious({ ...companion, hp: 0 })).toBe(false);
+  expect(isCompanionConscious(buildDefaultCompanion())).toBe(false);
+
+  const journal = buildQuestJournal(
+    { ...buildDefaultFlags(), reachedBramblecross: true },
+    { ...companion, hp: 0 },
+  );
+  expect(journal.sideQuests.find((quest) => quest.id === "companion")).toMatchObject({
+    status: "Downed",
+    active: true,
+  });
+});
+
 test("Chapter 3 Westroot placeholder hub and cargo encounter preserve the vertical-slice contract", () => {
   expect(MAPS.westrootHub).toMatchObject({
     name: "Westroot",
@@ -309,6 +334,7 @@ test("Chapter 3 Westroot placeholder hub and cargo encounter preserve the vertic
     "rootmarket",
     "mossgarden",
     "witness_stones",
+    "rootbread_hatch",
     "split_hall",
     "cargo_siding",
   ].forEach((tile) => {
@@ -323,6 +349,39 @@ test("Chapter 3 Westroot placeholder hub and cargo encounter preserve the vertic
     willowCargoExposed: true,
   });
   expect(existsSync(resolve("docs/art/prompts/chapter-3-westroot-hub-map.md"))).toBe(true);
+});
+
+test("Westroot hub movement follows the painted road in short, room-aware steps", () => {
+  const visual = getMapVisualConfig("westrootHub");
+  expect(visual).toMatchObject({
+    fogRadius: 7.2,
+    fogPathWidth: 13,
+  });
+  expect(visual.fogRevealAreas?.map((area) => area.id)).toEqual([
+    "westroot-gate-approach",
+    "rootmarket-plaza",
+    "westroot-central-plaza",
+    "mossgarden",
+    "witness-stones",
+    "split-hall",
+    "cargo-siding",
+    "rootbread-hatch",
+  ]);
+  expect(getNavigationDestination("westrootHub", 1, 3, "right")).toEqual({ x: 1, y: 4 });
+  expect(getNavigationDestination("westrootHub", 3, 3, "up")).toEqual({ x: 2, y: 2 });
+  expect(getNavigationDestination("westrootHub", 7, 3, "down")).toEqual({ x: 7, y: 4 });
+
+  const edgeLengths = Object.entries(visual.navigationLinks || {}).flatMap(([from, exits]) => {
+    const [fromX, fromY] = from.split(",").map(Number);
+    const fromPoint = getMapNodePoint("westrootHub", fromX, fromY, 9, 7);
+    return Object.values(exits).flatMap((destination) => {
+      if (!destination || from >= destination) return [];
+      const [toX, toY] = destination.split(",").map(Number);
+      const toPoint = getMapNodePoint("westrootHub", toX, toY, 9, 7);
+      return [Math.hypot(toPoint.x - fromPoint.x, toPoint.y - fromPoint.y)];
+    });
+  });
+  expect(Math.max(...edgeLengths)).toBeLessThanOrEqual(11);
 });
 
 test("Chapter 3 production artwork is selected and fallback-safe", () => {
@@ -622,6 +681,13 @@ test("chapter one story script beats stay wired into data", () => {
   expect(DIALOGUE_SCENE_ART.rootCellarMural.src).toBe(
     DIALOGUE_SCENE_ART.rootCellarSigil.src,
   );
+  expect(DIALOGUE_SCENE_ART.chapterOneEnding).toMatchObject({
+    id: "chapter-one-ending",
+    alt: expect.stringContaining("defeated Briar Knot Warden"),
+  });
+  expect(DIALOGUE_SCENE_ART.chapterOneEnding.src).toContain(
+    "chapter-1-ending-the-road-that-lied-v01",
+  );
   expect(DIALOGUE_SCENE_ART.briarCrownMark).toMatchObject({
     id: "briar-crown-mark",
     presentation: "emblem",
@@ -629,12 +695,30 @@ test("chapter one story script beats stay wired into data", () => {
   expect(DIALOGUE_SCENE_ART.briarCrownMark.src).toContain(
     "briar-crown-primary-mark-v01",
   );
+  expect(MAPS.rootCellar.completedBackgroundImage).toContain(
+    "root-cellar-no-boss-map-v01",
+  );
 
   expect(CHAPTER_1_STORY.reportBack.hollisReceivesClothMessages.map((m) => m.text)).toContain(
     "He was hurt enough to be right.",
   );
   expect(CHAPTER_1_STORY.reportBack.closingChoices).toContain(
     "The Briar Crown won't get to bury this.",
+  );
+  expect(CHAPTER_1_STORY.rootCellar.completionTableau).toContain(
+    "The battle is over. The road beneath Bramblecross is only beginning to speak.",
+  );
+  expect(CHAPTER_1_STORY.reportBack.westrootLead).toContain(
+    "Mara Brindle knows Lio's private courier marks.",
+  );
+  expect(CHAPTER_1_STORY.reportBack.westrootLead).toContain(
+    "leaves a deliberate space between them for Edden's testimony",
+  );
+  expect(CHAPTER_1_STORY.reportBack.westrootLead).not.toContain(
+    "Edden's charcoal drawing",
+  );
+  expect(CHAPTER_1_STORY.reportBack.expeditionReady).toContain(
+    "The report and the plan have become the same piece of work.",
   );
   expect(CHAPTER_1_STORY.reportBack.threadMessages.some((m) =>
     m.text.includes("not a side theft"),

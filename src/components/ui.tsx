@@ -112,12 +112,20 @@ export function ItemIcon({
 }
 
 export function ChoiceButton({ choice, onChoose }) {
+  const isQuiet = choice.variant === "quiet";
+  const isPrimary = choice.variant === "primary";
   return (
     <button
       disabled={choice.locked}
       onClick={() => !choice.locked && onChoose(choice)}
-      className={`w-full rounded-2xl border px-3 py-3 text-left text-sm transition ${
-        choice.locked ? "border-slate-700 bg-slate-800/80 text-slate-400" : "border-white/10 bg-white/10 text-white hover:bg-white/20"
+      className={`min-h-12 w-full rounded-2xl border px-3 py-3 text-left text-sm transition ${
+        choice.locked
+          ? "border-slate-700 bg-slate-800/80 text-slate-400"
+          : isQuiet
+            ? "border-white/5 bg-white/[0.04] text-white/75 hover:bg-white/10 hover:text-white"
+            : isPrimary
+              ? "border-emerald-300/60 bg-emerald-400/20 text-emerald-50 shadow-[0_0_0_1px_rgba(110,231,183,0.08)] hover:bg-emerald-400/30"
+              : "border-white/10 bg-white/10 text-white hover:bg-white/20"
       }`}
     >
       <div className="font-medium">{choice.label}</div>

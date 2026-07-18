@@ -248,7 +248,7 @@ Keep these in place and remove their stock-looking fallback from the normal rend
 - Edden's Drawing: `eddens-three-door-drawing-scene-v01.webp`
 - Three-Door Threshold: `three-doors-threshold-v01.webp`
 - Crown Door, Lantern Door, and No-Handle Door: their existing closeup scenes
-- Crown Sign, Lantern Sign, Door Waits, Door Listens, Door Opens, False Crown Passage, and companion threshold reads: reuse the appropriate door closeup rather than their symbolic `portrait` value
+- Crown Sign, Lantern Sign, Door Waits, Door Listens, Door Opens, The Crown Door Holds, and companion threshold reads: reuse the appropriate door closeup rather than their symbolic `portrait` value
 - Crown Door Den vestibule, wax table, slat rack, witness ledger, kennel, guard, and false map: existing painted map tokens and tension art
 - The Signworks Finds You: existing Crown Door Den pursuit/tension art
 - Chapter 3 arrival, Witness Stones, Rootbread Promise, Cargo Siding evidence, Split Hall resolution, and Mossgarden closing: existing production scenes

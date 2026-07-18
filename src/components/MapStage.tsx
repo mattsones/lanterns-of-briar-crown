@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { ENEMY_DB } from "../data/enemies";
 import { TILE_META } from "../data/maps";
 import {
   areMapNodesConnected,
@@ -12,51 +13,6 @@ import { getDialoguePortrait } from "../data/portraits";
 import { getVisitedKey, isBlockedInteractionTile } from "../game/map";
 import { HeroArtwork } from "./HeroArtwork";
 
-const waxTableToken = new URL(
-  "../../assets/icons/map-tokens/crown-den-wax-table-token-v01.png",
-  import.meta.url,
-).href;
-const waxTableClearedToken = new URL(
-  "../../assets/icons/map-tokens/crown-den-wax-table-cleared-token-v01.png",
-  import.meta.url,
-).href;
-const slatRackToken = new URL(
-  "../../assets/icons/map-tokens/crown-den-slat-rack-token-v01.png",
-  import.meta.url,
-).href;
-const slatRackBrokenToken = new URL(
-  "../../assets/icons/map-tokens/crown-den-slat-rack-broken-token-v01.png",
-  import.meta.url,
-).href;
-const witnessLedgerToken = new URL(
-  "../../assets/icons/map-tokens/crown-den-witness-ledger-token-v01.png",
-  import.meta.url,
-).href;
-const witnessLedgerCopiedToken = new URL(
-  "../../assets/icons/map-tokens/crown-den-witness-ledger-copied-token-v01.png",
-  import.meta.url,
-).href;
-const collarKennelToken = new URL(
-  "../../assets/icons/map-tokens/crown-den-collar-kennel-token-v01.png",
-  import.meta.url,
-).href;
-const collarKennelBrokenToken = new URL(
-  "../../assets/icons/map-tokens/crown-den-collar-kennel-broken-token-v01.png",
-  import.meta.url,
-).href;
-const falseMapToken = new URL(
-  "../../assets/icons/map-tokens/crown-den-false-map-token-v01.png",
-  import.meta.url,
-).href;
-const falseMapClearedToken = new URL(
-  "../../assets/icons/map-tokens/crown-den-false-map-cleared-token-v01.png",
-  import.meta.url,
-).href;
-const crownDenExitToken = new URL(
-  "../../assets/icons/map-tokens/crown-den-exit-token-v01.png",
-  import.meta.url,
-).href;
-
 const MAP_TOKEN_CONFIG: Record<
   string,
   {
@@ -65,6 +21,8 @@ const MAP_TOKEN_CONFIG: Record<
     artworkSrc?: string;
     spentArtworkSrc?: string;
     artworkAlt?: string;
+    artworkMode?: "icon" | "enemy";
+    hideWhenSpent?: boolean;
     portraitFocus?: { x: number; y: number; scale?: number };
   }
 > = {
@@ -129,7 +87,13 @@ const MAP_TOKEN_CONFIG: Record<
   bram_inn_door: { kind: "action" },
   market_door: { kind: "action" },
   watch_door: { kind: "action" },
-  gate: { kind: "action" },
+  gate: {
+    kind: "threat",
+    artworkSrc: ENEMY_DB.bramble_boar.artwork.src,
+    artworkAlt: ENEMY_DB.bramble_boar.artwork.alt,
+    artworkMode: "enemy",
+    hideWhenSpent: true,
+  },
   chest: { kind: "action" },
   return_gate: { kind: "action" },
   camp: { kind: "action" },
@@ -144,60 +108,50 @@ const MAP_TOKEN_CONFIG: Record<
   westroot_return: { kind: "action" },
   westroot_cut: { kind: "action" },
   shelter_nook: { kind: "action" },
-  false_notice: {
-    kind: "action",
-    artworkSrc: slatRackToken,
-    spentArtworkSrc: slatRackBrokenToken,
-    artworkAlt: "Painted token of a false detour sign",
-  },
+  false_notice: { kind: "action" },
   three_hollow: { kind: "action" },
   crown_sign: { kind: "action" },
   lantern_sign: { kind: "action" },
   no_handle_stone: { kind: "action" },
   westroot_gate: { kind: "action" },
-  roadwatcher: { kind: "threat" },
-  crown_den_exit: {
-    kind: "action",
-    artworkSrc: crownDenExitToken,
-    artworkAlt: "Painted token of the Crown Door Den exit",
+  roadwatcher: {
+    kind: "threat",
+    artworkSrc: ENEMY_DB.briar_roadwatcher.artwork.src,
+    artworkAlt: ENEMY_DB.briar_roadwatcher.artwork.alt,
+    artworkMode: "enemy",
+    hideWhenSpent: true,
   },
-  wax_table: {
-    kind: "action",
-    artworkSrc: waxTableToken,
-    spentArtworkSrc: waxTableClearedToken,
-    artworkAlt: "Painted token of wax, seal tools, and spoons",
-  },
-  slat_rack: {
-    kind: "action",
-    artworkSrc: slatRackToken,
-    spentArtworkSrc: slatRackBrokenToken,
-    artworkAlt: "Painted token of broken sign slats",
-  },
-  witness_ledger: {
-    kind: "action",
-    artworkSrc: witnessLedgerToken,
-    spentArtworkSrc: witnessLedgerCopiedToken,
-    artworkAlt: "Painted token of a bound witness ledger",
-  },
+  crown_den_exit: { kind: "action" },
+  wax_table: { kind: "action" },
+  slat_rack: { kind: "action" },
+  witness_ledger: { kind: "action" },
   collar_kennel: {
-    kind: "action",
-    artworkSrc: collarKennelToken,
-    spentArtworkSrc: collarKennelBrokenToken,
-    artworkAlt: "Painted token of thorn collars and kennel straw",
+    kind: "threat",
+    artworkSrc: ENEMY_DB.thorn_collared_hound.artwork.src,
+    artworkAlt: ENEMY_DB.thorn_collared_hound.artwork.alt,
+    artworkMode: "enemy",
+    hideWhenSpent: true,
   },
-  false_map: {
-    kind: "action",
-    artworkSrc: falseMapToken,
-    spentArtworkSrc: falseMapClearedToken,
-    artworkAlt: "Painted token of a false road map",
+  false_map: { kind: "action" },
+  den_guard: {
+    kind: "threat",
+    artworkSrc: ENEMY_DB.false_sign_scratcher.artwork.src,
+    artworkAlt: ENEMY_DB.false_sign_scratcher.artwork.alt,
+    artworkMode: "enemy",
+    hideWhenSpent: true,
   },
-  den_guard: { kind: "threat" },
   westroot_first_gate: { kind: "action" },
   rootmarket: { kind: "action" },
   mossgarden: { kind: "action" },
   witness_stones: { kind: "action" },
   split_hall: { kind: "action" },
-  cargo_siding: { kind: "threat" },
+  cargo_siding: {
+    kind: "threat",
+    artworkSrc: ENEMY_DB.seal_forged_sentry.artwork.src,
+    artworkAlt: ENEMY_DB.seal_forged_sentry.artwork.alt,
+    artworkMode: "enemy",
+    hideWhenSpent: true,
+  },
   rootbread_hatch: { kind: "action" },
   stairs_up: { kind: "action" },
   sigil: { kind: "action" },
@@ -206,7 +160,13 @@ const MAP_TOKEN_CONFIG: Record<
   cache3: { kind: "action" },
   exit_door: { kind: "action" },
   wildbattle: { kind: "threat" },
-  skulk: { kind: "threat" },
+  skulk: {
+    kind: "threat",
+    artworkSrc: ENEMY_DB.rustroot_skulk.artwork.src,
+    artworkAlt: ENEMY_DB.rustroot_skulk.artwork.alt,
+    artworkMode: "enemy",
+    hideWhenSpent: true,
+  },
   boss: { kind: "threat" },
 };
 
@@ -464,6 +424,7 @@ export function MapStage({
       <div className="map-token-layer" aria-hidden="true">
         {renderedTokens.map((node) => {
           const config = MAP_TOKEN_CONFIG[node.tile];
+          if (node.tokenState === "spent" && config.hideWhenSpent) return null;
           const portrait = getDialoguePortrait(
             config.portraitName || node.meta.label,
           );
@@ -475,7 +436,10 @@ export function MapStage({
             ? {
                 src: artworkSrc,
                 alt: config.artworkAlt || "",
-                className: "map-token-artwork",
+                className:
+                  config.artworkMode === "enemy"
+                    ? "map-token-enemy"
+                    : "map-token-artwork",
               }
             : portrait
               ? {

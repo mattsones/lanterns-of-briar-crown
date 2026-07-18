@@ -2497,12 +2497,13 @@ This preserves the puzzle theme while making combat and exploration part of the 
 ## Implemented Flow
 
 1. The party reaches the Three-Door Threshold and studies the Crown, Lantern, and No-Handle doors.
-2. The No-Handle Door makes clear that the road behind the party must "speak true" before it opens fully.
-3. The Roadwatcher encounter happens as a normal adventure beat. Clean play makes it a prepared standard fight; messy play makes it harder.
-4. After victory, the Roadwatcher drops **Split Crown Slat**, a false-sign piece whose bent crown mark fits the Crown Door latch.
-5. The Crown Door can now be opened and explored as the Crown Door Den.
-6. Inside, the player finds the machinery of falsehood: sign slats, copied wax, witness lists, lantern marks scraped off wood, and thorn-collar supplies.
-7. Clearing the den removes the final false command from the road, giving the No-Handle Door enough truth to open.
+2. Before the split slat is found, the Crown Door remains completely sealed. Trying it reveals only the hidden notch and never previews the den beyond it.
+3. The No-Handle Door makes clear that the road behind the party must "speak true" before it opens fully.
+4. The Roadwatcher encounter happens as a normal adventure beat. Clean play makes it a prepared standard fight; messy play makes it harder.
+5. After victory, the Roadwatcher drops **Split Crown Slat**, a false-sign piece whose bent crown mark fits the Crown Door latch.
+6. The Crown Door can now be opened and explored as the Crown Door Den.
+7. Inside, the player finds the machinery of falsehood: sign slats, copied wax, witness lists, lantern marks scraped off wood, and thorn-collar supplies.
+8. Clearing the den removes the final false command from the road, giving the No-Handle Door enough truth to open.
 
 ## Why It Works
 

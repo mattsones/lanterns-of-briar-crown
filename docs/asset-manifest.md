@@ -104,6 +104,7 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Lantern Road gameplay map | `lantern-road-gameplay-map-v02.webp` | Current clean production map; icon-free version of the winding road layout. |
 | Bramblecross town gameplay map | `bramblecross-town-map-v02.webp` | Practical, square, guarded town layout with a clearly painted cellar entrance in the left-center building. The interaction is aligned to logical tile `(3,5)`. |
 | Root Cellar gameplay map | `root-cellar-map-v01.webp` | Strong layout; Warden visibly blocks sealed door. |
+| Root Cellar cleared gameplay map | `root-cellar-no-boss-map-v01.webp` | Post-Warden state preserving the same landmarks and navigation alignment while replacing the boss with collapsed roots. Runtime swaps to this map immediately after victory. |
 | Westroot Trail gameplay map | `westroot-trail-map-v04.webp` | Current Chapter 2 production map; readable Shelter Nook, false notice, Three-Sign Hollow, Roadwatcher bend, and First Westroot Gate. |
 | Crown Door Den gameplay map | `crown-door-den-map-v01.webp` | Current Chapter 2 production map for the Roadwatcher signworks behind the Crown Door. Prompt lives in `docs/art/prompts/chapter-2-crown-door-and-three-doors.md`. |
 | Westroot Hub gameplay map | `westroot-hub-map-v01.webp` | Current Chapter 3 production map; connected gate bridge, Rootmarket, Mossgarden/Witness Stones, Split Hall, Cargo Siding, and Rootbread Hatch space. Source PNG is preserved in `assets/reference/source-art/`. |
@@ -127,6 +128,7 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Courier Satchel evidence | `courier-satchel-evidence-scene-v01.webp` | Selected Chapter 1 boar-reward scene; Lio's scuffed satchel, crooked false seal, brass badge, and blue-string lunch packet remain legible in the dialogue modal. |
 | Bramblecross Watchhouse case wall | `bramblecross-watchhouse-case-wall-scene-v01.webp` | Selected shared evidence master; full scene and focused crops cover the evidence board, duty ledger, wall map, and forged-orders file. |
 | Root Cellar evidence wall | `root-cellar-evidence-wall-scene-v01.webp` | Selected shared evidence master; separate crops distinguish the recent coercive Root Sigil from the older communal Route Mural. |
+| Chapter 1 ending tableau | `chapter-1-ending-the-road-that-lied-v01.webp` | Selected Chapter 1 completion scene; the fallen Warden, recovered chain, blue watch cloth, and sealed old-road door frame the discovery after the boss climax. |
 
 ## Map Tokens
 

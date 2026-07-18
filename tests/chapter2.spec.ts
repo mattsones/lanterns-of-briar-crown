@@ -109,6 +109,74 @@ async function loadChapter2BriefingCheckpoint(page) {
   await expect(page.getByRole("button", { name: "Inspect Road", exact: true })).toBeVisible();
 }
 
+test("Mossgirl's completed Three-Door save can open the No-Handle Door", async ({ page }) => {
+  await page.addInitScript(() => window.localStorage.clear());
+  await page.goto("/");
+  await page.getByRole("button", { name: "Load Save Slot" }).click();
+  await page.locator('input[type="file"]').setInputFiles("public/saves/mossgirl-westroot-trail 3Doors.json");
+
+  await expect(page.getByRole("heading", { name: MAPS.westrootTrail.name })).toBeVisible();
+
+  await page.getByRole("button", { name: "Move up" }).click();
+  await page.getByRole("button", { name: "Approach the No-Handle Door." }).click();
+  await expect(page.getByText("The door is ready—speak the old road phrase.")).toBeVisible();
+  const openDoor = page.getByRole("button", { name: /Say: A road is safest.*open the door/ });
+  await expect(openDoor).toContainText("The road is clear. Speaking the phrase will open the door.");
+  await expect(openDoor).toHaveClass(/border-emerald-300/);
+  await openDoor.click();
+  await expect(page.getByRole("dialog", { name: "The No-Handle Door Opens" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Step to the First Westroot Gate." })).toBeVisible();
+});
+
+test("visible Westroot and Crown Den encounters use enemy markers instead of clue markers", async ({ page, context }) => {
+  await loadChapter2Checkpoint(
+    page,
+    {},
+    { position: { x: 8, y: 2 }, expectedTile: "Road" },
+  );
+
+  await expect(page.locator('.map-token[title="Watched Road"] .map-token-enemy')).toHaveAttribute(
+    "src",
+    /briar-roadwatcher/,
+  );
+  await expect(page.locator('.map-token[title="False Detour Notice"]')).toHaveCount(0);
+
+  const payload = buildChapter2Checkpoint(
+    {
+      roadwatcherDefeated: true,
+      crownDoorKeyFound: true,
+      crownDoorDungeonEntered: true,
+    },
+    { x: 6, y: 4 },
+  );
+  payload.region = "crownDoorDen";
+  payload.position = { x: 1, y: 1 };
+  payload.visited = {
+    ...payload.visited,
+    crownDoorDen: buildVisitedMap("crownDoorDen", 1, 1, 9),
+  };
+  const denPage = await context.newPage();
+  await denPage.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: payload },
+  );
+  await denPage.goto("/");
+  await denPage.getByRole("button", { name: "Continue Checkpoint" }).click();
+
+  await expect(denPage.locator('.map-token[title="Collar Kennel"] .map-token-enemy')).toHaveAttribute(
+    "src",
+    /thorn-collared-hound/,
+  );
+  await expect(denPage.locator('.map-token[title="False Sign Guard"] .map-token-enemy')).toHaveAttribute(
+    "src",
+    /false-sign-scratcher/,
+  );
+  for (const title of ["Wax Table", "Slat Rack", "Witness Ledger Nook", "False Map Room"]) {
+    await expect(denPage.locator(`.map-token[title="${title}"]`)).toHaveCount(0);
+  }
+  await denPage.close();
+});
+
 test("title screen loads the checked-in Chapter 2 playtest save", async ({ page }) => {
   await page.addInitScript(() => window.localStorage.clear());
   await page.goto("/");
@@ -186,26 +254,29 @@ test("chapter two loaded saves refresh fog after westroot node normalization", a
   expect(stored.visited.westrootTrail["6,4"]).toBe(true);
 });
 
-test("chapter two briefing Edden drawing choice opens the recovery room", async ({ page }) => {
+test("chapter two briefing withholds Edden's drawing until he gives it to the player", async ({ page }) => {
   await loadChapter2BriefingCheckpoint(page);
 
   await page.keyboard.press("ArrowUp");
   await page.getByRole("button", { name: "Enter" }).click();
   await page.getByRole("button", { name: "Review the Westroot briefing" }).click();
-  await page.getByRole("button", { name: "What did Edden draw?" }).click();
+  const briefing = page.getByRole("dialog", { name: "Bramblecross Watchhouse" });
+  await expect(briefing.getByRole("button", { name: "Review Edden's drawing." })).toHaveCount(0);
+  await expect(briefing.getByRole("button", { name: "What did Edden draw?" })).toHaveCount(0);
+  await expect(briefing.getByTestId("dialogue-scene-image")).toHaveCount(0);
+
+  await briefing.getByRole("button", { name: "Visit Edden's recovery room." }).click();
+  await expect(page.getByText("Edden's Recovery Room", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Take Edden's three-door drawing." })).toBeVisible();
+  await page.getByRole("button", { name: "Take Edden's three-door drawing." }).click();
+  await page.getByRole("button", { name: "Review the Westroot briefing" }).click();
+  await page.getByRole("button", { name: "Review Edden's drawing." }).click();
   await expect(page.getByText("Edden's Drawing")).toBeVisible();
   await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute(
     "src",
     /eddens-three-door-drawing-scene-v01/,
   );
   await expect(page.getByText("THE HONEST ONE HAS NO HANDLE")).not.toBeVisible();
-
-  await page.getByRole("button", { name: "I should talk to Edden." }).click();
-  await expect(page.getByText("Edden's Recovery Room", { exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Take Edden's three-door drawing." })).toBeVisible();
-  await page.getByRole("button", { name: "Take Edden's three-door drawing." }).click();
-  await page.getByRole("button", { name: "Review the Westroot briefing" }).click();
-  await expect(page.getByRole("button", { name: "What exactly is Westroot?" })).toBeVisible();
 });
 
 test("chapter two Ada pre-briefing interaction opens a dialog", async ({ page }) => {
@@ -342,8 +413,256 @@ test("chapter two threshold supports trying each door", async ({ page }) => {
   await page.getByRole("button", { name: "Back to the threshold." }).click();
   await page.getByRole("button", { name: "Approach the Crown Door." }).click();
   await page.getByRole("button", { name: "Try the Crown Door." }).click();
-  await expect(page.getByText("False Crown Passage")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Mark this as a dangerous branch." })).toBeVisible();
+  await expect(page.getByText("The Crown Door Holds")).toBeVisible();
+  await expect(page.getByText(/It does not open/)).toBeVisible();
+  await expect(page.getByText("False Crown Passage")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Mark this as a dangerous branch." })).toHaveCount(0);
+});
+
+test("trusting the false Crown Sign reaches a sealed door without revealing the den", async ({ page }) => {
+  await loadChapter2Checkpoint(page);
+
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await page.getByRole("button", { name: "Approach the Crown Door." }).click();
+  await page.getByRole("button", { name: "Inspect the Crown Sign." }).click();
+  await page.getByRole("button", { name: "Test the false direction anyway." }).click();
+
+  await expect(page.getByRole("dialog", { name: "The Crown Door Holds" })).toBeVisible();
+  await expect(page.getByText(/The order brought you to a sealed wall and cost you time/)).toBeVisible();
+  await expect(page.getByText("False Crown Passage")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Return to the Crown Door." })).toBeVisible();
+  await page.getByRole("button", { name: "Return to the Crown Door." }).click();
+  await expect(page.getByRole("button", { name: "Try the Crown Door." })).toHaveCount(0);
+});
+
+test("the threshold groups short actions on wide screens and stacks them on phones", async ({ page }) => {
+  await page.setViewportSize({ width: 1400, height: 900 });
+  await loadChapter2Checkpoint(page);
+
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  const threshold = page.getByRole("dialog", { name: "Three-Door Threshold" });
+  const sceneImage = threshold.getByTestId("dialogue-scene-image");
+  const copy = threshold.getByTestId("dialogue-copy");
+  await expect(threshold.getByText(/The trail pinches between roots and old stone/)).toBeInViewport();
+
+  const desktopImageBox = await sceneImage.boundingBox();
+  const desktopCopyBox = await copy.boundingBox();
+  expect(desktopImageBox).not.toBeNull();
+  expect(desktopCopyBox).not.toBeNull();
+  expect(Math.abs(desktopImageBox.y - desktopCopyBox.y)).toBeLessThan(12);
+
+  const doorGroup = page.getByTestId("dialogue-choice-group-doors");
+  const doorButtons = doorGroup.getByRole("button");
+  await expect(doorButtons).toHaveCount(3);
+
+  const desktopBoxes = await doorButtons.evaluateAll((buttons) =>
+    buttons.map((button) => {
+      const box = button.getBoundingClientRect();
+      return { x: box.x, y: box.y, width: box.width };
+    }),
+  );
+  expect(Math.abs(desktopBoxes[0].y - desktopBoxes[1].y)).toBeLessThan(2);
+  expect(Math.abs(desktopBoxes[1].y - desktopBoxes[2].y)).toBeLessThan(2);
+  expect(desktopBoxes[0].x).toBeLessThan(desktopBoxes[1].x);
+  expect(desktopBoxes[1].x).toBeLessThan(desktopBoxes[2].x);
+
+  await page.setViewportSize({ width: 430, height: 932 });
+  await expect(threshold.getByText(/The trail pinches between roots and old stone/)).toBeInViewport();
+  const phoneImageBox = await sceneImage.boundingBox();
+  const phoneCopyBox = await copy.boundingBox();
+  expect(phoneImageBox).not.toBeNull();
+  expect(phoneCopyBox).not.toBeNull();
+  expect(phoneCopyBox.y).toBeLessThan(phoneImageBox.y);
+
+  const phoneBoxes = await doorButtons.evaluateAll((buttons) =>
+    buttons.map((button) => {
+      const box = button.getBoundingClientRect();
+      return { x: box.x, y: box.y, width: box.width };
+    }),
+  );
+  expect(phoneBoxes[0].y).toBeLessThan(phoneBoxes[1].y);
+  expect(phoneBoxes[1].y).toBeLessThan(phoneBoxes[2].y);
+  expect(Math.abs(phoneBoxes[0].x - phoneBoxes[1].x)).toBeLessThan(2);
+});
+
+test("cleaning the Lantern Sign awards XP once and becomes a review", async ({ page }) => {
+  await loadChapter2Checkpoint(page, { noHandleStoneInspected: true });
+
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await page.getByRole("button", { name: "Approach the Lantern Door." }).click();
+  await page.getByRole("button", { name: "Inspect the Lantern Sign." }).click();
+  await page.getByRole("button", { name: "Clean the Lantern Sign fully." }).click();
+
+  await expect(page.getByRole("button", { name: "Clean the Lantern Sign fully." })).toHaveCount(0);
+  await expect(page.getByText("4/32", { exact: true }).first()).toBeAttached();
+  await page.getByRole("button", { name: "Back to the Lantern Door." }).click();
+
+  await expect(page.getByRole("button", { name: "Inspect the Lantern Sign." })).toHaveCount(0);
+  await page.getByRole("button", { name: "Review the Lantern Sign." }).click();
+  await expect(page.getByRole("button", { name: "Clean the Lantern Sign fully." })).toHaveCount(0);
+  await expect(page.getByText("4/32", { exact: true }).first()).toBeAttached();
+});
+
+test("door closeups keep their text visible and compact related actions", async ({ page }) => {
+  await page.setViewportSize({ width: 1400, height: 900 });
+  await loadChapter2Checkpoint(page);
+
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+
+  const doorChecks = [
+    {
+      button: "Approach the Crown Door.",
+      name: "Crown Door",
+      visual: "dialogue-visual-crownDoor",
+      copy: /The Crown Door is tall, straight/,
+    },
+    {
+      button: "Approach the Lantern Door.",
+      name: "Lantern Door",
+      visual: "dialogue-visual-lanternDoor",
+      copy: /The Lantern Door is squat and weathered/,
+    },
+    {
+      button: "Approach the No-Handle Door.",
+      name: "No-Handle Door",
+      visual: "dialogue-visual-noHandleDoor",
+      copy: /The stone door has no handle/,
+    },
+  ];
+
+  for (const check of doorChecks) {
+    await page.getByRole("button", { name: check.button }).click();
+    const door = page.getByRole("dialog", { name: check.name });
+    const visual = door.getByTestId(check.visual);
+    const copy = door.getByTestId("dialogue-copy");
+    await expect(visual).toBeInViewport();
+    await expect(door.getByText(check.copy)).toBeInViewport();
+    await expect(door.getByText(check.name, { exact: true })).toHaveCount(1);
+
+    const visualBox = await visual.boundingBox();
+    const copyBox = await copy.boundingBox();
+    expect(visualBox).not.toBeNull();
+    expect(copyBox).not.toBeNull();
+    expect(Math.abs(visualBox.y - copyBox.y)).toBeLessThan(12);
+
+    if (check.name === "No-Handle Door") break;
+    await door.getByRole("button", { name: "Back to the threshold." }).click();
+  }
+
+  const noHandleDoor = page.getByRole("dialog", { name: "No-Handle Door" });
+  await expect(noHandleDoor.getByTestId("dialogue-choice-group-investigate").getByRole("button")).toHaveCount(2);
+  await expect(noHandleDoor.getByTestId("dialogue-choice-group-door-actions").getByRole("button")).toHaveCount(2);
+
+  await page.setViewportSize({ width: 430, height: 932 });
+  await expect(noHandleDoor.getByText(/The stone door has no handle/)).toBeInViewport();
+});
+
+test("stepping back from the threshold returns to the previous trail node", async ({ page }) => {
+  await loadChapter2Checkpoint(
+    page,
+    {},
+    { position: { x: 6, y: 6 }, expectedTile: "Road" },
+  );
+
+  await page.getByRole("button", { name: "Move up" }).click();
+  await expect(page.getByRole("dialog", { name: "Three-Door Threshold" })).toBeVisible();
+  await page.getByRole("button", { name: "Step back." }).click();
+
+  await expect(page.getByRole("button", { name: "Inspect Road", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Inspect Three-Door Threshold", exact: true })).toHaveCount(0);
+});
+
+test("companion door reads return to the door that launched them", async ({ page }) => {
+  const payload = buildChapter2Checkpoint();
+  payload.companion = {
+    ...buildDefaultCompanion(),
+    recruited: true,
+    id: "rowan",
+    name: "Rowan Reedshield",
+    hp: 18,
+    maxHp: 18,
+    style: "guardian",
+    role: "Guardian",
+  };
+  payload.flags.companionChosen = true;
+  payload.flags.companionChoice = "rowan";
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: payload },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+
+  const checks = [
+    {
+      approach: "Approach the Crown Door.",
+      name: "Crown Door",
+      ask: "Ask your companion about this door.",
+      back: "Back to the Crown Door.",
+    },
+    {
+      approach: "Approach the Lantern Door.",
+      name: "Lantern Door",
+      ask: "Ask your companion about this door.",
+      back: "Back to the Lantern Door.",
+    },
+    {
+      approach: "Approach the No-Handle Door.",
+      name: "No-Handle Door",
+      ask: "Ask your companion about this door.",
+      back: "Back to the No-Handle Door.",
+    },
+  ];
+
+  for (const check of checks) {
+    await page.getByRole("button", { name: check.approach }).click();
+    await page.getByRole("button", { name: check.ask }).click();
+    await page.getByRole("button", { name: check.back }).click();
+
+    const door = page.getByRole("dialog", { name: check.name });
+    await expect(door).toBeVisible();
+    await expect(door.getByRole("button", { name: check.ask })).toHaveCount(0);
+    if (check.name !== "No-Handle Door")
+      await door.getByRole("button", { name: "Back to the threshold." }).click();
+  }
+});
+
+test("a downed companion cannot read the Chapter 2 threshold or doors", async ({ page }) => {
+  const payload = buildChapter2Checkpoint();
+  payload.companion = {
+    ...buildDefaultCompanion(),
+    recruited: true,
+    id: "rowan",
+    name: "Rowan Reedshield",
+    hp: 0,
+    maxHp: 18,
+    style: "guardian",
+    role: "Guardian",
+  };
+  payload.flags.companionChosen = true;
+  payload.flags.companionChoice = "rowan";
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: payload },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+
+  await expect(
+    page.getByRole("button", { name: "Ask your companion for their read." }),
+  ).toHaveCount(0);
+
+  for (const door of ["Crown", "Lantern", "No-Handle"]) {
+    await page.getByRole("button", { name: `Approach the ${door} Door.` }).click();
+    await expect(
+      page.getByRole("button", { name: "Ask your companion about this door." }),
+    ).toHaveCount(0);
+    await page.getByRole("button", { name: "Back to the threshold." }).click();
+  }
 });
 
 test("chapter two shelter nook supports multiple local actions in one visit", async ({ page }) => {
@@ -436,8 +755,11 @@ test("chapter two clearing the Crown Door den lets the no-handle door open", asy
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
   await page.getByRole("button", { name: "Approach the No-Handle Door." }).click();
-  await expect(page.getByText("The inscription feels warmer now.")).toBeVisible();
-  await page.getByRole("button", { name: /Say: A road is safest/ }).click();
+  await expect(page.getByText("The door is ready—speak the old road phrase.")).toBeVisible();
+  const openDoor = page.getByRole("button", { name: /Say: A road is safest.*open the door/ });
+  await expect(openDoor).toContainText("The road is clear. Speaking the phrase will open the door.");
+  await expect(openDoor).toHaveClass(/border-emerald-300/);
+  await openDoor.click();
   await expect(page.getByText("The No-Handle Door Opens", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Step to the First Westroot Gate." }).click();
   await expect(page.getByText("First Westroot Gate")).toBeVisible();
@@ -528,4 +850,90 @@ test("chapter two roadwatcher back away returns to the previous trail node", asy
 
   await page.getByRole("button", { name: "Back away." }).click();
   await expect(page.getByRole("button", { name: "Inspect Road", exact: true })).toBeVisible();
+});
+
+test("the return trip can copy the Westward Cut after it was studied outbound", async ({ page }) => {
+  await loadChapter2Checkpoint(
+    page,
+    {
+      noHandleStoneInspected: true,
+      westrootCutStudied: true,
+      westrootCutCopied: false,
+    },
+    { position: { x: 1, y: 3 }, expectedTile: "Old Westward Cut" },
+  );
+
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Copy the old route mark." })).toBeVisible();
+  await page.getByRole("button", { name: "Copy the old route mark." }).click();
+  await expect(page.getByText("You copy the old route mark. XP +4")).toBeVisible();
+});
+
+test("early No-Handle questions remain resolvable after their matching clues are found", async ({ page }) => {
+  await loadChapter2Checkpoint(page, {
+    noHandleStoneInspected: true,
+    noHandleDoorStudied: true,
+    maraAskedNoHandleMark: true,
+    lioShelterMarkFound: true,
+    lioHookMarkFound: false,
+    eddenDrawingComparedAtDoor: true,
+    lanternSignCleaned: true,
+    eddensDrawingValidated: false,
+  });
+
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await page.getByRole("button", { name: "Approach the No-Handle Door." }).click();
+  await expect(page.getByRole("button", { name: "Ask Mara to compare the shelter mark." })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Compare Edden's drawing with the cleaned sign." })).toBeVisible();
+
+  await page.getByRole("button", { name: "Ask Mara to compare the shelter mark." }).click();
+  await expect(page.getByText(/Mara matches the tiny hook-tail/i)).toBeVisible();
+  await expect(page.getByRole("button", { name: "Ask Mara to compare the shelter mark." })).toHaveCount(0);
+
+  await page.getByRole("button", { name: "Compare Edden's drawing with the cleaned sign." }).click();
+  await expect(page.getByText(/drawing/i)).toBeVisible();
+  await expect(page.getByRole("button", { name: "Compare Edden's drawing with the cleaned sign." })).toHaveCount(0);
+});
+
+test("spent Crown and Lantern Door opinions are not offered again", async ({ page }) => {
+  const companion = {
+    ...buildDefaultCompanion(),
+    recruited: true,
+    id: "rowan",
+    name: "Rowan Reedshield",
+    hp: 18,
+    maxHp: 18,
+    style: "guardian",
+    role: "Guardian",
+  };
+  const payload = buildChapter2Checkpoint({
+    maraQuestionedCrownDoor: true,
+    companionReadCrownDoor: true,
+    maraQuestionedLanternDoor: true,
+    companionReadLanternDoor: true,
+    lanternDoorTried: true,
+  });
+  payload.companion = companion;
+  payload.flags.companionChosen = true;
+  payload.flags.companionChoice = "rowan";
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: payload },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+
+  await page.getByRole("button", { name: "Approach the Crown Door." }).click();
+  let door = page.getByRole("dialog", { name: "Crown Door" });
+  await expect(door.getByRole("button", { name: /Ask Mara/ })).toHaveCount(0);
+  await expect(door.getByRole("button", { name: /Ask your companion/ })).toHaveCount(0);
+  await door.getByRole("button", { name: "Back to the threshold." }).click();
+
+  await page.getByRole("button", { name: "Approach the Lantern Door." }).click();
+  door = page.getByRole("dialog", { name: "Lantern Door" });
+  await expect(door.getByRole("button", { name: /Ask Mara/ })).toHaveCount(0);
+  await expect(door.getByRole("button", { name: /Ask your companion/ })).toHaveCount(0);
+  await expect(door.getByRole("button", { name: /Try the Lantern Door/ })).toHaveCount(0);
 });

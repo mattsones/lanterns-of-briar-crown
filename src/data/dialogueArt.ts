@@ -20,12 +20,21 @@ const rootCellarEvidenceWallScene = new URL(
   "../../assets/scenes/root-cellar-evidence-wall-scene-v01.webp",
   import.meta.url,
 ).href;
+const chapterOneEndingScene = new URL(
+  "../../assets/scenes/chapter-1-ending-the-road-that-lied-v01.webp",
+  import.meta.url,
+).href;
 const briarCrownPrimaryMark = new URL(
   "../../assets/icons/ui/briar-crown-primary-mark-v01.png",
   import.meta.url,
 ).href;
 
 export const DIALOGUE_SCENE_ART: Record<string, DialogueSceneArt> = {
+  chapterOneEnding: {
+    id: "chapter-one-ending",
+    src: chapterOneEndingScene,
+    alt: "The defeated Briar Knot Warden collapsed before the sealed old-road door beneath Bramblecross",
+  },
   courierSatchel: {
     id: "courier-satchel",
     src: courierSatchelScene,

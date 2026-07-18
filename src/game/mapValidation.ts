@@ -46,6 +46,15 @@ export const REQUIRED_GRAPH_LANDMARKS: Record<string, string[]> = {
     "roadwatcher",
     "no_handle_stone",
   ],
+  westrootHub: [
+    "westroot_first_gate",
+    "rootmarket",
+    "mossgarden",
+    "witness_stones",
+    "rootbread_hatch",
+    "cargo_siding",
+    "split_hall",
+  ],
   crownDoorDen: [
     "crown_den_exit",
     "crown_vestibule",

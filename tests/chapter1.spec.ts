@@ -69,6 +69,26 @@ function buildChapterOneClimaxCheckpoint() {
   };
 }
 
+function buildPostWardenDoorCheckpoint(companionHp: number) {
+  const checkpoint = buildChapterOneClimaxCheckpoint();
+  return {
+    ...checkpoint,
+    position: { x: 10, y: 4 },
+    visited: {
+      ...checkpoint.visited,
+      rootCellar: buildVisitedMap("rootCellar", 10, 4, 3),
+    },
+    companion: {
+      ...checkpoint.companion,
+      hp: companionHp,
+    },
+    flags: {
+      ...checkpoint.flags,
+      beatCellarBoss: true,
+    },
+  };
+}
+
 function buildPostBoarElderCheckpoint() {
   const player = buildPlayer({
     name: "Liam",
@@ -203,6 +223,24 @@ test("the village well dialogue only opens on the first visit", async ({ page })
   await expect(
     page.getByText("The village well continues to sit exactly where you left it."),
   ).toBeVisible();
+});
+
+test("the cellar marks hidden-path enemies but not the guardian painted into the map", async ({ page }) => {
+  const checkpoint = buildChapterOneClimaxCheckpoint();
+  checkpoint.position = { x: 8, y: 5 };
+  checkpoint.visited.rootCellar = buildVisitedMap("rootCellar", 8, 5, 12);
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+
+  await expect(page.locator('.map-token[title="Rustroot Skulk"] .map-token-enemy')).toHaveAttribute(
+    "src",
+    /rustroot-skulk/,
+  );
+  await expect(page.locator('.map-token[title="Cellar Guardian"]')).toHaveCount(0);
 });
 
 test("the forged-order reveal happens when the satchel is returned to Elder Brynn", async ({ page }) => {
@@ -475,6 +513,28 @@ test("Bramblecross points the player to the watchhouse and aligns the notice boa
   ).toBeVisible();
 });
 
+test("Mayor Anwen stops warning about the cellar after the Chapter 1 report", async ({ page }) => {
+  const mayorCheckpoint = buildBramblecrossInvestigationCheckpoint();
+  mayorCheckpoint.position = { x: 4, y: 3 };
+  mayorCheckpoint.flags.chapterOneClear = true;
+  mayorCheckpoint.flags.chapterReported = true;
+  mayorCheckpoint.flags.chapterTwoStarted = true;
+  mayorCheckpoint.flags.chapterTwoBriefed = true;
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: mayorCheckpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByTestId("move-down").click();
+
+  const mayorDialogue = page.getByRole("dialog", { name: "Mayor Anwen" });
+  await expect(mayorDialogue).toContainText("looks west instead of toward the cellar");
+  await expect(mayorDialogue).toContainText("Follow the Westroot lead");
+  await expect(mayorDialogue).not.toContainText("Go carefully");
+});
+
 test("Hollis explains why the cellar notices matter before sending anyone below", async ({ page }) => {
   const checkpoint = buildBramblecrossInvestigationCheckpoint();
   checkpoint.flags.readBoard = false;
@@ -708,7 +768,104 @@ test("the Companion menu connects every battle order to its named ability", asyn
   await expect(preview).toContainText("1d4 damage and 2 Guard");
 });
 
-test("chapter one golden path completes the Warden, cellar proof, and report-back", async ({ page }) => {
+test("a downed companion does not offer cellar-door reactions", async ({ page }) => {
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: buildPostWardenDoorCheckpoint(0) },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+
+  const door = page.getByRole("dialog", { name: "Sealed Iron Door" });
+  await expect(door).toBeVisible();
+  await expect(door.getByRole("button", { name: /Ask Rowan Reedshield/ })).toHaveCount(0);
+});
+
+test("a living companion can discuss the door after the proof is taken", async ({ page }) => {
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: buildPostWardenDoorCheckpoint(60) },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await page.getByRole("button", { name: "Take the Warden Chain and Edden's cloth." }).click();
+
+  let ending = page.getByRole("dialog", { name: "Chapter 1 Complete: The Road That Lied" });
+  await ending.getByRole("button", { name: "Ask Rowan Reedshield about the door." }).click();
+  const reaction = page.getByRole("dialog", { name: "Rowan Reedshield" });
+  await expect(reaction).toBeVisible();
+  await reaction.getByRole("button", { name: "Return to the chapter ending." }).click();
+
+  ending = page.getByRole("dialog", { name: "Chapter 1 Complete: The Road That Lied" });
+  await expect(ending.getByRole("button", { name: "Return with the truth." })).toBeVisible();
+  await expect(
+    ending.getByRole("button", { name: "Ask Rowan Reedshield about the door." }),
+  ).toHaveCount(0);
+});
+
+test("a battle item revives a downed companion in time for their next turn", async ({ page }) => {
+  const checkpoint = buildChapterOneClimaxCheckpoint();
+  checkpoint.companion.hp = 0;
+  checkpoint.player.battlePouch = {
+    ...checkpoint.player.battlePouch,
+    slot1: "healing_fizzpop",
+  };
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await page.getByRole("button", { name: "Stand and fight." }).click();
+  await page.getByRole("button", { name: "Items", exact: true }).click();
+  await page.getByRole("button", { name: "Give to Rowan Reedshield" }).click();
+
+  await page.getByText("Recent Events", { exact: true }).click();
+  await expect(
+    page.getByText(/Rowan Reedshield uses Linebreaker/).last(),
+  ).toBeVisible({ timeout: 3000 });
+});
+
+test("a downed companion receives no victory XP", async ({ page }) => {
+  const checkpoint = buildChapterOneClimaxCheckpoint();
+  checkpoint.companion.hp = 0;
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await page.getByRole("button", { name: "Stand and fight." }).click();
+
+  const attack = page.getByRole("button", { name: /Scrappy Chop/ });
+  for (let turn = 0; turn < 30; turn += 1) {
+    const claim = page.getByRole("button", { name: "Claim Victory" });
+    if (await claim.count()) {
+      await claim.first().click();
+      break;
+    }
+    if (await attack.isEnabled().catch(() => false)) await attack.click();
+    await page.waitForTimeout(900);
+  }
+
+  await expect(page.getByText("Briar Knot Warden", { exact: true })).toBeVisible();
+  await expect(page.getByText(/Rowan Reedshield gains .* companion XP/)).toHaveCount(0);
+  await page.getByRole("button", { name: "Approach the sealed door." }).click();
+  await expect(page.getByRole("dialog", { name: "Sealed Iron Door" })).toBeVisible();
+  await page.getByRole("button", { name: "Take the Warden Chain and Edden's cloth." }).click();
+  await page.getByRole("button", { name: "Return with the truth." }).click();
+  await page.getByTestId("open-adventure-menu").click();
+  await page.getByRole("button", { name: "Companion", exact: true }).click();
+  await expect(page.getByText(/Companion XP: 0/)).toBeVisible();
+});
+
+test("chapter one golden path completes at the cellar proof and folds the report into the Westroot briefing", async ({ page }) => {
   const runtimeErrors: string[] = [];
   page.on("console", (message) => {
     if (message.type() === "error") runtimeErrors.push(message.text());
@@ -738,17 +895,29 @@ test("chapter one golden path completes the Warden, cellar proof, and report-bac
   }
 
   await expect(page.getByText("Briar Knot Warden", { exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "Continue" }).click();
-  await page.getByTestId("move-right").click();
+  await page.getByRole("button", { name: "Approach the sealed door." }).click();
+  await expect(page.getByTestId("map-background")).toHaveAttribute(
+    "src",
+    /root-cellar-no-boss-map-v01/,
+  );
   await expect(page.getByRole("dialog", { name: "Sealed Iron Door", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Step back for now." })).toHaveCount(0);
   await page.getByRole("button", { name: "Study the Briar Crown mark." }).click();
   await expect(
     page.getByRole("dialog").locator('[data-art-key="briar-crown-mark"]'),
   ).toBeVisible();
   await page.getByRole("button", { name: "Take the Warden Chain and Edden's cloth." }).click();
   await expect(
-    page.getByText("Chapter 1 discovery complete. Report back to Hollis and Enna.").first(),
+    page.getByRole("dialog", { name: "Chapter 1 Complete: The Road That Lied" }),
   ).toBeVisible();
+  await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute(
+    "src",
+    /chapter-1-ending-the-road-that-lied-v01/,
+  );
+  await expect(
+    page.getByText("Chapter 1 complete. Report back to Hollis and Enna.").first(),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Return with the truth." }).click();
 
   await page.getByTestId("open-adventure-menu").click();
   await page.getByText("More", { exact: true }).click();
@@ -770,10 +939,134 @@ test("chapter one golden path completes the Warden, cellar proof, and report-bac
       .locator('[data-art-key="briar-crown-mark"]'),
   ).toBeVisible();
   await page.getByRole("button", { name: "Ask about Westroot." }).click();
+  await expect(page.getByText("Mara Brindle knows Lio's private courier marks.")).toBeVisible();
   await page.getByRole("button", { name: "I'll follow Westroot." }).click();
 
   await expect(
-    page.getByText("Chapter 1 Complete: The Road That Lied", { exact: true }),
+    page.getByRole("dialog", { name: "Chapter 2: The Westroot Trail" }),
   ).toBeVisible();
+  await expect(page.getByText("The report and the plan have become the same piece of work.")).toBeVisible();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.getByRole("button", { name: "Call Mara to the table" })).toBeVisible();
+  await expect(page.getByTestId("chapter-one-case-archive")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Study the completed evidence board" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Read the duty ledger" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Examine the wall map" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Read the forged orders file" })).toHaveCount(0);
   expect(runtimeErrors).toEqual([]);
+});
+
+test("cellar stairs return to the painted Bramblecross entrance", async ({ page }) => {
+  const checkpoint = buildChapterOneClimaxCheckpoint();
+  checkpoint.position = { x: 0, y: 1 };
+  checkpoint.visited.rootCellar = buildVisitedMap("rootCellar", 0, 1, 2);
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+
+  await expect(page.getByRole("heading", { name: "Bramblecross" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Inspect Old Root Cellar", exact: true })).toBeVisible();
+});
+
+test("a post-Warden cellar cannot be exited before the sealed-door proof", async ({ page }) => {
+  const checkpoint = buildPostWardenDoorCheckpoint(60);
+  checkpoint.position = { x: 0, y: 1 };
+  checkpoint.visited.rootCellar = buildVisitedMap("rootCellar", 0, 1, 2);
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+
+  await expect(page.getByRole("heading", { name: "Old Root Cellar" })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Sealed Iron Door" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Step back for now." })).toHaveCount(0);
+});
+
+test("an older post-Warden save outside the cellar returns directly to the sealed door", async ({ page }) => {
+  const checkpoint = buildPostWardenDoorCheckpoint(60);
+  checkpoint.region = "bramblecross";
+  checkpoint.position = { x: 3, y: 5 };
+  checkpoint.visited.bramblecross = buildVisitedMap("bramblecross", 3, 5, 2);
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+
+  await expect(page.getByText("The investigation is not finished")).toBeVisible();
+  await page.getByRole("button", { name: "Return to the sealed door." }).click();
+  await expect(page.getByRole("heading", { name: "Old Root Cellar" })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Sealed Iron Door" })).toBeVisible();
+});
+
+test("the active companion cannot be recruited again and keeps progress after waiting at the inn", async ({ page }) => {
+  const checkpoint = buildBramblecrossInvestigationCheckpoint();
+  checkpoint.position = { x: 2, y: 3 };
+  checkpoint.visited.bramblecross = buildVisitedMap("bramblecross", 2, 3, 3);
+  checkpoint.companion = {
+    ...buildDefaultCompanion(),
+    recruited: true,
+    id: "rowan",
+    name: "Rowan Reedshield",
+    hp: 18,
+    maxHp: 18,
+    level: 2,
+    xp: 23,
+    style: "guardian",
+    role: "Guardian",
+  };
+  checkpoint.flags.companionChosen = true;
+  checkpoint.flags.companionChoice = "rowan";
+  checkpoint.flags.rowanStatus = "joined";
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByTestId("move-up").click();
+  await page.getByRole("button", { name: "Enter" }).click();
+
+  await expect(page.getByRole("button", { name: "Traveling" })).toBeDisabled();
+  await page.getByRole("button", { name: "Ask current companion to wait here" }).click();
+  await page.getByRole("button", { name: "Travel together" }).click();
+  await page.getByRole("button", { name: "Welcome back." }).click();
+  await page.getByTestId("open-adventure-menu").click();
+  await page.getByRole("button", { name: "Companion", exact: true }).click();
+
+  await expect(page.getByText(/Companion XP: 23/)).toBeVisible();
+  await expect(page.getByText(/Guardian.*Lv 2/)).toBeVisible();
+});
+
+test("the searched pond no longer offers another one-time search", async ({ page }) => {
+  const checkpoint = buildRoadCampCheckpoint();
+  checkpoint.position = { x: 2, y: 6 };
+  checkpoint.visited.lanternRoad = buildVisitedMap("lanternRoad", 2, 6, 2);
+  checkpoint.flags.pondVisited = true;
+  checkpoint.flags.pondForaged = true;
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+
+  const pond = page.getByRole("dialog", { name: "Pond Edge" });
+  await expect(pond.getByRole("button", { name: "Search the pond edge carefully." })).toHaveCount(0);
+  await expect(pond.getByRole("button", { name: "Leave the pond alone." })).toBeVisible();
 });

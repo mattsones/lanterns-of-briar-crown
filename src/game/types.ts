@@ -30,9 +30,14 @@ export type GameFlags = {
   marketDiscount: boolean;
   ennaBriefed: boolean;
   watchEvidenceRead: boolean;
+  watchBoardRead: boolean;
   watchLedgerRead: boolean;
   watchMapRead: boolean;
   watchOrdersRead: boolean;
+  watchBoardCheckSucceeded: boolean;
+  watchLedgerCheckSucceeded: boolean;
+  watchMapCheckSucceeded: boolean;
+  watchOrdersCheckSucceeded: boolean;
   heardAboutEdden: boolean;
   askedHollisAboutEdden: boolean;
   gotDungeonLead: boolean;
@@ -43,6 +48,7 @@ export type GameFlags = {
   harvestedCellarFungus: boolean;
   beatCellarSkulk: boolean;
   beatCellarBoss: boolean;
+  cellarCompanionDoorReactionHeard: boolean;
   chapterOneClear: boolean;
   cellarEndChoice: string | null;
   chapterReported: boolean;
@@ -50,6 +56,9 @@ export type GameFlags = {
   rowanStatus: CompanionStatus;
   tildaStatus: CompanionStatus;
   mossStatus: CompanionStatus;
+  rowanRecruitmentCheckAttempted: boolean;
+  tildaRecruitmentCheckAttempted: boolean;
+  mossRecruitmentCheckAttempted: boolean;
   companionChosen: boolean;
   companionChoice: CompanionId | null;
   helpedTraveler: boolean;
@@ -62,6 +71,12 @@ export type GameFlags = {
   usedShrine: boolean;
   sawShrine: boolean;
   foundShrineSecret: boolean;
+  shrineStudyAttempted: boolean;
+  shrineStudySucceeded: boolean;
+  cartTrackCheckAttempted: boolean;
+  cartTrackCheckSucceeded: boolean;
+  briarCrownCheckAttempted: boolean;
+  briarCrownCheckSucceeded: boolean;
   sawRoadCamp: boolean;
   chapterTwoStarted: boolean;
   chapterTwoBriefed: boolean;
@@ -72,6 +87,7 @@ export type GameFlags = {
   adaSealLessonComplete: boolean;
   maraJob: MaraJob;
   westrootCutStudied: boolean;
+  westrootCutCopied: boolean;
   brokenSealWaxFound: boolean;
   shelterNoticeRemoved: boolean;
   shelterRested: boolean;
@@ -103,12 +119,14 @@ export type GameFlags = {
   crownDenHoundFreed: boolean;
   crownDenHoundDefeated: boolean;
   maraQuestionedCrownDoor: boolean;
+  companionReadCrownDoor: boolean;
   willowForgeryConfirmedAtHollow: boolean;
   lanternSignCleaned: boolean;
   lanternSignCompared: boolean;
   understandsTrueSigns: boolean;
   lanternDoorTried: boolean;
   maraQuestionedLanternDoor: boolean;
+  companionReadLanternDoor: boolean;
   eddensDrawingRotated: boolean;
   maraWatchedLantern: boolean;
   maraConsultedAtThreshold: boolean;
@@ -143,6 +161,9 @@ export type GameFlags = {
   chapterThreeStarted: boolean;
   metBramwell: boolean;
   metNoma: boolean;
+  nomaAskedNames: boolean;
+  nomaAskedCourier: boolean;
+  nomaAskedGate: boolean;
   metQuill: boolean;
   metAuntieLume: boolean;
   metRootbreadChild: boolean;
@@ -232,6 +253,8 @@ export type Companion = {
   [key: string]: unknown;
 };
 
+export type CompanionRoster = Partial<Record<CompanionId, Companion>>;
+
 export type GuestNpcId = "mara";
 
 export type GuestNpc = {
@@ -253,6 +276,7 @@ export type SavePayload = {
   position: Position;
   visited: Record<string, Record<string, boolean>>;
   companion: Companion;
+  companionRoster?: CompanionRoster;
   guestNpc?: GuestNpc | null;
   flags: Flags;
   quest: unknown;

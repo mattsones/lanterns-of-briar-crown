@@ -59,12 +59,13 @@ export const CHAPTER_2_SCENE_COPY = {
       unlocked:
         "The Crown Door is tall, straight, and marked with a polished crown seal. The split slat from the Roadwatcher fits a narrow notch under the seal, where a keyhole was pretending to be decoration.",
       tried:
-        "The Crown Door is still open a crack. Cold air moves behind it, carrying the smell of wet roots and scraped wax. Something in there feels real, but the latch has not admitted you yet.",
+        "The Crown Door has not moved. Its polished seal hides a narrow notch, but nothing you carry fits it yet.",
       default:
-        "The Crown Door is tall, straight, and marked with a polished crown seal. The passage behind it slopes down instead of forward, vanishing into a colder root-tunnel.",
+        "The Crown Door is tall, straight, and marked with a polished crown seal. It offers no view through, only the confidence of something that expects to be obeyed.",
     },
     labels: {
       inspectSign: "Inspect the Crown Sign.",
+      reviewSign: "Review the Crown Sign.",
       returnDen: "Return to the Crown Door Den.",
       openWithSlat: "Open the Crown Door with the split slat.",
       tryDoor: "Try the Crown Door.",
@@ -76,15 +77,18 @@ export const CHAPTER_2_SCENE_COPY = {
     maraRead:
       "\"Lio hates signs that sound like scolding,\" Mara says. \"He would write who it helps, or what it warns about. This one just wants to be obeyed.\"",
   },
-  falseCrownPassage: {
-    name: "False Crown Passage",
-    text:
-      "The Crown Door leads into a narrow root passage, colder than the trail and much too quiet. The floor drops toward a lower chamber where seal-cloth hangs from thorns like warning flags.\n\nIt is a real way, but not Lio's way. Not the quick one. Not the one Mara is trying not to cry about.",
+  blockedCrownDoor: {
+    name: "The Crown Door Holds",
+    text: {
+      tried:
+        "You push against the Crown Door. It does not open—not even a crack. The polished seal is colder than the surrounding stone, and a narrow notch hides beneath its lower edge. Whatever opens this door is not here yet.",
+      trustedSign:
+        "You follow the Crown Sign's straight command and put your weight against the door. It does not open—not even a crack. The order brought you to a sealed wall and cost you time. Mara looks back toward the quieter marks you passed.",
+    },
     labels: {
-      markDanger: "Mark this as a dangerous branch.",
+      returnDoor: "Return to the Crown Door.",
       returnThreshold: "Return to the threshold.",
     },
-    markedToast: "The Crown Door is real, but something else holds its latch.",
   },
   crownDoorDen: {
     enterTravelText:
@@ -214,6 +218,7 @@ export const CHAPTER_2_SCENE_COPY = {
     },
     labels: {
       inspectSign: "Inspect the Lantern Sign.",
+      reviewSign: "Review the Lantern Sign.",
       tryDoor: "Try the Lantern Door.",
       askMara: "Ask Mara about the Lantern Door.",
       askCompanion: "Ask your companion about this door.",
@@ -441,7 +446,7 @@ export function getCrownDoorText(flags: Flags = {}, canOpenDen = false) {
   const copy = CHAPTER_2_SCENE_COPY.crownDoor.text;
   if (flags.crownDoorDungeonCleared) return copy.cleared;
   if (canOpenDen) return copy.unlocked;
-  if (flags.enteredFalseCrownPassage) return copy.tried;
+  if (flags.crownDoorTried || flags.enteredFalseCrownPassage) return copy.tried;
   return copy.default;
 }
 
@@ -582,8 +587,7 @@ export function getWestrootDoorRepairState(flags: Flags = {}, assumedFlags: Flag
   const eddenDrawingAligned = !!(
     merged.eddensDrawingRotated ||
     merged.lanternSignCompared ||
-    merged.eddensDrawingValidated ||
-    (merged.eddenDrawingComparedAtDoor && merged.lanternSignCleaned)
+    merged.eddensDrawingValidated
   );
   const crownFalsehoodCleared = !!merged.crownDoorDungeonCleared;
   const roadwatcherDefeated = !!merged.roadwatcherDefeated;

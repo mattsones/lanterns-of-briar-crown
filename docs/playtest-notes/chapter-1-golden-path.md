@@ -302,12 +302,15 @@ Expected:
 - Warden blocks door.
 - Fight resolves cleanly.
 - Reward appears.
-- Sealed Door becomes meaningful after victory.
+- The reward action moves directly into the Sealed Door dialogue.
+- The player cannot return to exploration before collecting the Warden Chain and Edden's cloth.
+- Older/in-progress saves with the Warden defeated but the proof uncollected are redirected from the cellar stairs back to the Sealed Door.
+- If such a save is already outside, the cellar entrance offers **Return to the sealed door** and opens the unfinished reveal directly.
 
 ## Sealed Door
 
 1. Inspect before Warden.
-2. Inspect after Warden.
+2. Defeat the Warden and use the mandatory **Approach the sealed door** reward action.
 3. Study Briar Crown mark.
 4. Take Warden Chain and Edden’s cloth.
 

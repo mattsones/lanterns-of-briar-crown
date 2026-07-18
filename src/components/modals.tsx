@@ -7,7 +7,10 @@ import { BATTLE_CONSUMABLES, ITEM_DB } from "../data/items";
 import { MAPS } from "../data/maps";
 import { getDialoguePortrait } from "../data/portraits";
 import { RECIPE_DB } from "../data/recipes";
-import { getCompanionCommandHint } from "../game/companions";
+import {
+  getCompanionCommandHint,
+  isCompanionConscious,
+} from "../game/companions";
 import { checkSummary, resolveSkillCheck } from "../game/dice";
 import { canCraftRecipe, formatIngredients, gainItem, getBuyPrice, getItemHighlights, getSellPrice } from "../game/inventory";
 import { formatSaveTimestamp } from "../game/save";
@@ -314,7 +317,7 @@ export function LevelUpModal({ player, target, choose }) {
   </div>;
 }
 
-function DialogueVisual({ kind }) {
+function DialogueVisual({ kind, compact = false }) {
   const doors = [
     {
       key: "crownDoor",
@@ -392,22 +395,20 @@ function DialogueVisual({ kind }) {
   if (!singleDoor) return null;
 
   return (
-    <figure className="mt-4 overflow-hidden rounded-3xl border border-emerald-300/20 bg-emerald-950/30">
+    <figure
+      className={`${compact ? "mt-0 rounded-2xl" : "mt-4 rounded-3xl"} overflow-hidden border border-emerald-300/20 bg-emerald-950/30`}
+    >
       <img
         data-testid={`dialogue-visual-${kind}`}
         src={singleDoor.src}
         alt={singleDoor.alt}
-        className="aspect-[4/3] max-h-[58vh] w-full object-cover"
+        className={`${compact ? "max-h-[22rem]" : "max-h-[58vh]"} aspect-[4/3] w-full object-cover`}
       />
-      <figcaption className="border-t border-white/10 bg-black/20 px-4 py-3">
-        <div className="text-base font-semibold text-white/85">{singleDoor.title}</div>
-        <div className="mt-1 text-xs uppercase tracking-wide text-white/45">{singleDoor.mark}</div>
-      </figcaption>
     </figure>
   );
 }
 
-function DialogueSceneImage({ image }) {
+function DialogueSceneImage({ image, compact = false }) {
   if (!image?.src) return null;
 
   const focusX = image.focusX ?? 50;
@@ -418,7 +419,7 @@ function DialogueSceneImage({ image }) {
   return (
     <figure
       data-art-key={image.id}
-      className={`relative mt-4 overflow-hidden rounded-xl border border-white/10 ${isEmblem ? "aspect-[5/2] bg-[radial-gradient(circle_at_center,_rgba(127,29,29,0.28),_rgba(2,6,23,0.72)_68%)]" : "aspect-video bg-black/20"}`}
+      className={`relative overflow-hidden rounded-xl border border-white/10 ${compact ? "mt-0" : "mt-4"} ${isEmblem ? "aspect-[5/2] bg-[radial-gradient(circle_at_center,_rgba(127,29,29,0.28),_rgba(2,6,23,0.72)_68%)]" : "aspect-video bg-black/20"}`}
     >
       <img
         data-testid="dialogue-scene-image"
@@ -478,9 +479,31 @@ export function DialogueModal({ dialogue, close }) {
   const sceneImage = dialogue.sceneImage || getDialogueSceneArt(dialogue.artKey);
   const hasMapVignette = Boolean(MAP_INTERACTION_VIGNETTES[dialogue.mapVignette]);
   const showPortrait = Boolean(portraitImage || portraitAsset) && !hasMapVignette && !dialogue.visual && !sceneImage;
+  const usesSplitVisual = dialogue.contentLayout === "split" && Boolean(dialogue.visual);
+  const usesSplitScene = dialogue.contentLayout === "split" && Boolean(sceneImage);
   const widthClass = dialogue.size === "wide" || dialogue.visual || sceneImage ? "max-w-5xl" : "max-w-3xl";
+  const choiceRows = dialogue.choices.reduce((rows, choice, index) => {
+    const choiceGroup = dialogue.choiceLayout === "grouped" ? choice.choiceGroup : null;
+    const existingRow = choiceGroup ? rows.find((row) => row.group === choiceGroup) : null;
+    if (existingRow) {
+      existingRow.choices.push(choice);
+      return rows;
+    }
+    rows.push({
+      id: choiceGroup ? `group-${choiceGroup}` : `choice-${index}`,
+      group: choiceGroup,
+      choices: [choice],
+    });
+    return rows;
+  }, []);
   const scrollRef = useRef(null);
   const modalRef = useModalAccessibility(close);
+  const dialogueCopy = (
+    <div data-testid="dialogue-copy" className="min-w-0">
+      {dialogue.messages ? <div className="mt-3 space-y-2">{dialogue.messages.map((m, i) => <div key={`${m.speaker}-${i}`} className={`flex ${m.side === "right" ? "justify-end" : "justify-start"}`}><div className={`max-w-[85%] rounded-2xl px-4 py-3 text-base leading-7 ${m.side === "right" ? "bg-emerald-500/20" : "bg-white/10 text-white/85"}`}><div className="mb-1 text-[10px] uppercase tracking-wide text-white/50">{m.speaker}</div><div>{m.text}</div></div></div>)}</div> : <div className="mt-2 whitespace-pre-line text-base leading-7 text-white/85">{dialogue.text}</div>}
+      {dialogue.feedback ? <div role="status" data-testid="dialogue-feedback" className="mt-4 rounded-2xl border border-emerald-300/20 bg-emerald-500/10 px-4 py-3 text-sm leading-6 text-emerald-100">{dialogue.feedback}</div> : null}
+    </div>
+  );
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: 0 });
@@ -498,14 +521,54 @@ export function DialogueModal({ dialogue, close }) {
           <div className="min-w-0 flex-1">
             <div id="dialogue-title" className="text-xl font-semibold">{dialogue.name}</div>
             {hasMapVignette ? <DialogueMapVignette kind={dialogue.mapVignette} /> : null}
-            {sceneImage ? <DialogueSceneImage image={sceneImage} /> : null}
-            {dialogue.visual ? <DialogueVisual kind={dialogue.visual} /> : null}
-            {dialogue.messages ? <div className="mt-3 space-y-2">{dialogue.messages.map((m, i) => <div key={`${m.speaker}-${i}`} className={`flex ${m.side === "right" ? "justify-end" : "justify-start"}`}><div className={`max-w-[85%] rounded-2xl px-4 py-3 text-base leading-7 ${m.side === "right" ? "bg-emerald-500/20" : "bg-white/10 text-white/85"}`}><div className="mb-1 text-[10px] uppercase tracking-wide text-white/50">{m.speaker}</div><div>{m.text}</div></div></div>)}</div> : <div className="mt-2 whitespace-pre-line text-base leading-7 text-white/85">{dialogue.text}</div>}
-            {dialogue.feedback ? <div role="status" data-testid="dialogue-feedback" className="mt-4 rounded-2xl border border-emerald-300/20 bg-emerald-500/10 px-4 py-3 text-sm leading-6 text-emerald-100">{dialogue.feedback}</div> : null}
+            {sceneImage && !usesSplitScene ? <DialogueSceneImage image={sceneImage} /> : null}
+            {usesSplitScene ? (
+              <div className="mt-3 grid gap-4 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:items-start">
+                <div className="order-2 md:order-1">
+                  <DialogueSceneImage image={sceneImage} compact />
+                </div>
+                <div className="order-1 md:order-2">{dialogueCopy}</div>
+              </div>
+            ) : usesSplitVisual ? (
+              <div className="mt-3 grid gap-4 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:items-start">
+                <DialogueVisual kind={dialogue.visual} compact />
+                {dialogueCopy}
+              </div>
+            ) : (
+              <>
+                {dialogue.visual ? <DialogueVisual kind={dialogue.visual} /> : null}
+                {dialogueCopy}
+              </>
+            )}
           </div>
         </div>
       </div>
-      <div className="mt-5 grid gap-2 border-t border-white/10 pt-4">{dialogue.choices.map((choice, i) => <ChoiceButton key={`${choice.label}-${i}`} choice={choice} onChoose={(selected) => selected.effect?.()} />)}</div>
+      <div className="mt-5 grid gap-2 border-t border-white/10 pt-4">
+        {choiceRows.map((row) => {
+          const responsiveColumns = row.choices.length >= 4
+            ? "sm:grid-cols-2 lg:grid-cols-4"
+            : row.choices.length === 3
+              ? "sm:grid-cols-2 lg:grid-cols-3"
+              : row.choices.length === 2
+                ? "sm:grid-cols-2"
+                : "grid-cols-1";
+          return (
+            <div
+              key={row.id}
+              data-testid={row.group ? `dialogue-choice-group-${row.group}` : undefined}
+              className={`grid grid-cols-1 gap-2 ${responsiveColumns}`}
+            >
+              {row.choices.map((choice, i) => (
+                <ChoiceButton
+                  key={`${choice.label}-${i}`}
+                  choice={choice}
+                  onChoose={(selected) => selected.effect?.()}
+                />
+              ))}
+            </div>
+          );
+        })}
+      </div>
     </div>
   </div>;
 }
@@ -611,8 +674,21 @@ export function InteriorModal({ scene, close, flags, setFlags, player, setPlayer
   const recruitConversation = (option) => {
     const scene = getRecruitmentScene(option);
     if (!scene) return;
+    if (companion.id === option.id) return;
+    if (flags[`${option.id}Status`] === "joined") {
+      setActiveCompanion(option.id);
+      close();
+      setDialogue({
+        portrait: option.icon,
+        name: option.name,
+        text: `${option.name} gathers their gear and falls back into step beside you.`,
+        choices: [{ label: "Welcome back.", effect: () => setDialogue(null) }],
+      });
+      return;
+    }
     const stats = getDerivedStats(player);
     const checkCfg = option.id === "rowan" ? { stat: "Heart", dc: 10 } : option.id === "tilda" ? { stat: "Wit", dc: 10 } : { stat: "Will", dc: 10 };
+    const recruitmentCheckAttempted = !!flags[`${option.id}RecruitmentCheckAttempted`];
     const join = (check = null) => {
       const bonusXp = check?.success ? 5 : 0;
       setActiveCompanion(option.id);
@@ -625,24 +701,75 @@ export function InteriorModal({ scene, close, flags, setFlags, player, setPlayer
 ${option.name} starts with +${bonusXp} companion XP because your approach earned immediate trust.` : ""}`, choices: [{ label: "Welcome to the party.", effect: () => setDialogue(null) }] });
     };
     const attemptRecruit = () => {
+      setFlags((prev) => ({ ...prev, [`${option.id}RecruitmentCheckAttempted`]: true }));
       const check = resolveSkillCheck(stats, checkCfg.stat, checkCfg.dc);
       if (check.success) return join(check);
       setDialogue({ portrait: option.icon, name: option.name, text: `${checkSummary(check)}
 
 Your approach is right, but the words land awkwardly in the noise of the inn. ${option.name} does not walk away. They wait to see whether you mean it plainly.`, choices: [{ label: "Say it plainly and ask them to come.", effect: () => join(check) }, { label: "Step back for now.", effect: () => setDialogue(null) }] });
     };
+    const goodChoice = recruitmentCheckAttempted
+      ? { label: "Ask plainly if they will come.", effect: () => join() }
+      : { label: scene.goodLabel, requirement: `${checkCfg.stat} Check DC ${checkCfg.dc}`, effect: attemptRecruit };
     setDialogue({ portrait: option.icon, name: option.name, text: `${scene.opening}
 
 ${scene.ask}`, choices: [
-      { label: scene.goodLabel, requirement: `${checkCfg.stat} Check DC ${checkCfg.dc}`, effect: attemptRecruit },
-      { label: scene.neutralLabel, effect: () => setDialogue({ portrait: option.icon, name: option.name, text: scene.neutralReply, choices: [{ label: scene.goodLabel, requirement: `${checkCfg.stat} Check DC ${checkCfg.dc}`, effect: attemptRecruit }, { label: "I'll think about it.", effect: () => setDialogue(null) }] }) },
+      goodChoice,
+      { label: scene.neutralLabel, effect: () => setDialogue({ portrait: option.icon, name: option.name, text: scene.neutralReply, choices: [goodChoice, { label: "I'll think about it.", effect: () => setDialogue(null) }] }) },
       { label: scene.badLabel, effect: () => { setFlags((prev) => ({ ...prev, [`${option.id}Status`]: "declined" })); setDialogue({ portrait: option.icon, name: option.name, text: scene.badReply, choices: [{ label: "Fair. I'll rethink that.", effect: () => setDialogue(null) }] }); } },
     ] });
   };
 
+  const openWatchhouseCheck = ({
+    readFlag,
+    successFlag,
+    stat,
+    portrait,
+    artKey,
+    name,
+    successText,
+    failureText,
+    successLabel,
+    failureLabel,
+    companionBeat = null,
+  }) => {
+    const alreadyRead = !!flags[readFlag];
+    const check = alreadyRead ? null : resolveSkillCheck(getDerivedStats(player), stat, 10);
+    const success = alreadyRead ? !!flags[successFlag] : !!check?.success;
+    if (!alreadyRead) {
+      setFlags((current) => ({
+        ...current,
+        watchEvidenceRead: true,
+        [readFlag]: true,
+        [successFlag]: success,
+      }));
+    }
+    const resultText = `${alreadyRead ? "You review what you learned earlier." : checkSummary(check)}
+
+${success ? successText : failureText}`;
+    setDialogue({
+      portrait,
+      artKey,
+      name,
+      text: companionBeat
+        ? appendChapter1CompanionReaction(
+            resultText,
+            isCompanionConscious(companion) ? companion.id : null,
+            companionBeat,
+          )
+        : resultText,
+      choices: [
+        {
+          label: success ? successLabel : failureLabel,
+          effect: () => setDialogue(null),
+        },
+      ],
+    });
+  };
+
   return <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/50 p-4 sm:items-center"><div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="interior-title" tabIndex={-1} className="max-h-[88vh] w-full max-w-5xl overflow-y-auto rounded-[2rem] border border-white/10 bg-slate-900 p-5 shadow-2xl"><div className="mb-4 flex items-center justify-between gap-3"><div><div id="interior-title" className="text-2xl font-semibold">{scene === "home" ? "Inside Your Home" : scene === "bramInn" ? "Inside the Bramblecross Inn" : scene === "watchhouse" ? "Inside the Watchhouse" : "Interior"}</div>{scene === "watchhouse" && !flags.ennaBriefed ? <div className="text-sm text-white/70">An incomplete case wall waits for your road report.</div> : null}</div><Button onClick={close}>Leave</Button></div>
     {scene === "home" ? <div className="space-y-4"><div className="rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-white/80">A warm, familiar room. Your own things suddenly feel more important now that the road has gone dangerous.</div><div className="flex flex-wrap gap-2"><Button onClick={() => { setPlayer((p) => ({ ...p, hp: Math.min(p.maxHp, p.hp + 6) })); }}>Rest a little</Button>{!flags.homeStashClaimed ? <Button onClick={() => { gainItem(setPlayer, "old_hatchet", 1); setFlags((f) => ({ ...f, homeStashClaimed: true })); announce("You gather your old village hatchet from home.", [{ id: "old_hatchet", qty: 1 }]); }}>Take your old hatchet</Button> : null}</div></div> : null}
-    {scene === "bramInn" ? <div className="space-y-4"><div className="rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-white/80">The Bramblecross Inn is trying very hard to feel ordinary. Mugs clink, someone laughs too loudly, and every traveler in the room seems to be listening for news from the road. Three capable strangers stand out—not because they are waiting to be hired, but because each of them is already responding to the crisis in their own way. Recruitment is conversation-driven: the way you speak to them matters.</div><div className="flex flex-wrap gap-2">{companion.recruited ? <Button onClick={dismissCompanion}>Ask current companion to wait here</Button> : null}<Button onClick={() => { setPlayer((p) => ({ ...p, hp: p.maxHp })); setCompanion((c) => c.recruited ? { ...c, hp: c.maxHp } : c); saveGame("Bramblecross Inn"); }}>Rest for the night</Button></div><div className="grid gap-3 md:grid-cols-3">{Object.values(COMPANION_OPTIONS).map((o) => <div key={o.id} className="rounded-3xl border border-white/10 bg-white/5 p-4"><div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl bg-white/10 text-4xl"><span>{o.icon}</span>{o.portraitSrc ? <img src={o.portraitSrc} alt={`Portrait of ${o.name}`} onError={(event) => { event.currentTarget.style.display = "none"; }} className="absolute inset-0 h-full w-full object-cover" /> : null}</div><div className="mt-2 text-lg font-semibold">{o.name}</div><div className="text-sm text-emerald-300">{o.role}</div><div className="mt-2 text-sm text-white/75">{o.description}</div><div className="mt-2 text-xs text-white/55">{o.id === "rowan" ? "Polishing a dented shield while watching the door." : o.id === "tilda" ? "Making apple seeds land where apple seeds should not." : "Listening to the fire as if it is telling the truth slowly."}</div><div className="mt-4"><Button onClick={() => recruitConversation(o)}>{companion.id === o.id ? "Traveling" : "Talk"}</Button></div></div>)}</div></div> : null}
+    {scene === "bramInn" ? <div className="space-y-4"><div className="rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-white/80">The Bramblecross Inn is trying very hard to feel ordinary. Mugs clink, someone laughs too loudly, and every traveler in the room seems to be listening for news from the road. Three capable strangers stand out—not because they are waiting to be hired, but because each of them is already responding to the crisis in their own way. Recruitment is conversation-driven: the way you speak to them matters.</div><div className="flex flex-wrap gap-2">{companion.recruited ? <Button onClick={dismissCompanion}>Ask current companion to wait here</Button> : null}<Button onClick={() => { setPlayer((p) => ({ ...p, hp: p.maxHp })); setCompanion((c) => c.recruited ? { ...c, hp: c.maxHp } : c); saveGame("Bramblecross Inn"); }}>Rest for the night</Button></div><div className="grid gap-3 md:grid-cols-3">{Object.values(COMPANION_OPTIONS).map((o) => <div key={o.id} className="rounded-3xl border border-white/10 bg-white/5 p-4"><div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl bg-white/10 text-4xl"><span>{o.icon}</span>{o.portraitSrc ? <img src={o.portraitSrc} alt={`Portrait of ${o.name}`} onError={(event) => { event.currentTarget.style.display = "none"; }} className="absolute inset-0 h-full w-full object-cover" /> : null}</div><div className="mt-2 text-lg font-semibold">{o.name}</div><div className="text-sm text-emerald-300">{o.role}</div><div className="mt-2 text-sm text-white/75">{o.description}</div><div className="mt-2 text-xs text-white/55">{o.id === "rowan" ? "Polishing a dented shield while watching the door." : o.id === "tilda" ? "Making apple seeds land where apple seeds should not." : "Listening to the fire as if it is telling the truth slowly."}</div><div className="mt-4"><Button onClick={() => recruitConversation(o)} disabled={companion.id === o.id}>{companion.id === o.id ? "Traveling" : flags[`${o.id}Status`] === "joined" ? "Travel together" : "Talk"}</Button></div></div>)}</div></div> : null}
     {scene === "watchhouse" ? <div className="space-y-4">
       <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
         <div className="text-sm uppercase tracking-wide text-white/50">People Inside</div>
@@ -677,6 +804,12 @@ ${scene.ask}`, choices: [
           </div>
         </div>
         <div className="rounded-3xl border border-amber-300/20 bg-amber-400/10 p-4 text-sm text-white/85">Enna notices the road dust on your boots. Talk to her at the clerk's desk before trusting the wall as complete.</div>
+      </> : flags.chapterReported ? <>
+        <div data-testid="chapter-one-case-archive" className="rounded-3xl border border-emerald-300/20 bg-emerald-400/10 p-5">
+          <div className="text-sm uppercase tracking-wide text-emerald-200/80">Chapter 1 Case Archived</div>
+          <div className="mt-2 text-xl font-semibold">The Road That Lied</div>
+          <div className="mt-2 text-sm leading-6 text-white/80">The satchel, planted order, stolen Willow seal, Root Cellar, and Briar Crown mark are preserved in Enna's completed file. The active table now belongs to the Westroot search.</div>
+        </div>
       </> : <>
         <DialogueSceneImage image={getDialogueSceneArt("watchhouseCaseWall")} />
         <div className="rounded-3xl border border-emerald-300/20 bg-emerald-400/10 p-5">
@@ -692,18 +825,10 @@ ${scene.ask}`, choices: [
           <EvidenceCard title="False Crown?" description="Not a royal seal. Not random." image={WATCHHOUSE_EVIDENCE_ART.falseCrown} accent />
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
-          <Button className="justify-start text-left" onClick={() => { setFlags((f) => ({ ...f, watchEvidenceRead: true })); const check = resolveSkillCheck(getDerivedStats(player), "Wit", 10); const boardText = `${checkSummary(check)}
-
-${check.success ? "The red string no longer runs from clue to clue. It runs from system to system: road signs, cargo marks, public notices, old cellars, and frightened people. The pattern is not theft or random monster trouble. It is misdirection built to make ordinary systems lie." : "The board is dense and crowded. Hearthhollow, Lantern Road, Bramblecross, and the cellar all have strings on them, but following the full shape yourself makes the room feel louder. Enna has clearly seen something here; you have the pieces, not the pattern."}`; setDialogue({ portrait: "🧷", artKey: "watchhouseEvidenceBoard", name: "Evidence Board", text: appendChapter1CompanionReaction(boardText, companion?.recruited ? companion.id : null, "caseWall"), choices: [{ label: check.success ? "That pattern matters." : "Keep the board in mind.", effect: () => setDialogue(null) }] }); }}>Study the completed evidence board</Button>
-          <Button className="justify-start text-left" onClick={() => { setFlags((f) => ({ ...f, watchEvidenceRead: true, watchLedgerRead: true })); const check = resolveSkillCheck(getDerivedStats(player), "Wit", 10); setDialogue({ portrait: "📚", name: "Duty Ledger", text: `${checkSummary(check)}
-
-${check.success ? "The missing porters were last assigned near the old root cellar. Someone altered the route notes afterward, turning an ordinary storage shift into a blind corner in the records. The changed handwriting is trying to imitate the clerk's shorthand, but the route marks are copied backward." : "You find the missing porters' names and their last root-cellar assignment. After that, the corrections, arrows, and shorthand marks crowd together until the page looks more anxious than informative."}`, artKey: "watchhouseDutyLedger", choices: [{ label: check.success ? "Useful." : "Set the ledger back.", effect: () => setDialogue(null) }] }); }}>Read the duty ledger</Button>
-          <Button className="justify-start text-left" onClick={() => { setFlags((f) => ({ ...f, watchEvidenceRead: true, watchMapRead: true })); const check = resolveSkillCheck(getDerivedStats(player), "Instinct", 10); setDialogue({ portrait: "🗺️", name: "Wall Map", text: `${checkSummary(check)}
-
-${check.success ? "Pins connect Hearthhollow, Lantern Road, Bramblecross, and cellar paths under the warehouses. Some lines are public roads. Some are older, half-erased routes that still match the marks at the Lantern Shrine. One faded line bends west into a cluster of obsolete marks Enna has circled twice." : "Pins connect Hearthhollow, Lantern Road, Bramblecross, and cellar paths under the warehouses. You can follow the public roads, but the older half-erased lines fade into smudges before they tell you where they go."}`, artKey: "watchhouseWallMap", choices: [{ label: check.success ? "Memorize it." : "Step back from the map.", effect: () => setDialogue(null) }] }); }}>Examine the wall map</Button>
-          <Button className="justify-start text-left" onClick={() => { setFlags((f) => ({ ...f, watchEvidenceRead: true, watchOrdersRead: true })); const check = resolveSkillCheck(getDerivedStats(player), "Will", 10); setDialogue({ portrait: "📄", name: "Forged Orders File", text: `${checkSummary(check)}
-
-${check.success ? "The copied orders borrow royal language but push fear instead of wise command. Enna has underlined the verbs: delay, hold, misdirect, recover. Whoever wrote them thinks in routes and pressure points. The tone feels like a crown without care: command stripped of responsibility." : "The copied orders use heavy royal phrasing. Enna has underlined the verbs: delay, hold, misdirect, recover. You can feel the pressure in the wording, but what that pressure proves keeps slipping away."}`, artKey: "watchhouseForgedOrders", choices: [{ label: check.success ? "The tone itself is fake." : "Set the file aside.", effect: () => setDialogue(null) }] }); }}>Read the forged orders file</Button>
+          <Button className="justify-start text-left" onClick={() => openWatchhouseCheck({ readFlag: "watchBoardRead", successFlag: "watchBoardCheckSucceeded", stat: "Wit", portrait: "🧷", artKey: "watchhouseEvidenceBoard", name: "Evidence Board", successText: "The red string no longer runs from clue to clue. It runs from system to system: road signs, cargo marks, public notices, old cellars, and frightened people. The pattern is not theft or random monster trouble. It is misdirection built to make ordinary systems lie.", failureText: "The board is dense and crowded. Hearthhollow, Lantern Road, Bramblecross, and the cellar all have strings on them, but following the full shape yourself makes the room feel louder. Enna has clearly seen something here; you have the pieces, not the pattern.", successLabel: "That pattern matters.", failureLabel: "Keep the board in mind.", companionBeat: "caseWall" })}>{flags.watchBoardRead ? "Review the completed evidence board" : "Study the completed evidence board"}</Button>
+          <Button className="justify-start text-left" onClick={() => openWatchhouseCheck({ readFlag: "watchLedgerRead", successFlag: "watchLedgerCheckSucceeded", stat: "Wit", portrait: "📚", artKey: "watchhouseDutyLedger", name: "Duty Ledger", successText: "The missing porters were last assigned near the old root cellar. Someone altered the route notes afterward, turning an ordinary storage shift into a blind corner in the records. The changed handwriting is trying to imitate the clerk's shorthand, but the route marks are copied backward.", failureText: "You find the missing porters' names and their last root-cellar assignment. After that, the corrections, arrows, and shorthand marks crowd together until the page looks more anxious than informative.", successLabel: "Useful.", failureLabel: "Set the ledger back." })}>{flags.watchLedgerRead ? "Review the duty ledger" : "Read the duty ledger"}</Button>
+          <Button className="justify-start text-left" onClick={() => openWatchhouseCheck({ readFlag: "watchMapRead", successFlag: "watchMapCheckSucceeded", stat: "Instinct", portrait: "🗺️", artKey: "watchhouseWallMap", name: "Wall Map", successText: "Pins connect Hearthhollow, Lantern Road, Bramblecross, and cellar paths under the warehouses. Some lines are public roads. Some are older, half-erased routes that still match the marks at the Lantern Shrine. One faded line bends west into a cluster of obsolete marks Enna has circled twice.", failureText: "Pins connect Hearthhollow, Lantern Road, Bramblecross, and cellar paths under the warehouses. You can follow the public roads, but the older half-erased lines fade into smudges before they tell you where they go.", successLabel: "Memorize it.", failureLabel: "Step back from the map." })}>{flags.watchMapRead ? "Review the wall map" : "Examine the wall map"}</Button>
+          <Button className="justify-start text-left" onClick={() => openWatchhouseCheck({ readFlag: "watchOrdersRead", successFlag: "watchOrdersCheckSucceeded", stat: "Will", portrait: "📄", artKey: "watchhouseForgedOrders", name: "Forged Orders File", successText: "The copied orders borrow royal language but push fear instead of wise command. Enna has underlined the verbs: delay, hold, misdirect, recover. Whoever wrote them thinks in routes and pressure points. The tone feels like a crown without care: command stripped of responsibility.", failureText: "The copied orders use heavy royal phrasing. Enna has underlined the verbs: delay, hold, misdirect, recover. You can feel the pressure in the wording, but what that pressure proves keeps slipping away.", successLabel: "The tone itself is fake.", failureLabel: "Set the file aside." })}>{flags.watchOrdersRead ? "Review the forged orders file" : "Read the forged orders file"}</Button>
         </div>
         <div className="rounded-3xl border border-white/10 bg-black/20 p-4 text-sm text-white/75">Enna has left a note in the corner: <span className="italic text-white">“A road is safest when truth walks it first. Someone is making lies walk first.”</span></div>
       </>}

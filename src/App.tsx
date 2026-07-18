@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useMemo, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import {
   AdventureStatusRail,
   AdventureWorkspace,
@@ -39,7 +39,10 @@ import {
   rotateEnemyIntent,
   tickCooldowns,
 } from "./game/battle";
-import { getCompanionCommandAbility } from "./game/companions";
+import {
+  getCompanionCommandAbility,
+  isCompanionConscious,
+} from "./game/companions";
 import { getChapterProgress } from "./game/chapterProgress";
 import { checkSummary, resolveRoll, resolveSkillCheck } from "./game/dice";
 import { getActiveGuestNpc } from "./game/guestNpcs";
@@ -88,7 +91,7 @@ import {
   normalizePlayerData,
 } from "./game/state";
 import { addBonuses, formatBonuses, getDerivedStats } from "./game/stats";
-import type { Flags, Position } from "./game/types";
+import type { CompanionId, CompanionRoster, Flags, Position } from "./game/types";
 import {
   CHAPTER_1_STORY,
   appendChapter1CompanionReaction,
@@ -367,6 +370,12 @@ function CrownDenTension({ level, text }) {
 function getMayorDialogue(flags) {
   if (!flags.ennaBriefed)
     return 'Mayor Anwen stands beside a stack of unread petitions, but her eyes keep moving to the road. "We have missing porters, forged notices, delayed carts, and families asking whether to bolt their doors. I can calm a crowd for an hour. I cannot calm a lie unless someone brings me its shape. Take your road report to Enna inside the watchhouse—the large stone building at the north end of the square. She sees patterns before the rest of us admit they exist."';
+  if (flags.chapterReported)
+    return 'Mayor Anwen looks west instead of toward the cellar. "Hollis has guards on the entrance, and Enna says the danger beneath us was protecting a road beyond us. Bramblecross can hold its own doors. Follow the Westroot leadâ€”and if Lio Brindle is still on that road, bring him home."';
+  if (flags.chapterOneClear)
+    return 'Mayor Anwen takes in the cellar mud on your boots and the chain in your hands. "You came back. Good. Hollis and Enna have been waiting in the watchhouse. Tell them what was below us before rumor gets there first."';
+  if (flags.beatCellarBoss)
+    return 'Mayor Anwen studies the cellar mud on your boots. "Hollis says the guardian fell, but the sealed door still holds the truth you went below to find. Go back for the door before Bramblecross mistakes a defeated monster for a finished investigation."';
   if (!flags.gotDungeonLead)
     return 'Mayor Anwen studies the watchhouse windows. "Enna says your report turned scattered worries into a route case. Good. That means we\'re not losing our minds. Bad, because it means someone else is using theirs. Read what the town knows, then speak with Hollis."';
   return 'Mayor Anwen nods toward the old cellar ways. "If Hollis is sending you below, then Bramblecross is past pretending this is only paperwork. Go carefully. Towns are built on foundations, and foundations remember things."';
@@ -384,8 +393,11 @@ export default function LiamsGamePrototype() {
   const [player, setPlayer] = useState(null);
   const [region, setRegion] = useState("hearthhollow");
   const [position, setPosition] = useState(MAPS.hearthhollow.start);
+  const previousPositionByRegionRef = useRef<Partial<Record<string, Position>>>({});
   const [visited, setVisited] = useState(buildDefaultVisited());
   const [companion, setCompanion] = useState(buildDefaultCompanion());
+  const [companionRoster, setCompanionRoster] = useState<CompanionRoster>({});
+  const companionIsConscious = isCompanionConscious(companion);
   const [flags, setFlags] = useState(buildDefaultFlags());
   const [quest, setQuest] = useState({
     title: "Talk to Elder Brynn",
@@ -415,6 +427,14 @@ export default function LiamsGamePrototype() {
   );
   const [saveModalMode, setSaveModalMode] = useState(null);
   const [levelUpPending, setLevelUpPending] = useState(null);
+
+  useEffect(() => {
+    if (!companion.id) return;
+    setCompanionRoster((current) => ({
+      ...current,
+      [companion.id as CompanionId]: companion,
+    }));
+  }, [companion]);
 
   const currentMap = MAPS[region].tiles;
   const currentRegionInfo = MAPS[region];
@@ -488,7 +508,13 @@ export default function LiamsGamePrototype() {
       if (tile === "well" && flags.wellVisited) return true;
     }
     if (region === "westrootTrail") {
-      if (tile === "westroot_cut" && flags.westrootCutStudied) return true;
+      if (
+        tile === "westroot_cut" &&
+        (flags.noHandleStoneInspected
+          ? flags.westrootCutCopied
+          : flags.westrootCutStudied)
+      )
+        return true;
       if (tile === "shelter_nook" && flags.shelterNoticeRemoved && flags.lioShelterMarkFound)
         return true;
       if (
@@ -515,7 +541,7 @@ export default function LiamsGamePrototype() {
       if (tile === "den_guard" && flags.beatCrownDenGuard) return true;
     }
     if (region === "westrootHub") {
-      if (tile === "westroot_first_gate" && flags.chapterThreeStarted) return true;
+      if (tile === "westroot_first_gate" && flags.metBramwell) return true;
       if (tile === "rootmarket" && flags.metQuill) return true;
       if (tile === "mossgarden" && flags.metNoma) return true;
       if (tile === "witness_stones" && flags.witnessStoneSequenceSolved) return true;
@@ -526,6 +552,13 @@ export default function LiamsGamePrototype() {
     return false;
   };
   const getMapTokenState = (tile, tileRegion = region) => {
+    if (tileRegion === "hearthhollow") {
+      if (tile === "gate" && flags.beatGateBattle) return "spent";
+    }
+    if (tileRegion === "rootCellar") {
+      if (tile === "skulk" && flags.beatCellarSkulk) return "spent";
+      if (tile === "boss" && flags.beatCellarBoss) return "spent";
+    }
     if (tileRegion === "westrootTrail") {
       if (
         tile === "false_notice" &&
@@ -604,6 +637,7 @@ export default function LiamsGamePrototype() {
     message,
   ) => {
     setDialogue(null);
+    previousPositionByRegionRef.current[nextRegion] = undefined;
     setRegion(nextRegion);
     setPosition(nextPosition);
     revealArea(nextRegion, nextPosition.x, nextPosition.y, 2);
@@ -634,6 +668,12 @@ export default function LiamsGamePrototype() {
     companionSnapshot = companion,
   ) => {
     if (!playerSnapshot) return null;
+    const companionRosterSnapshot = companionSnapshot.id
+      ? {
+          ...companionRoster,
+          [companionSnapshot.id]: companionSnapshot,
+        }
+      : companionRoster;
     return {
       screen: "play",
       chapterId: getChapterProgress(flags).currentChapterId,
@@ -642,6 +682,7 @@ export default function LiamsGamePrototype() {
       position,
       visited,
       companion: companionSnapshot,
+      companionRoster: companionRosterSnapshot,
       guestNpc: getActiveGuestNpc(flags),
       flags,
       quest,
@@ -676,6 +717,9 @@ export default function LiamsGamePrototype() {
       nextPosition,
     );
     const nextCompanion = normalizeCompanionData(payload.companion);
+    const nextCompanionRoster = { ...(payload.companionRoster || {}) };
+    if (nextCompanion.id)
+      nextCompanionRoster[nextCompanion.id as CompanionId] = nextCompanion;
     const nextFlags = { ...buildDefaultFlags(), ...(payload.flags || {}) };
     const nextQuest =
       (payload.quest as { title: string; description: string } | undefined) || {
@@ -683,10 +727,12 @@ export default function LiamsGamePrototype() {
         description: "Continue exploring.",
       };
     setPlayer(nextPlayer);
+    previousPositionByRegionRef.current = {};
     setRegion(nextRegion);
     setPosition(nextPosition);
     setVisited(nextVisited);
     setCompanion(nextCompanion);
+    setCompanionRoster(nextCompanionRoster);
     setFlags(nextFlags);
     setQuest(nextQuest);
     setLevelUpPending(null);
@@ -707,6 +753,7 @@ export default function LiamsGamePrototype() {
         position: nextPosition,
         visited: nextVisited,
         companion: nextCompanion,
+        companionRoster: nextCompanionRoster,
         flags: nextFlags,
         quest: nextQuest,
       }),
@@ -739,10 +786,12 @@ export default function LiamsGamePrototype() {
   const startGame = () => {
     const hero = buildPlayer(createForm);
     setPlayer(hero);
+    previousPositionByRegionRef.current = {};
     setRegion("hearthhollow");
     setPosition(MAPS.hearthhollow.start);
     setVisited(buildDefaultVisited());
     setCompanion(buildDefaultCompanion());
+    setCompanionRoster({});
     setFlags(buildDefaultFlags());
     setScreen("play");
     setDialogue({
@@ -854,26 +903,26 @@ export default function LiamsGamePrototype() {
         ? "The pond settles back into itself. A frog sits on a stone with the smug expression of someone who knows you have already had your chance."
         : "The pond is small enough to skip a stone across and deep enough to hide exactly one interesting thing. Moonmint leans over the bank, reeds tick softly against each other, and something round bubbles once beneath the mud. You will probably only get one careful search before the edge turns cloudy.",
       choices: [
-        {
-          label: "Search the pond edge carefully.",
-          effect: () => {
-            setDialogue(null);
-            if (!flags.pondForaged) {
-              setFlags((f) => ({ ...f, pondVisited: true, pondForaged: true }));
-              const found = Math.random() > 0.45;
-              if (found) {
-                gainItem(setPlayer, "bubblecap", 1);
-                announce(
-                  "You find a Bubblecap tucked under the pond reeds.",
-                  [{ id: "bubblecap", qty: 1 }],
-                );
-              } else
-                setToast("Wet hands, reeds, and one suspicious frog stare.");
+        !flags.pondForaged
+          ? {
+              label: "Search the pond edge carefully.",
+              effect: () => {
+                setDialogue(null);
+                setFlags((f) => ({ ...f, pondVisited: true, pondForaged: true }));
+                const found = Math.random() > 0.45;
+                if (found) {
+                  gainItem(setPlayer, "bubblecap", 1);
+                  announce(
+                    "You find a Bubblecap tucked under the pond reeds.",
+                    [{ id: "bubblecap", qty: 1 }],
+                  );
+                } else
+                  setToast("Wet hands, reeds, and one suspicious frog stare.");
+              },
             }
-          },
-        },
+          : null,
         { label: "Leave the pond alone.", effect: () => setDialogue(null) },
-      ],
+      ].filter(Boolean),
     });
   };
   const handleBlockedTileInteraction = (tile) => {
@@ -954,6 +1003,7 @@ export default function LiamsGamePrototype() {
       saveModalMode
     )
       return;
+    if (routeUnintroducedPartyToBramwell()) return;
     const direction =
       dx === 1 ? "right" : dx === -1 ? "left" : dy === 1 ? "down" : "up";
     const graphDestination = getNavigationDestination(
@@ -984,6 +1034,7 @@ export default function LiamsGamePrototype() {
       return;
     }
     const previousPosition = { x: position.x, y: position.y };
+    previousPositionByRegionRef.current[region] = previousPosition;
     setPosition({ x: nx, y: ny });
     revealArea(region, nx, ny);
     if (region === "crownDoorDen" && tile !== "crown_den_exit" && advanceCrownDenThreat())
@@ -1637,7 +1688,7 @@ Deep breath. Am I really ready for this?`,
     setDialogue({
       portrait: "🗂️",
       name: "Watch Clerk Enna",
-      text: `Enna taps two pins on the board without looking up. "The shape still holds: false authority above ground, missing workers below ground, and a road being trained to fear the wrong thing. The old shrine had it right: a road is safest when truth walks it first. Study the wall if you need the full pattern. Hollis will not move until you understand why the cellar matters."${companion.recruited ? "" : '\n\nShe nods toward the square. "Before you go below, consider taking another pair of eyes. Rowan, Tilda, and Moss are staying at the Bramblecross Inn."'}`,
+      text: `Enna taps two pins on the board without looking up. "The shape still holds: false authority above ground, missing workers below ground, and a road being trained to fear the wrong thing. The old shrine had it right: a road is safest when truth walks it first. Study the wall if you need the full pattern. Hollis will not move until you understand why the cellar matters."${companionIsConscious ? "" : companion.recruited ? `\n\nShe glances toward ${companion.name}. "Before you go below again, let them recover at the Bramblecross Inn."` : '\n\nShe nods toward the square. "Before you go below, consider taking another pair of eyes. Rowan, Tilda, and Moss are staying at the Bramblecross Inn."'}`,
       choices: [
         {
           label: "I'll study the wall, then speak with Hollis.",
@@ -1663,7 +1714,7 @@ Deep breath. Am I really ready for this?`,
   };
   const beginRootCellarDeparture = () => {
     setFlags((f) => ({ ...f, gotDungeonLead: true }));
-    if (companion.recruited) return enterRootCellarWithHollis();
+    if (companionIsConscious) return enterRootCellarWithHollis();
     setDialogue({
       portrait: "🛡️",
       name: "Captain Hollis",
@@ -1732,7 +1783,7 @@ Deep breath. Am I really ready for this?`,
         text: 'Hollis keeps the cellar key ready on the desk. The questions are not gone, but the permission is settled. "You know what the wall shows," he says. "Go below when you are ready, and come back with truth instead of rumors."',
         choices: [
           {
-            label: companion.recruited
+            label: companionIsConscious
               ? "We're ready. Take us to the Root Cellar."
               : "I'm ready to go below.",
             effect: beginRootCellarDeparture,
@@ -1746,7 +1797,7 @@ Deep breath. Am I really ready for this?`,
         text: 'Hollis sees you return and rests one hand beside the key. He does not make you ask about Edden again. "You have the shape of it now: missing porters, altered routes, and a runner who came back speaking old road names. If you are ready, take the key and go carefully."',
         choices: [
           {
-            label: companion.recruited
+            label: companionIsConscious
               ? "We're ready. Take us to the Root Cellar."
               : "I'm ready to go below.",
             effect: beginRootCellarDeparture,
@@ -1776,7 +1827,7 @@ Deep breath. Am I really ready for this?`,
               text: "Hollis looks at the cracked lantern again. “Edden is seventeen. Fast runner. Terrible at cards. Good at remembering details. He went below joking that cellar ghosts would have to file a complaint if they wanted his attention. When we found him, he kept repeating three phrases: hold the root, misdirect the road, and the old way still listens. We thought it was shock-talk until your road report gave two of those words weight. So no, I am not being cautious because I doubt you. I am being cautious because I believe the danger is smarter than it first looked.”",
               choices: [
                 {
-                  label: companion.recruited
+                  label: companionIsConscious
                     ? "Then take us to the Root Cellar."
                     : "Then I'm ready to go below.",
                   effect: beginRootCellarDeparture,
@@ -1798,8 +1849,26 @@ Deep breath. Am I really ready for this?`,
     setDialogue({
       portrait: "🕳️",
       name: "Old Root Cellar",
-      text: "The old root cellar squats behind the watchhouse like a mouth trying not to open. Someone has freshly scraped mud away from the hinges. The air leaking through the cracks smells of cold stone, old vegetables, and something green that should not be growing underground.",
-      choices: [
+      text:
+        flags.beatCellarBoss && !flags.chapterOneClear
+          ? "The guardian is down, but the sealed iron door still holds the cellar's answer. The investigation is not finished until you face what the Warden guarded."
+          : "The old root cellar squats behind the watchhouse like a mouth trying not to open. Someone has freshly scraped mud away from the hinges. The air leaking through the cracks smells of cold stone, old vegetables, and something green that should not be growing underground.",
+      choices: flags.beatCellarBoss && !flags.chapterOneClear
+        ? [
+            {
+              label: "Return to the sealed door.",
+              effect: () => {
+                travelToRegion(
+                  "rootCellar",
+                  { x: 10, y: 4 },
+                  "Old Root Cellar",
+                  "You return to the truth waiting behind the fallen Warden.",
+                );
+                openExitDoorDialogue({ beatCellarBoss: true });
+              },
+            },
+          ]
+        : [
         {
           label: "Descend into the Root Cellar.",
           effect: () => {
@@ -1884,7 +1953,19 @@ Deep breath. Am I really ready for this?`,
   };
   const openCartDialogue = () => {
     const roadMarkCheck = () => {
-      const check = resolveSkillCheck(derivedStats, "Instinct", 11);
+      const alreadyAttempted = !!flags.cartTrackCheckAttempted;
+      const check = alreadyAttempted
+        ? null
+        : resolveSkillCheck(derivedStats, "Instinct", 11);
+      const success = alreadyAttempted
+        ? !!flags.cartTrackCheckSucceeded
+        : !!check?.success;
+      if (!alreadyAttempted)
+        setFlags((f) => ({
+          ...f,
+          cartTrackCheckAttempted: true,
+          cartTrackCheckSucceeded: success,
+        }));
       const successText =
         "The wheel-ruts bend sharply toward the ditch, but the hoofprints do not panic. That is the strange part. Whoever stopped this cart was calm enough afterward to cut away the identifying marks. The missing seal was removed by hand, not broken loose in the crash.";
       const failText =
@@ -1893,9 +1974,9 @@ Deep breath. Am I really ready for this?`,
         portrait: "🛒",
         mapVignette: "lanternCart",
         name: "Cart Tracks",
-        text: `${checkSummary(check)}
+        text: `${alreadyAttempted ? "You review the road marks you already examined." : checkSummary(check)}
 
-${check.success ? successText : failText}`,
+${success ? successText : failText}`,
         choices: [
           {
             label: "Recover proof for Ada.",
@@ -1905,10 +1986,10 @@ ${check.success ? successText : failText}`,
                 searchedCart: true,
                 cartRecoveredForAda: true,
               }));
-              setPlayer((p) => ({ ...p, xp: p.xp + (check.success ? 7 : 5) }));
+              setPlayer((p) => ({ ...p, xp: p.xp + (success ? 7 : 5) }));
               setDialogue(null);
               setToast(
-                `You recover proof for Ada. XP +${check.success ? 7 : 5}`,
+                `You recover proof for Ada. XP +${success ? 7 : 5}`,
               );
             },
           },
@@ -1945,8 +2026,12 @@ ${check.success ? successText : failText}`,
             },
           },
           {
-            label: "Look over the road marks first.",
-            requirement: "Instinct Check DC 11",
+            label: flags.cartTrackCheckAttempted
+              ? "Review the road marks."
+              : "Look over the road marks first.",
+            requirement: flags.cartTrackCheckAttempted
+              ? undefined
+              : "Instinct Check DC 11",
             effect: roadMarkCheck,
           },
         ],
@@ -2050,17 +2135,33 @@ But one fresh mark cuts across the older names: a false crown seal, copied badly
           },
         },
         {
-          label: "Study the true road marks.",
-          requirement: "Will Check DC 10",
+          label: flags.shrineStudyAttempted
+            ? "Review the true road marks."
+            : "Study the true road marks.",
+          requirement: flags.shrineStudyAttempted
+            ? undefined
+            : "Will Check DC 10",
           effect: () => {
-            const check = resolveSkillCheck(derivedStats, "Will", 10);
+            const alreadyAttempted = !!flags.shrineStudyAttempted;
+            const check = alreadyAttempted
+              ? null
+              : resolveSkillCheck(derivedStats, "Will", 10);
+            const success = alreadyAttempted
+              ? !!flags.shrineStudySucceeded
+              : !!check?.success;
+            if (!alreadyAttempted)
+              setFlags((f) => ({
+                ...f,
+                shrineStudyAttempted: true,
+                shrineStudySucceeded: success,
+              }));
             setDialogue({
               portrait: "✨",
               mapVignette: "lanternShrine",
               name: "Lantern Shrine",
-              text: `${checkSummary(check)}
+              text: `${alreadyAttempted ? "You retrace the marks you already studied." : checkSummary(check)}
 
-${check.success ? "The marks settle into meaning as you trace them: water here, shelter north, broken bridge east, safe camp beyond the pines. These signs do not order anyone around. They simply tell the truth to the next traveler. Then you notice three recent courier marks scratched in a hurry, each beside a tiny arrow pointing toward Bramblecross. The shrine has not been silent. It has been interrupted." : "Most of the shrine marks are old, layered, and worn smooth by weather. The fresh crown scratch is easier to see than the cuts beneath it, which is probably why it was put there."}`,
+${success ? "The marks settle into meaning as you trace them: water here, shelter north, broken bridge east, safe camp beyond the pines. These signs do not order anyone around. They simply tell the truth to the next traveler. Then you notice three recent courier marks scratched in a hurry, each beside a tiny arrow pointing toward Bramblecross. The shrine has not been silent. It has been interrupted." : "Most of the shrine marks are old, layered, and worn smooth by weather. The fresh crown scratch is easier to see than the cuts beneath it, which is probably why it was put there."}`,
               choices: [
                 {
                   label: "Clean the false seal and honor the true marks.",
@@ -2074,11 +2175,11 @@ ${check.success ? "The marks settle into meaning as you trace them: water here, 
                       ...p,
                       hp: Math.min(p.maxHp, p.hp + 8),
                       baseStats: addBonuses(p.baseStats, { Will: 1 }),
-                      xp: p.xp + (check.success ? 4 : 0),
+                      xp: p.xp + (success ? 4 : 0),
                     }));
                     setDialogue(null);
                     setToast(
-                      `The shrine warms under your hand. HP +8 • Will +1${check.success ? " • XP +4" : ""}`,
+                      `The shrine warms under your hand. HP +8 • Will +1${success ? " • XP +4" : ""}`,
                     );
                   },
                 },
@@ -2290,7 +2391,49 @@ ${check.success ? "The marks settle into meaning as you trace them: water here, 
       ],
     });
 
-  const completeCellarDiscovery = (studiedBriarCrown = false) => {
+  const getActiveCompanionReaction = (
+    beat,
+    assumedFlags: Partial<Flags> = {},
+  ) => {
+    const viewFlags = { ...flags, ...assumedFlags };
+    if (beat === "sealedDoor" && viewFlags.cellarCompanionDoorReactionHeard)
+      return "";
+    return companionIsConscious
+      ? getChapter1CompanionReaction(companion.id, beat)
+      : "";
+  };
+
+  const openChapterOneCompletionDialogue = (
+    studiedBriarCrown = false,
+    assumedFlags: Partial<Flags> = {},
+  ) => {
+    const companionDoorReaction = getActiveCompanionReaction(
+      "sealedDoor",
+      assumedFlags,
+    );
+    setDialogue({
+      portrait: "✨",
+      artKey: "chapterOneEnding",
+      name: "Chapter 1 Complete: The Road That Lied",
+      size: "wide",
+      text: CHAPTER_1_STORY.rootCellar.completionTableau,
+      choices: [
+        companionDoorReaction
+          ? {
+              label: `Ask ${companion.name} about the door.`,
+              effect: () =>
+                openCellarCompanionReaction("sealedDoor", studiedBriarCrown, true),
+            }
+          : null,
+        { label: "Return with the truth.", effect: () => setDialogue(null) },
+      ].filter(Boolean),
+    });
+  };
+
+  const completeCellarDiscovery = (
+    studiedBriarCrown = false,
+    assumedFlags: Partial<Flags> = {},
+  ) => {
     gainItem(setPlayer, "warden_chain", 1);
     gainItem(setPlayer, "edden_cloth", 1);
     setFlags((f) => ({
@@ -2299,37 +2442,68 @@ ${check.success ? "The marks settle into meaning as you trace them: water here, 
       studiedBriarCrown: studiedBriarCrown || f.studiedBriarCrown,
       cellarEndChoice: "chain",
     }));
-    setDialogue(null);
+    openChapterOneCompletionDialogue(studiedBriarCrown, assumedFlags);
     announce(CHAPTER_1_STORY.rootCellar.discoveryCompleteToast, [
       { id: "warden_chain", qty: 1 },
       { id: "edden_cloth", qty: 1 },
     ]);
   };
 
-  const getActiveCompanionReaction = (beat) =>
-    companion.recruited
-      ? getChapter1CompanionReaction(companion.id, beat)
-      : "";
-
-  const openCellarCompanionReaction = (beat, studiedBriarCrown = false) => {
+  const openCellarCompanionReaction = (
+    beat,
+    studiedBriarCrown = false,
+    returnToCompletion = false,
+  ) => {
     const reaction = getActiveCompanionReaction(beat);
     if (!reaction) return;
+    const heardDoorReaction = beat === "sealedDoor";
+    if (heardDoorReaction)
+      setFlags((f) => ({ ...f, cellarCompanionDoorReactionHeard: true }));
     setDialogue({
       portrait: companion.icon || "✨",
       name: companion.name,
       text: reaction,
-      choices: [
-        {
-          label: CHAPTER_1_STORY.rootCellar.takeProofLabel,
-          effect: () => completeCellarDiscovery(studiedBriarCrown),
-        },
-        { label: "Step back for now.", effect: () => setDialogue(null) },
-      ],
+      choices: returnToCompletion
+        ? [
+            {
+              label: "Return to the chapter ending.",
+              effect: () =>
+                openChapterOneCompletionDialogue(
+                  studiedBriarCrown,
+                  heardDoorReaction
+                    ? { cellarCompanionDoorReactionHeard: true }
+                    : {},
+                ),
+            },
+          ]
+        : [
+            {
+              label: CHAPTER_1_STORY.rootCellar.takeProofLabel,
+              effect: () =>
+                completeCellarDiscovery(
+                  studiedBriarCrown,
+                  heardDoorReaction
+                    ? { cellarCompanionDoorReactionHeard: true }
+                    : {},
+                ),
+            },
+            {
+              label: "Return to the sealed door.",
+              effect: () =>
+                openExitDoorDialogue({
+                  beatCellarBoss: true,
+                  ...(heardDoorReaction
+                    ? { cellarCompanionDoorReactionHeard: true }
+                    : {}),
+                }),
+            },
+          ],
     });
   };
 
-  const openExitDoorDialogue = () => {
-    if (!flags.beatCellarBoss)
+  const openExitDoorDialogue = (assumedFlags: Partial<Flags> = {}) => {
+    const viewFlags = { ...flags, ...assumedFlags };
+    if (!viewFlags.beatCellarBoss)
       return setDialogue({
         portrait: "🚪",
         mapVignette: "rootCellarDoor",
@@ -2337,7 +2511,7 @@ ${check.success ? "The marks settle into meaning as you trace them: water here, 
         text: CHAPTER_1_STORY.rootCellar.sealedDoorBeforeWarden,
         choices: [{ label: "Step back.", effect: () => setDialogue(null) }],
       });
-    if (flags.chapterOneClear)
+    if (viewFlags.chapterOneClear)
       return setDialogue({
         portrait: "🚪",
         mapVignette: "rootCellarDoor",
@@ -2352,17 +2526,33 @@ ${check.success ? "The marks settle into meaning as you trace them: water here, 
       text: CHAPTER_1_STORY.rootCellar.sealedDoorAfterWarden,
       choices: [
         {
-          label: "Study the Briar Crown mark.",
-          requirement: "Will Check DC 12",
+          label: flags.briarCrownCheckAttempted
+            ? "Review the Briar Crown mark."
+            : "Study the Briar Crown mark.",
+          requirement: flags.briarCrownCheckAttempted
+            ? undefined
+            : "Will Check DC 12",
           effect: () => {
-            const check = resolveSkillCheck(derivedStats, "Will", 12);
+            const alreadyAttempted = !!flags.briarCrownCheckAttempted;
+            const check = alreadyAttempted
+              ? null
+              : resolveSkillCheck(derivedStats, "Will", 12);
+            const success = alreadyAttempted
+              ? !!flags.briarCrownCheckSucceeded
+              : !!check?.success;
+            if (!alreadyAttempted)
+              setFlags((f) => ({
+                ...f,
+                briarCrownCheckAttempted: true,
+                briarCrownCheckSucceeded: success,
+              }));
             setDialogue({
               portrait: "👑",
               artKey: "briarCrownMark",
               name: "Briar Crown Mark",
-              text: `${checkSummary(check)}
+              text: `${alreadyAttempted ? "You review the mark without testing your first impression again." : checkSummary(check)}
 
-${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.rootCellar.briarCrownStudyFallback}`,
+${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.rootCellar.briarCrownStudyFallback}`,
               choices: [
                 {
                   label: CHAPTER_1_STORY.rootCellar.takeProofLabel,
@@ -2375,17 +2565,13 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                         openCellarCompanionReaction("briarCrown", true),
                     }
                   : null,
-                getActiveCompanionReaction("sealedDoor")
+                getActiveCompanionReaction("sealedDoor", viewFlags)
                   ? {
                       label: `Ask ${companion.name} about the door.`,
                       effect: () =>
                         openCellarCompanionReaction("sealedDoor", true),
                     }
                   : null,
-                {
-                  label: "Step back for now.",
-                  effect: () => setDialogue(null),
-                },
               ].filter(Boolean),
             });
           },
@@ -2394,27 +2580,29 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           label: CHAPTER_1_STORY.rootCellar.takeProofLabel,
           effect: () => completeCellarDiscovery(false),
         },
-        getActiveCompanionReaction("sealedDoor")
+        getActiveCompanionReaction("sealedDoor", viewFlags)
           ? {
               label: `Ask ${companion.name} about the door.`,
               effect: () => openCellarCompanionReaction("sealedDoor", false),
             }
           : null,
-        { label: "Step back for now.", effect: () => setDialogue(null) },
       ].filter(Boolean),
     });
   };
 
-  const completeChapterReport = (closingChoice) => {
+  const completeWestrootBriefing = (closingChoice) => {
     setFlags((f) => ({
       ...f,
       chapterReported: true,
+      chapterTwoStarted: true,
+      chapterTwoBriefed: true,
       chapterClosingChoice: closingChoice,
     }));
     setDialogue({
-      portrait: "✨",
-      name: "Chapter 1 Complete: The Road That Lied",
-      text: CHAPTER_1_STORY.reportBack.closingNarration,
+      portrait: "🗺️",
+      name: "Chapter 2: The Westroot Trail",
+      size: "wide",
+      text: CHAPTER_1_STORY.reportBack.expeditionReady,
       choices: [{ label: "Continue", effect: () => setDialogue(null) }],
     });
   };
@@ -2425,12 +2613,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       name: "Westroot",
       text: appendChapter1CompanionReaction(
         CHAPTER_1_STORY.reportBack.westrootLead,
-        companion.recruited ? companion.id : null,
+        companionIsConscious ? companion.id : null,
         "reportBack",
       ),
       choices: CHAPTER_1_STORY.reportBack.closingChoices.map((label) => ({
         label,
-        effect: () => completeChapterReport(label),
+        effect: () => completeWestrootBriefing(label),
       })),
     });
 
@@ -2509,7 +2697,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     viewFlags.localResult ? `${text}\n\n${viewFlags.localResult}` : text;
 
   const chapter2CompanionLine = (rowan, tilda, moss, fallback = "") => {
-    if (!companion.recruited) return fallback;
+    if (!companionIsConscious) return fallback;
     if (companion.id === "rowan") return rowan;
     if (companion.id === "tilda") return tilda;
     if (companion.id === "moss") return moss;
@@ -2518,7 +2706,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
 
   const formatWestrootDoorWhisper = (repair) => {
     if (repair.readyToOpen)
-      return "The inscription feels warmer now. Somewhere behind you, the road feels less tangled than it did.";
+      return "The inscription glows warm. Every false command behind you has gone quiet. The door is ready—speak the old road phrase.";
     if (repair.readyForRoadwatcher && repair.roadwatcherDefeated && !repair.crownFalsehoodCleared)
       return "The door listens past you toward the Crown Door. One false room is still speaking behind the road.";
     if (repair.readyForRoadwatcher)
@@ -2533,14 +2721,17 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
   const openChapter2Briefing = () => {
     if (!flags.chapterReported)
       return setToast("Finish reporting Chapter 1 before following Westroot.");
+    const briefingTableText = flags.eddenDrawingReceived
+      ? "Enna has three records spread across the table: the public road, courier marks, and Edden's charcoal drawing. None of them agree, but they all point west."
+      : "Enna has the public road and old courier marks spread across the table. A clear space waits between them for whatever Edden can remember clearly enough to share.";
     if (flags.chapterTwoBriefed)
       return setDialogue({
         portrait: "🗺️",
         name: "Westroot Briefing",
         size: "wide",
         text: flags.maraJoined
-          ? "Enna has three maps spread across the table: public road, courier marks, and Edden's impossible drawing. None of them agree, but they all point west. Mara watches the maps like they might try to leave without her.\n\nHollis has added Ada's name to the margin: if Willow-marked cargo appears west of town, her lens may show what ordinary eyes miss."
-          : "Enna has three maps spread across the table. Hollis nods toward the inn and the watchhouse door. \"Choose your companion if you want one, then speak with Mara. She knows Lio's private marks better than any of us. Before you leave, borrow Ada's lens too. Her seal was named under the cellar, and Westroot may hide cargo lies as well as road lies.\"",
+          ? `${briefingTableText} Mara watches the maps like they might try to leave without her.\n\nHollis has added Ada's name to the margin: if Willow-marked cargo appears west of town, her lens may show what ordinary eyes miss.`
+          : `${briefingTableText}\n\nHollis nods toward the inn and the watchhouse door. "Choose your companion if you want one, then speak with Mara. She knows Lio's private marks better than any of us. Before you leave, borrow Ada's lens too. Her seal was named under the cellar, and Westroot may hide cargo lies as well as road lies."`,
         choices: [
           {
             label: "What exactly is Westroot?",
@@ -2553,21 +2744,23 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                 choices: [{ label: "Back to the map table.", effect: openChapter2Briefing }],
               }),
           },
-          {
-            label: "Review Edden's drawing.",
-            effect: () =>
-              setDialogue({
-                portrait: "paper",
-                name: "Edden's Drawing",
-                sceneImage: {
-                  src: eddensThreeDoorDrawingScene,
-                  alt: "Edden's shaky charcoal drawing of three root-buried doors.",
-                },
-                size: "wide",
-                text: CHAPTER_2_SCENE_COPY.edden.drawingReview,
-                choices: [{ label: "Back to the map table.", effect: openChapter2Briefing }],
-              }),
-          },
+          flags.eddenDrawingReceived
+            ? {
+                label: "Review Edden's drawing.",
+                effect: () =>
+                  setDialogue({
+                    portrait: "paper",
+                    name: "Edden's Drawing",
+                    sceneImage: {
+                      src: eddensThreeDoorDrawingScene,
+                      alt: "Edden's shaky charcoal drawing of three root-buried doors.",
+                    },
+                    size: "wide",
+                    text: CHAPTER_2_SCENE_COPY.edden.drawingReview,
+                    choices: [{ label: "Back to the map table.", effect: openChapter2Briefing }],
+                  }),
+              }
+            : null,
           !flags.maraJoined
             ? { label: "Call Mara into the plan.", effect: () => openMaraChapter2Dialogue() }
             : null,
@@ -2582,7 +2775,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       portrait: "🗺️",
       name: "Bramblecross Watchhouse",
       size: "wide",
-      text: `${companion.recruited ? "Enna nods once to the companion at your side. \"Good. One clear witness is better than a crowd of half-listeners.\"" : "Enna looks at the empty space beside you. \"You can follow this lead alone if you must, but I would rather you did not. The road west is not simply dangerous. It is being edited.\""}\n\nHollis stands near the case wall, where Edden's blue cloth is pinned beside the Briar Crown mark.\n\n\"The sealed cellar door still opens from the far side,\" he says. \"We cannot chase Westroot through it yet. But the old courier maps show a surface cut west of town that reaches the same buried road.\"\n\nEnna taps three pages in turn: a public road map, a courier map, and Edden's charcoal drawing of three doors under roots.\n\n\"Someone else has already opened Westroot,\" she says. \"This chapter of the search is about proving where Lio went and whether he survived the gate. Mara reads his smallest marks. Ada's lens reads copied Willow marks. We should have both before the west road gets a vote.\"\n\nFor the first time, the room stops treating Lio Brindle like a route problem. He becomes someone's brother.`,
+      text: `${companionIsConscious ? "Enna nods once to the companion at your side. \"Good. One clear witness is better than a crowd of half-listeners.\"" : companion.recruited ? `Enna glances toward ${companion.name}. "Your witness needs rest before the road asks anything more of them."` : "Enna looks at the empty space beside you. \"You can follow this lead alone if you must, but I would rather you did not. The road west is not simply dangerous. It is being edited.\""}\n\nHollis stands near the case wall, where Edden's blue cloth is pinned beside the Briar Crown mark.\n\n\"The sealed cellar door still opens from the far side,\" he says. \"We cannot chase Westroot through it yet. But the old courier maps show a surface cut west of town that reaches the same buried road.\"\n\nEnna taps the public road map and the older courier marks, then leaves a deliberate space between them. Edden reached the buried road; his testimony belongs there when he is ready to give it.\n\n\"Someone else has already opened Westroot,\" she says. \"This chapter of the search is about proving where Lio went and whether he survived the gate. Mara reads his smallest marks. Ada's lens reads copied Willow marks. We should have both before the west road gets a vote.\"\n\nFor the first time, the room stops treating Lio Brindle like a route problem. He becomes someone's brother.`,
       choices: [
         {
           label: "What exactly is Westroot?",
@@ -2594,29 +2787,29 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               choices: [{ label: "Then we follow the old marks.", effect: openChapter2Briefing }],
             }),
         },
-        {
-          label: "What did Edden draw?",
-          effect: () =>
-            setDialogue({
-              portrait: "📜",
-              name: "Edden's Drawing",
-              sceneImage: {
-                src: eddensThreeDoorDrawingScene,
-                alt: "Edden's shaky charcoal drawing of three root-buried doors.",
-              },
-              size: "wide",
-              text: CHAPTER_2_SCENE_COPY.edden.drawingReview,
-              choices: [
-                {
-                  label: "I should talk to Edden.",
-                  effect: () => {
-                    setFlags((f) => ({ ...f, chapterTwoBriefed: true, chapterTwoStarted: true }));
-                    openEddenRecoveryDialogue({ allowPreBriefing: true });
+        flags.eddenDrawingReceived
+          ? {
+              label: "Review Edden's drawing.",
+              effect: () =>
+                setDialogue({
+                  portrait: "📜",
+                  name: "Edden's Drawing",
+                  sceneImage: {
+                    src: eddensThreeDoorDrawingScene,
+                    alt: "Edden's shaky charcoal drawing of three root-buried doors.",
                   },
-                },
-              ],
-            }),
-        },
+                  size: "wide",
+                  text: CHAPTER_2_SCENE_COPY.edden.drawingReview,
+                  choices: [{ label: "Back to the map table.", effect: openChapter2Briefing }],
+                }),
+            }
+          : {
+              label: "Visit Edden's recovery room.",
+              effect: () => {
+                setFlags((f) => ({ ...f, chapterTwoBriefed: true, chapterTwoStarted: true }));
+                openEddenRecoveryDialogue({ allowPreBriefing: true });
+              },
+            },
         {
           label: "How does this help us find Lio?",
           effect: () => {
@@ -2768,7 +2961,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     setDialogue({
       portrait: "✦",
       name: "Leaving Bramblecross",
-      text: `The westward cut does not look like a road at first. It looks like a place where the grass has been persuaded to lean the same direction for a very long time.\n\nMara touches the blue string at her wrist. Hollis says, \"Mara stays behind the line when trouble starts.\"\n\n${companion.recruited ? chapter2CompanionLine("Rowan adjusts his shield. \"Then we walk carefully.\"", "Tilda grins. \"I have always wanted to argue with a road.\"", "Moss touches the mossy lantern mark. \"Old roads ask so we remember what kind of travelers we are.\"") : "The westward cut waits in silence. It does not look safer for being quiet."}`,
+      text: `The westward cut does not look like a road at first. It looks like a place where the grass has been persuaded to lean the same direction for a very long time.\n\nMara touches the blue string at her wrist. Hollis says, \"Mara stays behind the line when trouble starts.\"\n\n${companionIsConscious ? chapter2CompanionLine("Rowan adjusts his shield. \"Then we walk carefully.\"", "Tilda grins. \"I have always wanted to argue with a road.\"", "Moss touches the mossy lantern mark. \"Old roads ask so we remember what kind of travelers we are.\"") : companion.recruited ? `${companion.name} is still recovering. The westward cut will have to wait—or be faced without their help.` : "The westward cut waits in silence. It does not look safer for being quiet."}`,
       choices: [
         { label: "Mara, watch for Lio's smallest marks.", effect: () => departToWestroot("lioMarks") },
         { label: "Mara, keep Edden's drawing ready.", effect: () => departToWestroot("eddenDrawing") },
@@ -2792,6 +2985,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
 
   const openWestrootCutDialogue = () => {
     const alreadyStudied = !!flags.westrootCutStudied;
+    const alreadyCopied = !!flags.westrootCutCopied;
     const repairMode = !!flags.noHandleStoneInspected;
     setDialogue({
       portrait: "✦",
@@ -2804,18 +2998,28 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           ? "Old cart ruts appear, vanish, then appear again under grass. A small route mark survives on a knee-high stone, half hidden by fresh scrapes. It is easy to miss because it is not trying to impress anyone."
           : "Old cart ruts appear, vanish, then appear again under grass. Mara is already ahead, one hand on the blue string at her wrist.\n\n\"Lio came this way,\" she says. \"He cuts his arrows low when he does not want tall people noticing them. West. Fast.\"",
       choices: [
-        !alreadyStudied
+        repairMode && !alreadyCopied
           ? {
-              label: repairMode ? "Copy the old route mark." : "Keep following Lio's mark.",
+              label: "Copy the old route mark.",
+              effect: () => {
+                setFlags((f) => ({
+                  ...f,
+                  westrootCutStudied: true,
+                  westrootCutCopied: true,
+                }));
+                setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
+                setDialogue(null);
+                setToast("You copy the old route mark. XP +4");
+              },
+            }
+          : null,
+        !repairMode && !alreadyStudied
+          ? {
+              label: "Keep following Lio's mark.",
               effect: () => {
                 setFlags((f) => ({ ...f, westrootCutStudied: true }));
-                if (repairMode) setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
                 setDialogue(null);
-                setToast(
-                  repairMode
-                    ? "You copy the old route mark. XP +4"
-                    : "Mara keeps the trail moving west.",
-                );
+                setToast("Mara keeps the trail moving west.");
               },
             }
           : null,
@@ -3019,6 +3223,20 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
+  const stepBackFromThreeDoorThreshold = (fallbackPosition?: Position) => {
+    const destination =
+      fallbackPosition ||
+      previousPositionByRegionRef.current.westrootTrail ||
+      getNavigationDestination("westrootTrail", 6, 4, "down");
+    if (destination) {
+      previousPositionByRegionRef.current.westrootTrail = { x: 6, y: 4 };
+      setPosition(destination);
+      revealArea("westrootTrail", destination.x, destination.y);
+      setToast("You step back from the three doors.");
+    }
+    setDialogue(null);
+  };
+
   const openThreeDoorThresholdDialogue = (fallbackPosition, assumedFlags: Flags & { localResult?: string } = {}) =>
     setDialogue({
       portrait: CHAPTER_2_SCENE_COPY.threeDoorThreshold.portrait,
@@ -3028,24 +3246,48 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         alt: CHAPTER_2_SCENE_COPY.threeDoorThreshold.sceneAlt,
       },
       size: "wide",
+      contentLayout: "split",
+      choiceLayout: "grouped",
       text: addLocalResult(CHAPTER_2_SCENE_COPY.threeDoorThreshold.text, assumedFlags),
       choices: [
-        { label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.crownDoor, effect: () => openCrownDoorDialogue({}, fallbackPosition) },
-        { label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.lanternDoor, effect: () => openLanternDoorDialogue({}, fallbackPosition) },
+        {
+          label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.crownDoor,
+          choiceGroup: "doors",
+          effect: () => openCrownDoorDialogue({}, fallbackPosition),
+        },
+        {
+          label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.lanternDoor,
+          choiceGroup: "doors",
+          effect: () => openLanternDoorDialogue({}, fallbackPosition),
+        },
         {
           label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.noHandleDoor,
+          choiceGroup: "doors",
           effect: () => openNoHandleStoneDialogue({}, fallbackPosition),
         },
         flags.westrootGateOpened
           ? { label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.westrootGate, effect: () => openWestrootGateDialogue() }
           : null,
         !(flags.maraConsultedAtThreshold || assumedFlags.maraConsultedAtThreshold)
-          ? { label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.maraRead, effect: () => openMaraHollowJobDialogue(fallbackPosition) }
+          ? {
+              label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.maraRead,
+              choiceGroup: "reads",
+              effect: () => openMaraHollowJobDialogue(fallbackPosition),
+            }
           : null,
+        companionIsConscious &&
         !(flags.companionReadThreshold || assumedFlags.companionReadThreshold)
-          ? { label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.companionRead, effect: () => openCompanionHollowReadDialogue(fallbackPosition) }
+          ? {
+              label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.companionRead,
+              choiceGroup: "reads",
+              effect: () => openCompanionHollowReadDialogue(fallbackPosition),
+            }
           : null,
-        { label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.back, effect: () => setDialogue(null) },
+        {
+          label: CHAPTER_2_SCENE_COPY.threeDoorThreshold.labels.back,
+          variant: "quiet",
+          effect: () => stepBackFromThreeDoorThreshold(fallbackPosition),
+        },
       ].filter(Boolean),
     });
 
@@ -3057,22 +3299,36 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       name: CHAPTER_2_SCENE_COPY.crownDoor.name,
       visual: "crownDoor",
       size: "wide",
+      contentLayout: "split",
+      choiceLayout: "grouped",
       text: getCrownDoorText(viewFlags, canOpenDen),
       choices: [
-        { label: CHAPTER_2_SCENE_COPY.crownDoor.labels.inspectSign, effect: () => openCrownSignDialogue({}, fallbackPosition) },
+        {
+          label: viewFlags.crownSignRejected || viewFlags.crownSignLensUsed
+            ? CHAPTER_2_SCENE_COPY.crownDoor.labels.reviewSign
+            : CHAPTER_2_SCENE_COPY.crownDoor.labels.inspectSign,
+          choiceGroup: "investigate",
+          effect: () => openCrownSignDialogue(viewFlags, fallbackPosition),
+        },
         canOpenDen
           ? {
               label: viewFlags.crownDoorDungeonCleared
                 ? CHAPTER_2_SCENE_COPY.crownDoor.labels.returnDen
                 : CHAPTER_2_SCENE_COPY.crownDoor.labels.openWithSlat,
+              choiceGroup: "investigate",
               effect: () => enterCrownDoorDen(),
             }
-          : {
+          : !viewFlags.crownDoorTried
+            ? {
               label: CHAPTER_2_SCENE_COPY.crownDoor.labels.tryDoor,
-              effect: () => openFalseCrownPassageDialogue({ ...assumedFlags, crownDoorTried: true }, fallbackPosition),
-            },
-        {
+              choiceGroup: "investigate",
+              effect: () => openBlockedCrownDoorDialogue({ ...assumedFlags, crownDoorTried: true }, fallbackPosition),
+            }
+            : null,
+        !viewFlags.maraQuestionedCrownDoor
+          ? {
           label: CHAPTER_2_SCENE_COPY.crownDoor.labels.askMara,
+          choiceGroup: "reads",
           effect: () => {
             setFlags((f) => ({ ...f, maraQuestionedCrownDoor: true }));
             setDialogue({
@@ -3082,19 +3338,33 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               choices: [{ label: CHAPTER_2_SCENE_COPY.crownDoor.labels.backDoor, effect: () => openCrownDoorDialogue({ ...assumedFlags, maraQuestionedCrownDoor: true }, fallbackPosition) }],
             });
           },
+        }
+          : null,
+        companionIsConscious && !viewFlags.companionReadCrownDoor
+          ? {
+              label: CHAPTER_2_SCENE_COPY.crownDoor.labels.askCompanion,
+              choiceGroup: "reads",
+              effect: () => {
+                setFlags((f) => ({ ...f, companionReadCrownDoor: true }));
+                openCompanionDoorReadDialogue("crown", fallbackPosition, viewFlags);
+              },
+            }
+          : null,
+        {
+          label: CHAPTER_2_SCENE_COPY.crownDoor.labels.backThreshold,
+          variant: "quiet",
+          effect: () => openThreeDoorThresholdDialogue(fallbackPosition),
         },
-        { label: CHAPTER_2_SCENE_COPY.crownDoor.labels.askCompanion, effect: () => openCompanionDoorReadDialogue("crown", fallbackPosition) },
-        { label: CHAPTER_2_SCENE_COPY.crownDoor.labels.backThreshold, effect: () => openThreeDoorThresholdDialogue(fallbackPosition) },
-      ],
+      ].filter(Boolean),
     });
   };
 
-  const openFalseCrownPassageDialogue = (assumedFlags: Flags & { localResult?: string } = {}, fallbackPosition) => {
+  const openBlockedCrownDoorDialogue = (assumedFlags: Flags & { localResult?: string } = {}, fallbackPosition) => {
+    const trustedFalseSign = !!assumedFlags.trustedCrownSignAtHollow;
     setFlags((f) => ({
       ...f,
       crownDoorTried: true,
-      enteredFalseCrownPassage: true,
-      ...(assumedFlags.trustedCrownSignAtHollow
+      ...(trustedFalseSign
         ? {
             followedFalseDetour: true,
             trustedCrownSignAtHollow: true,
@@ -3104,17 +3374,25 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     }));
     setDialogue({
       portrait: CHAPTER_2_SCENE_COPY.crownDoor.portrait,
-      name: CHAPTER_2_SCENE_COPY.falseCrownPassage.name,
-      text: CHAPTER_2_SCENE_COPY.falseCrownPassage.text,
+      name: CHAPTER_2_SCENE_COPY.blockedCrownDoor.name,
+      visual: "crownDoor",
+      size: "wide",
+      contentLayout: "split",
+      text: trustedFalseSign
+        ? CHAPTER_2_SCENE_COPY.blockedCrownDoor.text.trustedSign
+        : CHAPTER_2_SCENE_COPY.blockedCrownDoor.text.tried,
+      choiceLayout: "grouped",
       choices: [
         {
-          label: CHAPTER_2_SCENE_COPY.falseCrownPassage.labels.markDanger,
-          effect: () => {
-            setToast(CHAPTER_2_SCENE_COPY.falseCrownPassage.markedToast);
-            openCrownDoorDialogue({ ...assumedFlags, enteredFalseCrownPassage: true }, fallbackPosition);
-          },
+          label: CHAPTER_2_SCENE_COPY.blockedCrownDoor.labels.returnDoor,
+          choiceGroup: "return",
+          effect: () => openCrownDoorDialogue({ ...assumedFlags, crownDoorTried: true }, fallbackPosition),
         },
-        { label: CHAPTER_2_SCENE_COPY.falseCrownPassage.labels.returnThreshold, effect: () => openThreeDoorThresholdDialogue(fallbackPosition) },
+        {
+          label: CHAPTER_2_SCENE_COPY.blockedCrownDoor.labels.returnThreshold,
+          choiceGroup: "return",
+          effect: () => openThreeDoorThresholdDialogue(fallbackPosition),
+        },
       ],
     });
   };
@@ -3450,13 +3728,23 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       name: CHAPTER_2_SCENE_COPY.lanternDoor.name,
       visual: "lanternDoor",
       size: "wide",
+      contentLayout: "split",
+      choiceLayout: "grouped",
       text: viewFlags.lanternDoorTried
         ? CHAPTER_2_SCENE_COPY.lanternDoor.text.tried
         : CHAPTER_2_SCENE_COPY.lanternDoor.text.default,
       choices: [
-        { label: CHAPTER_2_SCENE_COPY.lanternDoor.labels.inspectSign, effect: () => openLanternSignDialogue({}, fallbackPosition) },
         {
+          label: viewFlags.lanternSignCleaned
+            ? CHAPTER_2_SCENE_COPY.lanternDoor.labels.reviewSign
+            : CHAPTER_2_SCENE_COPY.lanternDoor.labels.inspectSign,
+          choiceGroup: "investigate",
+          effect: () => openLanternSignDialogue(viewFlags, fallbackPosition),
+        },
+        !viewFlags.lanternDoorTried
+          ? {
           label: CHAPTER_2_SCENE_COPY.lanternDoor.labels.tryDoor,
+          choiceGroup: "investigate",
           effect: () => {
             const firstTry = !flags.lanternDoorTried && !viewFlags.lanternDoorTried;
             setFlags((f) => ({ ...f, lanternDoorTried: true }));
@@ -3473,9 +3761,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               choices: [{ label: CHAPTER_2_SCENE_COPY.lanternDoor.labels.backDoor, effect: () => openLanternDoorDialogue({ ...assumedFlags, lanternDoorTried: true }, fallbackPosition) }],
             });
           },
-        },
-        {
+        }
+          : null,
+        !viewFlags.maraQuestionedLanternDoor
+          ? {
           label: CHAPTER_2_SCENE_COPY.lanternDoor.labels.askMara,
+          choiceGroup: "reads",
           effect: () => {
             setFlags((f) => ({ ...f, maraQuestionedLanternDoor: true }));
             setDialogue({
@@ -3485,10 +3776,24 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               choices: [{ label: CHAPTER_2_SCENE_COPY.lanternDoor.labels.backDoor, effect: () => openLanternDoorDialogue({ ...assumedFlags, maraQuestionedLanternDoor: true }, fallbackPosition) }],
             });
           },
+        }
+          : null,
+        companionIsConscious && !viewFlags.companionReadLanternDoor
+          ? {
+              label: CHAPTER_2_SCENE_COPY.lanternDoor.labels.askCompanion,
+              choiceGroup: "reads",
+              effect: () => {
+                setFlags((f) => ({ ...f, companionReadLanternDoor: true }));
+                openCompanionDoorReadDialogue("lantern", fallbackPosition, viewFlags);
+              },
+            }
+          : null,
+        {
+          label: CHAPTER_2_SCENE_COPY.lanternDoor.labels.backThreshold,
+          variant: "quiet",
+          effect: () => openThreeDoorThresholdDialogue(fallbackPosition),
         },
-        { label: CHAPTER_2_SCENE_COPY.lanternDoor.labels.askCompanion, effect: () => openCompanionDoorReadDialogue("lantern", fallbackPosition) },
-        { label: CHAPTER_2_SCENE_COPY.lanternDoor.labels.backThreshold, effect: () => openThreeDoorThresholdDialogue(fallbackPosition) },
-      ],
+      ].filter(Boolean),
     });
   };
 
@@ -3545,6 +3850,8 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
   };
 
   const openCompanionHollowReadDialogue = (fallbackPosition) => {
+    if (!companionIsConscious)
+      return openThreeDoorThresholdDialogue(fallbackPosition);
     setFlags((f) => ({ ...f, companionReadThreshold: true }));
     const text = getChapter2CompanionRead("threshold", companion.id);
     setDialogue({
@@ -3564,17 +3871,31 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openCompanionDoorReadDialogue = (door, fallbackPosition) => {
+  const openCompanionDoorReadDialogue = (door, fallbackPosition, returnFlags: Flags = {}) => {
+    if (!companionIsConscious)
+      return openThreeDoorThresholdDialogue(fallbackPosition);
     const doorText = {
       crown: getChapter2CompanionRead("crownDoor", companion.id),
       lantern: getChapter2CompanionRead("lanternDoor", companion.id),
       noHandle: getChapter2CompanionRead("noHandleDoor", companion.id),
     };
+    const returnToDoor = () => {
+      if (door === "crown")
+        return openCrownDoorDialogue({ ...returnFlags, companionReadCrownDoor: true }, fallbackPosition);
+      if (door === "lantern")
+        return openLanternDoorDialogue({ ...returnFlags, companionReadLanternDoor: true }, fallbackPosition);
+      return openNoHandleStoneDialogue({ ...returnFlags, companionReadNoHandleDoor: true }, fallbackPosition);
+    };
+    const returnLabel = door === "crown"
+      ? CHAPTER_2_SCENE_COPY.crownDoor.labels.backDoor
+      : door === "lantern"
+        ? CHAPTER_2_SCENE_COPY.lanternDoor.labels.backDoor
+        : "Back to the No-Handle Door.";
     setDialogue({
       portrait: companion.icon || "3",
       name: companion.recruited ? `${companion.name}'s Read` : "The Hollow Waits",
       text: doorText[door] || doorText.noHandle,
-      choices: [{ label: CHAPTER_2_SCENE_COPY.crownDoor.labels.backThreshold, effect: () => openThreeDoorThresholdDialogue(fallbackPosition) }],
+      choices: [{ label: returnLabel, effect: returnToDoor }],
     });
   };
 
@@ -3616,10 +3937,10 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         !viewFlags.crownSignRejected
           ? {
               label: CHAPTER_2_SCENE_COPY.crownSign.labels.testDirection,
-              effect: () => openFalseCrownPassageDialogue({ ...assumedFlags, trustedCrownSignAtHollow: true }, fallbackPosition),
+              effect: () => openBlockedCrownDoorDialogue({ ...assumedFlags, trustedCrownSignAtHollow: true }, fallbackPosition),
             }
           : null,
-        { label: CHAPTER_2_SCENE_COPY.crownSign.labels.backDoor, effect: () => openCrownDoorDialogue(assumedFlags, fallbackPosition) },
+        { label: CHAPTER_2_SCENE_COPY.crownSign.labels.backDoor, effect: () => openCrownDoorDialogue(viewFlags, fallbackPosition) },
       ].filter(Boolean),
     });
   };
@@ -3637,7 +3958,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               label: CHAPTER_2_SCENE_COPY.lanternSign.labels.clean,
               effect: () => {
                 setFlags((f) => ({ ...f, lanternSignCleaned: true, understandsTrueSigns: true }));
-                if (!flags.lanternSignCleaned) setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
+                if (!viewFlags.lanternSignCleaned) setPlayer((p) => ({ ...p, xp: p.xp + 4 }));
                 openLanternSignDialogue({
                   ...assumedFlags,
                   lanternSignCleaned: true,
@@ -3677,7 +3998,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               },
             }
           : null,
-        { label: CHAPTER_2_SCENE_COPY.lanternSign.labels.backDoor, effect: () => openLanternDoorDialogue(assumedFlags, fallbackPosition) },
+        { label: CHAPTER_2_SCENE_COPY.lanternSign.labels.backDoor, effect: () => openLanternDoorDialogue(viewFlags, fallbackPosition) },
       ].filter(Boolean),
     });
   };
@@ -3688,16 +4009,44 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     const repair = getWestrootDoorRepairState(flags, doorFlags);
     const viewFlags = { ...flags, ...doorFlags };
     const lioText = getNoHandleLioText(viewFlags, repair);
+    const openReadyWestrootDoor = () => {
+      setFlags((f) => ({
+        ...f,
+        ...doorFlags,
+        westrootGateOpened: true,
+        lioAlivePastGate: true,
+        cleanWestrootSolve: !!f.cleanWestrootSolve || outcome.cleanSolve,
+        eddensDrawingValidated: true,
+        briarCrownWatchingWestroot: true,
+      }));
+      if (!viewFlags.westrootGateOpened) setPlayer((p) => ({ ...p, xp: p.xp + 10 }));
+      setDialogue({
+        portrait: CHAPTER_2_SCENE_COPY.noHandleDoor.portrait,
+        name: CHAPTER_2_SCENE_COPY.noHandleDoor.doorOpensName,
+        text: formatDoorOpensText(),
+        choices: [
+          {
+            label: CHAPTER_2_SCENE_COPY.noHandleDoor.labels.stepGate,
+            effect: () => openWestrootGateDialogue({ westrootGateOpened: true }),
+          },
+        ],
+      });
+    };
+
     setFlags((f) => ({ ...f, noHandleStoneInspected: true }));
     setDialogue({
       portrait: CHAPTER_2_SCENE_COPY.noHandleDoor.portrait,
       name: CHAPTER_2_SCENE_COPY.noHandleDoor.name,
       visual: "noHandleDoor",
       size: "wide",
+      contentLayout: "split",
+      choiceLayout: "grouped",
       text: addLocalResult(formatNoHandleDoorText(lioText, formatWestrootDoorWhisper(repair)), viewFlags),
       choices: [
-        {
+        !viewFlags.noHandleDoorStudied
+          ? {
           label: CHAPTER_2_SCENE_COPY.noHandleDoor.labels.study,
+          choiceGroup: "investigate",
           effect: () => {
             setFlags((f) => ({ ...f, noHandleDoorStudied: true }));
             openNoHandleStoneDialogue(
@@ -3711,18 +4060,23 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               fallbackPosition,
             );
           },
-        },
-        !viewFlags.maraAskedNoHandleMark
+        }
+          : null,
+        (!viewFlags.maraAskedNoHandleMark ||
+          (!!viewFlags.lioShelterMarkFound && !viewFlags.lioHookMarkFound))
           ? {
-          label: CHAPTER_2_SCENE_COPY.noHandleDoor.labels.askMara,
+          label: viewFlags.maraAskedNoHandleMark
+            ? "Ask Mara to compare the shelter mark."
+            : CHAPTER_2_SCENE_COPY.noHandleDoor.labels.askMara,
+          choiceGroup: "reads",
           effect: () => {
             const foundMark = !!(flags.lioShelterMarkFound || doorFlags.lioShelterMarkFound);
             const markFlags = {
               maraAskedNoHandleMark: true,
-              lioHookMarkFound: true,
+              ...(foundMark ? { lioHookMarkFound: true } : {}),
             };
             setFlags((f) => ({ ...f, ...markFlags }));
-            if (foundMark && !flags.maraAskedNoHandleMark && !flags.lioHookMarkFound)
+            if (foundMark && !flags.lioHookMarkFound)
               setPlayer((p) => ({ ...p, xp: p.xp + 5 }));
             openNoHandleStoneDialogue(
               {
@@ -3737,34 +4091,42 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           },
         }
           : null,
-        !viewFlags.companionReadNoHandleDoor
+        companionIsConscious && !viewFlags.companionReadNoHandleDoor
           ? {
               label: CHAPTER_2_SCENE_COPY.noHandleDoor.labels.askCompanion,
+              choiceGroup: "reads",
               effect: () => {
                 setFlags((f) => ({ ...f, companionReadNoHandleDoor: true }));
-                openCompanionDoorReadDialogue("noHandle", fallbackPosition);
+                openCompanionDoorReadDialogue("noHandle", fallbackPosition, viewFlags);
               },
             }
           : null,
-        !viewFlags.eddenDrawingComparedAtDoor
+        (!viewFlags.eddenDrawingComparedAtDoor ||
+          (!!viewFlags.lanternSignCleaned && !viewFlags.eddensDrawingValidated))
           ? {
-          label: CHAPTER_2_SCENE_COPY.noHandleDoor.labels.compareDrawing,
+          label: viewFlags.eddenDrawingComparedAtDoor
+            ? "Compare Edden's drawing with the cleaned sign."
+            : CHAPTER_2_SCENE_COPY.noHandleDoor.labels.compareDrawing,
+          choiceGroup: "investigate",
           effect: () => {
+            const drawingMatches = !!(
+              flags.lanternSignCleaned || doorFlags.lanternSignCleaned
+            );
             const drawingFlags = {
               eddenDrawingComparedAtDoor: true,
-              ...(flags.lanternSignCleaned || doorFlags.lanternSignCleaned
+              ...(drawingMatches
                 ? { eddensDrawingRotated: true, eddensDrawingValidated: true }
                 : {}),
             };
             setFlags((f) => ({ ...f, ...drawingFlags }));
-            if (!flags.eddenDrawingComparedAtDoor && (flags.lanternSignCleaned || doorFlags.lanternSignCleaned))
+            if (drawingMatches && !flags.eddensDrawingValidated)
               setPlayer((p) => ({ ...p, xp: p.xp + 5 }));
             openNoHandleStoneDialogue(
               {
                 ...doorFlags,
                 ...drawingFlags,
                 localResult:
-                  flags.lanternSignCleaned || doorFlags.lanternSignCleaned
+                  drawingMatches
                     ? CHAPTER_2_SCENE_COPY.noHandleDoor.results.drawingMatched
                     : CHAPTER_2_SCENE_COPY.noHandleDoor.results.drawingAlmost,
               },
@@ -3774,7 +4136,14 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         }
           : null,
         {
-          label: `Say: ${CHAPTER_2_STORY.oldRoadPhrase}`,
+          label: repair.readyToOpen
+            ? `Say: ${CHAPTER_2_STORY.oldRoadPhrase} — open the door.`
+            : `Say: ${CHAPTER_2_STORY.oldRoadPhrase}`,
+          requirement: repair.readyToOpen
+            ? "The road is clear. Speaking the phrase will open the door."
+            : undefined,
+          variant: repair.readyToOpen ? "primary" : undefined,
+          choiceGroup: "door-actions",
           effect: () => {
             if (!outcome.enoughClues) {
               setFlags((f) => ({ ...f, incompleteTruthPhraseSpoken: true }));
@@ -3808,27 +4177,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             }
 
             if (repair.readyToOpen) {
-              setFlags((f) => ({
-                ...f,
-                ...doorFlags,
-                westrootGateOpened: true,
-                lioAlivePastGate: true,
-                cleanWestrootSolve: !!f.cleanWestrootSolve || outcome.cleanSolve,
-                eddensDrawingValidated: true,
-                briarCrownWatchingWestroot: true,
-              }));
-              if (!flags.westrootGateOpened) setPlayer((p) => ({ ...p, xp: p.xp + 10 }));
-              setDialogue({
-                portrait: CHAPTER_2_SCENE_COPY.noHandleDoor.portrait,
-                name: CHAPTER_2_SCENE_COPY.noHandleDoor.doorOpensName,
-                text: formatDoorOpensText(),
-                choices: [
-                  {
-                    label: CHAPTER_2_SCENE_COPY.noHandleDoor.labels.stepGate,
-                    effect: () => openWestrootGateDialogue({ westrootGateOpened: true }),
-                  },
-                ],
-              });
+              openReadyWestrootDoor();
               return;
             }
 
@@ -3860,8 +4209,10 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             });
           },
         },
-        {
+        !viewFlags.forcedNoHandleDoorTwice
+          ? {
           label: CHAPTER_2_SCENE_COPY.noHandleDoor.labels.force,
+          choiceGroup: "door-actions",
           effect: () => {
             setFlags((f) => ({
               ...f,
@@ -3879,9 +4230,11 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
               fallbackPosition,
             );
           },
-        },
+        }
+          : null,
         {
           label: CHAPTER_2_SCENE_COPY.noHandleDoor.labels.backThreshold,
+          variant: "quiet",
           effect: () => openThreeDoorThresholdDialogue(fallbackPosition),
         },
       ].filter(Boolean),
@@ -3966,16 +4319,21 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const enterWestrootHub = () =>
+  const enterWestrootHub = () => {
     travelToRegion(
       "westrootHub",
       MAPS.westrootHub.start,
       "Westroot Gate",
       "You step beneath the hill into Westroot.",
     );
+    openWestrootFirstGateDialogue();
+  };
 
   const openWestrootFirstGateDialogue = () => {
-    if (flags.chapterThreeStarted) {
+    if (flags.metBramwell) {
+      if (!flags.chapterThreeStarted) {
+        setFlags((current) => ({ ...current, chapterThreeStarted: true }));
+      }
       return setDialogue({
         portrait: "◈",
         name: CHAPTER_3_SCENE_COPY.firstGate.name,
@@ -4037,10 +4395,21 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
+  const routeUnintroducedPartyToBramwell = () => {
+    if (region !== "westrootHub" || flags.metBramwell) return false;
+    const gatePosition = MAPS.westrootHub.start;
+    if (position.x !== gatePosition.x || position.y !== gatePosition.y) {
+      setPosition(gatePosition);
+      revealArea("westrootHub", gatePosition.x, gatePosition.y, 2);
+    }
+    openWestrootFirstGateDialogue();
+    return true;
+  };
+
   const withChapter3CompanionReaction = (text, beat) =>
     appendChapter3CompanionReaction(
       text,
-      companion.recruited ? companion.id : null,
+      companionIsConscious ? companion.id : null,
       beat,
     );
 
@@ -4126,6 +4495,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
   };
 
   const openRootmarketDialogue = () => {
+    if (routeUnintroducedPartyToBramwell()) return;
     if (flags.metQuill) {
       return setDialogue({
         portrait: "⌂",
@@ -4160,12 +4530,18 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     });
   };
 
-  const openMossgardenWitnessContext = (response) =>
+  const openMossgardenWitnessContext = (response, askedFlag) => {
+    const assumedFlags = { metNoma: true, [askedFlag]: true };
+    setFlags((current) => ({ ...current, ...assumedFlags }));
     setDialogue({
       portrait: "✿",
       name: "Noma Greenstill",
       text: `${response}\n\n${CHAPTER_3_FULL_SCENE_COPY.mossgarden.converged}`,
       choices: [
+        {
+          label: "Ask Noma another question.",
+          effect: () => openMossgardenDialogue(assumedFlags),
+        },
         {
           label: "Show me how the stones are meant to work.",
           effect: () => openWitnessStonesDialogue([], CHAPTER_3_FULL_SCENE_COPY.mossgarden.showResponse),
@@ -4180,38 +4556,61 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         },
       ],
     });
+  };
 
-  const openMossgardenDialogue = () => {
-    if (flags.metNoma) {
-      return setDialogue({
-        portrait: "✿",
-        name: CHAPTER_3_SCENE_COPY.mossgarden.name,
-        text: CHAPTER_3_SCENE_COPY.mossgarden.repeat,
-        choices: [
-          { label: "Study the Witness Stones.", effect: () => openWitnessStonesDialogue() },
-          { label: "Keep exploring.", effect: () => setDialogue(null) },
-        ],
-      });
-    }
-    setFlags((f) => ({ ...f, metNoma: true }));
+  const openMossgardenDialogue = (assumedFlags: Flags = {}) => {
+    const viewFlags = { ...flags, ...assumedFlags };
+    if (!viewFlags.metNoma) setFlags((f) => ({ ...f, metNoma: true }));
+    const questionChoices = [
+      !viewFlags.nomaAskedNames
+        ? {
+            label: "What are these names?",
+            effect: () =>
+              openMossgardenWitnessContext(
+                CHAPTER_3_FULL_SCENE_COPY.mossgarden.namesResponse,
+                "nomaAskedNames",
+              ),
+          }
+        : null,
+      !viewFlags.nomaAskedCourier
+        ? {
+            label: "We need to find the truth about a missing courier.",
+            effect: () =>
+              openMossgardenWitnessContext(
+                CHAPTER_3_FULL_SCENE_COPY.mossgarden.courierResponse,
+                "nomaAskedCourier",
+              ),
+          }
+        : null,
+      !viewFlags.nomaAskedGate
+        ? {
+            label: "Bramwell says Westroot should close the gate.",
+            effect: () =>
+              openMossgardenWitnessContext(
+                CHAPTER_3_FULL_SCENE_COPY.mossgarden.gateResponse,
+                "nomaAskedGate",
+              ),
+          }
+        : null,
+    ].filter(Boolean);
     setDialogue({
       portrait: "✿",
-      name: "Noma Greenstill",
-      text: CHAPTER_3_SCENE_COPY.mossgarden.text,
+      name: viewFlags.metNoma
+        ? CHAPTER_3_SCENE_COPY.mossgarden.name
+        : "Noma Greenstill",
+      text: viewFlags.metNoma
+        ? CHAPTER_3_SCENE_COPY.mossgarden.repeat
+        : CHAPTER_3_SCENE_COPY.mossgarden.text,
       choices: [
-        {
-          label: "What are these names?",
-          effect: () => openMossgardenWitnessContext(CHAPTER_3_FULL_SCENE_COPY.mossgarden.namesResponse),
-        },
-        {
-          label: "We need to find the truth about a missing courier.",
-          effect: () => openMossgardenWitnessContext(CHAPTER_3_FULL_SCENE_COPY.mossgarden.courierResponse),
-        },
-        {
-          label: "Bramwell says Westroot should close the gate.",
-          effect: () => openMossgardenWitnessContext(CHAPTER_3_FULL_SCENE_COPY.mossgarden.gateResponse),
-        },
-      ],
+        ...questionChoices,
+        viewFlags.metNoma
+          ? {
+              label: "Study the Witness Stones.",
+              effect: () => openWitnessStonesDialogue(),
+            }
+          : null,
+        { label: "Keep exploring.", effect: () => setDialogue(null) },
+      ].filter(Boolean),
     });
   };
 
@@ -4463,8 +4862,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         src: mossgardenClosingMarkScene,
         alt: "Mara and Noma leaving a new courier mark in the lantern-lit Mossgarden.",
       },
-      text: CHAPTER_3_SCENE_COPY.closing.text,
-      choices: [{ label: "Follow the westward lead.", effect: () => setDialogue(null) }],
+      text: `${CHAPTER_3_SCENE_COPY.closing.text}\n\n${
+        flags.rootbreadPromiseKept
+          ? "Chapter 3 is complete. The playable story currently ends here; the westward lead continues in Chapter 4."
+          : "Chapter 3's main story is complete. The playable story currently ends here, but one optional Westroot thread remains: Inspect Rootmarket, speak with Auntie Lume, then follow the Rootbread Promise to the sealed hatch."
+      }`,
+      choices: [{ label: "Finish Chapter 3 for now.", effect: () => setDialogue(null) }],
       size: "wide",
     });
 
@@ -4522,6 +4925,18 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     const viewFlags = { ...flags, ...assumedFlags };
     if (!viewFlags.westrootGateOpened)
       return setToast(CHAPTER_2_SCENE_COPY.westrootGate.closedToast);
+    if (viewFlags.chapterTwoClear)
+      return setDialogue({
+        portrait: CHAPTER_2_SCENE_COPY.westrootGate.portrait,
+        name: CHAPTER_2_SCENE_COPY.westrootGate.name,
+        text: "The First Westroot Gate stands open. The truth that opened it does not need to be proven twice.",
+        choices: [
+          {
+            label: CHAPTER_2_SCENE_COPY.westrootGate.labels.continue,
+            effect: enterWestrootHub,
+          },
+        ],
+      });
     setDialogue({
       portrait: CHAPTER_2_SCENE_COPY.westrootGate.portrait,
       name: CHAPTER_2_SCENE_COPY.westrootGate.name,
@@ -4578,6 +4993,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
   };
 
   const inspectTile = (tile, options: { auto?: boolean; previousPosition?: Position } = {}) => {
+    if (routeUnintroducedPartyToBramwell()) return;
     if (options.auto && shouldSkipAutoInspect(tile)) return;
     if (region === "hearthhollow") {
       if (tile === "elder") openElderDialogue();
@@ -4792,7 +5208,11 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
           choices: [
             {
               label: flags.ennaBriefed
-                ? "I'll look into it."
+                ? flags.chapterReported
+                  ? "We'll follow the Westroot lead."
+                  : flags.chapterOneClear
+                    ? "I'll report what we found."
+                    : "I'll look into it."
                 : "I'll find Enna in the watchhouse.",
               effect: () => {
                 setFlags((f) => ({ ...f, metMayor: true }));
@@ -4808,13 +5228,19 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       if (tile === "cellar") openCellarDialogue();
     }
     if (region === "rootCellar") {
-      if (tile === "stairs_up")
+      if (tile === "stairs_up") {
+        if (flags.beatCellarBoss && !flags.chapterOneClear) {
+          setPosition({ x: 10, y: 4 });
+          openExitDoorDialogue({ beatCellarBoss: true });
+          return;
+        }
         travelToRegion(
           "bramblecross",
-          { x: 6, y: 6 },
+          { x: 3, y: 5 },
           player.checkpointLabel,
           "You climb back into Bramblecross.",
         );
+      }
       if (tile === "sigil") openRootSigilDialogue();
       if (tile === "mural") openRootMuralDialogue();
       if (tile === "fungus") openCellarFungusDialogue();
@@ -4839,7 +5265,9 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       if (tile === "crown_sign") openCrownSignDialogue({}, options.previousPosition);
       if (tile === "lantern_sign") openLanternSignDialogue({}, options.previousPosition);
       if (tile === "no_handle_stone")
-        openThreeDoorThresholdDialogue(options.previousPosition);
+        openThreeDoorThresholdDialogue(
+          options.previousPosition || previousPositionByRegionRef.current.westrootTrail,
+        );
       if (tile === "roadwatcher")
         openRoadwatcherDialogue(options.previousPosition);
       if (tile === "westroot_gate") openWestrootGateDialogue();
@@ -4866,6 +5294,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
   };
 
   const handleMapNodeClick = (x, y, tile) => {
+    if (routeUnintroducedPartyToBramwell()) return;
     const isCurrentNode = position.x === x && position.y === y;
     const isConnectedNode = areMapNodesConnected(region, position, { x, y });
     if (isConnectedNode) {
@@ -4878,6 +5307,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         else bump(tile);
       } else {
         const previousPosition = { x: position.x, y: position.y };
+        previousPositionByRegionRef.current[region] = previousPosition;
         setPosition({ x, y });
         revealArea(region, x, y);
         if (shouldTriggerLanternRoadAmbush(region, flags, { x, y })) {
@@ -4966,7 +5396,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     const sendNextTurn = () =>
       window.setTimeout(
         () =>
-          companion.recruited && companion.hp > 0
+          companionIsConscious
             ? companionTurn()
             : enemyTurn(),
         250,
@@ -4986,7 +5416,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                 ? { ...(prev.cooldowns || {}), [skill.id]: skill.cooldown }
                 : prev.cooldowns,
               turn:
-                companion.recruited && companion.hp > 0 ? "companion" : "enemy",
+                companionIsConscious ? "companion" : "enemy",
               log: [
                 ...prev.log.slice(-7),
                 `${player.name} uses ${skill.name}. HP +${heal}, Guard +${guard}.`,
@@ -5036,14 +5466,14 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       return {
         ...updated,
         selectedTargetId: nextTarget?.battleId,
-        turn: companion.recruited && companion.hp > 0 ? "companion" : "enemy",
+        turn: companionIsConscious ? "companion" : "enemy",
       };
     });
 
     if (!targetWillFall || otherLivingEnemies.length) sendNextTurn();
   };
 
-  const companionTurn = () => {
+  const companionTurn = (allowRevivedCompanion = false) => {
     setBattle((prev) => (prev ? { ...prev, turn: "companion" } : prev));
     window.setTimeout(() => {
       let allEnemiesDefeated = false;
@@ -5073,7 +5503,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       }
 
       setBattle((prev) => {
-        if (!prev || prev.finished || !companion.recruited || companion.hp <= 0)
+        if (
+          !prev ||
+          prev.finished ||
+          !companion.recruited ||
+          (companion.hp <= 0 && !allowRevivedCompanion)
+        )
           return prev;
         const target = getSelectedBattleEnemy(prev.enemies, prev.selectedTargetId);
         if (!target) return advanceToNextEnemyOrVictory(prev);
@@ -5180,7 +5615,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       battle.turn === "victory" || getLivingEnemies(battle.enemies).length === 0;
     if (victory) {
       let companionReward = null;
-      if (companion.recruited && flags.companionChoice) {
+      if (companionIsConscious && flags.companionChoice) {
         companionReward = { gained: 8, xp: (companion.xp || 0) + 8 };
         setCompanion((c) => ({ ...c, xp: (c.xp || 0) + 8 }));
       }
@@ -5237,8 +5672,17 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
                   label:
                     battle.rewardKey === "boar"
                       ? "Take the satchel to Elder Brynn."
-                      : "Continue",
-                  effect: () => setDialogue(null),
+                      : battle.rewardKey === "cellarBoss"
+                        ? "Approach the sealed door."
+                        : "Continue",
+                  effect: () => {
+                    if (battle.rewardKey === "cellarBoss") {
+                      setPosition({ x: 10, y: 4 });
+                      openExitDoorDialogue({ beatCellarBoss: true });
+                      return;
+                    }
+                    setDialogue(null);
+                  },
                 },
               ],
       });
@@ -5267,6 +5711,9 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
       return;
     removeItem(setPlayer, itemId, 1);
     const giveToCompanion = target === "companion" && companion.recruited;
+    const companionActsNext =
+      companionIsConscious ||
+      (giveToCompanion && companion.hp + cfg.heal > 0);
     if (giveToCompanion)
       setCompanion((c) => ({ ...c, hp: Math.min(c.maxHp, c.hp + cfg.heal) }));
     else setPlayer((p) => ({ ...p, hp: Math.min(p.maxHp, p.hp + cfg.heal) }));
@@ -5275,7 +5722,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
         ? {
             ...prev,
             turn:
-              companion.recruited && companion.hp > 0 ? "companion" : "enemy",
+              companionActsNext ? "companion" : "enemy",
             log: [
               ...prev.log.slice(-5),
               giveToCompanion
@@ -5288,7 +5735,9 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     setBattleItemsOpen(false);
     setTimeout(
       () =>
-        companion.recruited && companion.hp > 0 ? companionTurn() : enemyTurn(),
+        companionActsNext
+          ? companionTurn(giveToCompanion && !companionIsConscious)
+          : enemyTurn(),
       200,
     );
   };
@@ -5395,18 +5844,23 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
   };
   const setActiveCompanion = (id) => {
     const opt = COMPANION_OPTIONS[id];
-    setCompanion({
-      ...buildDefaultCompanion(),
-      recruited: true,
-      id,
-      name: opt.name,
-      hp: opt.maxHp,
-      maxHp: opt.maxHp,
-      icon: opt.icon,
-      role: opt.role,
-      style: opt.style,
-      futurePathOptions: getCompanionGrowthPreview(id),
-    });
+    const savedCompanion = companionRoster[id];
+    setCompanion(
+      savedCompanion
+        ? { ...normalizeCompanionData(savedCompanion), recruited: true }
+        : {
+            ...buildDefaultCompanion(),
+            recruited: true,
+            id,
+            name: opt.name,
+            hp: opt.maxHp,
+            maxHp: opt.maxHp,
+            icon: opt.icon,
+            role: opt.role,
+            style: opt.style,
+            futurePathOptions: getCompanionGrowthPreview(id),
+          },
+    );
     setFlags((f) => ({
       ...f,
       companionChosen: true,
@@ -5491,6 +5945,7 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
   const devJumpTo = (nextRegion) => {
     const target = MAPS[nextRegion];
     if (!target) return;
+    previousPositionByRegionRef.current[nextRegion] = undefined;
     setRegion(nextRegion);
     setPosition(target.start);
     revealArea(nextRegion, target.start.x, target.start.y, 2);
@@ -5827,7 +6282,12 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
     shopMode === "market"
       ? { title: "Willow Market", inventory: SHOP_INVENTORIES.market }
       : { title: "Smith Orin's Shop", inventory: SHOP_INVENTORIES.smith };
-  const mapBackgroundImage = currentRegionInfo.backgroundImage;
+  const mapBackgroundImage =
+    region === "rootCellar" &&
+    flags.beatCellarBoss &&
+    "completedBackgroundImage" in currentRegionInfo
+      ? currentRegionInfo.completedBackgroundImage
+      : currentRegionInfo.backgroundImage;
   const crownDenAlertLevel = Math.min(
     4,
     Math.max(0, Number(flags.crownDenAlertLevel || 0)),
@@ -5892,7 +6352,9 @@ ${check.success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_
             <div className="mt-0.5 hidden sm:block">
               {chapterProgress.currentChapterId >= 2
                 ? flags.chapterThreeClear
-                  ? "Westroot will not let lies travel unchallenged. The old road now points deeper west."
+                  ? flags.rootbreadPromiseKept
+                    ? "The current playable story ends here. Westroot now points toward Chapter 4 and the deeper western road."
+                    : "The main story ends here for now. An optional Rootbread thread remains: Inspect Rootmarket and speak with Auntie Lume."
                   : chapterProgress.currentChapterId >= 3
                     ? "Earn Westroot's trust, restore the Witness Stones, and expose the false cargo route."
                     : flags.chapterTwoClear

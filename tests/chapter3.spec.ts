@@ -1,4 +1,6 @@
 import { expect, test } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { MAPS } from "../src/data/maps";
 import { buildVisitedMap } from "../src/game/map";
 import { STORAGE_KEY } from "../src/game/save";
@@ -66,7 +68,9 @@ test("Chapter 3 keeps the Rootbread Promise and Witness Stones fail-forward sequ
   await expect(page.getByText("Goal: Enter Westroot")).toBeVisible();
   await expect(page.getByRole("button", { name: "Inspect First Westroot Gate", exact: true })).toBeVisible();
 
-  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  // Movement cannot bypass Bramwell: the first attempted step opens his gate
+  // conversation and leaves the party at the entrance.
+  await move(page, "right");
   await expect(page.getByText("Who opened my gate?")).toBeVisible();
   await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute(
     "src",
@@ -74,8 +78,9 @@ test("Chapter 3 keeps the Rootbread Promise and Witness Stones fail-forward sequ
   );
   await page.getByRole("button", { name: "The road opened when we told it the truth." }).click();
   await page.getByRole("button", { name: "Listen before asking for more." }).click();
+  await expect(page.getByRole("button", { name: "Inspect First Westroot Gate", exact: true })).toBeVisible();
 
-  await move(page, "right", 2);
+  await move(page, "right", 6);
   await expect(page.getByText("Hold that,")).toBeVisible();
   await page.getByRole("button", { name: "What does that shutter do?" }).click();
   await page.getByRole("button", { name: "Listen to Quill's old-road rule." }).click();
@@ -84,8 +89,8 @@ test("Chapter 3 keeps the Rootbread Promise and Witness Stones fail-forward sequ
   await page.getByRole("button", { name: "What is the Rootbread Promise?" }).click();
   await page.getByRole("button", { name: "Follow the Rootbread Promise." }).click();
 
-  await move(page, "right", 4);
-  await move(page, "down", 2);
+  await move(page, "right", 6);
+  await move(page, "down", 3);
   await expect(page.getByText("That is Lio's knot")).toBeVisible();
   await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute(
     "src",
@@ -97,9 +102,9 @@ test("Chapter 3 keeps the Rootbread Promise and Witness Stones fail-forward sequ
   await expect(page.getByText("The Rootbread Promise is kept. XP +6").first()).toBeVisible();
   await page.getByRole("button", { name: "Thank the child and keep the promise." }).click();
 
-  await move(page, "up", 2);
-  await move(page, "left", 4);
   await move(page, "up", 3);
+  await move(page, "left", 6);
+  await move(page, "up", 5);
   await expect(page.getByText("Do not step on the names")).toBeVisible();
   await page.getByRole("button", { name: "We need to find the truth about a missing courier." }).click();
   await page.getByRole("button", { name: "Show me how the stones are meant to work." }).click();
@@ -168,9 +173,9 @@ test("Chapter 3 Cargo Siding resolves into Split Hall and the westward handoff",
   await expect(page.getByText("Not a public road")).toBeVisible();
   await page.getByRole("button", { name: "Bring the evidence to Split Hall." }).click();
 
-  await move(page, "down", 2);
-  await move(page, "left", 2);
-  await move(page, "up");
+  await move(page, "down", 3);
+  await move(page, "left", 3);
+  await move(page, "up", 2);
   await expect(page.getByText("They learned which parts of us were afraid")).toBeVisible();
   await page.getByRole("button", { name: "The Witness Stones already gave us the answer." }).click();
   await expect(page.getByText("Caution is not cowardice")).toBeVisible();
@@ -186,4 +191,87 @@ test("Chapter 3 Cargo Siding resolves into Split Hall and the westward handoff",
   );
   await expect(page.getByText("Chapter 3 complete: The Hidden Root")).toBeVisible();
   expect(runtimeErrors).toEqual([]);
+});
+
+test("a downed companion does not speak during Chapter 3 story reactions", async ({ page }) => {
+  const payload = buildChapter3CargoCheckpoint();
+  payload.position = { x: 4, y: 1 };
+  payload.visited = {
+    westrootHub: buildVisitedMap("westrootHub", 4, 1, 10),
+  };
+  payload.flags.witnessStoneSequenceSolved = false;
+  payload.companion = {
+    ...buildDefaultCompanion(),
+    recruited: true,
+    id: "rowan",
+    name: "Rowan Reedshield",
+    hp: 0,
+    maxHp: 18,
+    style: "guardian",
+    role: "Guardian",
+  };
+  payload.flags.companionChosen = true;
+  payload.flags.companionChoice = "rowan";
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: payload },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await page.getByRole("button", { name: /^False Crown/ }).click();
+
+  await expect(page.getByText("A mistake")).toBeVisible();
+  await expect(page.getByText("We correct it. That is what a good warning is for.")).toHaveCount(0);
+});
+
+test("Noma keeps each informational question available until it has been asked", async ({ page }) => {
+  const payload = buildChapter3CargoCheckpoint();
+  payload.position = { x: 3, y: 0 };
+  payload.visited = {
+    westrootHub: buildVisitedMap("westrootHub", 3, 0, 3),
+  };
+  payload.flags.nomaAskedCourier = true;
+  payload.flags.nomaAskedNames = false;
+  payload.flags.nomaAskedGate = false;
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: payload },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+
+  await expect(page.getByRole("button", { name: "What are these names?" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "We need to find the truth about a missing courier." })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Bramwell says Westroot should close the gate." })).toBeVisible();
+
+  await page.getByRole("button", { name: "What are these names?" }).click();
+  await page.getByRole("button", { name: "Ask Noma another question." }).click();
+  await expect(page.getByRole("button", { name: "What are these names?" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Bramwell says Westroot should close the gate." })).toBeVisible();
+});
+
+test("the user Chapter 3 save clearly identifies the endpoint and preserves its optional thread", async ({ page }) => {
+  const importedSave = JSON.parse(
+    readFileSync(resolve("public/saves/stuck ch 3.json"), "utf8"),
+  );
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: importedSave.payload },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+
+  await expect(page.getByText("Goal: Chapter 3 Complete — Playable Story Ends Here")).toBeVisible();
+  await expect(
+    page.getByText("The main Chapter 3 story is complete, and Chapter 4 is not playable yet."),
+  ).toBeVisible();
+
+  await move(page, "left");
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Speak with Auntie Lume." })).toBeVisible();
 });

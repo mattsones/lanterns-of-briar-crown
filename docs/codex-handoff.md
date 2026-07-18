@@ -1319,3 +1319,212 @@ Last updated: 2026-07-17
 ### Canonical Pickup
 
 Use `docs/playtest-notes/2026-07-17-current-status.md` for the concise current state, verified commands, and prioritized remaining work. This file remains the chronological implementation history.
+
+## Current Handoff — Chapter 1 Ending And Chapter 2 Transition
+
+Last updated: 2026-07-17
+
+### What Changed
+
+- Moved the formal **Chapter 1 Complete: The Road That Lied** presentation to the sealed-door proof pickup after the Briar Knot Warden fight.
+- Combined the cellar report, Westroot explanation, and Chapter 2 expedition organization into one Watchhouse conversation. Its closing choice now sets `chapterReported`, `chapterTwoStarted`, and `chapterTwoBriefed` together.
+- Kept the Watchhouse's Westroot briefing available afterward as an optional review and as a compatibility path for older saves.
+- Updated the combined briefing to identify Mara, Edden, and Ada as the next preparation threads without repeating the Westroot premise in a second required Enna interaction.
+- Gated Edden's drawing review on `eddenDrawingReceived`; the briefing now leaves room for his testimony until the player visits him and receives the drawing.
+- Replaced Mayor Anwen's cellar warning with post-cellar and post-report dialogue once Chapter 1 is cleared.
+- Collapsed the detailed Chapter 1 case wall into a compact archive after the report, removing the four obsolete evidence actions while keeping the active Westroot preparation controls.
+- Companion story reactions now require the companion to have positive HP. A living companion's sealed-door reaction remains available from the Chapter 1 completion tableau after the player takes the Warden Chain and Edden's cloth; a downed companion offers no reaction control.
+- Corrected the Root Cellar stairs so they return to the painted Bramblecross cellar entrance at `(3,5)` instead of the retired `(6,6)` location.
+- Added Chapter 1 browser coverage for the completion tableau, merged transition, and corrected cellar return.
+- Updated the canonical Chapter 1 story script to treat the Watchhouse report as the combined epilogue and Chapter 2 opening.
+
+### Verification
+
+- `npm.cmd run build` passed; the existing slightly-over-500-KB JavaScript chunk warning remains.
+- `npm.cmd run optimize:assets` passed: 128 imported assets optimized; the two new full-size PNGs were preserved under source art and emitted as runtime WebPs.
+- `npm.cmd run audit:assets -- --limit=10` passed: 128 production images scanned, with both new assets within the documented map/scene targets.
+- `npm.cmd run test:rules` passed: 26 tests.
+- `npm.cmd run playtest:chapter1` passed: 23 tests.
+- `npm.cmd run playtest:chapter2` passed: 19 tests.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `git diff --check` passed with normal Windows line-ending warnings only.
+
+### Artwork Follow-Up
+
+The selected Chapter 1 ending scene is wired into the completion dialogue, and the Root Cellar now swaps to a cleared painted background after the Warden falls. Runtime WebP derivatives live in `assets/scenes/` and `assets/maps/`; full-resolution PNG sources are preserved under `assets/reference/source-art/`.
+
+## Current Handoff — Downed Companion System Pass
+
+Last updated: 2026-07-17
+
+### What Changed
+
+- Added the shared `isCompanionConscious` rule so recruitment and ability to act are no longer treated as the same state.
+- Applied the rule to Chapter 1 case-wall/report reactions, Chapter 2 briefing/departure narration and all threshold/door reads, and Chapter 3 story reactions.
+- Downed companions remain recruited and recoverable, but do not speak, perform physical story actions, satisfy cellar-readiness language, or receive victory XP.
+- The quest journal now marks a recruited 0-HP companion as **Downed** and directs the player toward rest, shelter, camp, or a healing item.
+- Fixed battle-item revival so a companion healed from 0 HP takes the immediately following companion turn instead of being skipped by stale pre-heal state.
+- Made the Briar Knot Warden victory flow directly into the Sealed Iron Door. The post-boss reveal cannot be dismissed before the proof is collected, so the player cannot leave a defeated cellar with `chapterOneClear` still unset.
+- Made the companion's sealed-door reaction a persistent one-time beat; once heard, its action is hidden from both the door and the Chapter 1 ending tableau.
+- Added Chapter 1–3 browser coverage plus a rules-level availability contract.
+
+### Verification
+
+- `npm.cmd run build` passed; the existing slightly-over-500-KB JavaScript chunk warning remains.
+- `npm.cmd run test:rules` passed: 27 tests.
+- `npm.cmd run playtest:chapter1` passed: 27 tests.
+- `npm.cmd run playtest:chapter2` passed: 20 tests.
+- `npm.cmd run playtest:chapter3` passed: 3 tests.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+
+## Current Handoff — Persistent Choices And One-Time Action Pass
+
+Last updated: 2026-07-17
+
+### What Changed
+
+- Added a persistent companion roster. Sending a companion to the inn and inviting them back now restores their HP, XP, level, and learned progress instead of rebuilding a fresh companion. The currently active companion is marked **Traveling** and cannot be recruited again.
+- Split repeatable skill checks into explicit **attempted** and **succeeded** state. The Watchhouse evidence checks, shrine study, cart tracks, Briar Crown examination, and companion recruitment checks no longer reroll or award repeat XP when reviewed.
+- Hid exhausted one-time actions such as the pond forage and completed door reactions. Repeatable reference material remains available with review-oriented labels and the remembered result.
+- Separated Chapter 2 clue observation from clue resolution. The Westward Cut can still be copied on the return trip after an outbound study, and early questions to Mara or Edden remain actionable once the matching shelter or Lantern clues are found.
+- Kept the Crown and Lantern Door NPC/companion opinions one-time, and removed the failed Lantern supply-door attempt after it has been tried.
+- Gave Noma's three Chapter 3 information topics independent state. Asking one question no longer discards the other two; each remains available until asked.
+- Extended save migration for the companion roster and all new choice-state flags so older saves remain loadable.
+
+### Interaction-State Rule
+
+For future story actions, persist the three concepts separately when they can diverge: whether an action was attempted, what result it produced, and whether a later clue actually resolved it. A review must not reroll a remembered check, and collecting an unrelated clue must not silently consume an unanswered action.
+
+### Verification
+
+- `npm.cmd run build` passed; the existing slightly-over-500-KB JavaScript chunk warning remains.
+- `npm.cmd run test:rules` passed: 27 tests.
+- Combined Chapters 1–3 browser suite passed: 56 tests (29 Chapter 1, 23 Chapter 2, and 4 Chapter 3).
+- Focused regression coverage confirms companion progress survives inn swaps, exhausted actions disappear, Westroot clues work in either order, and Noma preserves unanswered topics.
+
+## Current Handoff — Compact Grouped Dialogue Choices
+
+Last updated: 2026-07-17
+
+### What Changed
+
+- Added an opt-in grouped layout to the shared dialogue renderer. Existing dialogues remain single-column unless they explicitly request grouping.
+- Applied the layout to the Three-Door Threshold: the three door approaches share a responsive row, Mara and companion reads share a second row when available, and **Step back** remains a quieter full-width exit.
+- Preserved touch-friendly minimum button heights. Groups use three columns on wide screens, two columns at intermediate widths, and full-width stacked actions on phones.
+- Added browser coverage that checks the threshold's wide-screen row and its phone-width stack.
+
+### Verification
+
+- `npm.cmd run build` passed; the existing slightly-over-500-KB JavaScript chunk warning remains.
+- `npm.cmd run test:rules` passed: 27 tests.
+- Combined Chapters 1–3 browser suite passed: 57 tests (29 Chapter 1, 24 Chapter 2, and 4 Chapter 3).
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `git diff --check` passed with normal Windows line-ending warnings only.
+
+## Current Handoff — Three-Door Close-Up And Backtracking Pass
+
+Last updated: 2026-07-17
+
+### What Changed
+
+- Retired the obsolete **False Crown Passage** preview. Before the Roadwatcher's split slat is found, the Crown Door does not open and reveals nothing about the den beyond it.
+- Trying the locked door now records only `crownDoorTried` and points out the hidden notch. Deliberately trusting the false Crown Sign still records the intended messy-route mistake, but ends at the same sealed door instead of granting premature knowledge.
+- Added an opt-in split presentation to the shared dialogue modal and applied it to the Crown, Lantern, and No-Handle Door close-ups. On wider screens, the copy begins beside the art and is visible immediately; narrow screens stack the same content.
+- Removed the redundant captions beneath single-door artwork. The dialogue title remains the one accessible visible label.
+- Grouped each door's investigation actions, character reads, and consequential actions into compact responsive rows while preserving full-width phone targets.
+- Made **Step back** at the Three-Door Threshold restore the trail node used to enter it. The previous node is retained if the player closes and manually reopens the threshold dialogue.
+
+### Verification
+
+- `npm.cmd run build` passed; the existing slightly-over-500-KB JavaScript chunk warning remains.
+- Focused Chapter 2 browser coverage confirms the locked Crown Door reveals no passage, false-sign trust ends at the sealed door, all three close-ups expose their copy at desktop and phone widths, and threshold backtracking restores the prior map node.
+- `npm.cmd run test:rules` passed: 27 tests.
+- Combined Chapters 1–3 browser suite passed: 60 tests (29 Chapter 1, 27 Chapter 2, and 4 Chapter 3).
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `git diff --check` passed with normal Windows line-ending warnings only.
+
+## Current Handoff — Threshold Readability And Door Return-State Pass
+
+Last updated: 2026-07-18
+
+### What Changed
+
+- Applied the split scene layout to the Three-Door Threshold itself. The threshold copy now begins beside the illustration on wider screens instead of below it.
+- At phone widths, required prose appears before a shorter stacked illustration. Players no longer need to discover the internal scrollbar to understand the scene.
+- Kept the compact action area available without forcing a ceremonial scroll through already-read prose.
+- Fixed the Lantern Door-to-sign return loop so `lanternSignCleaned` and related local state are carried through every dialogue transition.
+- Cleaning the Lantern Sign now awards XP only once. Later visits are labeled **Review the Lantern Sign**, preserve the cleaned copy, and never restore the cleaning action.
+- Applied the same inspect/review distinction to the Crown Sign once it has been resolved.
+- Companion opinions at the Crown, Lantern, and No-Handle Doors now return to the exact door that launched them. Each return carries its one-time reaction flag and the door's current local state, so the opinion remains consumed.
+
+### Verification
+
+- `npm.cmd run build` passed; the existing slightly-over-500-KB JavaScript chunk warning remains.
+- Focused Chapter 2 coverage confirms threshold prose is immediately visible at 1400×900 and 430×932, Lantern cleaning remains at one XP award across repeated reviews, and all three companion reads return to their originating doors.
+
+## Current Handoff — Save-Gate Clarity And Encounter Marker Pass
+
+Last updated: 2026-07-18
+
+### What Changed
+
+- Reproduced the user-provided **Mossgirl - Westroot Trail** save through the real disk file-picker path. Its repair flags are complete and the No-Handle Door opens correctly after the player repeats the old road phrase.
+- Kept the second phrase as the intentional password beat. When the door is ready, its copy now says so directly and the opening phrase becomes a highlighted primary choice with an explicit consequence.
+- Removed map overlays from the False Detour Notice and Crown Den clue/exit stations. Their locations remain readable in the painted maps and through navigation hitboxes.
+- Added enemy-art markers for visible encounters: the south-gate boar, Root Cellar skulk, Briar Roadwatcher, releasable thorn-collared hound, fixed Crown Den guard, and Cargo Siding threat. Defeated/resolved markers disappear.
+- Kept intentionally hidden ambushes unmarked. The Briar Knot Warden also remains unmarked because the guardian is already painted into the Root Cellar map.
+
+### Verification
+
+- `npm.cmd run build` passed; the existing slightly-over-500-KB JavaScript chunk warning remains.
+- `npm.cmd run test:rules` passed: 27 tests.
+- Combined Chapters 1–3 browser suites passed: 65 tests (30 Chapter 1, 31 Chapter 2, and 4 Chapter 3).
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `git diff --check` passed with normal Windows line-ending warnings only.
+
+## Current Handoff — Westroot Hub Navigation And Chapter 3 Entry Order
+
+Last updated: 2026-07-18
+
+### What Changed
+
+- Rebuilt the Westroot Hub graph around the painted entrance road and plaza. Added short intermediate path nodes so movement follows visible stonework instead of hopping between distant landmark coordinates.
+- Increased path reveal width and added room-aware fog areas for the gate approach, Rootmarket, central plaza, Mossgarden, Witness Stones, Split Hall, Cargo Siding, and Rootbread Hatch.
+- Removed the duplicate non-navigable Rootmarket tile and added every Chapter 3 hub landmark to reusable map-graph validation.
+- Made Bramwell’s introduction mandatory before Westroot exploration. A normal Chapter 2 transition opens his scene immediately; movement, connected-node clicks, manual inspection, and older saves already inside the hub all route back to the First Westroot Gate until `metBramwell` is set.
+- Changed repeat/auto-inspect logic to key off `metBramwell`, repairing the previously possible state where Chapter 3 had started but Bramwell had never been met.
+
+### Future Option To Preserve
+
+- **High-perception ambush discovery:** near an intentionally hidden encounter, an exceptional hidden Perception/Instinct result could reveal its enemy marker and allow a pre-ambush response. Keep normal failures fully hidden. Include this among the options the next time the user asks **“what’s next?”**
+
+### Verification
+
+- `npm.cmd run build` passed; the existing slightly-over-500-KB JavaScript chunk warning remains.
+- `npm.cmd run test:rules` passed: 28 tests.
+- `npm.cmd run playtest:chapter3` passed: 4 tests.
+- Live browser QA confirmed the gate-to-market reveal is continuous and that an attempted first move opens Bramwell without moving the hero past the gate.
+
+## Current Handoff — Chapter 3 Endpoint And Bridge Alignment
+
+Last updated: 2026-07-18
+
+### What Changed
+
+- Inspected `public/saves/stuck ch 3.json`. Its main Chapter 3 flags are fully complete (`witnessStoneSequenceSolved`, `willowCargoExposed`, `westrootTrustEarned`, and `chapterThreeClear`), so the silent hub was the current prototype endpoint rather than a blocked main quest.
+- Found one unfinished optional thread in that save: Auntie Lume and the Rootbread Promise. The persistent objective now explains that Chapter 4 is not playable yet and gives the exact optional route through Rootmarket to the sealed hatch.
+- Added the same endpoint explanation to the final Mossgarden scene and changed its closing action to **Finish Chapter 3 for now**, avoiding a button that implies the westward Chapter 4 route is already playable.
+- Corrected the Westroot entrance geometry after live comparison with the painted map. The route descends from the gate, crosses the lower wooden bridge, and rises into the open Rootmarket plaza. Rootmarket is no longer positioned inside its awning, and the Mossgarden branch skirts the hut instead of crossing it.
+- Preserved one-time walk-over behavior: completed landmark scenes do not repeatedly interrupt movement, but manual **Inspect** still opens their review dialogue.
+
+### Verification
+
+- `npm.cmd run build` passed; the existing slightly-over-500-KB JavaScript chunk warning remains.
+- `npm.cmd run test:rules` passed: 28 tests.
+- `npm.cmd run playtest:chapter1` passed: 30 tests.
+- `npm.cmd run playtest:chapter2` passed: 31 tests.
+- `npm.cmd run playtest:chapter3` passed: 5 tests, including the user-provided stuck save.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `npm.cmd run audit:assets` passed: 128 production images scanned within the documented category targets.
+- Live disk-load QA confirmed the endpoint guidance and remaining Rootbread thread.
+- Live map QA confirmed the hero follows the wooden bridge and adjacent paving; no browser console errors were reported.

@@ -22,6 +22,12 @@ export type CompanionAbility = {
   };
 };
 
+export function isCompanionConscious(
+  companion?: Partial<Companion> | null,
+) {
+  return !!companion?.recruited && (companion.hp || 0) > 0;
+}
+
 const ABILITIES_BY_STYLE: Record<
   string,
   Record<CompanionCommand, CompanionAbility>
@@ -129,6 +135,8 @@ export function getCompanionCommandHint(
   companion?: Partial<Companion> | null,
 ) {
   if (!companion?.recruited) return "";
+  if (!isCompanionConscious(companion))
+    return `${companion.name || "Your companion"} is down and must recover before acting.`;
   const ability = getCompanionCommandAbility(companion);
   return ability
     ? `${ability.name}: ${ability.description}`

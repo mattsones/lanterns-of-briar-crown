@@ -830,13 +830,29 @@ Mayor Anwen studies the watchhouse windows. "Enna says your report turned scatte
 **Choice**
 - I'll look into it.
 
-### After dungeon lead acquired
+### After dungeon lead acquired, before the cellar is cleared
 **Text**
 
 Mayor Anwen nods toward the old cellar ways. "If Hollis is sending you below, then Bramblecross is past pretending this is only paperwork. Go carefully. Towns are built on foundations, and foundations remember things."
 
 **Choice**
 - I'll look into it.
+
+### After the cellar is cleared, before the report
+**Text**
+
+Mayor Anwen takes in the cellar mud on your boots and the chain in your hands. "You came back. Good. Hollis and Enna have been waiting in the watchhouse. Tell them what was below us before rumor gets there first."
+
+**Choice**
+- I'll report what we found.
+
+### After the Chapter 1 report
+**Text**
+
+Mayor Anwen looks west instead of toward the cellar. "Hollis has guards on the entrance, and Enna says the danger beneath us was protecting a road beyond us. Bramblecross can hold its own doors. Follow the Westroot lead—and if Lio Brindle is still on that road, bring him home."
+
+**Choice**
+- We'll follow the Westroot lead.
 
 ---
 
@@ -1583,6 +1599,12 @@ As the guardian falls, forged seal-cloth tears free from its chains.
 - Gold
 - XP
 
+**Required transition**
+
+Claiming the Warden victory moves the player directly to the Sealed Iron Door. The post-Warden door sequence has no leave/step-back path before the Warden Chain and Edden's cloth are collected and the Chapter 1 ending tableau is shown.
+
+Each companion's sealed-door reaction is a one-time story beat. After the player hears it, the door sequence and Chapter 1 ending tableau no longer offer the same question again.
+
 ---
 
 ## Sealed Iron Door / Chapter 1 Ending
@@ -1712,11 +1734,11 @@ Chapter 1 complete.
 
 ---
 
-### Chapter 1 wrap-up scene: Report Back to Hollis and Enna
+### Chapter 2 opening scene: Report Back and Organize the Westroot Expedition
 
 **Story purpose**
 
-This scene is the true conclusion of Chapter 1. The boss fight is the action climax, but this scene is the story resolution: the player brings the evidence back, Hollis receives emotional confirmation about Edden, Enna connects the investigation threads, and the next lead emerges without fully revealing the larger enemy.
+Chapter 1 formally completes at the sealed door after the Warden fight, when the player recovers the chain and Edden's cloth. This Watchhouse scene is the combined epilogue and Chapter 2 opening: the player brings the evidence back, Hollis receives emotional confirmation about Edden, Enna connects the investigation threads, and the group immediately organizes the Westroot expedition. The player should not have to end this conversation and then speak to Enna again for a second briefing.
 
 This should happen after the player exits the Root Cellar with:
 
@@ -1900,7 +1922,7 @@ And somewhere beyond the sealed door, beneath root and stone and false command, 
 
 Small, but not gone.
 
-**Chapter 1 Complete: The Road That Lied**
+**Chapter 2 Begins: The Westroot Trail**
 
 ---
 
