@@ -126,6 +126,21 @@ export function migrateFlags(flags: Flags | Record<string, unknown> = {}): GameF
     migrated.roadwatcherDefeated = true;
   }
 
+  // Chapter 3 saves created before the Hold Bell drama pass have already
+  // crossed these story gates if they reached the Witness Stones or beyond.
+  if (
+    source.westrootHoldBellRung === undefined &&
+    (migrated.witnessStoneSequenceSolved || migrated.willowCargoExposed || migrated.chapterThreeClear)
+  ) {
+    migrated.westrootHoldBellRung = true;
+  }
+  if (
+    source.splitHallDebateHeard === undefined &&
+    (migrated.witnessStoneSequenceSolved || migrated.willowCargoExposed || migrated.chapterThreeClear)
+  ) {
+    migrated.splitHallDebateHeard = true;
+  }
+
   return migrated;
 }
 

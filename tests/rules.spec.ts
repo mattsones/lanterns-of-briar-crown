@@ -85,6 +85,7 @@ import {
 import {
   formatDiskSaveFilename,
   getSavePayload,
+  migrateFlags,
   migrateSavePayload,
   parseDiskSaveText,
   SAVE_FILE_VERSION,
@@ -512,6 +513,16 @@ test("save migrations normalize older payloads before load", () => {
     briarCrownWatchingWestroot: true,
   });
   expect(getChapterProgress(migrated.flags).currentChapterId).toBe(3);
+
+  const oldChapter3Flags = migrateFlags({
+    chapterThreeStarted: true,
+    metBramwell: true,
+    metQuill: true,
+    metNoma: true,
+    witnessStoneSequenceSolved: true,
+  });
+  expect(oldChapter3Flags.westrootHoldBellRung).toBe(true);
+  expect(oldChapter3Flags.splitHallDebateHeard).toBe(true);
 });
 
 test("progression and default map state stay compatible with chapter one", () => {
@@ -1204,7 +1215,7 @@ test("asset audit command and export guidance are documented", () => {
   const scriptUrl = new URL("../scripts/audit-assets.mjs", import.meta.url);
   const optimizerUrl = new URL("../scripts/optimize-assets.mjs", import.meta.url);
   const manifest = readFileSync(
-    new URL("../docs/asset-manifest.md", import.meta.url),
+    new URL("../docs/art/asset-manifest.md", import.meta.url),
     "utf8",
   );
 

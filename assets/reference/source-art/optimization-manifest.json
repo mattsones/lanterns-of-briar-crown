@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-17T19:35:17.528Z",
+  "generatedAt": "2026-07-20T03:03:49.925Z",
   "sourceArtRoot": "assets/reference/source-art",
   "alternatesRoot": "assets/reference/alternates",
   "conversions": [
@@ -587,7 +587,7 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/maps/root-cellar-no-boss-map-v01.png",
+      "source": "assets/maps/root-cellar-no-boss-map-v01.webp",
       "original": "assets/reference/source-art/assets/maps/root-cellar-no-boss-map-v01.png",
       "output": "assets/maps/root-cellar-no-boss-map-v01.webp",
       "format": "webp",
@@ -1258,7 +1258,7 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/scenes/chapter-1-ending-the-road-that-lied-v01.png",
+      "source": "assets/scenes/chapter-1-ending-the-road-that-lied-v01.webp",
       "original": "assets/reference/source-art/assets/scenes/chapter-1-ending-the-road-that-lied-v01.png",
       "output": "assets/scenes/chapter-1-ending-the-road-that-lied-v01.webp",
       "format": "webp",
@@ -1352,6 +1352,28 @@
       "format": "webp",
       "originalBytes": 2828796,
       "outputBytes": 276126,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/scenes/rootmarket-uneasy-arrival-scene-v01.webp",
+      "original": "assets/reference/source-art/assets/scenes/rootmarket-uneasy-arrival-scene-v01.png",
+      "output": "assets/scenes/rootmarket-uneasy-arrival-scene-v01.webp",
+      "format": "webp",
+      "originalBytes": 3057078,
+      "outputBytes": 341330,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/scenes/split-hall-hold-debate-scene-v01.webp",
+      "original": "assets/reference/source-art/assets/scenes/split-hall-hold-debate-scene-v01.png",
+      "output": "assets/scenes/split-hall-hold-debate-scene-v01.webp",
+      "format": "webp",
+      "originalBytes": 3121864,
+      "outputBytes": 362308,
       "width": 1672,
       "height": 941,
       "hasAlpha": false

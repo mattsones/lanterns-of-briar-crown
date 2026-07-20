@@ -164,11 +164,18 @@ export type GameFlags = {
   nomaAskedNames: boolean;
   nomaAskedCourier: boolean;
   nomaAskedGate: boolean;
+  rootmarketVisited: boolean;
   metQuill: boolean;
   metAuntieLume: boolean;
   metRootbreadChild: boolean;
   rootbreadPromiseKept: boolean;
   lioKnotFound: boolean;
+  westrootHoldBellRung: boolean;
+  splitHallVisitedBeforeBell: boolean;
+  splitHallDebateHeard: boolean;
+  splitHallAskedOuterShelter: boolean;
+  splitHallAskedGateCost: boolean;
+  splitHallAskedCargoHold: boolean;
   witnessStoneFirstAttemptMissed: boolean;
   westrootTrustEarned: boolean;
   witnessStoneSequenceSolved: boolean;
