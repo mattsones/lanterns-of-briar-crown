@@ -13,13 +13,13 @@ The full Chapter 3 story script is the delivery source of truth. The current pla
 
 ## Generation Order
 
-Generate one asset per request. The batches below are grouped so a selection decision in one group does not require regenerating another. They contain 16 current production candidates; none needs to be padded to ten images.
+Generate one asset per request. The batches below are grouped so a selection decision in one group does not require regenerating another. They contain 18 current production candidates; none needs to be padded to ten images.
 
 | Batch | Assets | Why it comes first |
 |---|---:|---|
 | A — Cast and encounter | 7 | Covers every new speaking role and the Chapter 3 battle. |
 | B — Reward icons | 3 | Covers the full-script reward/evidence items. |
-| C — Story scenes | 6 | Adds illustrated dialogue moments after the portraits/enemies have a consistent visual identity. |
+| C — Story scenes | 8 | Adds illustrated dialogue moments after the portraits/enemies have a consistent visual identity. |
 
 ## Production Rules
 
@@ -200,7 +200,7 @@ Use only non-readable marks, route notches, and simple pictograms. The object sh
 
 # Batch C — Optional Illustrated Dialogue Scenes
 
-These six scenes make Chapter 3 fully illustrated, but the current code does not yet import or display Chapter 3 scene images. Generate them after Batch A so facial and ancestry details stay consistent, then wire selected images once the full narrative flow is implemented and human-playtested. Use opaque 16:9 images, ideally 1920 x 1080 or larger.
+These eight scenes make Chapter 3 fully illustrated, and all eight are now represented by selected runtime art. Preserve facial, ancestry, room, and prop continuity with those selected assets. Use opaque 16:9 images, ideally 1920 x 1080 or larger.
 
 ## C1. Westroot Arrival
 
@@ -241,7 +241,49 @@ Inside the opened crate, show blank official-sized papers, seal tools, thorn-col
 Mood: concrete evidence, violated trust, tense but not horror. Keep the main evidence clearly visible and reserve red as a small invasive accent only.
 ```
 
-## C4. Split Hall Resolution
+## C4. Rootmarket Uneasy Arrival
+
+**Suggested source filename:** `rootmarket-uneasy-arrival-scene-v01.png`<br>
+**Target runtime folder:** `assets/scenes/`
+
+Use the selected Westroot map plus the established Quill Pebbleturn and Auntie Lume portraits as visual references when possible.
+
+```text
+Create a 16:9 hand-painted storybook fantasy dialogue scene for Chapter 3 of Liam's Game, showing Westroot's Rootmarket during an uneasy ordinary morning, shortly before the Hold Bell calls everyone to Split Hall.
+
+Rootmarket is a broad inhabited shelf carved into the hidden village's intertwined roots and fitted gray stone: modest market awnings, shallow stalls, jars and baskets, a rain barrel, carved stone toys, patched lanterns, small water channels, and warm gold-green moss-lantern light. It must feel intimate, practical, old, and lovingly maintained—not like a grand bazaar, dungeon, mine, palace, or generic fantasy marketplace.
+
+Show daily life continuing under visible social strain. On one side, Quill Pebbleturn, the established young Stonekin craftsperson, repairs a brass lantern shutter at a cluttered workbench. On the other, Auntie Lume, the established elderly Mossback baker, tends a low bread counter. Neither is addressing the viewer. Between and behind them, include a small mixed group of Stonekin and Mossback villagers: some quietly exchanging goods, some packing items away too early, some watching one another or glancing toward the paths out of town. The disagreement must not divide neatly by species—place worried and defensive people from both communities on both sides of the space.
+
+Add two subtle ambient-story details: a pipe-mender tying a single thin red hold-cord to the corner of a stall, and a tired relay runner gripping a folded tally slip with no readable writing. A nearby conversation has just gone quiet. Nobody is fighting or shouting, but bodies are guarded, smiles are strained, and empty space has opened between small groups. The market should communicate: people are still sharing a home, yet everyone expects an argument soon.
+
+Compose it as a reusable, character-neutral establishing image with no visible player hero or companions and no single dominant close-up. Keep clear visual separation between Quill's repair area and Auntie Lume's bread counter so the scene supports a location hub where the player may choose whom to approach. Preserve the established character designs, Westroot architecture, soft painterly rendering, warm earth palette, tactile roots and stone, and gentle storybook proportions.
+
+Important timing: this is before the Hold Bell. Lantern shutters are still open, the market is operating, and nobody is assembling for the hall yet.
+
+No readable text, labels, signage, lettering, logos, UI, speech bubbles, modern objects, weapons drawn, combat, crowds, royal grandeur, dramatic magical effects, hard species segregation, red threads covering the ceiling, or red string conspiracy-board imagery.
+```
+
+## C5. Split Hall Hold Debate
+
+**Suggested source filename:** `split-hall-hold-debate-scene-v01.png`<br>
+**Target runtime folder:** `assets/scenes/`
+
+Use the selected Split Hall resolution scene as a continuity reference for the room, established characters, materials, rendering, and 16:9 composition. This image is the earlier dramatic counterpoint; it must not visually suggest that reconciliation has already happened.
+
+```text
+Create a new 16:9 storybook fantasy scene showing the same Split Hall, characters, architecture, and visual style as the supplied Split Hall resolution reference, but at the earlier tense Hold Bell debate before Westroot reconciles.
+
+Keep the same root-woven underground community hall, fitted stone, repaired wooden table, mossy cavern walls, warm handmade materials, and established character designs. Bramwell Gatehand stands firmly on the left side of the repaired table, protective, exhausted, and unyielding, with one hand planted on the tabletop. Noma Greenstill stands opposite him on the right, gentle but equally firm. Quill Pebbleturn stands near the middle holding or placing a cracked lantern shutter on the table; the shutter has a small crown-red scorch on its inner hinge. Mara Brindle stands near the central aisle, visibly torn between reaching her missing brother and understanding Westroot's danger. Auntie Lume has placed two baskets of rootbread at opposite ends of the table, but nobody has taken any bread.
+
+Divide the hall into two rough groups with a conspicuous empty aisle. Stonekin and Mossbacks must appear on both sides of the disagreement; this is not Stonekin versus Mossbacks. Include a cautious Mossback pipe-mender wearing a red hold-cord around one wrist behind Bramwell, and a young Stonekin relay runner nearer Noma clutching an unanswered outer-shelter tally with only abstract unreadable marks.
+
+Several lantern shutters are closed or hooded after the Hold Bell. Use dimmer and more divided lighting than the resolution reference: pockets of warm gold separated by cooler green-brown shadow. Include subtle red hold-cords, the scorched shutter, a closed gate ledger, and an unanswered route tally as contested evidence. Faces and posture should show fear, grief, frustration, suspicion, and protective resolve. Bramwell and Noma must both remain sympathetic.
+
+Medium-wide cinematic tableau with all major faces readable at dialogue size. No customizable player hero, combat poses, raised weapons, physical violence, cheering, handshakes, shared bread, smiling reconciliation, readable text, speech bubbles, UI, logos, or watermark. No photorealism, anime, glossy 3D rendering, grimdark horror, or exaggerated cartoon anger.
+```
+
+## C6. Split Hall Resolution
 
 **Suggested source filename:** `split-hall-resolution-scene-v01.png`<br>
 **Target runtime folder:** `assets/scenes/`
@@ -254,7 +296,7 @@ At the table, arrange non-text evidence: the Witness Stone Rubbing, the broken f
 Mood: practical reconciliation after hard evidence, watched openness, a community choosing clear warning and care over isolation. No readable text, banners, speeches, or dramatic cheering.
 ```
 
-## C5. Mossgarden Closing Mark
+## C7. Mossgarden Closing Mark
 
 **Suggested source filename:** `mossgarden-closing-mark-scene-v01.png`<br>
 **Target runtime folder:** `assets/scenes/`
@@ -267,7 +309,7 @@ Show pale moss, old name tablets, fitted stone, and a line of gold moss-lanterns
 Mood: intimate, restrained hope, a small useful truth discovered in a hidden place. No readable message, no text, no spectacle, and no ominous darkness swallowing the scene.
 ```
 
-## C6. Rootbread Promise
+## C8. Rootbread Promise
 
 **Suggested source filename:** `rootbread-promise-scene-v01.png`<br>
 **Target runtime folder:** `assets/scenes/`
@@ -297,5 +339,5 @@ Do not spend a generation on these yet. They are described in the broader story 
 1. Keep the source image in the reference/source-art tree and use the suggested filename.
 2. Promote only the approved asset into its runtime asset folder.
 3. Add a registry import and the fallback-safe mapping: dialogue portrait data for characters, `ENEMY_DB` for combat art, `ITEM_ARTWORK` for icons, and `sceneImage` wiring for scenes.
-4. Update `docs/asset-manifest.md` and `src/data/artworkPlan.ts`.
+4. Update `docs/art/asset-manifest.md` and `src/data/artworkPlan.ts`.
 5. Run `npm.cmd run optimize:assets`, `npm.cmd run audit:assets`, the Chapter 3 playtest, the Chapter 1/2 regression playtests, and the production build.

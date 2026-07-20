@@ -18,9 +18,9 @@ The repo currently includes:
 
 ```text
 docs/
-  liams_game_chapter_1_story_script.md
-  liams_game_repo_plan.md
-  liams-game-art-direction.md
+  story/chapter-1-story-script.md
+  planning/repository-plan.md
+  art/art-direction.md
 
 liams_game_prototype.jsx
 ```
@@ -31,13 +31,13 @@ The immediate goal is to turn this into a runnable Vite + React + TypeScript pro
 
 Please read these first:
 
-1. `docs/liams_game_repo_plan.md`
-2. `docs/liams_game_chapter_1_story_script.md`
-3. `docs/liams-game-art-direction.md`
-4. `docs/prompts/chapter-1-environments.md`
-5. `docs/prompts/chapter-1-characters.md`
-6. `docs/asset-manifest.md`
-7. `docs/refactor-roadmap.md`
+1. `docs/planning/repository-plan.md`
+2. `docs/story/chapter-1-story-script.md`
+3. `docs/art/art-direction.md`
+4. `docs/art/prompts/chapter-1-environments.md`
+5. `docs/art/prompts/chapter-1-characters.md`
+6. `docs/art/asset-manifest.md`
+7. `docs/planning/refactor-roadmap.md`
 
 ## First Task
 
@@ -489,8 +489,8 @@ Branch: `main`
 ### Useful References
 
 - `docs/art/item-icons/liams-game-custom-item-icon-plan.md`
-- `docs/asset-manifest.md`
-- `docs/liams-game-art-direction.md`
+- `docs/art/asset-manifest.md`
+- `docs/art/art-direction.md`
 
 ### Proof Asset Evaluation
 
@@ -697,7 +697,7 @@ Branch: `codex/chapter-2-completion`
 - Wired selected enemy portraits through `src/data/enemies.ts` and the battle modal, preserving the existing enemy emoji fallback if art is missing or fails to load.
 - Selected Roadwatcher v2 and False Sign Scratcher v2 for production; Roadwatcher v2 fixes the earlier Warden silhouette overlap.
 - Marked the wired Chapter 1-2 portrait and enemy entries as available in `src/data/artworkPlan.ts`.
-- Updated `docs/asset-manifest.md`, `docs/liams-game-art-direction.md`, and the art prompt/review docs for the selected versions and bolder ancestry direction.
+- Updated `docs/art/asset-manifest.md`, `docs/art/art-direction.md`, and the art prompt/review docs for the selected versions and bolder ancestry direction.
 
 ### Verification Run
 
@@ -832,7 +832,7 @@ git diff --check
 
 ### Post-Chapter 2 Planning Note
 
-After Chapter 2 is playtested, finalized, committed, and pushed, use `docs/post-chapter-2-technical-hardening.md` as the next pickup plan before starting Chapter 3 code. The intent is a focused hardening pass: lock a Chapter 2 complete fixture, reduce `App.tsx` risk, type story flags, add save migrations, validate map graphs, audit asset size, and extract reusable QA validators without starting a broad rewrite.
+After Chapter 2 is playtested, finalized, committed, and pushed, use `docs/planning/post-chapter-2-technical-hardening.md` as the next pickup plan before starting Chapter 3 code. The intent is a focused hardening pass: lock a Chapter 2 complete fixture, reduce `App.tsx` risk, type story flags, add save migrations, validate map graphs, audit asset size, and extract reusable QA validators without starting a broad rewrite.
 
 ## Current Handoff - Chapter 2 Door And Den Token Art Wiring
 
@@ -857,7 +857,7 @@ Branch: `codex/chapter-2-completion`
 - Added two floor-only Crown Door Den movement nodes at the central lower connector and the right-hand passage connector, with map-graph tests covering the new route.
 - Updated map-token CSS so transparent object art displays cleanly without portrait-style face cropping.
 - Wired the three generated door closeups into `DialogueVisual` for the Crown Door, Lantern Door, and No-Handle Door inspection panels.
-- Added the promoted assets to `docs/asset-manifest.md` and noted the no-space token path in the prompt doc.
+- Added the promoted assets to `docs/art/asset-manifest.md` and noted the no-space token path in the prompt doc.
 
 ### Verification To Run
 
@@ -927,7 +927,7 @@ Branch: `main`
 - Kept the imperative Chapter 2 callback flow in `src/App.tsx`; the app now reads the stable copy from the story module instead of owning the large dialogue blocks directly.
 - Fixed the threshold companion-read function scope while touching the Chapter 2 threshold flow so the "Ask your companion for their read" choice stays available from the outer app component scope.
 - Added `scripts/audit-assets.mjs` plus `npm.cmd run audit:assets` as a report-only largest-production-assets command. The script scans `assets/maps`, `assets/portraits`, `assets/scenes`, and `assets/icons`, reports dimensions where possible, and marks files over the documented target ranges.
-- Added production export discipline to `docs/asset-manifest.md` and linked it from `docs/liams-game-art-direction.md`: source/concept art stays separate, opaque maps/portraits/scenes should get WebP or AVIF derivatives, transparent icons/tokens/hero cutouts remain PNG, and fallbacks stay preserved.
+- Added production export discipline to `docs/art/asset-manifest.md` and linked it from `docs/art/art-direction.md`: source/concept art stays separate, opaque maps/portraits/scenes should get WebP or AVIF derivatives, transparent icons/tokens/hero cutouts remain PNG, and fallbacks stay preserved.
 - Added `src/game/qa.ts` with reusable pure game QA checks for map shape/metadata, shop and recipe IDs, companion definitions, battle pouch IDs, item-granted skills, graph validation, chapter contracts, art contracts, guest NPC safety, and Chapter 2 puzzle divergence.
 - Slimmed the Dev Tools QA button in `src/App.tsx` so it calls `runGameQaChecks` and only supplies live runtime callback checks from inside the component.
 - Expanded rules coverage for Chapter 2 copy extraction, reusable QA checks, and asset audit docs/script discoverability.
@@ -954,7 +954,7 @@ Latest local results:
 
 ### Next Recommended Slice
 
-Start the Chapter 3 vertical slice contract from `docs/post-chapter-2-technical-hardening.md`: enter Chapter 3 from the checked-in Chapter 2 complete fixture, add placeholder playable Westroot hub flow first, and keep Chapter 1/2 smoke paths green before adding final Chapter 3 art.
+Start the Chapter 3 vertical slice contract from `docs/planning/post-chapter-2-technical-hardening.md`: enter Chapter 3 from the checked-in Chapter 2 complete fixture, add placeholder playable Westroot hub flow first, and keep Chapter 1/2 smoke paths green before adding final Chapter 3 art.
 
 ## Current Handoff - Asset Runtime Split And Repo Cleanup
 
@@ -971,7 +971,7 @@ Branch: `main`
 - Added `scripts/optimize-assets.mjs` plus `npm.cmd run optimize:assets`. The optimizer preserves full-size originals in `assets/reference/source-art/`, moves non-imported production-folder images to `assets/reference/alternates/`, and leaves optimized runtime derivatives in the shipped asset folders.
 - Converted opaque imported maps, scenes, portraits, and enemy art to WebP runtime files. Transparent icons, map tokens, UI symbols, and full-body hero art remain PNG.
 - Updated `src/` asset imports for the WebP runtime derivatives while preserving existing emoji/text fallbacks.
-- Updated `docs/asset-manifest.md`, `docs/liams-game-art-direction.md`, README asset notes, and rules coverage for the new asset workflow.
+- Updated `docs/art/asset-manifest.md`, `docs/art/art-direction.md`, README asset notes, and rules coverage for the new asset workflow.
 - Installed `sharp` as a dev dependency for local image optimization.
 - Updated Vite to `8.1.4` after `npm audit` flagged the old Vite range; `npm.cmd audit --audit-level=high` now reports zero vulnerabilities.
 - Removed ignored generated local clutter (`dist/`, `test-results/`, and `.vite-dev.*` logs). These are safe to delete and are recreated by build/playtest commands.
@@ -1065,7 +1065,7 @@ Branch: `codex/chapter-3-vertical-slice`
 
 - Promoted the user-provided Westroot Hub source map into the runtime asset flow. The original `westroot-hub-map-v01.png` now lives under `assets/reference/source-art/assets/maps/`; the imported runtime derivative is `assets/maps/westroot-hub-map-v01.webp`.
 - The 1672x941 opaque source was optimized to a 1600x900 WebP runtime asset (about 413 KB), within the documented map budget.
-- Wired the WebP as `MAPS.westrootHub.backgroundImage` and marked Westroot Hub map art available in `src/data/artworkPlan.ts` and `docs/asset-manifest.md`.
+- Wired the WebP as `MAPS.westrootHub.backgroundImage` and marked Westroot Hub map art available in `src/data/artworkPlan.ts` and `docs/art/asset-manifest.md`.
 - Replaced the loose Westroot Hub grid with a connected navigation graph, then placed its gate bridge, Rootmarket, Mossgarden, Witness Stones, Split Hall, Cargo Siding, and Rootbread Hatch nodes directly on their painted landmarks in `src/data/mapVisuals.ts`.
 - Visual browser QA confirmed the initial fog now follows the painted gate bridge instead of revealing disconnected map pockets. The Chapter 3 Playwright path was adjusted to use the graph's real route to Mossgarden.
 
@@ -1146,7 +1146,7 @@ Branch: `codex/chapter-3-vertical-slice`
 - Added six story-scene images to their matching beats: First Westroot Gate, Witness Stones, Rootbread Promise, Cargo Siding, Split Hall resolution v03, and Mossgarden closing mark.
 - Extended the Chapter 3 Playwright path to assert all six scene-image references, and added static registry coverage for selected portraits, enemy artwork, icons, and art-plan availability.
 - Ran the production asset optimizer. Opaque portraits/enemies/scenes are now 1200px/1600px WebP runtime assets; transparent icons remain PNG. Full-size originals are under `assets/reference/source-art/`; earlier v01/v02 choices and source sheets are under `assets/reference/alternates/`.
-- Updated `docs/asset-manifest.md` and `src/data/artworkPlan.ts` to record the selected Chapter 3 production set.
+- Updated `docs/art/asset-manifest.md` and `src/data/artworkPlan.ts` to record the selected Chapter 3 production set.
 
 ### Verification Run
 
@@ -1257,7 +1257,7 @@ Branch: `codex/chapter-3-vertical-slice`
 - Replaced direct companion emoji in the Companion menu and battle party card with existing portraits.
 - Registered existing artwork for the Split Crown Slat, Briar Signmaker's Ledger, and Cleaned Lantern Mark.
 - Added and wired five transparent level-up emblems. The original growth emoji remain only as image-error fallbacks; Craft uses `level-up-craft-v02.png`.
-- Saved the generation handoff in `docs/art/prompts/dialog-stock-icon-replacement-prompt-pack.md` and updated `docs/dialog-stock-icon-replacement-plan.md` with the completed and remaining audit work.
+- Saved the generation handoff in `docs/art/prompts/dialog-stock-icon-replacement-prompt-pack.md` and updated `docs/planning/dialog-stock-icon-replacement-plan.md` with the completed and remaining audit work.
 
 ### Verification
 
@@ -1279,7 +1279,7 @@ Last updated: 2026-07-17
 - Moved the Old Root Cellar interaction from `(5,6)` to `(3,5)` and focused its painted-map point at `(25.2%, 49.7%)`, on the new visible cellar steps. The former cellar tile is ordinary road again.
 - Repaired the cramped Adventure Menus presentation: tabs now sit below the heading, and inventory items use readable full-width cards instead of two squeezed columns.
 - Completed the functional combat-responsive pass with a persistent action dock below the `2xl` breakpoint. It keeps hero HP, selected-target HP, skills, items, and companion command together while the battlefield scrolls.
-- Added `docs/gameplay-ux-redesign-plan.md` with the recommended map-first shell, desktop menu drawer, mobile bottom sheet, and phased implementation plan.
+- Added `docs/planning/gameplay-ux-redesign-plan.md` with the recommended map-first shell, desktop menu drawer, mobile bottom sheet, and phased implementation plan.
 - Recorded the user's Paint.NET alpha-cleaned level-up files as the authoritative sources; do not replace them with the earlier cleanup working files.
 
 ### Verification
@@ -1516,6 +1516,7 @@ Last updated: 2026-07-18
 - Added the same endpoint explanation to the final Mossgarden scene and changed its closing action to **Finish Chapter 3 for now**, avoiding a button that implies the westward Chapter 4 route is already playable.
 - Corrected the Westroot entrance geometry after live comparison with the painted map. The route descends from the gate, crosses the lower wooden bridge, and rises into the open Rootmarket plaza. Rootmarket is no longer positioned inside its awning, and the Mossgarden branch skirts the hut instead of crossing it.
 - Preserved one-time walk-over behavior: completed landmark scenes do not repeatedly interrupt movement, but manual **Inspect** still opens their review dialogue.
+- Made Rootmarket the deliberate exception while Auntie Lume is still unmet: walking onto the market automatically opens its choices until the Rootbread lead has been introduced, then later walk-throughs remain quiet.
 
 ### Verification
 
@@ -1528,3 +1529,28 @@ Last updated: 2026-07-18
 - `npm.cmd run audit:assets` passed: 128 production images scanned within the documented category targets.
 - Live disk-load QA confirmed the endpoint guidance and remaining Rootbread thread.
 - Live map QA confirmed the hero follows the wooden bridge and adjacent paving; no browser console errors were reported.
+
+## Current Handoff — Chapter 3 Faction Tension And Rootmarket Hub
+
+Last updated: 2026-07-19
+
+### What Changed
+
+- Added an optional pre-bell Split Hall visit where ordinary Stonekin and Mossback residents are already arguing across ancestry lines. It is one-time on walk-through and remains reviewable by inspection.
+- Added a mandatory Hold Bell crisis after both Quill and Noma have been heard. The first formal Split Hall debate now occurs before the Witness Stones unlock, so the central conflict cannot be skipped on a clean path.
+- Made the First Gate, Rootmarket, and Mossgarden react to the Hold Bell and later investigation state. The final Split Hall scene recalls testimony the player chose to hear during the earlier debate.
+- Rebuilt Rootmarket as a location hub with independent choices for Quill, Auntie Lume, ambient market voices, and departure. Character conversations return to the market hub instead of nesting Auntie inside Quill's dialogue.
+- Added save flags and migration defaults for the new beats so older completed Chapter 3 saves remain past the new gates.
+- Selected and wired `split-hall-hold-debate-scene-v01.webp` for the tense debate only. The full PNG source remains in the source-art tree; the existing resolution scene remains exclusive to the final outcome.
+- Added the Rootmarket uneasy-arrival prompt to the Chapter 3 production pack, then selected, optimized, and wired the resulting scene exclusively to the Rootmarket location hub. Quill and Auntie Lume retain their individual portraits inside their conversations.
+
+### Verification
+
+- `npm.cmd run build` passed; the existing over-500-KB main-chunk warning remains.
+- `npm.cmd run test:rules` passed: 28 tests.
+- `npm.cmd run playtest:chapter1` passed: 30 tests.
+- `npm.cmd run playtest:chapter2` passed: 31 tests.
+- `npm.cmd run playtest:chapter3` passed: 6 tests.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `npm.cmd run audit:assets -- --limit=10` passed: 130 production images scanned within the documented category targets.
+- `git diff --check` passed with normal Windows line-ending warnings only.

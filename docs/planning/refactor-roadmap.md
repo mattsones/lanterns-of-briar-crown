@@ -265,7 +265,7 @@ Chapter 2 implementation is already underway. Complete it before starting Chapte
 
 After Chapter 2 ships, take one focused technical hardening pass before building Chapter 3 content.
 
-Use `docs/post-chapter-2-technical-hardening.md` as the pickup plan. The priorities are:
+Use `docs/planning/post-chapter-2-technical-hardening.md` as the pickup plan. The priorities are:
 
 - lock a Chapter 2 complete / Chapter 3 ready save fixture;
 - extract stable Chapter 2 scene text from `App.tsx`;

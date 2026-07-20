@@ -11,12 +11,13 @@ Start from `public/saves/chapter-2-complete.json`. Entry requires the Chapter 2 
 ## Smallest complete playable loop
 
 1. Enter through the First Westroot Gate.
-2. Move through a placeholder graph containing First Gate, Rootmarket, Witness Stones, Mossgarden, Split Hall, and Cargo Siding.
-3. Meet one credible community voice on each side of the open/close conflict.
-4. Resolve the Witness Stones as a fail-forward puzzle: mistakes change trust or consequences, but do not dead-end the chapter.
-5. Investigate Willow-sealed cargo and fight a simultaneous multi-enemy encounter.
-6. Return the evidence to Split Hall.
-7. Finish with `westrootTrustEarned`, `witnessStoneSequenceSolved`, `willowCargoExposed`, and `chapterThreeClear` set.
+2. Move through the painted Westroot hub containing First Gate, Rootmarket, Witness Stones, Mossgarden, Split Hall, and Cargo Siding.
+3. Use Rootmarket as a location hub: approach Quill or Auntie Lume independently, and hear ambient villagers whose concerns cross ancestry lines.
+4. Trigger the mandatory Hold Bell crisis and hear the first Split Hall debate; Stonekin and Mossbacks must appear on both sides of the conflict.
+5. Resolve the Witness Stones as a fail-forward puzzle: mistakes change trust or consequences, but do not dead-end the chapter.
+6. Investigate Willow-sealed cargo and fight a simultaneous multi-enemy encounter.
+7. Return the evidence to Split Hall, where earlier testimony is remembered.
+8. Finish with `westrootTrustEarned`, `witnessStoneSequenceSolved`, `willowCargoExposed`, and `chapterThreeClear` set.
 
 ## Build order
 

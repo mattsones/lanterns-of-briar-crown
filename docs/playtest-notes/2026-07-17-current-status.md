@@ -2,7 +2,7 @@
 
 Branch: `codex/chapter-3-vertical-slice`
 
-This is the concise pickup document for the current illustrated prototype. Historical implementation notes remain in `docs/codex-handoff.md`; the detailed dialogue-art inventory remains in `docs/dialog-stock-icon-replacement-plan.md`.
+This is the concise pickup document for the current illustrated prototype. Historical implementation notes remain in `docs/codex-handoff.md`; the detailed dialogue-art inventory remains in `docs/planning/dialog-stock-icon-replacement-plan.md`.
 
 ## Playable State
 
@@ -24,7 +24,7 @@ This is the concise pickup document for the current illustrated prototype. Histo
 - The Three-Door Threshold uses the same split presentation; on phones its required prose moves ahead of the illustration so the scene never depends on noticing an internal scrollbar.
 - Tile and graph movement, save compatibility, and existing story triggers remain intact.
 
-The implementation and decisions are documented in `docs/gameplay-ux-redesign-plan.md`.
+The implementation and decisions are documented in `docs/planning/gameplay-ux-redesign-plan.md`.
 
 ## Recent Playtest And Story Decisions
 
@@ -58,7 +58,11 @@ The implementation and decisions are documented in `docs/gameplay-ux-redesign-pl
 - Westroot Hub navigation now follows the painted entrance road, plaza, and branching paths with shorter waypoints. Fog opens in room-sized areas around Rootmarket, the Mossgarden, Witness Stones, Split Hall, Cargo Siding, and the Rootbread Hatch instead of exposing a thin disconnected tunnel.
 - Bramwell is now a mandatory Chapter 3 entry beat. Entering Westroot opens his introduction, and movement, map-node clicks, or older saves positioned past the gate are routed back to him until `metBramwell` is true; Quill cannot be met first.
 - The lower Westroot approach now follows the stone lane down to the wooden bridge and rises into the open Rootmarket plaza; it no longer cuts across the gorge or places the hero inside the market awning. The Mossgarden branch similarly routes around the hut.
-- Completed Chapter 3 saves now identify the current playable endpoint explicitly. If the Rootbread Promise is unfinished, the persistent objective directs the player to Inspect Rootmarket, speak with Auntie Lume, and continue to the sealed hatch; completed landmarks remain quiet on walk-over but reviewable with **Inspect**.
+- Completed Chapter 3 saves now identify the current playable endpoint explicitly. If the Rootbread Promise is unfinished, the persistent objective directs the player back to Rootmarket, where Auntie Lume's choice opens automatically, and then onward to the sealed hatch; completed landmarks remain quiet on walk-over but reviewable with **Inspect**.
+- Rootmarket now opens automatically while Auntie Lume's first conversation is still available. Once both Quill and Auntie have been handled, it returns to the normal completed-landmark behavior and stays quiet unless the player chooses **Inspect**.
+- Rootmarket is now a location-level dialogue hub. Quill, Auntie Lume, and the market's ambient voices are independent choices, and each character returns to the shared market instead of presenting another person inside Quill's dialogue.
+- Chapter 3 now builds tension before the investigation: Split Hall may be visited for an optional simmering argument, then the mandatory Hold Bell and first formal hall debate occur after Quill and Noma have been heard. The Witness Stones remain locked until that debate has happened.
+- Stonekin and Mossbacks appear on both sides of the open/close disagreement. The gate, market, and Mossgarden change after the Hold Bell, and testimony heard in the first debate is remembered at the final evidence scene.
 
 ## Production Art Status
 
@@ -68,7 +72,9 @@ The implementation and decisions are documented in `docs/gameplay-ux-redesign-pl
 - Companion cards and level-up choices use production portraits/emblems with fallback symbols retained only for image failure.
 - Willowmark seal v2 is optimized for runtime; the full source is preserved under `assets/reference/source-art/` and v1 is retained under `assets/reference/alternates/`.
 - The Chapter 1 ending tableau is wired into the sealed-door proof pickup, and the Root Cellar switches to a boss-free painted background immediately after the Warden is defeated. Both full-resolution PNG sources are preserved under `assets/reference/source-art/`.
-- The optimized runtime asset set currently contains 128 images and passes the asset audit.
+- The tense Split Hall Hold Bell scene is selected and wired before the resolution image. Thin red ceiling cords read as Westroot hold-lines rather than faction decoration.
+- The Rootmarket uneasy-arrival tableau is selected and wired to the location hub while Quill and Auntie Lume retain their individual portraits inside their conversations.
+- The optimized runtime asset set currently contains 130 images and passes the asset audit.
 
 ## Verification At Handoff
 
@@ -77,9 +83,9 @@ npm.cmd run build                 passed
 npm.cmd run test:rules            28 passed
 npm.cmd run playtest:chapter1     30 passed
 npm.cmd run playtest:chapter2     31 passed
-npm.cmd run playtest:chapter3      5 passed
+npm.cmd run playtest:chapter3      6 passed
 npm.cmd run playtest:smoke         1 passed
-npm.cmd run audit:assets          128 images scanned; largest assets within targets
+npm.cmd run audit:assets          130 images scanned; largest assets within targets
 git diff --check                 passed (Windows line-ending warnings only)
 ```
 
@@ -95,7 +101,7 @@ Browser QA covered desktop exploration at 1400×900, phone exploration at 430×9
 
 ### 2. Finish The Stock-Icon Migration
 
-Use `docs/dialog-stock-icon-replacement-plan.md` as the inventory.
+Use `docs/planning/dialog-stock-icon-replacement-plan.md` as the inventory.
 
 1. Replace remaining normal-path dialogue symbols with existing portraits, enemy art, map crops, or scene aliases before generating more art.
 2. Mark abstract/system dialogues deliberately text-only where an illustration would be decoration rather than information.
@@ -121,7 +127,7 @@ Use `docs/dialog-stock-icon-replacement-plan.md` as the inventory.
 ### 6. Technical Follow-Ups
 
 1. The main JavaScript chunk remains slightly above 500 KB. Treat code splitting as a focused performance task.
-2. `src/App.tsx` remains large. Continue the staged extraction in `docs/refactor-roadmap.md`; do not combine a major structural refactor with new story behavior.
+2. `src/App.tsx` remains large. Continue the staged extraction in `docs/planning/refactor-roadmap.md`; do not combine a major structural refactor with new story behavior.
 3. Consider drag gestures for the phone bottom sheet only if human playtesting finds the explicit Menu button insufficient. The current button-driven sheet is intentional and tested.
 
 ## Resume Checklist

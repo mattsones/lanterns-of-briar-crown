@@ -7,11 +7,11 @@ You are helping me create the initial repository for Liam’s Game, a storybook 
 
 Please read these docs first:
 - docs/codex-handoff.md
-- docs/liams_game_repo_plan.md
-- docs/liams_game_chapter_1_story_script.md
-- docs/liams-game-art-direction.md
-- docs/refactor-roadmap.md
-- docs/asset-manifest.md
+- docs/planning/repository-plan.md
+- docs/story/chapter-1-story-script.md
+- docs/art/art-direction.md
+- docs/planning/refactor-roadmap.md
+- docs/art/asset-manifest.md
 
 The current working prototype is in:
 - liams_game_prototype.jsx
@@ -37,7 +37,7 @@ Important constraints:
    - assets/maps/
    - assets/portraits/
    - assets/icons/
-   - docs/prompts/
+   - docs/art/prompts/
    - docs/playtest-notes/
 6. Include a README section explaining how to run:
    - npm install

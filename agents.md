@@ -26,11 +26,11 @@ Chapter 1 is playable. Chapter 2 has already started in code and should be compl
 Before making changes, read:
 
 - `docs/codex-handoff.md`
-- `docs/liams_game_repo_plan.md`
-- `docs/liams_game_chapter_1_story_script.md`
-- `docs/liams-game-art-direction.md`
-- `docs/refactor-roadmap.md`
-- `docs/asset-manifest.md`
+- `docs/planning/repository-plan.md`
+- `docs/story/chapter-1-story-script.md`
+- `docs/art/art-direction.md`
+- `docs/planning/refactor-roadmap.md`
+- `docs/art/asset-manifest.md`
 - `docs/playtest-notes/chapter-1-golden-path.md`
 
 ## Current App

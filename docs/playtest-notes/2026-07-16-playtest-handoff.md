@@ -35,7 +35,7 @@ This is the concise pickup point for the large Chapter 1 playtest-polish pass on
 - All five level-up choices use a coordinated transparent emblem set. The decorative header sparkle is gone, and the growth emoji are fallback-only.
 - Bramblecross town map v2 is the active production map. Its new visible cellar entrance is aligned to tile `(3,5)` and approachable from the road below or beside it.
 - Adventure-menu tabs and inventory cards have been stabilized at narrow widths. Combat now keeps a persistent action/health dock visible on phone and ordinary laptop widths.
-- The broader map-first redesign proposal is documented in `docs/gameplay-ux-redesign-plan.md`.
+- The broader map-first redesign proposal is documented in `docs/planning/gameplay-ux-redesign-plan.md`.
 
 ## Remaining Work
 
@@ -47,7 +47,7 @@ This is the concise pickup point for the large Chapter 1 playtest-polish pass on
 
 ### Priority 2 — Finish The Dialogue-Art Migration
 
-The full inventory and recommended replacements live in `docs/dialog-stock-icon-replacement-plan.md`. A1–A4 cover the highest-value gaps, not every generic symbol in Chapters 1–3.
+The full inventory and recommended replacements live in `docs/planning/dialog-stock-icon-replacement-plan.md`. A1–A4 cover the highest-value gaps, not every generic symbol in Chapters 1–3.
 
 1. Continue through the lower-priority dialogue inventory using existing map crops and scene aliases before generating more art.
 2. Decide deliberately which remaining abstract/system dialogues should be text-only.
@@ -58,12 +58,12 @@ The full inventory and recommended replacements live in `docs/dialog-stock-icon-
 
 1. Give Healing Fizzpop's mint-green hair a later comedic payoff. Before implementation, decide whether it is a short-lived status flag, a single scripted callback, or recurring NPC reactivity; it is currently flavor only.
 2. Run one final name-consistency pass across older docs and future scripts. Current intent is Elder Brynn and Sela of the Loom in Hearthhollow, plus Mara Brindle in Bramblecross. Some selected asset filenames still contain older names and should not drive story copy.
-3. Begin Chapter 4 only after the Chapter 3 human pacing pass. The next NPC/enemy art gaps are tracked in `docs/asset-manifest.md`.
+3. Begin Chapter 4 only after the Chapter 3 human pacing pass. The next NPC/enemy art gaps are tracked in `docs/art/asset-manifest.md`.
 
 ### Priority 4 — Technical Cleanup
 
 1. Vite still reports the main JavaScript chunk slightly above 500 KB. Treat code splitting as a focused performance task, not part of story polish.
-2. `src/App.tsx` remains large. Follow `docs/refactor-roadmap.md`; do not combine a major extraction with new story behavior.
+2. `src/App.tsx` remains large. Follow `docs/planning/refactor-roadmap.md`; do not combine a major extraction with new story behavior.
 3. Keep the asset workflow: source in `assets/reference/source-art/`, selected runtime derivative in the appropriate shipped folder, then run `optimize:assets` and `audit:assets`.
 
 ## Standard Verification

@@ -227,7 +227,7 @@ async function main() {
     );
   });
   console.log("");
-  console.log("Targets are documented in docs/asset-manifest.md.");
+  console.log("Targets are documented in docs/art/asset-manifest.md.");
 }
 
 main().catch((error) => {

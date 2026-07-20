@@ -2,7 +2,7 @@
 
 ## Chapter 3: The Hidden Root
 
-**Draft status:** Story and gameplay-flow draft. This is the reviewable narrative source for the Chapter 3 vertical slice; it does not change live game behavior yet.
+**Status:** Canonical narrative source for the playable Chapter 3 vertical slice. The Hold Bell drama pass and first Split Hall debate are implemented in the live game.
 
 ## Chapter Promise
 
@@ -70,11 +70,13 @@ Mara remains a protected non-combat guest. Her urgency is valid: every delay may
 
 ```text
 First Westroot Gate
-  → Rootmarket / Mossgarden / Split Hall (any order)
+  → Rootmarket / Mossgarden
   → Rootbread Promise (optional)
+  → Hold Bell crisis
+  → Split Hall first debate
   → Witness Stones
   → Cargo Siding
-  → Split Hall
+  → Split Hall resolution
   → Mossgarden closing scene
 ```
 
@@ -84,9 +86,11 @@ First Westroot Gate
 |---|---|---|
 | 1 | **Enter Westroot** — The First Westroot Gate is open, but the people beneath the hill do not yet know why you came. | Bramwell grants a limited welcome. |
 | 2 | **Listen Before You Ask** — Meet the people keeping Westroot safe and learn why the gate's opening has divided them. | Hear Bramwell, Noma, and one Rootmarket voice. |
-| 3 | **Restore the Witness Stones** — The old road did not begin with command. Learn what a traveler needs first. | Complete the fail-forward stone sequence. |
-| 4 | **Follow the Willow Cargo** — Ada warned that Willow-sealed cargo below the hill should not be trusted. | Inspect the Cargo Siding evidence and clear the encounter. |
-| 5 | **Bring the Evidence to Split Hall** — Westroot needs the full truth: the danger outside and the opening made from within. | Resolve the Split Hall scene. |
+| 3 | **Answer the Hold Bell** — A Willow crate moved under a correct Westroot signal. Hear what the sudden closure protects and who it leaves outside. | Trigger the Hold Bell after hearing Quill and Noma. |
+| 4 | **Hear Westroot at Split Hall** — Bramwell wants three days sealed; the outer shelter has missed its water call. | Hear at least one piece of community testimony. |
+| 5 | **Restore the Witness Stones** — The old road did not begin with command. Learn what a traveler needs first. | Complete the fail-forward stone sequence. |
+| 6 | **Follow the Willow Cargo** — Ada warned that Willow-sealed cargo below the hill should not be trusted. | Inspect the Cargo Siding evidence and clear the encounter. |
+| 7 | **Bring the Evidence to Split Hall** — Westroot needs the full truth: the danger outside and the opening made from within. | Resolve the Split Hall scene. |
 | Complete | **Chapter Complete: The Hidden Root** — Westroot will not open blindly, but it will not let lies travel unchallenged. Lio's trail leads west into the older road. | `chapterThreeClear` is set. |
 
 ## Required Chapter-End Flags
@@ -183,6 +187,19 @@ Rootmarket occupies a broad shelf beneath the cavern wall. It is quieter than an
 The goods are practical and carefully mended. Rootbread. Preserved apples. Lamp oil. Buttons carved from river stone. Folded road maps whose routes have been crossed out so many times they look like quilts.
 
 People do not stop watching you. They simply find reasons to watch while doing something useful.
+
+Rootmarket is a location hub rather than the opening of Quill's conversation. From this shared space, the player may approach Quill, speak with Auntie Lume, listen to the surrounding market, or leave. Every character conversation returns to the Rootmarket choices instead of presenting another character as though they were one of Quill's replies.
+
+**Location choices**
+
+- Talk to the Stonekin repairing a shutter.
+- Speak with the Mossback baker.
+- Listen to the market.
+- Leave Rootmarket.
+
+### Ambient market voices
+
+A Mossback pipe-mender knots one thin red hold-cord to a stall while arguing that every listening signal should be stopped. A tired Stonekin relay runner grips an unanswered outer-shelter tally and insists that silence could strand her father. Other Stonekin and Mossbacks quietly disagree with both of them. Nobody sounds like a faction. Everyone sounds like someone who expects the coming decision to cost a neighbor.
 
 ### Quill Pebbleturn
 
@@ -396,6 +413,75 @@ Mara looks at the crown mark.
 
 - Objective: **Restore the Witness Stones**.
 - Witness Stone interaction is unlocked.
+
+---
+
+## 3A. Optional Split Hall Visit Before the Bell
+
+The player may enter Split Hall before hearing both Quill and Noma. The room is only half full, but an argument is already underway between ordinary villagers: a cautious Mossback pipe-mender wants listening signals stopped, while a young Stonekin relay runner is waiting on her father's outer-shelter water tally. Other Stonekin and Mossbacks challenge both of them from across the repaired table.
+
+This scene establishes that the disagreement predates the player's arrival and gives Westroot the same chorus-of-concern effect that Hearthhollow uses in Chapter 1. Auntie Lume leaves bread between the speakers, but even her practical humor cannot resolve the divide.
+
+The player may validate caution, name the cost of closure, or simply listen. This is a tonal choice only. Set `splitHallVisitedBeforeBell` so ordinary walk-throughs stay quiet afterward; manual inspection preserves a shorter review. If the player saw this scene, the post-bell debate explicitly transforms its small gaps between neighbors into the packed hall's central aisle.
+
+No dedicated art is needed for the pre-bell visit. The selected `split-hall-hold-debate-scene-v01.webp` is reserved for the later escalation so it does not appear before the bell.
+
+---
+
+## 4A. The Hold Bell
+
+This crisis is mandatory after the player has heard both Quill and Noma. It must occur on a clean playthrough; the faction drama cannot depend on failing the Witness Stones.
+
+### Incident
+
+A single low bell rolls through the hill. Market sounds stop and lantern shutters close in sequence. A runner reports that the Willow-marked crate has moved despite Bramwell's hold, while the ledger and siding door still claim it is sealed.
+
+Bramwell orders the First Gate and side passages closed until Westroot knows whose mark moved the cargo. Noma objects that the outer shelter has missed its water tally and will disappear from Westroot's hearing if every listening mark is hooded.
+
+The village divides personally rather than by ancestry. A cautious Mossback pipe-mender wants the gate sealed after losing his sister to a false order. A young Stonekin relay runner argues that his father is one of six people waiting at the outer shelter. Stonekin and Mossbacks stand on both sides.
+
+Mara recognizes the cost of both positions: opening every signal may reveal Lio's route, while sealing every route may erase the next useful mark he leaves.
+
+**Player approaches**
+
+- Count who will be left outside.
+- A warning cannot stop at Westroot's gate.
+- Who moved a crate under hold?
+
+All three validate a different part of the crisis and converge on Bramwell and Noma taking the dispute to Split Hall.
+
+**Outcome**
+
+- Set `westrootHoldBellRung`.
+- Objective: **Hear Westroot at Split Hall**.
+- Rootmarket, the First Gate, and the Mossgarden change to their Hold Bell descriptions.
+
+---
+
+## 4B. Split Hall: The Hold Debate
+
+This is the player's first dramatic visit to Split Hall. The room is already full. Its benches have pulled into two rough banks, but neither ancestry owns a side. Two untouched rootbread baskets sit at opposite ends of the repaired table.
+
+Bramwell asks for three days sealed so every gate-account mark can be checked. Noma insists that three days may be the whole distance between the outer shelter waiting and being forgotten. Quill places the scorched lantern shutter on the table and explains that somebody knew both a private Westroot signal and the timing of the watch change.
+
+The player may hear three independent pieces of testimony:
+
+- **Outer shelter:** six named people have missed two water calls.
+- **Gate cost:** Bramwell names the people already lost when false warnings reached Westroot homes.
+- **Cargo hold:** the correct private timing suggests internal knowledge, but Noma stops the hall from inventing a traitor before evidence exists.
+
+Each topic remains independently available until asked. Hearing any one completes the required first debate and unlocks the Witness Stones; the others remain optional review material. The final Split Hall resolution recalls whichever testimony the player heard.
+
+**Outcome**
+
+- Set `splitHallDebateHeard` after the first testimony.
+- Persist the three testimony choices separately.
+- Objective: **Restore the Witness Stones**.
+- Repeated walk-throughs remain quiet until the cargo evidence is ready, but manual inspection can reopen unanswered testimony.
+
+### Art target
+
+Use `split-hall-hold-debate-scene-v01`: the same room and character continuity as the selected resolution scene, but with hooded lanterns, a clear empty aisle, opposing body language, untouched bread, the scorched shutter, and mixed Stonekin/Mossbacks on both sides. Do not reuse the reconciliation tableau here.
 
 ---
 

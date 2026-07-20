@@ -164,8 +164,8 @@ Acceptance criteria:
 Likely files:
 
 - `scripts/`
-- `docs/asset-manifest.md`
-- `docs/liams-game-art-direction.md`
+- `docs/art/asset-manifest.md`
+- `docs/art/art-direction.md`
 - `src/data/artworkPlan.ts`
 
 ### 7. Move QA Checks Out Of `App.tsx`

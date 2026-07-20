@@ -4,12 +4,11 @@ Last updated: 2026-07-04
 
 This is a ChatGPT-facing prompt pack for the remaining NPC and enemy art in Liam's Game so far. It is scoped from:
 
-- `docs/asset-manifest.md`
-- `docs/liams-game-art-direction.md`
-- `docs/liams_game_chapter_1_story_script.md`
-- `docs/liams_game_chapter_2_story_script.md`
-- `docs/liams-game-chapter-2-the-westroot-trail-updated.md`
-- `docs/liams_game_chapters_2_5_story_bible.md`
+- `docs/art/asset-manifest.md`
+- `docs/art/art-direction.md`
+- `docs/story/chapter-1-story-script.md`
+- `docs/story/chapter-2-story-script.md`
+- `docs/story/chapters-2-5-story-bible.md`
 - `src/data/artworkPlan.ts`
 - `src/data/enemies.ts`
 - `src/story/chapters2to5.ts`

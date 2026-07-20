@@ -120,9 +120,11 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | No-Handle Door closeup | `no-handle-door-closeup-v01.webp` | Current Chapter 2 dialogue closeup for inspecting the No-Handle Door. Wired into door dialogue visuals. |
 | Westroot threshold opening | `westroot-threshold-opening-v02.webp` | Chapter 2 closing illustration: a character-neutral view through the open oval Westroot gate, matching the rounded Three-Door Threshold architecture. |
 | Westroot arrival | `westroot-arrival-scene-v01.webp` | Chapter 3 First Westroot Gate dialogue scene; establishes Mara's arrival beneath the hill. |
+| Rootmarket uneasy arrival | `rootmarket-uneasy-arrival-scene-v01.webp` | Selected Chapter 3 pre-bell Rootmarket hub scene; Quill and Auntie Lume anchor independent conversation areas while mixed neighbors continue their work under quiet social strain. |
 | Witness Stones | `witness-stones-scene-v01.webp` | Chapter 3 puzzle scene; the false crown slat and the four road-mark values are visually distinct. |
 | Rootbread Promise | `rootbread-promise-scene-v01.webp` | Chapter 3 sealed-hatch scene; Mara, the young Mossback, rootbread, and Lio's blue knot are present. |
 | Cargo Siding evidence | `cargo-siding-evidence-scene-v01.webp` | Chapter 3 cargo inspection scene; false Willow cargo and the evidence crate are legible. |
+| Split Hall Hold Debate | `split-hall-hold-debate-scene-v01.webp` | Selected Chapter 3 post-bell confrontation scene; Bramwell and Noma remain sympathetic, the crowd is mixed across ancestry lines, Quill's shutter occupies the contested center, and thin ceiling hold-lines reinforce the temporary civic closure. |
 | Split Hall resolution | `split-hall-resolution-scene-v03.webp` | Selected Chapter 3 resolution scene; Bramwell, Noma, Auntie Lume, Mara, Mossbacks, and Stonekin gather around the evidence table. |
 | Mossgarden closing mark | `mossgarden-closing-mark-scene-v01.webp` | Chapter 3 closing scene; Mara and Noma restore a courier mark without relying on baked-in text. |
 | Courier Satchel evidence | `courier-satchel-evidence-scene-v01.webp` | Selected Chapter 1 boar-reward scene; Lio's scuffed satchel, crooked false seal, brass badge, and blue-string lunch packet remain legible in the dialogue modal. |

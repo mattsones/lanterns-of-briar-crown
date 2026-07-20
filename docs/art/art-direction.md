@@ -730,7 +730,7 @@ The safest implementation path is:
 
 For item art specifically, use `docs/art/item-icons/liams-game-custom-item-icon-plan.md` as the production target. The item UI should render custom art when present and fall back to the existing emoji when art is missing or broken.
 
-For web export discipline, use `docs/asset-manifest.md#production-export-discipline`, run `npm.cmd run optimize:assets` after promoting a large production batch, and run `npm.cmd run audit:assets` before shipping it. Keep source art separate from shipped derivatives, prefer WebP/AVIF for opaque maps, portraits, and scenes, and keep PNG for transparent icons, tokens, and hero cutouts.
+For web export discipline, use `docs/art/asset-manifest.md#production-export-discipline`, run `npm.cmd run optimize:assets` after promoting a large production batch, and run `npm.cmd run audit:assets` before shipping it. Keep source art separate from shipped derivatives, prefer WebP/AVIF for opaque maps, portraits, and scenes, and keep PNG for transparent icons, tokens, and hero cutouts.
 
 ---
 

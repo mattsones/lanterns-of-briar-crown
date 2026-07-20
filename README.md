@@ -88,18 +88,18 @@ npm run playtest:smoke
 
 ## Project Docs
 
-Important project docs:
+Start with [`docs/README.md`](docs/README.md) for the documentation map. Important project docs:
 
 ```text
-docs/liams_game_repo_plan.md
-docs/liams_game_chapter_1_story_script.md
-docs/liams-game-art-direction.md
 docs/codex-handoff.md
-docs/refactor-roadmap.md
-docs/asset-manifest.md
+docs/story/chapter-1-story-script.md
+docs/art/art-direction.md
+docs/art/asset-manifest.md
+docs/planning/repository-plan.md
+docs/planning/refactor-roadmap.md
 docs/playtest-notes/chapter-1-golden-path.md
-docs/prompts/chapter-1-environments.md
-docs/prompts/chapter-1-characters.md
+docs/art/prompts/chapter-1-environments.md
+docs/art/prompts/chapter-1-characters.md
 ```
 
 ## Development Principle

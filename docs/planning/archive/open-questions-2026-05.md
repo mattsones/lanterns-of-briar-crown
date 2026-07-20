@@ -1,5 +1,7 @@
 # Liam’s Game — Open Questions
 
+> **Archived May 2026 planning snapshot:** Many of these setup questions were answered during Chapters 1–3 implementation. Keep this list for decision history; track new unresolved work in the relevant current plan or playtest handoff.
+
 This document tracks questions that should be answered later, but do not need to block the current repo setup.
 
 ## Story Questions

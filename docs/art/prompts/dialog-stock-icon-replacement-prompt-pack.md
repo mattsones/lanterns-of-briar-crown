@@ -2,7 +2,7 @@
 
 Use this document with ChatGPT image generation to replace the remaining generic dialogue symbols in Liam's Game. Generate **one asset per request**. Do not ask for all of them in a single contact sheet.
 
-The implementation audit and reuse plan live in `docs/dialog-stock-icon-replacement-plan.md`. Most dialogue art should come from existing portraits, enemies, scenes, and map crops. This pack is deliberately limited to the few missing masters that add real story value.
+The implementation audit and reuse plan live in `docs/planning/dialog-stock-icon-replacement-plan.md`. Most dialogue art should come from existing portraits, enemies, scenes, and map crops. This pack is deliberately limited to the few missing masters that add real story value.
 
 ## Generation Order
 

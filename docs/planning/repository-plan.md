@@ -105,13 +105,18 @@ liams-game/
       ui/
     source-prompts/
   docs/
-    chapter-1-story-script.md
-    art-direction.md
-    repo-plan.md
-    prompts/
-      chapter-1-environments.md
-      chapter-1-characters.md
-      chapter-1-key-art.md
+    README.md
+    codex-handoff.md
+    story/
+      chapter-1-story-script.md
+    planning/
+      repository-plan.md
+    art/
+      art-direction.md
+      prompts/
+        chapter-1-environments.md
+        chapter-1-characters.md
+        chapter-1-key-art.md
     playtest-notes/
       chapter-1-golden-path.md
   tests/
@@ -136,9 +141,13 @@ liams-game/
     App.tsx
     styles.css
   docs/
-    chapter-1-story-script.md
-    art-direction.md
-    repo-plan.md
+    README.md
+    story/
+      chapter-1-story-script.md
+    planning/
+      repository-plan.md
+    art/
+      art-direction.md
   assets/
     concept/
       environments/
@@ -536,8 +545,8 @@ The first priority is preserving a working Chapter 1 prototype. Refactors should
 1. Create a local project folder named `liams-game`.
 2. Initialize Vite React TypeScript.
 3. Paste the current working prototype into `src/App.tsx`.
-4. Add the Chapter 1 story script to `docs/chapter-1-story-script.md`.
-5. Add this repo plan to `docs/repo-plan.md`.
+4. Add the Chapter 1 story script to `docs/story/chapter-1-story-script.md`.
+5. Add this repo plan to `docs/planning/repository-plan.md`.
 6. Add selected concept art to `assets/reference/concept/`.
 7. Commit the working baseline.
 8. Only then begin extraction/refactoring.
