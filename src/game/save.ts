@@ -140,6 +140,19 @@ export function migrateFlags(flags: Flags | Record<string, unknown> = {}): GameF
   ) {
     migrated.splitHallDebateHeard = true;
   }
+  if (
+    source.nomaIntroducedWitnessStones === undefined &&
+    (migrated.westrootHoldBellRung || migrated.witnessStoneSequenceSolved || migrated.chapterThreeClear)
+  ) {
+    migrated.nomaIntroducedWitnessStones = true;
+  }
+  if (
+    source.rootbreadLeadLearned === undefined &&
+    (migrated.metAuntieLume || migrated.rootbreadPromiseKept)
+  ) {
+    migrated.lumeMentionedRootbread = true;
+    migrated.rootbreadLeadLearned = true;
+  }
 
   return migrated;
 }

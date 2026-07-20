@@ -684,10 +684,10 @@ export const MAPS = {
       ["wall", "wall", "wall", "mossgarden", "westroot_path", "westroot_path", "wall", "wall", "wall"],
       ["wall", "westroot_path", "westroot_path", "westroot_path", "witness_stones", "westroot_path", "westroot_path", "cargo_siding", "wall"],
       ["wall", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "split_hall", "westroot_path", "westroot_path", "wall"],
-      ["wall", "westroot_first_gate", "westroot_path", "rootmarket", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "wall"],
+      ["wall", "westroot_first_gate", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "wall"],
       ["wall", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "wall"],
       ["wall", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "rootbread_hatch", "wall"],
-      ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+      ["wall", "wall", "wall", "rootmarket", "wall", "wall", "wall", "wall", "wall"],
     ],
   },
 };
@@ -811,8 +811,8 @@ Object.assign(TILE_META, {
   westroot_first_gate: makeTile("◈", "First Westroot Gate", false, "bg-emerald-950/90"),
   rootmarket: makeTile("⌂", "Rootmarket", false, "bg-amber-800/80"),
   mossgarden: makeTile("✿", "Mossgarden", false, "bg-emerald-800/80"),
-  witness_stones: makeTile("◌", "Witness Stones", false, "bg-teal-800/85"),
+  witness_stones: makeTile("◌", "Weathered Stones", false, "bg-teal-800/85"),
   split_hall: makeTile("▤", "Split Hall", false, "bg-stone-700/85"),
   cargo_siding: makeTile("▰", "Cargo Siding", false, "bg-rose-950/85"),
-  rootbread_hatch: makeTile("🍞", "Rootbread Hatch", false, "bg-amber-700/80"),
+  rootbread_hatch: makeTile("🍞", "Sealed Hatch", false, "bg-amber-700/80"),
 });

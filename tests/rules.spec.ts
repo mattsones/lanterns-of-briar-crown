@@ -46,6 +46,7 @@ import {
   isCompanionConscious,
 } from "../src/game/companions";
 import { getVisitedKey, isBlockedInteractionTile } from "../src/game/map";
+import { getWestrootMapNpcTokens } from "../src/game/westrootMap";
 import { addBonuses } from "../src/game/stats";
 import { BATTLE_REWARDS } from "../src/data/battleRewards";
 import { DIALOGUE_SCENE_ART } from "../src/data/dialogueArt";
@@ -355,22 +356,42 @@ test("Chapter 3 Westroot placeholder hub and cargo encounter preserve the vertic
 test("Westroot hub movement follows the painted road in short, room-aware steps", () => {
   const visual = getMapVisualConfig("westrootHub");
   expect(visual).toMatchObject({
-    fogRadius: 7.2,
-    fogPathWidth: 13,
+    revealAll: true,
   });
-  expect(visual.fogRevealAreas?.map((area) => area.id)).toEqual([
-    "westroot-gate-approach",
-    "rootmarket-plaza",
-    "westroot-central-plaza",
-    "mossgarden",
-    "witness-stones",
-    "split-hall",
-    "cargo-siding",
-    "rootbread-hatch",
-  ]);
+  expect(visual.fogRadius).toBeUndefined();
+  expect(visual.fogPathWidth).toBeUndefined();
+  expect(visual.fogRevealAreas).toBeUndefined();
+  expect(getNavigationDestination("westrootHub", 1, 3, "down")).toEqual({ x: 1, y: 4 });
   expect(getNavigationDestination("westrootHub", 1, 3, "right")).toEqual({ x: 1, y: 4 });
-  expect(getNavigationDestination("westrootHub", 3, 3, "up")).toEqual({ x: 2, y: 2 });
+  expect(getNavigationDestination("westrootHub", 3, 3, "up")).toEqual({ x: 3, y: 6 });
+  expect(getNavigationDestination("westrootHub", 3, 3, "left")).toEqual({ x: 2, y: 2 });
+  expect(MAPS.westrootHub.tiles[3][3]).toBe("westroot_path");
+  expect(MAPS.westrootHub.tiles[6][3]).toBe("rootmarket");
+  expect(getMapNodePoint("westrootHub", 3, 6, 9, 7)).toEqual({ x: 40.5, y: 56.5 });
+  expect(getMapNodePoint("westrootHub", 4, 1, 9, 7)).toEqual({ x: 43, y: 20.5 });
   expect(getNavigationDestination("westrootHub", 7, 3, "down")).toEqual({ x: 7, y: 4 });
+
+  const directionIsVisuallyConsistent = {
+    up: (dx: number, dy: number) => dy < 0 && Math.abs(dy) >= 0.45 * Math.abs(dx),
+    down: (dx: number, dy: number) => dy > 0 && Math.abs(dy) >= 0.45 * Math.abs(dx),
+    left: (dx: number, dy: number) => dx < 0 && Math.abs(dx) >= 0.45 * Math.abs(dy),
+    right: (dx: number, dy: number) => dx > 0 && Math.abs(dx) >= 0.45 * Math.abs(dy),
+  };
+  Object.entries(visual.navigationLinks || {}).forEach(([from, exits]) => {
+    const [fromX, fromY] = from.split(",").map(Number);
+    const fromPoint = getMapNodePoint("westrootHub", fromX, fromY, 9, 7);
+    Object.entries(exits).forEach(([direction, destination]) => {
+      if (!destination) return;
+      const [toX, toY] = destination.split(",").map(Number);
+      const toPoint = getMapNodePoint("westrootHub", toX, toY, 9, 7);
+      const dx = toPoint.x - fromPoint.x;
+      const dy = toPoint.y - fromPoint.y;
+      expect(
+        directionIsVisuallyConsistent[direction](dx, dy),
+        `${from} ${direction} -> ${destination} should match the painted direction`,
+      ).toBe(true);
+    });
+  });
 
   const edgeLengths = Object.entries(visual.navigationLinks || {}).flatMap(([from, exits]) => {
     const [fromX, fromY] = from.split(",").map(Number);
@@ -383,6 +404,46 @@ test("Westroot hub movement follows the painted road in short, room-aware steps"
     });
   });
   expect(Math.max(...edgeLengths)).toBeLessThanOrEqual(11);
+});
+
+test("Westroot map NPC markers follow the story's physical staging", () => {
+  const initialFlags = buildDefaultFlags();
+  expect(getWestrootMapNpcTokens(initialFlags)).toMatchObject([
+    { id: "bramwell", x: 1, y: 3 },
+    { id: "noma", name: "Mossback caretaker", x: 3, y: 0 },
+  ]);
+
+  const holdMeeting = {
+    ...initialFlags,
+    metNoma: true,
+    westrootHoldBellRung: true,
+  };
+  expect(getWestrootMapNpcTokens(holdMeeting)).toMatchObject([
+    { id: "bramwell", x: 5, y: 2 },
+    { id: "noma", name: "Noma Greenstill", x: 5, y: 2 },
+  ]);
+
+  const atWitnessStones = {
+    ...holdMeeting,
+    splitHallDebateHeard: true,
+    rootbreadLeadLearned: true,
+  };
+  expect(getWestrootMapNpcTokens(atWitnessStones)).toMatchObject([
+    { id: "bramwell", x: 5, y: 2 },
+    { id: "noma", x: 4, y: 1 },
+    { id: "rootbread-child", x: 7, y: 5 },
+  ]);
+
+  const resolved = {
+    ...atWitnessStones,
+    witnessStoneSequenceSolved: true,
+    rootbreadPromiseKept: true,
+    chapterThreeClear: true,
+  };
+  expect(getWestrootMapNpcTokens(resolved)).toMatchObject([
+    { id: "bramwell", x: 1, y: 3 },
+    { id: "noma", x: 3, y: 0 },
+  ]);
 });
 
 test("Chapter 3 production artwork is selected and fallback-safe", () => {
@@ -523,6 +584,14 @@ test("save migrations normalize older payloads before load", () => {
   });
   expect(oldChapter3Flags.westrootHoldBellRung).toBe(true);
   expect(oldChapter3Flags.splitHallDebateHeard).toBe(true);
+  expect(oldChapter3Flags.nomaIntroducedWitnessStones).toBe(true);
+
+  const oldRootbreadFlags = migrateFlags({
+    chapterThreeStarted: true,
+    metAuntieLume: true,
+  });
+  expect(oldRootbreadFlags.lumeMentionedRootbread).toBe(true);
+  expect(oldRootbreadFlags.rootbreadLeadLearned).toBe(true);
 });
 
 test("progression and default map state stay compatible with chapter one", () => {

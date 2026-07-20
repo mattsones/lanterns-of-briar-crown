@@ -11,6 +11,7 @@ import {
 } from "../data/mapVisuals";
 import { getDialoguePortrait } from "../data/portraits";
 import { getVisitedKey, isBlockedInteractionTile } from "../game/map";
+import type { MapNpcToken } from "../game/westrootMap";
 import { HeroArtwork } from "./HeroArtwork";
 
 const MAP_TOKEN_CONFIG: Record<
@@ -204,6 +205,7 @@ export function MapStage({
   debug = false,
   fogComplete = false,
   getTokenState = (_tile: string, _tileRegion: string) => "active",
+  npcTokens = [] as MapNpcToken[],
 }) {
   const visual = getMapVisualConfig(region);
   const rows = map.length;
@@ -298,6 +300,11 @@ export function MapStage({
     columns,
     rows,
   );
+  const renderedNpcTokens = npcTokens.map((token) => ({
+    ...token,
+    point: getMapNodePoint(region, token.x, token.y, columns, rows),
+    portrait: getDialoguePortrait(token.portraitName),
+  }));
 
   return (
     <div
@@ -424,6 +431,7 @@ export function MapStage({
       <div className="map-token-layer" aria-hidden="true">
         {renderedTokens.map((node) => {
           const config = MAP_TOKEN_CONFIG[node.tile];
+          if (node.tokenState === "hidden") return null;
           if (node.tokenState === "spent" && config.hideWhenSpent) return null;
           const portrait = getDialoguePortrait(
             config.portraitName || node.meta.label,
@@ -486,6 +494,35 @@ export function MapStage({
             </div>
           );
         })}
+        {renderedNpcTokens.map((token) => (
+          <div
+            key={`npc-token-${token.id}`}
+            data-testid={`map-npc-token-${token.id}`}
+            className="map-token map-token--npc has-artwork"
+            title={token.name}
+            style={{
+              left: `${token.point.x + (token.offsetX || 0)}%`,
+              top: `${token.point.y + (token.offsetY || 0)}%`,
+            }}
+          >
+            <span className="map-token-fallback">•</span>
+            {token.portrait ? (
+              <img
+                src={token.portrait.src}
+                alt=""
+                className="map-token-portrait"
+                style={getPortraitTokenStyle(token.portraitFocus)}
+                onError={(event) => {
+                  event.currentTarget.style.display = "none";
+                  event.currentTarget.parentElement?.style.setProperty(
+                    "display",
+                    "none",
+                  );
+                }}
+              />
+            ) : null}
+          </div>
+        ))}
       </div>
       <div
         data-testid="hero-token"

@@ -180,7 +180,7 @@ test("visible Westroot and Crown Den encounters use enemy markers instead of clu
 test("title screen loads the checked-in Chapter 2 playtest save", async ({ page }) => {
   await page.addInitScript(() => window.localStorage.clear());
   await page.goto("/");
-  await page.getByRole("button", { name: "Load Chapter 2 Playtest Save" }).click();
+  await page.getByRole("button", { name: "Begin Chapter 2 Playtest" }).click();
 
   await expect(page.getByRole("heading", { name: MAPS.bramblecross.name })).toBeVisible();
   await expect(page.getByText("Goal: Return to the Watchhouse")).toBeVisible();
@@ -191,7 +191,7 @@ test("title screen loads the checked-in Chapter 2 playtest save", async ({ page 
 test("title screen loads the checked-in Chapter 3 ready save", async ({ page }) => {
   await page.addInitScript(() => window.localStorage.clear());
   await page.goto("/");
-  await page.getByRole("button", { name: "Load Chapter 3 Ready Save" }).click();
+  await page.getByRole("button", { name: "Begin Chapter 3 Playtest" }).click();
 
   await expect(page.getByRole("heading", { name: MAPS.westrootHub.name })).toBeVisible();
   await expect(page.getByRole("button", { name: "Inspect First Westroot Gate", exact: true })).toBeVisible();
