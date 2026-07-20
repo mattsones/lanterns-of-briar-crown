@@ -1554,3 +1554,75 @@ Last updated: 2026-07-19
 - `npm.cmd run playtest:smoke` passed: 1 test.
 - `npm.cmd run audit:assets -- --limit=10` passed: 130 production images scanned within the documented category targets.
 - `git diff --check` passed with normal Windows line-ending warnings only.
+
+## Current Handoff — Chapter 3 Conversation Continuity Pass
+
+Last updated: 2026-07-19
+
+### What Changed
+
+- Audited every playable Chapter 3 dialogue branch for prerequisite knowledge, conversational continuity, repeat behavior, and exit/return flow.
+- Removed authorial prompt language from the Rootmarket ambient scene and made listening a one-time action.
+- Hid Quill's and Auntie Lume's names until they introduce themselves. Quill's old-road and cargo topics now remain available until asked, without requiring the player to leave and restart the conversation.
+- Removed the premature **What is the Rootbread Promise?** choice. Lume must first use the term; the sealed-hatch action appears only after she supplies that concrete lead.
+- Made Lume's remaining topics, Noma's three informational questions, and the Rootbread child's two questions persistent within their conversations.
+- Delayed the Hold Bell until the player deliberately steps away from Quill or Noma, preventing it from cutting off unanswered topics.
+- Stopped Noma's Witness Stones explanation and Mara's first Split Hall conclusion from repeating after every answer.
+- Renamed unrevealed map landmarks to **Weathered Stones** and **Sealed Hatch**, and added neutral pre-introduction dialogue for both.
+- Updated older-save migration so prior Chapter 3 and Rootbread progress remains compatible with the new knowledge flags.
+
+### Verification
+
+- `npm.cmd run build` passed; the existing over-500-KB main-chunk warning remains.
+- `npm.cmd run test:rules` passed: 28 tests.
+- `npm.cmd run playtest:chapter3` passed: 8 tests, including explicit early-knowledge boundary coverage.
+- `npm.cmd run playtest:chapter1` passed: 30 tests.
+- `npm.cmd run playtest:chapter2` passed: 31 tests.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `npm.cmd run audit:assets -- --limit=10` passed: 130 production images scanned within the documented category targets.
+
+## Current Handoff — Westroot Village Visibility, NPC Staging, And Directional Movement
+
+Last updated: 2026-07-20
+
+### What Changed
+
+- Marked Westroot Hub as a fully revealed village map and removed its fog radius, path width, and room reveal masks. Wilderness and dungeon fog behavior is unchanged.
+- Re-authored every Westroot Hub movement direction against the painted node coordinates. The opening bridge accepts both **Down** and **Right**; diagonal stretches accept a second visually plausible key only where it cannot steal a junction direction.
+- Added a rule-level geometry audit covering every Westroot movement key. Each assigned arrow must point substantially toward its destination, and the existing maximum edge-length guard remains in place.
+- Added phase-aware outdoor NPC markers using existing portraits. Bramwell moves from the First Gate to Split Hall and back; Noma moves from Mossgarden to Split Hall, then Witness Stones, and back; the Rootbread child appears at the sealed hatch only while that learned thread is active.
+- Kept Quill and Lume inside Rootmarket without redundant outdoor markers. The Cargo Siding enemy marker is now hidden until the Witness Stones open the route, preventing the fully revealed village map from leaking an undiscovered threat.
+
+### Verification
+
+- `npm.cmd run build` passed; the existing over-500-KB main-chunk warning remains.
+- `npm.cmd run test:rules` passed: 29 tests.
+- `npm.cmd run playtest:chapter1` passed: 30 tests.
+- `npm.cmd run playtest:chapter2` passed: 31 tests.
+- `npm.cmd run playtest:chapter3` passed: 8 tests.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `git diff --check` passed with normal Windows line-ending warnings only.
+- Live browser QA confirmed zero Westroot fog layers, no premature Cargo Siding enemy marker, distinct Bramwell/Noma starting markers, and a first **Down** keypress that reaches the visibly lower bridge node after Bramwell's introduction.
+
+## Current Handoff — Westroot Introductions And Rootmarket Spatial Entry
+
+Last updated: 2026-07-20
+
+### What Changed
+
+- Added Liam's reciprocal party introduction to the existing first dialogue screens with Bramwell, Quill, Lume, and Noma. No extra continue screen was added; each Westroot resident's response instead shows a distinct attitude toward unfamiliar people.
+- Split the Rootmarket approach from Rootmarket itself. The plaza path remains a quiet junction in front of the stalls; **Up** enters the market, **Left** climbs toward Mossgarden, and **Right** continues through central Westroot.
+- Adjusted the Witness Stones endpoint within its painted water circle so the hero token remains fully visible below the persistent update ribbon, and removed the now-misleading **Up** alias from the final nearly horizontal step.
+- Added Chapter 3 assertions for every reciprocal introduction, the quiet market approach, deliberate market entry, and one-time ambient argument. Extended the movement rule test to lock both landmark positions and every key's visual direction.
+- Updated the story script and current playtest notes to describe the deliberate market entry and first-meeting trust reactions.
+
+### Verification
+
+- `npm.cmd run build` passed; the existing over-500-KB main-chunk warning remains.
+- `npm.cmd run test:rules` passed: 29 tests.
+- `npm.cmd run playtest:chapter1` passed: 30 tests.
+- `npm.cmd run playtest:chapter2` passed: 31 tests.
+- `npm.cmd run playtest:chapter3` passed: 8 tests.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `npm.cmd run audit:assets -- --limit=10` passed: 130 production images scanned within the documented category targets.
+- Live browser QA walked every Westroot branch from the First Gate through the market approach/interior, Mossgarden, Witness Stones, Split Hall, Cargo Siding, and sealed hatch. The market, hall, siding, garden, gate, and hatch tokens land on their painted landmarks; the corrected Witness Stones token is fully visible on the pool's lower rim.

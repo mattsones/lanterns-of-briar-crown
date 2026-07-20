@@ -2,7 +2,7 @@
 
 ## Chapter 3: The Hidden Root
 
-**Status:** Canonical narrative source for the playable Chapter 3 vertical slice. The Hold Bell drama pass and first Split Hall debate are implemented in the live game.
+**Status:** Canonical narrative source for the playable Chapter 3 vertical slice. The Hold Bell drama pass, first Split Hall debate, and conversation knowledge/continuity pass are implemented in the live game.
 
 ## Chapter Promise
 
@@ -79,6 +79,23 @@ First Westroot Gate
   → Split Hall resolution
   → Mossgarden closing scene
 ```
+
+## Hub Presentation And Movement
+
+Westroot is a village beneath the hill, not an unknown wilderness or dungeon. The complete painted hub remains visible from the moment the player enters; it does not use fog of war.
+
+Movement nodes remain hidden in normal play. Arrow/WASD inputs therefore follow the direction the next stretch of painted road appears to travel on screen, rather than the underlying tile coordinates. Diagonal stretches may accept both plausible directions when neither key belongs to another visible branch. At the First Gate, for example, both **Down** and **Right** begin the descending bridge route. At the plaza junction in front of Rootmarket, **Up** enters the stalls, **Left** follows the rising path toward Mossgarden, and **Right** continues through the village. Later junctions preserve similarly visible choices toward Split Hall, Cargo Siding, and the sealed hatch.
+
+The paved plaza in front of Rootmarket and Rootmarket itself are separate nodes. Walking past the stalls does not begin a market conversation; the player deliberately steps off the public path and into the market. The Witness Stones endpoint sits on the lower edge of its painted water circle so the hero remains visible beneath the persistent update ribbon.
+
+First meetings include the party returning the courtesy of a name without adding another dialogue step. Bramwell receives the names like entries in a gate ledger, Quill immediately trusts the named hands with work, Lume answers them with another slice of bread, and Noma treats a name as the beginning of accountable evidence. These reactions establish each person's relationship to outsiders inside the conversation the player was already having.
+
+Outdoor character markers follow story staging:
+
+- Bramwell waits beside the First Gate before the Hold Bell, moves to Split Hall during the crisis, and returns to the gate after the resolution.
+- Noma begins in the Mossgarden, joins the Hold Bell meeting in Split Hall, moves to the Witness Stones once the first debate is heard, and returns to the Mossgarden after the chapter resolves.
+- The Rootbread child appears beside the sealed hatch only after Lume gives the player that lead, and disappears when the promise is complete.
+- Quill and Lume remain inside Rootmarket and do not need separate outdoor markers. The Cargo Siding threat remains hidden until the Witness Stones open that route.
 
 ## Main Quest: The Hidden Root
 
@@ -188,18 +205,18 @@ The goods are practical and carefully mended. Rootbread. Preserved apples. Lamp 
 
 People do not stop watching you. They simply find reasons to watch while doing something useful.
 
-Rootmarket is a location hub rather than the opening of Quill's conversation. From this shared space, the player may approach Quill, speak with Auntie Lume, listen to the surrounding market, or leave. Every character conversation returns to the Rootmarket choices instead of presenting another character as though they were one of Quill's replies.
+Rootmarket is a location hub rather than the opening of Quill's conversation. Before introductions, its choices describe an observable person rather than supplying a name the player has not heard. Every character conversation returns to its own unanswered topics or to the shared market instead of presenting another person as though they were one of Quill's replies.
 
 **Location choices**
 
 - Talk to the Stonekin repairing a shutter.
-- Speak with the Mossback baker.
-- Listen to the market.
+- Approach the Mossback baker.
+- Listen to the argument. This is a one-time action.
 - Leave Rootmarket.
 
 ### Ambient market voices
 
-A Mossback pipe-mender knots one thin red hold-cord to a stall while arguing that every listening signal should be stopped. A tired Stonekin relay runner grips an unanswered outer-shelter tally and insists that silence could strand her father. Other Stonekin and Mossbacks quietly disagree with both of them. Nobody sounds like a faction. Everyone sounds like someone who expects the coming decision to cost a neighbor.
+A Mossback pipe-mender knots one thin red hold-cord to a stall while arguing that every listening signal should be stopped. A tired Stonekin relay runner grips an unanswered outer-shelter tally and insists that silence could strand her father. Other Stonekin and Mossbacks quietly disagree with both of them. They sound like neighbors deciding which fear gets to speak first.
 
 ### Quill Pebbleturn
 
@@ -211,7 +228,9 @@ A young Stonekin is repairing a cracked lantern shutter with a tool small enough
 
 They point to a brass hinge. After you hold it, they look up and realize you are not from Westroot.
 
-“Oh. You are the gate problem.”
+“Oh. You are the gate problem. Quill Pebbleturn—shutter-mender, signal-keeper, and apparently greeter.”
+
+The player introduces Liam, Mara, and the current companion. Quill repeats the names without hesitation and points back to the hinge: named hands are easier to ask for help.
 
 **Choices**
 
@@ -229,7 +248,7 @@ They point to a brass hinge. After you hold it, they look up and realize you are
 
 ### Response: Lio question
 
-> Quill's hands still on the hinge. “We heard a courier passed through. We did not hear his name. There is a difference between a report and a person.”
+> Quill stills their hands on the hinge. “We heard a courier passed through. We did not hear his name. There is a difference between a report and a person.”
 
 ### Converged text
 
@@ -237,15 +256,19 @@ Quill fits the hinge back into place.
 
 “The old road had a rule. Every signal had to tell someone what it was for. Warning. Shelter. Water. Witness. The Briar people like their signals simple. Stop. Go. Obey. Simple is easy to fake.”
 
+Quill reaches for a work tally weighted with a chip of green sealing wax, introducing the object that the player may reasonably ask about.
+
 **Choices**
 
-- “Where can I learn the old rule?”
-- “Have you seen Willow-sealed cargo?”
-- “I should keep moving.”
+- “How did the old road keep its signals clear?”
+- “What is the green wax in that ledger?”
+- Thank Quill and step back.
+
+Each informational topic disappears only after it has been asked. Its response offers **Ask Quill about something else** while another topic remains, so the player can hear both without leaving and restarting the conversation. If Noma's explanation is already complete, the Hold Bell interrupts only when the player chooses to step back.
 
 ### Old-rule response
 
-> “Witness Stones, past the Mossgarden. Noma tends them. Do not call them a puzzle while she can hear you. She will call you a puzzle back.”
+> “Witness Stones, past the Mossgarden. Noma tends them. Do not call them a puzzle while they can hear you. They will call you a puzzle back.”
 
 ### Cargo response
 
@@ -259,7 +282,7 @@ Quill fits the hinge back into place.
 
 ### Repeat interaction
 
-> “If somebody tells you the road needs only one voice,” Quill says, “ask who gets to be quiet. It is usually not the person giving the order.”
+Quill asks what else the player needs to know. Any unanswered old-road or green-wax topic remains available.
 
 ---
 
@@ -269,31 +292,41 @@ Quill fits the hinge back into place.
 
 **Text**
 
-Auntie Lume stands behind a low counter with flour on her sleeves and a kettle steaming at her elbow. Her mossy brow is tied back with a yellow scarf.
+The Mossback baker stands behind a low counter with flour on her sleeves and a kettle steaming at her elbow. Her mossy brow is tied back with a yellow scarf.
 
 She slides a warm heel of rootbread toward you before anyone asks whether you deserve it.
 
-“Eat,” she says. “Then explain why the gate is making all my soup nervous.”
+“Eat,” she says. “Then explain why the gate is making all my soup nervous. Lume is my name. Auntie if I feed you twice.”
+
+The player introduces Liam, Mara, and the current companion. Lume cuts another slice: names first, questions after bread.
 
 **Choices**
 
 - “Thank you. We are looking for Lio Brindle.”
-- “What is the Rootbread Promise?”
+- “Why offer us food before you know whether to trust us?”
 - “I should not take food from people who do not trust me.”
+
+The player cannot ask about the **Rootbread Promise** yet. Lume must first use that name in her answer about Lio, hospitality, or accepting food from strangers. Once she does, **You called it the Rootbread Promise. What does it ask of Westroot?** becomes available.
 
 ### Lio response
 
-> “Good. A proper answer before a dramatic one.” Lume nods toward a narrow side passage. “Someone has been leaving bread at the sealed hatch every night. Says it is for whoever the road forgets. I do not believe roads forget. People do.”
+> “Good. A proper answer before a dramatic one.” Lume nods toward a narrow side passage. “Someone has been leaving bread at the sealed hatch every night. The old Rootbread Promise: food and water for whoever the road forgets. I do not believe roads forget. People do.”
 
-### Promise response
+### Hospitality response
+
+> “Trust decides whether I open a door. Hunger decides whether I pass bread through it. Westroot calls that the Rootbread Promise.”
+
+### Promise response, available only after Lume names it
 
 > “If a traveler arrives hungry, you feed them. If a traveler leaves hungry, you pack bread. If a traveler cannot leave, you do not punish them by making them invisible.”
 
 ### Refusal response
 
-> Auntie Lume pushes the bread closer. “Then take it as evidence. I am feeding you because we do not know you. That is when food matters most.”
+> Lume pushes the bread closer. “Then take it as evidence. I am feeding you because we do not know you. That is when food matters most. Westroot calls it the Rootbread Promise.”
 
-**Side objective:** **Follow the Rootbread Promise** — Someone has been leaving food at a sealed hatch. Find out who needs it and why.
+Lume's topics remain available until asked. The concrete action **Look for the food left by the sealed hatch** appears only after she has mentioned that food and hatch.
+
+**Side objective:** **Check the Sealed Hatch** — Lume says someone has been leaving food there. Find out who needs it and why.
 
 ### Sealed Hatch
 
@@ -313,9 +346,11 @@ From behind the nearby barrels, a small Mossback child steps out, chin raised wi
 
 **Choices**
 
-- “You did the right thing.”
-- “When did the hatch rattle?”
-- “It can be dangerous to leave food at a sealed way.”
+- “When did you hear someone behind the hatch?”
+- “Leaving food without opening the hatch was careful.”
+- “Tell the child whose blue knot Mara found.”
+
+The first two topics remain available until asked and return to the child's conversation. Telling the child about Lio's knot completes the scene; an informational answer no longer ends the conversation automatically.
 
 ### Right-thing response
 
@@ -365,7 +400,7 @@ Noma Greenstill is kneeling beside a tablet with a brush in one hand and a cup o
 
 - “What are these names?”
 - “We need to find the truth about a missing courier.”
-- “Bramwell says Westroot should close the gate.”
+- “Why is everyone preparing for the gate to close?”
 
 ### Names response
 
@@ -379,7 +414,7 @@ Noma Greenstill is kneeling beside a tablet with a brush in one hand and a cup o
 
 > “Bramwell has buried friends. I will not call his caution small. But a root that drinks only its own water eventually has nothing left to share.”
 
-### Converged text
+### Converged text, shown after the first substantive answer only
 
 Noma leads you to four weathered stones set in a shallow circle. A fifth, newer mark has been nailed over the first stone: a crooked crown and a single word.
 
@@ -391,23 +426,7 @@ Mara looks at the crown mark.
 
 “Lio would have hated that,” she says. “No one can follow ‘obey’ home.”
 
-**Choices**
-
-- “Show me how the stones are meant to work.”
-- “Can we remove the crown mark?”
-- “What happens if I get it wrong?”
-
-### Show-me response
-
-> “The stones do not care about pride,” Noma says. “They care what the next traveler receives.”
-
-### Remove response
-
-> “Not yet. First we read what it is trying to replace. A lie is easier to spot when the truth is still beside it.”
-
-### Wrong response
-
-> “Then Westroot hears the mistake. That is not punishment. It is why testimony matters. We correct it together.”
+After this explanation, any unanswered names, courier, or closing-gate topic remains available. The player may ask another question, examine the Witness Stones, or thank Noma and leave. The Hold Bell waits for that deliberate transition instead of replacing the remaining questions.
 
 **Outcome**
 

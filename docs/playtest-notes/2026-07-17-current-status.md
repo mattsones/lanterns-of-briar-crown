@@ -55,14 +55,19 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 - Lantern Sign cleaning is one-time and becomes a no-XP review afterward. Companion opinions at each threshold door return to that specific door rather than ejecting the player to the main threshold.
 - The user-provided Mossgirl disk save is now covered through the real file-picker load path. It has every repair required to open the No-Handle Door; the intentional second password phrase remains the final action, with explicit ready-state copy and a highlighted opening choice.
 - Map overlays now prioritize encounters: the Roadwatcher, releasable Crown Den hound, fixed den guard, Root Cellar skulk, south-gate boar, and Cargo Siding threat use enemy art. Painted clue stations no longer get map icons, scripted ambushes remain hidden, and the cellar guardian gets no overlay because it is already painted into the map.
-- Westroot Hub navigation now follows the painted entrance road, plaza, and branching paths with shorter waypoints. Fog opens in room-sized areas around Rootmarket, the Mossgarden, Witness Stones, Split Hall, Cargo Siding, and the Rootbread Hatch instead of exposing a thin disconnected tunnel.
+- Westroot Hub navigation follows the painted entrance road, plaza, and branching paths with short hidden waypoints. As a village map, the entire hub now stays visible without fog of war.
+- Westroot arrow/WASD controls now follow the visible direction of the painted road. Diagonal stretches accept both plausible keys where junctions allow it; the opening gate move accepts both **Down** and **Right**, while branch keys remain reserved for the landmarks they visibly approach.
+- Bramwell and Noma now have phase-aware outdoor map markers. Bramwell moves between the First Gate and Split Hall; Noma moves among the Mossgarden, Split Hall, and Witness Stones. The Rootbread child appears at the sealed hatch only after Lume supplies that lead. Quill and Lume remain represented inside Rootmarket.
 - Bramwell is now a mandatory Chapter 3 entry beat. Entering Westroot opens his introduction, and movement, map-node clicks, or older saves positioned past the gate are routed back to him until `metBramwell` is true; Quill cannot be met first.
-- The lower Westroot approach now follows the stone lane down to the wooden bridge and rises into the open Rootmarket plaza; it no longer cuts across the gorge or places the hero inside the market awning. The Mossgarden branch similarly routes around the hut.
+- The lower Westroot approach follows the stone lane down to the wooden bridge and rises to a plaza junction in front of Rootmarket. The public path no longer triggers the market: **Up** steps into a dedicated node on the painted stalls, **Left** climbs toward Mossgarden, and **Right** continues through the village. The Mossgarden branch similarly routes around the hut.
 - Completed Chapter 3 saves now identify the current playable endpoint explicitly. If the Rootbread Promise is unfinished, the persistent objective directs the player back to Rootmarket, where Auntie Lume's choice opens automatically, and then onward to the sealed hatch; completed landmarks remain quiet on walk-over but reviewable with **Inspect**.
 - Rootmarket now opens automatically while Auntie Lume's first conversation is still available. Once both Quill and Auntie have been handled, it returns to the normal completed-landmark behavior and stays quiet unless the player chooses **Inspect**.
 - Rootmarket is now a location-level dialogue hub. Quill, Auntie Lume, and the market's ambient voices are independent choices, and each character returns to the shared market instead of presenting another person inside Quill's dialogue.
 - Chapter 3 now builds tension before the investigation: Split Hall may be visited for an optional simmering argument, then the mandatory Hold Bell and first formal hall debate occur after Quill and Noma have been heard. The Witness Stones remain locked until that debate has happened.
 - Stonekin and Mossbacks appear on both sides of the open/close disagreement. The gate, market, and Mossgarden change after the Hold Bell, and testimony heard in the first debate is remembered at the final evidence scene.
+- Chapter 3 dialogue now gates names, terms, and actions behind the conversation that introduces them. Rootmarket initially offers the Stonekin shutter-mender and Mossback baker rather than Quill and Auntie Lume; weathered stones and the sealed hatch likewise remain generically described until Noma and Lume explain them.
+- Liam now returns introductions inside the existing first dialogue with Bramwell, Quill, Lume, and Noma. Each response expresses a different level and kind of outsider trust without adding a separate introduction screen.
+- Rootmarket listening is one-time. Quill, Lume, Noma, the Rootbread child, and the first Split Hall debate retain unanswered questions without replaying their converged speeches, and the Hold Bell waits until the player deliberately steps away from Quill or Noma.
 
 ## Production Art Status
 
@@ -80,16 +85,16 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 
 ```text
 npm.cmd run build                 passed
-npm.cmd run test:rules            28 passed
+npm.cmd run test:rules            29 passed
 npm.cmd run playtest:chapter1     30 passed
 npm.cmd run playtest:chapter2     31 passed
-npm.cmd run playtest:chapter3      6 passed
+npm.cmd run playtest:chapter3      8 passed
 npm.cmd run playtest:smoke         1 passed
 npm.cmd run audit:assets          130 images scanned; largest assets within targets
 git diff --check                 passed (Windows line-ending warnings only)
 ```
 
-Browser QA covered desktop exploration at 1400×900, phone exploration at 430×932, the phone menu sheet, compact phone combat, the Willowmark evidence selection, Root Cellar room-aware fog, and the responsive Three-Door close-up/choice layouts.
+Browser QA covered desktop exploration at 1400×900, phone exploration at 430×932, the phone menu sheet, compact phone combat, the Willowmark evidence selection, Root Cellar room-aware fog, the responsive Three-Door close-up/choice layouts, and Westroot's fully revealed map, opening down-arrow move, and initial NPC staging.
 
 ## Remaining Work
 
