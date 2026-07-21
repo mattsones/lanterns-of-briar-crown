@@ -26,9 +26,9 @@ The story can include real danger, missing people, captivity, betrayal, and ange
 
 ## Core Contrast
 
-**True road signs** guide, warn, shelter, and remember.
+**True road signs** name their purpose, guide, warn, shelter, and remember.
 
-**Briar Crown marks** overwrite, command, control, and misdirect.
+**Briar Crown marks** counterfeit trusted authority, hide responsibility, control, and misdirect.
 
 Recurring phrase:
 
@@ -36,9 +36,9 @@ Recurring phrase:
 
 ## The Main Moral Tension
 
-The Briar Crown claims that people are safer when they obey before they understand.
+The Briar Crown exploits the fact that people rightly depend on trusted authorities, then removes the truth and responsibility that make authority trustworthy.
 
-The Lantern Road teaches that people are safer when truth travels ahead of command.
+The Lantern Road teaches that good instructions name who is responsible, what danger they address, and what care they promise.
 
 ## The True Crown vs. the Briar Crown
 
@@ -48,12 +48,12 @@ The Briar Crown is a counterfeit crown. It imitates royal authority but lacks ro
 
 **True Crown:** authority that serves, protects, listens, and keeps roads open.
 
-**Briar Crown:** authority that commands, controls, frightens, and narrows the road.
+**Briar Crown:** counterfeit authority that copies trusted signs while hiding responsibility, frightening people, and narrowing the road.
 
 Working theme:
 
-> The true crown protects roads so people can travel freely.  
-> The Briar Crown controls roads so people can only go where they are commanded.
+> The true crown gives trustworthy direction and accepts responsibility for the people on the road.
+> The Briar Crown borrows that trust while refusing the responsibility that should come with it.
 
 ## The Princess Thread
 
@@ -734,39 +734,17 @@ The player should not be asked to choose one side completely. Instead, they help
 
 The heroic path is not reckless openness or fearful closure. It is truthful opening: roads should open with warning, memory, shelter, and care.
 
-## Main Puzzle: The Witness Stone Sequence
+## Public Renewal: The Witness Stones
 
-The party must prove they understand the old road signs by restoring a sequence on the Witness Stones.
+The Witness Stones are not a puzzle or a test of whether the party memorized the old signs. They are Westroot's civic place for renewing four shared road promises: Witness, Warning, Shelter, and Water.
 
-Four signs:
+When the suspicious Willow crate was first placed under hold, Bramwell lawfully closed the stone walk with a Gatehand's oak-and-brass hold-shutter. Westroot tolerates the barrier because it is an accountable emergency safeguard, publicly marked and imposed by someone responsible for the gate. The chapter's conflict is not whether obedience or caution is bad. It is whether a temporary order remains responsible when the danger changes and its costs acquire names.
 
-- Shelter
-- Warning
-- Water
-- Witness/Memory
+After the first Split Hall debate, Bramwell and Noma remove the shutter together. The player chooses which promise Westroot should act on first in the present crisis. Neighbors from both sides then activate the other three stones together.
 
-A false Briar Crown mark has been placed first, commanding travelers to “Obey Crown Detour.” The correct sequence does not begin with command. It begins with warning or witness, depending on design.
+This scene establishes the moral contrast with the Briar Crown: trustworthy authority names its purpose, accepts responsibility, protects the people affected, and remains open to correction. Counterfeit authority copies trusted signs while refusing accountability.
 
-Recommended correct sequence:
-
-1. Witness — tell what is true.
-2. Warning — name the danger.
-3. Shelter — protect the traveler.
-4. Water — sustain the traveler.
-
-This expresses the old road ethic:
-
-> Truth first, then safety, then help for the journey.
-
-### Companion hints
-
-**Rowan:** “Warning before shelter. If people do not know the danger, they cannot receive protection wisely.”
-
-**Tilda:** “The crown mark is cutting in line. Rude and suspicious.”
-
-**Moss:** “The stones are not asking who is in charge. They are asking what the next traveler needs.”
-
-**Mara:** “Lio always said you leave the warning where someone can see it before they step in the hole.”
+The renewal authorizes a witnessed investigation of the Cargo Siding. It is the chapter's first concrete act of reconciliation, not a declaration that either caution or openness was wholly wrong.
 
 ## Side Thread: The Rootbread Promise
 
@@ -778,7 +756,9 @@ Story purpose: Reinforces hospitality and gives Mara a humanizing moment. She ma
 
 ## Main Investigation: Willow-Sealed Cargo
 
-The party discovers Willow-marked crates in Westroot, but Ada warned that any Willow crates found below should not be trusted.
+The party traces a counterfeit Willow-marked crate that vanished from its assigned Westroot hold bay into the locked inner Cargo Siding. This is **not Ada's original missing spice crate**. It is a separate false shipment made possible by stealing and copying the trust attached to Ada's seal.
+
+The apparent disappearance is a physical mystery, not magic: wheel grooves lead from the empty hold bay deeper into the siding, somebody brushed the dust, and the lock was reset to claim the crate never moved. The player volunteers at Split Hall to follow that trail and return with evidence before Westroot accuses anyone.
 
 Inside the crates are not spices. They contain:
 
@@ -1600,4 +1580,3 @@ The player should feel:
 > The old road is real.  
 > The Briar Crown is watching.  
 > Westroot is waiting.
-

@@ -14,7 +14,7 @@ Start from `public/saves/chapter-2-complete.json`. Entry requires the Chapter 2 
 2. Move through the painted Westroot hub containing First Gate, Rootmarket, Witness Stones, Mossgarden, Split Hall, and Cargo Siding.
 3. Use Rootmarket as a location hub: approach Quill or Auntie Lume independently, and hear ambient villagers whose concerns cross ancestry lines.
 4. Trigger the mandatory Hold Bell crisis and hear the first Split Hall debate; Stonekin and Mossbacks must appear on both sides of the conflict.
-5. Resolve the Witness Stones as a fail-forward puzzle: mistakes change trust or consequences, but do not dead-end the chapter.
+5. Join Westroot at the shuttered Witness Stones for a public renewal: Bramwell and Noma open the lawful emergency hold together, and the player chooses which shared road promise the town should act on first.
 6. Investigate Willow-sealed cargo and fight a simultaneous multi-enemy encounter.
 7. Return the evidence to Split Hall, where earlier testimony is remembered.
 8. Finish with `westrootTrustEarned`, `witnessStoneSequenceSolved`, `willowCargoExposed`, and `chapterThreeClear` set.

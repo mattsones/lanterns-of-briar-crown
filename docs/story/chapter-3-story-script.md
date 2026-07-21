@@ -93,7 +93,7 @@ First meetings include the party returning the courtesy of a name without adding
 Outdoor character markers follow story staging:
 
 - Bramwell waits beside the First Gate before the Hold Bell, moves to Split Hall during the crisis, and returns to the gate after the resolution.
-- Noma begins in the Mossgarden, joins the Hold Bell meeting in Split Hall, moves to the Witness Stones once the first debate is heard, and returns to the Mossgarden after the chapter resolves.
+- Noma begins in the Mossgarden, joins the Hold Bell meeting in Split Hall, and moves with Bramwell to the Witness Stones once the first debate is heard. Both return to their usual posts after the public renewal or final resolution.
 - The Rootbread child appears beside the sealed hatch only after Lume gives the player that lead, and disappears when the promise is complete.
 - Quill and Lume remain inside Rootmarket and do not need separate outdoor markers. The Cargo Siding threat remains hidden until the Witness Stones open that route.
 
@@ -103,10 +103,10 @@ Outdoor character markers follow story staging:
 |---|---|---|
 | 1 | **Enter Westroot** — The First Westroot Gate is open, but the people beneath the hill do not yet know why you came. | Bramwell grants a limited welcome. |
 | 2 | **Listen Before You Ask** — Meet the people keeping Westroot safe and learn why the gate's opening has divided them. | Hear Bramwell, Noma, and one Rootmarket voice. |
-| 3 | **Answer the Hold Bell** — A Willow crate moved under a correct Westroot signal. Hear what the sudden closure protects and who it leaves outside. | Trigger the Hold Bell after hearing Quill and Noma. |
+| 3 | **Answer the Hold Bell** — A counterfeit Willow-marked crate vanished from its assigned hold bay under a correct Westroot signal. Hear what the sudden closure protects and who it leaves outside. | Trigger the Hold Bell after hearing Quill and Noma. |
 | 4 | **Hear Westroot at Split Hall** — Bramwell wants three days sealed; the outer shelter has missed its water call. | Hear at least one piece of community testimony. |
-| 5 | **Restore the Witness Stones** — The old road did not begin with command. Learn what a traveler needs first. | Complete the fail-forward stone sequence. |
-| 6 | **Follow the Willow Cargo** — Ada warned that Willow-sealed cargo below the hill should not be trusted. | Inspect the Cargo Siding evidence and clear the encounter. |
+| 5 | **Renew the Road Promises** — Join Westroot as it decides publicly how caution and care will guide the investigation. | Choose which promise Westroot acts on first; the community renews all four together. |
+| 6 | **Track the Missing Willow-Marked Crate** — This counterfeit shipment is not Ada's original spice crate; wheel marks lead from its empty hold bay into the locked inner siding. | Follow the physical trail, inspect the relocated crate, and defeat the enemies still hiding there. |
 | 7 | **Bring the Evidence to Split Hall** — Westroot needs the full truth: the danger outside and the opening made from within. | Resolve the Split Hall scene. |
 | Complete | **Chapter Complete: The Hidden Root** — Westroot will not open blindly, but it will not let lies travel unchallenged. Lio's trail leads west into the older road. | `chapterThreeClear` is set. |
 
@@ -117,7 +117,7 @@ Outdoor character markers follow story staging:
 - `willowCargoExposed`
 - `chapterThreeClear`
 
-Optional consequence flags may record whether the first Witness Stone attempt went wrong and whether the cargo runner escaped. Neither may prevent the required end flags.
+Optional consequence flags record which Witness Stone promise the player chose first and whether the cargo runner escaped. Neither may prevent the required end flags.
 
 ---
 
@@ -254,7 +254,7 @@ The player introduces Liam, Mara, and the current companion. Quill repeats the n
 
 Quill fits the hinge back into place.
 
-“The old road had a rule. Every signal had to tell someone what it was for. Warning. Shelter. Water. Witness. The Briar people like their signals simple. Stop. Go. Obey. Simple is easy to fake.”
+“The old road had a rule. Every signal had to tell someone what it was for, who sent it, and what care came with it. Warning. Shelter. Water. Witness. The Briar people copy the authority and leave out the responsibility. That is what makes their signals easy to misuse.”
 
 Quill reaches for a work tally weighted with a chip of green sealing wax, introducing the object that the player may reasonably ask about.
 
@@ -416,22 +416,20 @@ Noma Greenstill is kneeling beside a tablet with a brush in one hand and a cup o
 
 ### Converged text, shown after the first substantive answer only
 
-Noma leads you to four weathered stones set in a shallow circle. A fifth, newer mark has been nailed over the first stone: a crooked crown and a single word.
+Noma leads you to four weathered stones set in a shallow water circle. A low oak-and-brass shutter bars the approach. Its latch bears Bramwell's Gatehand mark, pressed cleanly and in public.
 
-**OBEY.**
+“Bramwell ordered the walk closed when the Willow crate was placed under hold,” Noma says. “He had the right, and reason, to do it. The stones are where Westroot makes shared promises. One frightened person should not renew them alone—not Bramwell, and not me.”
 
-“The Witness Stones once taught every traveler the same thing,” Noma says. “Tell what is true. Name the danger. Give shelter. Leave water. Someone made the lesson into an order.”
+Mara studies the honest mark on the latch.
 
-Mara looks at the crown mark.
-
-“Lio would have hated that,” she says. “No one can follow ‘obey’ home.”
+“So the question is not whether we listen to the Gatehand,” she says. “It is whether the whole town keeps listening when the danger changes.”
 
 After this explanation, any unanswered names, courier, or closing-gate topic remains available. The player may ask another question, examine the Witness Stones, or thank Noma and leave. The Hold Bell waits for that deliberate transition instead of replacing the remaining questions.
 
 **Outcome**
 
-- Objective: **Restore the Witness Stones**.
-- Witness Stone interaction is unlocked.
+- Objective remains to hear Westroot at Split Hall before the hold-shutter can be removed.
+- The player can inspect the shutter but cannot access the stones yet.
 
 ---
 
@@ -453,7 +451,7 @@ This crisis is mandatory after the player has heard both Quill and Noma. It must
 
 ### Incident
 
-A single low bell rolls through the hill. Market sounds stop and lantern shutters close in sequence. A runner reports that the Willow-marked crate has moved despite Bramwell's hold, while the ledger and siding door still claim it is sealed.
+A single low bell rolls through the hill. Market sounds stop and lantern shutters close in sequence. A runner reports that the false Willow-marked shipment is gone from its assigned hold bay, while the ledger and siding door still claim it has not moved.
 
 Bramwell orders the First Gate and side passages closed until Westroot knows whose mark moved the cargo. Noma objects that the outer shelter has missed its water tally and will disappear from Westroot's hearing if every listening mark is hooded.
 
@@ -489,13 +487,17 @@ The player may hear three independent pieces of testimony:
 - **Gate cost:** Bramwell names the people already lost when false warnings reached Westroot homes.
 - **Cargo hold:** the correct private timing suggests internal knowledge, but Noma stops the hall from inventing a traitor before evidence exists.
 
-Each topic remains independently available until asked. Hearing any one completes the required first debate and unlocks the Witness Stones; the others remain optional review material. The final Split Hall resolution recalls whichever testimony the player heard.
+Each topic remains independently available until asked. Hearing any one completes the required first debate; the others remain optional review material. Before leaving, the player explicitly volunteers to investigate what happened to the Willow crate.
+
+Quill first distinguishes this shipment from **Ada's original missing spice crate**. The Westroot shipment is a separate counterfeit crate made to borrow the trust of Ada's stolen Willow seal. It is **missing from its assigned hold bay**, not proven to have left Westroot. A wheel cut leads from the empty bay toward the inner Cargo Siding, but somebody brushed the dust and reset the lock. The player offers to follow that physical trail, compare the copied seal with Ada's lesson, and return with evidence before the hall names a traitor.
+
+Bramwell refuses to send strangers into a held route alone. Noma proposes the reconciled method: renew the road promises publicly, have Bramwell and Noma open the siding together, and let the party investigate under Westroot's witness. Bramwell agrees because it is an investigation for which responsible people have put their names on the plan.
 
 **Outcome**
 
 - Set `splitHallDebateHeard` after the first testimony.
 - Persist the three testimony choices separately.
-- Objective: **Restore the Witness Stones**.
+- Objective: **Renew the Road Promises** before entering the held siding.
 - Repeated walk-throughs remain quiet until the cargo evidence is ready, but manual inspection can reopen unanswered testimony.
 
 ### Art target
@@ -504,120 +506,56 @@ Use `split-hall-hold-debate-scene-v01`: the same room and character continuity a
 
 ---
 
-## 5. Witness Stones Puzzle
+## 5. Witness Stones — Public Renewal
 
-### Inspection text
+### Why the approach is closed
 
-Each stone can be inspected before being placed in the sequence.
+The low wooden barrier on the Westroot map is a legitimate oak-and-brass **hold-shutter**, not Briar Crown construction. Bramwell ordered it closed when the suspicious Willow crate was placed under hold, before the party arrived. A Gatehand has limited authority to close a route or civic signal during an emergency, and Westroot recognizes that authority.
 
-| Stone | Inspection text |
+The shutter therefore remains inaccessible through the first Hold Bell debate. The conflict is not that Bramwell was wrong to act. It is whether a temporary safeguard still protects the community after the danger changes and the closure begins abandoning named people outside it.
+
+Before Split Hall acts, inspection should make the boundary clear:
+
+> The oak crossbar is ordinary Westroot work: sound hinges, a public Gatehand seal, and a small slate naming the Willow cargo hold. Nothing about it is counterfeit. Its danger is simpler—the temporary answer may remain after the question has changed.
+
+### Public opening
+
+After the first Split Hall testimony, Bramwell, Noma, Quill, Lume, Mara, and neighbors from both sides gather at the shutter.
+
+Bramwell places one hand on its latch.
+
+> “I ordered this closed when the Willow crate was placed under hold. A Gatehand is allowed to do that when a route may be carrying danger. The mistake was not closing it. The mistake was keeping the same answer after the danger changed.”
+
+Noma takes the other latch.
+
+> “And the answer is not to pretend caution was cowardice. We open this together, with the danger named.”
+
+They remove the hold-shutter together. This is the chapter's first visible act of reconciliation: Bramwell accepts that lawful authority must remain accountable, and Noma affirms that caution and responsible leadership are necessary.
+
+### The player's choice
+
+The stones are not a memory test and have no correct sequence. The player chooses which promise Westroot should act on first in the present crisis:
+
+| Promise | Immediate public action |
 |---|---|
-| **Witness** | A hand pressed to stone beside a simple line: *I was here. This happened. Let the next traveler know.* |
-| **Warning** | A lantern turned outward over a broken bridge: *The danger is named before the traveler reaches it.* |
-| **Shelter** | A roofline beneath a root: *Rest is not a reward for the lucky. It is help for the tired.* |
-| **Water** | A cup beside a spring mark: *Leave enough for the journey after the danger.* |
-| **False Crown** | A nailed-on briar crown: *OBEY CROWN DETOUR.* No destination, danger, shelter, or reason is named. |
+| **Witness** | Quill reads the held-cargo ledger aloud; no accusation is entered without named testimony. |
+| **Warning** | Bramwell and Noma send an accountable warning to the outer shelters without exposing every route. |
+| **Shelter** | Lume and the gatekeepers count beds, food, and every person the closure must still protect. |
+| **Water** | The missed water tally is sent with two witnesses watching the signal leave and its answer return. |
 
-### Puzzle rule
+The chosen stone warms first. Then Westroot's neighbors activate the other three—not in a hierarchy or sequence, but as interdependent promises held by different hands.
 
-The player restores four positions. The intended sequence is:
+The scene's moral distinction is **trustworthy authority versus counterfeit authority**, not obedience versus independence. A good instruction comes from someone who has accepted responsibility, names the danger and the people affected, and remains answerable when circumstances change. The Briar Crown corrupts trust by copying legitimate marks and signals while refusing those responsibilities.
 
-1. **Witness** — tell what is true.
-2. **Warning** — name the danger.
-3. **Shelter** — protect the traveler.
-4. **Water** — sustain the journey.
+### Outcome
 
-The False Crown is not a valid road need and cannot be part of the restored sequence.
-
-### Companion and Mara hints
-
-**Rowan**
-
-> “A warning comes before shelter. If people do not know the danger, they cannot receive protection wisely.”
-
-**Tilda**
-
-> “The crown mark is cutting in line. Rude, suspicious, and not actually carrying a cup of water.”
-
-**Moss**
-
-> “The stones are not asking who is in charge. They are asking what the next traveler needs.”
-
-**Mara**
-
-> “Lio always said you leave the warning where someone can see it before they step in the hole.”
-
-### First incorrect attempt — fail forward
-
-**Text**
-
-The last stone settles into place.
-
-For one breath, nothing happens.
-
-Then the moss-lanterns around the garden shutter closed all at once.
-
-The false crown mark glows red through its cracks. Somewhere in Rootmarket, a bell rings twice: not an alarm exactly, but the sound of people remembering that alarms exist.
-
-Mara flinches toward the passage. Bramwell arrives from the bridge with two gatekeepers behind him.
-
-“What did you wake?” he asks.
-
-Noma does not raise their voice.
-
-“A mistake,” they say. “Which is why the stones were built to be witnessed.”
-
-They touch the first stone gently.
-
-“We do not hide the wrong order. We say it was wrong, name what it caused, and leave the next person a better way through.”
-
-Mara looks ashamed for a moment, then angry at the shame.
-
-“Then we fix it,” she says. “Out loud.”
-
-**Outcome**
-
-- Set `witnessStoneFirstAttemptMissed`.
-- Do **not** remove access to the puzzle, Cargo Siding, or chapter completion.
-- Bramwell's initial trust is shaken, but the correction scene makes the chapter's theme explicit.
-- Noma gives the player a **Witness Stone Rubbing** showing the four old symbols and their purposes.
-
-### Correct completion
-
-**Text**
-
-You set Witness first.
-
-The stone warms under your hand. Moss brightens around the carved palm.
-
-You set Warning second. A small gold lantern appears above the broken bridge mark.
-
-You set Shelter third. Root shadows fold into the shape of a roof.
-
-You set Water last. The channel around the stones clears, and a thin ribbon of water runs through it without spilling.
-
-The false crown mark loosens with a dry crack.
-
-Underneath, the oldest line on the first stone becomes readable:
-
-**A ROAD IS SAFEST WHEN TRUTH WALKS IT FIRST.**
-
-Noma smiles—not because the work is easy, but because it was done.
-
-“There,” they say. “Not a command. A promise with steps.”
-
-Bramwell stands at the garden edge. He sees the bright water, the broken crown slat, and the people gathered nearby.
-
-“The Cargo Siding lock answers to a witness sequence,” he says. “I thought that was old caution.”
-
-Quill, appearing with a lantern shutter tucked under one arm, says, “It turns out old caution has better engineering than new fear.”
-
-**Outcome**
-
-- Set `witnessStoneSequenceSolved`.
-- Unlock Cargo Siding.
-- Objective: **Follow the Willow Cargo**.
-- Gain the **Witness Stone Rubbing** if not already received.
+- Retain `witnessStoneSequenceSolved` temporarily for save compatibility; its story meaning is now “the road promises were publicly renewed.”
+- Record which promise the player chose first.
+- Quill explains that wheel grooves run from the empty hold bay deeper into the Cargo Siding; the crate did not simply vanish.
+- Bramwell and Noma open the Cargo Siding under shared witness.
+- Objective: **Track the Missing Willow-Marked Crate**.
+- Gain the **Witness Stone Rubbing**.
+- The post-renewal map uses the open Witness Stone approach without the shutter.
 
 ---
 
@@ -627,17 +565,13 @@ Quill, appearing with a lantern shutter tucked under one arm, says, “It turns 
 
 **Text**
 
-The Cargo Siding is older than the market above it. Rail grooves run through the stone, interrupted by roots that have chosen not to move aside. Crates sit in neat stacks beneath covered lamps.
+Bramwell and Noma open the Cargo Siding together. Just inside, a chalk rectangle marks the empty bay where the false Willow-marked crate was supposed to remain under hold.
 
-The green three-leaf Willow seal is stamped on the nearest one.
+Fresh wheel grooves cross the older rail cuts and run behind the rearmost stacks. The party follows them to a green three-leaf crate with the same chipped runner and inventory cord Quill logged outside. Its lid has been hastily re-nailed. Scuffed bootprints continue behind the crates into the covered-lantern shadows.
 
-Mara looks at it as if it has personally insulted her.
+Mara identifies the relationship clearly: this is not Ada's missing spice crate. It is the kind of counterfeit shipment the theft of Ada's seal made possible.
 
-“Ada said not to trust those below the hill.”
-
-Quill kneels beside a crate runner.
-
-“This one came in through a locked door,” they say. “That is the part I keep disliking.”
+“Missing from the hold bay,” Quill says quietly. “Moved deeper while the door was made to look locked. Whoever did it may not have finished.”
 
 ### Crate inspection
 
@@ -702,7 +636,14 @@ Mara backs behind a stone loading post before the fight begins.
 
 “Still behind the line,” she says, breathless but steady. “I am very committed to this part.”
 
-**Battle objective:** Clear the Cargo Siding. Both enemies are active simultaneously; the encounter should use the multi-enemy battle system rather than a sequential queue.
+The transition must use explicit controls:
+
+1. **Call out whoever is hiding behind the crates.** This reveals both enemies and displays the battle setup.
+2. **Fight the Briar Cargo Runner and Seal-Forged Sentry.** This starts combat. The alternate control is **Back away before they attack.**
+
+Do not use a generic action such as “Clear the Cargo Siding” to start the encounter. The player must know that the next click begins a fight.
+
+**Battle objective:** Defeat both enemies in the Cargo Siding. Both are active simultaneously; the encounter should use the multi-enemy battle system rather than a sequential queue.
 
 ### Battle victory
 
@@ -798,7 +739,7 @@ Quill sets the cracked crown slat beside the evidence.
 
 ### Response: stones answer
 
-> You place the rubbing in the center of the table. “Witness. Warning. Shelter. Water. The road was not built to make people obey. It was built to make sure the next traveler had what they needed.”
+> You place the rubbing in the center of the table. “Witness. Warning. Shelter. Water. Each promise names who is responsible and what care the next traveler can expect. That is why people can trust the road enough to follow it.”
 
 ### Converged resolution
 
@@ -965,15 +906,16 @@ Companion reactions should be sparse and play after a meaningful choice or revea
 
 ---
 
-# Gameplay and Fail-Forward Requirements
+# Gameplay and Choice Requirements
 
 ## Witness Stones
 
-- The player may inspect every symbol before committing.
-- The correct order is clear through environment text and optional companion/Mara hints.
-- An incorrect first attempt changes tone and trust but not access to the critical route.
-- The player receives a clear correction path; do not make trial-and-error feel punitive.
-- The False Crown's failure is that it commands without naming danger, help, destination, or witness.
+- The hold-shutter blocks access until the first Split Hall debate has named the costs on both sides.
+- The shutter is visibly legitimate Westroot work, not enemy propaganda.
+- Bramwell and Noma remove it together in a public scene.
+- The player may inspect every promise before choosing which one Westroot acts on first.
+- There is no incorrect choice and no memorized sequence.
+- All four promises are renewed by different community members; no one promise or faction is declared sufficient alone.
 
 ## Cargo Siding
 
@@ -995,7 +937,7 @@ Companion reactions should be sparse and play after a meaningful choice or revea
 ## Key scene images
 
 1. **Westroot reveal:** a character-neutral first view from the gate bridge; gold-green moss lanterns, root-wrapped stone homes, people looking up from Rootmarket.
-2. **Witness Stones:** four worn stone tablets in a mossgarden water channel with the false crown slat visibly nailed over an old mark.
+2. **Witness Stones:** four worn stone tablets in a mossgarden water channel. The post-renewal base map shows an open approach; a stateful pre-renewal overlay or alternate background shows the legitimate oak-and-brass Westroot hold-shutter across it.
 3. **Cargo Siding:** Willow-sealed crates under covered lamps, old rail grooves, roots through fitted stone, no readable baked-in text.
 4. **Closing Mossgarden:** Mara and the revealed courier mark, using soft green and gold light rather than melodrama.
 

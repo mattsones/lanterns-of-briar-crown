@@ -377,7 +377,7 @@ Bring Lio's satchel to Elder Brynn. The south gate will not open onto Lantern Ro
 
 You place Lio's satchel in Brynn's hands and unfold the order beside it. She reads the command once. Then again, slower. Her thumb presses into the crooked crown seal.
 
-"No," she says. "This did not come from the Crown. A true road order names the danger, the people it protects, and the hand responsible for it. This names only panic. Someone forged authority because frightened people obey faster than careful ones."
+"No," she says. "This did not come from the Crown. A true road order names the danger, the people it protects, and the hand responsible for it. This names only panic. Someone forged authority because fear makes a trusted seal harder to question."
 
 She looks from Lio's badge to the lunch packet still tied with Mara's blue string.
 
@@ -533,7 +533,7 @@ The traveler clutches a satchel so tightly the leather creaks. His hat is on sid
 ### If player asks what the order looked like
 **Text**
 
-"I saw enough," he insists. "The royal crown was pressed right into the red wax. The order said Bramblecross was being held and no couriers could leave until a Crown inspection. So I obeyed it. You obey a Crown seal like that—everyone knows that. Then the men started asking why I was still on the road, and I decided obedience could include leaving quickly."
+"I saw enough," he insists. "The royal crown was pressed right into the red wax. The order said Bramblecross was being held and no couriers could leave until a Crown inspection. So I trusted it. A Crown seal is supposed to mean somebody responsible has named a real danger. Then the men started asking why I was still on the road, and I realized the seal was the only responsible-looking thing about them."
 
 **Choices**
 - The seal may be false. Get to the camp.

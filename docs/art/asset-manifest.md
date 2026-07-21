@@ -107,7 +107,7 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Root Cellar cleared gameplay map | `root-cellar-no-boss-map-v01.webp` | Post-Warden state preserving the same landmarks and navigation alignment while replacing the boss with collapsed roots. Runtime swaps to this map immediately after victory. |
 | Westroot Trail gameplay map | `westroot-trail-map-v04.webp` | Current Chapter 2 production map; readable Shelter Nook, false notice, Three-Sign Hollow, Roadwatcher bend, and First Westroot Gate. |
 | Crown Door Den gameplay map | `crown-door-den-map-v01.webp` | Current Chapter 2 production map for the Roadwatcher signworks behind the Crown Door. Prompt lives in `docs/art/prompts/chapter-2-crown-door-and-three-doors.md`. |
-| Westroot Hub gameplay map | `westroot-hub-map-v01.webp` | Current Chapter 3 production map; connected gate bridge, Rootmarket, Mossgarden/Witness Stones, Split Hall, Cargo Siding, and Rootbread Hatch space. Source PNG is preserved in `assets/reference/source-art/`. |
+| Westroot Hub gameplay maps | `westroot-hub-map-v01.webp`, `westroot-hub-map-v02-open-stones.webp` | Chapter 3 uses v01 while Bramwell's legitimate hold-shutter closes the Witness Stone approach, then swaps to v02 after the public renewal opens the walk. The v02 source PNG is preserved in `assets/reference/source-art/assets/maps/`. |
 
 ## Scenes
 
@@ -121,7 +121,7 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Westroot threshold opening | `westroot-threshold-opening-v02.webp` | Chapter 2 closing illustration: a character-neutral view through the open oval Westroot gate, matching the rounded Three-Door Threshold architecture. |
 | Westroot arrival | `westroot-arrival-scene-v01.webp` | Chapter 3 First Westroot Gate dialogue scene; establishes Mara's arrival beneath the hill. |
 | Rootmarket uneasy arrival | `rootmarket-uneasy-arrival-scene-v01.webp` | Selected Chapter 3 pre-bell Rootmarket hub scene; Quill and Auntie Lume anchor independent conversation areas while mixed neighbors continue their work under quiet social strain. |
-| Witness Stones | `witness-stones-scene-v01.webp` | Chapter 3 puzzle scene; the false crown slat and the four road-mark values are visually distinct. |
+| Witness Stones public renewal | `witness-stones-public-renewal-scene-v02.webp` | Chapter 3 reconciliation scene with exactly four road-promise stones and no false Crown plaque. The source PNG is preserved in `assets/reference/source-art/assets/scenes/`; v01 remains as superseded concept art. |
 | Rootbread Promise | `rootbread-promise-scene-v01.webp` | Chapter 3 sealed-hatch scene; Mara, the young Mossback, rootbread, and Lio's blue knot are present. |
 | Cargo Siding evidence | `cargo-siding-evidence-scene-v01.webp` | Chapter 3 cargo inspection scene; false Willow cargo and the evidence crate are legible. |
 | Split Hall Hold Debate | `split-hall-hold-debate-scene-v01.webp` | Selected Chapter 3 post-bell confrontation scene; Bramwell and Noma remain sympathetic, the crowd is mixed across ancestry lines, Quill's shutter occupies the contested center, and thin ceiling hold-lines reinforce the temporary civic closure. |
