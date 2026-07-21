@@ -24,7 +24,7 @@ export const CHAPTER_3_STORY = {
 export const CHAPTER_3_HUB_NODES = [
   { id: "first_gate", label: "First Westroot Gate", purpose: "Chapter entry and return threshold" },
   { id: "rootmarket", label: "Rootmarket", purpose: "Community voices and hospitality thread" },
-  { id: "witness_stones", label: "Witness Stones", purpose: "Fail-forward truth-order puzzle" },
+  { id: "witness_stones", label: "Witness Stones", purpose: "Public renewal of Westroot's shared road promises" },
   { id: "mossgarden", label: "Mossgarden", purpose: "Mossback history and community care" },
   { id: "split_hall", label: "Split Hall", purpose: "First Hold Bell debate and final community resolution" },
   { id: "cargo_siding", label: "Cargo Siding", purpose: "Willow-sealed cargo investigation and combat" },
@@ -51,7 +51,7 @@ export const CHAPTER_3_VERTICAL_SLICE = {
     "Walk the placeholder Westroot hub graph",
     "Meet one voice from each side of the community conflict",
     "Hear the Hold Bell crisis and first Split Hall debate",
-    "Solve or fail forward through the Witness Stones",
+    "Renew Westroot's shared promises at the Witness Stones",
     "Inspect Willow-sealed cargo",
     "Resolve one true multi-enemy encounter",
     "Return evidence to Split Hall and set the four Chapter 3 completion flags",
@@ -83,12 +83,10 @@ export const CHAPTER_3_SCENE_COPY = {
   witnessStones: {
     name: "The Witness Stones",
     introduction:
-      "Four worn stones sit in a shallow circle. A fifth, newer plaque has been nailed over the first: a crooked crown with one command. OBEY.\n\nNoma touches the oldest stone. \"The road did not begin with command. It began with what the next traveler needed: tell what is true, name the danger, give shelter, leave water.\"",
-    prompt: "Choose the next road promise.",
+      "Westroot gathers at the low oak-and-brass shutter across the Witness Stone walk. Bramwell rests one stone-dusted hand on its latch.\n\n\"I ordered this closed when the Willow crate was placed under hold,\" he says. \"A Gatehand is allowed to do that when a route may be carrying danger. The mistake was not closing it. The mistake was keeping the same answer after the danger changed.\"\n\nNoma takes the other latch. \"And the answer is not to pretend caution was cowardice. We open this together, with the danger named.\"\n\nThey lift the shutter between them. Four worn stones stand in the running water beyond: witness, warning, shelter, and water.",
+    prompt: "Which promise should Westroot act on first?",
     success:
-      "Witness warms beneath your hand. Warning kindles a small gold lantern above a broken-bridge mark. Shelter folds root shadows into the shape of a roof. Water clears the channel without spilling.\n\nThe false crown plaque cracks loose. Underneath, the old road phrase shines through: A ROAD IS SAFEST WHEN TRUTH WALKS IT FIRST.",
-    failure:
-      "The stones turn cold. Moss-lantern shutters close all around the garden, and a bell rings twice in Rootmarket.\n\nNoma does not raise their voice. \"A mistake,\" they say. \"That is why the stones were built to be witnessed. We name what went wrong, then leave the next traveler a better way through.\"",
+      "The promise you chose warms beneath your hand. Then Westroot answers—not in a sequence, and not with one voice.\n\nBramwell calls a gatekeeper to Warning. Noma invites the outer-shelter runner to Water. Auntie Lume brings a frightened neighbor to Shelter. Quill reads the cargo hold aloud at Witness. Gold-green light passes between all four stones until the water circle runs clear.\n\nNo promise stands above the others. The road holds because different hands keep them together.\n\nQuill unrolls a charcoal copy of the Cargo Siding floor. \"The false Willow-marked crate is missing from its assigned hold bay,\" they say. \"Not necessarily from Westroot. Its wheel grooves run deeper into the siding, then somebody brushed the dust and reset the lock.\"\n\nBramwell turns the Cargo Siding key over to Noma, and Noma closes both their hands around it before offering one back to him. They will open the siding together—and your party will follow the physical trail to the relocated crate.",
   },
   rootbread: {
     name: "The Rootbread Promise",
@@ -100,9 +98,9 @@ export const CHAPTER_3_SCENE_COPY = {
   cargoSiding: {
     name: "Cargo Siding",
     locked:
-      "The Cargo Siding lock bears the same four old road needs as the Witness Stones. Westroot will not open another way until the stones remember their purpose.",
+      "The Cargo Siding remains under a lawful Westroot hold. Bramwell will not open it alone, and Noma will not ask him to ignore the danger. The town must decide how to investigate it together.",
     text:
-      "Old rail grooves run through the stone beneath covered lamps. The nearest crate bears a green three-leaf seal.\n\nQuill kneels by its runner while Noma compares the lock symbols with the Witness Stone rubbing. Bramwell stands at the sealed rail door with two gatekeepers. \"This came through a locked door,\" Quill says. \"That is the part I keep disliking.\"",
+      "Bramwell and Noma open the Cargo Siding together. Just inside, a chalk rectangle marks the empty bay where the false Willow-marked crate was supposed to remain under hold.\n\nFresh wheel grooves cross the older rail cuts and run behind the rearmost stacks. You follow them to a green three-leaf crate with the same chipped runner and inventory cord Quill logged outside. Its lid has been hastily re-nailed. Scuffed bootprints continue behind the crates into the covered-lantern shadows.\n\nMara touches the Willowmark Lens at your belt. \"Not Ada's missing spice crate,\" she says. \"This is what stealing her seal let them make.\"\n\n\"Missing from the hold bay,\" Quill says quietly. \"Moved deeper while the door was made to look locked. Whoever did it may not have finished.\"",
     evidence:
       "Under the green wax lies pine pitch and a thin wash of crown-red. The crate contains blank order sheets, seal tools, thorn-collar fittings, and a true courier pouch stamped WESTWARD RELAY — TRANSFERRED.\n\nA loading ledger bears two acknowledgements: a Briar Crown route scratch and an old Westroot gate-account mark. Westroot was opened from inside and outside.",
     battle:
@@ -122,14 +120,22 @@ export const CHAPTER_3_SCENE_COPY = {
   },
 } as const;
 
-export const WITNESS_STONE_SEQUENCE = ["witness", "warning", "shelter", "water"] as const;
-
 export const WITNESS_STONE_LABELS = {
-  witness: "Witness — tell what is true.",
-  warning: "Warning — name the danger.",
-  shelter: "Shelter — protect the traveler.",
-  water: "Water — sustain the journey.",
-  crown: "False Crown — obey without guidance.",
+  witness: "Begin with Witness — investigate in the open.",
+  warning: "Begin with Warning — alert the outer shelters.",
+  shelter: "Begin with Shelter — protect those caught outside.",
+  water: "Begin with Water — keep essential aid moving.",
+} as const;
+
+export const WITNESS_STONE_RESPONSES = {
+  witness:
+    "\"Then we begin by saying exactly what happened,\" you say. Quill brings the held-cargo ledger into the circle and reads every mark aloud. No accusation is entered without a name beside the testimony.",
+  warning:
+    "\"Then we begin by warning the people who cannot hear this bell,\" you say. Bramwell names the safe listening marks; Noma sends the message with the danger, the sender, and the reason all attached.",
+  shelter:
+    "\"Then we begin with the people our closed routes left outside,\" you say. Auntie Lume opens the hall pantry while gatekeepers count blankets, beds, and every person the hold must still protect.",
+  water:
+    "\"Then we begin by keeping necessary help in motion,\" you say. The relay runner sends the missed water tally while Bramwell assigns two witnesses to watch the signal leave and its answer return.",
 } as const;
 
 // The vertical slice keeps its callbacks in App.tsx, but the complete Chapter 3
@@ -146,9 +152,9 @@ export const CHAPTER_3_FULL_SCENE_COPY = {
     guestResponse: "Quill snorts. \"Good. You understand signs. That one says: do not make my afternoon worse.\"",
     shutterResponse: "\"Keeps a lantern from calling through the hill when it should only light a stair. A road signal is useful. A road signal shouted at the wrong time is a map for anyone listening.\"",
     lioResponse: "Quill stills their hands on the hinge. \"We heard a courier passed through. We did not hear his name. There is a difference between a report and a person.\"",
-    converged: "Quill fits the hinge back into place.\n\n\"The old road had a rule. Every signal had to tell someone what it was for. Warning. Shelter. Water. Witness. The Briar people like their signals simple. Stop. Go. Obey. Simple is easy to fake.\"\n\nThey reach for a work tally weighted with a chip of green sealing wax, then stop with their hand above it.",
-    oldRule: "\"Witness Stones, past the Mossgarden. Noma tends them. Do not call them a puzzle while they can hear you. They will call you a puzzle back.\"",
-    cargo: "Quill's expression closes. \"A crate with green wax came in by the Cargo Siding. Bramwell put a hold on it. Then somebody moved it anyway. That is why nobody is enjoying the gate being open.\"",
+    converged: "Quill fits the hinge back into place.\n\n\"The old road had a rule. Every signal had to tell someone what it was for, who sent it, and what care came with it. Warning. Shelter. Water. Witness. The Briar people copy the authority and leave out the responsibility. That is what makes their signals easy to misuse.\"\n\nThey reach for a work tally weighted with a chip of green sealing wax, then stop with their hand above it.",
+    oldRule: "\"Witness Stones, past the Mossgarden. Noma tends them. Bramwell put their walk under a lawful hold when the Willow crate arrived. The stones are not a lock to solve; they are where Westroot says what it will do in front of witnesses.\"",
+    cargo: "Quill's expression closes. \"A crate wearing a green Willow seal came in by the Cargo Siding—not Ada's lost spice crate, but something made to borrow its trust. Bramwell put a hold on it. Then somebody moved it anyway. That is why nobody is enjoying the gate being open.\"",
     topicPrompt: "Quill turns the repaired shutter under the market light. \"All right. What else do you need to know?\"",
     repeat: "The market argument has broken into quieter pieces. The lantern-mender keeps working at one counter while the baker serves bread at the other. Both glance up when footsteps approach, then return to their work.",
     holdBellRepeat: "Half of Rootmarket has vanished behind shutters. The other half is carrying bundles toward the hall. A cautious Mossback pipe-mender ties a red hold-cord across his own stall while a young Stonekin relay runner argues that an outer shelter is still waiting for its water tally. Neither of them looks like they chose the easier side.\n\nQuill holds the repaired lantern shutter against their chest. \"Someone used my work to signal the cargo move. I would like to be furious without also being useful, but apparently today has standards.\"",
@@ -156,10 +162,10 @@ export const CHAPTER_3_FULL_SCENE_COPY = {
     restoredRepeat: "Rootmarket sounds like work again: jars clink, bread knives scrape boards, and two people disagree about turnips without treating the disagreement as treason. Red hold-cords have been rewoven into witness tags beside the reopened stalls.",
   },
   holdBell: {
-    introduction: "A single low bell rolls through the hill.\n\nEvery market sound stops. Lantern shutters snap closed along the bridges—one after another, quick as blinking eyes. Somewhere below, iron wheels strike rail and then go abruptly quiet.\n\nA Stonekin runner reaches the garden out of breath. \"Gatehand! The Willow crate is gone from hold. The ledger still says sealed. The siding door still says locked.\"\n\nBramwell arrives with two gatekeepers. Behind him, people are already drawing red cords across Rootmarket stalls. \"First Gate closes. Side passages close. Nobody enters or leaves until we know whose mark moved that cargo.\"\n\n\"The outer shelter has not sent its water tally,\" Noma says. \"Close the listening marks and we will not know whether they are safe.\"\n\nA Mossback pipe-mender near the bridge knots a hold-cord with shaking hands. \"My sister was on the last crew the Crown took. Close it. Close all of it.\"\n\nA Stonekin relay runner answers from across the market, \"My father is in that shelter. If you close all of it, close your mouth before you call him protected.\"\n\nThe village does not divide cleanly. It divides personally.",
+    introduction: "A single low bell rolls through the hill.\n\nEvery market sound stops. Lantern shutters snap closed along the bridges—one after another, quick as blinking eyes. Somewhere below, iron wheels strike rail and then go abruptly quiet.\n\nA Stonekin runner reaches the garden out of breath. \"Gatehand! The false Willow-marked crate is gone from its hold bay. The ledger still says sealed. The siding door still says locked.\"\n\nBramwell arrives with two gatekeepers. Behind him, people are already drawing red cords across Rootmarket stalls. \"First Gate closes. Side passages close. Nobody enters or leaves until we know whose mark moved that cargo.\"\n\n\"The outer shelter has not sent its water tally,\" Noma says. \"Close the listening marks and we will not know whether they are safe.\"\n\nA Mossback pipe-mender near the bridge knots a hold-cord with shaking hands. \"My sister was on the last crew the Crown took. Close it. Close all of it.\"\n\nA Stonekin relay runner answers from across the market, \"My father is in that shelter. If you close all of it, close your mouth before you call him protected.\"\n\nThe village does not divide cleanly. It divides personally.",
     boundaryResponse: "\"Then count them before the stone closes,\" you say. \"A boundary that cannot name who it leaves outside is only hiding the cost.\"\n\nBramwell's expression hardens, but he turns to a gatekeeper. \"Get the outer-route tally. Names, not numbers.\"",
     warningResponse: "\"A warning that stops at Westroot's gate is not protecting the road,\" you say. \"It is protecting only the people close enough to hear this bell.\"\n\nNoma inclines their head. Bramwell does not, but he listens.",
-    cargoResponse: "\"Who could move a held crate through a locked siding?\" you ask.\n\nQuill looks at the shutter in their hands. \"Someone who knew our signal.\"\n\nBramwell looks toward the sealed rail tunnel. \"Or someone who knew which of us would obey it.\"",
+    cargoResponse: "\"Who could move a held crate through a locked siding?\" you ask.\n\nQuill looks at the shutter in their hands. \"Someone who knew our signal.\"\n\nBramwell looks toward the sealed rail tunnel. \"Or someone who knew which signal my watch was duty-bound to follow.\"",
     converged: "Mara watches the red cords go up across the market. \"If you seal every route, we lose Lio. If you leave every signal calling, whoever took him hears us coming.\"\n\nFor once, her urgency offers no easy side.\n\nBramwell points toward Split Hall. \"Nobody settles this in a passage with one hand on a door. The hall hears it now.\"\n\nNoma turns toward the same room. \"Good. Let Westroot hear what its safety costs while the cost still has names.\"",
   },
   auntieLume: {
@@ -187,10 +193,10 @@ export const CHAPTER_3_FULL_SCENE_COPY = {
     namesResponse: "\"Witnesses. Travelers. Bridge-menders. People who left a warning before it was fashionable to call one another frightened. The road remembers names because a missing person is never only a missing number.\"",
     courierResponse: "Noma looks at Mara, then at the old gate-light still reflected on your gear. \"Then begin with what you know, not what you fear. Fear makes a loud first draft.\"",
     gateResponse: "\"Bramwell has buried friends. I will not call his caution small. But a root that drinks only its own water eventually has nothing left to share.\"",
-    converged: "Noma leads you to four weathered stones set in a shallow circle. A fifth, newer mark has been nailed over the first stone: a crooked crown and a single word.\n\nOBEY.\n\n\"The Witness Stones once taught every traveler the same thing,\" Noma says. \"Tell what is true. Name the danger. Give shelter. Leave water. Someone made the lesson into an order.\"\n\nMara looks at the crown mark.\n\n\"Lio would have hated that,\" she says. \"No one can follow 'obey' home.\"",
-    showResponse: "\"The stones do not care about pride,\" Noma says. \"They care what the next traveler receives.\"",
-    removeResponse: "\"Not yet. First we read what it is trying to replace. A lie is easier to spot when the truth is still beside it.\"",
-    wrongResponse: "\"Then Westroot hears the mistake. That is not punishment. It is why testimony matters. We correct it together.\"",
+    converged: "Noma leads you to four weathered stones set in a shallow water circle. A low oak-and-brass shutter bars the approach. Its latch bears Bramwell's Gatehand mark, pressed cleanly and in public.\n\n\"Bramwell ordered the walk closed when the Willow crate was placed under hold,\" Noma says. \"He had the right, and reason, to do it. The stones are where Westroot makes shared promises. One frightened person should not renew them alone—not Bramwell, and not me.\"\n\nMara studies the honest mark on the latch. \"So the question is not whether we listen to the Gatehand. It is whether the whole town keeps listening when the danger changes.\"",
+    showResponse: "\"The stones do not test whether you remember four words,\" Noma says. \"They ask whether Westroot will keep those promises when keeping them costs something.\"",
+    removeResponse: "\"Not alone,\" Noma says. \"Bramwell closed it in his office as Gatehand. If Westroot changes course, he should help us name why—and help us open it safely.\"",
+    wrongResponse: "\"The shutter is not an enemy mark,\" Noma says. \"It is a safeguard. Split Hall must decide when that safeguard protects the road and when it begins to abandon people beyond it.\"",
     holdBellRepeat: "The water still runs, but every listening lantern above the Mossgarden has been hooded. Noma has laid blank name tablets beside the channel for anyone the sudden closure leaves uncounted. \"Bramwell is making a shield,\" they say. \"Split Hall must decide who is standing outside it.\"",
     debateRepeat: "The Mossgarden is quiet enough to hear Rootmarket arguing through the water channels. Noma has not uncovered the Witness Stones yet. \"An old promise is not an answer because it is old,\" they say. \"It becomes an answer when frightened people can still choose it together.\"",
   },
@@ -200,9 +206,8 @@ export const CHAPTER_3_FULL_SCENE_COPY = {
       warning: "A lantern turned outward over a broken bridge: The danger is named before the traveler reaches it.",
       shelter: "A roofline beneath a root: Rest is not a reward for the lucky. It is help for the tired.",
       water: "A cup beside a spring mark: Leave enough for the journey after the danger.",
-      crown: "A nailed-on briar crown: OBEY CROWN DETOUR. No destination, danger, shelter, or reason is named.",
     },
-    correction: "Noma gives you a Witness Stone Rubbing showing the four old symbols and their purposes. \"We do not hide the wrong order,\" they say. \"We say it was wrong, name what it caused, and leave the next person a better way through.\"",
+    shutterInspection: "The oak crossbar is ordinary Westroot work: sound hinges, a public Gatehand seal, and a small slate naming the Willow cargo hold. Nothing about it is counterfeit. Its danger is simpler—the temporary answer may remain after the question has changed.",
   },
   cargoSiding: {
     lensResult: "Ada's lens catches the nicked three-leaf mark beneath a layer of pine pitch and a thin wash of crown-red wax. The seal is genuine enough to pass a hurried eye and false enough to make Ada furious.",
@@ -227,7 +232,8 @@ export const CHAPTER_3_FULL_SCENE_COPY = {
     outerShelterResponse: "The Stonekin relay runner unfolds the unanswered tally. \"Six people maintain the outer cistern and the listening post. My father is one. They report at every second water bell. We have missed two.\"\n\nThe Mossback pipe-mender looks away first. \"My sister used to carry that tally,\" he says. \"Before a false order brought her home on a door. I still want the gate closed. I also want those six names said aloud.\"\n\nThe disagreement survives the truth, but it can no longer pretend the people outside are an abstraction.",
     gateCostResponse: "Bramwell looks toward the families nearest his bench. \"Forged orders took two gatekeepers at the east listening stair. A watcher followed a shelter mark home last winter. Children sleep above those roots. That is what closing protects.\"\n\nNoma answers, \"Then say their names too. Caution becomes cruelty only when it stops counting who pays for it.\"\n\nBramwell does not thank them. He does begin naming the dead.",
     cargoHoldResponse: "Quill turns the scorched shutter over. \"The hold signal was correct. The timing was correct. The private hinge-mark was correct. Someone outside could copy the paint. They could not guess when Bramwell's second watch changed.\"\n\nA gatekeeper protests. A market clerk protests louder. Suspicion crosses the aisle faster than either of them.\n\nNoma strikes the table once with the flat of their hand. \"No traitors invented before evidence. That is how fear writes its first false order.\"",
-    earlyConverged: "Mara looks from the sealed-gate benches to the outer-shelter list. \"Opening everything could tell the Crown where Lio went. Closing everything could erase the next mark he leaves. I hate both of those truths.\"\n\nBramwell studies her for a moment. \"Good. Hate them honestly.\"\n\nNoma slides the old Witness Stone rubbing frame into the center of the table, still empty. \"Westroot had rules for carrying danger without carrying it alone. The stones remember them, if we are willing to ask before we command.\"",
+    earlyConverged: "Mara looks from the sealed-gate benches to the outer-shelter list. \"Opening everything could tell the Crown where Lio went. Closing everything could erase the next mark he leaves. I hate both of those truths.\"\n\nBramwell studies her for a moment. \"Good. Hate them honestly.\"\n\nNoma slides the old Witness Stone rubbing frame into the center of the table, still empty. \"Westroot had rules for carrying danger without carrying it alone. The stones remember them, if we renew those promises together.\"\n\nBramwell looks at the unanswered water tally, then at his own seal on the hold order. \"I closed the stone walk,\" he says. \"I will stand there when we decide whether to open it.\"",
+    investigationOffer: "You point to the empty hold mark on Quill's ledger. \"Then let us find the false Willow-marked crate before this hall decides who moved it. It did not walk through a locked door. We can follow the wheel marks, compare the copied seal with Ada Willowmarket's lesson, and bring back evidence before anyone names a traitor.\"\n\nQuill taps the ledger with a charcoal-stained finger. \"Missing from its assigned bay,\" they clarify. \"Not proven gone from Westroot. I found a wheel cut leading toward the inner siding before somebody brushed dust across it.\"\n\nBramwell shakes his head once. \"You will not enter a held route on a stranger's promise—or alone.\"\n\n\"Then do not send them alone,\" Noma says. \"We renew the road promises in public. You and I open the siding together. They follow the physical trail, and Westroot witnesses what comes back.\"\n\nBramwell looks across the aisle before answering. \"That is an investigation I can put my name to.\"",
     earlyMemories: {
       outerShelter: "You remember the six names at the outer cistern and the two water bells they have missed.",
       gateCost: "You remember Bramwell naming the people lost after false warnings reached their doors.",
@@ -236,18 +242,18 @@ export const CHAPTER_3_FULL_SCENE_COPY = {
     fullIntroduction: "Split Hall is not grand. It is a wide room of fitted stone, mismatched benches, and a long table repaired so often that the repairs have become its decoration.\n\nThe two sides of the room are not marked Closed Root and Open Lantern. They do not need to be. People choose their seats the way people choose shelter in bad weather: near whoever seems likely to keep them safe.\n\nBramwell places the copied gate-account mark on the table. Noma places the Witness Stone Rubbing beside it. You place the false cargo evidence last.\n\nFor a while, nobody speaks.\n\n\"I asked for the gate closed because the danger was real,\" Bramwell says. \"Forged orders. Watchers. Cargo that looks like help until it has crossed your floor. I will not apologize for wanting families asleep behind stone.\"\n\n\"And the cargo crossed because our silence became useful to the people who lied,\" Noma says. \"We did not invite them. But a road no one may witness is easy for a false order to claim.\"\n\nQuill sets the cracked crown slat beside the evidence. \"They did not beat the gate,\" they say. \"They learned which parts of us were afraid and made a key out of that.\"",
     bramwellResponse: "Bramwell nods once. \"Thank you.\"\n\n\"But,\" you continue, \"a closed gate did not stop the false cargo. It made it harder for anyone outside to know it was here.\"",
     nomaResponse: "Noma inclines their head. \"Truth is not the same as throwing every door open.\"\n\n\"No,\" you say. \"It is warning people before they walk into a trap, then giving them shelter and water when they need it.\"",
-    stonesResponse: "You place the rubbing in the center of the table. \"Witness. Warning. Shelter. Water. The road was not built to make people obey. It was built to make sure the next traveler had what they needed.\"",
+    stonesResponse: "You place the rubbing in the center of the table. \"Witness. Warning. Shelter. Water. Each promise names who is responsible and what care the next traveler can expect. That is why people can trust the road enough to follow it.\"",
     fullResolution: "Bramwell looks at the old road phrase for a long time.\n\n\"Caution is not cowardice,\" he says. \"But if a shield never lowers, it becomes a wall.\"\n\nNoma's expression softens. \"Roots hold fast,\" they say. \"They also share water.\"\n\nBramwell turns to the hall. \"The gate stays watched. Cargo is opened with witnesses. Every warning is copied to Bramblecross, and every shelter mark is restored where we can reach it.\"\n\nThere is no cheer. The decision is too new and too costly for that.\n\nThe Rootmarket baker sets a basket of bread on the table, and people begin taking pieces. It is the closest thing Westroot has to a vote of confidence.\n\nMara picks up a piece, breaks it in half, and gives one half to the nearest gatekeeper.\n\n\"For the next traveler,\" she says.\n\nThe gatekeeper takes it.",
   },
 } as const;
 
-type Chapter3CompanionBeat = "firstView" | "holdBell" | "rootbread" | "witnessMistake" | "cargo" | "resolution";
+type Chapter3CompanionBeat = "firstView" | "holdBell" | "rootbread" | "witnessRenewal" | "cargo" | "resolution";
 
 const CHAPTER_3_COMPANION_REACTIONS = {
   firstView: { rowan: "A hidden town is still a town. Keep your hands visible. Let them decide we are not another order walking in.", tilda: "A whole village under a hill, and every lantern has opinions. I respect that.", moss: "This place has been holding its breath for a long time." },
   holdBell: { rowan: "A shield has to know who stands behind it. Make them count the outer shelter before they close anything.", tilda: "That bell did not split Stonekin from Mossbacks. It split every family from the person they are afraid of losing.", moss: "The hill is holding its breath again. This time everyone can hear who runs out of air first." },
   rootbread: { rowan: "Someone left food without opening the door. That is care with a boundary. We could use more of it.", tilda: "The best secret message is apparently lunch. I approve.", moss: "A promise is a path someone has already walked for another." },
-  witnessMistake: { rowan: "We correct it. That is what a good warning is for.", tilda: "Well. We rang the wrong bell. At least now everybody knows why the right order matters.", moss: "A true memory does not vanish because we first remembered it poorly." },
+  witnessRenewal: { rowan: "A good order names the danger and the hand responsible. I can stand behind that.", tilda: "Two latches, four promises, and nobody pretending one person can carry the whole road. Sensible.", moss: "The stones are listening to one another now." },
   cargo: { rowan: "They turned trust into a disguise. That is why it feels worse than an ordinary theft.", tilda: "A fake seal, a fake order, and a real person moved like a crate. I have run out of polite names for them.", moss: "The lie used a root from both sides. We will have to heal both sides too." },
   resolution: { rowan: "A shield with witnesses behind it is not a wall. That will do.", tilda: "Turns out the secret village has rules for being less secret. Very advanced.", moss: "The hill has exhaled." },
 } as const;

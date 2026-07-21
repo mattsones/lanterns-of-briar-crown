@@ -55,13 +55,13 @@ export const CHAPTER_2_SCENE_COPY = {
     portrait: "♛",
     text: {
       cleared:
-        "The Crown Door stands open now. The passage behind it no longer feels like a command. It feels like a workshop someone abandoned in a hurry.",
+        "The Crown Door stands open now. The passage behind it no longer carries borrowed authority. It feels like a workshop someone abandoned in a hurry.",
       unlocked:
         "The Crown Door is tall, straight, and marked with a polished crown seal. The split slat from the Roadwatcher fits a narrow notch under the seal, where a keyhole was pretending to be decoration.",
       tried:
         "The Crown Door has not moved. Its polished seal hides a narrow notch, but nothing you carry fits it yet.",
       default:
-        "The Crown Door is tall, straight, and marked with a polished crown seal. It offers no view through, only the confidence of something that expects to be obeyed.",
+        "The Crown Door is tall, straight, and marked with a polished crown seal. It offers no view through, no named danger, and no accountable hand behind its certainty.",
     },
     labels: {
       inspectSign: "Inspect the Crown Sign.",
@@ -75,7 +75,7 @@ export const CHAPTER_2_SCENE_COPY = {
       backThreshold: "Back to the threshold.",
     },
     maraRead:
-      "\"Lio hates signs that sound like scolding,\" Mara says. \"He would write who it helps, or what it warns about. This one just wants to be obeyed.\"",
+      "\"Lio hates signs that hide the important part,\" Mara says. \"He would write who sent it, who it helps, or what it warns about. This one borrows a crown and answers none of those questions.\"",
   },
   blockedCrownDoor: {
     name: "The Crown Door Holds",
@@ -288,7 +288,7 @@ export const CHAPTER_2_SCENE_COPY = {
       clean: "The old lantern marks shine through. XP +4",
       compare: "Mara turns Edden's drawing sideways. The roots match the no-handle stone.",
       askMarks:
-        "Warning, shelter, water, and witness are traveler help. None of them says obey.",
+        "Warning, shelter, water, and witness each name what help the road promises to provide.",
     },
   },
   noHandleDoor: {
@@ -405,7 +405,7 @@ export const CHAPTER_2_COMPANION_READS: Record<Chapter2CompanionReadId, Companio
   },
   crownDoor: {
     rowan:
-      'Rowan plants his shield between Mara and the straight passage. "A real order can explain who it protects. This one only explains who it expects to obey."',
+      'Rowan plants his shield between Mara and the straight passage. "A real order can explain who issued it, what danger it answers, and who it protects. This one explains none of that."',
     tilda:
       'Tilda peers down the straight passage. "It is trying very hard to look official. That is what I do when I am lying with props."',
     moss:
@@ -418,7 +418,7 @@ export const CHAPTER_2_COMPANION_READS: Record<Chapter2CompanionReadId, Companio
     tilda:
       'Tilda taps each mark in turn. "This one is not glamorous, which is how you know it may be doing actual work."',
     moss:
-      'Moss smiles at the old cuts. "Lantern marks do not command the traveler. They remember the traveler."',
+      'Moss smiles at the old cuts. "Lantern marks tell the traveler what care waits ahead—and who promised it."',
     fallback: "The Lantern Door seems less interested in opening than in helping you read the hollow.",
   },
   noHandleDoor: {

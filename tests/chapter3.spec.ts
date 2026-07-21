@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { MAPS } from "../src/data/maps";
+import { getMapVisualConfig } from "../src/data/mapVisuals";
 import { buildVisitedMap } from "../src/game/map";
 import { STORAGE_KEY } from "../src/game/save";
 import { buildDefaultCompanion, buildDefaultFlags, buildPlayer } from "../src/game/state";
@@ -11,6 +12,79 @@ async function move(page, direction, count = 1) {
     await page.getByTestId(`move-${direction}`).click();
   }
 }
+
+async function navigateWestroot(page, start, target, { holdOpen = false } = {}) {
+  const links = getMapVisualConfig("westrootHub").navigationLinks || {};
+  const startKey = `${start.x},${start.y}`;
+  const targetKey = `${target.x},${target.y}`;
+  const queue = [{ key: startKey, route: [] }];
+  const seen = new Set([startKey]);
+
+  while (queue.length) {
+    const current = queue.shift();
+    if (current.key === targetKey) {
+      for (const [index, direction] of current.route.entries()) {
+        await move(page, direction);
+        const leaveRootmarket = page.getByRole("button", { name: "Leave Rootmarket.", exact: true });
+        if (index < current.route.length - 1 && await leaveRootmarket.count()) {
+          await leaveRootmarket.click();
+        }
+      }
+      return;
+    }
+    for (const [direction, destination] of Object.entries(links[current.key] || {})) {
+      if (!destination || seen.has(destination)) continue;
+      if (
+        !holdOpen &&
+        (
+          (current.key === "5,0" && destination === "6,0") ||
+          (current.key === "6,0" && destination === "5,0")
+        )
+      ) continue;
+      seen.add(destination);
+      queue.push({ key: destination, route: [...current.route, direction] });
+    }
+  }
+  throw new Error(`No Westroot route from ${startKey} to ${targetKey}`);
+}
+
+test("the Witness Stone hold blocks its path until Split Hall removes it", async ({ page }) => {
+  const payload = buildChapter3CargoCheckpoint();
+  payload.position = { x: 5, y: 0 };
+  payload.visited = {
+    westrootHub: buildVisitedMap("westrootHub", 5, 0, 10),
+  };
+  payload.flags.splitHallDebateHeard = false;
+  payload.flags.witnessStoneSequenceSolved = false;
+
+  await page.goto("/");
+  await page.evaluate(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: payload },
+  );
+  await page.reload();
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+
+  const hero = page.getByTestId("hero-token");
+  const heldPositionStyle = await hero.getAttribute("style");
+  await page.getByTestId("move-up").click();
+  await expect(page.getByText("Witness Stone Hold Notice", { exact: true })).toBeVisible();
+  await expect(hero).toHaveAttribute("style", heldPositionStyle || "");
+  await page.getByRole("button", { name: "Respect the hold and stay on this side." }).click();
+
+  payload.flags.splitHallDebateHeard = true;
+  await page.evaluate(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: payload },
+  );
+  await page.reload();
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByTestId("move-up").click();
+  expect(await page.getByTestId("hero-token").getAttribute("style")).not.toBe(
+    heldPositionStyle,
+  );
+  await expect(page.getByText("Witness Stone Hold Notice", { exact: true })).toHaveCount(0);
+});
 
 function buildChapter3CargoCheckpoint() {
   const player = buildPlayer({
@@ -57,12 +131,12 @@ function buildChapter3CargoCheckpoint() {
       splitHallDebateHeard: true,
       witnessStoneSequenceSolved: true,
     },
-    quest: { title: "Follow the Willow Cargo", description: "Expose the false cargo route." },
+    quest: { title: "Track the Missing Willow-Marked Crate", description: "Follow the wheel marks into the inner siding." },
     toast: "Loaded Chapter 3 Cargo Siding checkpoint.",
   };
 }
 
-test("Chapter 3 keeps the Rootbread Promise and Witness Stones fail-forward sequence", async ({ page }) => {
+test("Chapter 3 keeps the Rootbread Promise and renews the Witness Stones in public", async ({ page }) => {
   await page.addInitScript(() => window.localStorage.clear());
   await page.goto("/");
   await page.getByRole("button", { name: "Begin Chapter 3 Playtest" }).click();
@@ -90,12 +164,10 @@ test("Chapter 3 keeps the Rootbread Promise and Witness Stones fail-forward sequ
   await page.getByRole("button", { name: "Listen before asking for more." }).click();
   await expect(page.getByRole("button", { name: "Inspect First Westroot Gate", exact: true })).toBeVisible();
 
-  await move(page, "down", 2);
-  await move(page, "right", 2);
-  await move(page, "up", 2);
+  await navigateWestroot(page, { x: 1, y: 3 }, { x: 3, y: 3 });
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(page.getByText("Standing on Westroot Path")).toBeVisible();
-  await move(page, "up");
+  await navigateWestroot(page, { x: 3, y: 3 }, { x: 3, y: 6 });
   await expect(page.getByText("Rootmarket is trying to continue around the fact that the First Gate opened.")).toBeVisible();
   await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute(
     "src",
@@ -115,7 +187,7 @@ test("Chapter 3 keeps the Rootbread Promise and Witness Stones fail-forward sequ
   await page.getByRole("button", { name: "Ask Quill about something else." }).click();
   await expect(page.getByRole("button", { name: "How did the old road keep its signals clear?" })).toHaveCount(0);
   await page.getByRole("button", { name: "What is the green wax in that ledger?" }).click();
-  await expect(page.getByText("A crate with green wax came in by the Cargo Siding.")).toBeVisible();
+  await expect(page.getByText("not Ada's lost spice crate, but something made to borrow its trust")).toBeVisible();
   await page.getByRole("button", { name: "Thank Quill and step back." }).click();
   await page.getByRole("button", { name: "Approach the Mossback baker." }).click();
   await expect(page.getByText("making all my soup nervous")).toBeVisible();
@@ -128,9 +200,7 @@ test("Chapter 3 keeps the Rootbread Promise and Witness Stones fail-forward sequ
   await page.getByRole("button", { name: "Look for the food left by the sealed hatch." }).click();
   await expect(page.getByTestId("map-npc-token-rootbread-child")).toHaveCount(1);
 
-  await move(page, "down");
-  await move(page, "right", 6);
-  await move(page, "down", 3);
+  await navigateWestroot(page, { x: 3, y: 6 }, { x: 7, y: 5 });
   await expect(page.getByText("That is Lio's knot")).toBeVisible();
   await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute(
     "src",
@@ -144,10 +214,7 @@ test("Chapter 3 keeps the Rootbread Promise and Witness Stones fail-forward sequ
   await expect(page.getByText("The Rootbread Promise is kept. XP +6").first()).toBeVisible();
   await page.getByRole("button", { name: "Thank the child and keep the promise." }).click();
 
-  await move(page, "up", 3);
-  await move(page, "left", 6);
-  await move(page, "left");
-  await move(page, "up", 4);
+  await navigateWestroot(page, { x: 7, y: 5 }, { x: 3, y: 0 });
   await expect(page.getByText("Do not step on the names")).toBeVisible();
   await expect(page.getByText("Names are not proof")).toBeVisible();
   await page.getByRole("button", { name: "We need to find the truth about a missing courier." }).click();
@@ -157,12 +224,10 @@ test("Chapter 3 keeps the Rootbread Promise and Witness Stones fail-forward sequ
   await page.getByRole("button", { name: "Thank Noma and keep exploring." }).click();
   await expect(page.getByText("The village does not divide cleanly. It divides personally.")).toBeVisible();
   await page.getByRole("button", { name: "Who moved a crate under hold?" }).click();
-  await expect(page.getByText("someone who knew which of us would obey it")).toBeVisible();
+  await expect(page.getByText("which signal my watch was duty-bound to follow")).toBeVisible();
   await page.getByRole("button", { name: "Go to Split Hall." }).click();
 
-  await move(page, "down", 4);
-  await move(page, "right", 4);
-  await move(page, "up", 2);
+  await navigateWestroot(page, { x: 3, y: 0 }, { x: 5, y: 2 });
   await expect(page.getByText("Nobody has called the meeting. The Hold Bell did that.")).toBeVisible();
   await expect(page.getByText("Stonekin and Mossbacks sit on both sides.")).toBeVisible();
   await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute(
@@ -176,31 +241,35 @@ test("Chapter 3 keeps the Rootbread Promise and Witness Stones fail-forward sequ
   await page.getByRole("button", { name: "How could the held cargo move?" }).click();
   await expect(page.getByText("The private hinge-mark was correct.")).toBeVisible();
   await expect(page.getByText("Opening everything could tell the Crown where Lio went.")).toHaveCount(0);
-  await page.getByRole("button", { name: "Return to the Witness Stones." }).click();
+  await page.getByRole("button", { name: "Volunteer to track down the missing Willow crate." }).click();
+  await expect(page.getByText("Then let us find the false Willow-marked crate before this hall decides who moved it")).toBeVisible();
+  await expect(page.getByText("Missing from its assigned bay")).toBeVisible();
+  await expect(page.getByText("Not proven gone from Westroot")).toBeVisible();
+  await page.getByRole("button", { name: "Meet Bramwell and Noma at the Witness Stones." }).click();
 
-  await move(page, "down", 2);
-  await move(page, "left", 4);
-  await move(page, "up", 4);
-  await move(page, "right", 3);
+  await navigateWestroot(page, { x: 5, y: 2 }, { x: 4, y: 1 }, { holdOpen: true });
   await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute(
     "src",
-    /witness-stones-scene-v01\.webp/,
+    /witness-stones-public-renewal-scene-v02\.webp/,
   );
+  await expect(page.getByText("I ordered this closed when the Willow crate was placed under hold")).toBeVisible();
+  await expect(page.getByText("The mistake was keeping the same answer after the danger changed")).toBeVisible();
+  await expect(page.getByText("We open this together, with the danger named")).toBeVisible();
   await page.getByRole("button", { name: "Inspect the stone carvings." }).click();
-  await expect(page.getByText("No destination, danger, shelter, or reason is named.")).toBeVisible();
-  await page.getByRole("button", { name: "Return to the sequence." }).click();
+  await expect(page.getByText("A hand pressed to stone beside a simple line")).toBeVisible();
+  await expect(page.getByText("OBEY CROWN DETOUR")).toHaveCount(0);
+  await page.getByRole("button", { name: "Return to the public renewal." }).click();
 
-  await page.getByRole("button", { name: /^False Crown/ }).click();
-  await expect(page.getByText("A mistake")).toBeVisible();
-  await expect(page.getByText("Noma gives you a Witness Stone Rubbing.").first()).toBeVisible();
-  await page.getByRole("button", { name: "Name the mistake and try again." }).click();
-  await page.getByRole("button", { name: /^Witness/ }).click();
-  await page.getByRole("button", { name: /^Warning/ }).click();
-  await page.getByRole("button", { name: /^Shelter/ }).click();
-  await page.getByRole("button", { name: /^Water/ }).click();
+  await page.getByRole("button", { name: /^Begin with Warning/ }).click();
 
-  await expect(page.getByText("A ROAD IS SAFEST WHEN TRUTH WALKS IT FIRST.")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Follow the Willow cargo." })).toBeVisible();
+  await expect(page.getByText("warning the people who cannot hear this bell")).toBeVisible();
+  await expect(page.getByText("The road holds because different hands keep them together")).toBeVisible();
+  await expect(page.getByTestId("map-background")).toHaveAttribute(
+    "src",
+    /westroot-hub-map-v02-open-stones\.webp/,
+  );
+  await expect(page.getByText("Its wheel grooves run deeper into the siding")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open the Cargo Siding and track the missing crate." })).toBeVisible();
 });
 
 test("Split Hall simmers before the Hold Bell and does not repeat on walk-through", async ({ page }) => {
@@ -237,18 +306,14 @@ test("Split Hall simmers before the Hold Bell and does not repeat on walk-throug
   await move(page, "up");
   await expect(page.getByRole("dialog")).toHaveCount(0);
 
-  await move(page, "down", 2);
-  await move(page, "left", 4);
-  await move(page, "up", 4);
+  await navigateWestroot(page, { x: 5, y: 2 }, { x: 3, y: 0 });
   await expect(page.getByText("Do not step on the names")).toBeVisible();
   await page.getByRole("button", { name: "Why is everyone preparing for the gate to close?" }).click();
   await page.getByRole("button", { name: "Thank Noma and keep exploring." }).click();
   await page.getByRole("button", { name: "Count who will be left outside." }).click();
   await page.getByRole("button", { name: "Go to Split Hall." }).click();
 
-  await move(page, "down", 4);
-  await move(page, "right", 4);
-  await move(page, "up", 2);
+  await navigateWestroot(page, { x: 3, y: 0 }, { x: 5, y: 2 });
   await expect(page.getByText("Split Hall is no longer half full.")).toBeVisible();
   await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute(
     "src",
@@ -276,12 +341,17 @@ test("Chapter 3 Cargo Siding resolves into Split Hall and the westward handoff",
     "src",
     /cargo-siding-evidence-scene-v01\.webp/,
   );
+  await expect(page.getByText("a chalk rectangle marks the empty bay")).toBeVisible();
+  await expect(page.getByText("Not Ada's missing spice crate")).toBeVisible();
+  await expect(page.getByText("Moved deeper while the door was made to look locked")).toBeVisible();
   await page.getByRole("button", { name: "Open the crate carefully." }).click();
   await expect(page.getByText("They made a person into cargo")).toBeVisible();
   await page.getByRole("button", { name: "Compare this clue with the whole crate record." }).click();
   await expect(page.getByText("opened from inside and outside")).toBeVisible();
-  await page.getByRole("button", { name: "Confront the cargo operation." }).click();
-  await page.getByRole("button", { name: "Clear the Cargo Siding." }).click();
+  await page.getByRole("button", { name: "Call out whoever is hiding behind the crates." }).click();
+  await expect(page.getByText("A hooded Briar Cargo Runner steps out")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Fight the Briar Cargo Runner and Seal-Forged Sentry." })).toBeVisible();
+  await page.getByRole("button", { name: "Fight the Briar Cargo Runner and Seal-Forged Sentry." }).click();
 
   const attack = page.getByRole("button", { name: /Scrappy Chop/ });
   for (let turn = 0; turn < 35; turn += 1) {
@@ -300,9 +370,7 @@ test("Chapter 3 Cargo Siding resolves into Split Hall and the westward handoff",
   await expect(page.getByText("Not a public road")).toBeVisible();
   await page.getByRole("button", { name: "Bring the evidence to Split Hall." }).click();
 
-  await move(page, "down", 3);
-  await move(page, "left", 3);
-  await move(page, "up", 2);
+  await navigateWestroot(page, { x: 7, y: 1 }, { x: 5, y: 2 });
   await expect(page.getByText("They learned which parts of us were afraid")).toBeVisible();
   await page.getByRole("button", { name: "Use the old road promises as rules for reopening." }).click();
   await expect(page.getByText("Caution is not cowardice")).toBeVisible();
@@ -320,7 +388,7 @@ test("Chapter 3 Cargo Siding resolves into Split Hall and the westward handoff",
   expect(runtimeErrors).toEqual([]);
 });
 
-test("a downed companion does not speak during Chapter 3 story reactions", async ({ page }) => {
+test("a downed companion does not add commentary to the Witness Stone renewal", async ({ page }) => {
   const payload = buildChapter3CargoCheckpoint();
   payload.position = { x: 4, y: 1 };
   payload.visited = {
@@ -347,10 +415,10 @@ test("a downed companion does not speak during Chapter 3 story reactions", async
   await page.goto("/");
   await page.getByRole("button", { name: "Continue Checkpoint" }).click();
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
-  await page.getByRole("button", { name: /^False Crown/ }).click();
+  await page.getByRole("button", { name: /^Begin with Witness/ }).click();
 
-  await expect(page.getByText("A mistake")).toBeVisible();
-  await expect(page.getByText("We correct it. That is what a good warning is for.")).toHaveCount(0);
+  await expect(page.getByText("saying exactly what happened")).toBeVisible();
+  await expect(page.getByText("A good order names the danger and the hand responsible.")).toHaveCount(0);
 });
 
 test("Noma keeps each informational question available until it has been asked", async ({ page }) => {
@@ -401,7 +469,7 @@ test("the weathered stones do not reveal their rule before Noma explains it", as
   await page.getByRole("button", { name: "Continue Checkpoint" }).click();
   await expect(page.getByRole("button", { name: "Inspect Weathered Stones", exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
-  await expect(page.getByText("Four weathered stones stand in a shallow water circle.")).toBeVisible();
+  await expect(page.getByText("A low oak-and-brass hold-shutter crosses the only approach")).toBeVisible();
   await expect(page.getByRole("button", { name: /^False Crown/ })).toHaveCount(0);
 });
 
@@ -444,8 +512,7 @@ test("the user Chapter 3 save clearly identifies the endpoint and preserves its 
     page.getByText("The main Chapter 3 story is complete, and Chapter 4 is not playable yet."),
   ).toBeVisible();
 
-  await move(page, "left");
-  await move(page, "up");
+  await navigateWestroot(page, { x: 4, y: 3 }, { x: 3, y: 6 });
   await expect(page.getByText("The Mossback baker in Rootmarket may still have heard something about Lio.").first()).toBeVisible();
   await expect(page.getByRole("button", { name: "Approach the Mossback baker." })).toBeVisible();
   await page.getByRole("button", { name: "Approach the Mossback baker." }).click();
@@ -453,7 +520,7 @@ test("the user Chapter 3 save clearly identifies the endpoint and preserves its 
   await page.getByRole("button", { name: "Thank you. We are looking for Lio Brindle." }).click();
   await page.getByRole("button", { name: "Look for the food left by the sealed hatch." }).click();
 
-  await move(page, "down");
-  await move(page, "up");
+  await navigateWestroot(page, { x: 3, y: 6 }, { x: 3, y: 3 });
+  await navigateWestroot(page, { x: 3, y: 3 }, { x: 3, y: 6 });
   await expect(page.getByRole("dialog")).toHaveCount(0);
 });

@@ -177,7 +177,7 @@ The forged orders were not the whole plan. They were cover. The stolen Willow se
     },
     briarCrown: {
       rowan:
-        "Rowan tightens his grip on his shield. \"That mark wants obedience before trust. I know the shape of that. Whoever uses it expects people to kneel first and ask questions later.\"",
+        "Rowan tightens his grip on his shield. \"That mark wants trust without earning it. I know the shape of that. Whoever uses it borrows a crown so nobody asks whose hand is really giving the order.\"",
       tilda:
         "Tilda crouches beside the mark and wrinkles her nose. \"Not royal. Not honest. Not even stylish. If you are going to impersonate authority, at least have the decency to draw straight lines.\" Then her grin fades. \"Still. People believed it from a distance. That is what worries me.\"",
       moss: "Moss does not touch the mark. \"Briars protect living things when they grow where they belong,\" they say. \"This was carved to choke something older. That is not growth. That is conquest pretending to be nature.\"",

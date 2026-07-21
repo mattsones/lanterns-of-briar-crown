@@ -401,19 +401,23 @@ export function MapStage({
         </svg>
       ) : null}
       <div className="map-node-layer" aria-label="Map movement layer">
-        {renderedNodes.filter((node) => node.clickable).map((node) => (
+        {renderedNodes.filter((node) => debug || node.clickable).map((node) => (
           <button
             key={node.key}
             type="button"
             title={`${node.meta.label} (${node.x}, ${node.y})`}
+            data-map-node={`${node.x},${node.y}`}
+            data-reachable={node.clickable ? "true" : "false"}
             aria-label={
               node.isPlayer
                 ? `Inspect ${node.meta.label}`
-                : `Move to ${node.meta.label}`
+                : node.clickable
+                  ? `Move to ${node.meta.label}`
+                  : `Map node ${node.meta.label} at ${node.x}, ${node.y}; not directly reachable`
             }
             disabled={!node.clickable}
             onClick={() => onNodeClick(node.x, node.y, node.tile)}
-            className={`map-node-hitbox ${node.clickable ? "is-clickable" : ""} ${debug ? "is-debug" : ""} is-${node.debugState}`}
+            className={`map-node-hitbox ${node.clickable ? "is-clickable" : "is-unreachable"} ${node.isPlayer ? "is-current" : ""} ${debug ? "is-debug" : ""} is-${node.debugState}`}
             style={{
               left: `${node.point.x}%`,
               top: `${node.point.y}%`,

@@ -208,6 +208,26 @@ textarea {
   background: rgb(244 63 94 / 0.52);
 }
 
+.map-node-hitbox.is-debug.is-unreachable {
+  opacity: 0.48;
+  border-style: dashed;
+  filter: saturate(0.72);
+}
+
+.map-node-hitbox.is-debug.is-clickable {
+  border: 2px solid rgb(125 211 252 / 0.96);
+  box-shadow:
+    0 0 0 1px rgb(2 6 23 / 0.75),
+    0 0 0 4px rgb(56 189 248 / 0.2);
+}
+
+.map-node-hitbox.is-debug.is-current {
+  border-color: rgb(253 224 71 / 0.96);
+  box-shadow:
+    0 0 0 1px rgb(2 6 23 / 0.75),
+    0 0 0 4px rgb(250 204 21 / 0.22);
+}
+
 .map-debug-label {
   font-size: 0.58rem;
   font-weight: 700;

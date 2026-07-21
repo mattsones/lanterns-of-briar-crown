@@ -26,7 +26,18 @@ export function getWestrootMapNpcTokens(
   flags: WestrootMapFlags,
 ): MapNpcToken[] {
   const hallIsMeeting = flags.westrootHoldBellRung && !flags.chapterThreeClear;
-  const bramwell = hallIsMeeting
+  const stonesAreGathering = flags.splitHallDebateHeard && !flags.witnessStoneSequenceSolved;
+  const bramwell = stonesAreGathering
+    ? {
+        id: "bramwell",
+        name: "Bramwell Gatehand",
+        portraitName: "Bramwell Gatehand",
+        x: 4,
+        y: 1,
+        offsetX: -2.1,
+        offsetY: 2.6,
+      }
+    : hallIsMeeting
     ? {
         id: "bramwell",
         name: "Bramwell Gatehand",
@@ -41,9 +52,7 @@ export function getWestrootMapNpcTokens(
         name: "Bramwell Gatehand",
         portraitName: "Bramwell Gatehand",
         x: 1,
-        y: 3,
-        offsetX: 5.4,
-        offsetY: -5.8,
+        y: 4,
       };
 
   const noma = !flags.westrootHoldBellRung || flags.chapterThreeClear
@@ -53,10 +62,8 @@ export function getWestrootMapNpcTokens(
         portraitName: "Noma Greenstill",
         x: 3,
         y: 0,
-        offsetX: 1.4,
-        offsetY: 1.2,
       }
-    : flags.splitHallDebateHeard && !flags.witnessStoneSequenceSolved
+    : stonesAreGathering
       ? {
           id: "noma",
           name: "Noma Greenstill",

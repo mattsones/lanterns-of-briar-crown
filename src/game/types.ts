@@ -188,6 +188,10 @@ export type GameFlags = {
   splitHallAskedGateCost: boolean;
   splitHallAskedCargoHold: boolean;
   witnessStoneFirstAttemptMissed: boolean;
+  witnessPromiseWitnessChosen: boolean;
+  witnessPromiseWarningChosen: boolean;
+  witnessPromiseShelterChosen: boolean;
+  witnessPromiseWaterChosen: boolean;
   westrootTrustEarned: boolean;
   witnessStoneSequenceSolved: boolean;
   willowCargoExposed: boolean;

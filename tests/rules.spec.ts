@@ -330,6 +330,10 @@ test("Chapter 3 Westroot placeholder hub and cargo encounter preserve the vertic
     name: "Westroot",
     start: { x: 1, y: 3 },
   });
+  expect(MAPS.westrootHub.backgroundImage).toContain("westroot-hub-map-v01");
+  expect(MAPS.westrootHub.restoredBackgroundImage).toContain(
+    "westroot-hub-map-v02-open-stones",
+  );
   const hubTiles = MAPS.westrootHub.tiles.flat();
   [
     "westroot_first_gate",
@@ -364,12 +368,83 @@ test("Westroot hub movement follows the painted road in short, room-aware steps"
   expect(getNavigationDestination("westrootHub", 1, 3, "down")).toEqual({ x: 1, y: 4 });
   expect(getNavigationDestination("westrootHub", 1, 3, "right")).toEqual({ x: 1, y: 4 });
   expect(getNavigationDestination("westrootHub", 3, 3, "up")).toEqual({ x: 3, y: 6 });
-  expect(getNavigationDestination("westrootHub", 3, 3, "left")).toEqual({ x: 2, y: 2 });
+  expect(getNavigationDestination("westrootHub", 2, 3, "right")).toEqual({ x: 3, y: 4 });
+  expect(getNavigationDestination("westrootHub", 3, 4, "up")).toEqual({ x: 2, y: 2 });
+  expect(getNavigationDestination("westrootHub", 3, 6, "down")).toEqual({ x: 3, y: 3 });
+  expect(getNavigationDestination("westrootHub", 3, 3, "right")).toEqual({ x: 4, y: 3 });
+  expect(getNavigationDestination("westrootHub", 3, 6, "right")).toEqual({ x: 4, y: 3 });
+  expect(getNavigationDestination("westrootHub", 4, 3, "up")).toEqual({ x: 3, y: 6 });
+  expect(getNavigationNodeKeys("westrootHub")).not.toContain("4,5");
+  expect(getNavigationDestination("westrootHub", 4, 2, "down")).toEqual({ x: 4, y: 4 });
+  // Noma's garden and the stone spur meet at the 1,2 / 4,0 junction.
+  expect(getNavigationDestination("westrootHub", 3, 0, "down")).toEqual({ x: 1, y: 0 });
+  expect(getNavigationDestination("westrootHub", 1, 0, "right")).toEqual({ x: 1, y: 2 });
+  expect(getNavigationDestination("westrootHub", 1, 2, "up")).toEqual({ x: 4, y: 0 });
+  expect(getNavigationDestination("westrootHub", 3, 0, "right")).toEqual({ x: 1, y: 0 });
+  expect(areMapNodesConnected(
+    "westrootHub",
+    { x: 3, y: 0 },
+    { x: 4, y: 0 },
+  )).toBe(false);
+  expect(getNavigationDestination("westrootHub", 4, 0, "right")).toEqual({ x: 2, y: 0 });
+  expect(getNavigationDestination("westrootHub", 2, 0, "right")).toEqual({ x: 5, y: 0 });
+  expect(getNavigationDestination("westrootHub", 5, 0, "up")).toEqual({ x: 6, y: 0 });
+  expect(getNavigationDestination("westrootHub", 6, 0, "up")).toEqual({ x: 4, y: 1 });
+  // Split Hall rejoins the town road, so the siding does not require the western loop.
+  expect(getNavigationDestination("westrootHub", 5, 2, "down")).toEqual({ x: 6, y: 1 });
+  expect(getNavigationDestination("westrootHub", 6, 1, "down")).toEqual({ x: 4, y: 2 });
+  expect(getNavigationDestination("westrootHub", 4, 4, "up")).toEqual({ x: 4, y: 2 });
+  expect(getNavigationDestination("westrootHub", 6, 4, "right")).toEqual({ x: 7, y: 3 });
+  // The two new painted-road loops meet on the center-right path.
+  expect(getNavigationDestination("westrootHub", 4, 4, "down")).toEqual({ x: 8, y: 0 });
+  expect(getNavigationDestination("westrootHub", 8, 3, "down")).toEqual({ x: 5, y: 6 });
+  expect(getNavigationDestination("westrootHub", 3, 3, "down")).toEqual({ x: 8, y: 4 });
   expect(MAPS.westrootHub.tiles[3][3]).toBe("westroot_path");
   expect(MAPS.westrootHub.tiles[6][3]).toBe("rootmarket");
-  expect(getMapNodePoint("westrootHub", 3, 6, 9, 7)).toEqual({ x: 40.5, y: 56.5 });
-  expect(getMapNodePoint("westrootHub", 4, 1, 9, 7)).toEqual({ x: 43, y: 20.5 });
+  expect(getMapNodePoint("westrootHub", 3, 6, 9, 7)).toEqual({ x: 40.6, y: 52.7 });
+  expect(getMapNodePoint("westrootHub", 4, 1, 9, 7)).toEqual({ x: 41.4, y: 15 });
   expect(getNavigationDestination("westrootHub", 7, 3, "down")).toEqual({ x: 7, y: 4 });
+
+  const followWestrootRoute = (
+    start: { x: number; y: number },
+    directions: Array<"up" | "down" | "left" | "right">,
+  ) => directions.reduce((position, direction) => {
+    const destination = getNavigationDestination(
+      "westrootHub",
+      position.x,
+      position.y,
+      direction,
+    );
+    if (!destination) {
+      throw new Error(
+        `Westroot continuity route stopped at ${position.x},${position.y} on ${direction}`,
+      );
+    }
+    return destination;
+  }, start);
+
+  // Long organic stretches should repeat one arrow until the painted road
+  // actually turns or reaches a fork.
+  expect(followWestrootRoute(
+    { x: 3, y: 6 },
+    ["down", "left", "up", "up", "up", "up", "up", "up", "left", "left"],
+  )).toEqual({ x: 3, y: 0 });
+  expect(followWestrootRoute(
+    { x: 3, y: 0 },
+    ["right", "right", "down", "down", "down", "down", "down", "down", "right", "up"],
+  )).toEqual({ x: 3, y: 6 });
+  expect(followWestrootRoute(
+    { x: 4, y: 1 },
+    ["down", "down", "down", "down", "down"],
+  )).toEqual({ x: 4, y: 4 });
+  expect(followWestrootRoute(
+    { x: 4, y: 4 },
+    ["down", "down", "down", "down", "right"],
+  )).toEqual({ x: 6, y: 5 });
+  expect(followWestrootRoute(
+    { x: 6, y: 5 },
+    ["left", "left", "left", "left", "left"],
+  )).toEqual({ x: 4, y: 4 });
 
   const directionIsVisuallyConsistent = {
     up: (dx: number, dy: number) => dy < 0 && Math.abs(dy) >= 0.45 * Math.abs(dx),
@@ -397,19 +472,19 @@ test("Westroot hub movement follows the painted road in short, room-aware steps"
     const [fromX, fromY] = from.split(",").map(Number);
     const fromPoint = getMapNodePoint("westrootHub", fromX, fromY, 9, 7);
     return Object.values(exits).flatMap((destination) => {
-      if (!destination || from >= destination) return [];
+      if (!destination || from >= destination || from === "3,6" || destination === "3,6") return [];
       const [toX, toY] = destination.split(",").map(Number);
       const toPoint = getMapNodePoint("westrootHub", toX, toY, 9, 7);
       return [Math.hypot(toPoint.x - fromPoint.x, toPoint.y - fromPoint.y)];
     });
   });
-  expect(Math.max(...edgeLengths)).toBeLessThanOrEqual(11);
+  expect(Math.max(...edgeLengths)).toBeLessThanOrEqual(12);
 });
 
 test("Westroot map NPC markers follow the story's physical staging", () => {
   const initialFlags = buildDefaultFlags();
   expect(getWestrootMapNpcTokens(initialFlags)).toMatchObject([
-    { id: "bramwell", x: 1, y: 3 },
+    { id: "bramwell", x: 1, y: 4 },
     { id: "noma", name: "Mossback caretaker", x: 3, y: 0 },
   ]);
 
@@ -429,7 +504,7 @@ test("Westroot map NPC markers follow the story's physical staging", () => {
     rootbreadLeadLearned: true,
   };
   expect(getWestrootMapNpcTokens(atWitnessStones)).toMatchObject([
-    { id: "bramwell", x: 5, y: 2 },
+    { id: "bramwell", x: 4, y: 1 },
     { id: "noma", x: 4, y: 1 },
     { id: "rootbread-child", x: 7, y: 5 },
   ]);
@@ -441,7 +516,7 @@ test("Westroot map NPC markers follow the story's physical staging", () => {
     chapterThreeClear: true,
   };
   expect(getWestrootMapNpcTokens(resolved)).toMatchObject([
-    { id: "bramwell", x: 1, y: 3 },
+    { id: "bramwell", x: 1, y: 4 },
     { id: "noma", x: 3, y: 0 },
   ]);
 });

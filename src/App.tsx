@@ -122,7 +122,7 @@ import {
   CHAPTER_3_SCENE_COPY,
   CHAPTER_3_FULL_SCENE_COPY,
   WITNESS_STONE_LABELS,
-  WITNESS_STONE_SEQUENCE,
+  WITNESS_STONE_RESPONSES,
   appendChapter3CompanionReaction,
 } from "./story/chapter3";
 
@@ -201,7 +201,10 @@ const rootmarketUneasyArrivalScene = new URL(
   "../assets/scenes/rootmarket-uneasy-arrival-scene-v01.webp",
   import.meta.url,
 ).href;
-const witnessStonesScene = new URL("../assets/scenes/witness-stones-scene-v01.webp", import.meta.url).href;
+const witnessStonesScene = new URL(
+  "../assets/scenes/witness-stones-public-renewal-scene-v02.webp",
+  import.meta.url,
+).href;
 const rootbreadPromiseScene = new URL("../assets/scenes/rootbread-promise-scene-v01.webp", import.meta.url).href;
 const cargoSidingEvidenceScene = new URL(
   "../assets/scenes/cargo-siding-evidence-scene-v01.webp",
@@ -1010,6 +1013,26 @@ export default function LiamsGamePrototype() {
     if (tile === "well") return openVillageWellDialogue();
     if (tile === "pond") return openPondDialogue();
   };
+
+  const isClosedWestrootHoldCrossing = (from: Position, to: Position) => {
+    if (region !== "westrootHub" || flags.splitHallDebateHeard) return false;
+    const crossing = `${from.x},${from.y}->${to.x},${to.y}`;
+    return crossing === "5,0->6,0" || crossing === "6,0->5,0";
+  };
+
+  const openWestrootHoldPathNotice = () =>
+    setDialogue({
+      portrait: "!",
+      name: "Witness Stone Hold Notice",
+      text: `${CHAPTER_3_FULL_SCENE_COPY.witnessStones.shutterInspection}\n\nA posted notice closes the walk between the Mossgarden road and the Witness Stones while the Willow cargo hold is reviewed. The shutter will stay in place until Split Hall hears why it was closed and who the closure leaves outside.`,
+      choices: [
+        {
+          label: "Respect the hold and stay on this side.",
+          effect: () => setDialogue(null),
+        },
+      ],
+    });
+
   const movePlayer = (dx, dy) => {
     if (
       dialogue ||
@@ -1032,6 +1055,12 @@ export default function LiamsGamePrototype() {
     if (hasNavigationGraph(region) && !graphDestination) return;
     const nx = graphDestination?.x ?? position.x + dx;
     const ny = graphDestination?.y ?? position.y + dy;
+    if (
+      isClosedWestrootHoldCrossing(position, { x: nx, y: ny })
+    ) {
+      openWestrootHoldPathNotice();
+      return;
+    }
     if (
       ny < 0 ||
       ny >= currentMap.length ||
@@ -1254,7 +1283,7 @@ export default function LiamsGamePrototype() {
         name: "Elder Brynn",
         text: `You place Lio's satchel in Brynn's hands and unfold the order beside it. She reads the command once. Then again, slower. Her thumb presses into the crooked crown seal.
 
-"No," she says. "This did not come from the Crown. A true road order names the danger, the people it protects, and the hand responsible for it. This names only panic. Someone forged authority because frightened people obey faster than careful ones."
+"No," she says. "This did not come from the Crown. A true road order names the danger, the people it protects, and the hand responsible for it. This names only panic. Someone forged authority because fear makes a trusted seal harder to question."
 
 She looks from Lio's badge to the lunch packet still tied with Mara's blue string.
 
@@ -4857,7 +4886,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     });
   };
 
-  const openWitnessStoneInspectionDialogue = (order, guidance = "") =>
+  const openWitnessStoneInspectionDialogue = () =>
     setDialogue({
       portrait: "◌",
       name: "Witness Stone Carvings",
@@ -4866,98 +4895,94 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         .join("\n\n"),
       choices: [
         {
-          label: "Return to the sequence.",
-          effect: () => openWitnessStonesDialogue(order, guidance),
+          label: "Return to the public renewal.",
+          effect: () => openWitnessStonesDialogue(),
         },
         { label: "Step back for now.", effect: () => setDialogue(null) },
       ],
     });
 
-  const chooseWitnessStone = (order, choice, guidance = "") => {
-    const expected = WITNESS_STONE_SEQUENCE[order.length - 1];
-    if (choice !== expected) {
-      const firstMiss = !flags.witnessStoneFirstAttemptMissed;
-      setFlags((f) => ({ ...f, witnessStoneFirstAttemptMissed: true }));
-      gainStoryItemOnce("witness_stone_rubbing");
-      if (firstMiss) announce("Noma gives you a Witness Stone Rubbing.", [{ id: "witness_stone_rubbing", qty: 1 }]);
-      return setDialogue({
-        portrait: "◌",
-        name: CHAPTER_3_SCENE_COPY.witnessStones.name,
-        text: withChapter3CompanionReaction(
-          `${CHAPTER_3_SCENE_COPY.witnessStones.failure}\n\n${CHAPTER_3_FULL_SCENE_COPY.witnessStones.correction}`,
-          "witnessMistake",
-        ),
-        choices: [
-          { label: "Name the mistake and try again.", effect: () => openWitnessStonesDialogue([], guidance) },
-          { label: "Step back for now.", effect: () => setDialogue(null) },
-        ],
-      });
-    }
-    if (order.length === WITNESS_STONE_SEQUENCE.length) {
-      setFlags((f) => ({ ...f, witnessStoneSequenceSolved: true }));
-      gainStoryItemOnce("witness_stone_rubbing");
-      setPlayer((p) => ({ ...p, xp: p.xp + 12 }));
-      announce("The Witness Stones remember their promise. XP +12", [{ id: "witness_stone_rubbing", qty: 1 }]);
-      return setDialogue({
-        portrait: "◌",
-        name: CHAPTER_3_SCENE_COPY.witnessStones.name,
-        text: CHAPTER_3_SCENE_COPY.witnessStones.success,
-        choices: [{ label: "Follow the Willow cargo.", effect: () => setDialogue(null) }],
-      });
-    }
-    openWitnessStonesDialogue(order, guidance);
+  const renewWitnessStones = (promise) => {
+    const promiseFlag = {
+      witness: "witnessPromiseWitnessChosen",
+      warning: "witnessPromiseWarningChosen",
+      shelter: "witnessPromiseShelterChosen",
+      water: "witnessPromiseWaterChosen",
+    }[promise];
+    setFlags((f) => ({
+      ...f,
+      witnessStoneSequenceSolved: true,
+      [promiseFlag]: true,
+    }));
+    gainStoryItemOnce("witness_stone_rubbing");
+    setPlayer((p) => ({ ...p, xp: p.xp + 12 }));
+    announce("Westroot renews the road promises together. XP +12", [
+      { id: "witness_stone_rubbing", qty: 1 },
+    ]);
+    setDialogue({
+      portrait: "◌",
+      name: CHAPTER_3_SCENE_COPY.witnessStones.name,
+      sceneImage: {
+        src: witnessStonesScene,
+        alt: "Four carved Witness Stones standing unobstructed inside Westroot's lantern-lit water circle.",
+      },
+      text: withChapter3CompanionReaction(
+        `${WITNESS_STONE_RESPONSES[promise]}\n\n${CHAPTER_3_SCENE_COPY.witnessStones.success}`,
+        "witnessRenewal",
+      ),
+      choices: [{ label: "Open the Cargo Siding and track the missing crate.", effect: () => setDialogue(null) }],
+      size: "wide",
+    });
   };
 
-  const openWitnessStonesDialogue = (order = [], guidance = "", assumedFlags: Flags = {}) => {
+  const openWitnessStonesDialogue = (_order = [], _guidance = "", assumedFlags: Flags = {}) => {
     const viewFlags = { ...flags, ...assumedFlags };
     if (!viewFlags.nomaIntroducedWitnessStones) {
       return setDialogue({
         portrait: "◌",
-        name: "Weathered Road Stones",
-        text: "Four weathered stones stand in a shallow water circle. You can make out a hand, an outward lantern, a roof beneath a root, and a cup beside a spring—but not the order Westroot intended. The Mossback caretaker in the nearby garden may know how they were used.",
-        choices: [{ label: "Leave the stones undisturbed.", effect: () => setDialogue(null) }],
+        name: "Closed Witness Stone Walk",
+        text: "A low oak-and-brass hold-shutter crosses the only approach to four weathered stones. Its latch bears a clean Gatehand seal and a slate naming the Willow cargo hold. This is an official Westroot safeguard, not a hostile barricade. The Mossback caretaker in the nearby garden may know why the stones were closed.",
+        choices: [{ label: "Respect the hold and step back.", effect: () => setDialogue(null) }],
       });
     }
     if (viewFlags.metQuill && viewFlags.nomaIntroducedWitnessStones && !viewFlags.westrootHoldBellRung) {
       return openWestrootHoldBellDialogue();
     }
-    if (viewFlags.westrootHoldBellRung && !viewFlags.splitHallDebateHeard) {
+    if (!viewFlags.splitHallDebateHeard) {
       return setDialogue({
         portrait: "!",
-        name: CHAPTER_3_SCENE_COPY.witnessStones.name,
-        text: "The Hold Bell is still echoing through the hooded lanterns. Noma keeps the false Crown slat in place. \"Not until the hall has named what it is afraid of losing,\" they say. \"Otherwise we will turn the old promise into one more command.\"",
-        choices: [{ label: "Hear Westroot at Split Hall first.", effect: () => setDialogue(null) }],
+        name: "Witness Stone Hold-Shutter",
+        text: `${CHAPTER_3_FULL_SCENE_COPY.witnessStones.shutterInspection}\n\nNoma keeps their hands away from Bramwell's latch. \"Not until the hall has named what it is afraid of losing,\" they say. \"A safeguard deserves an honest reason to close and an honest reason to open.\"`,
+        choices: [{ label: viewFlags.westrootHoldBellRung ? "Hear Westroot at Split Hall first." : "Leave the lawful hold in place.", effect: () => setDialogue(null) }],
       });
     }
     if (viewFlags.witnessStoneSequenceSolved) {
       return setDialogue({
         portrait: "◌",
         name: CHAPTER_3_SCENE_COPY.witnessStones.name,
-        text: "The restored sequence glows softly: witness, warning, shelter, water. The Cargo Siding lock is open now.",
+        text: "The hold-shutter stands open. Witness, Warning, Shelter, and Water glow around the clear channel—not as a sequence, but as promises Westroot renewed together. Bramwell and Noma have opened the Cargo Siding under shared witness.",
         choices: [{ label: "Continue.", effect: () => setDialogue(null) }],
       });
     }
-    const prefix = order.length
-      ? `So far: ${order.map((step) => WITNESS_STONE_LABELS[step]).join("\n")}\n\n`
-      : `${guidance ? `${guidance}\n\n` : ""}${CHAPTER_3_SCENE_COPY.witnessStones.introduction}`;
     setDialogue({
       portrait: "◌",
       name: CHAPTER_3_SCENE_COPY.witnessStones.name,
       sceneImage: {
         src: witnessStonesScene,
-        alt: "Mara and Noma examining Westroot's false crown-marked Witness Stones.",
+        alt: "Four carved Witness Stones standing unobstructed inside Westroot's lantern-lit water circle.",
       },
-      text: `${prefix}\n\n${CHAPTER_3_SCENE_COPY.witnessStones.prompt}`,
+      text: `${CHAPTER_3_SCENE_COPY.witnessStones.introduction}\n\n${CHAPTER_3_SCENE_COPY.witnessStones.prompt}`,
       choices: [
         {
           label: "Inspect the stone carvings.",
-          effect: () => openWitnessStoneInspectionDialogue(order, guidance),
+          effect: openWitnessStoneInspectionDialogue,
         },
         ...Object.entries(WITNESS_STONE_LABELS).map(([id, label]) => ({
           label,
-          effect: () => chooseWitnessStone([...order, id], id, guidance),
+          effect: () => renewWitnessStones(id),
         })),
       ],
+      size: "wide",
     });
   };
 
@@ -5074,7 +5099,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       text: CHAPTER_3_FULL_SCENE_COPY.cargoSiding.evidence,
       choices: [
         {
-          label: "Confront the cargo operation.",
+          label: "Call out whoever is hiding behind the crates.",
           effect: () =>
             setDialogue({
               portrait: "▰",
@@ -5082,13 +5107,13 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
               text: CHAPTER_3_FULL_SCENE_COPY.cargoSiding.battle,
               choices: [
                 {
-                  label: "Clear the Cargo Siding.",
+                  label: "Fight the Briar Cargo Runner and Seal-Forged Sentry.",
                   effect: () => {
                     setDialogue(null);
                     startBattle(buildEncounterEnemies("westrootCargo"), "westrootCargo");
                   },
                 },
-                { label: "Step back for now.", effect: () => setDialogue(null) },
+                { label: "Back away before they attack.", effect: () => setDialogue(null) },
               ],
             }),
         },
@@ -5244,6 +5269,32 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     });
   };
 
+  const openSplitHallInvestigationOffer = (assumedFlags: Flags = {}) => {
+    const viewFlags = { ...flags, ...assumedFlags, splitHallDebateHeard: true };
+    const hasAnotherQuestion =
+      !viewFlags.splitHallAskedOuterShelter ||
+      !viewFlags.splitHallAskedGateCost ||
+      !viewFlags.splitHallAskedCargoHold;
+    setDialogue({
+      portrait: "!",
+      name: "Split Hall — The Missing Crate",
+      text: CHAPTER_3_FULL_SCENE_COPY.splitHall.investigationOffer,
+      choices: [
+        hasAnotherQuestion
+          ? {
+              label: "Ask one more question before we go.",
+              effect: () => openSplitHallEarlyDialogue(viewFlags),
+            }
+          : null,
+        {
+          label: "Meet Bramwell and Noma at the Witness Stones.",
+          effect: () => setDialogue(null),
+        },
+      ].filter(Boolean),
+      size: "wide",
+    });
+  };
+
   const openSplitHallEarlyResponse = (
     response,
     askedFlag,
@@ -5264,7 +5315,10 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           label: "Ask the hall another question.",
           effect: () => openSplitHallEarlyDialogue(nextFlags),
         },
-        { label: "Return to the Witness Stones.", effect: () => setDialogue(null) },
+        {
+          label: "Volunteer to track down the missing Willow crate.",
+          effect: () => openSplitHallInvestigationOffer(nextFlags),
+        },
       ],
       size: "wide",
     });
@@ -5319,7 +5373,10 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       choices: [
         ...questions,
         viewFlags.splitHallDebateHeard
-          ? { label: "Return to the Witness Stones.", effect: () => setDialogue(null) }
+          ? {
+              label: "Volunteer to track down the missing Willow crate.",
+              effect: () => openSplitHallInvestigationOffer(viewFlags),
+            }
           : null,
       ].filter(Boolean),
       size: "wide",
@@ -5583,7 +5640,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
                         portrait: "🧳",
                         portraitName: "Worried Road Traveler",
                         name: "Worried Traveler",
-                        text: '"I saw enough," he insists. "The royal crown was pressed right into the red wax. The order said Bramblecross was being held and no couriers could leave until a Crown inspection. So I obeyed it. You obey a Crown seal like that—everyone knows that. Then the men started asking why I was still on the road, and I decided obedience could include leaving quickly."',
+                        text: '"I saw enough," he insists. "The royal crown was pressed right into the red wax. The order said Bramblecross was being held and no couriers could leave until a Crown inspection. So I trusted it. A Crown seal is supposed to mean somebody responsible has named a real danger. Then the men started asking why I was still on the road, and I realized the seal was the only responsible-looking thing about them."',
                         choices: [
                           {
                             label: "The seal may be false. Get to the camp.",
@@ -5742,6 +5799,10 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     const isCurrentNode = position.x === x && position.y === y;
     const isConnectedNode = areMapNodesConnected(region, position, { x, y });
     if (isConnectedNode) {
+      if (isClosedWestrootHoldCrossing(position, { x, y })) {
+        openWestrootHoldPathNotice();
+        return;
+      }
       if (isLockedCellarExit(tile)) {
         blockLockedCellarExit();
         return;
@@ -6731,7 +6792,11 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     flags.beatCellarBoss &&
     "completedBackgroundImage" in currentRegionInfo
       ? currentRegionInfo.completedBackgroundImage
-      : currentRegionInfo.backgroundImage;
+      : region === "westrootHub" &&
+          flags.witnessStoneSequenceSolved &&
+          "restoredBackgroundImage" in currentRegionInfo
+        ? currentRegionInfo.restoredBackgroundImage
+        : currentRegionInfo.backgroundImage;
   const crownDenAlertLevel = Math.min(
     4,
     Math.max(0, Number(flags.crownDenAlertLevel || 0)),
@@ -6804,7 +6869,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
                         ? "The main story ends here for now. Lume may still know whether anyone saw a sign of Lio."
                         : "The main story ends here for now. The Mossback baker in Rootmarket may still have heard something about Lio."
                   : chapterProgress.currentChapterId >= 3
-                    ? "Earn Westroot's trust, restore the Witness Stones, and expose the false cargo route."
+                    ? "Earn Westroot's trust, renew the road promises, and expose the false cargo route."
                     : flags.chapterTwoClear
                       ? "Lio is alive past the First Westroot Gate. The hidden road is ready to continue."
                       : "Follow Westroot, clear the false roadwork, and open the old way beneath the hill."

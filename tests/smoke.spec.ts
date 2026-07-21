@@ -127,8 +127,13 @@ test("starts a new adventure and passes built-in QA checks", async ({
   await page.getByTestId("open-adventure-menu").click();
   await page.getByText("More", { exact: true }).click();
   await page.getByRole("button", { name: "Dev Tools" }).click();
+  const visibleMovementNodeCount = await page.locator(".map-node-hitbox").count();
   await page.getByRole("button", { name: "Show Map Debug" }).click();
   await expect(page.getByTestId("map-debug-bounds")).toBeVisible();
+  const debugNodes = page.locator(".map-node-hitbox.is-debug");
+  expect(await debugNodes.count()).toBeGreaterThan(visibleMovementNodeCount);
+  expect(await page.locator(".map-node-hitbox.is-debug.is-clickable").count()).toBeGreaterThan(0);
+  expect(await page.locator(".map-node-hitbox.is-debug.is-unreachable").count()).toBeGreaterThan(0);
   await page.getByRole("button", { name: "Hide Map Debug" }).click();
   await expect(page.getByTestId("map-debug-bounds")).toHaveCount(0);
   await page.getByRole("button", { name: "Run QA Checks" }).click();
