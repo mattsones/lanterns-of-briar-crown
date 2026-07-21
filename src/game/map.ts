@@ -70,6 +70,11 @@ export function normalizeRegionId(regionId?: string | null) {
   return regionId && MAPS[regionId] ? regionId : "hearthhollow";
 }
 
+export function getRegionCheckpointLabel(regionId?: string | null) {
+  const region = normalizeRegionId(regionId);
+  return region === "hearthhollow" ? "South Gate" : MAPS[region].name;
+}
+
 export function normalizeMapPosition(regionId: string, position?: { x?: number; y?: number } | null) {
   const region = normalizeRegionId(regionId);
   const fallback = MAPS[region].start;

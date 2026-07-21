@@ -195,6 +195,7 @@ export type GameFlags = {
   westrootTrustEarned: boolean;
   witnessStoneSequenceSolved: boolean;
   willowCargoExposed: boolean;
+  cargoAmbushPrepared: boolean;
   cargoRunnerCaptured: boolean;
   cargoRunnerEscaped: boolean;
   chapterThreeClear: boolean;

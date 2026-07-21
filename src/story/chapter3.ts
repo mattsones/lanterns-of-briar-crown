@@ -213,6 +213,7 @@ export const CHAPTER_3_FULL_SCENE_COPY = {
     lensResult: "Ada's lens catches the nicked three-leaf mark beneath a layer of pine pitch and a thin wash of crown-red wax. The seal is genuine enough to pass a hurried eye and false enough to make Ada furious.",
     manualResult: "Even without the lens, the wax tells on itself. Green market wax has been warmed, pressed, covered, then made to look untouched. Someone wanted trust to arrive before questions did.",
     ledgerResult: "The loading ledger has no sender's name. Instead, it bears two acknowledgements: a Briar Crown route scratch and an old Westroot gate-account mark. One opened the way from outside. One confirmed it from within.",
+    preparedResult: "Fresh boot scuffs cross the ledger stand and vanish into a narrow service passage behind the crates. You quietly show Quill, who angles the repaired lantern shutter across that route while Bramwell signals two gatekeepers to cover it. If someone runs, Westroot will be ready.",
     crateResult: "The lid gives with a reluctant scrape.\n\nInside are no spices. There are blank order sheets cut to official size. Broken seal tools. Thorn-collar fittings wrapped in waxed cloth. Small scratching knives for changing route marks in the dark.\n\nAt the bottom lies a true courier pouch, empty except for a torn route tag: WESTWARD RELAY - TRANSFERRED.\n\nMara picks it up, then puts it down with both hands. \"They made a person into cargo,\" she says.",
     evidence: "Noma reads the two acknowledgement marks without touching them.\n\n\"Westroot was opened from inside and outside,\" they say.\n\nBramwell's jaw tightens. \"A gate account can be copied.\"\n\n\"Yes,\" Noma replies. \"And a copied mark is still evidence that someone knew which mark to copy.\"\n\nThere is no accusation in Noma's voice. That makes the silence heavier.\n\nThen, from the far end of the siding, a crate latch snaps shut.\n\nSomeone says, \"You should have left the gate closed.\"",
     battle: "A hooded Briar Cargo Runner steps out from behind the stacked crates. A Seal-Forged Sentry unfolds from a bundle of order sheets, wax, route tags, and thorn cord. Its crown-stamped scraps flutter like it is trying to become official by force.\n\nMara backs behind a stone loading post before the fight begins. \"Still behind the line,\" she says, breathless but steady. \"I am very committed to this part.\"",
@@ -270,4 +271,36 @@ export function canStartChapter3(flags: Flags = {}) {
 
 export function isChapter3Complete(flags: Flags = {}) {
   return CHAPTER_3_STORY.requiredEndFlags.every((flag) => !!flags[flag]);
+}
+
+export function buildChapterThreeRecap(flags: Partial<Flags> = {}) {
+  const firstPromise = flags.witnessPromiseWitnessChosen
+    ? "Witness — investigate in the open"
+    : flags.witnessPromiseWarningChosen
+      ? "Warning — alert the outer shelters"
+      : flags.witnessPromiseShelterChosen
+        ? "Shelter — protect those caught outside"
+        : flags.witnessPromiseWaterChosen
+          ? "Water — keep essential aid moving"
+          : "the four promises were renewed together";
+  const cargoOutcome = flags.cargoRunnerCaptured
+    ? "the prepared service passage held, and the runner was captured"
+    : flags.cargoRunnerEscaped
+      ? "the evidence was secured while the runner escaped west"
+      : "the false Willow cargo was exposed";
+  const rootbreadOutcome = flags.rootbreadPromiseKept
+    ? "Lio's blue courier knot was found, and the Rootbread Promise was kept"
+    : flags.rootbreadLeadLearned
+      ? "the Rootbread Promise remains an open lead"
+      : "the Rootbread Promise was not uncovered";
+  const testimonyCount = [
+    flags.splitHallAskedOuterShelter,
+    flags.splitHallAskedGateCost,
+    flags.splitHallAskedCargoHold,
+  ].filter(Boolean).length;
+  const testimony = testimonyCount
+    ? `${testimonyCount} ${testimonyCount === 1 ? "cost" : "costs"} of Westroot's choice were named in Split Hall`
+    : "the final evidence carried the argument in Split Hall";
+
+  return `Westroot's witnessed record:\n• First promise: ${firstPromise}.\n• Cargo Siding: ${cargoOutcome}.\n• Rootbread: ${rootbreadOutcome}.\n• Split Hall: ${testimony}.`;
 }

@@ -124,8 +124,8 @@ Visual direction:
 
 ## Short-Term Roadmap
 
-1. Play through Chapter 2 for story feel and map-label taste.
-2. Apply any Westroot Trail map projection tweaks found during playthrough.
-3. Continue extracting chapter story text and interaction helpers from `src/App.tsx`.
-4. Start Chapter 3 as the next vertical slice: story module, Westroot hub map, interactions, and tests.
-5. Add chapter-progress, guest-NPC, and artwork-registry tests as new chapters land.
+1. Human-playtest the completed Chapter 3 route at desktop and phone widths, especially the two full-width ending tableaus.
+2. Run one uninterrupted human Chapter 1–3 session to catch pacing or interaction fatigue that focused automation cannot measure.
+3. Implement Chapter 4 from the existing westward listening-route handoff.
+4. Continue the staged `src/App.tsx` extraction and address the slightly-over-500-KB main bundle as focused technical work.
+5. Continue the source-art, optimized-runtime, and fallback-safe asset workflow as later chapters land.

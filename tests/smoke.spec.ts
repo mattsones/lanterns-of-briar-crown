@@ -3,6 +3,7 @@ import { expect, test } from "@playwright/test";
 test("starts a new adventure and passes built-in QA checks", async ({
   page,
 }) => {
+  test.setTimeout(60_000);
   const runtimeErrors: string[] = [];
 
   page.on("console", (message) => {

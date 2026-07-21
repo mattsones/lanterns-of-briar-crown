@@ -136,7 +136,40 @@ function buildChapter3CargoCheckpoint() {
   };
 }
 
-test("Chapter 3 keeps the Rootbread Promise and renews the Witness Stones in public", async ({ page }) => {
+test("illustrated dialogue keeps its opening copy visible across supported viewports", async ({ page }) => {
+  const viewports = [
+    { width: 1280, height: 720 },
+    { width: 1366, height: 768 },
+    { width: 430, height: 932 },
+    { width: 390, height: 844 },
+  ];
+
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    await page.evaluate(() => window.localStorage.clear());
+    await page.reload();
+    await page.getByRole("button", { name: "Begin Chapter 3 Playtest" }).click();
+    await move(page, "down");
+
+    const dialog = page.getByRole("dialog");
+    const openingCopy = page.getByText("The no-handle door closes behind you without a sound.");
+    const image = page.getByTestId("dialogue-scene-image");
+    await expect(dialog).toHaveAttribute("data-content-layout", "split");
+    await expect(openingCopy).toBeInViewport();
+    await expect(page.getByTestId("dialogue-choices")).toBeInViewport();
+
+    const copyBox = await openingCopy.boundingBox();
+    const imageBox = await image.boundingBox();
+    expect(copyBox).not.toBeNull();
+    expect(imageBox).not.toBeNull();
+    if (viewport.width >= 768) expect(copyBox!.x).toBeGreaterThan(imageBox!.x);
+    else expect(copyBox!.y).toBeLessThan(imageBox!.y);
+  }
+});
+
+test("Chapter 3 real fixture runs uninterrupted through the witnessed Westroot ending", async ({ page }) => {
+  test.setTimeout(120_000);
   await page.addInitScript(() => window.localStorage.clear());
   await page.goto("/");
   await page.getByRole("button", { name: "Begin Chapter 3 Playtest" }).click();
@@ -270,6 +303,50 @@ test("Chapter 3 keeps the Rootbread Promise and renews the Witness Stones in pub
   );
   await expect(page.getByText("Its wheel grooves run deeper into the siding")).toBeVisible();
   await expect(page.getByRole("button", { name: "Open the Cargo Siding and track the missing crate." })).toBeVisible();
+  await page.getByRole("button", { name: "Open the Cargo Siding and track the missing crate." }).click();
+
+  await navigateWestroot(page, { x: 4, y: 1 }, { x: 7, y: 1 }, { holdOpen: true });
+  await expect(page.getByText("a chalk rectangle marks the empty bay")).toBeVisible();
+  await page.getByRole("button", { name: "Check the rail marks and loading ledger." }).click();
+  await expect(page.getByText("Fresh boot scuffs cross the ledger stand")).toBeVisible();
+  await expect(page.getByText("If someone runs, Westroot will be ready.")).toBeVisible();
+  await page.getByRole("button", { name: "Compare this clue with the whole crate record." }).click();
+  await page.getByRole("button", { name: "Call out whoever is hiding behind the crates." }).click();
+  await page.getByRole("button", { name: "Fight the Briar Cargo Runner and Seal-Forged Sentry." }).click();
+  await expect(page.getByText("Checkpoint reached: Westroot").first()).toBeVisible();
+  await expect(page.getByText("The party starts ready, with 4 guard.")).toHaveCount(1);
+  await expect(page.getByText("Choose Liam's action and target.").first()).toBeVisible();
+
+  const attack = page.getByRole("button", { name: /Pebbleknock Slam/ });
+  for (let turn = 0; turn < 35; turn += 1) {
+    const claim = page.getByRole("button", { name: "Claim Victory" });
+    if (await claim.count()) {
+      await claim.first().click();
+      break;
+    }
+    if (await attack.isEnabled().catch(() => false)) await attack.click();
+    await page.waitForTimeout(850);
+  }
+
+  await expect(page.getByText("Cargo Siding Cleared", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Tell Quill to shut the lantern shutter." })).toBeVisible();
+  await page.getByRole("button", { name: "Tell Quill to shut the lantern shutter." }).click();
+  await expect(page.getByText("The powder fails to catch.")).toBeVisible();
+  await page.getByRole("button", { name: "Bring the evidence to Split Hall." }).click();
+
+  await navigateWestroot(page, { x: 7, y: 1 }, { x: 5, y: 2 });
+  await page.getByRole("button", { name: "Use the old road promises as rules for reopening." }).click();
+  await expect(page.getByRole("dialog")).toHaveAttribute("data-content-layout", "stacked");
+  await expect(page.getByText("Caution is not cowardice")).toBeVisible();
+  await page.getByRole("button", { name: "Visit Noma in the Mossgarden." }).click();
+  await expect(page.getByRole("dialog")).toHaveAttribute("data-content-layout", "stacked");
+  await expect(page.getByText("Westroot's witnessed record:")).toBeVisible();
+  await expect(page.getByText(/First promise: Warning/)).toBeVisible();
+  await expect(page.getByText(/the prepared service passage held, and the runner was captured/)).toBeVisible();
+  await expect(page.getByText(/Lio's blue courier knot was found/)).toBeVisible();
+  await expect(page.getByText(/2 costs of Westroot's choice were named/)).toBeVisible();
+  await page.getByRole("button", { name: "Finish Chapter 3 for now." }).click();
+  await expect(page.getByText("Goal: Chapter 3 Complete — Playable Story Ends Here")).toBeVisible();
 });
 
 test("Split Hall simmers before the Hold Bell and does not repeat on walk-through", async ({ page }) => {
@@ -321,7 +398,8 @@ test("Split Hall simmers before the Hold Bell and does not repeat on walk-throug
   );
 });
 
-test("Chapter 3 Cargo Siding resolves into Split Hall and the westward handoff", async ({ page }) => {
+test("focused Cargo Siding fixture preserves the unprepared escape branch", async ({ page }) => {
+  test.setTimeout(90_000);
   const runtimeErrors: string[] = [];
   page.on("console", (message) => {
     if (message.type() === "error") runtimeErrors.push(message.text());
@@ -365,6 +443,7 @@ test("Chapter 3 Cargo Siding resolves into Split Hall and the westward handoff",
   }
 
   await expect(page.getByText("Cargo Siding Cleared", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Tell Quill to shut the lantern shutter." })).toHaveCount(0);
   await page.getByRole("button", { name: "Secure the evidence while the runner escapes." }).click();
   await expect(page.getByText("They ran west")).toBeVisible();
   await expect(page.getByText("Not a public road")).toBeVisible();

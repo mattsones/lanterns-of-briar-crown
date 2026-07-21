@@ -465,8 +465,9 @@ test("the worried traveler portrait and testimony show that the false seal foole
   await page.getByRole("button", { name: "Did you get a look at the order?" }).click();
   travelerDialogue = page.getByRole("dialog", { name: "Worried Traveler" });
   await expect(travelerDialogue).toContainText("The royal crown was pressed right into the red wax");
-  await expect(travelerDialogue).toContainText("So I obeyed it");
-  await expect(travelerDialogue).toContainText("You obey a Crown seal like that");
+  await expect(travelerDialogue).toContainText("So I trusted it");
+  await expect(travelerDialogue).toContainText("A Crown seal is supposed to mean somebody responsible has named a real danger");
+  await expect(travelerDialogue).toContainText("the seal was the only responsible-looking thing about them");
   await expect(travelerDialogue).not.toContainText("copied the shape of command");
   await expect(travelerDialogue).not.toContainText("too clean");
   await expect(

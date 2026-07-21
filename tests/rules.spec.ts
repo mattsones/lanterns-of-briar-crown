@@ -45,7 +45,7 @@ import {
   getCompanionCommandOptions,
   isCompanionConscious,
 } from "../src/game/companions";
-import { getVisitedKey, isBlockedInteractionTile } from "../src/game/map";
+import { getRegionCheckpointLabel, getVisitedKey, isBlockedInteractionTile } from "../src/game/map";
 import { getWestrootMapNpcTokens } from "../src/game/westrootMap";
 import { addBonuses } from "../src/game/stats";
 import { BATTLE_REWARDS } from "../src/data/battleRewards";
@@ -79,6 +79,7 @@ import {
 import { CHAPTER_STORY_PLANS } from "../src/story/chapters2to5";
 import {
   canStartChapter3,
+  buildChapterThreeRecap,
   CHAPTER_3_HUB_NODES,
   CHAPTER_3_STORY,
   isChapter3Complete,
@@ -247,6 +248,29 @@ test("Chapter 3 scaffold has explicit entry, hub, and completion contracts", () 
   expect(CHAPTER_3_HUB_NODES.map((node) => node.id)).toEqual(
     expect.arrayContaining(["first_gate", "witness_stones", "split_hall", "cargo_siding"]),
   );
+});
+
+test("battle checkpoints use the current region's actual name", () => {
+  expect(getRegionCheckpointLabel("hearthhollow")).toBe("South Gate");
+  expect(getRegionCheckpointLabel("rootCellar")).toBe("Old Root Cellar");
+  expect(getRegionCheckpointLabel("westrootHub")).toBe("Westroot");
+  expect(getRegionCheckpointLabel("not-a-region")).toBe("South Gate");
+});
+
+test("Chapter 3 recap preserves the player's consequential choices", () => {
+  const recap = buildChapterThreeRecap({
+    witnessPromiseWarningChosen: true,
+    cargoAmbushPrepared: true,
+    cargoRunnerCaptured: true,
+    rootbreadPromiseKept: true,
+    splitHallAskedOuterShelter: true,
+    splitHallAskedCargoHold: true,
+  });
+
+  expect(recap).toContain("First promise: Warning");
+  expect(recap).toContain("runner was captured");
+  expect(recap).toContain("Rootbread Promise was kept");
+  expect(recap).toContain("2 costs of Westroot's choice were named");
 });
 
 test("companion commands select named abilities with distinct battle effects", () => {

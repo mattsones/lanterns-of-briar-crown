@@ -594,6 +594,10 @@ Mara identifies the relationship clearly: this is not Ada's missing spice crate.
 
 > The loading ledger has no sender's name. Instead, it bears two acknowledgements: a Briar Crown route scratch and an old Westroot gate-account mark. One opened the way from outside. One confirmed it from within.
 
+Fresh boot scuffs also reveal the narrow service passage behind the crates. Quill bars it with the repaired lantern shutter while Bramwell quietly stations two gatekeepers. This deliberate investigation sets `cargoAmbushPrepared`, lets the party begin combat with the initiative and 4 Guard, and makes the runner-capture choice available after victory.
+
+The other inspection choices remain valid fail-forward routes. They reveal enough evidence to confront the enemies and finish the chapter, but the unprepared runner escapes through the service passage after the fight.
+
 ### Open-crate result
 
 The lid gives with a reluctant scrape.
@@ -659,6 +663,8 @@ They throw a fistful of crown-red powder into a lantern shutter.
 
 ### Runner captured outcome
 
+Available only if the service passage was discovered and covered before combat.
+
 The powder fails to catch. Quill's repaired shutter closes with a sharp click, and Bramwell's gatekeepers step through the smoke.
 
 > “Then you can choose to answer questions,” Bramwell says.
@@ -682,6 +688,7 @@ The recovered tag carries a route notation that Noma recognizes but cannot fully
 - Optional: **Cargo Transfer Tag** story item.
 - Set either `cargoRunnerCaptured` or `cargoRunnerEscaped`; both continue to the same chapter resolution.
 - Objective: **Bring the Evidence to Split Hall**.
+- Save combat checkpoints using the active region name; this encounter must report **Westroot**, not Lantern Road.
 
 ---
 
@@ -921,7 +928,8 @@ Companion reactions should be sparse and play after a meaningful choice or revea
 
 - The Willowmark Lens provides richer wording but is not mandatory.
 - The fight is a true simultaneous multi-enemy encounter.
-- The Cargo Runner capture/escape branch may change a later line or reward, not the chapter's completion path.
+- Inspecting the ledger prepares the service passage, grants initiative plus 4 Guard, and unlocks capture. Skipping it fail-forwards to the escape outcome without blocking completion.
+- The Cargo Runner capture/escape branch changes the witnessed ending record, not the chapter's completion path.
 - Mara remains clearly protected and does not enter battle systems.
 
 ## Community Resolution
@@ -933,6 +941,10 @@ Companion reactions should be sparse and play after a meaningful choice or revea
 ---
 
 # Art and Presentation Notes
+
+Illustrated dialogue uses the condensed responsive layout by default: art and required copy sit side by side on wider screens, while required copy precedes the shorter illustration on phones. Choices remain visible outside that scroll region. True chapter-ending tableaus are explicit exceptions: the Chapter 1 completion, Chapter 2 Westroot threshold handoff, Chapter 3 Split Hall resolution, and Chapter 3 Mossgarden closing retain full-width art, with their actions placed after the prose inside the scroll flow.
+
+The Chapter 3 closing also includes a concise witnessed record of the first promise chosen, Cargo Siding capture/escape outcome, Rootbread result, and Split Hall testimony heard.
 
 ## Key scene images
 

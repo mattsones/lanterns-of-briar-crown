@@ -241,6 +241,7 @@ export function buildDefaultFlags(): GameFlags {
     westrootTrustEarned: false,
     witnessStoneSequenceSolved: false,
     willowCargoExposed: false,
+    cargoAmbushPrepared: false,
     cargoRunnerCaptured: false,
     cargoRunnerEscaped: false,
     chapterThreeClear: false,

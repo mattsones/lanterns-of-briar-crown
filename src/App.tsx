@@ -60,6 +60,7 @@ import {
 import {
   buildVisitedMap,
   ensureVisitedIncludesPosition,
+  getRegionCheckpointLabel,
   isBlockedInteractionTile,
   normalizeMapPosition,
 } from "./game/map";
@@ -124,6 +125,7 @@ import {
   WITNESS_STONE_LABELS,
   WITNESS_STONE_RESPONSES,
   appendChapter3CompanionReaction,
+  buildChapterThreeRecap,
 } from "./story/chapter3";
 
 const QuestTab = React.lazy(() =>
@@ -2462,6 +2464,7 @@ ${success ? "The marks settle into meaning as you trace them: water here, shelte
       artKey: "chapterOneEnding",
       name: "Chapter 1 Complete: The Road That Lied",
       size: "wide",
+      contentLayout: "stacked",
       text: CHAPTER_1_STORY.rootCellar.completionTableau,
       choices: [
         companionDoorReaction
@@ -5092,7 +5095,8 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     });
   };
 
-  const openCargoEvidenceDialogue = () =>
+  const openCargoEvidenceDialogue = (assumedFlags = {}) => {
+    const viewFlags = { ...flags, ...assumedFlags };
     setDialogue({
       portrait: "▰",
       name: CHAPTER_3_SCENE_COPY.cargoSiding.name,
@@ -5110,7 +5114,13 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
                   label: "Fight the Briar Cargo Runner and Seal-Forged Sentry.",
                   effect: () => {
                     setDialogue(null);
-                    startBattle(buildEncounterEnemies("westrootCargo"), "westrootCargo");
+                    startBattle(buildEncounterEnemies("westrootCargo"), "westrootCargo", {
+                      heroStarts: viewFlags.cargoAmbushPrepared ? true : undefined,
+                      heroGuard: viewFlags.cargoAmbushPrepared ? 4 : 0,
+                      openingLog: viewFlags.cargoAmbushPrepared
+                        ? "Your ledger work exposed the service passage. The party starts ready, with 4 guard."
+                        : null,
+                    });
                   },
                 },
                 { label: "Back away before they attack.", effect: () => setDialogue(null) },
@@ -5120,18 +5130,21 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         { label: "Bring the evidence to Split Hall later.", effect: () => setDialogue(null) },
       ],
     });
+  };
 
-  const openCargoInspectionDialogue = (result) =>
+  const openCargoInspectionDialogue = (result, flagUpdate = {}) => {
+    if (Object.keys(flagUpdate).length) setFlags((f) => ({ ...f, ...flagUpdate }));
     setDialogue({
       portrait: "▰",
       name: CHAPTER_3_SCENE_COPY.cargoSiding.name,
       text: result,
       choices: [
-        { label: "Compare this clue with the whole crate record.", effect: openCargoEvidenceDialogue },
+        { label: "Compare this clue with the whole crate record.", effect: () => openCargoEvidenceDialogue(flagUpdate) },
         { label: "Keep investigating the siding.", effect: openCargoSidingDialogue },
         { label: "Step back for now.", effect: () => setDialogue(null) },
       ],
     });
+  };
 
   const openCargoSidingDialogue = () => {
     if (!flags.witnessStoneSequenceSolved) {
@@ -5159,7 +5172,13 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           ? { label: "Use the Willowmark Lens.", effect: () => openCargoInspectionDialogue(CHAPTER_3_FULL_SCENE_COPY.cargoSiding.lensResult) }
           : null,
         { label: "Inspect the wax and crate tags closely.", effect: () => openCargoInspectionDialogue(CHAPTER_3_FULL_SCENE_COPY.cargoSiding.manualResult) },
-        { label: "Check the rail marks and loading ledger.", effect: () => openCargoInspectionDialogue(CHAPTER_3_FULL_SCENE_COPY.cargoSiding.ledgerResult) },
+        {
+          label: "Check the rail marks and loading ledger.",
+          effect: () => openCargoInspectionDialogue(
+            `${CHAPTER_3_FULL_SCENE_COPY.cargoSiding.ledgerResult}\n\n${CHAPTER_3_FULL_SCENE_COPY.cargoSiding.preparedResult}`,
+            { cargoAmbushPrepared: true },
+          ),
+        },
         { label: "Open the crate carefully.", effect: () => openCargoInspectionDialogue(CHAPTER_3_FULL_SCENE_COPY.cargoSiding.crateResult) },
         { label: "Leave the crates for now.", effect: () => setDialogue(null) },
       ].filter(Boolean),
@@ -5191,7 +5210,8 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         src: mossgardenClosingMarkScene,
         alt: "Mara and Noma leaving a new courier mark in the lantern-lit Mossgarden.",
       },
-      text: `${CHAPTER_3_SCENE_COPY.closing.text}\n\n${
+      contentLayout: "stacked",
+      text: `${CHAPTER_3_SCENE_COPY.closing.text}\n\n${buildChapterThreeRecap(flags)}\n\n${
         flags.rootbreadPromiseKept
           ? "Chapter 3 is complete. The playable story currently ends here; the westward lead continues in Chapter 4."
           : flags.rootbreadLeadLearned
@@ -5215,6 +5235,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         src: splitHallResolutionScene,
         alt: "Mara, Bramwell, Noma, the Rootmarket baker, and their Stonekin and Mossback neighbors resolve Westroot's future in Split Hall.",
       },
+      contentLayout: "stacked",
       text: withChapter3CompanionReaction(
         `${response}\n\n${CHAPTER_3_FULL_SCENE_COPY.splitHall.fullResolution}`,
         "resolution",
@@ -5388,7 +5409,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       return setDialogue({
         portrait: "▤",
         name: CHAPTER_3_SCENE_COPY.splitHall.name,
-        text: "The hall is full of copied warnings, open ledgers, and people making themselves useful. Westroot is not opening blindly, and it is no longer letting lies travel unchallenged.",
+        text: `The hall is full of copied warnings, open ledgers, and people making themselves useful. Westroot is not opening blindly, and it is no longer letting lies travel unchallenged.\n\n${buildChapterThreeRecap(flags)}`,
         choices: [{ label: "Continue.", effect: () => setDialogue(null) }],
       });
     }
@@ -5484,6 +5505,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
                 src: westrootThresholdOpeningScene,
                 alt: CHAPTER_2_SCENE_COPY.westrootGate.completeSceneAlt,
               },
+              contentLayout: "stacked",
               size: "wide",
               choices: [{ label: CHAPTER_2_SCENE_COPY.westrootGate.labels.continue, effect: enterWestrootHub }],
             });
@@ -5824,7 +5846,11 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     } else if (isCurrentNode) inspectTile(tile);
   };
 
-  const startBattle = (enemies, rewardKey) => {
+  const startBattle = (
+    enemies,
+    rewardKey,
+    options: { heroStarts?: boolean; heroGuard?: number; openingLog?: string | null } = {},
+  ) => {
     const battleEnemies = prepareBattleEnemies(enemies);
     const firstEnemy = battleEnemies[0];
     if (!firstEnemy) return;
@@ -5834,33 +5860,26 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       bonus: Math.floor((derivedStats.Precision + derivedStats.Instinct) / 3),
     });
     const enemyRoll = resolveRoll({ count: 1, sides: 6, bonus: 1 });
-    const heroStarts = heroRoll.total >= enemyRoll.total;
+    const heroStarts = options.heroStarts ?? (heroRoll.total >= enemyRoll.total);
     setBattle({
       enemies: battleEnemies,
       selectedTargetId: firstEnemy.battleId,
       totalEnemies: battleEnemies.length,
       rewardKey,
       turn: heroStarts ? "hero" : "enemy",
-      heroGuard: 0,
+      heroGuard: options.heroGuard || 0,
       cooldowns: {},
       finished: false,
       log: [
         `${battleEnemies.length} ${battleEnemies.length === 1 ? "enemy squares" : "enemies square"} up across the field.`,
-        `${heroStarts ? player.name : "The enemy side"} moves first (${heroRoll.total} vs ${enemyRoll.total}).`,
-      ],
+        options.openingLog,
+        options.heroStarts === true
+          ? `${player.name} moves first because the ambush route is covered.`
+          : `${heroStarts ? player.name : "The enemy side"} moves first (${heroRoll.total} vs ${enemyRoll.total}).`,
+      ].filter(Boolean),
     });
     if (!heroStarts) window.setTimeout(() => enemyTurn(), 350);
-    saveGame(
-      region === "hearthhollow"
-        ? "South Gate"
-        : region === "rootCellar"
-          ? "Old Root Cellar"
-          : region === "westrootTrail"
-            ? "Westroot Trail"
-            : region === "crownDoorDen"
-              ? "Crown Door Den"
-          : "Lantern Road",
-    );
+    saveGame(getRegionCheckpointLabel(region));
   };
   const pushBattleLog = (text) =>
     setBattle((prev) =>
@@ -6163,15 +6182,15 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         choices:
           battle.rewardKey === "westrootCargo"
             ? [
-                {
+                flags.cargoAmbushPrepared ? {
                   label: "Tell Quill to shut the lantern shutter.",
                   effect: () => resolveCargoBattleOutcome("captured"),
-                },
+                } : null,
                 {
                   label: "Secure the evidence while the runner escapes.",
                   effect: () => resolveCargoBattleOutcome("escaped"),
                 },
-              ]
+              ].filter(Boolean)
             : [
                 {
                   label:

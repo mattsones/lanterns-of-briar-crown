@@ -1626,3 +1626,28 @@ Last updated: 2026-07-20
 - `npm.cmd run playtest:smoke` passed: 1 test.
 - `npm.cmd run audit:assets -- --limit=10` passed: 130 production images scanned within the documented category targets.
 - Live browser QA walked every Westroot branch from the First Gate through the market approach/interior, Mossgarden, Witness Stones, Split Hall, Cargo Siding, and sealed hatch. The market, hall, siding, garden, gate, and hatch tokens land on their painted landmarks; the corrected Witness Stones token is fully visible on the pool's lower rim.
+
+## Current Handoff — Illustrated Dialogue And Chapter 3 Consequence Pass
+
+Last updated: 2026-07-21
+
+### What Changed
+
+- Made the condensed responsive art-and-copy layout the default for scene-image dialogues. Desktop places required copy beside the image; phones place copy before a shorter image; actions remain outside the scrolling copy area.
+- Preserved full-width art for the Chapter 1 completion, Chapter 2 Westroot threshold handoff, Chapter 3 Split Hall resolution, and Chapter 3 Mossgarden closing. These explicit `stacked` exceptions place their actions after the resolution prose in the same scroll flow.
+- Added viewport regression coverage at 1280×720, 1366×768, 430×932, and 390×844, starting with Bramwell's previously affected Westroot opening.
+- Replaced the hard-coded battle checkpoint fallback with region-derived labels. Cargo Siding now saves **Checkpoint reached: Westroot**.
+- Turned the Cargo ledger clue into a meaningful investigation advantage. Finding the service passage prepares the ambush, grants the opening turn and 4 Guard, and unlocks the runner-capture outcome. All other evidence routes still reach the fight and fail forward through the escape outcome.
+- Added a persistent Chapter 3 witnessed record covering the first promise, cargo outcome, Rootbread thread, and testimony heard. It appears in the final Mossgarden scene and remains reviewable in Split Hall.
+- Extended the real checked-in level-3 Chapter 3 fixture through the entire Westroot route and actual two-enemy battle. The older boosted Cargo fixture remains only as focused coverage for the unprepared escape branch.
+
+### Verification
+
+- `npm.cmd run build` passed; the existing over-500-KB main-chunk warning remains.
+- `npm.cmd run test:rules` passed: 31 tests.
+- `npm.cmd run playtest:chapter1` passed: 30 tests.
+- `npm.cmd run playtest:chapter2` passed: 31 tests.
+- `npm.cmd run playtest:chapter3` passed: 10 tests.
+- `npm.cmd run playtest:smoke` passed: 1 test.
+- `npm.cmd run audit:assets -- --limit=10` passed: 133 production images scanned within the documented category targets.
+- `git diff --check` passed with normal Windows line-ending warnings only.

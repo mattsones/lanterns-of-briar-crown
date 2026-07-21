@@ -1,4 +1,4 @@
-# Current Project Status — 2026-07-17
+# Current Project Status — 2026-07-21
 
 Branch: `codex/chapter-3-vertical-slice`
 
@@ -22,6 +22,8 @@ This is the concise pickup document for the current illustrated prototype. Histo
 - Dialogues can opt into compact semantic choice groups. The Three-Door Threshold uses responsive door and companion-read rows on wider screens while retaining full-width stacked touch targets on phones.
 - Door close-ups use a split art-and-copy presentation on wider screens, eliminating hidden below-image text and redundant image captions. Their actions are grouped by investigation, character read, and consequence.
 - The Three-Door Threshold uses the same split presentation; on phones its required prose moves ahead of the illustration so the scene never depends on noticing an internal scrollbar.
+- That condensed responsive treatment is now the default for every dialogue with a scene image. Required copy appears beside the art on desktop and before it on phones, while actions remain visible outside the copy scroll region.
+- True chapter-ending tableaus are explicit full-width exceptions. Their actions follow the prose inside the scroll flow so a button never appears to precede unread resolution text.
 - Tile and graph movement, save compatibility, and existing story triggers remain intact.
 
 The implementation and decisions are documented in `docs/planning/gameplay-ux-redesign-plan.md`.
@@ -68,6 +70,9 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 - Chapter 3 dialogue now gates names, terms, and actions behind the conversation that introduces them. Rootmarket initially offers the Stonekin shutter-mender and Mossback baker rather than Quill and Auntie Lume; weathered stones and the sealed hatch likewise remain generically described until Noma and Lume explain them.
 - Liam now returns introductions inside the existing first dialogue with Bramwell, Quill, Lume, and Noma. Each response expresses a different level and kind of outsider trust without adding a separate introduction screen.
 - Rootmarket listening is one-time. Quill, Lume, Noma, the Rootbread child, and the first Split Hall debate retain unanswered questions without replaying their converged speeches, and the Hold Bell waits until the player deliberately steps away from Quill or Noma.
+- The Cargo Siding investigation now rewards deliberate ledger work: spotting and covering the service passage grants the opening turn, 4 Guard, and the runner-capture option. Other clues remain valid fail-forward paths and produce the escape outcome without blocking completion.
+- Westroot battles now save a **Westroot** checkpoint instead of falling through to the old **Lantern Road** label.
+- The closing Mossgarden scene records the first Witness promise, Cargo Siding outcome, Rootbread result, and Split Hall testimony heard. The same recap remains reviewable in the completed Split Hall.
 
 ## Production Art Status
 
@@ -79,28 +84,28 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 - The Chapter 1 ending tableau is wired into the sealed-door proof pickup, and the Root Cellar switches to a boss-free painted background immediately after the Warden is defeated. Both full-resolution PNG sources are preserved under `assets/reference/source-art/`.
 - The tense Split Hall Hold Bell scene is selected and wired before the resolution image. Thin red ceiling cords read as Westroot hold-lines rather than faction decoration.
 - The Rootmarket uneasy-arrival tableau is selected and wired to the location hub while Quill and Auntie Lume retain their individual portraits inside their conversations.
-- The optimized runtime asset set currently contains 130 images and passes the asset audit.
+- The optimized runtime asset set currently contains 133 images and passes the asset audit.
 
 ## Verification At Handoff
 
 ```text
 npm.cmd run build                 passed
-npm.cmd run test:rules            29 passed
+npm.cmd run test:rules            31 passed
 npm.cmd run playtest:chapter1     30 passed
 npm.cmd run playtest:chapter2     31 passed
-npm.cmd run playtest:chapter3      8 passed
+npm.cmd run playtest:chapter3     10 passed
 npm.cmd run playtest:smoke         1 passed
-npm.cmd run audit:assets          130 images scanned; largest assets within targets
+npm.cmd run audit:assets          133 images scanned; largest assets within targets
 git diff --check                 passed (Windows line-ending warnings only)
 ```
 
-Browser QA covered desktop exploration at 1400×900, phone exploration at 430×932, the phone menu sheet, compact phone combat, the Willowmark evidence selection, Root Cellar room-aware fog, the responsive Three-Door close-up/choice layouts, and Westroot's fully revealed map, opening down-arrow move, and initial NPC staging.
+Browser QA covered illustrated dialogue at 1280×720, 1366×768, 430×932, and 390×844; the full real level-3 Chapter 3 fixture; the prepared and fail-forward Cargo outcomes; both full-width Chapter 3 ending tableaus; desktop and phone exploration; compact phone combat; Root Cellar room-aware fog; and Westroot's map and NPC staging.
 
 ## Remaining Work
 
 ### 1. Human Playtesting
 
-1. Play Chapter 3 end to end at desktop width and at approximately 430×932. Focus on pacing, choice clarity, dialogue scrolling around the six Chapter 3 illustrations, and Westroot map readability.
+1. Play Chapter 3 end to end at desktop width and at approximately 430×932. Focus on pacing, choice clarity, and the deliberate full-width treatment of the Split Hall and Mossgarden ending tableaus.
 2. Do one uninterrupted Chapter 1–3 playthrough with the new map-first shell. Automated paths are green, but a continuous human session may expose fatigue, drawer/sheet friction, or poorly timed feedback.
 3. Tune individual Root Cellar room masks only if playtesting shows a chamber revealing too early or leaving important room art hidden.
 
@@ -119,17 +124,13 @@ Use `docs/planning/dialog-stock-icon-replacement-plan.md` as the inventory.
 2. Run a final character-name consistency pass across older planning documents. Runtime intent is Elder Brynn, Sela of the Loom, Mara Brindle, Enna, Hollis, and Ada Willowmarket; legacy asset filenames should not dictate story names.
 3. Human-playtest the Chapter 3 ending before implementing Chapter 4.
 
-### 4. Future Mechanic Candidates
-
-1. **High-perception ambush discovery:** when the party nears an intentionally hidden encounter, make a hidden Perception/Instinct check. An exceptional result should reveal the enemy marker and offer a pre-ambush choice; ordinary results should preserve the scripted surprise. Offer this as one of the options the next time the user asks **“what’s next?”**
-
-### 5. Chapter 4 And 5 Production
+### 4. Chapter 4 And 5 Production
 
 1. Implement the Chapter 4 playable route from the existing Chapter 3 handoff before expanding Chapter 5.
 2. Produce the tracked Chapter 4–5 story-item and enemy art: Folded Map Scrap, Lanternwell Drop, True Seal Fragment, Briar Chain Link, Lio's Courier Knot, Briar Relay Guard, Crown Whisperer, Bracken Voss, Thornseal Guard, and Thornroot Sentry.
 3. Continue using the source-art/alternate/runtime asset workflow and retain fallbacks until each asset passes in-game QA.
 
-### 6. Technical Follow-Ups
+### 5. Technical Follow-Ups
 
 1. The main JavaScript chunk remains slightly above 500 KB. Treat code splitting as a focused performance task.
 2. `src/App.tsx` remains large. Continue the staged extraction in `docs/planning/refactor-roadmap.md`; do not combine a major structural refactor with new story behavior.

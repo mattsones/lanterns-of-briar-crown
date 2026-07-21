@@ -480,7 +480,8 @@ export function DialogueModal({ dialogue, close }) {
   const hasMapVignette = Boolean(MAP_INTERACTION_VIGNETTES[dialogue.mapVignette]);
   const showPortrait = Boolean(portraitImage || portraitAsset) && !hasMapVignette && !dialogue.visual && !sceneImage;
   const usesSplitVisual = dialogue.contentLayout === "split" && Boolean(dialogue.visual);
-  const usesSplitScene = dialogue.contentLayout === "split" && Boolean(sceneImage);
+  const usesStackedScene = dialogue.contentLayout === "stacked" && Boolean(sceneImage);
+  const usesSplitScene = Boolean(sceneImage) && !usesStackedScene;
   const widthClass = dialogue.size === "wide" || dialogue.visual || sceneImage ? "max-w-5xl" : "max-w-3xl";
   const choiceRows = dialogue.choices.reduce((rows, choice, index) => {
     const choiceGroup = dialogue.choiceLayout === "grouped" ? choice.choiceGroup : null;
@@ -509,9 +510,49 @@ export function DialogueModal({ dialogue, close }) {
     scrollRef.current?.scrollTo({ top: 0 });
   }, [dialogue.name, dialogue.text, dialogue.feedback, dialogue.visual, dialogue.mapVignette, sceneImage?.src, dialogue.messages?.length]);
 
+  const dialogueChoices = (
+    <div
+      data-testid="dialogue-choices"
+      className="mt-5 grid gap-2 border-t border-white/10 pt-4"
+    >
+      {choiceRows.map((row) => {
+        const responsiveColumns = row.choices.length >= 4
+          ? "sm:grid-cols-2 lg:grid-cols-4"
+          : row.choices.length === 3
+            ? "sm:grid-cols-2 lg:grid-cols-3"
+            : row.choices.length === 2
+              ? "sm:grid-cols-2"
+              : "grid-cols-1";
+        return (
+          <div
+            key={row.id}
+            data-testid={row.group ? `dialogue-choice-group-${row.group}` : undefined}
+            className={`grid grid-cols-1 gap-2 ${responsiveColumns}`}
+          >
+            {row.choices.map((choice, i) => (
+              <ChoiceButton
+                key={`${choice.label}-${i}`}
+                choice={choice}
+                onChoose={(selected) => selected.effect?.()}
+              />
+            ))}
+          </div>
+        );
+      })}
+    </div>
+  );
+
   return <div className="fixed inset-0 z-[80] flex items-end justify-center bg-black/60 p-4 sm:items-center">
-    <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="dialogue-title" tabIndex={-1} className={`flex max-h-[85vh] w-full ${widthClass} flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900 p-5 shadow-2xl`}>
-      <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto pr-1">
+    <div
+      ref={modalRef}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="dialogue-title"
+      data-content-layout={usesStackedScene ? "stacked" : usesSplitScene || usesSplitVisual ? "split" : "standard"}
+      tabIndex={-1}
+      className={`flex max-h-[85vh] w-full ${widthClass} flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900 p-5 shadow-2xl`}
+    >
+      <div ref={scrollRef} data-testid="dialogue-scroll-region" className="min-h-0 flex-1 overflow-y-auto pr-1">
         <div className={showPortrait ? "flex items-start gap-4" : "block"}>
           {showPortrait ? <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-3xl bg-white/10 text-4xl">
             <span className={portraitImage || portraitAsset ? "opacity-0" : ""}>{dialogue.portrait}</span>
@@ -542,33 +583,9 @@ export function DialogueModal({ dialogue, close }) {
             )}
           </div>
         </div>
+        {usesStackedScene ? dialogueChoices : null}
       </div>
-      <div className="mt-5 grid gap-2 border-t border-white/10 pt-4">
-        {choiceRows.map((row) => {
-          const responsiveColumns = row.choices.length >= 4
-            ? "sm:grid-cols-2 lg:grid-cols-4"
-            : row.choices.length === 3
-              ? "sm:grid-cols-2 lg:grid-cols-3"
-              : row.choices.length === 2
-                ? "sm:grid-cols-2"
-                : "grid-cols-1";
-          return (
-            <div
-              key={row.id}
-              data-testid={row.group ? `dialogue-choice-group-${row.group}` : undefined}
-              className={`grid grid-cols-1 gap-2 ${responsiveColumns}`}
-            >
-              {row.choices.map((choice, i) => (
-                <ChoiceButton
-                  key={`${choice.label}-${i}`}
-                  choice={choice}
-                  onChoose={(selected) => selected.effect?.()}
-                />
-              ))}
-            </div>
-          );
-        })}
-      </div>
+      {!usesStackedScene ? dialogueChoices : null}
     </div>
   </div>;
 }

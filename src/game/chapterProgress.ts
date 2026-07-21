@@ -144,6 +144,7 @@ export const CHAPTER_FLAG_DEFAULTS: Flags = {
   westrootTrustEarned: false,
   witnessStoneSequenceSolved: false,
   willowCargoExposed: false,
+  cargoAmbushPrepared: false,
   cargoRunnerCaptured: false,
   cargoRunnerEscaped: false,
   chapterThreeClear: false,
