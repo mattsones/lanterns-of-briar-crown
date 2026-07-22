@@ -200,7 +200,7 @@ Use only non-readable marks, route notches, and simple pictograms. The object sh
 
 # Batch C — Optional Illustrated Dialogue Scenes
 
-These eight scenes make Chapter 3 fully illustrated, and all eight are now represented by selected runtime art. Preserve facial, ancestry, room, and prop continuity with those selected assets. Use opaque 16:9 images, ideally 1920 x 1080 or larger.
+These eight scenes make Chapter 3 fully illustrated. Seven have selected runtime art. The current Witness Stones v02 image preserves the correct four symbols but does not show the public act strongly enough, so Chapter 3 release-candidate closeout includes the C2 replacement below. Preserve facial, ancestry, room, and prop continuity with the selected assets. Use opaque 16:9 images, ideally 1920 x 1080 or larger.
 
 ## C1. Westroot Arrival
 
@@ -215,17 +215,19 @@ Show root-wrapped stone homes, modest balconies, warm gold-and-green moss lanter
 Use warm stone gray, bark brown, moss green, lantern gold, and minimal invasive crown-red. No text, signs, labels, or UI symbols.
 ```
 
-## C2. Witness Stones
+## C2. Witness Stones Public Renewal Replacement
 
-**Suggested source filename:** `witness-stones-scene-v01.png`<br>
+**Suggested source filename:** `witness-stones-public-renewal-scene-v03.png`<br>
 **Target runtime folder:** `assets/scenes/`
 
 ```text
-Create a 16:9 hand-painted storybook fantasy dialogue scene for Chapter 3 of Liam's Game: the Witness Stones in the Mossgarden of Remembering. In a shallow circular stone water channel, show four worn standing stones with clear non-text carvings: a hand, an outward lantern above a broken bridge, a roof beneath a root, and a cup beside a spring mark. A fifth newer crooked slat or plaque with a thorn-crown-like mark has been crudely nailed over part of the oldest stone.
+Create a 16:9 hand-painted storybook fantasy dialogue scene for Chapter 3 of Liam's Game: Westroot publicly reopening the Witness Stone walk. In a shallow circular stone water channel, preserve exactly four worn standing stones with clear non-text carvings: a hand for Witness, an outward lantern above a broken bridge for Warning, a roof beneath a root for Shelter, and a cup beside a spring mark for Water.
 
-Frame the stones with pale moss, small tablet markers, gentle roots, quiet water, and sheltered gold-green lantern light. The composition should make the four true road needs legible without turning into a game puzzle UI. A Mossback hand holding a small cleaning brush may appear at the edge, but do not make this a character portrait. It must feel like an old community lesson about witness, warning, shelter, and water.
+At the front of the circle, Bramwell Gatehand and Noma Greenstill lift or remove the same low oak-and-brass hold-shutter together. Keep both established character designs recognizable and equally active. Near them, Quill Pebbleturn records the changed order in a small open ledger with unreadable marks. Around the four stones, a modest mixed group of Stonekin and Mossback neighbors takes responsibility for the work: an outer-shelter runner holds the unanswered water tally, Auntie Lume or another neighbor carries a small basket of bread and folded blankets for Shelter, and a gatekeeper prepares an outward warning slate. Mara may watch from the edge with her blue wrist string, but the customizable player hero must not appear.
 
-No readable text, labels, numbers, or glowing magical runes. Avoid heavy fog, ominous horror, or excessive false-authority red.
+The scene should read immediately as a civic action witnessed by a community, not as an empty monument, private ritual, game puzzle, or triumphant festival. Use attentive faces, practical props, and several hands turned toward the work. Frame the stones with pale moss, small tablet markers, gentle roots, quiet water, and sheltered gold-green lantern light. Keep the four carvings legible without making them UI buttons. There is no false Crown plaque in this revised scene.
+
+No readable text, labels, numbers, glowing magical runes, cheering crowd, royal ceremony, heavy fog, ominous horror, or excessive false-authority red.
 ```
 
 ## C3. Cargo Siding Evidence

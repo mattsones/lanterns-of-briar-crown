@@ -77,7 +77,7 @@ export const CHAPTER_STORY_PLANS: Record<Exclude<ChapterId, 1>, ChapterStoryPlan
       "Reveal Westroot was opened from both inside and outside",
     ],
     keyLines: [
-      "Caution is not cowardice. But if a shield never lowers, it becomes a wall.",
+      "A shield must know what it covers. And when to lower.",
       "Roots survive by holding fast. They also survive by sharing water.",
       "Westroot was opened from inside and outside.",
     ],

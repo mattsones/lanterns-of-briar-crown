@@ -38,7 +38,7 @@ Stonekin elder and keeper of the First Westroot Gate. Bramwell is careful, tired
 
 **Voice:** Short sentences, concrete images, no grand speeches. He calls danger by its plain name.
 
-> “Caution is not cowardice. But if a shield never lowers, it becomes a wall.”
+> “A shield must know what it covers. And when to lower.”
 
 ## Noma Greenstill
 
@@ -104,7 +104,7 @@ Outdoor character markers follow story staging:
 | 1 | **Enter Westroot** — The First Westroot Gate is open, but the people beneath the hill do not yet know why you came. | Bramwell grants a limited welcome. |
 | 2 | **Listen Before You Ask** — Meet the people keeping Westroot safe and learn why the gate's opening has divided them. | Hear Bramwell, Noma, and one Rootmarket voice. |
 | 3 | **Answer the Hold Bell** — A counterfeit Willow-marked crate vanished from its assigned hold bay under a correct Westroot signal. Hear what the sudden closure protects and who it leaves outside. | Trigger the Hold Bell after hearing Quill and Noma. |
-| 4 | **Hear Westroot at Split Hall** — Bramwell wants three days sealed; the outer shelter has missed its water call. | Hear at least one piece of community testimony. |
+| 4 | **Hear Westroot at Split Hall** — Bramwell wants three days sealed; Westroot has missed two scheduled water calls to the outer shelter. | Hear at least one piece of community testimony. |
 | 5 | **Renew the Road Promises** — Join Westroot as it decides publicly how caution and care will guide the investigation. | Choose which promise Westroot acts on first; the community renews all four together. |
 | 6 | **Track the Missing Willow-Marked Crate** — This counterfeit shipment is not Ada's original spice crate; wheel marks lead from its empty hold bay into the locked inner siding. | Follow the physical trail, inspect the relocated crate, and defeat the enemies still hiding there. |
 | 7 | **Bring the Evidence to Split Hall** — Westroot needs the full truth: the danger outside and the opening made from within. | Resolve the Split Hall scene. |
@@ -268,7 +268,7 @@ Each informational topic disappears only after it has been asked. Its response o
 
 ### Old-rule response
 
-> “Witness Stones, past the Mossgarden. Noma tends them. Do not call them a puzzle while they can hear you. They will call you a puzzle back.”
+> “The Witness Stones are past the Mossgarden. Noma tends them,” Quill says. “Warnings, water calls, shelter marks—Westroot gives each one a sender, a witness, and someone responsible for what follows. Bramwell closed the walk when the Willow crate came under hold.”
 
 ### Cargo response
 
@@ -404,7 +404,7 @@ Noma Greenstill is kneeling beside a tablet with a brush in one hand and a cup o
 
 ### Names response
 
-> “Witnesses. Travelers. Bridge-menders. People who left a warning before it was fashionable to call one another frightened. The road remembers names because a missing person is never only a missing number.”
+> “Witnesses. Travelers. Bridge-menders. Some names came from the Witness Stones after a warning, a repair, or a missed return. The road remembers names because a missing person is never only a missing number.”
 
 ### Courier response
 
@@ -412,17 +412,19 @@ Noma Greenstill is kneeling beside a tablet with a brush in one hand and a cup o
 
 ### Gate response
 
-> “Bramwell has buried friends. I will not call his caution small. But a root that drinks only its own water eventually has nothing left to share.”
+> “Bramwell has buried friends. His caution carries their names. But a root that drinks only its own water eventually has nothing left to share.”
 
 ### Converged text, shown after the first substantive answer only
 
-Noma leads you to four weathered stones set in a shallow water circle. A low oak-and-brass shutter bars the approach. Its latch bears Bramwell's Gatehand mark, pressed cleanly and in public.
+Noma leads you to four weathered stones set in a shallow water circle. A low oak-and-brass shutter bars the approach. Its latch bears Bramwell's public Gatehand seal. The slate beside it names the Willow cargo hold, closes the stone walk and listening marks, and names Split Hall as the place of review.
 
-“Bramwell ordered the walk closed when the Willow crate was placed under hold,” Noma says. “He had the right, and reason, to do it. The stones are where Westroot makes shared promises. One frightened person should not renew them alone—not Bramwell, and not me.”
+“Travelers once left route testimony here—washed bridges, safe shelters, names of those who passed,” Noma says. “Westroot still brings every warning, water call, and shelter promise here so the responsible hands can be witnessed. Bramwell's seal names him. That is why the hold carries weight.”
 
-Mara studies the honest mark on the latch.
+Mara looks toward the tally hook beside the shutter.
 
-“So the question is not whether we listen to the Gatehand,” she says. “It is whether the whole town keeps listening when the danger changes.”
+“And the outer shelter's water call?”
+
+“Waiting for the witnessed mark it needs before it can leave,” Noma says. “Until it does, Westroot cannot hear their answer.”
 
 After this explanation, any unanswered names, courier, or closing-gate topic remains available. The player may ask another question, examine the Witness Stones, or thank Noma and leave. The Hold Bell waits for that deliberate transition instead of replacing the remaining questions.
 
@@ -453,7 +455,7 @@ This crisis is mandatory after the player has heard both Quill and Noma. It must
 
 A single low bell rolls through the hill. Market sounds stop and lantern shutters close in sequence. A runner reports that the false Willow-marked shipment is gone from its assigned hold bay, while the ledger and siding door still claim it has not moved.
 
-Bramwell orders the First Gate and side passages closed until Westroot knows whose mark moved the cargo. Noma objects that the outer shelter has missed its water tally and will disappear from Westroot's hearing if every listening mark is hooded.
+Bramwell orders the First Gate and side passages closed until Westroot knows whose mark moved the cargo. Noma objects that the outer shelter is due its water call: the call must leave under a witnessed mark at the stones, and closing every listening mark prevents Westroot from sending it or receiving the shelter's answer.
 
 The village divides personally rather than by ancestry. A cautious Mossback pipe-mender wants the gate sealed after losing his sister to a false order. A young Stonekin relay runner argues that his father is one of six people waiting at the outer shelter. Stonekin and Mossbacks stand on both sides.
 
@@ -483,7 +485,7 @@ Bramwell asks for three days sealed so every gate-account mark can be checked. N
 
 The player may hear three independent pieces of testimony:
 
-- **Outer shelter:** six named people have missed two water calls.
+- **Outer shelter:** Westroot sends a call every second water bell and the six named people return their headcount and need; two calls have been missed.
 - **Gate cost:** Bramwell names the people already lost when false warnings reached Westroot homes.
 - **Cargo hold:** the correct private timing suggests internal knowledge, but Noma stops the hall from inventing a traitor before evidence exists.
 
@@ -510,13 +512,13 @@ Use `split-hall-hold-debate-scene-v01`: the same room and character continuity a
 
 ### Why the approach is closed
 
-The low wooden barrier on the Westroot map is a legitimate oak-and-brass **hold-shutter**, not Briar Crown construction. Bramwell ordered it closed when the suspicious Willow crate was placed under hold, before the party arrived. A Gatehand has limited authority to close a route or civic signal during an emergency, and Westroot recognizes that authority.
+The low wooden barrier on the Westroot map is an oak-and-brass **hold-shutter** bearing Bramwell's public Gatehand seal. He ordered it closed when the suspicious Willow crate was placed under hold, before the party arrived. A Gatehand has limited authority to pause a route or civic signal during an emergency, provided the order names the responsible officer, its scope, and its place of review.
 
-The shutter therefore remains inaccessible through the first Hold Bell debate. The conflict is not that Bramwell was wrong to act. It is whether a temporary safeguard still protects the community after the danger changes and the closure begins abandoning named people outside it.
+The shutter therefore remains in place through the first Hold Bell debate. It pauses the stone walk and its listening marks while the cargo risk is reviewed. Once the crate moves under hold and the outer shelter misses two water calls, Split Hall has new facts with which to judge whether that scope still protects Westroot.
 
 Before Split Hall acts, inspection should make the boundary clear:
 
-> The oak crossbar is ordinary Westroot work: sound hinges, a public Gatehand seal, and a small slate naming the Willow cargo hold. Nothing about it is counterfeit. Its danger is simpler—the temporary answer may remain after the question has changed.
+> The oak crossbar is sound Westroot work. Bramwell's public Gatehand seal sits beside a slate naming the Willow cargo hold, the closed stone walk and listening marks, and Split Hall review. Anyone who reads it knows who ordered the closure, what it covers, and where it must be questioned.
 
 ### Public opening
 
@@ -524,17 +526,17 @@ After the first Split Hall testimony, Bramwell, Noma, Quill, Lume, Mara, and nei
 
 Bramwell places one hand on its latch.
 
-> “I ordered this closed when the Willow crate was placed under hold. A Gatehand is allowed to do that when a route may be carrying danger. The mistake was not closing it. The mistake was keeping the same answer after the danger changed.”
+> “I closed this walk when the Willow crate came under hold. The crate moved anyway. Westroot has missed two water calls to six people at the outer shelter. This shutter is holding the wrong thing.”
 
 Noma takes the other latch.
 
-> “And the answer is not to pretend caution was cowardice. We open this together, with the danger named.”
+> “Then we open it together and put the new order under both our names.”
 
 They remove the hold-shutter together. This is the chapter's first visible act of reconciliation: Bramwell accepts that lawful authority must remain accountable, and Noma affirms that caution and responsible leadership are necessary.
 
 ### The player's choice
 
-The stones are not a memory test and have no correct sequence. The player chooses which promise Westroot should act on first in the present crisis:
+The four stones turn Westroot's road commitments into witnessed public work. The player chooses which promise Westroot should act on first in the present crisis:
 
 | Promise | Immediate public action |
 |---|---|
@@ -543,7 +545,7 @@ The stones are not a memory test and have no correct sequence. The player choose
 | **Shelter** | Lume and the gatekeepers count beds, food, and every person the closure must still protect. |
 | **Water** | The missed water tally is sent with two witnesses watching the signal leave and its answer return. |
 
-The chosen stone warms first. Then Westroot's neighbors activate the other three—not in a hierarchy or sequence, but as interdependent promises held by different hands.
+The chosen stone warms first. Then Westroot's neighbors take up the work represented by the other three, with a named hand responsible for each action.
 
 The scene's moral distinction is **trustworthy authority versus counterfeit authority**, not obedience versus independence. A good instruction comes from someone who has accepted responsibility, names the danger and the people affected, and remains answerable when circumstances change. The Briar Crown corrupts trust by copying legitimate marks and signals while refusing those responsibilities.
 
@@ -752,7 +754,7 @@ Quill sets the cracked crown slat beside the evidence.
 
 Bramwell looks at the old road phrase for a long time.
 
-“Caution is not cowardice,” he says. “But if a shield never lowers, it becomes a wall.”
+“A shield must know what it covers,” he says. “And when to lower.”
 
 Noma's expression softens.
 

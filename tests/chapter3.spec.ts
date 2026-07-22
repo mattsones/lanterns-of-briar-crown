@@ -216,7 +216,8 @@ test("Chapter 3 real fixture runs uninterrupted through the witnessed Westroot e
   await expect(page.getByText("Named hands are easier to ask for help.")).toBeVisible();
   await page.getByRole("button", { name: "What does that shutter do?" }).click();
   await page.getByRole("button", { name: "How did the old road keep its signals clear?" }).click();
-  await expect(page.getByText("Witness Stones, past the Mossgarden.")).toBeVisible();
+  await expect(page.getByText("The Witness Stones are past the Mossgarden.")).toBeVisible();
+  await expect(page.getByText("Westroot gives each one a sender, a witness, and someone responsible")).toBeVisible();
   await page.getByRole("button", { name: "Ask Quill about something else." }).click();
   await expect(page.getByRole("button", { name: "How did the old road keep its signals clear?" })).toHaveCount(0);
   await page.getByRole("button", { name: "What is the green wax in that ledger?" }).click();
@@ -249,13 +250,15 @@ test("Chapter 3 real fixture runs uninterrupted through the witnessed Westroot e
 
   await navigateWestroot(page, { x: 7, y: 5 }, { x: 3, y: 0 });
   await expect(page.getByText("Do not step on the names")).toBeVisible();
-  await expect(page.getByText("Names are not proof")).toBeVisible();
+  await expect(page.getByText("Names tell us who a question belongs to")).toBeVisible();
   await page.getByRole("button", { name: "We need to find the truth about a missing courier." }).click();
+  await expect(page.getByText("Waiting for the witnessed mark it needs before it can leave")).toBeVisible();
   await page.getByRole("button", { name: "Ask Noma something else." }).click();
   await page.getByRole("button", { name: "What are these names?" }).click();
   await expect(page.getByText("Lio would have hated that")).toHaveCount(0);
   await page.getByRole("button", { name: "Thank Noma and keep exploring." }).click();
   await expect(page.getByText("The village does not divide cleanly. It divides personally.")).toBeVisible();
+  await expect(page.getByText("The call leaves under a witnessed mark at the stones")).toBeVisible();
   await page.getByRole("button", { name: "Who moved a crate under hold?" }).click();
   await expect(page.getByText("which signal my watch was duty-bound to follow")).toBeVisible();
   await page.getByRole("button", { name: "Go to Split Hall." }).click();
@@ -285,9 +288,9 @@ test("Chapter 3 real fixture runs uninterrupted through the witnessed Westroot e
     "src",
     /witness-stones-public-renewal-scene-v02\.webp/,
   );
-  await expect(page.getByText("I ordered this closed when the Willow crate was placed under hold")).toBeVisible();
-  await expect(page.getByText("The mistake was keeping the same answer after the danger changed")).toBeVisible();
-  await expect(page.getByText("We open this together, with the danger named")).toBeVisible();
+  await expect(page.getByText("The crate moved anyway")).toBeVisible();
+  await expect(page.getByText("This shutter is holding the wrong thing")).toBeVisible();
+  await expect(page.getByText("put the new order under both our names")).toBeVisible();
   await page.getByRole("button", { name: "Inspect the stone carvings." }).click();
   await expect(page.getByText("A hand pressed to stone beside a simple line")).toBeVisible();
   await expect(page.getByText("OBEY CROWN DETOUR")).toHaveCount(0);
@@ -296,7 +299,7 @@ test("Chapter 3 real fixture runs uninterrupted through the witnessed Westroot e
   await page.getByRole("button", { name: /^Begin with Warning/ }).click();
 
   await expect(page.getByText("warning the people who cannot hear this bell")).toBeVisible();
-  await expect(page.getByText("The road holds because different hands keep them together")).toBeVisible();
+  await expect(page.getByText("Around the circle, the other work begins")).toBeVisible();
   await expect(page.getByTestId("map-background")).toHaveAttribute(
     "src",
     /westroot-hub-map-v02-open-stones\.webp/,
@@ -337,7 +340,7 @@ test("Chapter 3 real fixture runs uninterrupted through the witnessed Westroot e
   await navigateWestroot(page, { x: 7, y: 1 }, { x: 5, y: 2 });
   await page.getByRole("button", { name: "Use the old road promises as rules for reopening." }).click();
   await expect(page.getByRole("dialog")).toHaveAttribute("data-content-layout", "stacked");
-  await expect(page.getByText("Caution is not cowardice")).toBeVisible();
+  await expect(page.getByText("A shield must know what it covers")).toBeVisible();
   await page.getByRole("button", { name: "Visit Noma in the Mossgarden." }).click();
   await expect(page.getByRole("dialog")).toHaveAttribute("data-content-layout", "stacked");
   await expect(page.getByText("Westroot's witnessed record:")).toBeVisible();
@@ -452,7 +455,7 @@ test("focused Cargo Siding fixture preserves the unprepared escape branch", asyn
   await navigateWestroot(page, { x: 7, y: 1 }, { x: 5, y: 2 });
   await expect(page.getByText("They learned which parts of us were afraid")).toBeVisible();
   await page.getByRole("button", { name: "Use the old road promises as rules for reopening." }).click();
-  await expect(page.getByText("Caution is not cowardice")).toBeVisible();
+  await expect(page.getByText("A shield must know what it covers")).toBeVisible();
   await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute(
     "src",
     /split-hall-resolution-scene-v03\.webp/,

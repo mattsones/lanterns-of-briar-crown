@@ -105,6 +105,7 @@ Do not start Chapter 4 implementation until these gates are resolved:
 - [ ] Human-play Chapter 3 end to end at desktop width.
 - [ ] Human-play Chapter 3 at approximately 430x932.
 - [ ] Run one uninterrupted Chapters 1-3 session with the map-first shell.
+- [ ] Replace `witness-stones-public-renewal-scene-v02.webp` with a public-renewal illustration that visibly includes Bramwell and Noma opening the hold, Quill recording the order, and neighbors taking responsibility at the four stones; preserve the four established symbols and fallback-safe scene wiring.
 - [ ] Decide which remaining Chapter 3 findings block a release candidate.
 - [ ] Create a canonical `public/saves/chapter-3-complete.json` fixture.
 - [ ] Verify that the fixture satisfies every Chapter 4 entry requirement.

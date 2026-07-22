@@ -1026,7 +1026,7 @@ export default function LiamsGamePrototype() {
     setDialogue({
       portrait: "!",
       name: "Witness Stone Hold Notice",
-      text: `${CHAPTER_3_FULL_SCENE_COPY.witnessStones.shutterInspection}\n\nA posted notice closes the walk between the Mossgarden road and the Witness Stones while the Willow cargo hold is reviewed. The shutter will stay in place until Split Hall hears why it was closed and who the closure leaves outside.`,
+      text: `${CHAPTER_3_FULL_SCENE_COPY.witnessStones.shutterInspection}\n\nThe hold remains until Split Hall reviews both the cargo danger and the unanswered outer-shelter call.`,
       choices: [
         {
           label: "Respect the hold and stay on this side.",
@@ -4944,7 +4944,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       return setDialogue({
         portrait: "◌",
         name: "Closed Witness Stone Walk",
-        text: "A low oak-and-brass hold-shutter crosses the only approach to four weathered stones. Its latch bears a clean Gatehand seal and a slate naming the Willow cargo hold. This is an official Westroot safeguard, not a hostile barricade. The Mossback caretaker in the nearby garden may know why the stones were closed.",
+        text: "A low oak-and-brass hold-shutter crosses the only approach to four weathered stones. The public seal names Bramwell Gatehand. The slate lists the Willow cargo hold, the stone walk and listening marks, and review at Split Hall. The Mossback caretaker in the nearby garden may know what work has been paused here.",
         choices: [{ label: "Respect the hold and step back.", effect: () => setDialogue(null) }],
       });
     }
@@ -4955,7 +4955,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       return setDialogue({
         portrait: "!",
         name: "Witness Stone Hold-Shutter",
-        text: `${CHAPTER_3_FULL_SCENE_COPY.witnessStones.shutterInspection}\n\nNoma keeps their hands away from Bramwell's latch. \"Not until the hall has named what it is afraid of losing,\" they say. \"A safeguard deserves an honest reason to close and an honest reason to open.\"`,
+        text: `${CHAPTER_3_FULL_SCENE_COPY.witnessStones.shutterInspection}\n\nNoma keeps their hands away from Bramwell's latch. \"The hall hears both costs first,\" they say. \"Then Bramwell and I can change this order in public.\"`,
         choices: [{ label: viewFlags.westrootHoldBellRung ? "Hear Westroot at Split Hall first." : "Leave the lawful hold in place.", effect: () => setDialogue(null) }],
       });
     }
@@ -4963,7 +4963,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       return setDialogue({
         portrait: "◌",
         name: CHAPTER_3_SCENE_COPY.witnessStones.name,
-        text: "The hold-shutter stands open. Witness, Warning, Shelter, and Water glow around the clear channel—not as a sequence, but as promises Westroot renewed together. Bramwell and Noma have opened the Cargo Siding under shared witness.",
+        text: "The hold-shutter stands open. Fresh witness tags hang beside the four stones, and the outer shelter's answered water tally rests at Water. The Cargo Siding order now bears Bramwell's and Noma's names.",
         choices: [{ label: "Continue.", effect: () => setDialogue(null) }],
       });
     }

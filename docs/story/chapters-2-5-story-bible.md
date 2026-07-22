@@ -736,9 +736,9 @@ The heroic path is not reckless openness or fearful closure. It is truthful open
 
 ## Public Renewal: The Witness Stones
 
-The Witness Stones are not a puzzle or a test of whether the party memorized the old signs. They are Westroot's civic place for renewing four shared road promises: Witness, Warning, Shelter, and Water.
+The Witness Stones are Westroot's civic place for recording route testimony and renewing four shared road promises: Witness, Warning, Shelter, and Water. Warnings, water calls, and shelter marks receive a named sender, witness, and responsible responder there.
 
-When the suspicious Willow crate was first placed under hold, Bramwell lawfully closed the stone walk with a Gatehand's oak-and-brass hold-shutter. Westroot tolerates the barrier because it is an accountable emergency safeguard, publicly marked and imposed by someone responsible for the gate. The chapter's conflict is not whether obedience or caution is bad. It is whether a temporary order remains responsible when the danger changes and its costs acquire names.
+When the suspicious Willow crate was first placed under hold, Bramwell closed the stone walk and listening marks with a Gatehand's oak-and-brass hold-shutter. Its public slate names Bramwell, the Willow cargo hold, the order's scope, and Split Hall review. Once the crate moves under hold and Westroot fails to complete two scheduled water calls with the outer shelter, the facts supporting that scope have changed and the community must answer for both dangers.
 
 After the first Split Hall debate, Bramwell and Noma remove the shutter together. The player chooses which promise Westroot should act on first in the present crisis. Neighbors from both sides then activate the other three stones together.
 
@@ -1470,7 +1470,7 @@ Lio is rescued. The Briar Crown is revealed as a faction network hijacking roads
 ## Chapter 3 — When Westroot Debates Closing the Gate
 
 **Rowan:**  
-“Caution is not cowardice. But if a shield never lowers, it becomes a wall.”
+“A shield must know what it covers. And when to lower.”
 
 **Tilda:**  
 “I understand hiding. Big fan, personally. But hiding forever is just being captured by your own front door.”

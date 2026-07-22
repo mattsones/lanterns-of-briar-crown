@@ -1679,3 +1679,46 @@ Branch: `codex/chapter-3-vertical-slice`
 ### Canonical Pickup
 
 Use `docs/playtest-notes/2026-07-17-current-status.md` for current game state and `docs/planning/chapter-4-development-process.md` for the next development-process gates. Do not start Chapter 4 content by replaying or extending the user-provided completed save; first create and validate the canonical Chapter 4-ready fixture described in the plan.
+
+## Current Handoff — Witness Stones Civic-Clarity Pass
+
+Last updated: 2026-07-21
+
+Branch: `codex/chapter-3-vertical-slice`
+
+### What Changed
+
+- Reframed the Witness Stones in playable dialogue as Westroot's working civic site for route testimony, warnings, water calls, shelter marks, and named responsibility.
+- Replaced Quill's retired-puzzle disclaimer with the sender/witness/responder practice and connected Noma's name tablets to recorded road testimony.
+- Made the hold-shutter legible through its public seal, named scope, and Split Hall review instead of narrator assurances about what it is not.
+- Connected the closed stone walk directly to the outer shelter's blocked water response before the Hold Bell and in the optional pre-bell hall scene.
+- Rewrote Bramwell and Noma's reopening around changed facts: the crate moved under hold and six people missed two water calls. The renewal now shows the community taking up concrete work without sequence or hierarchy disclaimers.
+- Replaced the unsupported "Caution is not cowardice" defense with Bramwell's concrete shield rule.
+- Added the public-renewal scene replacement to Chapter 3 release-candidate closeout and wrote the v03 art brief. The current v02 asset remains wired until that later art pass.
+
+### Verification
+
+- `npm.cmd run build` passed; the existing over-500-KB main-chunk warning remains.
+- `npm.cmd run test:rules` passed: 31 tests.
+- `npm.cmd run playtest:chapter3` passed: 10 tests.
+- `git diff --check` passed with normal Windows line-ending warnings only.
+
+## Current Handoff — Chapter 3 Story-Clarity Audit
+
+Last updated: 2026-07-21
+
+Branch: `codex/chapter-3-vertical-slice`
+
+### What Was Discovered
+
+- Repeated human playthrough still requires unsupported inference about Lio's route, the Rootbread hatch, the counterfeit crate, Westroot's recent openings, and the final relationship with Bramblecross.
+- The chapter currently conflates historical withdrawal, normal hidden operation, the Briar breach, the limited Willow hold, the Hold Bell lockdown, the Witness Stone reopening, and the final compact under generic open/closed language.
+- The current Rootbread completion does not dramatize an action that keeps the promise, and no physical transfer mechanism explains how food or Lio's string crossed a sealed hatch.
+- The cargo evidence can reasonably imply that Lio was physically inside the crate even though the likely intended meaning is that the Briar Crown processed him as freight while moving him beside the shipment.
+- The existing story bible does not settle the historical event that removed Westroot from public maps, so the missing explanation cannot be repaired honestly through dialogue alone.
+
+### Durable Discussion Record
+
+Use `docs/story/chapter-3-story-clarity-audit.md` for the full continuity audit, proposed coherent backstory, plain-language timeline, unresolved story decisions, and recommended revision process.
+
+The proposal is deliberately marked non-canonical. Resume by approving or revising its eight story decisions, then create the route diagram and player-knowledge ladder before performing another playable-text pass.
