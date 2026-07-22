@@ -250,7 +250,7 @@ Add tests after relevant logic is extracted.
 
 # Phase 7 — Chapter 2 Completion
 
-Chapter 2 implementation is already underway. Complete it before starting Chapter 3 code.
+Status: complete. Chapter 2 is playable through the First Westroot Gate and has automated clean, standard, and messy outcome coverage.
 
 - Keep Mara as a non-combat guest, not a battle companion.
 - Finish the Westroot Trail flow from briefing through the First Westroot Gate.
@@ -263,9 +263,9 @@ Chapter 2 implementation is already underway. Complete it before starting Chapte
 
 # Phase 7.5 — Post-Chapter 2 Technical Hardening
 
-After Chapter 2 ships, take one focused technical hardening pass before building Chapter 3 content.
+Status: complete. The focused hardening pass landed before Chapter 3 implementation.
 
-Use `docs/planning/post-chapter-2-technical-hardening.md` as the pickup plan. The priorities are:
+The completed work is documented in `docs/planning/post-chapter-2-technical-hardening.md`. Its priorities were:
 
 - lock a Chapter 2 complete / Chapter 3 ready save fixture;
 - extract stable Chapter 2 scene text from `App.tsx`;
@@ -280,6 +280,14 @@ Keep this pass small and playable. It should reduce Chapter 3 risk, not become a
 ---
 
 # Phase 8 — Chapters 3-5 Vertical Slices
+
+Current status:
+
+- Chapter 3 has a complete automated playable route and production art; final human pacing and uninterrupted-playthrough signoff remain.
+- Chapter 4 has story-bible direction but no playable implementation or canonical ready fixture yet.
+- Chapter 5 remains planned.
+
+Use `docs/planning/chapter-4-development-process.md` as the required process for closing Chapter 3 and starting Chapter 4. It adds an interaction-state matrix, a Folded Map graybox gate, explicit human-QA milestones, and tooling prerequisites to the general vertical-slice order below.
 
 Each later chapter should land in this order:
 

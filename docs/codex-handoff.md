@@ -1651,3 +1651,31 @@ Last updated: 2026-07-21
 - `npm.cmd run playtest:smoke` passed: 1 test.
 - `npm.cmd run audit:assets -- --limit=10` passed: 133 production images scanned within the documented category targets.
 - `git diff --check` passed with normal Windows line-ending warnings only.
+
+## Current Handoff — Chapter 2-3 Retrospective And Chapter 4 Process Plan
+
+Last updated: 2026-07-21
+
+Branch: `codex/chapter-3-vertical-slice`
+
+### What Changed
+
+- Added `docs/planning/chapter-4-development-process.md` as the canonical development-process plan for closing Chapter 3 and building Chapter 4.
+- Recorded the Chapter 2 and Chapter 3 process retrospective, quantitative evidence, practices to preserve, current structural risks, milestone vocabulary, and scope guardrails.
+- Added required Chapter 3 human-signoff and Chapter 4-ready-fixture gates before Chapter 4 implementation.
+- Added an interaction-state matrix and a standalone Folded Map graybox gate so Chapter 4's central puzzle is validated before surrounding content and production art.
+- Added a prioritized tooling backlog covering verification tiers, reusable Playwright fixtures, stable scene/action test IDs, chapter-contract validation, CI chapter coverage, asset enforcement/dry-run support, and visual map/viewport capture helpers.
+- Updated the root README, docs index, refactor roadmap, current-status pickup, and completed post-Chapter 2 hardening plan so they agree on current Chapter 3 status and point to the Chapter 4 process.
+- Clarified that no canonical Chapter 3-complete / Chapter 4-ready fixture exists yet. Creating it remains implementation work after Chapter 3 human signoff.
+
+### Verification
+
+- The freshly synced `a6e5fa3` baseline passed `npm.cmd run verify`: 133 assets audited, build green, 31 rules tests, 30 Chapter 1 tests, 31 Chapter 2 tests, 10 Chapter 3 tests, and 1 smoke test.
+- After the documentation edits, the changed-document link check passed.
+- `npm.cmd run build` passed; the existing slightly-over-500-KB main chunk warning remains.
+- `npm.cmd run test:rules` passed: 31 tests.
+- `git diff --check` passed with normal Windows line-ending warnings only.
+
+### Canonical Pickup
+
+Use `docs/playtest-notes/2026-07-17-current-status.md` for current game state and `docs/planning/chapter-4-development-process.md` for the next development-process gates. Do not start Chapter 4 content by replaying or extending the user-provided completed save; first create and validate the canonical Chapter 4-ready fixture described in the plan.

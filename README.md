@@ -4,7 +4,7 @@ A storybook fantasy adventure prototype about Hearthhollow, Lantern Road, Brambl
 
 ## Current Status
 
-Chapter 1 is playable as a React/TypeScript prototype. Chapter 2, **The Westroot Trail**, now has a playable clean/messy No-Handle Gate path with a painted Westroot Trail map integrated.
+Chapters 1-3 have automated playable paths in the React/TypeScript prototype. Chapter 1 remains the protected baseline, Chapter 2 is playable through the First Westroot Gate, and Chapter 3 is playable through the Westroot resolution and Chapter 4 handoff. Chapter 3 still needs final human pacing and continuous-playthrough signoff before Chapter 4 implementation begins.
 
 Current features include:
 
@@ -17,8 +17,9 @@ Current features include:
 - item-granted combat skills
 - hero XP and level-up choices
 - Chapter 1 story arc through the Root Cellar and report-back scene
-- Chapter 2 Westroot Trail scenes, puzzle flags, clean/messy Roadwatcher outcomes, and painted map background
-- painted Chapter 1 maps, portrait integration, and custom item icons with emoji fallbacks
+- Chapter 2 Westroot Trail, Three-Door Hollow, Crown Door Den, and clean/messy Roadwatcher outcomes
+- Chapter 3 Rootmarket, Hold Bell, Witness Stones, Cargo Siding, Split Hall, and Rootbread Promise routes
+- painted Chapter 1-3 maps, portrait integration, scene art, and custom item icons with fallback-safe presentation
 
 ## Chapter 1
 
@@ -32,14 +33,14 @@ The player begins in Hearthhollow, follows evidence onto Lantern Road, briefs En
 
 The current long-term goal is a fully illustrated playable prototype through **Chapter 5: Briarhold Waystation**.
 
-Planned arc:
+Chapter arc:
 
-1. **Chapter 2: The Westroot Trail** - complete Mara, Edden, Ada's Willowmark Lens, the Three-Sign Hollow, Roadwatcher consequences, and the First Westroot Gate.
-2. **Chapter 3: The Hidden Root** - introduce Westroot as a hidden Lantern Road community and expose Willow-sealed cargo.
-3. **Chapter 4: The Riddle Road** - follow Edden's folded-map clues, find Lio's message, and discover the Briarhold lead.
-4. **Chapter 5: Briarhold Waystation** - rescue Lio, reveal the Briar Crown cell structure, and hint that the mark itself is older than the faction.
+1. **Chapter 2: The Westroot Trail** - playable through the Three-Sign Hollow, Crown Door Den, Roadwatcher consequences, and First Westroot Gate.
+2. **Chapter 3: The Hidden Root** - automated playable route through Westroot and its Willow-sealed cargo resolution; final human signoff remains.
+3. **Chapter 4: The Riddle Road** - planned route following Edden's folded-map clues to Lio's message and the Briarhold lead.
+4. **Chapter 5: Briarhold Waystation** - planned rescue of Lio and reveal of the Briar Crown cell structure.
 
-Implementation should move in vertical slices: story/script, data, map, art prompts/generation, implementation, automated QA, then user playthrough.
+Implementation should move in vertical slices: executable chapter contract, central-interaction graybox, data and placeholder map, critical path, automated QA, human playthrough, then production art and release-candidate QA. The Chapter 4 process is documented in [`docs/planning/chapter-4-development-process.md`](docs/planning/chapter-4-development-process.md).
 
 ## Run Locally
 
@@ -60,6 +61,7 @@ npm.cmd run build
 npm.cmd run test:rules
 npm.cmd run playtest:chapter1
 npm.cmd run playtest:chapter2
+npm.cmd run playtest:chapter3
 npm.cmd run playtest:smoke
 ```
 
@@ -83,7 +85,7 @@ npm.cmd run optimize:assets
 ## Smoke Playtest
 
 ```bash
-npm run playtest:smoke
+npm.cmd run playtest:smoke
 ```
 
 ## Project Docs
@@ -97,6 +99,7 @@ docs/art/art-direction.md
 docs/art/asset-manifest.md
 docs/planning/repository-plan.md
 docs/planning/refactor-roadmap.md
+docs/planning/chapter-4-development-process.md
 docs/playtest-notes/chapter-1-golden-path.md
 docs/art/prompts/chapter-1-environments.md
 docs/art/prompts/chapter-1-characters.md
@@ -124,8 +127,8 @@ Visual direction:
 
 ## Short-Term Roadmap
 
-1. Human-playtest the completed Chapter 3 route at desktop and phone widths, especially the two full-width ending tableaus.
+1. Human-playtest the current Chapter 3 route at desktop and phone widths, especially the two full-width ending tableaus.
 2. Run one uninterrupted human Chapter 1–3 session to catch pacing or interaction fatigue that focused automation cannot measure.
-3. Implement Chapter 4 from the existing westward listening-route handoff.
+3. Close the Chapter 3 release-candidate gate, create the Chapter 4-ready fixture, and follow `docs/planning/chapter-4-development-process.md`.
 4. Continue the staged `src/App.tsx` extraction and address the slightly-over-500-KB main bundle as focused technical work.
 5. Continue the source-art, optimized-runtime, and fallback-safe asset workflow as later chapters land.

@@ -126,9 +126,10 @@ Use `docs/planning/dialog-stock-icon-replacement-plan.md` as the inventory.
 
 ### 4. Chapter 4 And 5 Production
 
-1. Implement the Chapter 4 playable route from the existing Chapter 3 handoff before expanding Chapter 5.
-2. Produce the tracked Chapter 4–5 story-item and enemy art: Folded Map Scrap, Lanternwell Drop, True Seal Fragment, Briar Chain Link, Lio's Courier Knot, Briar Relay Guard, Crown Whisperer, Bracken Voss, Thornseal Guard, and Thornroot Sentry.
-3. Continue using the source-art/alternate/runtime asset workflow and retain fallbacks until each asset passes in-game QA.
+1. Follow `docs/planning/chapter-4-development-process.md`: finish Chapter 3 human signoff, create the canonical Chapter 4-ready fixture, define the executable contract, and validate the Folded Map graybox before full implementation.
+2. Implement the Chapter 4 playable route from the existing Chapter 3 handoff before expanding Chapter 5.
+3. Produce the tracked Chapter 4–5 story-item and enemy art only after the relevant interaction and map topology settle: Folded Map Scrap, Lanternwell Drop, True Seal Fragment, Briar Chain Link, Lio's Courier Knot, Briar Relay Guard, Crown Whisperer, Bracken Voss, Thornseal Guard, and Thornroot Sentry.
+4. Continue using the source-art/alternate/runtime asset workflow and retain fallbacks until each asset passes in-game QA.
 
 ### 5. Technical Follow-Ups
 
@@ -147,4 +148,4 @@ npm.cmd run build
 npm.cmd run test:rules
 ```
 
-Then use the title-screen Chapter 2 and Chapter 3 ready saves for focused playtesting instead of replaying earlier chapters.
+Then use the title-screen Chapter 2 and Chapter 3 playtest entries for focused testing instead of replaying earlier chapters. There is not yet a canonical Chapter 3-complete / Chapter 4-ready fixture; creating and validating it is the first implementation prerequisite in `docs/planning/chapter-4-development-process.md`.

@@ -1,10 +1,14 @@
 # Liam's Game - Post-Chapter 2 Technical Hardening
 
+Status: completed on 2026-07-12; retained as a historical implementation plan
+
+All eight slices in this plan landed before Chapter 3: the Chapter 3-ready fixture, extracted Chapter 2 copy, typed `GameFlags`, save migrations, map validation, asset audit/optimization workflow, reusable QA validators, and the Chapter 3 vertical-slice scaffold. Statements below describe the risks at the time this plan was written. They are not current project status; use `docs/playtest-notes/2026-07-17-current-status.md` and `docs/planning/chapter-4-development-process.md` for current pickup.
+
 This is the recommended technical cleanup pass to pick up after Chapter 2 ships and before Chapter 3 implementation begins in earnest.
 
 The goal is not a rewrite. The goal is to make Chapter 3 cheaper and safer to build while preserving the working Chapter 1 and Chapter 2 baselines.
 
-## Start Condition
+## Historical Start Condition
 
 Begin this pass only after:
 
@@ -22,7 +26,7 @@ git diff --check
 
 If there is uncommitted art wiring, map tuning, or story polish in progress, finish that slice first.
 
-## Current Risk Signals
+## Historical Risk Signals
 
 - `src/App.tsx` is still the center of gravity for game flow and is roughly 5,000 lines.
 - `src/App.tsx` still uses `// @ts-nocheck`, so TypeScript cannot catch many story, flag, dialogue, and branch mistakes there.
