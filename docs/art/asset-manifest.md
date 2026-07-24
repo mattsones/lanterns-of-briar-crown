@@ -108,6 +108,7 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Westroot Trail gameplay map | `westroot-trail-map-v04.webp` | Current Chapter 2 production map; readable Shelter Nook, false notice, Three-Sign Hollow, Roadwatcher bend, and First Westroot Gate. |
 | Crown Door Den gameplay map | `crown-door-den-map-v01.webp` | Current Chapter 2 production map for the Roadwatcher signworks behind the Crown Door. Prompt lives in `docs/art/prompts/chapter-2-crown-door-and-three-doors.md`. |
 | Westroot Hub gameplay maps | `westroot-hub-map-v01.webp`, `westroot-hub-map-v02-open-stones.webp` | Chapter 3 uses v01 while Bramwell's legitimate hold-shutter closes the Witness Stone approach, then swaps to v02 after the public renewal opens the walk. The v02 source PNG is preserved in `assets/reference/source-art/assets/maps/`. |
+| Great Survey political world map | `assets/reference/source-art/assets/maps/great-survey-of-alderreach-v02.png` | Selected reference source for the competent national Survey with a broad inhabited Rainroot, defended Veyran frontier, smaller Bramblecross/Hearthhollow, and Westroot added later in graphite. V01 is preserved as the superseded border-heavy composition. Not wired into runtime; create an optimized derivative before import. Generation prompts and diegetic timing live in `docs/art/prompts/great-survey-world-map.md`. |
 
 ## Scenes
 

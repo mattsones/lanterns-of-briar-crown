@@ -1,4 +1,4 @@
-# Current Project Status — 2026-07-21
+# Current Project Status — 2026-07-24
 
 Branch: `codex/chapter-3-vertical-slice`
 
@@ -29,6 +29,11 @@ This is the concise pickup document for the current illustrated prototype. Histo
 The implementation and decisions are documented in `docs/planning/gameplay-ux-redesign-plan.md`.
 
 ## Recent Playtest And Story Decisions
+
+- Chapter 3 now has a working story-foundation package covering the factual story truth, physical route diagram, three-day chronology, and player-knowledge contract. These documents resolve the Lio/crate/hatch/gate continuity questions for review but do not yet change playable canon.
+- The realm-history workshop now places Lanthorne above Bramblecross as the Rainroot regional city, proposes Hearthward as the Hearthvale capital, adds the Saltwake War and Cinder Vale diaspora, makes Witherdeath a separate two-year international plague, confirms the coastal Sunreach queen and Elowen's independent Royal Progress, develops Moonmark performing companies, and gives the Crownward/Briar movement a sovereign claimant above its road-office operators. The Chapters 2–5 story bible now reflects the non-cosmic civic-road and institutional-conspiracy direction; playable text still awaits a later focused pass.
+- `docs/story/historical-backdrop-integration-audit.md` now identifies the leanest integration points across playable Chapters 1–3 and planned Chapters 4–5. Its first priorities are the Chapter 3 checkpoint/compact rewrite, a non-cosmic language pass, the Great Survey evidence prop, Elowen's Royal Progress, the Crownward/Briar distinction, and Chapter 5's institutional-compromise reveal.
+- The selected Great Survey political map now lives at `assets/reference/source-art/assets/maps/great-survey-of-alderreach-v02.png`. Rainroot is a broad inhabited region: fortified settlements guard the direct Veyran border, while small Bramblecross, Hearthhollow, and underground Westroot lie several quiet days inside Alderreach. Westroot remains a later graphite correction made after renewed contact. V01 is preserved as the superseded border-heavy composition. The map is reference-only until an optimized runtime derivative and story placement are approved.
 
 - Elder Brynn learns that the order is forged only after the Bramble Boar fight. The player reports the satchel to Brynn before following Lio's trail.
 - The worried traveler believes the apparent royal order; he does not diagnose the forgery.
@@ -85,6 +90,7 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 - The Chapter 1 ending tableau is wired into the sealed-door proof pickup, and the Root Cellar switches to a boss-free painted background immediately after the Warden is defeated. Both full-resolution PNG sources are preserved under `assets/reference/source-art/`.
 - The tense Split Hall Hold Bell scene is selected and wired before the resolution image. Thin red ceiling cords read as Westroot hold-lines rather than faction decoration.
 - The Rootmarket uneasy-arrival tableau is selected and wired to the location hub while Quill and Auntie Lume retain their individual portraits inside their conversations.
+- The full-size Great Survey of Alderreach map is selected as a reference source and intentionally excluded from the production asset audit until it is optimized and wired.
 - The optimized runtime asset set currently contains 133 images and passes the asset audit.
 
 ## Verification At Handoff
@@ -101,6 +107,68 @@ git diff --check                 passed (Windows line-ending warnings only)
 ```
 
 Browser QA covered illustrated dialogue at 1280×720, 1366×768, 430×932, and 390×844; the full real level-3 Chapter 3 fixture; the prepared and fail-forward Cargo outcomes; both full-width Chapter 3 ending tableaus; desktop and phone exploration; compact phone combat; Root Cellar room-aware fog; and Westroot's map and NPC staging.
+
+## Next Session — Worldbuilding Implementation Order
+
+Do not begin by adding general lore dialogue. Implement the worldbuilding where it resolves the current plot, in this order:
+
+### Priority 1: Chapter 3 Physical And Political Clarity
+
+Use `docs/story/chapter-3-player-knowledge-contract.md` as the acceptance contract and update the canonical script, runtime copy, quest text, flags, tests, map interaction, and affected art together.
+
+Required results:
+
+1. Establish the Transfer Checkpoint at the First Gate with visible sanitation and account procedures.
+2. Explain why the party's unscheduled gate opening is alarming even though the false convoy entered three nights earlier.
+3. Replace the sealed-hatch Rootbread scene with the return interaction at the checkpoint; finish on **The Rootbread Promise reached Lio**.
+4. State on the required path that Lio walked beside the crate as a prisoner recorded like freight and was never inside it.
+5. Name the scope of every hold and reopening: crate hold, Hold Bell lockdown, Witness Stone signal/investigation reopening, and final compact.
+6. Make Split Hall's final action an explicit first restored compact with Bramblecross, limited to guarded entry, named witnesses, outward warnings, and Enna/Hollis contacts.
+7. Have Quill physically carry the first warning outward so the political decision becomes visible action.
+
+Art/map work in this priority:
+
+- replace the sealed-hatch Rootbread illustration with the Transfer Checkpoint version;
+- add or move the temporary Mossback-child interaction to the First Gate landing;
+- complete the already-planned public Witness Stones renewal artwork;
+- preserve current fallback-safe wiring and map navigation.
+
+Run the Chapter 3 build, rules, automated playtest, and a full human comprehension playthrough before moving on.
+
+### Priority 2: Non-Cosmic Consistency Pass
+
+Apply the inventory in `docs/story/historical-backdrop-integration-audit.md` across:
+
+- `src/App.tsx`;
+- `src/story/chapter1.ts`, `chapter2.ts`, `chapter3.ts`, and `chapters2to5.ts`;
+- all three canonical chapter scripts;
+- the Chapters 2–5 story bible;
+- art direction and relevant art prompts.
+
+Replace literal road/stone/root agency with keeper practices, crafted locks, echo tubes, signals, records, and human memory. Metaphor may remain only after the physical mechanism is clear. Preserve Chapter 1 behavior and do not combine this prose pass with broad refactoring.
+
+### Priority 3: Great Survey Story Integration
+
+1. Add the official Survey copy to Enna's Chapter 2 map briefing: **“The Survey ends cleanly west of Bramblecross. The courier marks do not.”**
+2. Keep Westroot absent from official ink before discovery.
+3. After the Chapter 3 compact, unlock or show the selected v02 map with Westroot penciled in and dated under a witness name.
+4. Create an optimized runtime derivative or focused crops from `great-survey-of-alderreach-v02.png`; never import the 3.2 MB reference PNG directly.
+
+### Priority 4: Reconcile Chapters 4–5 Before Implementation
+
+Before the Chapter 4 executable-contract gate:
+
+- replace the self-changing Wrong Map Room with a Survey Correction Room or overlay archive;
+- define the Listening Mile as a keeper-built review circuit;
+- make Elowen's first independent Royal Progress the reason her forged authority is plausible;
+- place a lawful Crownward argument beside secret Briar operational evidence;
+- replace every living-mark or awakening beat with proof of genuine Roadwarden, Survey, seal, contractor, or council access above Bracken.
+
+Chapter 4 still must not begin until the closeout, ready-fixture, central-interaction graybox, and executable-contract gates in `docs/planning/chapter-4-development-process.md` are satisfied.
+
+### Deferred Until The Plot Needs Them
+
+Do not force the Saltwake War, Cinder Vale diaspora, Sea-Peace marriage, Fostered Heir, Cairn politics, or Moonmark Counselor into Chapters 1–3. Introduce each through a later character, object, song, prejudice, policy, or conflict that makes the history immediately relevant.
 
 ## Remaining Work
 
@@ -121,9 +189,12 @@ Use `docs/planning/dialog-stock-icon-replacement-plan.md` as the inventory.
 
 ### 3. Story Follow-Ups
 
-1. Give Healing Fizzpop's mint-green hair a later comedic payoff. Decide first whether it is one scripted callback, a temporary status flag, or recurring NPC reactivity.
-2. Run a final character-name consistency pass across older planning documents. Runtime intent is Elder Brynn, Sela of the Loom, Mara Brindle, Enna, Hollis, and Ada Willowmarket; legacy asset filenames should not dictate story names.
-3. Human-playtest the Chapter 3 ending before implementing Chapter 4.
+1. Implement the Chapter 3 player-knowledge contract: add the Transfer Checkpoint interaction, retire the sealed hatch, distinguish every hold/opening by scope, state that Lio walked beside the crate, and make the Bramblecross compact explicit.
+2. Run the focused non-cosmic language pass listed in `docs/story/historical-backdrop-integration-audit.md` through runtime, canonical scripts, Chapters 4–5 plans, and art direction.
+3. Add the Great Survey as a Chapter 2 evidence object and unlock the penciled Westroot version only after Chapter 3; optimize the image before runtime import.
+4. Give Healing Fizzpop's mint-green hair a later comedic payoff. Decide first whether it is one scripted callback, a temporary status flag, or recurring NPC reactivity.
+5. Run a final character-name consistency pass across older planning documents. Runtime intent is Elder Brynn, Sela of the Loom, Mara Brindle, Enna, Hollis, and Ada Willowmarket; legacy asset filenames should not dictate story names.
+6. Human-playtest the revised Chapter 3 ending before implementing Chapter 4.
 
 ### 4. Chapter 4 And 5 Production
 

@@ -1722,3 +1722,153 @@ Branch: `codex/chapter-3-vertical-slice`
 Use `docs/story/chapter-3-story-clarity-audit.md` for the full continuity audit, proposed coherent backstory, plain-language timeline, unresolved story decisions, and recommended revision process.
 
 The proposal is deliberately marked non-canonical. Resume by approving or revising its eight story decisions, then create the route diagram and player-knowledge ladder before performing another playable-text pass.
+
+## Current Handoff — Chapter 3 Story-Foundation Artifacts
+
+Last updated: 2026-07-22
+
+Branch: `codex/chapter-3-vertical-slice`
+
+### What Changed
+
+- Created `docs/story/chapter-3-story-truth.md` as the compact factual foundation for Westroot's history, the Briar convoy, Lio's movement, the counterfeit crate, the Rootbread action, and the two distinct reopening decisions.
+- Created `docs/story/chapter-3-route-diagram.md` with a Mermaid physical-continuity diagram and explicit route/boundary rules for the First Gate, Cargo Siding, rotating provision cupboard, outer shelter, Lower West Gate, and Underway.
+- Created `docs/story/chapter-3-three-day-timeline.md` to separate the false convoy, Willow hold, missed water calls, unscheduled party arrival, Hold Bell lockdown, witnessed investigation, and final compact.
+- Created `docs/story/chapter-3-player-knowledge-contract.md` to assign every foundational fact to its earliest required scene, protect optional-content boundaries, and define an end-of-chapter comprehension check.
+- Cross-linked the package from the clarity audit, documentation index, and current-status pickup.
+
+### Scope
+
+These are working story-development artifacts. No playable dialogue, flags, quest behavior, or artwork changed in this pass. Review the factual choices before using the package to write the short-prose version or update the canonical script/runtime.
+
+## Current Handoff — Rootbread Transfer-Checkpoint Correction
+
+Last updated: 2026-07-22
+
+Branch: `codex/chapter-3-vertical-slice`
+
+### What Changed
+
+- Removed the proposed sealed service hatch and rotating provision cupboard from all four Chapter 3 story-foundation artifacts.
+- Placed the Rootbread event at Westroot's ordinary Transfer Checkpoint on the broad inner landing of the First Gate. Lio receives the routine tray while the false Willow account is checked and returns his blue-thread knot on the cup.
+- Made the player's optional side-thread action a deliberate return to that checkpoint: hear the child's account, let Mara identify the cup, and restock the tray for the next traveler.
+- Recorded the outcome as **The Rootbread Promise reached Lio** rather than claiming the player retroactively kept it.
+- Kept the checkpoint as a sub-location of the existing First Gate map landmark. A temporary child marker supplies the later interaction; the current sealed-hatch landmark should be retired when playable text and map wiring are revised.
+
+### Scope
+
+This pass updates only the working story-foundation package and its handoff. Runtime text, map nodes, tests, current artwork, and canonical story script remain unchanged pending approval of the full foundation.
+
+## Current Handoff — Realm History And Government Workshop
+
+Last updated: 2026-07-23
+
+Branch: `codex/chapter-3-vertical-slice`
+
+### What Changed
+
+- Created `docs/story/realm-history-and-government-workshop.md` as a non-canonical foundation for the country around Chapters 1–5.
+- Proposed a chartered road monarchy in which the Crown handles cross-boundary responsibilities while villages, charter towns, and road-commons retain accountable local governments.
+- Defined how Elder Brynn, Mayor Anwen, Hollis, Enna, Bramwell, Noma, Split Hall, and the royal family can belong to one political system.
+- Added a minimal two-hundred-year historical spine, four neighboring powers, an approach to relations among ancestries, ten selectable historical modules, and four possible cosmic explanations for the living Briar mark.
+- Recommended modules 2, 3, 7, and 10 as the strongest starting bundle: the Fostered Heir, Great Lantern Works, Candle Night, and the Great Survey.
+- Recommended broken-oath ecology as the cosmic foundation, with the possibility that a long-fed magical pattern may be becoming aware.
+- Corrected the Chapter 3 foundation package so Westroot is a western junction from Bramblecross's perspective, withdrew from routine contact with all surface partners rather than Bramblecross alone, and chooses Bramblecross as its first restored contact because the party supplies named people and verifiable records.
+
+### Scope
+
+The realm document is a workshop for review, not canonical story truth. The working names `Alderreach`, `Lanthorne`, and the neighboring countries have not been added to playable dialogue. No runtime, map, test, or artwork changes were made.
+
+## Current Handoff — Realm Workshop Second Review
+
+Last updated: 2026-07-23
+
+Branch: `codex/chapter-3-vertical-slice`
+
+### What Changed
+
+- Revised the political model into a feudal-adjacent ladder of nested charter obligations: villages support towns, towns support regional seats, and regional seats support the Crown.
+- Placed Hearthhollow within Bramblecross's rural jurisdiction. Elder Brynn governs ordinary village life, while Mayor Anwen and the Watch are Hearthhollow's next lawful protectors when a danger crosses the village boundary.
+- Defined the Rainroot frontier as administratively distant from the Crown but strongly attached to its symbolic legitimacy, explaining why rare apparent royal orders carry weight and are difficult to verify.
+- Integrated a provisional two-hundred-year chronology built around a first Veyran invasion, the Lantern Compact and Fostered Heir, the Great Lantern Works, the Western Boundary War, Emberling-heavy Rainroot refugee movement, the Long Fever, Westroot's sixty-year withdrawal, the ten-year Great Survey, the Sea-Peace Marriage, and Elowen's current inquiry.
+- Made the Great Survey an exceptionally competent first national mapping project. Westroot is absent because it had already hidden for roughly thirty years and could not be verified, not because surveyors deliberately erased it or performed careless work.
+- Expanded the Cairn Cantons as the primary Stonekin and Cloudling homeland, with most Cloudlings remaining in relatively isolated high settlements.
+- Removed the recommended cosmic or conscious-road premise. The Lantern Road is civic infrastructure that may contain individual crafted magical tools but has no required will, moral judgment, or living oath ecology.
+- Defined the Briar Crown as a domestic authoritarian movement that manufactures failures in order to suspend the charter system and install an emergency Protectorate. It admires Veyran coordination, may receive limited covert foreign support, but is not simply a Veyran creation.
+- Replaced the proposed living-mark Chapter 5 escalation with a political escalation: evidence that a real government office, seal matrix, survey archive, contractor, or royal courier channel has been compromised.
+
+### Scope
+
+Only the non-canonical realm workshop and its documentation pointers changed in this review. The Chapter 3 foundation still carries the earlier twenty-five-year withdrawal and non-plague cause until the Long Fever model is explicitly approved for that package. No playable text, runtime behavior, tests, maps, or artwork changed.
+
+## Current Handoff — Realm Workshop Third Review
+
+Last updated: 2026-07-24
+
+Branch: `codex/chapter-3-vertical-slice`
+
+### What Changed
+
+- Moved `Lanthorne` from the national capital to the Rainroot regional city above Bramblecross. Proposed `Hearthward` as a warmer Hearthvale name for Alderreach's national capital.
+- Added the Saltwake War as a layered southern conflict: rival Ember Coast princes hire island captains, seasonal raiding becomes occupation, and the Emberling-majority Cinder Vale breaks apart amid resistance, collaboration, and competing claims.
+- Replaced the western-war origin for most Emberling refugees with the Cinder Vale diaspora, while retaining smaller western displacement from the Veyran boundary change.
+- Separated that migration from Witherdeath by more than fifty years. Witherdeath lasts about two years, devastates Alderreach and Veyrun alike, and has no credible connection to the Cinder Vale refugees.
+- Changed Westroot's outbreak cause from a false health pass to ordinary travel through a checkpoint that had no health checks or sanitation. The strict-order faction then combines prudent washing, inspection, airing, cargo separation, and observation with an overbroad permanent isolation policy.
+- Updated all four Chapter 3 story-foundation artifacts with the sixty-year Witherdeath history and visible checkpoint sanitation. This remains documentation only; playable dialogue and map art have not changed.
+- Confirmed the queen as a human of Sunreach heritage and an Ember Coast princess who married the current king while he was still a prince. She is an established royal power broker and a target of domestic resentment.
+- Established a post-Survey Royal Progress every five years. The current journey is Elowen's first independent Progress as heir apparent.
+- Developed Moonmark performing companies as musicians, storytellers, illusionists, minor magicians, oral historians, and news carriers. Added a royal Moonmark `Counselor of Songs` whose access draws political suspicion.
+- Recast the Briar Crown leadership. A powerful Hearthvale claimant, once the prince's expected domestic match and genuine love, leads or patronizes the Crownward League and intends to become Protector and then queen regnant. A Deputy Roadwarden or Survey official serves as the operational architect rather than the ultimate villain.
+
+### Canonical Story-Bible Reconciliation
+
+- Updated the Chapters 2–5 story bible so the Lantern Road is civic infrastructure with individual crafted mechanisms rather than a conscious or cosmic system.
+- Replaced the living-mark Chapter 5 escalation with evidence that genuine Roadwarden, Survey, seal, contractor, or council access supports the Briar Crown above Bracken's cell.
+- Added the Crownward League, the old Hearthvale claimant and former royal match, and the Deputy Roadwarden/Survey operator to the faction's long-term direction.
+- Updated the royal family direction with the coastal Sunreach queen, Moonmark Counselor of Songs, Elowen as heir apparent, and her first independent five-year Royal Progress.
+- Reframed keeper-designed route puzzles and wards so their consequences come from authored mechanisms rather than a road that judges players.
+
+### Scope
+
+The realm workshop, Chapter 3 foundation documents, and the canonical Chapters 2–5 story bible changed. No runtime, test, map wiring, or artwork files changed.
+
+## Current Handoff — Great Survey Map And Historical Integration Audit
+
+Last updated: 2026-07-24
+
+Branch: `codex/chapter-3-vertical-slice`
+
+### What Changed
+
+- Generated, corrected, visually inspected, and selected `assets/reference/source-art/assets/maps/great-survey-of-alderreach-v02.png`, a 1536×1024 political map of Alderreach and the surrounding known states. V01 remains preserved as the superseded composition.
+- Framed the object as a competent Great Survey copy with Westroot added later in graphite after Chapter 3, rather than an omniscient map or evidence that the original surveyors knew and erased Westroot.
+- Revised the western geography so Rainroot and Veyrun share a defended border with narrow disputed sections, while Bramblecross, Hearthhollow, and underground Westroot sit within a broad inhabited Rainroot interior. An unlabeled fortified border town and smaller keeps now carry the frontier-defense role.
+- Saved the exact reusable generation and correction prompts, geographic rules, map timing, and proposed story uses in `docs/art/prompts/great-survey-world-map.md`.
+- Registered the reference source in `docs/art/asset-manifest.md`. It remains outside the production asset set and must receive an optimized derivative before runtime import.
+- Reviewed the playable Chapter 1–3 sources, canonical scripts, Chapters 4–5 story bible, runtime story-plan constants, and art direction against the new realm foundation.
+- Created `docs/story/historical-backdrop-integration-audit.md` with chapter-by-chapter, low-exposition insertion points and a recommended work order.
+
+### Main Audit Findings
+
+- The most important story work remains the approved Chapter 3 clarity rewrite: Transfer Checkpoint, Lio beside rather than inside the crate, scoped holds/reopenings, and the explicit first restored Bramblecross compact.
+- Chapters 1–3 still contain extensive literal language that makes the road, roots, stones, and hill listen, remember, speak, decide, or judge. The Chapter 4–5 plan and art direction contain related stale cosmic assumptions.
+- The Great Survey is the strongest recurring evidence object: official map and older courier marks disagree in Chapter 2; Westroot is penciled in after Chapter 3; Survey overlays become a Chapter 4 mechanism.
+- Elowen's first independent Royal Progress should make forged orders in her name plausible in Chapter 4.
+- A lawful Crownward broadside beside a secret Briar instruction can reveal the distinction between legitimate centralizing politics and the faction's manufactured crisis.
+- Chapter 5 should end on genuine government-office access above Bracken's cell, not a living mark or cosmic awakening.
+
+### Verification
+
+- The selected v02 map was verified at 1536×1024, 3,286,510 bytes.
+- `npm.cmd run audit:assets -- --limit=10` passed with 133 production images; the new reference source is correctly excluded.
+- `git diff --check` passed with Windows line-ending warnings only.
+
+### Scope
+
+No runtime dialogue, story flags, map wiring, tests, or production assets changed. The new political map is a reference source, and the audit is the implementation brief for the later focused prose pass.
+
+### Resume Here
+
+The ordered implementation checklist is in `docs/playtest-notes/2026-07-17-current-status.md` under **Next Session — Worldbuilding Implementation Order**.
+
+Begin with Chapter 3 only. Treat `docs/story/chapter-3-player-knowledge-contract.md` as the acceptance contract: Transfer Checkpoint, scheduled convoy versus unscheduled party arrival, Rootbread return interaction, Lio beside rather than inside the crate, scoped holds/reopenings, explicit Bramblecross compact, and Quill carrying the first warning outward. Complete its replacement art and human comprehension playthrough before the non-cosmic pass or Great Survey runtime integration. Do not begin Chapter 4 while those closeout requirements remain open.

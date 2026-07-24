@@ -1,5 +1,7 @@
 # Liam’s Game — Main Story Bible for Chapters 2–5
 
+Last updated: 2026-07-24
+
 ## Working Arc Title
 
 **The Westroot Road**
@@ -8,11 +10,11 @@
 
 After Chapter 1, the hero knows the road was not merely dangerous — it was being lied about. The Briar Crown has used false authority, stolen trust, and old roadways beneath the towns to move something west. Maybe cargo. Maybe prisoners. Maybe Lio Brindle.
 
-Chapters 2–5 follow the hero, companions, Mara, and the Bramblecross investigators as they trace the Westroot lead, discover a hidden Stonekin/Mossback road-community, learn that the old Lantern Road was a living trust network, and finally rescue Lio from a Briar Crown faction cell.
+Chapters 2–5 follow the hero, companions, Mara, and the Bramblecross investigators as they trace the Westroot lead, discover a hidden Stonekin/Mossback road-community, learn that the old Lantern Road was a civic network of routes, shelters, couriers, records, and mutual obligations, and finally rescue Lio from a Briar Crown faction cell.
 
-By the end of Chapter 5, the player should feel that they now understand what the Briar Crown is: **a secret organized faction hijacking royal trust and old road magic to control roads, messages, cargo, and fear.**
+By the end of Chapter 5, the player should feel that they now understand what the Briar Crown is: **a secret organized faction hijacking royal trust, government access, and old route infrastructure to control roads, messages, cargo, and fear.**
 
-But the final note should hint that this explanation is not the whole truth. The Briar Crown faction may be using the mark, but the mark may also be using them.
+But the final note should reveal that the captured cell is not the whole organization. Someone with legitimate access to a road office, survey archive, seal procedure, or royal council channel is supporting the operation from above.
 
 ---
 
@@ -42,7 +44,7 @@ The Lantern Road teaches that good instructions name who is responsible, what da
 
 ## The True Crown vs. the Briar Crown
 
-The true kingdom is basically good. The king, queen, and princess are not villains. The kingdom is stretched thin, partially deceived, and separated from local truth because the roads, couriers, and messages have been corrupted.
+The true kingdom of Alderreach is basically good. The king, queen, and princess are not villains. The Crown is stretched thin, partially deceived, and separated from local truth because the roads, couriers, and messages have been corrupted.
 
 The Briar Crown is a counterfeit crown. It imitates royal authority but lacks royal responsibility.
 
@@ -153,13 +155,13 @@ He carried truth toward Hearthhollow. The Briar Crown stopped him before it arri
 
 **Role:** Wounded witness, riddle-source, artist of half-remembered road-truths
 
-Edden should not become a conventional quest-giver. He should be a person whose mind touched the old Lantern Road too suddenly. He speaks in disjointed riddles, sketches route shapes, and repeats phrases that make sense only later.
+Edden should not become a conventional quest-giver. He should be a person injured and overwhelmed while encountering corrupted route signs, layered signals, and old crafted mechanisms too suddenly. He speaks in disjointed riddles, sketches route shapes, and repeats phrases that make sense only later.
 
 He is not “crazy.” He is injured, overwhelmed, and partly right.
 
 ### Edden’s function in Chapters 2–5
 
-- Validates that the old ways are real.
+- Validates that the old routes and mechanisms are real.
 - Introduces puzzle language.
 - Draws maps that do not make sense until rotated, held to lanternlight, matched to moss patterns, or compared with old road marks.
 - Gives the party clues without cleanly explaining them.
@@ -177,7 +179,7 @@ He is not “crazy.” He is injured, overwhelmed, and partly right.
 
 > “Briar over crown, crown over road, road under root, root under town.”
 
-> “The old way still listens. But not to shouting.”
+> “The old signals still work. But not if you shout at them.”
 
 ### Puzzle principle
 
@@ -220,11 +222,15 @@ Good, responsible, somewhat distant. He likely cares for the kingdom but is rece
 
 ### Queen
 
-Potentially more perceptive about the old roads, old promises, or the spiritual/moral side of kingship. She could become important later.
+The queen is a human princess of Sunreach heritage from an Ember Coast principality. She married the current king while he was still a prince as part of the Sea-Peace settlement.
+
+She is a significant power broker, an experienced reader of compacts and archives, and a royal councillor in her own right. Some domestic families resent her foreign birth, the influence she gained before becoming queen, and the domestic marriage the prince abandoned for the alliance.
+
+The king and queen retain a Moonmark Counselor of Songs who gathers oral history and repeated local reports from traveling performance companies. Courtiers suspicious of the queen portray that relationship as foreign or magical manipulation.
 
 ### Princess
 
-Known publicly but not personally by the hero. Her name appears on a suspicious order in Chapters 3 or 4. Eventually she should be revealed as someone who has been investigating the same corruption.
+Princess Elowen is the acknowledged heir apparent, known publicly but not personally by the hero. Her name appears on a suspicious order in Chapters 3 or 4. Eventually she should be revealed as someone who has been investigating the same corruption.
 
 Working characterization:
 
@@ -232,6 +238,10 @@ Working characterization:
 - Disguised traveler tendencies
 - Loves old maps and ordinary villages
 - Understands that roads are how a kingdom listens to itself
+- Conducting her first independent Royal Progress
+- Comparing the Great Survey with current roads, petitions, and local records
+
+Since the Great Survey, a senior member of the royal family has conducted a Royal Progress every five years. Elowen's current Progress is the first she has undertaken without her parents. Her lawful ability to request route records and temporary safety measures makes forged orders in her name especially plausible.
 
 Possible princess names to consider later:
 
@@ -250,11 +260,13 @@ Placeholder name in this bible: **Princess Elowen**.
 
 ## What Westroot Is
 
-Westroot is not merely a village. It is an old Lantern Road hub: part hidden community, part root-gate, part storehouse, part waystation, part living map.
+Westroot is not merely a village. It is an old Lantern Road hub: part hidden community, part phrase-operated root-gate, part storehouse, part waystation, and part maintained route record.
 
 It lies west of Bramblecross, beneath and around a network of old roots, carved stone doors, moss-lit tunnels, cellar roads, and forgotten courier passages.
 
 The public roads no longer mark Westroot clearly, but couriers and old-road keepers know fragments of its route language.
+
+About sixty years ago, Witherdeath entered Westroot through ordinary admitted traffic when its checkpoint had no health or sanitation procedures. Split Hall answered with prudent washing, airing, inspection, cargo separation, and observation, but also with an overbroad isolation policy that became permanent civic tradition. Westroot continued rare sanitized transfers and outer services while ordinary Bramblecross memory faded into legend.
 
 ## Westroot Community
 
@@ -317,7 +329,7 @@ The Briar Crown wants Westroot because controlling it means controlling the old 
 
 ## What Players Should Think by Chapter 5
 
-The Briar Crown is a secret faction using counterfeit royal authority and corrupted old-road magic to control travel, messaging, cargo, and fear.
+The Briar Crown is the secret operational network inside a broader centralizing movement. It uses counterfeit royal authority, compromised government access, altered crafted devices, and old route infrastructure to control travel, messaging, cargo, and fear.
 
 They operate through cells. Each cell knows part of the plan but not necessarily the whole truth.
 
@@ -349,23 +361,33 @@ Or:
 
 They do not protect roads. They make people stop trusting roads, then offer control as the solution.
 
-## The Deeper Hint
+The faction's long-term plan is to manufacture a national emergency, suspend parts of the charter system, install a Protector, and replace accountable local offices with appointed Crown Reeves. It wants to possess the true Crown rather than abolish it.
 
-By the end of Chapter 5, there should be one sign that the Briar Crown faction is not the deepest truth.
+The secret network hides within or recruits from a lawful centralizing movement provisionally called the **Crownward League**. Many League members want stronger national coordination and know nothing about forged orders, kidnapping, or manufactured crises.
+
+The strongest current direction for the movement's leader is the head of a powerful old Hearthvale family with a collateral claim to the Crown. She and the current king genuinely loved one another when young and were expected to marry before the Sea-Peace required his political marriage to the Ember Coast princess. Decades later, she intends to use the manufactured emergency to become Protector, force the king aside, exclude Elowen as foreign-influenced, and be recognized as queen regnant.
+
+Her lost relationship is a personal wound, not her entire motivation. She has built a real constituency and believes the king's compromises, the queen's foreign influence, and Elowen's charter-conscious policies are weakening Alderreach.
+
+A Deputy Roadwarden or senior Survey official serves as the operational architect beneath her, supplying access to route forms, seal procedures, survey gaps, and courier channels. Bracken Voss is a regional cellmaster farther down that chain.
+
+## The Larger Political Hint
+
+By the end of Chapter 5, there should be one concrete sign that Bracken's cell has legitimate institutional support.
 
 Possibilities:
 
-1. The faction leader refers to “the Crown” as if it speaks.
-2. A Briar Crown mark appears somewhere the faction could not have carved it.
-3. The escaped leader is frightened by a briar mark that grows on its own.
-4. Lio remembers hearing the faction leader say, “We are not ready for the root beneath the crown.”
-5. A true lantern briefly reveals an older symbol hidden under the Briar Crown mark.
+1. A false-order ledger contains instructions on genuine Roadwarden office paper.
+2. A seal reference uses a private correction known only to the Great Seal or Survey archive.
+3. A respected Crownward League patron paid the cell through a legitimate contractor.
+4. A royal council draft appears in the cell before its policy was publicly issued.
+5. A courier-channel cipher identifies a compromised official above Bracken.
 
 Recommended hint:
 
-> After the Chapter 5 boss escapes, a Briar Crown mark left behind curls by itself, not like ink, but like something growing. The defeated henchman whispers, “It was not supposed to wake yet.”
+> Enna studies one surviving instruction and says, “This part is not forged. It came from the office that decides what the real version should look like.”
 
-This lets players feel they understand the faction while hinting that the faction has awakened something older.
+This lets players understand the faction while revealing that capturing one cell will not remove its access to power.
 
 ---
 
@@ -387,7 +409,7 @@ Each chapter should include:
 
 ## Puzzle Philosophy
 
-Puzzles are not random obstacles. They are how the old Lantern Road asks travelers to prove they understand truthful guidance.
+Puzzles are not random obstacles. They are mechanisms and practices designed by old route keepers to teach, test, or preserve truthful guidance.
 
 Puzzle types should match the theme:
 
@@ -625,7 +647,7 @@ The chapter ends as the gate opens into warm underground gold-green light.
 - Mara is now emotionally attached to the party’s quest.
 - Lio is confirmed alive past the westward gate.
 - Edden’s riddle was meaningful.
-- The old Lantern Road responds to truth-aligned action.
+- The old phrase-operated gate still responds to the correct route practice.
 - The party enters or approaches Westroot.
 
 ## Closing Image
@@ -834,15 +856,15 @@ Mara does not cry. She clenches both fists and says:
 
 Alternate titles:
 
-- **The Lantern That Remembered**
+- **The Lantern That Kept Watch**
 - **The Road Beneath the Crown**
-- **The Map That Lied Back**
+- **The Map That Did Not Match**
 
 Recommended title: **The Riddle Road**
 
 ## Chapter Promise
 
-The party enters the deeper Lantern Road system, where old route magic tests whether travelers understand the difference between guidance and command. Edden’s drawings become essential. Lio is confirmed alive in a more direct way, and the Briar Crown cell’s hideout is located.
+The party enters the deeper Lantern Road system, where old keeper-designed mechanisms and route practices distinguish guidance from command. Edden’s drawings become essential. Lio is confirmed alive in a more direct way, and the Briar Crown cell’s hideout is located.
 
 ## Main Question
 
@@ -937,7 +959,7 @@ Optional deeper puzzle:
 
 This is a strong thematic set-piece.
 
-The road asks questions, but not in a booming magical voice. Instead, old signs, echoes, and lantern flickers respond to what the party says.
+Old route keepers built this mile as a training and review circuit. Inscriptions pose questions at successive signs, while choice plates and lantern shutters record which marked answer a traveler selects. Echo tubes or crafted signal lamps can repeat stored phrases without giving the road a mind.
 
 Possible prompts:
 
@@ -947,7 +969,7 @@ Possible prompts:
 
 The correct answers do not need to be exact. They should reflect guidance, warning, shelter, and memory.
 
-If the player answers selfishly or fearfully, the road still lets them pass but with a harder encounter.
+If the player selects selfish or fear-driven answers, the old mechanism routes them through a harder inspection or maintenance passage. The consequence was designed by keepers; it is not a moral judgment made by the road.
 
 ## Side Thread: The Captive Porter
 
@@ -1141,7 +1163,7 @@ Chapter 5 can have a semi-dungeon structure:
 7. Boss battle.
 8. Bracken escapes.
 9. Lio and Mara reunite.
-10. Final deeper hint.
+10. Final institutional-compromise hint.
 
 ## Main Puzzle: The Captive Lanterns
 
@@ -1166,7 +1188,7 @@ Choose which lantern to uncover first. Correct choices weaken the boss or unlock
 
 Uncover all lanterns in the old order to gain a powerful temporary blessing for the boss fight:
 
-**Lantern Road Blessing:** Once during the boss battle, the hero or companion can resist a fear/control effect.
+**Lantern Keeper’s Ward:** Uncovering the lanterns in the keeper's intended safety order activates an old crafted ward. Once during the boss battle, the hero or companion can resist a fear/control effect.
 
 ### Companion hints
 
@@ -1351,29 +1373,27 @@ Possible clue:
 
 Or:
 
-> “I heard a girl’s voice through the lanternwell. Not Mara. Older. She said, ‘If this bears my name, then the road has been taught to lie about me too.’”
+> “I heard a girl’s voice through the lanternwell. Not Mara. Older. She said, ‘If this bears my name, then someone has made every station repeat the same lie.’”
 
-This can be the first magical/uncertain hint that the princess is actively involved or trapped somewhere in the old road system.
+This can be the first uncertain communications hint that the princess is actively involved or being isolated somewhere along the route system.
 
 Recommended version:
 
-Lio remembers hearing a voice beyond a lanternwell:
+Lio remembers hearing a voice carried through a lanternwell signal channel:
 
-> “Tell my father the road did not betray him. Someone taught it to speak with my name.”
+> “Tell my father I did not issue the order. Someone is making the roads carry my name.”
 
 He does not know who said it. The companion recognizes the implication.
 
-## Deeper Hint: The Faction Is Not the Whole Truth
+## Larger Hint: The Cell Has Institutional Support
 
-After Bracken escapes, the party finds a Briar Crown mark carved into old stone. As they watch, one briar line curls slightly deeper into the rock by itself.
+After Bracken escapes, the party recovers a surviving instruction from the false ledger room. Its order is criminal, but its paper, correction marks, or private seal reference are genuine.
 
-A captured Briar Crown member sees it and panics.
+Enna or a knowledgeable Westroot clerk examines it.
 
-> “No,” the prisoner whispers. “No, no. It was not supposed to wake yet.”
+> “This part is not forged,” they say. “It came from the office that decides what the real version should look like.”
 
-This is the final unsettling hint.
-
-The heroes know what the Briar Crown faction is. But they do not yet know what stands beneath or behind the mark.
+The heroes know what the Briar Crown faction is. They now also know that its access reaches above Bracken's cell.
 
 ## Chapter 5 End State
 
@@ -1404,13 +1424,11 @@ Mara answers:
 
 > “So are we.”
 
-Then, somewhere behind them, the old Briar Crown mark deepens by one thorn-line.
+Then Enna folds the genuine office paper around the false order.
 
-Small.
+The forgery is defeated.
 
-Almost unseen.
-
-Not gone.
+The access that made it possible is not.
 
 ---
 
@@ -1430,7 +1448,7 @@ Lio is alive and held at Briarhold Waystation. The Briar Crown cell has a struct
 
 ## End of Chapter 5
 
-Lio is rescued. The Briar Crown is revealed as a faction network hijacking roads and royal trust. But the living/growing Briar Crown mark suggests the faction is not the deepest layer.
+Lio is rescued. The Briar Crown is revealed as a faction network hijacking roads and royal trust. Genuine office material proves that the network reaches into the institutions it counterfeits.
 
 ---
 
@@ -1545,16 +1563,16 @@ Story item from Lio/Mara reunion. Symbol of rescued truth and sibling bond.
 
 These do not need to be solved before drafting Chapter 2, but they should remain visible.
 
-1. What is the kingdom called?
-2. What is the princess’s final name?
-3. What is the Briar Crown’s deeper ancient truth?
-4. Is the Briar Crown mark an old curse, a buried will, a forgotten false king, or something else?
-5. How soon should the party meet the princess in person or in disguise?
+1. What is the Hearthvale capital's final name: Hearthward, Goldhearth, Kingshearth, or Hearthstead?
+2. What is the queen's name and which Ember Coast principality is her home?
+3. What are the final names of the Crownward claimant and the Deputy Roadwarden who runs Briar operations?
+4. How soon should the party meet Princess Elowen in person or in disguise?
+5. Does the Moonmark Counselor of Songs travel with Elowen or remain at court?
 6. Should Lio become a recurring ally, a courier-network contact, or a future temporary guest?
 7. Should Mara eventually become a formal non-combat companion with a puzzle/support interface?
 8. What did the old Lantern Road require from official roadwardens?
-9. Was the true royal family historically connected to the Lantern Road’s founding?
-10. What happened long ago that caused Westroot to be hidden from public maps?
+9. How publicly is the royal family connected to the Lantern Compact and Great Survey?
+10. What is Cinder Vale's present political condition?
 
 ---
 

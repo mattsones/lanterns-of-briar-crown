@@ -1,8 +1,19 @@
 # Chapter 3 Story-Clarity Audit
 
-Last updated: 2026-07-21
+Last updated: 2026-07-24
 
-Status: Discussion record and revision brief. This document identifies continuity problems in the current playable Chapter 3 and proposes a coherent story model for review. The proposal is **not canonical yet**. Do not silently copy its new backstory into playable dialogue until the story decisions below are approved.
+Status: Discussion record and revision brief. This document identifies continuity problems in the current playable Chapter 3 and records the working model approved through 2026-07-24. The foundation now governs the later Chapter 3 dialogue and map pass, but this document does not itself change playable canon.
+
+## Story-Foundation Artifacts
+
+The proposed model has now been resolved into four working artifacts:
+
+1. [`chapter-3-story-truth.md`](chapter-3-story-truth.md) — the one-page factual foundation and resolved story assumptions;
+2. [`chapter-3-route-diagram.md`](chapter-3-route-diagram.md) — the physical relationship among the gates, Cargo Siding, provision hatch, outer shelter, and westward route;
+3. [`chapter-3-three-day-timeline.md`](chapter-3-three-day-timeline.md) — the chronology from the false convoy through the Split Hall compact;
+4. [`chapter-3-player-knowledge-contract.md`](chapter-3-player-knowledge-contract.md) — the facts each required scene must communicate without relying on inference.
+
+These are working review documents, not silent changes to the current playable canon. Once approved, they should govern the short-prose draft and the next script/runtime dialogue pass.
 
 ## Why This Audit Exists
 
@@ -37,13 +48,13 @@ The crate contains a courier pouch and a transfer tag, and Mara says, "They made
 
 | State | Intended scope |
 |---|---|
-| Historical withdrawal | Westroot ceased being openly connected to Bramblecross and disappeared from public maps. |
+| Historical withdrawal | After Witherdeath entered through ordinary traffic about sixty years ago, Westroot adopted strong checkpoint sanitation and an overbroad permanent isolation policy. |
 | Normal hidden operation | Westroot may still maintain selected couriers, cargo, shelters, and listening routes. This is not currently settled. |
 | Briar Crown breach | A recent movement used forged outside trust and copied or compromised inside authorization. |
 | Initial Willow hold | Bramwell closes the Witness Stone walk and listening marks while the suspicious crate is held. |
 | Hold Bell lockdown | Bramwell closes the First Gate and side passages after the held crate moves. |
 | Witness Stone renewal | Westroot restores urgent civic signals and authorizes a witnessed Cargo Siding investigation. |
-| Final compact | Westroot restores accountable communication with Bramblecross while retaining watched gates and witnessed cargo inspection. |
+| Final compact | Westroot chooses Bramblecross as its first restored, accountable surface contact while retaining watched gates and witnessed cargo inspection. |
 
 The playable chapter repeatedly uses variants of **open the gate**, **close the road**, and **seal Westroot** for these distinct states. This makes the sequence sound contradictory even when individual lines are evocative.
 
@@ -59,7 +70,7 @@ Chapter 2 places Lio's personal mark at the First Westroot Gate and interprets i
 
 ### The ending understates a historic decision
 
-The final policy currently appears mainly in Bramwell's line that warnings will be copied to Bramblecross. If Bramblecross has treated Westroot as myth and Westroot has avoided formal surface contact for a generation, this is a major political and cultural decision. The scene needs to distinguish controlled communication from unrestricted access and show the first concrete act of renewed contact.
+The final policy currently appears mainly in Bramwell's line that warnings will be copied to Bramblecross. If Bramblecross has treated Westroot as myth and Westroot has avoided formal surface contact for about sixty years, this is a major political and cultural decision. The scene needs to distinguish controlled communication from unrestricted access and show the first concrete act of renewed contact.
 
 ## Proposed Coherent Story Model
 
@@ -67,9 +78,11 @@ The following model resolves the problems above while preserving the current the
 
 ### Historical relationship
 
-Westroot was once the hidden eastern relay of the Lantern Road. Bramblecross was its surface neighbor and partner. Westroot maintained cargo routes, courier passages, shelters, cisterns, warnings, and witnessed route records.
+Westroot was once a hidden western junction of the Lantern Road. Bramblecross was its nearest active surface neighbor, while branches beyond Westroot served several settlements. Westroot maintained cargo routes, courier passages, shelters, cisterns, warnings, and witnessed route records.
 
-Roughly a generation ago, false orders or compromised shelter signals led danger to people who trusted the road. Westroot residents died. Westroot withdrew from its formal relationship with Bramblecross and disappeared from public maps. Bramblecross gradually remembered it as a legend, while a limited number of couriers, investigators, and old-road keepers retained fragments of its route language.
+About sixty years ago, the two-year Witherdeath epidemic devastated Alderreach, Veyrun, and neighboring countries. Westroot's checkpoint had no orderly health checks or sanitation procedures because its purpose was verifying identity, cargo, and civic obligations. The disease entered through normal admitted traffic and killed residents.
+
+The part of Split Hall favoring strict order won the response. Westroot added washing, airing, inspection, separated cargo handling, and short observation at the checkpoint. It also withdrew from routine surface relationships rather than severing only Bramblecross. Strong sanitation was justified; total isolation was an overreaction that became the new norm. Westroot disappeared from public maps, while rare sanitized transfers and outer services continued. Bramblecross gradually remembered it as a legend, while a limited number of couriers, investigators, and old-road keepers retained fragments of its route language.
 
 Westroot did not become physically inert. It continued to maintain the outer shelter and may have admitted selected known couriers or freight under strict authorization. The First Gate was normally closed and Westroot was hidden and selective, not completely cut off from every route.
 
@@ -83,11 +96,11 @@ The faction steals the Willow seal for credible outside cargo and obtains a copi
 
 Three nights before the player arrives, an authorized-looking freight convoy enters Westroot. Lio is restrained, disguised, and moved beside the shipment as a transferred courier. He is **not inside the counterfeit crate**.
 
-During a pause at the outer threshold, Lio scratches his hook-tailed mark near the First Gate. This is the Chapter 2 proof that he entered Westroot alive.
+During the convoy's sanitation and account check at the Transfer Checkpoint, Lio scratches his hook-tailed mark near the First Gate. This is the Chapter 2 proof that he entered Westroot alive.
 
-During a later pause behind the sealed Rootmarket service hatch, a child hears Lio's courier knock. The hatch has a small provision drawer or pass-through that cannot admit a person. The child sends bread and water through it without opening the passage. Lio ties blue thread around the returned cup or drawer handle before sending it back. The child continues leaving provisions afterward.
+A child helping Auntie Lume serves the checkpoint's ordinary bread and water tray. Every person waiting through inspection receives it. The Briar handlers allow the routine because refusing it would attract notice. Lio returns the cup with blue courier thread tied in his hooked knot, and the child sets the unfamiliar cup aside.
 
-The Rootbread scene then has a concrete completion: Mara identifies Lio's knot, tells the child that the food reached him, and helps pack or leave fresh provisions for the next traveler. The promise being kept is that a closed boundary will not make a hungry person invisible.
+The Rootbread scene then has a concrete completion: Mara identifies Lio's knot, tells the child that the food reached him, and helps restock the checkpoint tray for the next traveler. The promise being continued is that a guarded boundary will not make a hungry person invisible.
 
 ### The counterfeit crate
 
@@ -105,7 +118,7 @@ The arrival scene should state this distinction. Bramwell's concern is then spec
 
 The Witness Stone renewal lifts the narrower hold on the stone walk and listening marks. It lets Westroot answer the outer shelter, record the changed order publicly, and authorize Bramwell and Noma to open Cargo Siding together for a witnessed investigation. It does **not** yet reopen Westroot generally to Bramblecross.
 
-After the cargo evidence is heard, Split Hall creates a new compact:
+After the cargo evidence is heard, Split Hall chooses Bramblecross for its first restored surface compact. The evidence has shown that isolation prevented Westroot from checking the Willow credentials with the people whose names and seals were being used. The party can supply named counterparts and records in Bramblecross against which future claims can be tested:
 
 - the First Gate remains guarded;
 - admitted travelers and cargo receive named witnesses;
@@ -118,44 +131,49 @@ This is controlled, witnessed reconnection rather than unrestricted public acces
 
 ## Proposed Plain-Language Timeline
 
-1. A generation ago, Westroot withdraws from its formal relationship with Bramblecross after route trust is abused and people die.
-2. Westroot remains hidden but preserves selected shelters, listening signals, and controlled traffic.
-3. The Briar Crown steals Willowmarket trust and acquires knowledge of a Westroot account mark.
-4. Lio is captured after discovering or carrying evidence of the false-order operation.
-5. Three nights before Chapter 3, an authorized-looking convoy moves Lio and the counterfeit crate into Westroot.
-6. Lio scratches his mark at the First Gate during the transfer.
-7. A child passes bread and water through the provision hatch; Lio returns the blue-thread sign.
-8. Lio is moved west. His pouch and transfer record remain with the counterfeit cargo.
-9. Bramwell becomes suspicious and places the crate and related civic signals under a limited hold.
-10. The party opens the First Gate through the old truth-responsive protocol, without a scheduled Westroot account.
-11. A hidden Briar agent moves the held crate deeper into Cargo Siding and resets the lock.
-12. The Hold Bell triggers a total emergency lockdown.
-13. Split Hall names the costs of both danger and isolation.
-14. The Witness Stones restore essential signals and authorize a witnessed investigation.
-15. The crate proves that the Briar Crown combined outside forgery with inside route knowledge and moved Lio west as a prisoner-transfer, not inside the box.
-16. Split Hall restores controlled communication with Bramblecross and keeps the gates watched.
+1. About sixty years ago, Witherdeath enters Westroot through ordinary traffic when the checkpoint has no sanitation procedure.
+2. Split Hall adopts washing, airing, inspection, observation, and full surface isolation. The sanitation remains useful after the two-year epidemic; the isolation hardens into political tradition.
+3. Westroot remains hidden but preserves selected shelters, listening signals, and rare sanitized traffic.
+4. The Briar Crown steals Willowmarket trust and acquires knowledge of a Westroot account mark.
+5. Lio is captured after discovering or carrying evidence of the false-order operation.
+6. Three nights before Chapter 3, an authorized-looking convoy moves Lio and the counterfeit crate into Westroot.
+7. Lio scratches his mark at the First Gate during the sanitation and account check.
+8. A child serves the ordinary checkpoint tray; Lio returns the cup with his blue-thread sign.
+9. Lio is moved west. His pouch and transfer record remain with the counterfeit cargo.
+10. Bramwell becomes suspicious and places the crate and related civic signals under a limited hold.
+11. The party opens the First Gate through the old phrase-operated protocol, without a scheduled Westroot account.
+12. A hidden Briar agent moves the held crate deeper into Cargo Siding and resets the lock.
+13. The Hold Bell triggers a total emergency lockdown.
+14. Split Hall names the costs of both danger and isolation.
+15. The Witness Stones restore essential signals and authorize a witnessed investigation.
+16. The crate proves that the Briar Crown combined outside forgery with inside route knowledge and moved Lio west as a prisoner-transfer, not inside the box.
+17. Split Hall makes Bramblecross its first restored surface contact and keeps the gates watched.
 
-## Decisions To Make Before Rewriting
+## Adopted Working Decisions
 
-1. How long ago did Westroot end its formal relationship with Bramblecross?
-2. Has the First Gate admitted any legitimate traffic during that period, or only other controlled entrances?
-3. Did the Briar convoy use the First Gate, Cargo Siding, or both?
-4. Did a Westroot resident knowingly help, mistakenly approve forged credentials, or merely have their account mark copied?
-5. What exact physical mechanism lets food and the returned blue thread cross the sealed hatch?
-6. What concrete action completes the Rootbread Promise?
-7. Who carries Westroot's first renewed message to Bramblecross at the end?
-8. Does Bramblecross learn Westroot's location broadly, or do only Enna, Hollis, and named couriers enter the new compact?
+The four foundation artifacts use these approved working choices so the next prose draft can be tested as a coherent story:
+
+1. Witherdeath entered Westroot through ordinary admitted traffic about sixty years ago because the checkpoint had no health or sanitation procedure. Strong sanitation and overbroad isolation were adopted together.
+2. The First Gate has continued to admit rare, scheduled essential transfers under named outside and inside accounts plus washing, inspection, and observation.
+3. The Briar convoy enters through the First Gate, unloads the crate into Cargo Siding, and takes Lio through the transfer corridor and Lower West Gate.
+4. A Briar cargo operative acknowledges the movement from inside Westroot; the community does not knowingly admit the faction. How the operative first copied the account remains a purposeful mystery.
+5. The sealed hatch and provision cupboard are removed. The Rootbread clue occurs at the ordinary Transfer Checkpoint on the inner landing of the First Gate, now visibly designed around post-Witherdeath sanitation as well as account checks.
+6. The child serves Lio from the checkpoint tray during the false Willow account check. Mara and the player later return there, identify his knot on the cup, and restock the tray for the next traveler.
+7. Quill carries Westroot's first renewed written warning to Enna.
+8. Bramblecross is chosen first because the party can name Enna, Hollis, Ada, and records that let Westroot verify the next claim. Only named watch or courier contacts enter the initial compact; Westroot does not become public immediately, and other former partners are not automatically readmitted.
+
+The Transfer Checkpoint is not an eighth permanent map landmark. It is a visible sub-location of the First Gate, with a wash basin or water channel, airing rack, inspection bench, account rail, Rootbread tray, and a temporary child marker when the optional interaction is available. The current sealed-hatch landmark should be retired during the later playable rewrite.
+
+These choices now govern the later canonical story-script and playable-dialogue revision unless a new playtest exposes another contradiction.
 
 ## Recommended Revision Process
 
-Before another dialogue pass:
+The first four preparation artifacts now exist and agree on the working model. The next story-development sequence is:
 
-1. Approve a one-page story-truth version of the proposal above.
-2. Draw a route diagram for the First Gate, Cargo Siding, provision hatch, outer shelter, Bramblecross connection, and westward exit.
-3. Lock the three-day timeline from Lio's arrival through the Split Hall decision.
-4. Create a player-knowledge ladder specifying the facts the player must understand after each major scene.
-5. Write the complete chapter once as a short prose story.
-6. Test whether that prose version can be followed without an explanation afterward.
-7. Only then divide the story back into locations, optional conversations, choices, objectives, and ambient dialogue.
+1. Write the complete chapter once as a short prose story.
+2. Test whether that prose version can be followed without an explanation afterward.
+3. Divide the story back into locations, optional conversations, choices, objectives, and ambient dialogue.
+4. Replace the sealed-hatch map landmark with the Transfer Checkpoint interaction and post-Witherdeath visual details.
+5. Re-run the player-knowledge contract against an uninterrupted playthrough.
 
 The clarity rule for the next pass should be: **facts first, poetry second**. A metaphor may reinforce an event after the player understands it; it should not carry the only explanation of what physically happened.

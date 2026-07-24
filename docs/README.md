@@ -41,6 +41,25 @@ docs/
 
 The earlier Chapter 2 draft is retained in [`story/archive/`](story/archive/) for history. It should not be used as the current implementation source.
 
+## Chapter 3 Story-Clarity Package
+
+These working documents prepare the next Chapter 3 story revision without changing playable canon yet:
+
+- [`story/chapter-3-story-clarity-audit.md`](story/chapter-3-story-clarity-audit.md) — continuity diagnosis and revision brief.
+- [`story/chapter-3-story-truth.md`](story/chapter-3-story-truth.md) — one-page factual foundation.
+- [`story/chapter-3-route-diagram.md`](story/chapter-3-route-diagram.md) — physical route and boundary model.
+- [`story/chapter-3-three-day-timeline.md`](story/chapter-3-three-day-timeline.md) — causal chronology.
+- [`story/chapter-3-player-knowledge-contract.md`](story/chapter-3-player-knowledge-contract.md) — scene-by-scene clarity requirements.
+
+## Realm Worldbuilding Workshop
+
+- [`story/realm-history-and-government-workshop.md`](story/realm-history-and-government-workshop.md) — non-canonical nested political chassis, two-hundred-year history spine, ten historical modules, neighboring powers, ancestry relations, non-cosmic Lantern Road direction, and Briar Crown political model.
+- [`story/historical-backdrop-integration-audit.md`](story/historical-backdrop-integration-audit.md) — chapter-by-chapter revision brief for integrating that foundation into the playable story and Chapters 4–5 without lore dumps.
+
+## Political World Map
+
+- [`art/prompts/great-survey-world-map.md`](art/prompts/great-survey-world-map.md) — selected Great Survey map, its in-world date and Westroot correction logic, geographic reading, reusable generation prompt, and correction prompt.
+
 ## Active Planning Documents
 
 - [`planning/refactor-roadmap.md`](planning/refactor-roadmap.md) — staged architecture and chapter roadmap.
