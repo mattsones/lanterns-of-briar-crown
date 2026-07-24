@@ -386,12 +386,12 @@ test("chapter two three-sign hollow is a turn-back warning area", async ({ page 
   );
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
-  await expect(page.getByText("RETURN TO BRAMBLECROSS")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Hurry after Lio." })).toBeVisible();
+  await expect(page.getByText("TURN BACK EAST TOWARD BRAMBLECROSS")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Continue west, following Lio." })).toBeVisible();
   await expect(page.getByRole("button", { name: "Approach the Crown Door." })).not.toBeVisible();
 
-  await page.getByRole("button", { name: "Hurry after Lio." }).click();
-  await expect(page.getByRole("button", { name: "Hurry after Lio." })).not.toBeVisible();
+  await page.getByRole("button", { name: "Continue west, following Lio." }).click();
+  await expect(page.getByRole("button", { name: "Continue west, following Lio." })).not.toBeVisible();
 });
 
 test("chapter two threshold supports trying each door", async ({ page }) => {

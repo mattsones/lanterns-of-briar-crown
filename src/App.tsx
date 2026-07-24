@@ -3222,8 +3222,8 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       text: addLocalResult(viewFlags.crownSignRejected || viewFlags.crownSignLensUsed
         ? "The three warnings no longer agree with one another. One sign is down, one seal has cracked, and the third points back to Bramblecross with less confidence than paint should have."
         : repairMode
-          ? "Three warning signs crowd a narrow hollow. RETURN TO BRAMBLECROSS. WESTROOT UNSAFE. AWAIT CROWN COMMAND.\n\nOn the first pass they were scenery. Now they feel like hands pushing at your shoulders."
-          : "Three warning signs crowd a narrow hollow. RETURN TO BRAMBLECROSS. WESTROOT UNSAFE. AWAIT CROWN COMMAND.\n\nMara barely slows. \"Lio saw these too,\" she says. \"He still went on.\"", viewFlags),
+          ? "Three warning signs crowd a narrow hollow. TURN BACK EAST TOWARD BRAMBLECROSS. WESTROOT UNSAFE. AWAIT CROWN COMMAND.\n\nOn the first pass they were scenery. Now they feel like hands pushing at your shoulders."
+          : "Three warning signs crowd a narrow hollow. TURN BACK EAST TOWARD BRAMBLECROSS. WESTROOT UNSAFE. AWAIT CROWN COMMAND.\n\nMara barely slows. \"Lio saw these too,\" she says. \"He still went on.\"", viewFlags),
       choices: [
         repairMode && !viewFlags.crownSignRejected
           ? {
@@ -3267,7 +3267,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
               },
             }
           : null,
-        { label: repairMode ? "Leave the hollow." : "Hurry after Lio.", effect: () => setDialogue(null) },
+        { label: repairMode ? "Leave the hollow." : "Continue west, following Lio.", effect: () => setDialogue(null) },
       ].filter(Boolean),
     });
   };

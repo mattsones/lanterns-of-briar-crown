@@ -1417,7 +1417,7 @@ Mara keeps glancing at the hooked arrow beneath the bench.
 A fresh sign has been hammered into the road at an angle that makes it look official from a distance and desperate up close.
 
 > **WESTROOT WAY UNSAFE.**  
-> **RETURN EAST.**  
+> **TURN BACK EAST TOWARD BRAMBLECROSS.**\
 > **AWAIT CROWN ROAD DIRECTION.**
 
 The wood is new. The mud around the post is fresh. The letters are painted in a careful hand trying very hard to sound calm.
@@ -1439,7 +1439,7 @@ Below that, almost hidden in the grass, an older lantern scratch points onward.
 - Wonder whether Ada's lens could read the seal. *(Visible hint if player does not have Willowmark Lens; not a blocker.)*
 - Inspect the old lantern scratch.
 - Follow the detour east.
-- Continue west by the lantern mark.
+- Continue west, following Lio.
 
 ## Choice: Inspect the royal-looking seal.
 
@@ -1657,7 +1657,7 @@ The party returns to the false detour notice.
 
 - Back to the sign. Read it properly this time.
 
-## Choice: Continue west by the lantern mark.
+## Choice: Continue west, following Lio.
 
 ### Text
 
