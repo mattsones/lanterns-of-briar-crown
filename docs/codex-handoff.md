@@ -1872,3 +1872,36 @@ No runtime dialogue, story flags, map wiring, tests, or production assets change
 The ordered implementation checklist is in `docs/playtest-notes/2026-07-17-current-status.md` under **Next Session — Worldbuilding Implementation Order**.
 
 Begin with Chapter 3 only. Treat `docs/story/chapter-3-player-knowledge-contract.md` as the acceptance contract: Transfer Checkpoint, scheduled convoy versus unscheduled party arrival, Rootbread return interaction, Lio beside rather than inside the crate, scoped holds/reopenings, explicit Bramblecross compact, and Quill carrying the first warning outward. Complete its replacement art and human comprehension playthrough before the non-cosmic pass or Great Survey runtime integration. Do not begin Chapter 4 while those closeout requirements remain open.
+
+## Current Handoff — Chapter 3 Player-Knowledge Contract Implementation
+
+Last updated: 2026-07-27
+
+Branch: `codex/chapter-3-vertical-slice`
+
+### What Changed
+
+- Implemented `docs/story/chapter-3-player-knowledge-contract.md` across the canonical script, runtime dialogue, objectives, quest copy, flags, map interaction, and Chapter 3 tests.
+- Established the First Gate Transfer Checkpoint and its sanitation/account routine on arrival.
+- Distinguished the scheduled Willow convoy three nights earlier from the party's unscheduled phrase-lock opening.
+- Moved the Rootbread interaction from the retired sealed hatch to the checkpoint. The player must learn both the courier's condition and why the handlers accepted the ordinary tray before Mara can identify Lio's knot and the player can restock the tray.
+- Put the required Witherdeath history, exact Hold Bell scope, Witness Stone signal/answer and limited reopening, Lio's movement beside rather than inside the crate, and the limits of the available inside evidence on the required path.
+- Made Split Hall establish Westroot's first restored compact with Bramblecross: guarded and sanitized entry, named witnesses and contacts, resumed warnings, and Quill physically carrying the first warning outward.
+- Replaced the Rootbread scene with `assets/scenes/rootbread-transfer-checkpoint-scene-v01.webp`; preserved its generated source and the former sealed-hatch scene under the reference-art structure.
+- Completed the Witness Stones public-renewal art with `assets/scenes/witness-stones-public-renewal-scene-v03.webp`, preserving the four established symbols while showing Bramwell and Noma open the hold, Quill record the order, and mixed neighbors take responsibility. V02 is preserved under reference alternates.
+- Retired the `rootbread_hatch` tile and moved the temporary Rootbread-child marker to the First Gate landing without changing the Westroot navigation graph.
+
+### Verification
+
+- Build, rules, Chapter 1, Chapter 2, Chapter 3, smoke, asset audit, and `git diff --check` pass.
+- The Chapter 3 golden path asserts every required knowledge-contract fact, the two-question Rootbread gate, the reached-Lio completion, the disappearing child marker, and the repeatable checkpoint record.
+- Desktop and 390×844 phone browser QA confirm the new scene, responsive layout, question gating, and final restock action.
+- Browser console inspection found only the pre-existing missing `favicon.ico` request.
+
+### Scope
+
+This pass did not begin the broader non-cosmic language cleanup, Great Survey runtime integration, or Chapter 4 implementation.
+
+### Resume Here
+
+Run a fresh human comprehension playthrough of Chapter 3. If the physical route and political decision read cleanly without explanation, begin Priority 2, the bounded non-cosmic consistency pass. Keep Chapter 4 gated until that closeout decision.

@@ -89,10 +89,10 @@ export function getWestrootMapNpcTokens(
       id: "rootbread-child",
       name: "Westroot child",
       portraitName: "Westroot Rootbread Child",
-      x: 7,
-      y: 5,
-      offsetX: -1.8,
-      offsetY: -2.1,
+      x: 1,
+      y: 3,
+      offsetX: 2,
+      offsetY: -2.4,
     });
   }
   return tokens;

@@ -153,7 +153,6 @@ const MAP_TOKEN_CONFIG: Record<
     artworkMode: "enemy",
     hideWhenSpent: true,
   },
-  rootbread_hatch: { kind: "action" },
   stairs_up: { kind: "action" },
   sigil: { kind: "action" },
   mural: { kind: "action" },

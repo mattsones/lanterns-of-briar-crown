@@ -9,7 +9,7 @@ The full Chapter 3 story script is the delivery source of truth. The current pla
 - The selected Westroot Hub gameplay map is already in production as `assets/maps/westroot-hub-map-v01.webp`. Do **not** generate another map unless playtesting shows that this map must be replaced.
 - Mara Brindle, Lio Brindle, Ada Willowmarket, and the player/companion portraits already exist. Do not regenerate them for Chapter 3.
 - Emoji and text fallbacks are intentional and stay in place until selected art is wired into the app.
-- The full Rootbread Promise must eventually include Auntie Lume, the sealed hatch, the Westroot child, and Mara finding Lio's blue-thread knot. The current direct hatch reward is a temporary implementation shortcut.
+- The Rootbread Promise now returns the player to the First Gate's Transfer Checkpoint. Lume's helper presents Lio's returned cup and blue-thread knot after explaining the ordinary checkpoint routine; the sealed-hatch concept is retired.
 
 ## Generation Order
 
@@ -124,9 +124,9 @@ Mood: practical care, hidden-community warmth, old-road hospitality with a backb
 **Target runtime folder:** `assets/portraits/characters/`
 
 ```text
-Create a vertical half-body portrait of a small Mossback child from Westroot for the Rootbread Promise in Chapter 3 of Liam's Game. The child has been quietly leaving rootbread, dried apple, and water at a sealed hatch because somebody on the other side once knocked. They are not a comic sidekick or a fantasy mascot. They are scared of being in trouble, chin lifted in genuine bravery, and proud that they did the careful kind thing without opening the door.
+Create a vertical half-body portrait of a small Mossback child from Westroot for the Rootbread Promise in Chapter 3 of Liam's Game. The child helps Auntie Lume serve the ordinary bread-and-water tray at the First Gate Transfer Checkpoint and carefully set aside a returned cup whose blue courier knot they did not recognize. They are not a comic sidekick or a fantasy mascot. They are cautious, sincere, chin lifted in genuine bravery, and proud that they followed the humane checkpoint routine before Westroot decided whether to trust the travelers.
 
-Make their Mossback ancestry clear and consistent with the attached approved Mossback player-character samples, while keeping them recognizably young and distinct from Noma and Auntie Lume. Give them simple practical Westroot clothes, a small cloth food bundle or waxed-leaf cup, a few crumbs, and a nearby barrel or root-wrapped hatch in soft focus. Their expression should combine caution, sincerity, and a child's determined courage.
+Make their Mossback ancestry clear and consistent with the attached approved Mossback player-character samples, while keeping them recognizably young and distinct from Noma and Auntie Lume. Give them simple practical Westroot clothes and one returned clay cup with a short blue hooked knot. Suggest the checkpoint basin, airing rack, account rail, and rootbread tray in soft focus. Their expression should combine caution, sincerity, and a child's determined courage.
 
 Mood: small kindness with a boundary, honest worry, practical courage, old-road hospitality passed to the next generation. No magic effects, no tragedy pose, and no exaggerated cuteness.
 ```
@@ -200,7 +200,7 @@ Use only non-readable marks, route notches, and simple pictograms. The object sh
 
 # Batch C — Optional Illustrated Dialogue Scenes
 
-These eight scenes make Chapter 3 fully illustrated. Seven have selected runtime art. The current Witness Stones v02 image preserves the correct four symbols but does not show the public act strongly enough, so Chapter 3 release-candidate closeout includes the C2 replacement below. Preserve facial, ancestry, room, and prop continuity with the selected assets. Use opaque 16:9 images, ideally 1920 x 1080 or larger.
+These eight scenes make Chapter 3 fully illustrated, and all eight now have selected runtime art. The Witness Stones v03 image completes the public civic renewal composition described in C2; v02 remains preserved as an alternate. Preserve facial, ancestry, room, and prop continuity with the selected assets. Use opaque 16:9 images, ideally 1920 x 1080 or larger.
 
 ## C1. Westroot Arrival
 
@@ -311,15 +311,15 @@ Show pale moss, old name tablets, fitted stone, and a line of gold moss-lanterns
 Mood: intimate, restrained hope, a small useful truth discovered in a hidden place. No readable message, no text, no spectacle, and no ominous darkness swallowing the scene.
 ```
 
-## C8. Rootbread Promise
+## C8. Rootbread Promise At The Transfer Checkpoint
 
-**Suggested source filename:** `rootbread-promise-scene-v01.png`<br>
+**Suggested source filename:** `rootbread-transfer-checkpoint-scene-v01.png`<br>
 **Target runtime folder:** `assets/scenes/`
 
 ```text
-Create a 16:9 hand-painted storybook fantasy dialogue scene for the Rootbread Promise in Chapter 3 of Liam's Game. At a sealed door-sized hatch in a root-and-stone Westroot passage, show a small cloth bundle of warm rootbread, dried apple, and a cup of water covered by waxed leaf. Beneath the cup lies a short blue thread tied in a tiny hooked courier loop. Mara Brindle kneels beside it, carefully noticing the knot without touching it yet.
+Create a 16:9 hand-painted storybook fantasy dialogue scene for the Rootbread Promise in Chapter 3 of Liam's Game. At the broad inner landing of Westroot's First Gate, show the practical Transfer Checkpoint: a shallow wash basin or clean water channel, an airing rack, an inspection bench, a wooden account rail, and the ordinary rootbread-and-water tray served to every waiting traveler.
 
-At the edge of the scene, a small Mossback child steps carefully from behind old barrels, holding their breath and expecting to be scolded. Mara is twelve, wears travel clothes and the blue string at her wrist, and is not in armor. The hatch remains sealed; care is shown through food and a boundary, not through opening a dangerous door. Use warm lantern gold, rootbread amber, quiet moss green, fitted stone, and soft shadows.
+A small Mossback helper presents one returned clay cup to Mara Brindle. A short blue courier thread is tied around the cup in Lio's tiny hooked knot. Mara is twelve, wears travel clothes and the blue string at her wrist, and kneels to recognize the proof with restrained hope. The scene shows guarded hospitality and ordinary civic procedure, not a puzzle, prison, ritual, or hospital. No sealed hatch, no food bundle on the floor, no readable text, and no magical glow.
 
 Mood: small practical kindness, emotional evidence without melodrama, food as an answer, a promise that gives the next traveler farther to walk. No readable note, lettering, labels, or magical spectacle.
 ```

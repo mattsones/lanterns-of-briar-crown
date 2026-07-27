@@ -51,7 +51,6 @@ export const REQUIRED_GRAPH_LANDMARKS: Record<string, string[]> = {
     "rootmarket",
     "mossgarden",
     "witness_stones",
-    "rootbread_hatch",
     "cargo_siding",
     "split_hall",
   ],

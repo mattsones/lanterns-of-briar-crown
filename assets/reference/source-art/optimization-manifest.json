@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-20T03:03:49.925Z",
+  "generatedAt": "2026-07-27T19:40:37.666Z",
   "sourceArtRoot": "assets/reference/source-art",
   "alternatesRoot": "assets/reference/alternates",
   "conversions": [
@@ -1346,12 +1346,12 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/scenes/rootbread-promise-scene-v01.webp",
-      "original": "assets/reference/source-art/assets/scenes/rootbread-promise-scene-v01.png",
-      "output": "assets/scenes/rootbread-promise-scene-v01.webp",
+      "source": "assets/scenes/rootbread-transfer-checkpoint-scene-v01.png",
+      "original": "assets/reference/source-art/assets/scenes/rootbread-transfer-checkpoint-scene-v01.png",
+      "output": "assets/scenes/rootbread-transfer-checkpoint-scene-v01.webp",
       "format": "webp",
-      "originalBytes": 2828796,
-      "outputBytes": 276126,
+      "originalBytes": 2969225,
+      "outputBytes": 315174,
       "width": 1672,
       "height": 941,
       "hasAlpha": false
@@ -1432,7 +1432,27 @@
       "width": 1672,
       "height": 941,
       "hasAlpha": false
+    },
+    {
+      "source": "assets/scenes/witness-stones-public-renewal-scene-v03.png",
+      "original": "assets/reference/source-art/assets/scenes/witness-stones-public-renewal-scene-v03.png",
+      "output": "assets/scenes/witness-stones-public-renewal-scene-v03.webp",
+      "format": "webp",
+      "originalBytes": 3079488,
+      "outputBytes": 483806,
+      "width": 1600,
+      "height": 900,
+      "hasAlpha": false
     }
   ],
-  "movedAlternates": []
+  "movedAlternates": [
+    {
+      "source": "assets/scenes/rootbread-promise-scene-v01.webp",
+      "destination": "assets/reference/alternates/assets/scenes/rootbread-promise-scene-v01.webp"
+    },
+    {
+      "source": "assets/scenes/witness-stones-public-renewal-scene-v02.webp",
+      "destination": "assets/reference/alternates/assets/scenes/witness-stones-public-renewal-scene-v02.webp"
+    }
+  ]
 }

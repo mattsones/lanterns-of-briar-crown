@@ -362,7 +362,9 @@ test("chapter two no-handle door frames the repair puzzle before it opens", asyn
   });
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
-  await expect(page.getByText("Three-Door Threshold", { exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("dialog").getByText("Three-Door Threshold", { exact: true }),
+  ).toBeVisible();
   await page.getByRole("button", { name: "Approach the No-Handle Door." }).click();
   await expect(page.getByText("LET THE ROAD BEHIND YOU SPEAK")).toBeVisible();
   await expect(page.getByText("I DO NOT ANSWER HANDS")).toBeVisible();

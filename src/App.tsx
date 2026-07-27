@@ -204,10 +204,13 @@ const rootmarketUneasyArrivalScene = new URL(
   import.meta.url,
 ).href;
 const witnessStonesScene = new URL(
-  "../assets/scenes/witness-stones-public-renewal-scene-v02.webp",
+  "../assets/scenes/witness-stones-public-renewal-scene-v03.webp",
   import.meta.url,
 ).href;
-const rootbreadPromiseScene = new URL("../assets/scenes/rootbread-promise-scene-v01.webp", import.meta.url).href;
+const rootbreadCheckpointScene = new URL(
+  "../assets/scenes/rootbread-transfer-checkpoint-scene-v01.webp",
+  import.meta.url,
+).href;
 const cargoSidingEvidenceScene = new URL(
   "../assets/scenes/cargo-siding-evidence-scene-v01.webp",
   import.meta.url,
@@ -555,11 +558,14 @@ export default function LiamsGamePrototype() {
       if (tile === "den_guard" && flags.beatCrownDenGuard) return true;
     }
     if (region === "westrootHub") {
-      if (tile === "westroot_first_gate" && flags.metBramwell) return true;
+      if (
+        tile === "westroot_first_gate" &&
+        flags.metBramwell &&
+        !flags.rootbreadLeadLearned
+      ) return true;
       if (tile === "rootmarket" && flags.metQuill && flags.metAuntieLume) return true;
       if (tile === "mossgarden" && flags.metNoma) return true;
       if (tile === "witness_stones" && flags.witnessStoneSequenceSolved) return true;
-      if (tile === "rootbread_hatch" && flags.rootbreadPromiseKept) return true;
       if (tile === "cargo_siding" && flags.willowCargoExposed) return true;
       if (
         tile === "split_hall" &&
@@ -4384,6 +4390,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     }."`;
 
   const openWestrootFirstGateDialogue = () => {
+    if (flags.rootbreadLeadLearned && !flags.rootbreadPromiseKept) {
+      return openRootbreadCheckpointDialogue();
+    }
     if (flags.metBramwell) {
       if (!flags.chapterThreeStarted) {
         setFlags((current) => ({ ...current, chapterThreeStarted: true }));
@@ -4396,11 +4405,15 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           src: westrootArrivalScene,
           alt: "Mara arriving at the lantern-lit First Westroot Gate beneath the hill.",
         },
-        text: flags.chapterThreeClear
+        text: `${flags.chapterThreeClear
           ? "Bramwell has reopened the First Gate to witnessed messages, not unmarked cargo. Two gatekeepers compare every outgoing warning aloud. \"A shield needs eyes on both sides,\" he says."
           : flags.westrootHoldBellRung
             ? "Red hold-cords cross the First Gate. Bramwell's people are checking names against watch times instead of waving anyone through. \"The danger is real,\" he says. \"Split Hall is deciding whether our answer will be real too.\""
-            : CHAPTER_3_SCENE_COPY.firstGate.repeat,
+            : CHAPTER_3_SCENE_COPY.firstGate.repeat}${
+              flags.rootbreadPromiseKept
+                ? `\n\n${CHAPTER_3_FULL_SCENE_COPY.rootbread.repeat}`
+                : ""
+            }`,
         choices: [{ label: "Continue into Westroot.", effect: () => setDialogue(null) }],
       });
     }
@@ -4430,10 +4443,10 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       text: CHAPTER_3_SCENE_COPY.firstGate.text,
       choices: [
         {
-          label: "The road opened when we told it the truth.",
+          label: "The old phrase-lock opened after we restored its marks.",
           effect: () =>
             welcomeWestroot(
-              "Bramwell looks past you to the sealed stone. \"Truth opens old things. It does not guarantee what walks through after.\"",
+              "Bramwell looks past you to the sealed stone. \"Then you repaired an old mechanism. You did not supply an account or a gatekeeper expecting you. That difference is why everyone here is afraid.\"",
             ),
         },
         {
@@ -4618,7 +4631,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
             }
           : null,
         viewFlags.rootbreadLeadLearned
-          ? { label: "Look for the food left by the sealed hatch.", effect: () => setDialogue(null) }
+          ? { label: "Follow the Rootbread clue at the Transfer Checkpoint.", effect: () => setDialogue(null) }
           : null,
         {
           label: "Return to Rootmarket.",
@@ -4697,7 +4710,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
             }
           : null,
         conversationFlags.rootbreadLeadLearned
-          ? { label: "Look for the food left by the sealed hatch.", effect: () => setDialogue(null) }
+          ? { label: "Follow the Rootbread clue at the Transfer Checkpoint.", effect: () => setDialogue(null) }
           : null,
         {
           label: "Return to Rootmarket.",
@@ -4993,13 +5006,17 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     setFlags((f) => ({ ...f, rootbreadPromiseKept: true, lioKnotFound: true, metRootbreadChild: true }));
     gainStoryItemOnce("rootbread_charm");
     setPlayer((p) => ({ ...p, xp: p.xp + 6 }));
-    announce("The Rootbread Promise is kept. XP +6", [{ id: "rootbread_charm", qty: 1 }]);
+    announce("The Rootbread Promise reached Lio. XP +6", [{ id: "rootbread_charm", qty: 1 }]);
     setDialogue({
       portrait: "🍞",
       name: CHAPTER_3_SCENE_COPY.rootbread.name,
       portraitName: "Westroot Rootbread Child",
+      sceneImage: {
+        src: rootbreadCheckpointScene,
+        alt: "Mara and a young Mossback restocking the Transfer Checkpoint tray after identifying Lio's blue knot on a returned cup.",
+      },
       text: withChapter3CompanionReaction(CHAPTER_3_FULL_SCENE_COPY.rootbread.converged, "rootbread"),
-      choices: [{ label: "Thank the child and keep the promise.", effect: () => setDialogue(null) }],
+      choices: [{ label: "Leave the restocked tray for the next traveler.", effect: () => setDialogue(null) }],
     });
   };
 
@@ -5017,30 +5034,36 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       portrait: "🍞",
       name: "Westroot Child",
       portraitName: "Westroot Rootbread Child",
-      text: response,
+      sceneImage: {
+        src: rootbreadCheckpointScene,
+        alt: "A young Mossback presents Lio's returned cup to Mara at Westroot's Transfer Checkpoint.",
+      },
+      text: `${response}${hasAnotherQuestion ? "" : `\n\n${CHAPTER_3_FULL_SCENE_COPY.rootbread.cupReveal}`}`,
       choices: [
         hasAnotherQuestion
           ? {
               label: "Ask the child something else.",
-              effect: () => openRootbreadHatchDialogue(nextFlags),
+              effect: () => openRootbreadCheckpointDialogue(nextFlags),
             }
           : null,
-        {
-          label: "Tell the child whose blue knot Mara found.",
-          effect: completeRootbreadPromise,
-        },
+        !hasAnotherQuestion
+          ? {
+              label: "Restock the tray for the next traveler.",
+              effect: completeRootbreadPromise,
+            }
+          : null,
       ].filter(Boolean),
     });
   };
 
-  const openRootbreadHatchDialogue = (assumedFlags: Flags = {}) => {
+  const openRootbreadCheckpointDialogue = (assumedFlags: Flags = {}) => {
     const viewFlags = { ...flags, ...assumedFlags };
     if (!viewFlags.rootbreadLeadLearned) {
       return setDialogue({
         portrait: "🍞",
-        name: "Sealed Rootmarket Hatch",
+        name: "Westroot Transfer Checkpoint",
         text: CHAPTER_3_FULL_SCENE_COPY.rootbread.unavailable,
-        choices: [{ label: "Return to Rootmarket.", effect: () => setDialogue(null) }],
+        choices: [{ label: "Continue into Westroot.", effect: () => setDialogue(null) }],
       });
     }
     if (viewFlags.rootbreadPromiseKept) {
@@ -5049,7 +5072,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         name: CHAPTER_3_SCENE_COPY.rootbread.name,
         portraitName: "Westroot Rootbread Child",
         text: CHAPTER_3_FULL_SCENE_COPY.rootbread.repeat,
-        choices: [{ label: "Leave it for the next traveler.", effect: () => setDialogue(null) }],
+        choices: [{ label: "Leave the record and tray in place.", effect: () => setDialogue(null) }],
       });
     }
     const firstMeeting = !viewFlags.metRootbreadChild;
@@ -5060,8 +5083,8 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       name: firstMeeting ? CHAPTER_3_SCENE_COPY.rootbread.name : "Westroot Child",
       portraitName: "Westroot Rootbread Child",
       sceneImage: {
-        src: rootbreadPromiseScene,
-        alt: "Mara speaking with the young Mossback who keeps rootbread at a sealed hatch.",
+        src: rootbreadCheckpointScene,
+        alt: "A young Mossback helper speaking with Mara beside the basin, airing rack, account rail, and rootbread tray at Westroot's Transfer Checkpoint.",
       },
       text: firstMeeting
         ? CHAPTER_3_FULL_SCENE_COPY.rootbread.introduction
@@ -5069,9 +5092,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       choices: [
         !conversationFlags.rootbreadChildAskedWhen
           ? {
-              label: "When did you hear someone behind the hatch?",
+              label: "What did the courier look like?",
               effect: () => openRootbreadChildResponse(
-                CHAPTER_3_FULL_SCENE_COPY.rootbread.whenResponse,
+                CHAPTER_3_FULL_SCENE_COPY.rootbread.appearanceResponse,
                 "rootbreadChildAskedWhen",
                 conversationFlags,
               ),
@@ -5079,18 +5102,14 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           : null,
         !conversationFlags.rootbreadChildAskedSafety
           ? {
-              label: "Leaving food without opening the hatch was careful.",
+              label: "Why did the handlers let you feed him?",
               effect: () => openRootbreadChildResponse(
-                CHAPTER_3_FULL_SCENE_COPY.rootbread.rightThingResponse,
+                CHAPTER_3_FULL_SCENE_COPY.rootbread.routineResponse,
                 "rootbreadChildAskedSafety",
                 conversationFlags,
               ),
             }
           : null,
-        {
-          label: "Tell the child whose blue knot Mara found.",
-          effect: completeRootbreadPromise,
-        },
       ].filter(Boolean),
     });
   };
@@ -5215,7 +5234,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         flags.rootbreadPromiseKept
           ? "Chapter 3 is complete. The playable story currently ends here; the westward lead continues in Chapter 4."
           : flags.rootbreadLeadLearned
-            ? "Chapter 3's main story is complete. The playable story currently ends here, but one optional lead remains: check the food Lume said was left beside the sealed Rootmarket hatch."
+            ? "Chapter 3's main story is complete. The playable story currently ends here, but one optional lead remains: return to the Transfer Checkpoint and ask Lume's helper about the unnamed courier."
             : flags.metAuntieLume
               ? "Chapter 3's main story is complete. The playable story currently ends here. Lume may still know whether anyone in Westroot saw a sign of Lio."
               : "Chapter 3's main story is complete. The playable story currently ends here. The Mossback baker in Rootmarket may still have heard something about Lio."
@@ -5227,7 +5246,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
   const completeChapterThree = (response) => {
     setFlags((f) => ({ ...f, westrootTrustEarned: true, chapterThreeClear: true }));
     setPlayer((p) => ({ ...p, xp: p.xp + 16 }));
-    announce("Westroot trusts the road again. Chapter 3 complete. XP +16");
+    announce("Westroot restores its first Bramblecross compact. Chapter 3 complete. XP +16");
     setDialogue({
       portrait: "▤",
       name: CHAPTER_3_SCENE_COPY.splitHall.name,
@@ -5810,7 +5829,6 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       if (tile === "rootmarket") openRootmarketDialogue();
       if (tile === "mossgarden") openMossgardenDialogue();
       if (tile === "witness_stones") openWitnessStonesDialogue();
-      if (tile === "rootbread_hatch") openRootbreadHatchDialogue();
       if (tile === "cargo_siding") openCargoSidingDialogue();
       if (tile === "split_hall") openSplitHallDialogue();
     }
@@ -6883,7 +6901,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
                   ? flags.rootbreadPromiseKept
                     ? "The current playable story ends here. Westroot now points toward Chapter 4 and the deeper western road."
                     : flags.rootbreadLeadLearned
-                      ? "The main story ends here for now. Lume's sealed-hatch lead remains open in Westroot."
+                      ? "The main story ends here for now. Lume's Transfer Checkpoint lead remains open in Westroot."
                       : flags.metAuntieLume
                         ? "The main story ends here for now. Lume may still know whether anyone saw a sign of Lio."
                         : "The main story ends here for now. The Mossback baker in Rootmarket may still have heard something about Lio."
