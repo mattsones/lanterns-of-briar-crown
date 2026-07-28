@@ -1,8 +1,8 @@
 # Realm History And Government Workshop
 
-Last updated: 2026-07-24
+Last updated: 2026-07-26
 
-Status: Worldbuilding workshop, not yet fully canonical story truth. Existing chapter facts take precedence until their documents are revised. This revision incorporates the 2026-07-24 review direction: Alderreach, Lanthorne as the Rainroot regional city, a Hearthvale capital, a nested charter monarchy, Hearthhollow within Bramblecross's jurisdiction, the Saltwake War and Cinder Vale diaspora, the two-year Witherdeath crisis, Westroot's sixty-year isolation, a powerful foreign-born queen, Elowen's independent Royal Progress, Moonmark performing companies, and a non-cosmic Lantern Road.
+Status: Worldbuilding workshop, not yet fully canonical story truth. Existing chapter facts take precedence until their documents are revised. This revision incorporates the approved map geography and place-name direction through 2026-07-26: Alderreach and its four regional seats, named neighboring capitals and council seats, the Principality of Selvara, the Veyran river march, the southern waterfall escarpment, a nested charter monarchy, the Saltwake War and Cinder Vale diaspora, the two-year Witherdeath crisis, Westroot's sixty-year isolation, a powerful foreign-born queen, Elowen's independent Royal Progress, Moonmark performing companies, and a non-cosmic Lantern Road.
 
 ## Why This Document Exists
 
@@ -20,13 +20,21 @@ This model also makes the story's central danger concrete. The realm is decentra
 
 ## Working Names
 
-This document calls the country **Alderreach**. That working name has survived review but is not playable canon yet.
+The following names have survived map review and are the current worldbuilding direction. They remain outside playable canon until the chapter scripts and story bible deliberately introduce them.
 
-**Lanthorne** is the Rainroot regional city above Bramblecross. It administers the region's circuit court, regional levy, major granaries, and appeals. It need not appear in the current adventure unless the road eventually takes the party there.
+- **Alderreach** is the central chartered kingdom. **Hearthward**, in Hearthvale, is its national capital.
+- **Lanthorne** is Rainroot's regional city. It administers the circuit court, regional levy, major granaries, and appeals above Bramblecross.
+- **Bellwater** is Dawnmere's regional capital, built into its linked lake-and-river system.
+- **Saffron Gate** is Sunreach's regional capital, positioned on the plateau at a major pass through the southern escarpment.
+- **Kestovar** is the national capital of Veyrun.
+- **Cairnmeet** is the accessible conclave seat of the Cairn Cantons.
+- **Sevenbridge** is the council seat of the Mereward League.
+- **Tideglass** is the mainland Sea Council port for the Ember Coast Principalities; it is a meeting place, not the capital of a unified coastal country.
+- **Selvara** is the queen's mainland Ember Coast principality, whose capital is **Whiteharbor**.
+- **Valehaven** is the chief civic city of Cinder Vale.
+- **Riverwatch** is the Alderreach fortress at a major crossing of the disputed western river march.
 
-The national capital is provisionally **Hearthward**, an older central city in Hearthvale. The name is intentionally warmer, more settled, and less root-and-lantern flavored than Lanthorne. Other viable Hearthvale names are **Goldhearth**, **Kingshearth**, and **Hearthstead** if Hearthward does not survive review.
-
-`Alderreach` fits the existing place-name vocabulary without assigning the country to a single ancestry. If either city name changes later, the political model does not need to change with it.
+`Alderreach` fits the existing place-name vocabulary without assigning the country to a single ancestry. These seats give the map political anchors without implying that every confederation or league has a monarch.
 
 ## The Present-Day Country
 
@@ -117,7 +125,7 @@ Most disputes stay local. Cross-charter cases go to traveling circuit judges. Fo
 The existing story works best if:
 
 - the king is responsible and decent, but receives increasingly filtered information;
-- the queen is a human princess of Sunreach heritage from an Ember Coast principality;
+- the queen is a human of Sunreach heritage, born a princess of Selvara on the Ember Coast;
 - she married the current king while he was still a prince, as part of the Sea-Peace settlement;
 - she is now a significant power broker and royal councillor whose foreign birth and influence attract both principled opposition and ugly resentment;
 - she understands that law depends on memory, custom, and promises as much as seals;
@@ -189,18 +197,20 @@ That diversity is a strength until the communication system is corrupted. Then e
 
 The existing human heritages can function as broad cultural regions rather than separate countries:
 
-- **Hearthvale:** central farms, market villages, steady old hearths, and the approaches to the national capital of Hearthward.
-- **Rainroot:** a wide region of western river valleys, deep forests, scattered villages, market towns, and defended marches. Lanthorne is its regional seat. Bramblecross, Hearthhollow, and the underground Westroot junction lie in its remote interior; separate fortified settlements guard the Veyran border farther west.
-- **Dawnmere:** northern lakes, misted hills, careful craft, and old monastic or archival houses.
-- **Sunreach:** southern uplands, warm trade roads, orchards, and open courtyard towns.
+- **Hearthvale:** a broad fertile central basin where several navigable rivers converge near Hearthward. Open farms, orchards, market villages, bridges, and easy river travel help explain why the capital and Crown institutions developed there.
+- **Rainroot:** the wetter western watershed of deep forests, foothills, rain-fed tributary valleys, and low wooded ridges. Lanthorne stands at the major confluence where western traffic enters the Hearthvale basin. Bramblecross sits farther west at a smaller river crossing, Hearthhollow occupies a nearby agricultural hollow, and the underground Westroot junction lies beneath a forested limestone or sandstone ridge where several tributary valleys meet. Separate fortified settlements guard the Veyran river march still farther west.
+- **Dawnmere:** northern lake and wetland country fed by the Cairn mountains. Glacial valleys, linked lakes, and a low moraine or watershed divide give it a recognizable landscape without sealing it away from Hearthvale. Bellwater grew where lake traffic and the south-flowing roads can be transferred efficiently.
+- **Sunreach:** warmer and somewhat drier southern uplands above a long but broken escarpment. River gaps and road passes connect it to Hearthvale and descend south toward the Ember Coast. Waterfalls mark the principal rivers' descent to the coastal lowlands, while Saffron Gate controls one of the safest switchback passes from the plateau.
 
 These are not racially exclusive provinces. They describe landscapes and customs. Stonekin, Mossbacks, Sylvans, Emberlings, Tideborn, Cloudlings, Moonmarks, and humans may belong to any region.
+
+The four regions are administrative and cultural zones within one country, not former countries preserved as hard internal blocks. Their watercolor identities should blend at the edges. Faint charter boundaries generally follow watersheds, rivers, ridges, and old roads, but trade, marriage, migration, and occasional historical oddities cross every line.
 
 Four neighboring powers give Alderreach believable diplomatic pressures:
 
 ### The Cairn Cantons, north
 
-A confederation of highland holds, cliff settlements, and valley towns. Stonekin are prominent in the lower holds. Cloudling communities occupy the highest shelves and wind-cut valleys, where they mostly govern themselves and limit outside travel. Each canton guards its autonomy, so the confederation is slow to act and difficult to conquer.
+A confederation of highland holds, cliff settlements, and valley towns. Stonekin are prominent in the lower holds. Cloudling communities occupy the highest shelves and wind-cut valleys, where they mostly govern themselves and limit outside travel. Each canton guards its autonomy, so the confederation is slow to act and difficult to conquer. Cairnmeet occupies an accessible meeting valley near several passes; it is a conclave seat rather than a dominating capital.
 
 Alderreach depends on Cairn iron, bridgecraft, highland wool, weather reports, and mountain passes; the Cantons depend on southern grain and river access. Relations are usually friendly, with recurring arguments over mines, watershed rights, and whether a road improvement is also a military road.
 
@@ -208,23 +218,33 @@ The Cloudlings are not automatically messengers or adventurers. Most remain in t
 
 ### The Mereward League, east
 
-A league of river and lake cities with strong Tideborn and human merchant traditions. Its councils are wealthy, competitive, and suspicious of hereditary rulers. It is Alderreach's largest trading partner and its most persistent source of commercial espionage.
+A league of river and lake cities with strong Tideborn and human merchant traditions. Its councils are wealthy, competitive, and suspicious of hereditary rulers. Sevenbridge hosts the league council because several navigable routes, bridges, and causeways meet there, but it does not rule the member cities as a royal capital. The League is Alderreach's largest trading partner and its most persistent source of commercial espionage.
 
 The League prefers contracts and debt to conquest. A royal marriage, port loan, or disputed toll can matter as much as a battle.
 
+Its western edge follows a broad river-and-lake watershed, marsh belt, and low wooded divide. Trade concentrates at navigable crossings. The landscape separates jurisdictions without preventing the commerce on which both sides depend.
+
 ### The Ember Coast Principalities, south
 
-Several coastal principalities linked by marriage, rivalry, and shared sea defenses. Emberlings, Tideborn, and humans are common. The coast supplies salt, glass, dyes, and ships. Its rulers frequently marry across borders, which makes every family celebration a diplomatic event.
+Several mainland coastal principalities linked by marriage, rivalry, and shared sea defenses. Emberlings, Tideborn, and humans are common. The coast supplies salt, glass, dyes, and ships. Its rulers frequently marry across borders, which makes every family celebration a diplomatic event. Tideglass hosts the Sea Council and common naval deliberations at a mainland harbor without becoming a national capital.
 
 No single prince can speak for the whole coast. Alderreach may be allied with two principalities and feuding with a third at the same time.
 
+The coast forms a broad mainland shelf below a long escarpment extending across most of its boundary with Sunreach. Rivers descend through waterfall gorges, and a limited number of passes concentrate trade and defense. The principalities form around bays, river mouths, port valleys, and defensible coastal roads. Selvara is one of these mainland principalities, with Whiteharbor as its capital and royal harbor.
+
+Cinder Vale is a natural river valley and broad break in the escarpment. Its glassworks, furnaces, and metalworking are important to its history and economy, but do not make the landscape or Valehaven look like a modern factory complex. Valehaven is an ordinary civic city and regional center, not a palace state or separate giant fortress.
+
+The Saltwake Isles are a separate offshore chain south of the principalities, divided from the mainland by open water. Their captains intervened in mainland politics during the Saltwake War, but Selvara, Whiteharbor, and Tideglass are not part of the island chain.
+
 ### Veyrun, west
 
-A more centralized neighboring kingdom beyond the western marches. Veyrun values straight military roads, appointed governors, and rapid command. It is not inherently evil, but its political instinct is the opposite of Alderreach's charter tradition.
+A more centralized neighboring kingdom beyond the western marches. Veyrun values straight military roads, appointed governors, and rapid command. Its national capital, Kestovar, stands west of the disputed march in the settled interior. Veyrun is not inherently evil, but its political instinct is the opposite of Alderreach's charter tradition.
 
 The border has shifted after several wars. There are Alderreach families with Veyran grandparents and Veyran towns that once held Alderreach charters. That makes the frontier a place of mixed loyalties rather than a clean line between good people and bad people.
 
-Rainroot and Veyrun share a recognized political border, with narrow disputed parcels around a few roads, ridges, and old charter lands rather than a continent-wide no-man's-land. Alderreach maintains a fortified march town and smaller watch keeps on its side. Bramblecross is not one of those fortifications.
+Rainroot and Veyrun share a contested river march rather than a continent-wide no-man's-land or one obvious mountain wall. The country immediately west of the march is a broad inhabited river valley much like Rainroot, with farms, tributaries, forests, and towns; Veyrun's more regular fields, planned roads, and controlled crossings express political centralization rather than a different biome. Mountains rise only farther west and northwest.
+
+Several roughly parallel rivers, braided channels, oxbows, and abandoned riverbeds cross the frontier. Successive treaties and local charters name different channels as the lawful boundary, while the rivers themselves shift. Alderreach maintains Riverwatch at a major crossing and smaller bridge keeps on its side. Bramblecross is not one of those fortifications.
 
 ## Relations Among Peoples
 
@@ -722,13 +742,13 @@ This framework resolves several questions without requiring a history lecture in
 
 ## Decisions To Make Before This Becomes Canon
 
-1. Confirm **Hearthward** or choose another Hearthvale name for the national capital.
+1. Decide when **Hearthward**, **Lanthorne**, and the other approved map names become playable canon; their map roles are settled, but most do not require an immediate visit.
 2. Decide whether Lanthorne ever appears in the adventure; its role as Rainroot's regional city does not require an immediate visit.
 3. Confirm **Saltwake War** and **Saltwake Confederacy** as the southern conflict's working names.
 4. Decide Cinder Vale's present condition: restored principality, divided coastal district, semi-independent foundry league, or homeland that survives mainly in diaspora memory.
 5. Decide whether the historical event and disease are both called **Witherdeath**, or whether the illness has a softer medical name such as Wither Ache.
 6. Define the new checkpoint sanitation visually and decide how much can appear in Chapter 3 without creating cumbersome gameplay.
-7. Name the queen, her Ember Coast principality, and the council responsibilities through which she exercises power.
+7. Name Alderreach's queen, the Selvaran princess, and define the council responsibilities through which she exercises power.
 8. Name or outline the Moonmark Counselor of Songs and decide whether they accompany Elowen or remain at court.
 9. Name the old Hearthvale family and its claimant, and define the strength of her collateral claim.
 10. Decide whether the king's sister is a loyal centralizer, neutral dynastic rival, or future suspect.

@@ -1,4 +1,4 @@
-# Current Project Status — 2026-07-24
+# Current Project Status — 2026-07-26
 
 Branch: `codex/chapter-3-vertical-slice`
 
@@ -33,7 +33,7 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 - Chapter 3 now has a working story-foundation package covering the factual story truth, physical route diagram, three-day chronology, and player-knowledge contract. These documents resolve the Lio/crate/hatch/gate continuity questions for review but do not yet change playable canon.
 - The realm-history workshop now places Lanthorne above Bramblecross as the Rainroot regional city, proposes Hearthward as the Hearthvale capital, adds the Saltwake War and Cinder Vale diaspora, makes Witherdeath a separate two-year international plague, confirms the coastal Sunreach queen and Elowen's independent Royal Progress, develops Moonmark performing companies, and gives the Crownward/Briar movement a sovereign claimant above its road-office operators. The Chapters 2–5 story bible now reflects the non-cosmic civic-road and institutional-conspiracy direction; playable text still awaits a later focused pass.
 - `docs/story/historical-backdrop-integration-audit.md` now identifies the leanest integration points across playable Chapters 1–3 and planned Chapters 4–5. Its first priorities are the Chapter 3 checkpoint/compact rewrite, a non-cosmic language pass, the Great Survey evidence prop, Elowen's Royal Progress, the Crownward/Briar distinction, and Chapter 5's institutional-compromise reveal.
-- The selected Great Survey political map now lives at `assets/reference/source-art/assets/maps/great-survey-of-alderreach-v02.png`. Rainroot is a broad inhabited region: fortified settlements guard the direct Veyran border, while small Bramblecross, Hearthhollow, and underground Westroot lie several quiet days inside Alderreach. Westroot remains a later graphite correction made after renewed contact. V01 is preserved as the superseded border-heavy composition. The map is reference-only until an optimized runtime derivative and story placement are approved.
+- The selected Great Survey political map now lives at `assets/reference/source-art/assets/maps/great-survey-of-alderreach-v05.png`. Veyrun and Rainroot occupy comparable settled valleys on either side of the braided river march; the long Sunreach escarpment creates waterfall gorges and limited passes to a broad mainland Ember Coast; Selvara, Whiteharbor, Tideglass, Cinder Vale, and Valehaven sit on that mainland while the Saltwake Isles remain a separate offshore chain. National capitals use stars, provincial capitals use diamonds, council seats use hexagons, towns use dots, and Riverwatch uses a fortress square. The approved labels are Hearthward, Lanthorne, Bellwater, Saffron Gate, Kestovar, Cairnmeet, Sevenbridge, Tideglass, Selvara, Whiteharbor, Valehaven, and Riverwatch. Westroot remains a later graphite correction made after renewed contact. V01–V04 are preserved as superseded compositions. The map is reference-only until an optimized runtime derivative and story placement are approved.
 
 - Elder Brynn learns that the order is forged only after the Bramble Boar fight. The player reports the satchel to Brynn before following Lio's trail.
 - The worried traveler believes the apparent royal order; he does not diagnose the forgery.
@@ -151,8 +151,8 @@ Replace literal road/stone/root agency with keeper practices, crafted locks, ech
 
 1. Add the official Survey copy to Enna's Chapter 2 map briefing: **“The Survey ends cleanly west of Bramblecross. The courier marks do not.”**
 2. Keep Westroot absent from official ink before discovery.
-3. After the Chapter 3 compact, unlock or show the selected v02 map with Westroot penciled in and dated under a witness name.
-4. Create an optimized runtime derivative or focused crops from `great-survey-of-alderreach-v02.png`; never import the 3.2 MB reference PNG directly.
+3. After the Chapter 3 compact, unlock or show the selected v05 map with Westroot penciled in and dated under a witness name.
+4. Create an optimized runtime derivative or focused crops from `great-survey-of-alderreach-v05.png`; never import the 3.6 MB reference PNG directly.
 
 ### Priority 4: Reconcile Chapters 4–5 Before Implementation
 

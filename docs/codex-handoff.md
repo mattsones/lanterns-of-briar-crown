@@ -1840,9 +1840,11 @@ Branch: `codex/chapter-3-vertical-slice`
 
 ### What Changed
 
-- Generated, corrected, visually inspected, and selected `assets/reference/source-art/assets/maps/great-survey-of-alderreach-v02.png`, a 1536×1024 political map of Alderreach and the surrounding known states. V01 remains preserved as the superseded composition.
+- Generated, corrected, visually inspected, and selected `assets/reference/source-art/assets/maps/great-survey-of-alderreach-v03.png`, a 1536×1024 political map of Alderreach and the surrounding known states. V01–V02 remain preserved as superseded compositions.
 - Framed the object as a competent Great Survey copy with Westroot added later in graphite after Chapter 3, rather than an omniscient map or evidence that the original surveyors knew and erased Westroot.
-- Revised the western geography so Rainroot and Veyrun share a defended border with narrow disputed sections, while Bramblecross, Hearthhollow, and underground Westroot sit within a broad inhabited Rainroot interior. An unlabeled fortified border town and smaller keeps now carry the frontier-defense role.
+- Revised the physical geography so Alderreach's regions emerge from watersheds, climate, a central river basin, northern lake country, and a southern escarpment rather than four stark political color blocks.
+- Recast the Veyran frontier as a contested river march with braided channels and competing treaty lines. Bramblecross, Hearthhollow, and underground Westroot remain within the broader Rainroot interior.
+- Reduced the city and castle symbols throughout the map, particularly in Mereward and Cinder Vale.
 - Saved the exact reusable generation and correction prompts, geographic rules, map timing, and proposed story uses in `docs/art/prompts/great-survey-world-map.md`.
 - Registered the reference source in `docs/art/asset-manifest.md`. It remains outside the production asset set and must receive an optimized derivative before runtime import.
 - Reviewed the playable Chapter 1–3 sources, canonical scripts, Chapters 4–5 story bible, runtime story-plan constants, and art direction against the new realm foundation.
@@ -1859,7 +1861,7 @@ Branch: `codex/chapter-3-vertical-slice`
 
 ### Verification
 
-- The selected v02 map was verified at 1536×1024, 3,286,510 bytes.
+- The selected v03 map was verified at 1536×1024, 3,586,319 bytes.
 - `npm.cmd run audit:assets -- --limit=10` passed with 133 production images; the new reference source is correctly excluded.
 - `git diff --check` passed with Windows line-ending warnings only.
 
@@ -1872,3 +1874,56 @@ No runtime dialogue, story flags, map wiring, tests, or production assets change
 The ordered implementation checklist is in `docs/playtest-notes/2026-07-17-current-status.md` under **Next Session — Worldbuilding Implementation Order**.
 
 Begin with Chapter 3 only. Treat `docs/story/chapter-3-player-knowledge-contract.md` as the acceptance contract: Transfer Checkpoint, scheduled convoy versus unscheduled party arrival, Rootbread return interaction, Lio beside rather than inside the crate, scoped holds/reopenings, explicit Bramblecross compact, and Quill carrying the first warning outward. Complete its replacement art and human comprehension playthrough before the non-cosmic pass or Great Survey runtime integration. Do not begin Chapter 4 while those closeout requirements remain open.
+
+## Current Handoff — Great Survey V04 Named Political Geography
+
+Last updated: 2026-07-26
+
+Branch: `codex/chapter-3-vertical-slice`
+
+### What Changed
+
+- Selected `assets/reference/source-art/assets/maps/great-survey-of-alderreach-v04.png` as the current full-resolution reference map. V01–V03 remain preserved as superseded compositions.
+- Reworked Veyrun immediately west of the disputed march into a settled river valley comparable to Rainroot. More regular fields, planned roads, and controlled crossings now distinguish its centralized government without giving it an implausibly different biome.
+- Extended the Sunreach escarpment across most of the southern international boundary. Rivers descend through visible waterfall gorges, and a small number of switchback passes explain trade and defense between Alderreach and the Ember Coast.
+- Recast Cinder Vale as a natural river valley centered on the ordinary civic city of Valehaven. Glassmaking and metalworking remain historical and economic facts, but the map no longer represents the region with factory or furnace imagery.
+- Replaced oversized city and castle miniatures with a restrained survey hierarchy for national capitals, regional or council seats, cities and towns, and fortresses.
+- Added the approved map names and placements: Hearthward, Lanthorne, Bellwater, Saffron Gate, Kestovar, Cairnmeet, Sevenbridge, Tideglass, Selvara, Whiteharbor, Valehaven, and Riverwatch.
+- Established Selvara as the queen's Ember Coast principality, Whiteharbor as its capital, Tideglass as the Sea Council port, Cairnmeet as a conclave seat rather than a dominating capital, and Sevenbridge as the Mereward council seat.
+- Corrected Saffron Gate after the first v04 generation so it sits on the Sunreach plateau at a major escarpment pass rather than in the coastal lowlands.
+- Saved the exact v04 image-edit and Saffron Gate correction prompts in `docs/art/prompts/great-survey-world-map.md`.
+- Updated the realm workshop, current-status pickup, and asset manifest to use v04 and the approved place names.
+
+### Verification
+
+- The selected v04 map is 1536×1024, 3,569,406 bytes, SHA-256 `14D20C1C3D42F561A2BA8E52E3995F38AA95BC4A6A3EBCB2A24E9A8AC14B9D05`.
+- The full-size PNG remains a reference source and is excluded from production runtime assets.
+
+### Scope
+
+No playable dialogue, story flags, runtime map wiring, tests, or optimized production assets changed. The Great Survey remains reference-only until the planned post-Chapter-3 integration pass.
+
+## Current Handoff — Great Survey V05 Ember Coast Correction
+
+Last updated: 2026-07-26
+
+Branch: `codex/chapter-3-vertical-slice`
+
+### What Changed
+
+- Selected `assets/reference/source-art/assets/maps/great-survey-of-alderreach-v05.png` as the current full-resolution reference map. V01–V04 remain preserved as superseded compositions.
+- Rebuilt the southern third so the Ember Coast Principalities occupy a broad mainland shelf below Sunreach's waterfall escarpment.
+- Moved Selvara and its capital, Whiteharbor, onto the mainland Ember Coast. Moved Tideglass onto the mainland as the shared Sea Council port.
+- Reduced the Saltwake Isles to a clearly separate offshore chain with no Selvaran or Sea Council labels.
+- Kept Cinder Vale and Valehaven on the eastern mainland without industrial skyline imagery.
+- Replaced the ambiguous settlement markers with a clear hierarchy: stars for Alderreach and Veyrun's national capitals, diamonds for provincial or district capitals, hexagons for council or conclave seats, dots for cities and towns, and squares for fortresses.
+- Saved the exact built-in image-editing prompt in `docs/art/prompts/great-survey-world-map.md` and updated the realm workshop, current-status pickup, and asset manifest.
+
+### Verification
+
+- The selected v05 map is 1536×1024, 3,520,564 bytes, SHA-256 `D64E8A0453B0E84BD16825056EC295B9845A7D63B7C2C592B79116AE452FD022`.
+- The full-size PNG remains a reference source and is excluded from production runtime assets.
+
+### Scope
+
+No playable dialogue, story flags, runtime map wiring, tests, or optimized production assets changed. The Great Survey remains reference-only until the planned post-Chapter-3 integration pass.
