@@ -43,13 +43,13 @@ The earlier Chapter 2 draft is retained in [`story/archive/`](story/archive/) fo
 
 ## Chapter 3 Story-Clarity Package
 
-These working documents prepare the next Chapter 3 story revision without changing playable canon yet:
+These documents define the implemented Chapter 3 story foundation and its pending human validation:
 
-- [`story/chapter-3-story-clarity-audit.md`](story/chapter-3-story-clarity-audit.md) — continuity diagnosis and revision brief.
-- [`story/chapter-3-story-truth.md`](story/chapter-3-story-truth.md) — one-page factual foundation.
+- [`story/chapter-3-story-clarity-audit.md`](story/chapter-3-story-clarity-audit.md) — historical diagnosis and immediate human-validation handoff.
+- [`story/chapter-3-story-truth.md`](story/chapter-3-story-truth.md) — implemented one-page factual foundation.
 - [`story/chapter-3-route-diagram.md`](story/chapter-3-route-diagram.md) — physical route and boundary model.
 - [`story/chapter-3-three-day-timeline.md`](story/chapter-3-three-day-timeline.md) — causal chronology.
-- [`story/chapter-3-player-knowledge-contract.md`](story/chapter-3-player-knowledge-contract.md) — scene-by-scene clarity requirements.
+- [`story/chapter-3-player-knowledge-contract.md`](story/chapter-3-player-knowledge-contract.md) — implemented scene-by-scene acceptance contract and seven-question human check.
 
 ## Realm Worldbuilding Workshop
 

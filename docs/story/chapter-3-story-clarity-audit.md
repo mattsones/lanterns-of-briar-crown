@@ -1,19 +1,21 @@
 # Chapter 3 Story-Clarity Audit
 
-Last updated: 2026-07-24
+Last updated: 2026-07-27
 
-Status: Discussion record and revision brief. This document identifies continuity problems in the current playable Chapter 3 and records the working model approved through 2026-07-24. The foundation now governs the later Chapter 3 dialogue and map pass, but this document does not itself change playable canon.
+Status: Historical diagnosis and current validation handoff. The four-artifact foundation now governs the implemented canonical script and playable Chapter 3. Do not reopen that foundation or begin another rewrite before the human validation below.
 
 ## Story-Foundation Artifacts
 
-The proposed model has now been resolved into four working artifacts:
+The approved model is recorded in four governing artifacts:
 
 1. [`chapter-3-story-truth.md`](chapter-3-story-truth.md) — the one-page factual foundation and resolved story assumptions;
-2. [`chapter-3-route-diagram.md`](chapter-3-route-diagram.md) — the physical relationship among the gates, Cargo Siding, provision hatch, outer shelter, and westward route;
+2. [`chapter-3-route-diagram.md`](chapter-3-route-diagram.md) — the physical relationship among the gates, Cargo Siding, Transfer Checkpoint, outer shelter, and westward route;
 3. [`chapter-3-three-day-timeline.md`](chapter-3-three-day-timeline.md) — the chronology from the false convoy through the Split Hall compact;
 4. [`chapter-3-player-knowledge-contract.md`](chapter-3-player-knowledge-contract.md) — the facts each required scene must communicate without relying on inference.
 
-These are working review documents, not silent changes to the current playable canon. Once approved, they should govern the short-prose draft and the next script/runtime dialogue pass.
+The story truth and player-knowledge contract are implemented. The route diagram and three-day timeline remain the physical and causal references for that implementation.
+
+The diagnosis below records the pre-implementation problems that led to those artifacts. It is historical context, not a claim that the retired hatch and former clarity failures still exist in the current runtime.
 
 ## Why This Audit Exists
 
@@ -166,14 +168,13 @@ The Transfer Checkpoint is not an eighth permanent map landmark. It is a visible
 
 These choices now govern the later canonical story-script and playable-dialogue revision unless a new playtest exposes another contradiction.
 
-## Recommended Revision Process
+## Immediate Next Step — Human Chapter 3 Validation
 
-The first four preparation artifacts now exist and agree on the working model. The next story-development sequence is:
+The very next Lanterns story step is a fresh, uninterrupted human Chapter 3 comprehension and pacing playtest from the First Gate arrival through the Mossgarden closing.
 
-1. Write the complete chapter once as a short prose story.
-2. Test whether that prose version can be followed without an explanation afterward.
-3. Divide the story back into locations, optional conversations, choices, objectives, and ambient dialogue.
-4. Replace the sealed-hatch map landmark with the Transfer Checkpoint interaction and post-Witherdeath visual details.
-5. Re-run the player-knowledge contract against an uninterrupted playthrough.
+- Do not explain the plot, brief the tester on the four artifacts, or clarify events while the playthrough is in progress.
+- After completion, ask all seven questions in the **End-Of-Chapter Comprehension Check** in [`chapter-3-player-knowledge-contract.md`](chapter-3-player-knowledge-contract.md). The tester should answer from the played chapter without guessing.
+- Record every failed or uncertain answer against the earliest scene and contract row responsible for delivering that fact. Record pacing friction at the point where it occurs rather than converting it immediately into a proposed rewrite.
+- Do not reopen the factual foundation, add a late explanatory monologue, or begin another Chapter 3 rewrite before this validation.
 
-The clarity rule for the next pass should be: **facts first, poetry second**. A metaphor may reinforce an event after the player understands it; it should not carry the only explanation of what physically happened.
+If the playthrough exposes a failure, revise the earliest required scene assigned by the contract and retest. If the chapter reads cleanly, preserve the foundation and proceed to the bounded non-cosmic consistency pass before final continuous Chapters 1–3 signoff.
