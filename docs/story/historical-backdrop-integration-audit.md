@@ -1,6 +1,6 @@
 # Historical Backdrop Integration Audit
 
-Last updated: 2026-07-24
+Last updated: 2026-07-27
 
 Status: Revision brief. This document identifies where the new political and historical foundation should enter the playable story and future chapter plans. It does not itself revise runtime dialogue.
 
@@ -54,9 +54,7 @@ Canonical and planning sources:
 
 ### 1. Complete The Chapter 3 Clarity Rewrite
 
-This is the largest present gap between approved story truth and the playable game.
-
-The runtime and canonical Chapter 3 script still use the retired sealed hatch, imply Lio interacted with someone through it, call the optional result **keeping** the Rootbread Promise, and leave the final Bramblecross compact too implicit. They also do not yet establish the Transfer Checkpoint or why the party's opening alarms a community that admitted the earlier convoy.
+Implemented on 2026-07-27. The runtime and canonical script now establish the Transfer Checkpoint, distinguish the earlier scheduled convoy from the party's unscheduled opening, return the Rootbread interaction to the checkpoint, state that Lio walked beside rather than inside the crate, name the scope of each hold and reopening, establish the first guarded Bramblecross compact, and send Quill outward with its first warning.
 
 Implement the scene delivery in `chapter-3-player-knowledge-contract.md` before adding decorative history elsewhere.
 
@@ -152,7 +150,7 @@ Chapter 3 is where the political history should become personally consequential.
 | Final Split Hall resolution | Bramwell names Bramblecross as Westroot's first restored surface compact, explains why the party supplied verifiable contacts, and limits the reopening to guarded, witnessed communication | This is a historic decision, not a generic moral victory or opening of every gate | Four or five concrete policy sentences |
 | Final action | Quill leaves with the first named warning for Enna; the Great Survey copy receives its pencil correction | The compact has begun in action and the world map changes because of it | Short tableau/map unlock |
 
-The current Chapter 3 runtime and canonical script still contradict the approved story truth at the sealed hatch and in the final compact. Those are revision blockers, not optional polish.
+The former checkpoint and compact contradictions are resolved in runtime and the canonical script. The table above remains the design record for the implemented pass.
 
 ## Chapter 4 — The Riddle Road
 
@@ -214,7 +212,7 @@ The Lio/Mara reunion should remain the emotional climax. Political evidence shou
 ### Canonical/planning documents
 
 - `docs/story/chapter-1-story-script.md` and `chapter-2-story-script.md` contain many matching sentient-road formulations.
-- `docs/story/chapter-3-story-script.md` still contains the sealed hatch, old Rootbread completion, literal road memory, and an under-specified final compact.
+- `docs/story/chapter-3-story-script.md` now carries the Transfer Checkpoint, reached-Lio completion, scoped reopenings, and explicit first compact. Remaining literal road-language cleanup belongs to the separate non-cosmic consistency pass.
 - The later Chapter 4 section of `chapters-2-5-story-bible.md` still calls for maps that alter when nobody looks, despite its newer mechanical explanation of the Listening Mile.
 - The Chapter 5 promise and end-state bullets in that bible still refer to something older behind the faction and a Briar mark hint, while the newer foundational sections correctly specify institutional compromise.
 - `docs/art/art-direction.md` still instructs artists to make Lantern Road magical, benevolent, sacred, and able to remember truth.

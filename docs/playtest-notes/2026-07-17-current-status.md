@@ -1,4 +1,4 @@
-# Current Project Status — 2026-07-26
+# Current Project Status — 2026-07-27
 
 Branch: `codex/chapter-3-vertical-slice`
 
@@ -30,7 +30,7 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 
 ## Recent Playtest And Story Decisions
 
-- Chapter 3 now has a working story-foundation package covering the factual story truth, physical route diagram, three-day chronology, and player-knowledge contract. These documents resolve the Lio/crate/hatch/gate continuity questions for review but do not yet change playable canon.
+- Chapter 3 now implements its approved story-foundation package in playable canon. The Transfer Checkpoint, scheduled-convoy versus unscheduled-arrival distinction, Lio's movement beside the crate, scoped holds and reopenings, first restored Bramblecross compact, and Quill's outward warning are all on the required path.
 - The realm-history workshop now places Lanthorne above Bramblecross as the Rainroot regional city, proposes Hearthward as the Hearthvale capital, adds the Saltwake War and Cinder Vale diaspora, makes Witherdeath a separate two-year international plague, confirms the coastal Sunreach queen and Elowen's independent Royal Progress, develops Moonmark performing companies, and gives the Crownward/Briar movement a sovereign claimant above its road-office operators. The Chapters 2–5 story bible now reflects the non-cosmic civic-road and institutional-conspiracy direction; playable text still awaits a later focused pass.
 - `docs/story/historical-backdrop-integration-audit.md` now identifies the leanest integration points across playable Chapters 1–3 and planned Chapters 4–5. Its first priorities are the Chapter 3 checkpoint/compact rewrite, a non-cosmic language pass, the Great Survey evidence prop, Elowen's Royal Progress, the Crownward/Briar distinction, and Chapter 5's institutional-compromise reveal.
 - The selected Great Survey political map now lives at `assets/reference/source-art/assets/maps/great-survey-of-alderreach-v05.png`. Veyrun and Rainroot occupy comparable settled valleys on either side of the braided river march; the long Sunreach escarpment creates waterfall gorges and limited passes to a broad mainland Ember Coast; Selvara, Whiteharbor, Tideglass, Cinder Vale, and Valehaven sit on that mainland while the Saltwake Isles remain a separate offshore chain. National capitals use stars, provincial capitals use diamonds, council seats use hexagons, towns use dots, and Riverwatch uses a fortress square. The approved labels are Hearthward, Lanthorne, Bellwater, Saffron Gate, Kestovar, Cairnmeet, Sevenbridge, Tideglass, Selvara, Whiteharbor, Valehaven, and Riverwatch. Westroot remains a later graphite correction made after renewed contact. V01–V04 are preserved as superseded compositions. The map is reference-only until an optimized runtime derivative and story placement are approved.
@@ -64,16 +64,16 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 - Map overlays now prioritize encounters: the Roadwatcher, releasable Crown Den hound, fixed den guard, Root Cellar skulk, south-gate boar, and Cargo Siding threat use enemy art. Painted clue stations no longer get map icons, scripted ambushes remain hidden, and the cellar guardian gets no overlay because it is already painted into the map.
 - Westroot Hub navigation follows the painted entrance road, plaza, and branching paths with short hidden waypoints. As a village map, the entire hub now stays visible without fog of war.
 - Westroot arrow/WASD controls now follow the visible direction of the painted road. Diagonal stretches accept both plausible keys where junctions allow it; the opening gate move accepts both **Down** and **Right**, while branch keys remain reserved for the landmarks they visibly approach.
-- Bramwell and Noma now have phase-aware outdoor map markers. Bramwell moves between the First Gate and Split Hall; Noma moves among the Mossgarden, Split Hall, and Witness Stones. The Rootbread child appears at the sealed hatch only after Lume supplies that lead. Quill and Lume remain represented inside Rootmarket.
+- Bramwell and Noma now have phase-aware outdoor map markers. Bramwell moves between the First Gate and Split Hall; Noma moves among the Mossgarden, Split Hall, and Witness Stones. The Rootbread child appears at the First Gate Transfer Checkpoint only after Lume supplies that lead. Quill and Lume remain represented inside Rootmarket.
 - Bramwell is now a mandatory Chapter 3 entry beat. Entering Westroot opens his introduction, and movement, map-node clicks, or older saves positioned past the gate are routed back to him until `metBramwell` is true; Quill cannot be met first.
 - The lower Westroot approach follows the stone lane down to the wooden bridge and rises to a plaza junction in front of Rootmarket. The public path no longer triggers the market: **Up** steps into a dedicated node on the painted stalls, **Left** climbs toward Mossgarden, and **Right** continues through the village. The Mossgarden branch similarly routes around the hut.
-- Completed Chapter 3 saves now identify the current playable endpoint explicitly. If the Rootbread Promise is unfinished, the persistent objective directs the player back to Rootmarket, where Auntie Lume's choice opens automatically, and then onward to the sealed hatch; completed landmarks remain quiet on walk-over but reviewable with **Inspect**.
+- Completed Chapter 3 saves now identify the current playable endpoint explicitly. If the Rootbread Promise is unfinished, the persistent objective directs the player back to Rootmarket, where Auntie Lume's choice opens automatically, and then onward to the First Gate Transfer Checkpoint; completed landmarks remain quiet on walk-over but reviewable with **Inspect**.
 - Rootmarket now opens automatically while Auntie Lume's first conversation is still available. Once both Quill and Auntie have been handled, it returns to the normal completed-landmark behavior and stays quiet unless the player chooses **Inspect**.
 - Rootmarket is now a location-level dialogue hub. Quill, Auntie Lume, and the market's ambient voices are independent choices, and each character returns to the shared market instead of presenting another person inside Quill's dialogue.
 - Chapter 3 now builds tension before the investigation: Split Hall may be visited for an optional simmering argument, then the mandatory Hold Bell and first formal hall debate occur after Quill and Noma have been heard. The Witness Stones remain locked until that debate has happened.
-- Chapter 3 now establishes the Witness Stones through their civic use: Quill names the sender/witness/responder practice, Noma connects route testimony to the blocked outer-shelter water mark, the hold slate identifies its scope and review, and Bramwell reopens the walk after naming the changed facts. The current v02 renewal scene remains wired but is scheduled for a more visibly public replacement during Chapter 3 release-candidate closeout.
+- Chapter 3 now establishes the Witness Stones through their civic use: Quill names the sender/witness/responder practice, Noma connects route testimony to the blocked outer-shelter water mark, the hold slate identifies its scope and review, and Bramwell reopens the walk after naming the changed facts. The final v03 scene makes that reopening visibly public, with Bramwell and Noma opening the hold, Quill recording it, and mixed neighbors taking responsibility at the four stones.
 - Stonekin and Mossbacks appear on both sides of the open/close disagreement. The gate, market, and Mossgarden change after the Hold Bell, and testimony heard in the first debate is remembered at the final evidence scene.
-- Chapter 3 dialogue now gates names, terms, and actions behind the conversation that introduces them. Rootmarket initially offers the Stonekin shutter-mender and Mossback baker rather than Quill and Auntie Lume; weathered stones and the sealed hatch likewise remain generically described until Noma and Lume explain them.
+- Chapter 3 dialogue now gates names, terms, and actions behind the conversation that introduces them. Rootmarket initially offers the Stonekin shutter-mender and Mossback baker rather than Quill and Auntie Lume; the weathered stones and checkpoint child likewise remain unavailable until Noma and Lume explain them.
 - Liam now returns introductions inside the existing first dialogue with Bramwell, Quill, Lume, and Noma. Each response expresses a different level and kind of outsider trust without adding a separate introduction screen.
 - Rootmarket listening is one-time. Quill, Lume, Noma, the Rootbread child, and the first Split Hall debate retain unanswered questions without replaying their converged speeches, and the Hold Bell waits until the player deliberately steps away from Quill or Noma.
 - The Cargo Siding investigation now rewards deliberate ledger work: spotting and covering the service passage grants the opening turn, 4 Guard, and the runner-capture option. Other clues remain valid fail-forward paths and produce the escape outcome without blocking completion.
@@ -90,6 +90,8 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 - The Chapter 1 ending tableau is wired into the sealed-door proof pickup, and the Root Cellar switches to a boss-free painted background immediately after the Warden is defeated. Both full-resolution PNG sources are preserved under `assets/reference/source-art/`.
 - The tense Split Hall Hold Bell scene is selected and wired before the resolution image. Thin red ceiling cords read as Westroot hold-lines rather than faction decoration.
 - The Rootmarket uneasy-arrival tableau is selected and wired to the location hub while Quill and Auntie Lume retain their individual portraits inside their conversations.
+- The Witness Stones public-renewal v03 scene is selected and wired; its four established symbols remain dominant while the shared civic action is now visible.
+- The Rootbread Promise now uses a dedicated Transfer Checkpoint scene showing the basin, airing rack, inspection bench, account rail, ordinary tray, Mara, and Lume's young helper. The former sealed-hatch scene is preserved under reference alternates.
 - The full-size Great Survey of Alderreach map is selected as a reference source and intentionally excluded from the production asset audit until it is optimized and wired.
 - The optimized runtime asset set currently contains 133 images and passes the asset audit.
 
@@ -108,13 +110,13 @@ git diff --check                 passed (Windows line-ending warnings only)
 
 Browser QA covered illustrated dialogue at 1280×720, 1366×768, 430×932, and 390×844; the full real level-3 Chapter 3 fixture; the prepared and fail-forward Cargo outcomes; both full-width Chapter 3 ending tableaus; desktop and phone exploration; compact phone combat; Root Cellar room-aware fog; and Westroot's map and NPC staging.
 
-## Next Session — Worldbuilding Implementation Order
+## Worldbuilding Implementation Order
 
 Do not begin by adding general lore dialogue. Implement the worldbuilding where it resolves the current plot, in this order:
 
-### Priority 1: Chapter 3 Physical And Political Clarity
+### Priority 1: Chapter 3 Physical And Political Clarity — Implemented
 
-Use `docs/story/chapter-3-player-knowledge-contract.md` as the acceptance contract and update the canonical script, runtime copy, quest text, flags, tests, map interaction, and affected art together.
+The canonical script, runtime copy, quest text, flags, tests, map interaction, and affected art now satisfy `docs/story/chapter-3-player-knowledge-contract.md`.
 
 Required results:
 
@@ -133,7 +135,7 @@ Art/map work in this priority:
 - complete the already-planned public Witness Stones renewal artwork;
 - preserve current fallback-safe wiring and map navigation.
 
-Run the Chapter 3 build, rules, automated playtest, and a full human comprehension playthrough before moving on.
+Automated coverage and desktop/phone browser QA are complete. A fresh human comprehension playthrough remains the final signoff before Priority 2 or Chapter 4 work.
 
 ### Priority 2: Non-Cosmic Consistency Pass
 
@@ -189,7 +191,7 @@ Use `docs/planning/dialog-stock-icon-replacement-plan.md` as the inventory.
 
 ### 3. Story Follow-Ups
 
-1. Implement the Chapter 3 player-knowledge contract: add the Transfer Checkpoint interaction, retire the sealed hatch, distinguish every hold/opening by scope, state that Lio walked beside the crate, and make the Bramblecross compact explicit.
+1. Run a fresh human comprehension playthrough of the implemented Chapter 3 player-knowledge contract before beginning the non-cosmic consistency pass.
 2. Run the focused non-cosmic language pass listed in `docs/story/historical-backdrop-integration-audit.md` through runtime, canonical scripts, Chapters 4–5 plans, and art direction.
 3. Add the Great Survey as a Chapter 2 evidence object and unlock the penciled Westroot version only after Chapter 3; optimize the image before runtime import.
 4. Give Healing Fizzpop's mint-green hair a later comedic payoff. Decide first whether it is one scripted callback, a temporary status flag, or recurring NPC reactivity.

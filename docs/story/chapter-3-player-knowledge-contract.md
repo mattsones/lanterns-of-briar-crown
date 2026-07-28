@@ -1,8 +1,8 @@
 # Chapter 3 Player-Knowledge Contract
 
-Last updated: 2026-07-24
+Last updated: 2026-07-27
 
-Status: Working narrative-delivery contract paired with `chapter-3-story-truth.md`. It defines what the player must understand, not final dialogue. Required facts may be delivered in fewer words than shown here, but may not depend on optional content or inference.
+Status: Implemented acceptance contract paired with `chapter-3-story-truth.md`. The canonical script, runtime, map interaction, quest copy, art, and automated Chapter 3 playtest now carry these required facts. A fresh human comprehension playthrough remains the final release-candidate signoff.
 
 ## Clarity Rules
 

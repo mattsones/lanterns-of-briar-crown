@@ -269,7 +269,8 @@ test("Chapter 3 recap preserves the player's consequential choices", () => {
 
   expect(recap).toContain("First promise: Warning");
   expect(recap).toContain("runner was captured");
-  expect(recap).toContain("Rootbread Promise was kept");
+  expect(recap).toContain("Rootbread Promise reached him");
+  expect(recap).toContain("checkpoint tray was restocked");
   expect(recap).toContain("2 costs of Westroot's choice were named");
 });
 
@@ -364,7 +365,6 @@ test("Chapter 3 Westroot placeholder hub and cargo encounter preserve the vertic
     "rootmarket",
     "mossgarden",
     "witness_stones",
-    "rootbread_hatch",
     "split_hall",
     "cargo_siding",
   ].forEach((tile) => {
@@ -530,7 +530,7 @@ test("Westroot map NPC markers follow the story's physical staging", () => {
   expect(getWestrootMapNpcTokens(atWitnessStones)).toMatchObject([
     { id: "bramwell", x: 4, y: 1 },
     { id: "noma", x: 4, y: 1 },
-    { id: "rootbread-child", x: 7, y: 5 },
+    { id: "rootbread-child", x: 1, y: 3 },
   ]);
 
   const resolved = {

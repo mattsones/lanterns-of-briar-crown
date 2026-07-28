@@ -71,7 +71,7 @@ Mara remains a protected non-combat guest. Her urgency is valid: every delay may
 ```text
 First Westroot Gate
   → Rootmarket / Mossgarden
-  → Rootbread Promise (optional)
+  → Rootbread Promise at the Transfer Checkpoint (optional)
   → Hold Bell crisis
   → Split Hall first debate
   → Witness Stones
@@ -84,7 +84,7 @@ First Westroot Gate
 
 Westroot is a village beneath the hill, not an unknown wilderness or dungeon. The complete painted hub remains visible from the moment the player enters; it does not use fog of war.
 
-Movement nodes remain hidden in normal play. Arrow/WASD inputs therefore follow the direction the next stretch of painted road appears to travel on screen, rather than the underlying tile coordinates. Diagonal stretches may accept both plausible directions when neither key belongs to another visible branch. At the First Gate, for example, both **Down** and **Right** begin the descending bridge route. At the plaza junction in front of Rootmarket, **Up** enters the stalls, **Left** follows the rising path toward Mossgarden, and **Right** continues through the village. Later junctions preserve similarly visible choices toward Split Hall, Cargo Siding, and the sealed hatch.
+Movement nodes remain hidden in normal play. Arrow/WASD inputs therefore follow the direction the next stretch of painted road appears to travel on screen, rather than the underlying tile coordinates. Diagonal stretches may accept both plausible directions when neither key belongs to another visible branch. At the First Gate, for example, both **Down** and **Right** begin the descending bridge route. At the plaza junction in front of Rootmarket, **Up** enters the stalls, **Left** follows the rising path toward Mossgarden, and **Right** continues through the village. Later junctions preserve similarly visible choices toward Split Hall and Cargo Siding. The Rootbread return interaction reuses the First Gate landing rather than adding another landmark.
 
 The paved plaza in front of Rootmarket and Rootmarket itself are separate nodes. Walking past the stalls does not begin a market conversation; the player deliberately steps off the public path and into the market. The Witness Stones endpoint sits on the lower edge of its painted water circle so the hero remains visible beneath the persistent update ribbon.
 
@@ -94,7 +94,7 @@ Outdoor character markers follow story staging:
 
 - Bramwell waits beside the First Gate before the Hold Bell, moves to Split Hall during the crisis, and returns to the gate after the resolution.
 - Noma begins in the Mossgarden, joins the Hold Bell meeting in Split Hall, and moves with Bramwell to the Witness Stones once the first debate is heard. Both return to their usual posts after the public renewal or final resolution.
-- The Rootbread child appears beside the sealed hatch only after Lume gives the player that lead, and disappears when the promise is complete.
+- The Rootbread child appears at the First Gate's Transfer Checkpoint only after Lume gives the player that lead, and disappears when the promise is complete.
 - Quill and Lume remain inside Rootmarket and do not need separate outdoor markers. The Cargo Siding threat remains hidden until the Witness Stones open that route.
 
 ## Main Quest: The Hidden Root
@@ -108,7 +108,7 @@ Outdoor character markers follow story staging:
 | 5 | **Renew the Road Promises** — Join Westroot as it decides publicly how caution and care will guide the investigation. | Choose which promise Westroot acts on first; the community renews all four together. |
 | 6 | **Track the Missing Willow-Marked Crate** — This counterfeit shipment is not Ada's original spice crate; wheel marks lead from its empty hold bay into the locked inner siding. | Follow the physical trail, inspect the relocated crate, and defeat the enemies still hiding there. |
 | 7 | **Bring the Evidence to Split Hall** — Westroot needs the full truth: the danger outside and the opening made from within. | Resolve the Split Hall scene. |
-| Complete | **Chapter Complete: The Hidden Root** — Westroot will not open blindly, but it will not let lies travel unchallenged. Lio's trail leads west into the older road. | `chapterThreeClear` is set. |
+| Complete | **Chapter Complete: The Hidden Root** — Westroot restores its first guarded surface compact with Bramblecross. Lio's trail leads west through the Underway. | `chapterThreeClear` is set. |
 
 ## Required Chapter-End Flags
 
@@ -131,33 +131,29 @@ Optional consequence flags record which Witness Stone promise the player chose f
 
 **Text**
 
-The no-handle door closes behind you without a sound.
+The no-handle door closes behind you without a sound. Its broad inner landing is a working **Transfer Checkpoint**: a clean water channel and wash basin, an airing rack, an inspection bench, a wooden account rail, and an ordinary tray of rootbread and cups.
 
 For several steps, the passage is only root, stone, and the small noises your boots make when they stop pretending not to be nervous. Then the hill opens.
 
-Bridges of fitted gray stone cross a cavern broad enough to hold a village. Living roots curl around balconies and roofs. Moss-lanterns hang in clusters along the walls—some gold, some green, some covered with little shutters as if they are listening before they shine.
+Bridges of fitted gray stone cross a cavern broad enough to hold a village. Living roots curl around balconies and roofs. Gold-green moss lanterns hang in clusters along the walls, some fitted with practical signal shutters.
 
 Below, a market is packing itself away very quickly.
 
 Every face turns toward the gate.
 
-A broad Stonekin in a slate-colored coat waits at the far end of the bridge. Their key ring is too heavy for decoration. One key is still warm with gate-light.
+A broad Stonekin in a slate-colored coat blocks the bridge. Their key ring is too heavy for decoration.
 
-“No,” Mara says quietly.
-
-The Stonekin hears her anyway.
-
-“That is usually the first word,” he says. “I am Bramwell. Gatehand, until nobody needs one. Who opened my gate?”
+“No account mark. No inside confirmation. That old phrase-lock has not admitted an unscheduled surface party in living memory,” he says. “I am Bramwell. Gatehand, until nobody needs one. Who opened my gate?”
 
 **Choices**
 
-- “The road opened when we told it the truth.”
+- “The old phrase-lock opened after we restored its marks.”
 - “We are looking for Lio Brindle. He came through here alive.”
 - “Ask us what we brought before you decide what we are.”
 
 ### Response: truth choice
 
-> Bramwell looks past you to the sealed stone, then to the old lantern mark warm in your pack. “Truth opens old things. It does not guarantee what walks through after.”
+> Bramwell looks past you to the sealed stone. “Then you repaired an old mechanism. You did not supply an account or a gatekeeper expecting you. That difference is why everyone here is afraid.”
 
 ### Response: Lio choice
 
@@ -256,7 +252,7 @@ Quill fits the hinge back into place.
 
 “The old road had a rule. Every signal had to tell someone what it was for, who sent it, and what care came with it. Warning. Shelter. Water. Witness. The Briar people copy the authority and leave out the responsibility. That is what makes their signals easy to misuse.”
 
-Quill reaches for a work tally weighted with a chip of green sealing wax, introducing the object that the player may reasonably ask about.
+Quill first separates the arrivals: three nights ago, a scheduled Willow-marked shipment and unnamed westbound courier entered with correct-looking credentials; the party opened an old phrase-lock with no account or inside confirmation. Quill then reaches for a work tally weighted with a chip of green sealing wax, introducing the object that the player may reasonably ask about.
 
 **Choices**
 
@@ -272,7 +268,7 @@ Each informational topic disappears only after it has been asked. Its response o
 
 ### Cargo response
 
-> Quill's expression closes. “A crate with green wax came in by the Cargo Siding. Bramwell put a hold on it. Then somebody moved it anyway. That is why nobody is enjoying the gate being open.”
+> Quill's expression closes. “Three nights ago, during second watch, a scheduled transfer arrived with a green Willow seal, an unnamed westbound courier, a correct-looking outside account, and Westroot's inside confirmation. Bramwell later found that the sender record disagreed, put the crate under hold, and then somebody moved it anyway.”
 
 **Outcome**
 
@@ -310,7 +306,7 @@ The player cannot ask about the **Rootbread Promise** yet. Lume must first use t
 
 ### Lio response
 
-> “Good. A proper answer before a dramatic one.” Lume nods toward a narrow side passage. “Someone has been leaving bread at the sealed hatch every night. The old Rootbread Promise: food and water for whoever the road forgets. I do not believe roads forget. People do.”
+> “Good. A proper answer before a dramatic one.” Lume nods back toward the First Gate. “My young helper carried the ordinary checkpoint tray to an unnamed hooded courier during the false Willow transfer three nights ago. Every traveler waiting at the account rail gets bread and water before Westroot decides whether to admit them. The child set aside a returned cup that nobody recognized.”
 
 ### Hospitality response
 
@@ -318,63 +314,65 @@ The player cannot ask about the **Rootbread Promise** yet. Lume must first use t
 
 ### Promise response, available only after Lume names it
 
-> “If a traveler arrives hungry, you feed them. If a traveler leaves hungry, you pack bread. If a traveler cannot leave, you do not punish them by making them invisible.”
+> “If a traveler waits hungry, you feed them before trust is settled. A guarded boundary may delay passage; it may not make a hungry person invisible. Go back to the Transfer Checkpoint. Ask my helper what happened, and do not finish the child's story for them.”
 
 ### Refusal response
 
 > Lume pushes the bread closer. “Then take it as evidence. I am feeding you because we do not know you. That is when food matters most. Westroot calls it the Rootbread Promise.”
 
-Lume's topics remain available until asked. The concrete action **Look for the food left by the sealed hatch** appears only after she has mentioned that food and hatch.
+Lume's topics remain available until asked. The concrete action **Follow the Rootbread clue at the Transfer Checkpoint** appears only after she has identified the child and returned cup.
 
-**Side objective:** **Check the Sealed Hatch** — Lume says someone has been leaving food there. Find out who needs it and why.
+**Side objective:** **Follow the Rootbread Clue** — return to the First Gate's Transfer Checkpoint and ask Lume's helper about the unnamed courier.
 
-### Sealed Hatch
+### Transfer Checkpoint return interaction
 
 **Text**
 
-The hatch is only a door-sized seam in the stone, wrapped with an old root lattice. A small cloth bundle sits on the floor: rootbread, dried apple, and a cup of water covered with waxed leaf.
+Back at the Transfer Checkpoint, Lume's young helper waits beside the ordinary rootbread tray. The basin, airing rack, inspection bench, and account rail establish the same practical sequence used for every admitted traveler.
 
-Mara kneels beside it. Under the cup, a blue thread has been tied in a tiny hooked loop.
-
-She does not touch it at first.
-
-“That is Lio's knot,” she says. “Not a message. A courier's way of saying this was left for somebody who might need to keep going.”
-
-From behind the nearby barrels, a small Mossback child steps out, chin raised with the bravery of someone expecting to be scolded.
-
-“I only put bread there,” they say. “The old door rattled. Somebody was on the other side once.”
+“The hooded courier waited here with the Willow crate and two handlers,” the child says. “I brought the same bread and water everybody gets. I kept the cup he returned because it had a knot I did not know.”
 
 **Choices**
 
-- “When did you hear someone behind the hatch?”
-- “Leaving food without opening the hatch was careful.”
-- “Tell the child whose blue knot Mara found.”
+- “What did the courier look like?”
+- “Why did the handlers let you feed him?”
 
-The first two topics remain available until asked and return to the child's conversation. Telling the child about Lio's knot completes the scene; an informational answer no longer ends the conversation automatically.
+Both questions remain available until asked. The completion action does not appear early.
 
-### Right-thing response
+### Appearance response
 
-> The child exhales. “Auntie said food is not a question. It is an answer.”
+> “He was young,” the child says. “Hood over his face. His hands were tied, and the handlers stood too close even while the crate waited at the same account rail. He ate the bread. He watched everything.”
 
-### When response
+### Routine response
 
-> “Three nights ago. Before the gate opened. I heard boots. Then somebody knocked twice, waited, and knocked once.”
+> “Everybody waiting here gets the tray before the gate decides,” the child says. “If the handlers refused it, Bramwell would have asked why they were breaking the ordinary routine. So they let him eat. He tied something around the cup before he gave it back.”
 
-### Danger response
+### Cup reveal
 
-> “I know,” the child says. “That is why I did not open it.”
+After both questions, the child brings out the set-aside cup. A short blue courier thread circles it in one tiny hooked knot.
+
+Mara's breath catches.
+
+“That is Lio's knot. He ate here. He returned this so somebody would know he passed through alive.”
+
+The child looks from the cup to the half-empty tray.
+
+“What happens to it now?”
 
 ### Converged text
 
-Mara finally takes the blue thread between two fingers.
+The player chooses **Restock the tray for the next traveler**.
 
-“He passed close enough to leave this,” she says. “Close enough to hope someone would notice. That is not nothing.”
+The party and child restock the ordinary tray with rootbread and water. Mara enters the cup and blue knot in Westroot's witness record.
+
+“The Rootbread Promise reached Lio,” she says. “We did not keep him here. We can keep the promise moving.”
 
 **Outcome**
 
 - Set `rootbreadPromiseKept` and `lioKnotFound`.
-- Receive **Rootbread Charm** or **Westroot Packed Lunch**.
-- This is emotional evidence only; it does not replace the Chapter 3 closing confirmation or Chapter 4's direct Lio message.
+- Receive the **Rootbread Charm**.
+- The child marker disappears. Repeat inspection reviews the restocked tray and recorded cup without granting another reward.
+- The interaction proves that Lio received care and remained resourceful, but the required Cargo Siding path must still establish that he walked beside the crate rather than inside it.
 
 ### Auntie Lume, after completion
 
@@ -394,6 +392,8 @@ Noma Greenstill is kneeling beside a tablet with a brush in one hand and a cup o
 
 “Do not step on the names,” Noma says. “Most of them have already been walked over enough.”
 
+Noma begins with the physical history before using metaphor. About sixty years ago, Witherdeath entered through ordinary admitted traffic, before Westroot had orderly washing, airing, or observation. The sanitation now built into the Transfer Checkpoint was a prudent response. Ending routine surface compacts, disappearing from public maps, and keeping Bramblecross at a distance for generations was the fearful response that became permanent.
+
 ### First conversation
 
 **Choices**
@@ -404,7 +404,7 @@ Noma Greenstill is kneeling beside a tablet with a brush in one hand and a cup o
 
 ### Names response
 
-> “Witnesses. Travelers. Bridge-menders. Some names came from the Witness Stones after a warning, a repair, or a missed return. The road remembers names because a missing person is never only a missing number.”
+> “Witnesses. Travelers. Bridge-menders. Some names came from the Witness Stones after a warning, a repair, or a missed return. Westroot records names because a missing person is never only a missing number.”
 
 ### Courier response
 
@@ -412,7 +412,7 @@ Noma Greenstill is kneeling beside a tablet with a brush in one hand and a cup o
 
 ### Gate response
 
-> “Bramwell has buried friends. His caution carries their names. But a root that drinks only its own water eventually has nothing left to share.”
+> “We kept rare controlled transfers and the outer shelter,” Noma says. “Bramblecross had been our nearest active partner. In time, it remembered us as a story. Bramwell's caution carries real names, but sanitation and permanent civic isolation are not the same decision.”
 
 ### Converged text, shown after the first substantive answer only
 
@@ -455,7 +455,7 @@ This crisis is mandatory after the player has heard both Quill and Noma. It must
 
 A single low bell rolls through the hill. Market sounds stop and lantern shutters close in sequence. A runner reports that the false Willow-marked shipment is gone from its assigned hold bay, while the ledger and siding door still claim it has not moved.
 
-Bramwell orders the First Gate and side passages closed until Westroot knows whose mark moved the cargo. Noma objects that the outer shelter is due its water call: the call must leave under a witnessed mark at the stones, and closing every listening mark prevents Westroot from sending it or receiving the shelter's answer.
+Bramwell states the Hold Bell scope precisely: the First Gate closes to people and cargo, side passages close, and all listening marks and outward signals close until Westroot knows whose mark moved the cargo. Noma objects that the outer shelter is due its water call: closing every listening mark prevents Westroot from sending it or receiving the shelter's answer.
 
 The village divides personally rather than by ancestry. A cautious Mossback pipe-mender wants the gate sealed after losing his sister to a false order. A young Stonekin relay runner argues that his father is one of six people waiting at the outer shelter. Stonekin and Mossbacks stand on both sides.
 
@@ -545,7 +545,9 @@ The four stones turn Westroot's road commitments into witnessed public work. The
 | **Shelter** | Lume and the gatekeepers count beds, food, and every person the closure must still protect. |
 | **Water** | The missed water tally is sent with two witnesses watching the signal leave and its answer return. |
 
-The chosen stone warms first. Then Westroot's neighbors take up the work represented by the other three, with a named hand responsible for each action.
+The chosen promise receives the first named mark. Then Westroot's neighbors take up the work represented by the other three, with a named hand responsible for each action. A signal leaves for the outer cistern and its answer visibly returns: six people present, water needed, all accounted for.
+
+Quill reads the new scope aloud. The Witness Stone walk and listening marks are open again. The outer shelter may answer. Bramwell and Noma authorize one witnessed Cargo Siding investigation. The First Gate, side passages, and general traffic remain under hold.
 
 The scene's moral distinction is **trustworthy authority versus counterfeit authority**, not obedience versus independence. A good instruction comes from someone who has accepted responsibility, names the danger and the people affected, and remains answerable when circumstances change. The Briar Crown corrupts trust by copying legitimate marks and signals while refusing those responsibilities.
 
@@ -554,6 +556,8 @@ The scene's moral distinction is **trustworthy authority versus counterfeit auth
 - Retain `witnessStoneSequenceSolved` temporarily for save compatibility; its story meaning is now “the road promises were publicly renewed.”
 - Record which promise the player chose first.
 - Quill explains that wheel grooves run from the empty hold bay deeper into the Cargo Siding; the crate did not simply vanish.
+- Show the outer-shelter signal leave and its answer return before the Cargo Siding authorization.
+- Read the limited reopening scope aloud; this is not a general reopening of Westroot.
 - Bramwell and Noma open the Cargo Siding under shared witness.
 - Objective: **Track the Missing Willow-Marked Crate**.
 - Gain the **Witness Stone Rubbing**.
@@ -608,25 +612,29 @@ Inside are no spices.
 
 There are blank order sheets cut to official size. Broken seal tools. Thorn-collar fittings wrapped in waxed cloth. Small scratching knives for changing route marks in the dark.
 
-At the bottom lies a true courier pouch, empty except for a torn route tag: **WESTWARD RELAY — TRANSFERRED**.
+At the bottom lies Lio's confiscated courier pouch and a torn route tag. It records one restrained prisoner marched beside the Willow convoy through the Transfer Checkpoint and then sent through the Lower West Gate.
 
 Mara picks it up, then puts it down with both hands.
 
-“They made a person into cargo,” she says.
+“Moved like cargo,” she says, “but never inside this crate. He walked through Westroot alive.”
 
 ### Evidence scene
 
 **Text**
 
+Quill lays the transfer tag beside Lio's confiscated pouch.
+
+“This record is plain,” they say. “Lio was marched beside the convoy as a restrained prisoner. He was never inside this crate. The handlers moved him through the Lower West Gate while the crate remained here.”
+
 Noma reads the two acknowledgement marks without touching them.
 
-“Westroot was opened from inside and outside,” they say.
+“The operation borrowed trust from both sides of the checkpoint,” they say. “Ada's Willow seal outside. Westroot's account mark and second-watch timing inside.”
 
 Bramwell's jaw tightens.
 
 “A gate account can be copied,” he says.
 
-“Yes,” Noma replies. “And a copied mark is still evidence that someone knew which mark to copy.”
+“Yes,” Noma replies. “This proves procedural knowledge, not a willing traitor. We name that difference too.”
 
 There is no accusation in Noma's voice. That makes the silence heavier.
 
@@ -762,7 +770,13 @@ Noma's expression softens.
 
 Bramwell turns to the hall.
 
-“The gate stays watched. Cargo is opened with witnesses. Every warning is copied to Bramblecross, and every shelter mark is restored where we can reach it.”
+“Westroot restores one surface compact: Bramblecross, because this party supplied named people and records against which the next claim can be checked. The First Gate stays guarded. People and cargo require a named outside account, inside confirmation, checkpoint sanitation, and witnesses. Warning, shelter, and water signals travel outward again. For now, Enna, Captain Hollis, and their named watch or courier contacts receive the route. No other former partner is readmitted by this order.”
+
+Quill copies the decision, folds the first warning for Enna, and shoulders a courier satchel.
+
+“If a compact is real,” they say, “someone has to carry its first message.”
+
+Quill leaves for the First Gate. The decision has become visible action.
 
 There is no cheer. The decision is too new and too costly for that.
 
@@ -780,6 +794,7 @@ The gatekeeper takes it.
 - Set `chapterThreeClear`.
 - Objective updates to **Chapter Complete: The Hidden Root**.
 - Westroot becomes a trusted hub rather than a one-time hiding place.
+- Quill physically carries the first named warning toward Bramblecross.
 
 ---
 
@@ -951,9 +966,10 @@ The Chapter 3 closing also includes a concise witnessed record of the first prom
 ## Key scene images
 
 1. **Westroot reveal:** a character-neutral first view from the gate bridge; gold-green moss lanterns, root-wrapped stone homes, people looking up from Rootmarket.
-2. **Witness Stones:** four worn stone tablets in a mossgarden water channel. The post-renewal base map shows an open approach; a stateful pre-renewal overlay or alternate background shows the legitimate oak-and-brass Westroot hold-shutter across it.
-3. **Cargo Siding:** Willow-sealed crates under covered lamps, old rail grooves, roots through fitted stone, no readable baked-in text.
-4. **Closing Mossgarden:** Mara and the revealed courier mark, using soft green and gold light rather than melodrama.
+2. **Transfer Checkpoint Rootbread scene:** Mara and the young Mossback beside the basin, airing rack, inspection bench, account rail, and ordinary tray; the child presents Lio's returned cup with one short blue hooked knot.
+3. **Witness Stones:** four worn stone tablets in a mossgarden water channel. The post-renewal base map shows an open approach; a stateful pre-renewal overlay or alternate background shows the legitimate oak-and-brass Westroot hold-shutter across it.
+4. **Cargo Siding:** Willow-sealed crates under covered lamps, old rail grooves, roots through fitted stone, no readable baked-in text.
+5. **Closing Mossgarden:** Mara and the revealed courier mark, using soft green and gold light rather than melodrama.
 
 ## Required later portrait set
 

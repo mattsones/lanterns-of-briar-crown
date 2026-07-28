@@ -691,7 +691,7 @@ export const MAPS = {
       ["wall", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "split_hall", "westroot_path", "westroot_path", "westroot_path"],
       ["wall", "westroot_first_gate", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path"],
       ["wall", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path"],
-      ["wall", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "rootbread_hatch", "westroot_path"],
+      ["wall", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path"],
       ["wall", "wall", "wall", "rootmarket", "wall", "westroot_path", "westroot_path", "westroot_path", "westroot_path"],
     ],
   },
@@ -819,5 +819,4 @@ Object.assign(TILE_META, {
   witness_stones: makeTile("◌", "Weathered Stones", false, "bg-teal-800/85"),
   split_hall: makeTile("▤", "Split Hall", false, "bg-stone-700/85"),
   cargo_siding: makeTile("▰", "Cargo Siding", false, "bg-rose-950/85"),
-  rootbread_hatch: makeTile("🍞", "Sealed Hatch", false, "bg-amber-700/80"),
 });

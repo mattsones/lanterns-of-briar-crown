@@ -1,8 +1,8 @@
 # Chapter 3 Story Truth
 
-Last updated: 2026-07-24
+Last updated: 2026-07-27
 
-Status: Approved working story foundation for the Chapter 3 rewrite, including the 2026-07-24 Witherdeath and sanitation decisions. This document resolves the continuity questions raised by the story-clarity audit. It does not change playable dialogue by itself; the canonical script and runtime remain unchanged until the later dialogue and map pass.
+Status: Approved story foundation implemented in the canonical Chapter 3 script and playable runtime, including the Witherdeath, sanitation, transfer, hold-scope, and Bramblecross-compact decisions. A fresh human comprehension playthrough remains the final release-candidate signoff.
 
 ## Westroot And Bramblecross
 
