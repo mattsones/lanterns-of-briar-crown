@@ -1,6 +1,6 @@
 # Realm History And Government Workshop
 
-Last updated: 2026-07-26
+Last updated: 2026-07-27
 
 Status: Worldbuilding workshop, not yet fully canonical story truth. Existing chapter facts take precedence until their documents are revised. This revision incorporates the approved map geography and place-name direction through 2026-07-26: Alderreach and its four regional seats, named neighboring capitals and council seats, the Principality of Selvara, the Veyran river march, the southern waterfall escarpment, a nested charter monarchy, the Saltwake War and Cinder Vale diaspora, the two-year Witherdeath crisis, Westroot's sixty-year isolation, a powerful foreign-born queen, Elowen's independent Royal Progress, Moonmark performing companies, and a non-cosmic Lantern Road.
 
@@ -356,9 +356,11 @@ Westroot has already been hidden for about thirty years. Its surface entrances a
 
 The Survey succeeds on its own terms. Its standard references, seals, and route ledgers improve trade and emergency planning. The Briar Crown later exploits the same uniformity to create forgeries that travel farther than older local imitations could.
 
+The selected v05 artwork represents a surviving copy **after** Chapter 3 because its Westroot note is a later graphite correction. Earlier chapters require a clean official state without that annotation. After Quill's warning reaches Bramblecross, the correction becomes a witnessed record and should be presented with the responsible name and in-story date; the graphite note is not part of the original Survey ink.
+
 ### About 30 years ago: the Sea-Peace Marriage
 
-A trade and naval crisis with the Ember Coast ends when the current king, still a prince, marries a human princess of Sunreach heritage from one of the coastal principalities. By the time he inherits the throne, she has spent years building relationships with Alderreach merchants, Sunreach leaders, coastal courts, and the royal council.
+A trade and naval crisis with the Ember Coast ends when the current king, still a prince, marries a Selvaran-born human princess whose family carries Sunreach heritage. She is not a princess from Alderreach's Sunreach province. By the time he inherits the throne, she has spent years building relationships with Alderreach merchants, Sunreach leaders, coastal courts, and the royal council.
 
 The marriage secures shipping and food imports during poor harvests, establishes a lasting southern alliance, and makes the future queen a significant power broker before she is queen. Some Hearthvale families resent both the abandoned expectation that the prince would marry domestically and the continuing influence of a foreign-born consort.
 
@@ -496,7 +498,7 @@ The leases are cancelled. Charter towns gain stronger audit rights, and the Crow
 
 **Period:** about 30 years ago
 
-The current king, while still a prince, marries a human princess of Sunreach heritage from one of the Ember Coast principalities after a naval and trade crisis. She later becomes Alderreach's queen. Her marriage secures food and shipping during poor harvests, but court critics call her foreign whenever she challenges an old privilege.
+The current king, while still a prince, marries a Selvaran-born human princess whose family carries Sunreach heritage after a naval and trade crisis. She later becomes Alderreach's queen. Her marriage secures food and shipping during poor harvests, but court critics call her foreign whenever she challenges an old privilege.
 
 She brings coastal archive practices and becomes a leading reader of old compacts. Elowen grows up hearing more than one country's account of the same event.
 
@@ -714,6 +716,8 @@ Hearthhollow, Bramblecross, and Westroot are an ideal proving ground:
 
 The faction is not attacking an irrelevant backwater. It is testing whether counterfeit national authority can pass down the full political ladder—from apparent Crown order, to town response, to village obedience—without anyone being able to compare the message with its source.
 
+For Chapters 4–5, the Underway, Listening Mile, relay post, and Briarhold Waystation remain inside Rainroot, east of Riverwatch and the disputed river march. The westward pursuit approaches the defended frontier without crossing it. This keeps Bracken's cell and the present conspiracy domestic; any Veyran funding or intelligence contact remains a separate later choice rather than an inference created by geography.
+
 ### Relationship with Veyrun
 
 The strongest version keeps the Briar Crown domestic. Its ideology imitates Veyrun, but Veyrun did not create every Alderreach grievance.
@@ -747,11 +751,11 @@ This framework resolves several questions without requiring a history lecture in
 3. Confirm **Saltwake War** and **Saltwake Confederacy** as the southern conflict's working names.
 4. Decide Cinder Vale's present condition: restored principality, divided coastal district, semi-independent foundry league, or homeland that survives mainly in diaspora memory.
 5. Decide whether the historical event and disease are both called **Witherdeath**, or whether the illness has a softer medical name such as Wither Ache.
-6. Define the new checkpoint sanitation visually and decide how much can appear in Chapter 3 without creating cumbersome gameplay.
+6. Confirm **Elowen** as the final playable name before the Chapter 4 executable contract.
 7. Name Alderreach's queen, the Selvaran princess, and define the council responsibilities through which she exercises power.
 8. Name or outline the Moonmark Counselor of Songs and decide whether they accompany Elowen or remain at court.
 9. Name the old Hearthvale family and its claimant, and define the strength of her collateral claim.
 10. Decide whether the king's sister is a loyal centralizer, neutral dynastic rival, or future suspect.
-11. Name the Deputy Roadwarden or Survey official who turns Crownward politics into Briar Crown operations.
+11. Name the Deputy Roadwarden or Survey official who turns Crownward politics into Briar Crown operations, and decide whether **Crownward League** is the final public movement name.
 
 Until those decisions are approved, this document should guide discussion but should not silently add names or history to playable dialogue.

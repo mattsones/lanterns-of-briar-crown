@@ -1,6 +1,6 @@
 # The Great Survey Of Alderreach — Political World Map
 
-Last updated: 2026-07-26
+Last updated: 2026-07-27
 
 Status: Selected reference artwork and reusable generation prompt. The map is not wired into the playable build yet.
 
@@ -29,6 +29,25 @@ The graphite circle, route, and note **WESTROOT — NOT IN SURVEY** were added a
 
 Do not display the penciled Westroot version before the party has found Westroot unless it is clearly framed as a non-diegetic player reference.
 
+## Required Diegetic Map States
+
+The selected v05 source is the **post-Chapter-3 reference state** because the graphite Westroot circle, route, and note are already present. It is not the clean Survey copy that Enna can display during Chapters 1–2.
+
+Any later runtime integration should derive two clearly named states without rewriting the v05 source:
+
+1. **Clean Survey, before Chapter 3:** preserve all official ink and remove or mask only the later graphite Westroot circle, connector, and note. Enna may compare this copy with older courier scraps and explain that the Survey ends where verified knowledge ended.
+2. **Witnessed correction, after Chapter 3:** show the graphite Westroot correction only after Quill's first named warning reaches Bramblecross. Add the responsible witness name and in-story date in a legible annotation, overlay, caption, or transition treatment. The current v05 pixels do not contain that name or date, so the surrounding presentation must supply them before the image is treated as the completed diegetic correction.
+
+Do not use the annotated v05 source as an ordinary wall map in an earlier chapter, and do not imply that the original surveyors placed or erased Westroot.
+
+## Scale And Local Travel Use
+
+V05 is the selected national political composition, not the executable travel-time contract for the playable local routes. Its settlement labels and symbols are spaced for national readability, while Chapters 1–3 already establish the playable pacing from Hearthhollow to Bramblecross and from Bramblecross to Westroot.
+
+Before runtime integration, validate those local relationships in a dedicated Rainroot crop or local route inset. If literal distances cannot be reconciled with the national scale bar, treat the local labels in the national composition as displaced for legibility and say so in the artifact presentation; do not silently lengthen chapter travel or move the story communities to satisfy an illustrative spacing choice.
+
+The conservative Chapter 4–5 direction keeps the Underway, Listening Mile, Briar Relay Post, and Briarhold Waystation inside Rainroot, east of Riverwatch and the disputed Veyran river march. Those underground sites need not appear on the official Survey. Westward movement after Westroot does not cross into Veyrun unless a later story decision explicitly adds a separate border plot.
+
 ## Geographic Reading
 
 | Place | Map relationship |
@@ -41,6 +60,7 @@ Do not display the penciled Westroot version before the party has found Westroot
 | Bramblecross | Modest interior market town within Rainroot, several days east of the defended frontier |
 | Hearthhollow | Tiny village in Bramblecross's rural jurisdiction |
 | Westroot | Underground Rainroot junction west of Bramblecross but comfortably inside Alderreach, added later in pencil |
+| Underway / Listening Mile / Briarhold | Unmapped underground route complex west of Westroot but still east of Riverwatch and the disputed river march; remains inside Alderreach for Chapters 4–5 |
 | Riverwatch | Alderreach fortress guarding a crossing on the disputed western river march |
 | Veyrun / Kestovar | Centralized western rival and its inland national capital |
 | Cairn Cantons / Cairnmeet | Northern mountain cantons and their accessible conclave seat |

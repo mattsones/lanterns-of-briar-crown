@@ -1,6 +1,6 @@
 # Liam’s Game — Main Story Bible for Chapters 2–5
 
-Last updated: 2026-07-24
+Last updated: 2026-07-27
 
 ## Working Arc Title
 
@@ -40,7 +40,7 @@ Recurring phrase:
 
 The Briar Crown exploits the fact that people rightly depend on trusted authorities, then removes the truth and responsibility that make authority trustworthy.
 
-The Lantern Road teaches that good instructions name who is responsible, what danger they address, and what care they promise.
+The Lantern Road's keeper tradition holds that good instructions name who is responsible, what danger they address, and what care they promise.
 
 ## The True Crown vs. the Briar Crown
 
@@ -61,7 +61,7 @@ Working theme:
 
 The hero knows there is a princess, but does not know much about her.
 
-Her name should first appear on a suspicious order before the hero fully understands its significance. One companion, likely Rowan or Tilda, recognizes it:
+Chapter 4 should first establish that the heir apparent is conducting an independent Royal Progress with lawful authority to request route records and temporary safety measures. Her name should then appear on a suspicious order. One companion, likely Rowan or Tilda, recognizes both the name and why such an order could initially pass:
 
 > “Wait. That is not just a royal name. That is the princess.”
 
@@ -222,7 +222,7 @@ Good, responsible, somewhat distant. He likely cares for the kingdom but is rece
 
 ### Queen
 
-The queen is a human princess of Sunreach heritage from an Ember Coast principality. She married the current king while he was still a prince as part of the Sea-Peace settlement.
+The queen was born a princess of Selvara, a mainland Ember Coast principality. She has Sunreach family and cultural heritage, but she is Selvaran-born rather than a princess from Alderreach's Sunreach province. She married the current king while he was still a prince as part of the Sea-Peace settlement.
 
 She is a significant power broker, an experienced reader of compacts and archives, and a royal councillor in her own right. Some domestic families resent her foreign birth, the influence she gained before becoming queen, and the domestic marriage the prince abandoned for the alliance.
 
@@ -230,29 +230,20 @@ The king and queen retain a Moonmark Counselor of Songs who gathers oral history
 
 ### Princess
 
-Princess Elowen is the acknowledged heir apparent, known publicly but not personally by the hero. Her name appears on a suspicious order in Chapters 3 or 4. Eventually she should be revealed as someone who has been investigating the same corruption.
+Princess Elowen is the acknowledged heir apparent, known publicly but not personally by the hero. Chapter 4 establishes her Progress before her name first appears on a suspicious order. Eventually she should be revealed as someone who has been investigating the same corruption.
 
 Working characterization:
 
 - Scholar-princess
 - Disguised traveler tendencies
 - Loves old maps and ordinary villages
-- Understands that roads are how a kingdom listens to itself
+- Understands that roads, couriers, records, and petitions are how a kingdom hears local truth
 - Conducting her first independent Royal Progress
 - Comparing the Great Survey with current roads, petitions, and local records
 
 Since the Great Survey, a senior member of the royal family has conducted a Royal Progress every five years. Elowen's current Progress is the first she has undertaken without her parents. Her lawful ability to request route records and temporary safety measures makes forged orders in her name especially plausible.
 
-Possible princess names to consider later:
-
-- Princess Elowen
-- Princess Aster
-- Princess Maribel
-- Princess Linora
-- Princess Wrenna
-- Princess Adeline
-
-Placeholder name in this bible: **Princess Elowen**.
+**Elowen** is the current planning name used consistently in this bible and the history workshop. Confirm it before the Chapter 4 executable contract makes the name playable canon; if it changes, update every story and history reference together.
 
 ---
 
@@ -671,8 +662,8 @@ Mara whispers:
 Alternate titles:
 
 - **The Village Under the Hill**
-- **Westroot Remembers**
-- **The Door That Would Not Open for Lies**
+- **The Witnessed Road**
+- **The Door With No Handle**
 
 Recommended title: **The Hidden Root**
 
@@ -692,7 +683,7 @@ Can a hidden community risk helping outsiders when hiding has kept them safe?
 
 ### Westroot Threshold
 
-A transition zone of carved stone, living roots, and dim lanterns. The party is observed before being welcomed.
+A transition zone of carved stone, living roots, and dim lanterns. Westroot's gatekeepers observe the party before granting a limited welcome at the First Gate Transfer Checkpoint.
 
 ### Rootmarket
 
@@ -704,7 +695,7 @@ Stone tablets where travelers once left route testimony: warnings, gratitude, na
 
 ### Mossgarden of Remembering
 
-A quiet place where moss grows over old names and glows when true memories are spoken.
+A quiet memorial and record garden where keepers tend names, route marks, and physical records under moss. Moss may glow as ordinary fantasy flora, but it does not test truth or reveal records in response to speech.
 
 ### The Split Hall
 
@@ -718,7 +709,7 @@ A storage tunnel where suspicious Willow-sealed crates have been moved.
 
 ### Bramwell Gatehand
 
-Stonekin elder, cautious, practical, not unkind. Believes the gate should be sealed again immediately.
+Stonekin Gatehand and accountable emergency officer, cautious, practical, not unkind. Believes a temporary hold is necessary while Westroot identifies the breach.
 
 ### Noma Greenstill
 
@@ -738,7 +729,7 @@ Someone using Willow-sealed cargo to move items through Westroot.
 
 ## Westroot’s First Reaction
 
-Westroot does not immediately trust the party. The community knows opening the old gate may bring danger. Some blame the surface towns for forgetting the old promises.
+Westroot does not immediately trust the party. Their unscheduled phrase-lock opening has no outside account, inside confirmation, or Gatehand key. Westroot ordinarily admits rare scheduled transfers through the checkpoint, so the alarm concerns this unaccounted kind of arrival rather than a gate that has never opened.
 
 Mara makes things complicated because she refuses to speak politely about Lio being missing.
 
@@ -770,11 +761,11 @@ The renewal authorizes a witnessed investigation of the Cargo Siding. It is the 
 
 ## Side Thread: The Rootbread Promise
 
-A local child or elder has been leaving food at a sealed passage for someone unseen. The player investigates and discovers evidence that Lio or another captive passed nearby.
+Auntie Lume explains that her young helper served the ordinary Rootbread tray to an unnamed hooded courier during the false Willow transfer three nights earlier. The player returns to the First Gate Transfer Checkpoint, learns why the handlers accepted the routine tray, and hears how the child set aside an unfamiliar returned cup. Mara identifies Lio's hooked knot in the blue courier thread tied around it.
 
-Optional reward: **Rootbread Charm** or **Westroot Packed Lunch**.
+The player and Mara restock the checkpoint tray for the next person held there. The action continues Westroot's promise that a guarded boundary may delay passage without making a hungry traveler invisible; it does not retroactively feed Lio or use the retired sealed-hatch scene.
 
-Story purpose: Reinforces hospitality and gives Mara a humanizing moment. She may leave half a roll with Lio’s old lunch string.
+Implemented reward: **Rootbread Charm**, a carried reminder of the witnessed promise rather than a self-acting magical object.
 
 ## Main Investigation: Willow-Sealed Cargo
 
@@ -782,31 +773,15 @@ The party traces a counterfeit Willow-marked crate that vanished from its assign
 
 The apparent disappearance is a physical mystery, not magic: wheel grooves lead from the empty hold bay deeper into the siding, somebody brushed the dust, and the lock was reset to claim the crate never moved. The player volunteers at Split Hall to follow that trail and return with evidence before Westroot accuses anyone.
 
-Inside the crates are not spices. They contain:
+Inside the relocated crate are not spices. It contains:
 
 - forged blank orders
 - false seals
 - thorn collars for creatures
 - route-scratching tools
-- maybe a true royal courier pouch
+- Lio's courier pouch and transfer tag
 
-One crate bears an order with Princess Elowen’s name.
-
-The hero may not recognize the name. A companion does.
-
-### Companion recognition moment
-
-**Rowan version:**
-
-> Rowan’s face changes. “That name is not a clerk. That is the princess.”
-
-**Tilda version:**
-
-> Tilda stops smiling. “Oh. That is a very royal name to find in a very illegal box.”
-
-**Moss version:**
-
-> Moss reads the name twice. “That is a living branch of the true crown. Why would the Briar Crown write over it?”
+The Chapter 3 evidence establishes copied outside trust, copied inside procedure, and Lio's westward transfer. It does **not** introduce Princess Elowen's name; that escalation belongs in Chapter 4 after the player learns why her Progress gives route orders lawful weight.
 
 ## Combat Escalation
 
@@ -818,27 +793,26 @@ Possible enemies:
 - Thornroot Skulk
 - Crown-Seal Forger
 
-The infiltrator escapes or is captured depending on desired complexity, but not before revealing that Lio was moved toward a deeper place called **The Crown Cellar** or **Briarhold Waystation**.
+The operative is defeated or captured after confirming that Lio was moved west through the Lower Gate toward the Underway. The evidence proves continuing inside access or procedural knowledge, but it does not settle whether that knowledge came from a willing resident, theft, copied records, or observation.
 
 ## Chapter 3 Reveal
 
-Westroot was opened from inside and outside.
+The false transfer borrowed two kinds of trust: Ada's Willow seal outside and Westroot's account mark plus second-watch timing inside. Lio was moved beside the convoy, never hidden inside its crate, and his transfer record points west through the Underway.
 
-Someone in or near Westroot helped the Briar Crown move cargo through the old ways — possibly out of fear, possibly because they believed the Briar Crown would protect Westroot from surface chaos.
-
-Princess Elowen’s name appears on an order, but the order feels false.
+Westroot's isolation prevented it from checking the Willow claim against Bramblecross. That failure justifies a guarded, witnessed compact without proving a community-wide betrayal or naming a willing collaborator.
 
 ## Chapter 3 End State
 
-- The party earns partial trust in Westroot.
-- Westroot remains divided, but the Open Lantern side gains strength.
+- The party earns enough trust for Westroot to act on its evidence.
+- Split Hall restores one guarded surface compact with Bramblecross using named accounts, inside confirmation, checkpoint sanitation, witnesses, outward warnings, and limited contacts.
+- Quill physically carries the first named warning to Enna.
 - The party finds evidence of a Briar Crown cell.
-- The princess thread begins.
+- The identity and reach of the inside procedural source remain unsettled.
 - Lio’s trail points deeper into the old road network.
 
 ## Closing Image
 
-In the Mossgarden, Mara speaks Lio’s name aloud. The moss glows faintly, then reveals a scuffed courier mark beneath the green:
+In the Mossgarden, Noma clears moss from the edge of a maintained record tablet and uncovers a shallow courier mark left during Lio's transfer:
 
 > **BRINDLE PASSED. BREATHING. BOUND WEST.**
 
@@ -866,6 +840,8 @@ Recommended title: **The Riddle Road**
 
 The party enters the deeper Lantern Road system, where old keeper-designed mechanisms and route practices distinguish guidance from command. Edden’s drawings become essential. Lio is confirmed alive in a more direct way, and the Briar Crown cell’s hideout is located.
 
+Before the first order bearing Elowen's name appears, required-path dialogue establishes that Elowen is Alderreach's heir apparent, is conducting her first independent Royal Progress, and may lawfully request route records and temporary safety measures. The forgery works because it imitates a known public responsibility.
+
 ## Main Question
 
 Where is Lio being held?
@@ -873,6 +849,12 @@ Where is Lio being held?
 ## Emotional Question
 
 Can the party follow truth when lies offer a faster path?
+
+## Route Geography And Timing
+
+The Underway, Listening Mile, Briar Relay Post, and Briarhold Waystation remain inside Rainroot and east of Riverwatch and the disputed Veyran river march. The route may point west without crossing the international frontier. This preserves the Briar Crown as a domestic Alderreach conspiracy unless a later chapter deliberately chooses a separate Veyran-intelligence thread.
+
+The party already carries the useful core of Edden's drawings from the Chapter 2 briefing. Quill may later deliver a small addendum after completing the first witnessed round trip under the new compact, but no same-hour bird or runner should collapse the meaningful travel time between Bramblecross and Westroot.
 
 ## Main Locations
 
@@ -882,19 +864,19 @@ A guarded old passage that Westroot has not used in years.
 
 ### The Underway
 
-A road beneath roads. Not a tunnel exactly, but an old route-space where signs, memory, roots, and stone overlap.
+A linked system of tunnels, maintenance galleries, culverts, old route chambers, roots, and fitted stone beneath the surface roads.
 
-### The Wrong Map Room
+### The Survey Correction Room / Overlay Archive
 
-A chamber filled with maps that alter when no one is looking.
+A keeper archive containing Great Survey benchmarks, older route sheets, transparent correction overlays, folding leaves, dated shutters, and witnessed annotations. Different layers reveal different dates and operating conditions; the maps do not alter themselves.
 
 ### The Listening Mile
 
-A stretch of road where spoken words echo back as route clues. Lies echo wrong.
+A keeper-built review circuit where inscriptions, choice plates, echo tubes, and signal shutters return route clues. Incorrect alignments distort or redirect the echo; the mile does not detect lies.
 
 ### Lanternwell
 
-A deep shaft or chamber where an old gold lantern hangs over water, reflecting true paths.
+A deep shaft or chamber where a crafted gold signal lantern hangs over water. Mirrors, marked sightlines, and reflection plates relay route information when keepers align them correctly.
 
 ### Briar Relay Post
 
@@ -910,7 +892,7 @@ A captured old waystation used by the Briar Crown to relay messages and prisoner
 
 ## Edden’s Role
 
-Before the party leaves Westroot, Hollis/Enna sends a packet of Edden’s drawings, or the party receives them via courier bird/runner.
+The party retains the drawings reviewed with Edden in Chapter 2. Before entering the deeper route, Westroot's records let the party reinterpret marks that previously seemed incomplete. If a new page is needed, Quill brings it only after an explicit travel interval and a completed witnessed exchange with Enna or Hollis.
 
 The drawings include:
 
@@ -932,6 +914,8 @@ Edden’s clue says, “The map lies flat. Fold it.”
 
 The player must rotate/fold/interpret the map so two separated lantern marks touch, revealing the true route.
 
+The key fold joins a Great Survey benchmark to an older keeper mark. Neither record is complete alone; the route becomes legible when official measurement and local operational knowledge are compared.
+
 ### Simple implementation idea
 
 In game terms, this can be represented as choosing which marks to connect rather than actually building a complex visual folding mechanic.
@@ -951,7 +935,7 @@ Optional deeper puzzle:
 
 **Tilda:** “A flat map is only one opinion. I prefer maps that admit they have secrets.”
 
-**Moss:** “Fold memory to memory. Lantern to lantern. The road is not asking for speed.”
+**Moss:** “Fold record to record. Lantern to lantern. The keeper who made this was not measuring speed.”
 
 **Mara:** “Lio folds notes into triangles when he wants me to find them. Try the corners.”
 
@@ -1014,6 +998,8 @@ The party learns the local Briar Crown cell is not random. It has roles:
 
 They are using old Lantern Road waystations as relay points.
 
+At the relay post, place a lawful Crownward League broadside arguing for faster national road standards beside a secret Briar instruction that manufactures the delays and fear used to support that argument. The juxtaposition distinguishes debatable centralizing policy from kidnapping, forgery, and engineered panic.
+
 ## Combat Escalation
 
 The Briar Relay Post is guarded.
@@ -1040,7 +1026,7 @@ The hideout is called something like:
 
 Recommended: **Briarhold Waystation**.
 
-The party also learns that the false orders bearing Princess Elowen’s name are part of a wider effort to make people distrust the true crown.
+After the Progress has been established, the party finds the first false orders bearing Princess Elowen's name and learns that the cell is using her legitimate route authority to make settlements distrust the future queen while blocking replies that could warn her.
 
 ## Chapter 4 End State
 
@@ -1076,11 +1062,11 @@ Recommended title: **Briarhold Waystation**
 
 ## Chapter Promise
 
-The party infiltrates and confronts a Briar Crown faction cell, rescues Lio in a boss-battle climax, and learns what the Briar Crown appears to be. But the cell leader escapes, and a final hint suggests the faction itself is only the visible layer of something older.
+The party infiltrates and confronts a Briar Crown faction cell, rescues Lio in a boss-battle climax, and learns what the Briar Crown is at the operational level. The cell leader escapes, and genuine office material proves that the network reaches into the Alderreach institutions it counterfeits.
 
 ## Main Question
 
-Can the party rescue Lio before the Briar Crown moves him beyond Westroot?
+Can the party rescue Lio before the Briar Crown moves him out of Briarhold and farther west toward the defended river march?
 
 ## Emotional Question
 
@@ -1090,7 +1076,7 @@ After Lio is rescued, will justice become vengeance?
 
 ### Briarhold Outer Approach
 
-Hidden entrance disguised as a sealed waystation or collapsed root cellar.
+Hidden entrance disguised as a sealed waystation or collapsed root cellar. Briarhold remains on the Alderreach side of the disputed march, east of Riverwatch; reaching it does not make the cell a Veyran operation.
 
 ### False Ledger Room
 
@@ -1231,7 +1217,7 @@ Mara, seeing him, nearly runs forward. The hero or companion stops her gently.
 
 ### Boss setup
 
-Bracken Voss discovers the party during the rescue. He is not alone. He uses thornbound constructs, guards, or route-control magic.
+Bracken Voss discovers the party during the rescue. He is not alone. He uses thornbound constructs, guards, altered seals, signal shutters, and other crafted route-control devices.
 
 The boss battle should feel like rescuing Lio from the machinery of false authority.
 
@@ -1299,7 +1285,7 @@ Or:
 
 > “Truth walks slowly,” Bracken says. “We are already ahead of it.”
 
-Then he escapes, perhaps using a Briar Crown route that harms or seals itself behind him.
+Then he escapes through a prepared route mechanism that collapses or seals the passage behind him.
 
 ## Lio and Mara Reunion
 
@@ -1349,7 +1335,7 @@ This plants his healing arc.
 
 ## Chapter 5 Reveal: What the Briar Crown Is
 
-In the false ledger room or after the boss, Enna/Westroot interprets the evidence.
+In the false ledger room or after the boss, a knowledgeable Westroot clerk makes the immediate operational reading. The party preserves the original papers and later carries them through the guarded compact to Enna for the wider case analysis.
 
 The party learns:
 
@@ -1367,6 +1353,8 @@ The party finds a sealed order bearing Princess Elowen’s name.
 
 But Lio says something is wrong.
 
+Any voice clue here must be a stored or relayed crafted signal with a physical channel and an earlier sender, not unexplained real-time speech across the road network.
+
 Possible clue:
 
 > “They kept saying her name like a password,” Lio says. “But one of them slipped. Said, ‘The princess never gave the order, but she opened the question.’ I do not know what that means.”
@@ -1379,7 +1367,7 @@ This can be the first uncertain communications hint that the princess is activel
 
 Recommended version:
 
-Lio remembers hearing a voice carried through a lanternwell signal channel:
+Lio remembers hearing a recorded or relayed voice through a crafted lanternwell signal channel. The mechanism carries a message; it does not create a supernatural connection between speakers:
 
 > “Tell my father I did not issue the order. Someone is making the roads carry my name.”
 
@@ -1389,7 +1377,7 @@ He does not know who said it. The companion recognizes the implication.
 
 After Bracken escapes, the party recovers a surviving instruction from the false ledger room. Its order is criminal, but its paper, correction marks, or private seal reference are genuine.
 
-Enna or a knowledgeable Westroot clerk examines it.
+A knowledgeable Westroot clerk identifies the genuine office material on site. Enna confirms the wider implication after the evidence reaches Bramblecross.
 
 > “This part is not forged,” they say. “It came from the office that decides what the real version should look like.”
 
@@ -1404,19 +1392,19 @@ The heroes know what the Briar Crown faction is. They now also know that its acc
 - The Briar Crown is revealed as a faction/cell network.
 - The cell leader escapes.
 - Princess Elowen’s name becomes a major future lead.
-- The Briar Crown mark hints at something older than the faction.
+- Genuine office material proves that the cell has institutional support above Bracken.
 
 ## Closing Image
 
-The party returns to Westroot or Bramblecross with Lio alive.
+After the return journey through Westroot, the party reaches Bramblecross with Lio alive and the original office papers intact.
 
 The hidden road is safer than it was, but not fully healed.
 
-A gold lantern burns again in Briarhold Waystation, no longer covered.
+Back at Briarhold Waystation, a gold lantern burns again, no longer covered.
 
 Mara sits beside Lio, shoulder pressed against his arm so he cannot quite stand up and chase vengeance yet.
 
-Lio stares at the sealed escape route Bracken used.
+At the Bramblecross case wall, Lio stares at the westward route where Bracken escaped.
 
 > “He is still out there.”
 
@@ -1440,11 +1428,11 @@ Lio survived past the Westroot gate.
 
 ## End of Chapter 3
 
-Westroot is a hidden Lantern Road community, and Princess Elowen’s name is being used in suspicious orders.
+Westroot is a hidden Lantern Road community that has restored one guarded compact with Bramblecross. Lio was moved west through the Underway, and the source of the cell's inside procedural knowledge remains unsettled.
 
 ## End of Chapter 4
 
-Lio is alive and held at Briarhold Waystation. The Briar Crown cell has a structure and a plan.
+Lio is alive and held at Briarhold Waystation. The Briar Crown cell has a structure and a plan, and Princess Elowen's name is being used in false orders after her lawful Royal Progress authority has been established.
 
 ## End of Chapter 5
 
@@ -1533,7 +1521,7 @@ A small stone charm from the Westroot Gate. Possible bonus to Will or Wit.
 ## Chapter 3
 
 **Rootbread Charm**  
-A token of Westroot hospitality. Could grant minor healing or resistance.
+A story token of Westroot hospitality and the witnessed promise. It need not carry literal magic; any gameplay bonus can abstract the courage or care it represents.
 
 **Witness Stone Rubbing**  
 Quest item/lore item. Helps decode later road marks.
@@ -1541,7 +1529,7 @@ Quest item/lore item. Helps decode later road marks.
 ## Chapter 4
 
 **Folded Map Scrap**  
-Reveals hidden paths when viewed with lanternlight.
+Uses aligned folds, keeper marks, and lantern-visible ink or watermark to expose a hidden route.
 
 **Lanternwell Drop**  
 Crafting ingredient or trinket component.
@@ -1561,40 +1549,31 @@ Story item from Lio/Mara reunion. Symbol of rescued truth and sibling bond.
 
 # Open Questions for Later
 
-These do not need to be solved before drafting Chapter 2, but they should remain visible.
+The map roles of **Hearthward**, **Lanthorne**, **Selvara**, and the other v05 seats are settled planning direction. That does not automatically place every name in playable dialogue. The following choices remain genuinely open:
 
-1. What is the Hearthvale capital's final name: Hearthward, Goldhearth, Kingshearth, or Hearthstead?
-2. What is the queen's name and which Ember Coast principality is her home?
-3. What are the final names of the Crownward claimant and the Deputy Roadwarden who runs Briar operations?
-4. How soon should the party meet Princess Elowen in person or in disguise?
+1. Confirm **Elowen** as the final playable name before the Chapter 4 executable contract, and decide when Hearthward, Lanthorne, and the wider map names first enter dialogue.
+2. What is the Selvaran-born queen's personal name, and which council office or archive responsibility does she hold?
+3. What are the final names of the Crownward claimant and the Deputy Roadwarden or Survey official who runs Briar operations? Is **Crownward League** the final public name?
+4. How soon after the Chapter 5 evidence should the party meet Elowen in person or in disguise?
 5. Does the Moonmark Counselor of Songs travel with Elowen or remain at court?
 6. Should Lio become a recurring ally, a courier-network contact, or a future temporary guest?
 7. Should Mara eventually become a formal non-combat companion with a puzzle/support interface?
 8. What did the old Lantern Road require from official roadwardens?
 9. How publicly is the royal family connected to the Lantern Compact and Great Survey?
 10. What is Cinder Vale's present political condition?
+11. Are **Saltwake War** and **Saltwake Confederacy** the final southern-conflict names?
+12. Do people call both the epidemic and the wider crisis **Witherdeath**, or does the illness receive a distinct medical name?
 
 ---
 
 # Recommended Next Writing Step
 
-Draft **Chapter 2: The Westroot Trail** as a story script in the same style as Chapter 1, including:
+Complete the Chapter 3 human-comprehension signoff and bounded non-cosmic consistency pass before drafting the Chapter 4 executable contract. The Chapter 4 contract should then lock:
 
-- Bramblecross opening scene
-- Mara’s introduction
-- Edden’s riddle/drawing scene
-- Ada’s seal follow-up
-- Westward road map
-- Three-Sign Hollow puzzle
-- first Briar Crown scouts
-- First Westroot Gate
-- chapter-end reveal that Lio survived past the gate
-
-Chapter 2 should end not with a full answer, but with a door opening.
-
-The player should feel:
-
-> We are closer to Lio.  
-> The old road is real.  
-> The Briar Crown is watching.  
-> Westroot is waiting.
+- Elowen's final playable name and the one-line Royal Progress setup before her forged name appears;
+- the Survey Correction Room / Overlay Archive and grounded folded-map mechanism;
+- the Underway, relay post, and Briarhold locations east of Riverwatch;
+- the party's existing Edden drawings and any later Quill delivery after explicit travel time;
+- a lawful Crownward broadside paired with a secret Briar operational instruction;
+- a crafted-signal explanation for every echo, lantern, shutter, or relayed voice;
+- the Chapter 5 handoff toward genuine institutional access rather than an awakened symbol or older force.

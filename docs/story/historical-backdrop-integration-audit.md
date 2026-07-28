@@ -76,10 +76,12 @@ Metaphors can remain after the mechanism is understood. For example, a character
 
 Use two visual states:
 
-1. **Before Chapter 3:** Enna's official Survey copy ends west of Bramblecross, while older courier scraps continue.
-2. **After Chapter 3:** Quill or Enna pencils Westroot onto the Survey and dates the correction under a witness name.
+1. **Before Chapter 3:** Enna's clean official Survey copy ends west of Bramblecross, while older courier scraps continue. The selected v05 source cannot serve this state unchanged because it already contains the later graphite correction.
+2. **After Chapter 3:** Quill or Enna pencils Westroot onto the Survey and dates the correction under a witness name. V05 is the selected reference for this state, but its presentation still needs to supply the responsible name and in-story date.
 
 This single prop establishes the size of Alderreach, competent government with incomplete knowledge, Westroot's long isolation, the political ladder, and the investigative importance of local testimony.
+
+Treat v05 as a national political composition rather than an executable walking-time map. Preserve established Chapter 1–3 travel pacing; validate local distances in a Rainroot crop or route inset before runtime integration instead of silently stretching chapter journeys to match label spacing.
 
 ### 4. Make Elowen's Royal Progress The Reason Her Name Works As A Forgery
 
@@ -161,6 +163,8 @@ Chapter 4 should expose the conspiracy's political argument and make Elowen's na
 | Wrong Map Room | Recast as a **Survey Correction Room** or **Overlay Archive**. Maps do not alter themselves; old transparent overlays, shutters, folding leaves, or keeper annotations reveal routes at different dates and conditions. |
 | Folded Map puzzle | Let the fold join a Great Survey benchmark to an older keeper mark. The player learns that official and local records become useful when compared, not when one automatically defeats the other. |
 | Listening Mile | Keep the name if desired, but establish it as a keeper-built training/review circuit using inscriptions, choice plates, echo tubes, and signal shutters. It records choices; it does not judge them. |
+| Edden's drawings | Let the party carry the core drawings it already reviewed in Chapter 2. Any later addendum arrives through Quill only after an explicit witnessed round trip; do not use an instant bird or runner to collapse Bramblecross–Westroot travel time. |
+| Route geography | Keep the Underway, Listening Mile, relay post, and Briarhold inside Rainroot, east of Riverwatch and the disputed march. Westward pursuit does not make the conspiracy Veyran. |
 | Captive porter | Make the porter able to name the office or jurisdiction that should have received the missing transfer. This continues the nested-government logic from Chapter 1. |
 | Briar relay post | Place a lawful Crownward League broadside beside a secret operational instruction. A slogan such as **“Veyrun moves while Alderreach debates”** can reveal the centralizers' genuine fear without requiring a war lecture. |
 | Princess order | Have Rowan, Tilda, Quill, or the porter explain that Elowen is the heir on her first independent Royal Progress and may lawfully request route records. That is why the false order initially passes. |
@@ -180,7 +184,8 @@ Chapter 5 should answer “what is the Briar Crown?” at the organizational lev
 | Bracken's philosophy | Tie his preference for command to real crises: slow coordination, western war memory, and Witherdeath. Let the player see why the diagnosis attracts followers before the story rejects his methods. |
 | Faction structure reveal | Bracken is a regional cellmaster. Above him sits an operational architect with government access; above that person is a politically legitimate Crownward patron or claimant. Do not name the final claimant unless the next arc is ready to use her. |
 | Queen/Elowen hostility | One document can accuse the foreign-born queen and Elowen of sacrificing Alderreach to Ember Coast interests. This seeds the Sea-Peace backlash through antagonist propaganda, not narrator endorsement. |
-| Chapter ending | Enna identifies the genuine institutional element: **“This part is not forged. It came from the office that decides what the real version should look like.”** |
+| Evidence handoff | A Westroot clerk identifies the immediate operational fact at Briarhold. The party preserves the original material and carries it through the guarded compact so Enna can make the wider case analysis in Bramblecross. |
+| Chapter ending | Enna identifies the genuine institutional element after the evidence reaches her: **“This part is not forged. It came from the office that decides what the real version should look like.”** |
 | Next-arc lead | Point toward Elowen's interrupted Progress, a compromised regional office, or a Crownward patron—not a living mark or awakened ancient force. |
 
 The Lio/Mara reunion should remain the emotional climax. Political evidence should sharpen the aftermath, not crowd out the rescue.
@@ -206,28 +211,27 @@ The Lio/Mara reunion should remain the emotional climax. Political evidence shou
 - `src/story/chapter1.ts` describes the old way as listening, the cellar as remembering a route, and the road beneath Bramblecross as beginning to speak.
 - `src/App.tsx` repeats literal listening/remembering road language in Hearthhollow, the shrine, Edden's report, the Three-Door Threshold, and several tooltips.
 - `src/story/chapter2.ts` uses a road that speaks, roots that listen, a door that listens past the player, and lanterns that decide whether to trust.
-- `src/story/chapter3.ts` opens with a hill deciding whether to trust, says the road remembers names, calls the Witness Stones listeners, and still implements the retired sealed-hatch Rootbread scene.
+- `src/story/chapter3.ts` now implements the Transfer Checkpoint Rootbread scene and knowledge contract, but its opening still describes the hill as deciding whether to trust the party and retains a few literal road-language formulations.
 - `src/story/chapters2to5.ts` still plans a living Briar mark, “not supposed to wake,” and a road taught to speak.
 
 ### Canonical/planning documents
 
 - `docs/story/chapter-1-story-script.md` and `chapter-2-story-script.md` contain many matching sentient-road formulations.
 - `docs/story/chapter-3-story-script.md` now carries the Transfer Checkpoint, reached-Lio completion, scoped reopenings, and explicit first compact. Remaining literal road-language cleanup belongs to the separate non-cosmic consistency pass.
-- The later Chapter 4 section of `chapters-2-5-story-bible.md` still calls for maps that alter when nobody looks, despite its newer mechanical explanation of the Listening Mile.
-- The Chapter 5 promise and end-state bullets in that bible still refer to something older behind the faction and a Briar mark hint, while the newer foundational sections correctly specify institutional compromise.
+- `docs/story/chapters-2-5-story-bible.md` now uses the Survey Correction Room, mechanical Listening Mile, Chapter 4 Elowen reveal, domestic Briarhold jurisdiction, and institutional Chapter 5 ending. Keep future chapter contracts aligned with those reconciled sections.
+- The selected v05 map is the post-Chapter-3 annotated state. A clean pre-Chapter-3 derivative and a witnessed/date-stamped post-Chapter-3 presentation still need production treatment before runtime use.
 - `docs/art/art-direction.md` still instructs artists to make Lantern Road magical, benevolent, sacred, and able to remember truth.
 
 These should be changed together during the prose pass so script, runtime, story bible, tooltips, and art direction do not teach different world rules.
 
 ## Recommended Work Order
 
-1. Implement the Chapter 3 player-knowledge contract, Transfer Checkpoint interaction, compact ending, and required map adjustment.
-2. Run a focused non-cosmic language pass through Chapter 1–3 runtime and canonical scripts.
-3. Add the Great Survey prop to Chapter 2 briefing and unlock the penciled map after Chapter 3.
-4. Reconcile `src/story/chapters2to5.ts`, the Chapter 4–5 bible sections, and art direction with the institutional reveal.
-5. Build Chapter 4 around the Survey Correction Room, mechanical Listening Mile, Royal Progress order, and Crownward/Briar contrast.
-6. Use Chapter 5 to reveal the real-office connection and aim the next arc toward Elowen and national politics.
-7. Add Saltwake, Cinder Vale, Veyrun, court, and Moonmark texture only where a later character or conflict makes each history emotionally relevant.
+1. Complete the fresh Chapter 3 human-comprehension signoff.
+2. Run a focused non-cosmic language pass through Chapter 1–3 runtime, canonical scripts, `src/story/chapters2to5.ts`, and art direction.
+3. Produce the clean pre-Chapter-3 Survey state, the witnessed/date-stamped post-Chapter-3 presentation, and a local Rainroot distance check before runtime map integration.
+4. Build the Chapter 4 executable contract around the Survey Correction Room, mechanical Listening Mile, established Royal Progress before Elowen's forged name, explicit travel logistics, domestic Briarhold geography, and Crownward/Briar contrast.
+5. Use Chapter 5 to reveal the real-office connection, carry the original evidence back to Enna, and aim the next arc toward Elowen and national politics.
+6. Add Saltwake, Cinder Vale, Veyrun, court, and Moonmark texture only where a later character or conflict makes each history emotionally relevant.
 
 ## What Not To Add Yet
 
