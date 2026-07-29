@@ -1,4 +1,4 @@
-# Current Project Status — 2026-07-27
+# Current Project Status — 2026-07-28
 
 Branch: `codex/chapter-3-vertical-slice`
 
@@ -18,7 +18,7 @@ This is the concise pickup document for the current illustrated prototype. Histo
 - Quests, Character, Inventory, Equipment, Battle Pouch, Companion, and Recipes share a wide desktop drawer and phone bottom sheet.
 - Phones keep a fixed compact status bar and thumb-sized movement/Inspect controls at the map edge.
 - Latest-update feedback overlays the map instead of falling below the visible play area.
-- Combat uses compact party/enemy cards plus a persistent action dock with hero and selected-target HP. Recent Events is collapsible.
+- Combat presents enemies first, then party cards beside a static action panel. HP appears only on the combatant cards; the action panel no longer duplicates hero or selected-target meters. Enemy art uses contained framing instead of forced crops. Recent Events is collapsible.
 - Dialogues can opt into compact semantic choice groups. The Three-Door Threshold uses responsive door and companion-read rows on wider screens while retaining full-width stacked touch targets on phones.
 - Door close-ups use a split art-and-copy presentation on wider screens, eliminating hidden below-image text and redundant image captions. Their actions are grouped by investigation, character read, and consequence.
 - The Three-Door Threshold uses the same split presentation; on phones its required prose moves ahead of the illustration so the scene never depends on noticing an internal scrollbar.
@@ -63,8 +63,8 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 - The user-provided Mossgirl disk save is now covered through the real file-picker load path. It has every repair required to open the No-Handle Door; the intentional second password phrase remains the final action, with explicit ready-state copy and a highlighted opening choice.
 - Map overlays now prioritize encounters: the Roadwatcher, releasable Crown Den hound, fixed den guard, Root Cellar skulk, south-gate boar, and Cargo Siding threat use enemy art. Painted clue stations no longer get map icons, scripted ambushes remain hidden, and the cellar guardian gets no overlay because it is already painted into the map.
 - Westroot Hub navigation follows the painted entrance road, plaza, and branching paths with short hidden waypoints. As a village map, the entire hub now stays visible without fog of war.
-- Westroot arrow/WASD controls now follow the visible direction of the painted road. Diagonal stretches accept both plausible keys where junctions allow it; the opening gate move accepts both **Down** and **Right**, while branch keys remain reserved for the landmarks they visibly approach.
-- Bramwell and Noma now have phase-aware outdoor map markers. Bramwell moves between the First Gate and Split Hall; Noma moves among the Mossgarden, Split Hall, and Witness Stones. The Rootbread child appears at the First Gate Transfer Checkpoint only after Lume supplies that lead. Quill and Lume remain represented inside Rootmarket.
+- Westroot arrow/WASD controls now follow the visible direction of the painted road. The center junction has explicit one-way staging: from `(5,3)`, Down reaches `(4,4)`, Left `(4,2)`, Right `(6,3)`, and Up `(6,1)`; `(4,3)` Right reaches `(5,3)`.
+- Bramwell, Noma, Quill, and Lume now have phase-aware outdoor map markers. Quill and Lume identify Rootmarket before the bell; all four visibly gather for the Hold Bell and Witness Stone renewal; Bramwell, Noma, and Quill move to the Cargo Siding approach. The Rootbread child appears at the First Gate Transfer Checkpoint only after Lume supplies that lead.
 - Bramwell is now a mandatory Chapter 3 entry beat. Entering Westroot opens his introduction, and movement, map-node clicks, or older saves positioned past the gate are routed back to him until `metBramwell` is true; Quill cannot be met first.
 - The lower Westroot approach follows the stone lane down to the wooden bridge and rises to a plaza junction in front of Rootmarket. The public path no longer triggers the market: **Up** steps into a dedicated node on the painted stalls, **Left** climbs toward Mossgarden, and **Right** continues through the village. The Mossgarden branch similarly routes around the hut.
 - Completed Chapter 3 saves now identify the current playable endpoint explicitly. If the Rootbread Promise is unfinished, the persistent objective directs the player back to Rootmarket, where Auntie Lume's choice opens automatically, and then onward to the First Gate Transfer Checkpoint; completed landmarks remain quiet on walk-over but reviewable with **Inspect**.
@@ -78,7 +78,12 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 - Rootmarket listening is one-time. Quill, Lume, Noma, the Rootbread child, and the first Split Hall debate retain unanswered questions without replaying their converged speeches, and the Hold Bell waits until the player deliberately steps away from Quill or Noma.
 - The Cargo Siding investigation now rewards deliberate ledger work: spotting and covering the service passage grants the opening turn, 4 Guard, and the runner-capture option. Other clues remain valid fail-forward paths and produce the escape outcome without blocking completion.
 - Westroot battles now save a **Westroot** checkpoint instead of falling through to the old **Lantern Road** label.
-- The closing Mossgarden scene records the first Witness promise, Cargo Siding outcome, Rootbread result, and Split Hall testimony heard. The same recap remains reviewable in the completed Split Hall.
+- The July 28 playtest pass removes the bottom-left standing label, moves Noma's Witherdeath history behind the player's gate question, makes the Witness Stone tour a single physical movement, quotes the hold slate, stages every speaker and post-bell destination, gives the Willowmark Lens a seal image, clarifies Lio's hands-free courier disguise, assigns siding evidence to the cargo clerk, and replaces the implausible fresh courier carving with a transfer-tag and old-route-index deduction.
+- The three final Split Hall responses are now clearly three framings of the same guarded Bramblecross compact. The choice recap lives in the quest journal rather than in Noma's closing dialogue.
+
+## Next Best Step
+
+Complete one fresh uninterrupted human Chapter 3 replay on the revised build. If its pacing and physical transitions read cleanly, mark Chapter 3 signed off and proceed to the Chapter 4 readiness gates in `docs/planning/chapter-4-development-process.md`; Chapter 4 implementation should wait until those gates pass.
 
 ## Production Art Status
 

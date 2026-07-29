@@ -81,6 +81,16 @@ export const DOCUMENTED_ONE_WAY_LINKS: Record<string, Record<string, string>> = 
     "6,6->6,5":
       "First Westroot Gate approach: this shortcut returns toward the lower trail without replacing the main bend controls.",
   },
+  westrootHub: {
+    "4,3->5,3":
+      "Central Westroot junction: Right follows the painted shortcut to the east junction, whose Left control follows the upper branch.",
+    "5,4->4,3":
+      "Central Westroot junction: the return-facing Right control at 4,3 is reserved for the east junction shortcut.",
+    "5,3->4,2":
+      "Central Westroot junction: Left climbs the upper branch instead of reversing the approach shortcut.",
+    "5,3->6,1":
+      "Central Westroot junction: Up reaches the Split Hall approach, whose controls continue along the hall road.",
+  },
 };
 
 function parseNodeKey(key: string) {

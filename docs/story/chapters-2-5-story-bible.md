@@ -812,13 +812,11 @@ Westroot's isolation prevented it from checking the Willow claim against Bramble
 
 ## Closing Image
 
-In the Mossgarden, Noma clears moss from the edge of a maintained record tablet and uncovers a shallow courier mark left during Lio's transfer:
+In the Mossgarden, Noma compares the recovered transfer tag with an old Lower West Gate route index. The old carving has been there for generations; the fresh clerk's record says an unnamed courier entered alive under guard and left through the Lower West Gate. Lume's checkpoint cup identifies that courier as Lio.
 
-> **BRINDLE PASSED. BREATHING. BOUND WEST.**
+The route index connects the Lower West Gate to the Underway and the keeper-built Listening Mile. Mara closes both hands around the blue string at her wrist:
 
-Mara does not cry. She clenches both fists and says:
-
-> “Then we keep going.”
+> “He got one message through. Now we know which way they took him.”
 
 ---
 

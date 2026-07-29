@@ -371,6 +371,13 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
       // turn. Their return links already exist under the primary directions.
       { from: "5,1", to: "4,2", direction: "down" },
       { from: "8,0", to: "4,4", direction: "left" },
+      // The central east-west junction follows the painted stairs and bridge
+      // rather than the surrounding array coordinates.
+      { from: "4,3", to: "5,3", direction: "right" },
+      { from: "5,3", to: "4,4", direction: "down" },
+      { from: "5,3", to: "4,2", direction: "left" },
+      { from: "5,3", to: "6,3", direction: "right" },
+      { from: "5,3", to: "6,1", direction: "up" },
     ]),
     pointOverrides: {
       "1,3": { x: 21.1, y: 90.6 },

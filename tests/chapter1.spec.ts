@@ -329,7 +329,7 @@ test("road camp actions return to the camp and report what happened", async ({ p
   await expect(page.getByRole("button", { name: "Leave camp", exact: true })).toBeVisible();
 });
 
-test("narrow combat keeps current health and actions in reach", async ({ page }) => {
+test("narrow combat keeps party status beside actions without duplicate health meters", async ({ page }) => {
   const checkpoint = buildPostBoarElderCheckpoint();
   checkpoint.position = { x: 6, y: 8 };
   checkpoint.flags.beatGateBattle = false;
@@ -352,11 +352,12 @@ test("narrow combat keeps current health and actions in reach", async ({ page })
 
   const dock = page.getByTestId("battle-action-dock");
   await expect(dock).toBeVisible();
-  await expect(dock.getByText("Liam HP", { exact: true })).toBeVisible();
-  await expect(dock.getByText("Bramble Boar HP", { exact: true })).toBeVisible();
+  await expect(dock.getByText("Liam HP", { exact: true })).toHaveCount(0);
+  await expect(dock.getByText("Bramble Boar HP", { exact: true })).toHaveCount(0);
   await expect(dock.getByRole("button", { name: /Strike/ })).toBeVisible();
   await expect(dock.getByRole("button", { name: /Focus Step/ })).toBeVisible();
 
+  await dock.scrollIntoViewIfNeeded();
   const box = await dock.boundingBox();
   expect(box).not.toBeNull();
   expect((box?.y || 0) + (box?.height || 0)).toBeLessThanOrEqual(932);

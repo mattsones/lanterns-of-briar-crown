@@ -22,7 +22,7 @@ Its recent convoy combines two stolen forms of trust: Ada's Willow seal makes th
 
 ## Lio And The Crate
 
-Three nights before Liam's party arrives, the false convoy enters through the First Gate. Lio is restrained, hooded, and marched beside it under an unnamed **westward relay transfer**. He is never inside the crate.
+Three nights before Liam's party arrives, the false convoy enters through the First Gate. Lio is hooded and marched beside it under close guard as an unnamed **westward relay transfer**. His hands are left free to preserve the courier disguise; one handler keeps physical hold of him. He is never inside the crate.
 
 The convoy first stops at the Transfer Checkpoint on the broad inner landing of the First Gate. This is where Westroot washes and inspects admitted travelers and cargo, then compares outside papers with its own account before permitting movement beyond the threshold. While the handlers wait, Lio scratches his hook-tailed mark at the gate: **Alive past this point. Do not trust the straight road.**
 

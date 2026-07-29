@@ -2,6 +2,16 @@
 
 This file is the starting point for Codex.
 
+## Latest Handoff — 2026-07-28
+
+The current branch is `codex/chapter-3-vertical-slice`. The latest Chapter 3 human-feedback pass revises Westroot dialogue order, physical NPC staging, the Witness Stone and Cargo Siding transitions, combat composition, evidence iconography, the Split Hall choice framing, and the chapter ending. The formerly frontloaded Noma history now answers a player question; the closing lead now comes from the recovered transfer tag, Lume's cup, and an old Lower West Gate route index rather than a fresh mark hidden under moss.
+
+Automated coverage now fixes the requested `(4,3)` and `(5,3)` movement exits, verifies the staged Quill/Lume/Bramwell/Noma markers, prevents duplicate battle HP meters, checks the Willowmark seal image, and exercises both Cargo Siding outcomes. The Chapter 3 golden path and full Chapter 3 suite pass. A fresh human uninterrupted playthrough remains the release-candidate signoff.
+
+### Next Best Step
+
+Run one fresh, uninterrupted human Chapter 3 playthrough from the checked-in Chapter 2-complete fixture, concentrating on conversation pacing and whether each physical transition is immediately understandable. If that revised path receives signoff, record Chapter 3 as closed and move to the Chapter 4 readiness gates in `docs/planning/chapter-4-development-process.md`; do not begin Chapter 4 story implementation before its closeout, ready-fixture, central-interaction graybox, and executable-contract gates pass.
+
 ## Project Summary
 
 **Liam’s Game** is a storybook fantasy adventure prototype built in React/TypeScript. Chapter 1 is currently playable as a single-file prototype.

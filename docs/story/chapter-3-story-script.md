@@ -220,23 +220,23 @@ A Mossback pipe-mender knots one thin red hold-cord to a stall while arguing tha
 
 A young Stonekin is repairing a cracked lantern shutter with a tool small enough to be a joke and precise enough not to be one.
 
-“Hold that,” they say without looking up.
+“Hold this,” they say without looking up, pressing a warm brass hinge into your palm.
 
-They point to a brass hinge. After you hold it, they look up and realize you are not from Westroot.
+Only then do they look up and realize you are not from Westroot.
 
 “Oh. You are the gate problem. Quill Pebbleturn—shutter-mender, signal-keeper, and apparently greeter.”
 
-The player introduces Liam, Mara, and the current companion. Quill repeats the names without hesitation and points back to the hinge: named hands are easier to ask for help.
+The player introduces Liam, Mara, and the current companion. Quill repeats the names without hesitation and lets the player keep holding the hinge while they align the shutter: named hands are easier to ask for help.
 
 **Choices**
 
-- “I prefer ‘guest under review.’”
+- “Then ask us what you need to know.”
 - “What does that shutter do?”
 - “We are following a missing courier.”
 
-### Response: guest under review
+### Response: ready to help
 
-> Quill snorts. “Good. You understand signs. That one says: do not make my afternoon worse.”
+> Quill glances at the hinge in the player's hand. “Good. Hold it level, then. A useful introduction is better than a polished one.”
 
 ### Response: shutter question
 
@@ -252,7 +252,7 @@ Quill fits the hinge back into place.
 
 “The old road had a rule. Every signal had to tell someone what it was for, who sent it, and what care came with it. Warning. Shelter. Water. Witness. The Briar people copy the authority and leave out the responsibility. That is what makes their signals easy to misuse.”
 
-Quill first separates the arrivals: three nights ago, a scheduled Willow-marked shipment and unnamed westbound courier entered with correct-looking credentials; the party opened an old phrase-lock with no account or inside confirmation. Quill then reaches for a work tally weighted with a chip of green sealing wax, introducing the object that the player may reasonably ask about.
+Quill first separates the arrivals: three nights ago, a scheduled shipment bearing a green three-leaf market seal and an unnamed westbound courier entered with correct-looking credentials; the party opened an old phrase-lock with no account or inside confirmation. Quill does not know about Ada's missing spice crate at this point. They then reach for a work tally weighted with a chip of green sealing wax, introducing the object that the player may reasonably ask about.
 
 **Choices**
 
@@ -268,7 +268,7 @@ Each informational topic disappears only after it has been asked. Its response o
 
 ### Cargo response
 
-> Quill's expression closes. “Three nights ago, during second watch, a scheduled transfer arrived with a green Willow seal, an unnamed westbound courier, a correct-looking outside account, and Westroot's inside confirmation. Bramwell later found that the sender record disagreed, put the crate under hold, and then somebody moved it anyway.”
+> Quill's expression closes. “Three nights ago, during second watch, a scheduled transfer arrived with a green three-leaf market seal, an unnamed westbound courier, a correct-looking outside account, and Westroot's inside confirmation. Bramwell later found that the sender record disagreed, put the crate under hold, and then somebody moved it anyway.”
 
 **Outcome**
 
@@ -341,11 +341,11 @@ Both questions remain available until asked. The completion action does not appe
 
 ### Appearance response
 
-> “He was young,” the child says. “Hood over his face. His hands were tied, and the handlers stood too close even while the crate waited at the same account rail. He ate the bread. He watched everything.”
+> “He was young,” the child says. “Hood over his face. His hands were free so he would look like an ordinary courier, but one handler kept hold of his elbow and the other stood between him and the gate. He ate the bread. He watched everything.”
 
 ### Routine response
 
-> “Everybody waiting here gets the tray before the gate decides,” the child says. “If the handlers refused it, Bramwell would have asked why they were breaking the ordinary routine. So they let him eat. He tied something around the cup before he gave it back.”
+> “Everybody waiting here gets the tray before the gate decides,” the child says. “If the handlers refused it, Bramwell would have asked why they were breaking the ordinary routine. So they let him eat. He pulled a short blue thread from his cuff and wound it around the cup before he gave it back.”
 
 ### Cup reveal
 
@@ -392,7 +392,7 @@ Noma Greenstill is kneeling beside a tablet with a brush in one hand and a cup o
 
 “Do not step on the names,” Noma says. “Most of them have already been walked over enough.”
 
-Noma begins with the physical history before using metaphor. About sixty years ago, Witherdeath entered through ordinary admitted traffic, before Westroot had orderly washing, airing, or observation. The sanitation now built into the Transfer Checkpoint was a prudent response. Ending routine surface compacts, disappearing from public maps, and keeping Bramblecross at a distance for generations was the fearful response that became permanent.
+The party introduces itself before Noma offers any history. The first entry establishes the names and gives the player room to decide what to ask.
 
 ### First conversation
 
@@ -412,11 +412,19 @@ Noma begins with the physical history before using metaphor. About sixty years a
 
 ### Gate response
 
-> “We kept rare controlled transfers and the outer shelter,” Noma says. “Bramblecross had been our nearest active partner. In time, it remembered us as a story. Bramwell's caution carries real names, but sanitation and permanent civic isolation are not the same decision.”
+> “About sixty years ago, Witherdeath entered Westroot through ordinary admitted traffic,” Noma says. “The old checkpoint checked names and cargo, but it had no orderly washing, airing, or observation. People died. Westroot built the sanitation you saw at the First Gate, and that was prudent. Then we ended routine surface compacts, disappeared from public maps, and made isolation the rule. Bramblecross had been our nearest active partner. In time, it remembered us as a story. We kept rare controlled transfers and the outer shelter, but fear turned a safeguard into a whole civic policy.”
 
-### Converged text, shown after the first substantive answer only
+### Deliberate Witness Stone tour
 
-Noma leads you to four weathered stones set in a shallow water circle. A low oak-and-brass shutter bars the approach. Its latch bears Bramwell's public Gatehand seal. The slate beside it names the Willow cargo hold, closes the stone walk and listening marks, and names Split Hall as the place of review.
+After any answer, the player may choose **Walk with Noma to the Witness Stones**. This moves the player and Noma to the four weathered stones rather than merely describing a change of location. The tour is offered once as a deliberate action and is not repeated automatically.
+
+A low oak-and-brass shutter bars the approach. Its latch bears Bramwell's public Gatehand seal. Noma reads the slate aloud before explaining it:
+
+> **HOLD ORDER — FALSE THREE-LEAF CARGO: KEEP IN ASSIGNED BAY.**
+>
+> **WITNESS STONE WALK AND LISTENING MARKS: CLOSED.**
+>
+> **REVIEW: SPLIT HALL.**
 
 “Travelers once left route testimony here—washed bridges, safe shelters, names of those who passed,” Noma says. “Westroot still brings every warning, water call, and shelter promise here so the responsible hands can be witnessed. Bramwell's seal names him. That is why the hold carries weight.”
 
@@ -426,7 +434,7 @@ Mara looks toward the tally hook beside the shutter.
 
 “Waiting for the witnessed mark it needs before it can leave,” Noma says. “Until it does, Westroot cannot hear their answer.”
 
-After this explanation, any unanswered names, courier, or closing-gate topic remains available. The player may ask another question, examine the Witness Stones, or thank Noma and leave. The Hold Bell waits for that deliberate transition instead of replacing the remaining questions.
+Any unanswered names, courier, or closing-gate topic remains available before the tour. The Hold Bell waits until the player finishes looking at the stones or deliberately leaves the conversation.
 
 **Outcome**
 
@@ -453,11 +461,11 @@ This crisis is mandatory after the player has heard both Quill and Noma. It must
 
 ### Incident
 
-A single low bell rolls through the hill. Market sounds stop and lantern shutters close in sequence. A runner reports that the false Willow-marked shipment is gone from its assigned hold bay, while the ledger and siding door still claim it has not moved.
+A single low bell rolls through the hill. Market sounds stop and lantern shutters close in sequence. A cargo clerk runs in from the siding and reports that the false three-leaf shipment is gone from its assigned hold bay, while the ledger and siding door still claim it has not moved. Noma arrives visibly from the Mossgarden behind a relay runner; Quill and Lume emerge from Rootmarket with the crowd.
 
 Bramwell states the Hold Bell scope precisely: the First Gate closes to people and cargo, side passages close, and all listening marks and outward signals close until Westroot knows whose mark moved the cargo. Noma objects that the outer shelter is due its water call: closing every listening mark prevents Westroot from sending it or receiving the shelter's answer.
 
-The village divides personally rather than by ancestry. A cautious Mossback pipe-mender wants the gate sealed after losing his sister to a false order. A young Stonekin relay runner argues that his father is one of six people waiting at the outer shelter. Stonekin and Mossbacks stand on both sides.
+The village divides personally rather than by ancestry. A cautious Mossback pipe-mender names the Chapter 2 enemy that followed a copied shelter return mark: a **Briar Roadwatcher**. He names **Orra Vale** and **Pell Moss** as the people who died keeping it from the homes above. A young Stonekin relay runner argues that her father is one of six people waiting at the outer shelter. Stonekin and Mossbacks stand on both sides.
 
 Mara recognizes the cost of both positions: opening every signal may reveal Lio's route, while sealing every route may erase the next useful mark he leaves.
 
@@ -474,6 +482,7 @@ All three validate a different part of the crisis and converge on Bramwell and N
 - Set `westrootHoldBellRung`.
 - Objective: **Hear Westroot at Split Hall**.
 - Rootmarket, the First Gate, and the Mossgarden change to their Hold Bell descriptions.
+- Move the player to the Split Hall approach after the Hold Bell response. Rootmarket conversation is unavailable during this transition; entering it simply directs the player with the crowd toward the hall.
 
 ---
 
@@ -491,7 +500,7 @@ The player may hear three independent pieces of testimony:
 
 Each topic remains independently available until asked. Hearing any one completes the required first debate; the others remain optional review material. Before leaving, the player explicitly volunteers to investigate what happened to the Willow crate.
 
-Quill first distinguishes this shipment from **Ada's original missing spice crate**. The Westroot shipment is a separate counterfeit crate made to borrow the trust of Ada's stolen Willow seal. It is **missing from its assigned hold bay**, not proven to have left Westroot. A wheel cut leads from the empty bay toward the inner Cargo Siding, but somebody brushed the dust and reset the lock. The player offers to follow that physical trail, compare the copied seal with Ada's lesson, and return with evidence before the hall names a traitor.
+Mara identifies the relationship to **Ada's original missing spice crate**: the Westroot shipment is a separate counterfeit crate made to borrow the trust of Ada's stolen Willow seal. It is **missing from its assigned hold bay**, not proven to have left Westroot. The cargo clerk who ran in from the siding reports a wheel cut leading from the empty bay toward the inner Cargo Siding before somebody brushed the dust and reset the lock. Quill does not claim to have found a siding trace while working in Rootmarket. The player offers to follow that physical trail, compare the copied seal with Ada's lesson, and return with evidence before the hall names a traitor.
 
 Bramwell refuses to send strangers into a held route alone. Noma proposes the reconciled method: renew the road promises publicly, have Bramwell and Noma open the siding together, and let the party investigate under Westroot's witness. Bramwell agrees because it is an investigation for which responsible people have put their names on the plan.
 
@@ -555,10 +564,11 @@ The scene's moral distinction is **trustworthy authority versus counterfeit auth
 
 - Retain `witnessStoneSequenceSolved` temporarily for save compatibility; its story meaning is now “the road promises were publicly renewed.”
 - Record which promise the player chose first.
-- Quill explains that wheel grooves run from the empty hold bay deeper into the Cargo Siding; the crate did not simply vanish.
+- The cargo clerk unrolls the siding map and explains that wheel grooves run from the empty hold bay deeper into the Cargo Siding; the crate did not simply vanish.
 - Show the outer-shelter signal leave and its answer return before the Cargo Siding authorization.
 - Read the limited reopening scope aloud; this is not a general reopening of Westroot.
 - Bramwell and Noma open the Cargo Siding under shared witness.
+- Bramwell, Noma, and Quill move to the approach junction below the Cargo Siding entrance, and the player follows them there before walking the final step inside.
 - Objective: **Track the Missing Willow-Marked Crate**.
 - Gain the **Witness Stone Rubbing**.
 - The post-renewal map uses the open Witness Stone approach without the shutter.
@@ -592,6 +602,8 @@ Mara identifies the relationship clearly: this is not Ada's missing spice crate.
 
 > Ada's lens catches the nicked three-leaf mark beneath a layer of pine pitch and a thin wash of crown-red wax. The seal is genuine enough to pass a hurried eye and false enough to make Ada furious.
 
+Show the Willowmark seal icon with its nicked left leaf in this result so the visual evidence accompanies the lens reading.
+
 ### Manual inspection result
 
 > Even without the lens, the wax tells on itself. Green market wax has been warmed, pressed, covered, then made to look untouched. Someone wanted trust to arrive before questions did.
@@ -612,11 +624,11 @@ Inside are no spices.
 
 There are blank order sheets cut to official size. Broken seal tools. Thorn-collar fittings wrapped in waxed cloth. Small scratching knives for changing route marks in the dark.
 
-At the bottom lies Lio's confiscated courier pouch and a torn route tag. It records one restrained prisoner marched beside the Willow convoy through the Transfer Checkpoint and then sent through the Lower West Gate.
+At the bottom lies Lio's confiscated courier pouch and a torn route tag. It records one guarded prisoner marched beside the Willow convoy through the Transfer Checkpoint and then sent through the Lower West Gate. The crate remained in Westroot.
 
 Mara picks it up, then puts it down with both hands.
 
-“Moved like cargo,” she says, “but never inside this crate. He walked through Westroot alive.”
+“They recorded him like cargo,” she says, “but this crate stayed in Westroot. Lio walked through alive.”
 
 ### Evidence scene
 
@@ -624,7 +636,7 @@ Mara picks it up, then puts it down with both hands.
 
 Quill lays the transfer tag beside Lio's confiscated pouch.
 
-“This record is plain,” they say. “Lio was marched beside the convoy as a restrained prisoner. He was never inside this crate. The handlers moved him through the Lower West Gate while the crate remained here.”
+“This record is plain,” they say. “Lio was marched beside the convoy under guard and sent through the Lower West Gate. The crate remained here.”
 
 Noma reads the two acknowledgement marks without touching them.
 
@@ -738,9 +750,11 @@ Quill sets the cracked crown slat beside the evidence.
 
 ### Player choices
 
-- “Bramwell was right that the danger is real.”
-- “Noma was right that silence did not keep the lie out.”
-- “The Witness Stones already gave us the answer.”
+- “Frame the compact around the danger that closure failed to stop.”
+- “Frame the compact around warnings and shelter traveling together.”
+- “Frame the compact around the four road promises.”
+
+These are three framings of the same guarded Bramblecross compact, not three different success or failure endings. Every choice reaches the same concrete policy; the response changes which lesson the player names first.
 
 ### Response: Bramwell right
 
@@ -808,35 +822,19 @@ Later, when Split Hall has become a room full of lists, questions, and people ma
 
 The Witness Stones are still bright.
 
-The water channel runs past the tablet where Noma had been cleaning old names. Green moss shifts along one edge, uncovering a shallow scratch beneath it.
+Noma lays the recovered transfer tag beside an older carved route index and brushes moss from the matching Lower West Gate symbol. The carving has been here for generations; the fresh evidence is the clerk's transfer record.
 
-Not a sentence. A courier mark.
+The tag records an unnamed courier entering alive under guard and leaving through the Lower West Gate bound west. Lume's checkpoint cup identifies that courier as Lio.
 
-Mara kneels so quickly her knees strike stone.
+Mara reads the two records together, then closes both hands around the blue string at her wrist.
 
-Noma brushes the moss aside with two careful fingers.
+“He got one message through. Now we know which way they took him.”
 
-**BRINDLE PASSED. BREATHING. BOUND WEST.**
+Noma aligns the transfer notation with Edden's drawing.
 
-Mara reads it once.
+“The Lower West Gate opens into the Underway. This notation points toward its keeper-built listening circuit—the Listening Mile. It cannot be followed like an ordinary road map.”
 
-Then again.
-
-She closes both hands around the blue string at her wrist.
-
-“Then we keep going,” she says.
-
-Noma looks toward the deeper dark beyond the garden.
-
-“The transfer tag points to a listening route. It cannot be read like a road map. Edden's broken drawing may be less broken than we thought.”
-
-Quill arrives with a folded piece of old route cloth, its lines meaningless until it is turned sideways.
-
-“There is an Underway beyond Westroot,” they say. “And a mile where the road answers questions with questions.”
-
-Mara looks at the mark one last time.
-
-“Lio left truth in small places,” she says. “We will be small enough to find it.”
+The westward passage is still dark, but it is no longer an unnamed direction.
 
 The gold moss-lanterns brighten one by one along the westward passage.
 

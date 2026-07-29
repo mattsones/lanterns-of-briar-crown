@@ -958,7 +958,7 @@ function EnemyPortrait({ enemy, className = "ml-auto aspect-[4/3] w-full max-w-6
         <img
           src={enemy.artwork.src}
           alt={enemy.artwork.alt || `Portrait of ${enemy.name}`}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-contain p-1"
           onError={(event) => {
             event.currentTarget.style.display = "none";
             setArtFailed(true);
@@ -990,7 +990,7 @@ export function BattleModal({ battle, player, companion, heroSkills, heroAttack,
 
   return (
     <div className="fixed inset-0 z-50 flex items-stretch justify-center overflow-y-auto bg-slate-950/90 p-2 sm:items-center sm:p-4">
-      <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="battle-title" tabIndex={-1} className="max-h-[calc(100vh-1rem)] w-full max-w-7xl overflow-y-auto rounded-[2rem] border border-amber-100/15 bg-slate-900 p-4 pb-64 shadow-2xl sm:p-5 sm:pb-64 2xl:pb-5">
+      <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="battle-title" tabIndex={-1} className="max-h-[calc(100vh-1rem)] w-full max-w-7xl overflow-y-auto rounded-[2rem] border border-amber-100/15 bg-slate-900 p-4 shadow-2xl sm:p-5">
         <header className="sticky top-0 z-20 mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/95 p-3 backdrop-blur">
           <div>
             <h2 id="battle-title" className="text-2xl font-bold">Battle • {selectedEnemy?.name || "Enemy side"}</h2>
@@ -1001,10 +1001,10 @@ export function BattleModal({ battle, player, companion, heroSkills, heroAttack,
           </Button>
         </header>
 
-        <div className="battlefield-grid grid gap-3 xl:grid-cols-[0.72fr_1.28fr]">
-          <section aria-labelledby="party-side-title" className="rounded-3xl border border-emerald-200/15 bg-emerald-950/20 p-3">
+        <div className="battlefield-grid flex flex-col gap-3">
+          <section aria-labelledby="party-side-title" className="order-2 rounded-3xl border border-emerald-200/15 bg-emerald-950/20 p-3">
             <h3 id="party-side-title" className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200/80">Your party</h3>
-            <div className={`grid gap-2 ${companion.recruited ? "sm:grid-cols-2 xl:grid-cols-1" : ""}`}>
+            <div className={`grid gap-2 ${companion.recruited ? "sm:grid-cols-2" : ""}`}>
               <article className="grid grid-cols-[4.5rem_minmax(0,1fr)] items-center gap-3 rounded-2xl border border-white/10 bg-black/20 p-3">
                 <HeroArtwork player={player} variant="portrait" className="h-24 w-[4.5rem]" />
                 <div className="min-w-0">
@@ -1025,15 +1025,15 @@ export function BattleModal({ battle, player, companion, heroSkills, heroAttack,
             </div>
           </section>
 
-          <section aria-labelledby="enemy-side-title" className="rounded-3xl border border-orange-200/15 bg-orange-950/15 p-3">
+          <section aria-labelledby="enemy-side-title" className="order-1 rounded-3xl border border-orange-200/15 bg-orange-950/15 p-3">
             <h3 id="enemy-side-title" className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-orange-200/80">Enemy side • select a target</h3>
-            <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-2 sm:grid-cols-2">
               {battle.enemies.map((enemy) => {
                 const selected = enemy.battleId === selectedEnemy?.battleId && enemy.hp > 0;
                 const defeated = enemy.hp <= 0;
                 return (
                   <button key={enemy.battleId} type="button" onClick={() => selectTarget(enemy.battleId)} disabled={defeated || battle.finished} aria-pressed={selected} className={`relative rounded-2xl border p-3 text-left transition ${selected ? "border-amber-300 bg-amber-400/10 ring-2 ring-amber-300/30" : "border-white/10 bg-black/20 hover:border-orange-200/35"} ${defeated ? "opacity-45 grayscale" : ""}`}>
-                    <EnemyPortrait enemy={enemy} className="aspect-[16/9] w-full" />
+                    <EnemyPortrait enemy={enemy} className="aspect-[4/3] w-full" />
                     <div className="mt-2 flex items-start justify-between gap-2">
                       <div className="font-semibold">{enemy.name}</div>
                       {selected ? <span className="rounded-full bg-amber-300/20 px-2 py-1 text-[10px] uppercase tracking-wide text-amber-100">Target</span> : null}
@@ -1049,11 +1049,7 @@ export function BattleModal({ battle, player, companion, heroSkills, heroAttack,
         </div>
 
         <div className="mt-4 space-y-3">
-          <section data-testid="battle-action-dock" aria-label="Battle actions and current health" className="fixed inset-x-2 bottom-2 z-30 max-h-[48vh] overflow-y-auto rounded-3xl border border-sky-200/20 bg-slate-900/95 p-3 shadow-2xl backdrop-blur sm:inset-x-4 sm:p-4 2xl:static 2xl:max-h-none 2xl:overflow-visible 2xl:border-white/10 2xl:bg-black/20 2xl:shadow-none">
-            <div className="mb-3 grid grid-cols-2 gap-3 2xl:hidden">
-              <Meter value={player.hp} max={player.maxHp} label={`${player.name} HP`} />
-              <Meter value={selectedEnemy?.hp || 0} max={selectedEnemy?.maxHp || 1} label={`${selectedEnemy?.name || "Target"} HP`} colorClass="bg-orange-400" />
-            </div>
+          <section data-testid="battle-action-dock" aria-label="Battle actions" className="rounded-3xl border border-sky-200/20 bg-black/20 p-3 sm:p-4">
             <div className="mb-3 flex flex-wrap items-end justify-between gap-2">
               <h3 className="text-lg font-semibold">Actions</h3>
               <div className="text-xs text-white/65 sm:text-sm">{turnText}</div>

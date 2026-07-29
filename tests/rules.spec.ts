@@ -79,7 +79,6 @@ import {
 import { CHAPTER_STORY_PLANS } from "../src/story/chapters2to5";
 import {
   canStartChapter3,
-  buildChapterThreeRecap,
   CHAPTER_3_HUB_NODES,
   CHAPTER_3_STORY,
   isChapter3Complete,
@@ -257,23 +256,6 @@ test("battle checkpoints use the current region's actual name", () => {
   expect(getRegionCheckpointLabel("not-a-region")).toBe("South Gate");
 });
 
-test("Chapter 3 recap preserves the player's consequential choices", () => {
-  const recap = buildChapterThreeRecap({
-    witnessPromiseWarningChosen: true,
-    cargoAmbushPrepared: true,
-    cargoRunnerCaptured: true,
-    rootbreadPromiseKept: true,
-    splitHallAskedOuterShelter: true,
-    splitHallAskedCargoHold: true,
-  });
-
-  expect(recap).toContain("First promise: Warning");
-  expect(recap).toContain("runner was captured");
-  expect(recap).toContain("Rootbread Promise reached him");
-  expect(recap).toContain("checkpoint tray was restocked");
-  expect(recap).toContain("2 costs of Westroot's choice were named");
-});
-
 test("companion commands select named abilities with distinct battle effects", () => {
   const tilda = {
     ...buildDefaultCompanion(),
@@ -398,6 +380,11 @@ test("Westroot hub movement follows the painted road in short, room-aware steps"
   expect(getNavigationDestination("westrootHub", 3, 3, "right")).toEqual({ x: 4, y: 3 });
   expect(getNavigationDestination("westrootHub", 3, 6, "right")).toEqual({ x: 4, y: 3 });
   expect(getNavigationDestination("westrootHub", 4, 3, "up")).toEqual({ x: 3, y: 6 });
+  expect(getNavigationDestination("westrootHub", 4, 3, "right")).toEqual({ x: 5, y: 3 });
+  expect(getNavigationDestination("westrootHub", 5, 3, "down")).toEqual({ x: 4, y: 4 });
+  expect(getNavigationDestination("westrootHub", 5, 3, "left")).toEqual({ x: 4, y: 2 });
+  expect(getNavigationDestination("westrootHub", 5, 3, "right")).toEqual({ x: 6, y: 3 });
+  expect(getNavigationDestination("westrootHub", 5, 3, "up")).toEqual({ x: 6, y: 1 });
   expect(getNavigationNodeKeys("westrootHub")).not.toContain("4,5");
   expect(getNavigationDestination("westrootHub", 4, 2, "down")).toEqual({ x: 4, y: 4 });
   // Noma's garden and the stone spur meet at the 1,2 / 4,0 junction.
@@ -496,7 +483,13 @@ test("Westroot hub movement follows the painted road in short, room-aware steps"
     const [fromX, fromY] = from.split(",").map(Number);
     const fromPoint = getMapNodePoint("westrootHub", fromX, fromY, 9, 7);
     return Object.values(exits).flatMap((destination) => {
-      if (!destination || from >= destination || from === "3,6" || destination === "3,6") return [];
+      if (
+        !destination ||
+        from >= destination ||
+        from === "3,6" ||
+        destination === "3,6" ||
+        (from === "4,3" && destination === "5,3")
+      ) return [];
       const [toX, toY] = destination.split(",").map(Number);
       const toPoint = getMapNodePoint("westrootHub", toX, toY, 9, 7);
       return [Math.hypot(toPoint.x - fromPoint.x, toPoint.y - fromPoint.y)];
@@ -510,6 +503,8 @@ test("Westroot map NPC markers follow the story's physical staging", () => {
   expect(getWestrootMapNpcTokens(initialFlags)).toMatchObject([
     { id: "bramwell", x: 1, y: 4 },
     { id: "noma", name: "Mossback caretaker", x: 3, y: 0 },
+    { id: "quill", name: "Stonekin shutter-mender", x: 3, y: 6 },
+    { id: "lume", name: "Mossback baker", x: 3, y: 6 },
   ]);
 
   const holdMeeting = {
@@ -520,6 +515,8 @@ test("Westroot map NPC markers follow the story's physical staging", () => {
   expect(getWestrootMapNpcTokens(holdMeeting)).toMatchObject([
     { id: "bramwell", x: 5, y: 2 },
     { id: "noma", name: "Noma Greenstill", x: 5, y: 2 },
+    { id: "quill", x: 5, y: 2 },
+    { id: "lume", x: 5, y: 2 },
   ]);
 
   const atWitnessStones = {
@@ -530,18 +527,32 @@ test("Westroot map NPC markers follow the story's physical staging", () => {
   expect(getWestrootMapNpcTokens(atWitnessStones)).toMatchObject([
     { id: "bramwell", x: 4, y: 1 },
     { id: "noma", x: 4, y: 1 },
+    { id: "quill", x: 4, y: 1 },
+    { id: "lume", x: 4, y: 1 },
+    { id: "rootbread-child", x: 1, y: 3 },
+  ]);
+
+  const atCargoSiding = {
+    ...atWitnessStones,
+    witnessStoneSequenceSolved: true,
+  };
+  expect(getWestrootMapNpcTokens(atCargoSiding)).toMatchObject([
+    { id: "bramwell", x: 7, y: 2 },
+    { id: "noma", x: 7, y: 2 },
+    { id: "quill", x: 7, y: 2 },
     { id: "rootbread-child", x: 1, y: 3 },
   ]);
 
   const resolved = {
-    ...atWitnessStones,
-    witnessStoneSequenceSolved: true,
+    ...atCargoSiding,
+    willowCargoExposed: true,
     rootbreadPromiseKept: true,
     chapterThreeClear: true,
   };
   expect(getWestrootMapNpcTokens(resolved)).toMatchObject([
     { id: "bramwell", x: 1, y: 4 },
     { id: "noma", x: 3, y: 0 },
+    { id: "lume", x: 3, y: 6 },
   ]);
 });
 
