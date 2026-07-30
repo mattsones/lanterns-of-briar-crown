@@ -536,6 +536,8 @@ Mood:
 
 Role: old-magic / patient observer companion
 
+Gender/pronouns: male; he/him
+
 Visual identity:
 
 - Mossback works well

@@ -306,9 +306,9 @@ Use the master style block.
 ### Noma Greenstill
 
 ```text
-Create a vertical half-body storybook fantasy portrait of Noma Greenstill, a working Chapter 3 Westroot NPC concept. Noma is a Mossback memory keeper who tends moss-lanterns, old stones, and quiet witness gardens. They should feel calm, rooted, hospitable, and old-road wise without being spooky.
+Create a vertical half-body storybook fantasy portrait of Noma Greenstill, a working Chapter 3 Westroot NPC concept. Noma is a female Mossback memory keeper who tends moss-lanterns, old stones, and quiet witness gardens. She should feel calm, rooted, hospitable, and old-road wise without being spooky.
 
-Include moss-lantern light, small mushrooms, braided roots, soft green-gold glow, stone markers, and gentle natural adornments. Their posture should be still and patient, as if listening to roots remember what people tried to bury.
+Include moss-lantern light, small mushrooms, braided roots, soft green-gold glow, stone markers, and gentle natural adornments. Her posture should be still and patient, as if listening to roots remember what people tried to bury.
 
 Mood: gentle old magic, patient witness, warm hidden-road hospitality.
 
@@ -318,7 +318,7 @@ Use the master style block.
 ### Quill Pebbleturn
 
 ```text
-Create a vertical half-body storybook fantasy portrait of Quill Pebbleturn, a working Chapter 3 Westroot NPC concept. Quill is a small, precise Westroot record-keeper who copies route marks, witness stones, and old lantern signs. They should be clever, meticulous, and a little overburdened by notes.
+Create a vertical half-body storybook fantasy portrait of Quill Pebbleturn, a working Chapter 3 Westroot NPC concept. Quill is a small, precise male Westroot record-keeper who copies route marks, witness stones, and old lantern signs. He should be clever, meticulous, and a little overburdened by notes.
 
 Include pebbles marked with tiny route symbols, parchment slips, a charcoal pencil, little stone drawers, and warm green-gold Westroot light. Avoid readable text. The design can be Stonekin, Mossback, or mixed-community, but should feel local to Westroot.
 

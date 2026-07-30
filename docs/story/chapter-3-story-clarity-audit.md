@@ -40,7 +40,7 @@ The current completion action is effectively **Tell the child whose blue knot Ma
 
 ### The hatch has no workable transfer mechanism
 
-The bread, water, and Lio's string are all described on the Westroot side of a sealed hatch. The child says they did not open it. The scene does not provide a food slot, provision drawer, root gap, returned cup, or other way for Lio to touch the string or receive the food.
+The bread, water, and Lio's string are all described on the Westroot side of a sealed hatch. The girl says she did not open it. The scene does not provide a food slot, provision drawer, root gap, returned cup, or other way for Lio to touch the string or receive the food.
 
 ### The crate language implies literal human cargo
 

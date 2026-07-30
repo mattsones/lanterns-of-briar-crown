@@ -257,7 +257,7 @@ test("Chapter 3 real fixture runs uninterrupted through the witnessed Westroot e
   await expect(page.getByText(/His hands were free so he would look like an ordinary courier/)).toBeVisible();
   await expect(page.getByRole("button", { name: "Restock the tray for the next traveler." })).toHaveCount(0);
   await page.getByRole("button", { name: "Ask the child something else." }).click();
-  await page.getByRole("button", { name: "Why did the handlers let you feed him?" }).click();
+  await page.getByRole("button", { name: "How did Lio manage to mark the cup?" }).click();
   await expect(page.getByText("That is Lio's knot. He ate here.")).toBeVisible();
   await page.getByRole("button", { name: "Restock the tray for the next traveler." }).click();
   await expect(page.getByText("The Rootbread Promise reached Lio. XP +6").first()).toBeVisible();
@@ -342,13 +342,13 @@ test("Chapter 3 real fixture runs uninterrupted through the witnessed Westroot e
   await expect(page.getByText("a chalk rectangle marks the empty bay")).toBeVisible();
   await page.getByRole("button", { name: "Check the rail marks and loading ledger." }).click();
   await expect(page.getByText("Fresh boot scuffs cross the ledger stand")).toBeVisible();
-  await expect(page.getByText("If someone runs, Westroot will be ready.")).toBeVisible();
+  await expect(page.getByText(/If the Cargo Runner bolts after the fight/)).toBeVisible();
   await page.getByRole("button", { name: "Compare this clue with the whole crate record." }).click();
   await expect(page.getByText(/Lio was marched beside the convoy under guard/)).toBeVisible();
   await expect(page.getByText("The crate remained here.")).toBeVisible();
   await expect(page.getByText("He was never inside this crate.")).toHaveCount(0);
   await page.getByRole("button", { name: "Call out whoever is hiding behind the crates." }).click();
-  await page.getByRole("button", { name: "Fight the Briar Cargo Runner and Seal-Forged Sentry." }).click();
+  await page.getByRole("button", { name: "Fight the Briar Cargo Runner and Seal-Forged Sentry before he can escape." }).click();
   await expect(page.getByText("Checkpoint reached: Westroot").first()).toBeVisible();
   await expect(page.getByText("The party starts ready, with 4 guard.")).toHaveCount(1);
   await expect(page.getByText("Choose Liam's action and target.").first()).toBeVisible();
@@ -365,18 +365,22 @@ test("Chapter 3 real fixture runs uninterrupted through the witnessed Westroot e
   }
 
   await expect(page.getByText("Cargo Siding Cleared", { exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Tell Quill to shut the lantern shutter." })).toBeVisible();
-  await page.getByRole("button", { name: "Tell Quill to shut the lantern shutter." }).click();
-  await expect(page.getByText("The powder fails to catch.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Signal Quill to close the runner's prepared escape route." })).toBeVisible();
+  await page.getByRole("button", { name: "Signal Quill to close the runner's prepared escape route." }).click();
+  await expect(page.getByText(/Quill snaps the repaired shutter closed/)).toBeVisible();
   await page.getByRole("button", { name: "Bring the evidence to Split Hall." }).click();
 
   await navigateWestroot(page, { x: 7, y: 1 }, { x: 5, y: 2 });
   await page.getByRole("button", { name: "Frame the compact around the four road promises." }).click();
-  await expect(page.getByRole("dialog")).toHaveAttribute("data-content-layout", "stacked");
   await expect(page.getByText("A shield must know what it covers")).toBeVisible();
+  await expect(page.getByText(/Who should receive Westroot's first warning/)).toBeVisible();
+  await page.getByRole("button", { name: "Name Enna, Captain Hollis, and Mayor Anwen together." }).click();
+  await expect(page.getByRole("dialog")).toHaveAttribute("data-content-layout", "stacked");
   await expect(page.getByText("Westroot restores one surface compact: Bramblecross")).toBeVisible();
-  await expect(page.getByText("Enna, Captain Hollis, and their named watch or courier contacts")).toBeVisible();
-  await expect(page.getByText("Quill copies the decision, folds the first warning for Enna")).toBeVisible();
+  await expect(page.getByText("The room answers with a single audible gasp.")).toBeVisible();
+  await expect(page.getByText(/Noma has argued for a witnessed surface compact/)).toBeVisible();
+  await expect(page.getByText(/She was right/)).toBeVisible();
+  await expect(page.getByText(/Quill copies the decision, folds the first warning for Enna, Captain Hollis, and Mayor Anwen/)).toBeVisible();
   await expect(page.getByText("Quill leaves for the First Gate")).toBeVisible();
   await page.getByRole("button", { name: "Visit Noma in the Mossgarden." }).click();
   await expect(page.getByRole("dialog")).toHaveAttribute("data-content-layout", "stacked");
@@ -479,8 +483,8 @@ test("focused Cargo Siding fixture preserves the unprepared escape branch", asyn
   await expect(page.getByText("procedural knowledge, not a willing traitor")).toBeVisible();
   await page.getByRole("button", { name: "Call out whoever is hiding behind the crates." }).click();
   await expect(page.getByText("A hooded Briar Cargo Runner steps out")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Fight the Briar Cargo Runner and Seal-Forged Sentry." })).toBeVisible();
-  await page.getByRole("button", { name: "Fight the Briar Cargo Runner and Seal-Forged Sentry." }).click();
+  await expect(page.getByRole("button", { name: "Fight the Briar Cargo Runner and Seal-Forged Sentry before he can escape." })).toBeVisible();
+  await page.getByRole("button", { name: "Fight the Briar Cargo Runner and Seal-Forged Sentry before he can escape." }).click();
 
   const attack = page.getByRole("button", { name: /Scrappy Chop/ });
   for (let turn = 0; turn < 35; turn += 1) {
@@ -494,20 +498,21 @@ test("focused Cargo Siding fixture preserves the unprepared escape branch", asyn
   }
 
   await expect(page.getByText("Cargo Siding Cleared", { exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Tell Quill to shut the lantern shutter." })).toHaveCount(0);
-  await page.getByRole("button", { name: "Secure the evidence while the runner escapes." }).click();
-  await expect(page.getByText("They ran west")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Signal Quill to close the runner's prepared escape route." })).toHaveCount(0);
+  await page.getByRole("button", { name: "Secure the evidence; the runner reaches the uncovered passage." }).click();
+  await expect(page.getByText("He ran west")).toBeVisible();
   await expect(page.getByText("Not a public road")).toBeVisible();
   await page.getByRole("button", { name: "Bring the evidence to Split Hall." }).click();
 
   await navigateWestroot(page, { x: 7, y: 1 }, { x: 5, y: 2 });
-  await expect(page.getByText("They learned which parts of us were afraid")).toBeVisible();
+  await expect(page.getByText("Its people learned which parts of us were afraid")).toBeVisible();
   await page.getByRole("button", { name: "Frame the compact around the four road promises." }).click();
   await expect(page.getByText("A shield must know what it covers")).toBeVisible();
   await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute(
     "src",
     /split-hall-resolution-scene-v03\.webp/,
   );
+  await page.getByRole("button", { name: "Name Enna, the watch clerk who built the road case." }).click();
   await page.getByRole("button", { name: "Visit Noma in the Mossgarden." }).click();
   await expect(page.getByText(/The carving has been here for generations/)).toBeVisible();
   await expect(page.getByText(/fresh evidence is the clerk's transfer record/)).toBeVisible();

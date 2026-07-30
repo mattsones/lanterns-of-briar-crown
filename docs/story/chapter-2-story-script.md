@@ -761,7 +761,7 @@ She flicks an apple seed into a cup without looking.
 
 Moss sits near the hearth, listening to the fire as if it has finally reached the important part of a long story.
 
-“The old roads are waking unevenly,” they say. “That makes them helpful, dangerous, and easily misunderstood.”
+“The old roads are waking unevenly,” he says. “That makes them helpful, dangerous, and easily misunderstood.”
 
 #### Choices
 
@@ -773,9 +773,9 @@ Moss sits near the hearth, listening to the fire as if it has finally reached th
 
 #### Text
 
-Moss rises slowly, one hand resting on the cracked teacup tied to their pack.
+Moss rises slowly, one hand resting on the cracked teacup tied to his pack.
 
-“Westroot is not only west,” they say. “Roots do not think in straight lines. We should not either.”
+“Westroot is not only west,” he says. “Roots do not think in straight lines. We should not either.”
 
 #### Choice
 
@@ -950,7 +950,7 @@ Ada wipes her counter with the force of someone imagining the counter is persona
 
 She pauses.
 
-“And if you find someone moving cargo under my name, tell them Ada Willowmarket considers that poor manners with legal consequences.”
+“And if you find cargo moving under my name, bring me the name attached to it. Ada Willowmarket considers that poor manners with legal consequences.”
 
 ### Choice
 
@@ -1535,7 +1535,7 @@ Tilda exhales through her nose.
 
 #### Moss active
 
-Moss closes their eyes.
+Moss closes his eyes.
 
 “An honest mark buried under command. That is what they are doing to the road itself.”
 
@@ -2564,17 +2564,17 @@ As the no-handle door opens, something moves in the brush beyond the cracked Cro
 
 A hooded figure watches the open gate.
 
-For one breath, you see the crooked crown stitched at their shoulder.
+For one breath, you see the crooked crown stitched at his shoulder.
 
 Then the old Lantern Sign flares gold.
 
-The figure flinches as if the light has named them.
+The figure flinches as if the light has named him.
 
-They step out anyway, one hand closing around a pouch of pine-pitch wax and half-painted sign slats.
+He steps out anyway, one hand closing around a pouch of pine-pitch wax and half-painted sign slats.
 
-Mara stares after them.
+Mara stares after him.
 
-"They were watching."
+"He was watching."
 
 The Roadwatcher looks past you, straight at the open gate.
 
@@ -2582,7 +2582,7 @@ The Roadwatcher looks past you, straight at the open gate.
 
 #### Rowan active
 
-"And now they know someone reached the gate truthfully," Rowan says, raising his shield. "Good. Let them be frightened."
+"And now he knows someone reached the gate truthfully," Rowan says, raising his shield. "Good. Let him be frightened."
 
 #### Tilda active
 
@@ -2715,9 +2715,9 @@ Mara watches it go.
 
 “It did not want to be here either,” she says.
 
-The roadwatcher falls back, cloak torn and false seal pouch split open. They look less angry than alarmed.
+The roadwatcher falls back, cloak torn and false seal pouch split open. He looks less angry than alarmed.
 
-“You do not know what opens when Westroot opens,” they say.
+“You do not know what opens when Westroot opens,” he says.
 
 Then they flee into the trees, leaving pine-pitch wax, false nails, unfinished orders, and a split crown slat scattered behind them.
 
@@ -3182,7 +3182,7 @@ A lie often overdresses for the occasion.
 
 ## Moss’s Chapter 2 Emphasis
 
-Moss reads signs through old magic, patience, and memory. They understand that the road is not only a path but a listening thing.
+Moss reads signs through old magic, patience, and memory. He understands that the road is not only a path but a listening thing.
 
 ### Key Idea
 
@@ -3253,9 +3253,9 @@ Mara watches it go.
 
 ### Text
 
-The roadwatcher falls back, cloak torn and false seal pouch split open. They look less angry than alarmed.
+The roadwatcher falls back, cloak torn and false seal pouch split open. He looks less angry than alarmed.
 
-“You do not know what opens when Westroot opens,” they say.
+“You do not know what opens when Westroot opens,” he says.
 
 Then they flee into the trees, leaving pine-pitch wax and unfinished orders scattered behind them.
 

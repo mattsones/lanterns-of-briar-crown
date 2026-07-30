@@ -21,7 +21,7 @@ Status: Working chronology paired with `chapter-3-story-truth.md`. Day 3 is the 
 | Morning | Quill and Bramwell compare the freight ledger with the physical Willow seal. The sender details do not agree. | The shipment may be counterfeit, so its account and related signals require review. | The review is the first institutional action that threatens to expose the Briar route. |
 | Midday | Bramwell places the crate under hold. He closes the Witness Stone walk and listening marks pending Split Hall review. | A limited lawful pause will prevent the disputed account from authorizing more movement. | The hold secures the marked bay but also prevents the outer-shelter water call from receiving a witnessed mark. |
 | Second water bell | Westroot misses its first scheduled call to the six people at the outer cistern shelter. | The delay is an uncomfortable but temporary cost of the cargo review. | Isolation has begun harming people unconnected to the crate. |
-| Night | The child keeps the returned cup on the checkpoint shelf because its blue knot looks deliberate, though they do not know whose sign it is. | A traveler thanked the checkpoint in an unfamiliar courier fashion. | Lio has already been moved west. The cup is personal evidence that he was fed there. |
+| Night | The girl keeps the returned cup on the checkpoint shelf because its blue knot looks deliberate, though she does not know whose sign it is. | A traveler thanked the checkpoint in an unfamiliar courier fashion. | Lio has already been moved west. The cup is personal evidence that he was fed there. |
 
 ## Day 3 — The Playable Chapter
 

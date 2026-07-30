@@ -18,7 +18,7 @@ import {
   STAT_ORDER,
   getHumanHeritage,
 } from "./data/character";
-import { COMPANION_OPTIONS } from "./data/companions";
+import { COMPANION_OPTIONS, getCompanionPronouns } from "./data/companions";
 import { buildEncounterEnemies } from "./data/enemies";
 import { BATTLE_CONSUMABLES, ITEM_DB } from "./data/items";
 import { MAPS, TILE_META } from "./data/maps";
@@ -120,12 +120,15 @@ import {
   getWestrootPuzzleOutcome,
 } from "./story/chapter2";
 import {
+  BRAMBLECROSS_CONTACT_CHOICES,
   CHAPTER_3_SCENE_COPY,
   CHAPTER_3_FULL_SCENE_COPY,
   WITNESS_STONE_LABELS,
   WITNESS_STONE_RESPONSES,
   appendChapter3CompanionReaction,
+  getSplitHallResolution,
 } from "./story/chapter3";
+import type { BramblecrossContactChoice } from "./story/chapter3";
 
 const QuestTab = React.lazy(() =>
   import("./components/tabs").then((module) => ({ default: module.QuestTab })),
@@ -329,7 +332,7 @@ const crownDenPortraitImage = (src, alt) => ({ src, alt });
 function getVillageNpcDialogue(tile, flags) {
   const lines = {
     baker: flags.metElder
-      ? 'Nella has flour dust on one cheek and three half-shaped loaves abandoned on the table behind her. The ovens are still hot, but the bakery has gone quiet in the strange way busy places do when everyone is listening for bad news. "I was baking for the road crews," she says, lowering her voice. "Then the bells started, and folk stopped coming through. If that courier truly vanished, someone out there is not just scaring us. They\'re cutting us off."'
+      ? 'Nella has flour dust on one cheek and three half-shaped loaves abandoned on the table behind her. The ovens are still hot, but the bakery has gone quiet in the strange way busy places do when everyone is listening for bad news. "I was baking for the road crews," she says, lowering her voice. "Then the bells started, and folk stopped coming through. If that courier truly vanished, the people behind it are not just scaring us. They\'re cutting us off."'
       : 'Nella the Baker keeps glancing toward the south gate while pretending to rearrange a tray of pear rolls. "The ovens are hot, the bread is rising, and nobody has come by to make fun of my lopsided crusts. That is how I know the morning has gone wrong. Elder Brynn has the face she wears when bad news has boots on. Go find her, dear."',
     farmer: flags.metElder
       ? "Toma Fielding grips his rake like it might become a spear if the day gets any worse. \"Boars I understand. Boars with satchels? Couriers gone missing? That's not field trouble. That's road trouble. If you go out there, watch the ditches. Trouble loves a ditch.\""
@@ -403,7 +406,7 @@ function getMayorDialogue(flags) {
   if (flags.beatCellarBoss)
     return 'Mayor Anwen studies the cellar mud on your boots. "Hollis says the guardian fell, but the sealed door still holds the truth you went below to find. Go back for the door before Bramblecross mistakes a defeated monster for a finished investigation."';
   if (!flags.gotDungeonLead)
-    return 'Mayor Anwen studies the watchhouse windows. "Enna says your report turned scattered worries into a route case. Good. That means we\'re not losing our minds. Bad, because it means someone else is using theirs. Read what the town knows, then speak with Hollis."';
+    return 'Mayor Anwen studies the watchhouse windows. "Enna says your report turned scattered worries into a route case. Good. That means we\'re not losing our minds. Bad, because it means a deliberate mind is behind this. Read what the town knows, then speak with Hollis."';
   return 'Mayor Anwen nods toward the old cellar ways. "If Hollis is sending you below, then Bramblecross is past pretending this is only paperwork. Go carefully. Towns are built on foundations, and foundations remember things."';
 }
 
@@ -424,6 +427,7 @@ export default function LiamsGamePrototype() {
   const [companion, setCompanion] = useState(buildDefaultCompanion());
   const [companionRoster, setCompanionRoster] = useState<CompanionRoster>({});
   const companionIsConscious = isCompanionConscious(companion);
+  const companionPronouns = getCompanionPronouns(companion.id);
   const [flags, setFlags] = useState(buildDefaultFlags());
   const [quest, setQuest] = useState({
     title: "Talk to Elder Brynn",
@@ -1751,7 +1755,7 @@ Deep breath. Am I really ready for this?`,
     setDialogue({
       portrait: "🗂️",
       name: "Watch Clerk Enna",
-      text: `Enna taps two pins on the board without looking up. "The shape still holds: false authority above ground, missing workers below ground, and a road being trained to fear the wrong thing. The old shrine had it right: a road is safest when truth walks it first. Study the wall if you need the full pattern. Hollis will not move until you understand why the cellar matters."${companionIsConscious ? "" : companion.recruited ? `\n\nShe glances toward ${companion.name}. "Before you go below again, let them recover at the Bramblecross Inn."` : '\n\nShe nods toward the square. "Before you go below, consider taking another pair of eyes. Rowan, Tilda, and Moss are staying at the Bramblecross Inn."'}`,
+      text: `Enna taps two pins on the board without looking up. "The shape still holds: false authority above ground, missing workers below ground, and a road being trained to fear the wrong thing. The old shrine had it right: a road is safest when truth walks it first. Study the wall if you need the full pattern. Hollis will not move until you understand why the cellar matters."${companionIsConscious ? "" : companion.recruited ? `\n\nShe glances toward ${companion.name}. "Before you go below again, let ${companionPronouns.object} recover at the Bramblecross Inn."` : '\n\nShe nods toward the square. "Before you go below, consider taking another pair of eyes. Rowan, Tilda, and Moss are staying at the Bramblecross Inn."'}`,
       choices: [
         {
           label: "I'll study the wall, then speak with Hollis.",
@@ -2073,7 +2077,7 @@ ${success ? successText : failText}`,
         portrait: "🛒",
         mapVignette: "lanternCart",
         name: "Broken Cart",
-        text: "Now that Ada's notice is in your head, the cart changes from roadside clutter into evidence. Green paint flakes cling to the axle. A spice seal shaped like three leaves has been cut from a crate lid, not broken off. Someone did not merely raid the cart. They removed the parts that would prove where it came from.",
+        text: "Now that Ada's notice is in your head, the cart changes from roadside clutter into evidence. Green paint flakes cling to the axle. A spice seal shaped like three leaves has been cut from a crate lid, not broken off. The raider did not merely loot the cart. He removed the parts that would prove where it came from.",
         choices: [
           {
             label: "Recover the paint flakes and cut seal for Ada.",
@@ -2275,7 +2279,7 @@ ${success ? "The marks settle into meaning as you trace them: water here, shelte
       portrait: "📦",
       mapVignette: "lanternCache",
       name: "Road Cache",
-      text: "A cedar road cache is tucked under roots beside the path. It bears a faded lantern mark: public supplies for travelers in trouble. The latch is stiff, but not locked. Someone has already taken the obvious food and left the practical gear behind, which says a lot about their priorities.",
+      text: "A cedar road cache is tucked under roots beside the path. It bears a faded lantern mark: public supplies for travelers in trouble. The latch is stiff, but not locked. A previous visitor took the obvious food and left the practical gear behind, which says a lot about that visitor's priorities.",
       choices: [
         {
           label: "Open the cache.",
@@ -2839,7 +2843,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       portrait: "🗺️",
       name: "Bramblecross Watchhouse",
       size: "wide",
-      text: `${companionIsConscious ? "Enna nods once to the companion at your side. \"Good. One clear witness is better than a crowd of half-listeners.\"" : companion.recruited ? `Enna glances toward ${companion.name}. "Your witness needs rest before the road asks anything more of them."` : "Enna looks at the empty space beside you. \"You can follow this lead alone if you must, but I would rather you did not. The road west is not simply dangerous. It is being edited.\""}\n\nHollis stands near the case wall, where Edden's blue cloth is pinned beside the Briar Crown mark.\n\n\"The sealed cellar door still opens from the far side,\" he says. \"We cannot chase Westroot through it yet. But the old courier maps show a surface cut west of town that reaches the same buried road.\"\n\nEnna taps the public road map and the older courier marks, then leaves a deliberate space between them. Edden reached the buried road; his testimony belongs there when he is ready to give it.\n\n\"Someone else has already opened Westroot,\" she says. \"This chapter of the search is about proving where Lio went and whether he survived the gate. Mara reads his smallest marks. Ada's lens reads copied Willow marks. We should have both before the west road gets a vote.\"\n\nFor the first time, the room stops treating Lio Brindle like a route problem. He becomes someone's brother.`,
+      text: `${companionIsConscious ? "Enna nods once to the companion at your side. \"Good. One clear witness is better than a crowd of half-listeners.\"" : companion.recruited ? `Enna glances toward ${companion.name}. "Your witness needs rest before the road asks anything more of ${companionPronouns.object}."` : "Enna looks at the empty space beside you. \"You can follow this lead alone if you must, but I would rather you did not. The road west is not simply dangerous. It is being edited.\""}\n\nHollis stands near the case wall, where Edden's blue cloth is pinned beside the Briar Crown mark.\n\n\"The sealed cellar door still opens from the far side,\" he says. \"We cannot chase Westroot through it yet. But the old courier maps show a surface cut west of town that reaches the same buried road.\"\n\nEnna taps the public road map and the older courier marks, then leaves a deliberate space between them. Edden reached the buried road; his testimony belongs there when he is ready to give it.\n\n\"Someone else has already opened Westroot,\" she says. \"This chapter of the search is about proving where Lio went and whether he survived the gate. Mara reads his smallest marks. Ada's lens reads copied Willow marks. We should have both before the west road gets a vote.\"\n\nFor the first time, the room stops treating Lio Brindle like a route problem. He becomes someone's brother.`,
       choices: [
         {
           label: "What exactly is Westroot?",
@@ -3025,7 +3029,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     setDialogue({
       portrait: "✦",
       name: "Leaving Bramblecross",
-      text: `The westward cut does not look like a road at first. It looks like a place where the grass has been persuaded to lean the same direction for a very long time.\n\nMara touches the blue string at her wrist. Hollis says, \"Mara stays behind the line when trouble starts.\"\n\n${companionIsConscious ? chapter2CompanionLine("Rowan adjusts his shield. \"Then we walk carefully.\"", "Tilda grins. \"I have always wanted to argue with a road.\"", "Moss touches the mossy lantern mark. \"Old roads ask so we remember what kind of travelers we are.\"") : companion.recruited ? `${companion.name} is still recovering. The westward cut will have to wait—or be faced without their help.` : "The westward cut waits in silence. It does not look safer for being quiet."}`,
+      text: `The westward cut does not look like a road at first. It looks like a place where the grass has been persuaded to lean the same direction for a very long time.\n\nMara touches the blue string at her wrist. Hollis says, \"Mara stays behind the line when trouble starts.\"\n\n${companionIsConscious ? chapter2CompanionLine("Rowan adjusts his shield. \"Then we walk carefully.\"", "Tilda grins. \"I have always wanted to argue with a road.\"", "Moss touches the mossy lantern mark. \"Old roads ask so we remember what kind of travelers we are.\"") : companion.recruited ? `${companion.name} is still recovering. The westward cut will have to wait—or be faced without ${companionPronouns.possessive} help.` : "The westward cut waits in silence. It does not look safer for being quiet."}`,
       choices: [
         { label: "Mara, watch for Lio's smallest marks.", effect: () => departToWestroot("lioMarks") },
         { label: "Mara, keep Edden's drawing ready.", effect: () => departToWestroot("eddenDrawing") },
@@ -5022,7 +5026,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       return setDialogue({
         portrait: "!",
         name: "Witness Stone Hold-Shutter",
-        text: `${CHAPTER_3_FULL_SCENE_COPY.witnessStones.shutterInspection}\n\nNoma keeps their hands away from Bramwell's latch. \"The hall hears both costs first,\" they say. \"Then Bramwell and I can change this order in public.\"`,
+        text: `${CHAPTER_3_FULL_SCENE_COPY.witnessStones.shutterInspection}\n\nNoma keeps her hands away from Bramwell's latch. \"The hall hears both costs first,\" she says. \"Then Bramwell and I can change this order in public.\"`,
         choices: [{ label: viewFlags.westrootHoldBellRung ? "Hear Westroot at Split Hall first." : "Leave the lawful hold in place.", effect: () => setDialogue(null) }],
       });
     }
@@ -5156,7 +5160,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           : null,
         !conversationFlags.rootbreadChildAskedSafety
           ? {
-              label: "Why did the handlers let you feed him?",
+              label: "How did Lio manage to mark the cup?",
               effect: () => openRootbreadChildResponse(
                 CHAPTER_3_FULL_SCENE_COPY.rootbread.routineResponse,
                 "rootbreadChildAskedSafety",
@@ -5184,19 +5188,19 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
               text: CHAPTER_3_FULL_SCENE_COPY.cargoSiding.battle,
               choices: [
                 {
-                  label: "Fight the Briar Cargo Runner and Seal-Forged Sentry.",
+                  label: "Fight the Briar Cargo Runner and Seal-Forged Sentry before he can escape.",
                   effect: () => {
                     setDialogue(null);
                     startBattle(buildEncounterEnemies("westrootCargo"), "westrootCargo", {
                       heroStarts: viewFlags.cargoAmbushPrepared ? true : undefined,
                       heroGuard: viewFlags.cargoAmbushPrepared ? 4 : 0,
                       openingLog: viewFlags.cargoAmbushPrepared
-                        ? "Your ledger work exposed the service passage. The party starts ready, with 4 guard."
+                        ? "Your ledger work exposed the runner's escape route. Quill and two gatekeepers cover the service passage. The party starts ready, with 4 guard."
                         : null,
                     });
                   },
                 },
-                { label: "Back away before they attack.", effect: () => setDialogue(null) },
+                { label: "Back away before the runner and sentry attack.", effect: () => setDialogue(null) },
               ],
             }),
         },
@@ -5312,7 +5316,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       size: "wide",
     });
 
-  const completeChapterThree = (response) => {
+  const completeChapterThree = (contactChoice: BramblecrossContactChoice) => {
     setFlags((f) => ({ ...f, westrootTrustEarned: true, chapterThreeClear: true }));
     setPlayer((p) => ({ ...p, xp: p.xp + 16 }));
     announce("Westroot restores its first Bramblecross compact. Chapter 3 complete. XP +16");
@@ -5325,13 +5329,30 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       },
       contentLayout: "stacked",
       text: withChapter3CompanionReaction(
-        `${response}\n\n${CHAPTER_3_FULL_SCENE_COPY.splitHall.fullResolution}`,
+        getSplitHallResolution(contactChoice),
         "resolution",
       ),
       choices: [{ label: "Visit Noma in the Mossgarden.", effect: openChapterThreeClosing }],
       size: "wide",
     });
   };
+
+  const openBramblecrossContactChoice = (response) =>
+    setDialogue({
+      portrait: "▤",
+      name: "Split Hall — First Contact",
+      sceneImage: {
+        src: splitHallResolutionScene,
+        alt: "Mara, Bramwell, Noma, the Rootmarket baker, and the Stonekin and Mossback neighbors of Westroot deciding how to renew contact with Bramblecross.",
+      },
+      contentLayout: "stacked",
+      text: `${response}\n\n${CHAPTER_3_FULL_SCENE_COPY.splitHall.contactPrompt}`,
+      choices: Object.entries(BRAMBLECROSS_CONTACT_CHOICES).map(([key, choice]) => ({
+        label: choice.label,
+        effect: () => completeChapterThree(key as BramblecrossContactChoice),
+      })),
+      size: "wide",
+    });
 
   const openSplitHallPreBellResponse = (response) =>
     setDialogue({
@@ -5528,9 +5549,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         rememberedTestimony ? `\n\nThe hall has heard these fears before:\n${rememberedTestimony}` : ""
       }`,
       choices: [
-        { label: "Frame the compact around the danger that closure failed to stop.", effect: () => completeChapterThree(CHAPTER_3_FULL_SCENE_COPY.splitHall.bramwellResponse) },
-        { label: "Frame the compact around warnings and shelter traveling together.", effect: () => completeChapterThree(CHAPTER_3_FULL_SCENE_COPY.splitHall.nomaResponse) },
-        { label: "Frame the compact around the four road promises.", effect: () => completeChapterThree(CHAPTER_3_FULL_SCENE_COPY.splitHall.stonesResponse) },
+        { label: "Frame the compact around the danger that closure failed to stop.", effect: () => openBramblecrossContactChoice(CHAPTER_3_FULL_SCENE_COPY.splitHall.bramwellResponse) },
+        { label: "Frame the compact around warnings and shelter traveling together.", effect: () => openBramblecrossContactChoice(CHAPTER_3_FULL_SCENE_COPY.splitHall.nomaResponse) },
+        { label: "Frame the compact around the four road promises.", effect: () => openBramblecrossContactChoice(CHAPTER_3_FULL_SCENE_COPY.splitHall.stonesResponse) },
       ],
       size: "wide",
     });
@@ -6275,11 +6296,13 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           battle.rewardKey === "westrootCargo"
             ? [
                 flags.cargoAmbushPrepared ? {
-                  label: "Tell Quill to shut the lantern shutter.",
+                  label: "Signal Quill to close the runner's prepared escape route.",
                   effect: () => resolveCargoBattleOutcome("captured"),
                 } : null,
                 {
-                  label: "Secure the evidence while the runner escapes.",
+                  label: flags.cargoAmbushPrepared
+                    ? "Secure the evidence instead; let the runner reach the passage."
+                    : "Secure the evidence; the runner reaches the uncovered passage.",
                   effect: () => resolveCargoBattleOutcome("escaped"),
                 },
               ].filter(Boolean)

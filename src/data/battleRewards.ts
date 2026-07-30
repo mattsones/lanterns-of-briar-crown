@@ -109,7 +109,7 @@ export const BATTLE_REWARDS = {
       willowCargoExposed: true,
     },
     name: "Cargo Siding Cleared",
-    text: "The Seal-Forged Sentry collapses into wet wax, snapped cord, and paper that has forgotten how to stand up. The Briar runner reaches for crown-red powder as the Cargo Siding fills with smoke.",
+    text: "The Seal-Forged Sentry collapses into wet wax, snapped cord, and paper that has forgotten how to stand up. You disarm the Briar Cargo Runner and drive him to one knee. The fight is won, but he is not bound: he flings crown-red powder toward the lantern and bolts for the narrow service passage.",
   },
 };
 

@@ -2,11 +2,17 @@
 
 This file is the starting point for Codex.
 
-## Latest Handoff — 2026-07-28
+Story-writing work must also follow `docs/story/writing-rules.md`. Singular characters use he/him or she/her; *they/them/their* is reserved for genuinely plural antecedents.
 
-The current branch is `codex/chapter-3-vertical-slice`. The latest Chapter 3 human-feedback pass revises Westroot dialogue order, physical NPC staging, the Witness Stone and Cargo Siding transitions, combat composition, evidence iconography, the Split Hall choice framing, and the chapter ending. The formerly frontloaded Noma history now answers a player question; the closing lead now comes from the recovered transfer tag, Lume's cup, and an old Lower West Gate route index rather than a fresh mark hidden under moss.
+## Latest Handoff — 2026-07-29
 
-Automated coverage now fixes the requested `(4,3)` and `(5,3)` movement exits, verifies the staged Quill/Lume/Bramwell/Noma markers, prevents duplicate battle HP meters, checks the Willowmark seal image, and exercises both Cargo Siding outcomes. The Chapter 3 golden path and full Chapter 3 suite pass. A fresh human uninterrupted playthrough remains the release-candidate signoff.
+The current branch is `codex/chapter-3-vertical-slice`. The latest human-feedback pass removes the unnatural question about why Lio's handlers permitted routine checkpoint food and instead asks how he marked the returned cup. Noma now invites the next question without repeating her “fear makes a loud first draft” line.
+
+The Cargo Siding sequence now states that the Briar Cargo Runner is one of the two fought enemies, that combat defeat does not kill or bind him, and that he attempts to flee through the visible service passage after the fight. Inspecting the ledger explicitly prepares Quill's shutter and Bramwell's gatekeepers to capture him; the post-battle choices now state that causal link.
+
+The final Split Hall scene asks the player to name Enna, Captain Hollis, Mayor Anwen, or all three as Bramblecross's first trusted contact. Bramwell's announcement draws an audible gasp and questions from the hall, explains how shared record verification protects both communities, and publicly credits Noma for advocating a witnessed compact.
+
+Runtime and canonical Chapters 1–3 now use he/him or she/her for singular characters who previously used singular *they*. `docs/story/writing-rules.md` makes that rule explicit for future writing, and rules coverage protects the settled character decisions. Build, rules, and the full Chapter 3 suite pass after this pass. A fresh human uninterrupted playthrough remains the release-candidate signoff.
 
 ### Next Best Step
 

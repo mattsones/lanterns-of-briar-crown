@@ -99,7 +99,7 @@ Nella the Baker keeps glancing toward the south gate while pretending to rearran
 ### After talking to Brynn
 **Text**
 
-Nella has flour dust on one cheek and three half-shaped loaves abandoned on the table behind her. The ovens are still hot, but the bakery has gone quiet in the strange way busy places do when everyone is listening for bad news. "I was baking for the road crews," she says, lowering her voice. "Then the bells started, and folk stopped coming through. If that courier truly vanished, someone out there is not just scaring us. They're cutting us off."
+Nella has flour dust on one cheek and three half-shaped loaves abandoned on the table behind her. The ovens are still hot, but the bakery has gone quiet in the strange way busy places do when everyone is listening for bad news. "I was baking for the road crews," she says, lowering her voice. "Then the bells started, and folk stopped coming through. If that courier truly vanished, the people behind it are not just scaring us. They're cutting us off."
 
 **Choice**
 - I'll be careful.
@@ -588,7 +588,7 @@ The broken cart has nothing left to give except questions. The missing crate sti
 ### After accepting Ada’s notice
 **Text**
 
-Now that Ada's notice is in your head, the cart changes from roadside clutter into evidence. Green paint flakes cling to the axle. A spice seal shaped like three leaves has been cut from a crate lid, not broken off. Someone did not merely raid the cart. They removed the parts that would prove where it came from.
+Now that Ada's notice is in your head, the cart changes from roadside clutter into evidence. Green paint flakes cling to the axle. A spice seal shaped like three leaves has been cut from a crate lid, not broken off. The raider did not merely loot the cart. He removed the parts that would prove where it came from.
 
 **Choices**
 - Recover the paint flakes and cut seal for Ada.
@@ -713,7 +713,7 @@ Around the base, the old traveler saying holds steady:
 ### First inspection
 **Text**
 
-A cedar road cache is tucked under roots beside the path. It bears a faded lantern mark: public supplies for travelers in trouble. The latch is stiff, but not locked. Someone has already taken the obvious food and left the practical gear behind, which says a lot about their priorities.
+A cedar road cache is tucked under roots beside the path. It bears a faded lantern mark: public supplies for travelers in trouble. The latch is stiff, but not locked. A previous visitor took the obvious food and left the practical gear behind, which says a lot about that visitor's priorities.
 
 **Choices**
 - Open the cache.
@@ -825,7 +825,7 @@ Mayor Anwen stands beside a stack of unread petitions, but her eyes keep moving 
 ### After Enna briefed, before dungeon lead
 **Text**
 
-Mayor Anwen studies the watchhouse windows. "Enna says your report turned scattered worries into a route case. Good. That means we're not losing our minds. Bad, because it means someone else is using theirs. Read what the town knows, then speak with Hollis."
+Mayor Anwen studies the watchhouse windows. "Enna says your report turned scattered worries into a route case. Good. That means we're not losing our minds. Bad, because it means a deliberate mind is behind this. Read what the town knows, then speak with Hollis."
 
 **Choice**
 - I'll look into it.
@@ -1095,7 +1095,7 @@ Hollis authorizes the Root Cellar investigation. If the player is ready, he lead
 
 Ada’s side quest should not feel like a detached errand. It should reveal how the conspiracy uses ordinary trade systems—crates, seals, route marks, and trusted merchants—to move false authority through the region.
 
-The missing spice crate matters not because the spice is valuable, but because Ada’s market seal is trusted. If someone can steal or copy that seal, they can mark other goods as Willow Market cargo and move them through Bramblecross without suspicion.
+The missing spice crate matters not because the spice is valuable, but because Ada’s market seal is trusted. A thief who can steal or copy that seal can mark other goods as Willow Market cargo and move the goods through Bramblecross without suspicion.
 
 This turns Ada’s quest into a side-window into the larger plot: the conspiracy is not only spreading fake orders; it is hijacking the everyday systems people rely on.
 
@@ -1381,9 +1381,9 @@ Listening to the fire as if it is telling the truth slowly.
 
 Moss Fenmere sits where the firelight thins, turning a cracked teacup between both hands. No steam rises from it, but the surface ripples whenever the inn beams creak.
 
-A child nearby whispers that the cellar is haunted. Moss does not correct the child at first. They listen, then say gently, "Haunted is a word people use when history has not finished speaking."
+A child nearby whispers that the cellar is haunted. Moss does not correct the child at first. He listens, then says gently, "Haunted is a word people use when history has not finished speaking."
 
-Moss looks at you as if they have already heard the question arrive.
+Moss looks at you as if he has already heard the question arrive.
 
 "The road is frightened above ground, and the roots are restless below it. That is not two problems."
 
@@ -1836,7 +1836,7 @@ Her hand pauses over the last note.
 
 The room feels colder around Lio's name, even though no one says it yet.
 
-"Not confirmed dead," Enna says. "Not confirmed alive. Accounted for would mean they knew where he ended. Unaccounted for means someone lost track of him—or someone moved him and did not report it cleanly."
+"Not confirmed dead," Enna says. "Not confirmed alive. Accounted for would mean the record showed where he ended. Unaccounted for means someone lost track of him—or someone moved him and did not report it cleanly."
 
 Hollis looks toward the map.
 
@@ -1950,7 +1950,7 @@ Tilda leans close to the board, then whistles softly.
 
 Moss looks from the forged orders to the older route marks.
 
-"A road remembers how it was treated," they say. "This one has been taught to flinch. That can be untaught, but not by force alone."
+"A road remembers how it was treated," he says. "This one has been taught to flinch. That can be untaught, but not by force alone."
 
 ---
 
@@ -1976,7 +1976,7 @@ Then her grin fades.
 
 Moss does not touch the mark.
 
-"Briars protect living things when they grow where they belong," they say. "This was carved to choke something older. That is not growth. That is conquest pretending to be nature."
+"Briars protect living things when they grow where they belong," he says. "This was carved to choke something older. That is not growth. That is conquest pretending to be nature."
 
 ---
 
@@ -2000,7 +2000,7 @@ Her grin is gone.
 
 Moss rests a hand near the sealed door, not touching it.
 
-"There is still lantern-light under the roots," they say. "Buried, but not gone. That matters."
+"There is still lantern-light under the roots," he says. "Buried, but not gone. That matters."
 
 ---
 
@@ -2012,13 +2012,13 @@ Moss rests a hand near the sealed door, not touching it.
 
 **Tilda**
 
-"Westroot opened," Tilda repeats. "That sounds like a door someone forgot to tell us was a door. I love finding those. I hate what they probably moved through it."
+"Westroot opened," Tilda repeats. "That sounds like a door someone forgot to tell us was a door. I love finding those. I hate what the Briar Crown probably moved through it."
 
 **Moss**
 
 Moss watches the gold lanternlight reflected in the cracked glass on Hollis's desk.
 
-"Truth walked first once," they say. "It can again. But roads remember every footstep. We should choose ours carefully."
+"Truth walked first once," he says. "It can again. But roads remember every footstep. We should choose ours carefully."
 
 ---
 

@@ -176,7 +176,7 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Quill Pebbleturn | `quill-pebbleturn-portrait-v01.webp` | Chapter 3 Rootmarket technician with lantern-shutter identity. |
 | Auntie Lume | `auntie-lume-portrait-v02.webp` | Selected Chapter 3 Rootmarket host portrait; clearer and warmer than v01. |
 | Noma Greenstill | `noma-greenstill-portrait-v02.webp` | Selected Chapter 3 Mossgarden memory-keeper portrait; older and steadier than v01. |
-| Westroot Rootbread Child | `westroot-rootbread-child-portrait-v02.webp` | Selected Chapter 3 child portrait; visibly young Mossback with the hatch/rootbread story read. |
+| Westroot Rootbread Child | `westroot-rootbread-child-portrait-v02.webp` | Selected Chapter 3 portrait; visibly young Mossback girl with the Transfer Checkpoint/rootbread story read. |
 | Worried Road Traveler | `worried-road-traveler-portrait-v01.webp` | Production-usable generic traveler; includes baked-in sign text, so use sparingly. |
 
 ## Enemies

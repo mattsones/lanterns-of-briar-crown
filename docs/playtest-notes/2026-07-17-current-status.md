@@ -1,4 +1,4 @@
-# Current Project Status — 2026-07-28
+# Current Project Status — 2026-07-29
 
 Branch: `codex/chapter-3-vertical-slice`
 
@@ -30,6 +30,8 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 
 ## Recent Playtest And Story Decisions
 
+- The July 29 Chapter 3 pass clarifies the Rootbread cup question and both Cargo Runner outcomes, adds a player-selected Bramblecross contact, gives the sixty-year compact announcement a visible public reaction and concrete rationale, and lets Bramwell publicly acknowledge that Noma's witnessed-contact argument was right.
+- Singular characters in Chapters 1–3 now use he/him or she/her in runtime and canonical writing. `docs/story/writing-rules.md` records the rule and the settled character assignments for future work.
 - Chapter 3 now implements its approved story-foundation package in playable canon. The Transfer Checkpoint, scheduled-convoy versus unscheduled-arrival distinction, Lio's movement beside the crate, scoped holds and reopenings, first restored Bramblecross compact, and Quill's outward warning are all on the required path.
 - The realm-history workshop now places Lanthorne above Bramblecross as the Rainroot regional city, proposes Hearthward as the Hearthvale capital, adds the Saltwake War and Cinder Vale diaspora, makes Witherdeath a separate two-year international plague, confirms the coastal Sunreach queen and Elowen's independent Royal Progress, develops Moonmark performing companies, and gives the Crownward/Briar movement a sovereign claimant above its road-office operators. The Chapters 2–5 story bible now reflects the non-cosmic civic-road and institutional-conspiracy direction; playable text still awaits a later focused pass.
 - `docs/story/historical-backdrop-integration-audit.md` now identifies the leanest integration points across playable Chapters 1–3 and planned Chapters 4–5. Its first priorities are the Chapter 3 checkpoint/compact rewrite, a non-cosmic language pass, the Great Survey evidence prop, Elowen's Royal Progress, the Crownward/Briar distinction, and Chapter 5's institutional-compromise reveal.
@@ -104,7 +106,7 @@ Complete one fresh uninterrupted human Chapter 3 replay on the revised build. If
 
 ```text
 npm.cmd run build                 passed
-npm.cmd run test:rules            31 passed
+npm.cmd run test:rules            32 passed
 npm.cmd run playtest:chapter1     30 passed
 npm.cmd run playtest:chapter2     31 passed
 npm.cmd run playtest:chapter3     10 passed

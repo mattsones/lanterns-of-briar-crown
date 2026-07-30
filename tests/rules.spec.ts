@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { resolveRoll, resolveSkillCheck } from "../src/game/dice";
 import { DEFAULT_HUMAN_HERITAGE_ID, GENDERS, HUMAN_HERITAGES, RACES } from "../src/data/character";
+import { COMPANION_OPTIONS } from "../src/data/companions";
 import { buildEncounterEnemies, ENCOUNTERS, ENEMY_DB } from "../src/data/enemies";
 import {
   damageBattleEnemy,
@@ -78,9 +79,11 @@ import {
 } from "../src/story/chapter1";
 import { CHAPTER_STORY_PLANS } from "../src/story/chapters2to5";
 import {
+  BRAMBLECROSS_CONTACT_CHOICES,
   canStartChapter3,
   CHAPTER_3_HUB_NODES,
   CHAPTER_3_STORY,
+  getSplitHallResolution,
   isChapter3Complete,
 } from "../src/story/chapter3";
 import {
@@ -919,6 +922,59 @@ test("chapter one story script beats stay wired into data", () => {
   expect(
     appendChapter1CompanionReaction("Base text", "rowan", "reportBack"),
   ).toContain("One route at a time");
+});
+
+test("story writing rules keep singular character pronouns explicit", () => {
+  const writingRules = readFileSync(resolve("docs/story/writing-rules.md"), "utf8");
+  expect(writingRules).toContain("Use **they/them/their** only for a clearly plural antecedent");
+  expect(writingRules).toContain("| Moss Fenmere | Male | he/him/his |");
+  expect(writingRules).toContain("| Noma Greenstill | Female | she/her/her |");
+  expect(writingRules).toContain("| Quill Pebbleturn | Male | he/him/his |");
+  expect(COMPANION_OPTIONS.moss.pronouns).toEqual({
+    subject: "he",
+    object: "him",
+    possessive: "his",
+  });
+
+  const currentStorySources = [
+    "src/story/chapter1.ts",
+    "src/story/chapter2.ts",
+    "src/story/chapter3.ts",
+    "src/components/modals.tsx",
+    "docs/story/chapter-1-story-script.md",
+    "docs/story/chapter-2-story-script.md",
+    "docs/story/chapter-3-story-script.md",
+  ].map((path) => readFileSync(resolve(path), "utf8")).join("\n");
+
+  [
+    "Moss closes their",
+    "Moss looks at you as if they",
+    "Quill stills their",
+    "Quill places their",
+    "Noma inclines their",
+    "Noma keeps their",
+    "The Cargo Runner looks less angry than alarmed. They",
+    "“They ran west,” Mara says",
+  ].forEach((disallowedCopy) => expect(currentStorySources).not.toContain(disallowedCopy));
+});
+
+test("every Bramblecross contact choice produces the guarded Split Hall compact", () => {
+  expect(Object.keys(BRAMBLECROSS_CONTACT_CHOICES)).toEqual([
+    "enna",
+    "hollis",
+    "anwen",
+    "all",
+  ]);
+
+  Object.keys(BRAMBLECROSS_CONTACT_CHOICES).forEach((choice) => {
+    const resolution = getSplitHallResolution(
+      choice as keyof typeof BRAMBLECROSS_CONTACT_CHOICES,
+    );
+    expect(resolution).toContain("Westroot restores one surface compact: Bramblecross.");
+    expect(resolution).toContain("The room answers with a single audible gasp.");
+    expect(resolution).toContain("She was right.");
+    expect(resolution).toContain("The First Gate stays guarded.");
+  });
 });
 
 test("the boar reveal must be reported to Elder Brynn before the Lio search begins", () => {

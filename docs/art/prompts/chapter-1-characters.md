@@ -121,7 +121,7 @@ Use the master style block.
 ```text
 Create a half-body storybook fantasy portrait of Moss Fenmere, a Mossback companion sitting quietly in the Bramblecross inn. Moss should feel calm, rooted, strange, and ancient-adjacent without being creepy.
 
-They may have green or earthy skin, moss-like hair or texture, small plants, mushrooms, vines, barklike clothing, natural adornments, and a quiet gaze. They should seem patient and observant, as though listening to old roads and roots.
+He may have green or earthy skin, moss-like hair or texture, small plants, mushrooms, vines, barklike clothing, natural adornments, and a quiet gaze. He should seem patient and observant, as though listening to old roads and roots.
 
 Mood: gentle, still, wise, unusual, old-magic-aware. Not monstrous, not scary.
 

@@ -140,7 +140,7 @@ The forged orders were not the whole plan. They were cover. The stolen Willow se
       {
         speaker: "Enna",
         side: "left",
-        text: "Courier unaccounted for. Not confirmed dead. Not confirmed alive. Accounted for would mean they knew where he ended. Unaccounted for means someone lost track of him, or someone moved him and did not report it cleanly.",
+        text: "Courier unaccounted for. Not confirmed dead. Not confirmed alive. Accounted for would mean the record showed where he ended. Unaccounted for means someone lost track of him, or someone moved him and did not report it cleanly.",
       },
       {
         speaker: "Hollis",
@@ -180,21 +180,21 @@ The forged orders were not the whole plan. They were cover. The stolen Willow se
         "Rowan tightens his grip on his shield. \"That mark wants trust without earning it. I know the shape of that. Whoever uses it borrows a crown so nobody asks whose hand is really giving the order.\"",
       tilda:
         "Tilda crouches beside the mark and wrinkles her nose. \"Not royal. Not honest. Not even stylish. If you are going to impersonate authority, at least have the decency to draw straight lines.\" Then her grin fades. \"Still. People believed it from a distance. That is what worries me.\"",
-      moss: "Moss does not touch the mark. \"Briars protect living things when they grow where they belong,\" they say. \"This was carved to choke something older. That is not growth. That is conquest pretending to be nature.\"",
+      moss: "Moss does not touch the mark. \"Briars protect living things when they grow where they belong,\" he says. \"This was carved to choke something older. That is not growth. That is conquest pretending to be nature.\"",
     },
     sealedDoor: {
       rowan:
         "Rowan lowers his voice. \"Edden reached this far and still left proof. That is courage. Quiet courage counts.\"",
       tilda:
         "Tilda turns the phrase over in her mouth: \"Willow seal recovered. Courier unaccounted for.\" Her grin is gone. \"That is not a report. That is inventory. I hate people who inventory people.\"",
-      moss: "Moss rests a hand near the sealed door, not touching it. \"There is still lantern-light under the roots,\" they say. \"Buried, but not gone. That matters.\"",
+      moss: "Moss rests a hand near the sealed door, not touching it. \"There is still lantern-light under the roots,\" he says. \"Buried, but not gone. That matters.\"",
     },
     reportBack: {
       rowan:
         "\"They are using roads like weapons,\" Rowan says. \"Then we answer by making roads safe again. One route at a time.\"",
       tilda:
-        "\"Westroot opened,\" Tilda repeats. \"That sounds like a door someone forgot to tell us was a door. I love finding those. I hate what they probably moved through it.\"",
-      moss: "Moss watches the gold lanternlight reflected in the cracked glass on Hollis's desk. \"Truth walked first once,\" they say. \"It can again. But roads remember every footstep. We should choose ours carefully.\"",
+        "\"Westroot opened,\" Tilda repeats. \"That sounds like a door someone forgot to tell us was a door. I love finding those. I hate what the Briar Crown probably moved through it.\"",
+      moss: "Moss watches the gold lanternlight reflected in the cracked glass on Hollis's desk. \"Truth walked first once,\" he says. \"It can again. But roads remember every footstep. We should choose ours carefully.\"",
     },
   },
 } as const;

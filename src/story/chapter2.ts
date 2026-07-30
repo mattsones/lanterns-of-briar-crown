@@ -38,7 +38,7 @@ export const CHAPTER_2_SCENE_COPY = {
       noHandleDoor: "Approach the No-Handle Door.",
       westrootGate: "Step through the First Westroot Gate.",
       maraRead: "Ask Mara for her read.",
-      companionRead: "Ask your companion for their read.",
+      companionRead: "Ask your companion for a read.",
       back: "Step back.",
     },
   },
@@ -338,11 +338,11 @@ export const CHAPTER_2_SCENE_COPY = {
     name: "Briar Roadwatcher",
     hardName: "Briar Roadwatcher Ambush",
     hardText:
-      "The Crown Sign splits with a sharp wooden crack. A hooded roadwatcher steps from the brush with a thorn-collared hound and a false-sign scratcher at their side.\n\nMara ducks behind the sheltering roots near the Lantern Sign. \"I am behind the line,\" she says quickly. \"I am extremely behind it.\"",
+      "The Crown Sign splits with a sharp wooden crack. A hooded roadwatcher steps from the brush with a thorn-collared hound and a false-sign scratcher at his side.\n\nMara ducks behind the sheltering roots near the Lantern Sign. \"I am behind the line,\" she says quickly. \"I am extremely behind it.\"",
     standardText:
       "The Crown Sign splits with a sharp wooden crack. A hooded roadwatcher steps from the brush with a thorn-collared hound, face hidden beneath a crooked crown mark.\n\nMara steps back before anyone has to tell her, one hand wrapped around the blue string.",
     directText:
-      "A thorn-wrapped watcher unfolds beside the road, wearing strips of false seal-cloth like a badge. A thorn-collared hound pads at their heel. Mara steps back behind the line before Hollis can somehow object from town.",
+      "A thorn-wrapped watcher unfolds beside the road, wearing strips of false seal-cloth like a badge. A thorn-collared hound pads at his heel. Mara steps back behind the line before Hollis can somehow object from town.",
     quietToast: "The watched road is quiet now.",
     backAwayToast: "You back away from the watched road.",
     labels: {
@@ -496,7 +496,7 @@ export function formatDoorOpensText() {
 }
 
 export function formatPreparedRoadwatcherText(maraProtected: boolean) {
-  return `The no-handle door opens a handspan. Then the Crown Sign cracks, and a hooded roadwatcher steps from the brush, face hidden beneath a crooked crown mark. A thorn-collared hound pads beside them, the collar glowing where the Lantern Sign points.\n\nThis time the hollow is ready: the Lantern marks are clean, Edden's drawing is aligned, and Mara is ${maraProtected ? "already behind the sheltering roots" : "moving back from the fight"} with one hand wrapped around the blue string.`;
+  return `The no-handle door opens a handspan. Then the Crown Sign cracks, and a hooded roadwatcher steps from the brush, face hidden beneath a crooked crown mark. A thorn-collared hound pads beside him, the collar glowing where the Lantern Sign points.\n\nThis time the hollow is ready: the Lantern marks are clean, Edden's drawing is aligned, and Mara is ${maraProtected ? "already behind the sheltering roots" : "moving back from the fight"} with one hand wrapped around the blue string.`;
 }
 
 export function formatWestrootGateText() {

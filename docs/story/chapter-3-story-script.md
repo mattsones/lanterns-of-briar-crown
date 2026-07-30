@@ -42,7 +42,7 @@ Stonekin elder and keeper of the First Westroot Gate. Bramwell is careful, tired
 
 ## Noma Greenstill
 
-Mossback memory-keeper of the Mossgarden and Witness Stones. Noma is gentle, observant, and firm about the old road's purpose: memory is not nostalgia when someone needs the truth to get home.
+Female Mossback memory-keeper of the Mossgarden and Witness Stones. Noma is gentle, observant, and firm about the old road's purpose: memory is not nostalgia when someone needs the truth to get home. She uses she/her pronouns.
 
 **Voice:** Patient images of roots, water, weather, and care. Never vague for its own sake.
 
@@ -50,7 +50,7 @@ Mossback memory-keeper of the Mossgarden and Witness Stones. Noma is gentle, obs
 
 ## Quill Pebbleturn
 
-Young Stonekin craftsperson in Rootmarket. Quill is curious about surface inventions and irritated by people who mistake curiosity for carelessness. They offer practical help and give the player a lived-in, hopeful view of Westroot.
+Young male Stonekin craftsperson in Rootmarket. Quill is curious about surface inventions and irritated by people who mistake curiosity for carelessness. He offers practical help and gives the player a lived-in, hopeful view of Westroot. He uses he/him pronouns.
 
 **Voice:** Quick, precise, occasionally funny. Notices construction details before social ones.
 
@@ -141,7 +141,7 @@ Below, a market is packing itself away very quickly.
 
 Every face turns toward the gate.
 
-A broad Stonekin in a slate-colored coat blocks the bridge. Their key ring is too heavy for decoration.
+A broad Stonekin in a slate-colored coat blocks the bridge. His key ring is too heavy for decoration.
 
 “No account mark. No inside confirmation. That old phrase-lock has not admitted an unscheduled surface party in living memory,” he says. “I am Bramwell. Gatehand, until nobody needs one. Who opened my gate?”
 
@@ -220,13 +220,13 @@ A Mossback pipe-mender knots one thin red hold-cord to a stall while arguing tha
 
 A young Stonekin is repairing a cracked lantern shutter with a tool small enough to be a joke and precise enough not to be one.
 
-“Hold this,” they say without looking up, pressing a warm brass hinge into your palm.
+“Hold this,” he says without looking up, pressing a warm brass hinge into your palm.
 
-Only then do they look up and realize you are not from Westroot.
+Only then does he look up and realize you are not from Westroot.
 
 “Oh. You are the gate problem. Quill Pebbleturn—shutter-mender, signal-keeper, and apparently greeter.”
 
-The player introduces Liam, Mara, and the current companion. Quill repeats the names without hesitation and lets the player keep holding the hinge while they align the shutter: named hands are easier to ask for help.
+The player introduces Liam, Mara, and the current companion. Quill repeats the names without hesitation and lets the player keep holding the hinge while he aligns the shutter: named hands are easier to ask for help.
 
 **Choices**
 
@@ -244,7 +244,7 @@ The player introduces Liam, Mara, and the current companion. Quill repeats the n
 
 ### Response: Lio question
 
-> Quill stills their hands on the hinge. “We heard a courier passed through. We did not hear his name. There is a difference between a report and a person.”
+> Quill stills his hands on the hinge. “We heard a courier passed through. We did not hear his name. There is a difference between a report and a person.”
 
 ### Converged text
 
@@ -252,7 +252,7 @@ Quill fits the hinge back into place.
 
 “The old road had a rule. Every signal had to tell someone what it was for, who sent it, and what care came with it. Warning. Shelter. Water. Witness. The Briar people copy the authority and leave out the responsibility. That is what makes their signals easy to misuse.”
 
-Quill first separates the arrivals: three nights ago, a scheduled shipment bearing a green three-leaf market seal and an unnamed westbound courier entered with correct-looking credentials; the party opened an old phrase-lock with no account or inside confirmation. Quill does not know about Ada's missing spice crate at this point. They then reach for a work tally weighted with a chip of green sealing wax, introducing the object that the player may reasonably ask about.
+Quill first separates the arrivals: three nights ago, a scheduled shipment bearing a green three-leaf market seal and an unnamed westbound courier entered with correct-looking credentials; the party opened an old phrase-lock with no account or inside confirmation. Quill does not know about Ada's missing spice crate at this point. He then reaches for a work tally weighted with a chip of green sealing wax, introducing the object that the player may reasonably ask about.
 
 **Choices**
 
@@ -306,7 +306,7 @@ The player cannot ask about the **Rootbread Promise** yet. Lume must first use t
 
 ### Lio response
 
-> “Good. A proper answer before a dramatic one.” Lume nods back toward the First Gate. “My young helper carried the ordinary checkpoint tray to an unnamed hooded courier during the false Willow transfer three nights ago. Every traveler waiting at the account rail gets bread and water before Westroot decides whether to admit them. The child set aside a returned cup that nobody recognized.”
+> “Good. A proper answer before a dramatic one.” Lume nods back toward the First Gate. “My young helper carried the ordinary checkpoint tray to an unnamed hooded courier during the false Willow transfer three nights ago. Every traveler waiting at the account rail gets bread and water before Westroot decides on admission. The girl set aside a returned cup that nobody recognized.”
 
 ### Hospitality response
 
@@ -314,7 +314,7 @@ The player cannot ask about the **Rootbread Promise** yet. Lume must first use t
 
 ### Promise response, available only after Lume names it
 
-> “If a traveler waits hungry, you feed them before trust is settled. A guarded boundary may delay passage; it may not make a hungry person invisible. Go back to the Transfer Checkpoint. Ask my helper what happened, and do not finish the child's story for them.”
+> “If a traveler waits hungry, you offer food before trust is settled. A guarded boundary may delay passage; it may not make a hungry person invisible. Go back to the Transfer Checkpoint. Ask my helper what happened, and do not finish the girl's story for her.”
 
 ### Refusal response
 
@@ -335,7 +335,7 @@ Back at the Transfer Checkpoint, Lume's young helper waits beside the ordinary r
 **Choices**
 
 - “What did the courier look like?”
-- “Why did the handlers let you feed him?”
+- “How did Lio manage to mark the cup?”
 
 Both questions remain available until asked. The completion action does not appear early.
 
@@ -343,9 +343,9 @@ Both questions remain available until asked. The completion action does not appe
 
 > “He was young,” the child says. “Hood over his face. His hands were free so he would look like an ordinary courier, but one handler kept hold of his elbow and the other stood between him and the gate. He ate the bread. He watched everything.”
 
-### Routine response
+### Cup-mark response
 
-> “Everybody waiting here gets the tray before the gate decides,” the child says. “If the handlers refused it, Bramwell would have asked why they were breaking the ordinary routine. So they let him eat. He pulled a short blue thread from his cuff and wound it around the cup before he gave it back.”
+> “He waited until one handler turned toward the account rail,” the girl says. “Then he pulled a short blue thread from his cuff and wound it around the cup before he gave it back. The tray helped him hide the message in an ordinary checkpoint routine.”
 
 ### Cup reveal
 
@@ -636,11 +636,11 @@ Mara picks it up, then puts it down with both hands.
 
 Quill lays the transfer tag beside Lio's confiscated pouch.
 
-“This record is plain,” they say. “Lio was marched beside the convoy under guard and sent through the Lower West Gate. The crate remained here.”
+“This record is plain,” he says. “Lio was marched beside the convoy under guard and sent through the Lower West Gate. The crate remained here.”
 
 Noma reads the two acknowledgement marks without touching them.
 
-“The operation borrowed trust from both sides of the checkpoint,” they say. “Ada's Willow seal outside. Westroot's account mark and second-watch timing inside.”
+“The operation borrowed trust from both sides of the checkpoint,” she says. “Ada's Willow seal outside. Westroot's account mark and second-watch timing inside.”
 
 Bramwell's jaw tightens.
 
@@ -656,7 +656,7 @@ Someone says, “You should have left the gate closed.”
 
 ### Battle setup
 
-A hooded **Briar Cargo Runner** steps out from behind the stacked crates. A **Seal-Forged Sentry** unfolds from a bundle of order sheets, wax, route tags, and thorn cord. Its crown-stamped scraps flutter like it is trying to become official by force.
+A hooded **Briar Cargo Runner** steps out from behind the stacked crates. A **Seal-Forged Sentry** unfolds beside him from a bundle of order sheets, wax, route tags, and thorn cord. Its crown-stamped scraps flutter like it is trying to become official by force. The runner keeps one hand near a pouch of crown-red powder and one eye on the narrow service passage behind him. He means to hold the party here, then carry warning west if he can break away.
 
 Mara backs behind a stone loading post before the fight begins.
 
@@ -665,7 +665,7 @@ Mara backs behind a stone loading post before the fight begins.
 The transition must use explicit controls:
 
 1. **Call out whoever is hiding behind the crates.** This reveals both enemies and displays the battle setup.
-2. **Fight the Briar Cargo Runner and Seal-Forged Sentry.** This starts combat. The alternate control is **Back away before they attack.**
+2. **Fight the Briar Cargo Runner and Seal-Forged Sentry before he can escape.** This starts combat. The alternate control is **Back away before the runner and sentry attack.**
 
 Do not use a generic action such as “Clear the Cargo Siding” to start the encounter. The player must know that the next click begins a fight.
 
@@ -677,25 +677,25 @@ Do not use a generic action such as “Clear the Cargo Siding” to start the en
 
 The Seal-Forged Sentry collapses into wet wax, snapped cord, and paper that has forgotten how to stand up.
 
-The Cargo Runner looks once toward the old rail tunnel, then toward the open gate far above.
+The Cargo Runner is disarmed and driven to one knee. The fight is won, but he is not bound. He looks once toward the old rail tunnel, then toward the open gate far above.
 
-“You think truth makes people safe?” they say. “Truth makes them choose. That is worse.”
+“You think truth makes people safe?” he says. “Truth makes people choose. That is worse.”
 
-They throw a fistful of crown-red powder into a lantern shutter.
+He throws a fistful of crown-red powder into a lantern shutter and bolts toward the service passage.
 
 ### Runner captured outcome
 
 Available only if the service passage was discovered and covered before combat.
 
-The powder fails to catch. Quill's repaired shutter closes with a sharp click, and Bramwell's gatekeepers step through the smoke.
+The player signals Quill to close the prepared escape route. The powder fails to catch. Quill's repaired shutter closes with a sharp click, and Bramwell's gatekeepers step through the smoke to bind the runner.
 
 > “Then you can choose to answer questions,” Bramwell says.
 
 ### Runner escape outcome
 
-The shutter cracks. By the time the smoke clears, the runner has vanished into a service passage, leaving behind a torn transfer tag.
+The player secured the evidence without preparing the service passage. By the time the smoke clears, the runner has vanished west through that uncovered route, leaving behind a torn transfer tag. The defeated Seal-Forged Sentry and all of the crate evidence remain behind.
 
-> “They ran west,” Mara says. “That means west is still a direction, not an answer.”
+> “He ran west,” Mara says. “That means west is still a direction, not an answer.”
 
 ### Converged evidence
 
@@ -746,7 +746,7 @@ Mara starts to answer, but Noma lifts a hand—not to silence her, only to make 
 
 Quill sets the cracked crown slat beside the evidence.
 
-“They did not beat the gate,” they say. “They learned which parts of us were afraid and made a key out of that.”
+“The Briar Crown did not beat the gate,” he says. “Its people learned which parts of us were afraid and made a key out of that.”
 
 ### Player choices
 
@@ -764,7 +764,7 @@ These are three framings of the same guarded Bramblecross compact, not three dif
 
 ### Response: Noma right
 
-> Noma inclines their head. “Truth is not the same as throwing every door open.”
+> Noma inclines her head. “Truth is not the same as throwing every door open.”
 >
 > “No,” you say. “It is warning people before they walk into a trap, then giving them shelter and water when they need it.”
 
@@ -780,21 +780,37 @@ Bramwell looks at the old road phrase for a long time.
 
 Noma's expression softens.
 
-“Roots hold fast,” they say. “They also share water.”
+“Then name what changes—and what does not,” she says.
+
+Bramwell looks to the player instead of pretending to know a town he has not visited in sixty years.
+
+“You know Bramblecross,” he says. “Who should receive Westroot's first warning, and whose name should we trust on the first outside account?”
+
+The player may name Enna, Captain Hollis, Mayor Anwen, or all three. Each answer identifies why that person is trustworthy: Enna tests records, Hollis can bind the watch to the compact, and Anwen can answer for Bramblecross publicly.
 
 Bramwell turns to the hall.
 
-“Westroot restores one surface compact: Bramblecross, because this party supplied named people and records against which the next claim can be checked. The First Gate stays guarded. People and cargo require a named outside account, inside confirmation, checkpoint sanitation, and witnesses. Warning, shelter, and water signals travel outward again. For now, Enna, Captain Hollis, and their named watch or courier contacts receive the route. No other former partner is readmitted by this order.”
+“Westroot restores one surface compact: Bramblecross.”
 
-Quill copies the decision, folds the first warning for Enna, and shoulders a courier satchel.
+The room answers with a single audible gasp, then swells with murmurs and questions: the surface, after sixty years, and what may now reach the First Gate.
 
-“If a compact is real,” they say, “someone has to carry its first message.”
+Bramwell raises one hand for silence. He explains that the compact does not throw Westroot open: the First Gate stays guarded; people and cargo still require named outside accounts, inside confirmation, checkpoint sanitation, and witnesses; no other former partner is readmitted. The change gives Westroot honest Bramblecross contacts who can verify seals, compare records, carry warnings, and answer shelter and water calls. Isolation let the false Willow shipment use trust from both towns while neither could compare the claim.
+
+Bramwell then looks across the repaired table to Noma.
+
+“Noma has argued for a witnessed surface compact longer than I have enjoyed hearing it,” he says. “She was right. Caution without an honest neighbor became a wall around our own blind side.”
+
+Noma's smile is small and unmistakable.
+
+“I will try not to enjoy hearing that too much.”
+
+Quill copies the decision, folds the first warning for the contact named by the player, and shoulders a courier satchel.
+
+“If a compact is real,” he says, “someone has to carry its first message.”
 
 Quill leaves for the First Gate. The decision has become visible action.
 
-There is no cheer. The decision is too new and too costly for that.
-
-But Auntie Lume sets a basket of rootbread on the table, and people begin taking pieces. It is the closest thing Westroot has to a vote of confidence.
+Auntie Lume sets a basket of rootbread on the table, and people begin taking pieces. It is the closest thing Westroot has to a vote of confidence.
 
 Mara picks up a piece, breaks it in half, and gives one half to the nearest gatekeeper.
 

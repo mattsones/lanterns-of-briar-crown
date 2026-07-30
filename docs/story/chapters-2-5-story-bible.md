@@ -721,7 +721,7 @@ Young Stonekin craftsperson, curious and more open to outsiders.
 
 ### Auntie Lume
 
-Mossback cook/herbalist who feeds everyone before deciding whether to trust them.
+Mossback cook/herbalist who feeds everyone before deciding whom she trusts.
 
 ### Briar Crown infiltrator
 
@@ -761,7 +761,7 @@ The renewal authorizes a witnessed investigation of the Cargo Siding. It is the 
 
 ## Side Thread: The Rootbread Promise
 
-Auntie Lume explains that her young helper served the ordinary Rootbread tray to an unnamed hooded courier during the false Willow transfer three nights earlier. The player returns to the First Gate Transfer Checkpoint, learns why the handlers accepted the routine tray, and hears how the child set aside an unfamiliar returned cup. Mara identifies Lio's hooked knot in the blue courier thread tied around it.
+Auntie Lume explains that her young helper served the ordinary Rootbread tray to an unnamed hooded courier during the false Willow transfer three nights earlier. The player returns to the First Gate Transfer Checkpoint and hears how the girl saw Lio use the ordinary tray routine to hide an unfamiliar blue-thread knot on the returned cup. Mara identifies Lio's hooked knot in the thread tied around it.
 
 The player and Mara restock the checkpoint tray for the next person held there. The action continues Westroot's promise that a guarded boundary may delay passage without making a hungry traveler invisible; it does not retroactively feed Lio or use the retired sealed-hatch scene.
 
@@ -804,8 +804,10 @@ Westroot's isolation prevented it from checking the Willow claim against Bramble
 ## Chapter 3 End State
 
 - The party earns enough trust for Westroot to act on its evidence.
-- Split Hall restores one guarded surface compact with Bramblecross using named accounts, inside confirmation, checkpoint sanitation, witnesses, outward warnings, and limited contacts.
-- Quill physically carries the first named warning to Enna.
+- Split Hall restores one guarded surface compact with Bramblecross using named accounts, inside confirmation, checkpoint sanitation, witnesses, outward warnings, and limited contacts. The hall audibly reacts to the enormity of ending sixty years without a surface compact.
+- The player names Enna, Captain Hollis, Mayor Anwen, or all three as the first trusted Bramblecross contact.
+- Bramwell explains how shared verification makes both towns harder to deceive and publicly credits Noma for arguing that witnessed contact can strengthen caution.
+- Quill physically carries the first named warning to the chosen contact.
 - The party finds evidence of a Briar Crown cell.
 - The identity and reach of the inside procedural source remain unsettled.
 - Lio’s trail points deeper into the old road network.

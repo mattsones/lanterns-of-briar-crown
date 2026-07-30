@@ -26,7 +26,7 @@ Three nights before Liam's party arrives, the false convoy enters through the Fi
 
 The convoy first stops at the Transfer Checkpoint on the broad inner landing of the First Gate. This is where Westroot washes and inspects admitted travelers and cargo, then compares outside papers with its own account before permitting movement beyond the threshold. While the handlers wait, Lio scratches his hook-tailed mark at the gate: **Alive past this point. Do not trust the straight road.**
 
-A Mossback child helping Auntie Lume serves the checkpoint's ordinary rootbread tray. Every person held there receives bread and water, even before Westroot decides whether to admit them. The Briar handlers allow the routine because refusing Westroot hospitality would make their transfer conspicuous. Lio eats, ties blue courier thread around the cup in his hooked knot, and returns it on the tray. The child sets the unfamiliar cup aside at the checkpoint.
+A Mossback girl helping Auntie Lume serves the checkpoint's ordinary rootbread tray. Every person held there receives bread and water, even before Westroot decides on admission. The Briar handlers allow the routine because refusing Westroot hospitality would make their transfer conspicuous. Lio eats, ties blue courier thread around the cup in his hooked knot, and returns it on the tray. The girl sets the unfamiliar cup aside at the checkpoint.
 
 The convoy moves Lio through the Lower West Gate toward Briarhold Waystation. The crate remains in Cargo Siding with forged orders, seal tools, restraints, route-scratching tools, Lio's confiscated pouch, and the transfer tag that reduced him to a freight entry.
 

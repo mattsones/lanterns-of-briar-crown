@@ -85,9 +85,9 @@ Mood: cautious hospitality, dependable craft, hidden-community responsibility, a
 **Target runtime folder:** `assets/portraits/characters/`
 
 ```text
-Create a vertical half-body portrait of Noma Greenstill, the Mossback memory-keeper of Westroot's Mossgarden in Chapter 3 of Liam's Game. Noma is calm, observant, gender-neutral in presentation, warmly rooted, and old-road wise without being mystical for its own sake or spooky.
+Create a vertical half-body portrait of Noma Greenstill, the female Mossback memory-keeper of Westroot's Mossgarden in Chapter 3 of Liam's Game. Noma is calm, observant, practical in presentation, warmly rooted, and old-road wise without being mystical for its own sake or spooky.
 
-Make their Mossback ancestry clear through living moss, bark-soft texture, small braided roots, and gentle natural adornments rather than a costume or a monster design. Show Noma kneeling or standing beside a shallow stone water channel, old witness tablets, a soft gold-green moss lantern, and a small cup or brush used to clean old route marks. Their expression should be patient and firm: a person who knows the difference between fear and evidence, and makes room for both.
+Make her Mossback ancestry clear through living moss, bark-soft texture, small braided roots, and gentle natural adornments rather than a costume or a monster design. Show Noma kneeling or standing beside a shallow stone water channel, old witness tablets, a soft gold-green moss lantern, and a small cup or brush used to clean old route marks. Her expression should be patient and firm: a woman who knows the difference between fear and evidence, and makes room for both.
 
 Mood: patient witness, community care, gentle old magic, clear-eyed hospitality. Use moss green, lantern gold, warm stone gray, and restrained earth tones.
 ```
@@ -98,9 +98,9 @@ Mood: patient witness, community care, gentle old magic, clear-eyed hospitality.
 **Target runtime folder:** `assets/portraits/characters/`
 
 ```text
-Create a vertical half-body portrait of Quill Pebbleturn, a young Stonekin craftsperson and record-keeper in Westroot's Rootmarket in Chapter 3 of Liam's Game. Quill is small, clever, precise, curious about surface inventions, a little overburdened by notes, and quietly funny. They should not look like a generic tiny dwarf or a fantasy librarian stereotype.
+Create a vertical half-body portrait of Quill Pebbleturn, a young male Stonekin craftsperson and record-keeper in Westroot's Rootmarket in Chapter 3 of Liam's Game. Quill is small, clever, precise, curious about surface inventions, a little overburdened by notes, and quietly funny. He should not look like a generic tiny dwarf or a fantasy librarian stereotype.
 
-Show Quill repairing a small brass lantern shutter with a tiny exacting tool while holding or surrounded by non-readable route-symbol pebbles, charcoal slips, and a compact stone drawer of repair parts. Include Rootmarket details in soft focus: a modest awning, jars, a carved stone toy, a rain barrel, warm root-and-stone architecture, and gold-green moss-lantern light. Their face should look focused first, then surprised and amused to notice an unexpected guest.
+Show Quill repairing a small brass lantern shutter with a tiny exacting tool while holding or surrounded by non-readable route-symbol pebbles, charcoal slips, and a compact stone drawer of repair parts. Include Rootmarket details in soft focus: a modest awning, jars, a carved stone toy, a rain barrel, warm root-and-stone architecture, and gold-green moss-lantern light. His face should look focused first, then surprised and amused to notice an unexpected guest.
 
 Mood: practical intelligence, local optimism, careful engineering, keeper of small truths. Keep the silhouette and hands clear enough to read in a dialogue card.
 ```
@@ -111,7 +111,7 @@ Mood: practical intelligence, local optimism, careful engineering, keeper of sma
 **Target runtime folder:** `assets/portraits/characters/`
 
 ```text
-Create a vertical half-body portrait of Auntie Lume, the Mossback cook and herbalist of Westroot in Chapter 3 of Liam's Game. Lume feeds a frightened traveler before deciding whether she trusts them, but never confuses hospitality with naivete. She is warm, brisk, lightly formidable, and the person who can scold a council without raising her voice.
+Create a vertical half-body portrait of Auntie Lume, the Mossback cook and herbalist of Westroot in Chapter 3 of Liam's Game. Lume feeds a frightened traveler before deciding whether she trusts that traveler, but never confuses hospitality with naivete. She is warm, brisk, lightly formidable, and the person who can scold a council without raising her voice.
 
 Make her Mossback ancestry readable through welcoming moss, bark-soft texture, and a mossy brow tied back with a mustard-yellow scarf. Give her a sturdy practical apron with flour on the sleeves, a just-baked rootbread loaf or warm bread heel, a kettle steaming beside her, dried apples, cups of water, and a softly lit stone-and-root kitchen window. Avoid a witchy silhouette or a cute grandmother caricature; she should feel like an active keeper of Westroot's Rootbread Promise.
 
@@ -124,9 +124,9 @@ Mood: practical care, hidden-community warmth, old-road hospitality with a backb
 **Target runtime folder:** `assets/portraits/characters/`
 
 ```text
-Create a vertical half-body portrait of a small Mossback child from Westroot for the Rootbread Promise in Chapter 3 of Liam's Game. The child helps Auntie Lume serve the ordinary bread-and-water tray at the First Gate Transfer Checkpoint and carefully set aside a returned cup whose blue courier knot they did not recognize. They are not a comic sidekick or a fantasy mascot. They are cautious, sincere, chin lifted in genuine bravery, and proud that they followed the humane checkpoint routine before Westroot decided whether to trust the travelers.
+Create a vertical half-body portrait of a small Mossback girl from Westroot for the Rootbread Promise in Chapter 3 of Liam's Game. The girl helps Auntie Lume serve the ordinary bread-and-water tray at the First Gate Transfer Checkpoint and carefully sets aside a returned cup whose blue courier knot she does not recognize. She is not a comic sidekick or a fantasy mascot. She is cautious, sincere, chin lifted in genuine bravery, and proud that she followed the humane checkpoint routine before Westroot decided whether to trust the travelers.
 
-Make their Mossback ancestry clear and consistent with the attached approved Mossback player-character samples, while keeping them recognizably young and distinct from Noma and Auntie Lume. Give them simple practical Westroot clothes and one returned clay cup with a short blue hooked knot. Suggest the checkpoint basin, airing rack, account rail, and rootbread tray in soft focus. Their expression should combine caution, sincerity, and a child's determined courage.
+Make her Mossback ancestry clear and consistent with the attached approved Mossback player-character samples, while keeping her recognizably young and distinct from Noma and Auntie Lume. Give her simple practical Westroot clothes and one returned clay cup with a short blue hooked knot. Suggest the checkpoint basin, airing rack, account rail, and rootbread tray in soft focus. Her expression should combine caution, sincerity, and a child's determined courage.
 
 Mood: small kindness with a boundary, honest worry, practical courage, old-road hospitality passed to the next generation. No magic effects, no tragedy pose, and no exaggerated cuteness.
 ```
@@ -137,9 +137,9 @@ Mood: small kindness with a boundary, honest worry, practical courage, old-road 
 **Target runtime folder:** `assets/portraits/enemies/`
 
 ```text
-Create a square full-figure storybook fantasy enemy portrait of a Briar Cargo Runner for Chapter 3 of Liam's Game. This is a hooded human or humanoid logistics operative moving goods, messages, and people through old-road routes under stolen trust. They are quick and evasive, not a brute, not a bandit, and not a supernatural thorn guardian.
+Create a square full-figure storybook fantasy enemy portrait of a male Briar Cargo Runner for Chapter 3 of Liam's Game. He is a hooded human or humanoid logistics operative moving goods, messages, and people through old-road routes under stolen trust. He is quick and evasive, not a brute, not a bandit, and not a supernatural thorn guardian.
 
-Show a lean runner caught in motion beside low stacks of crates and old rail grooves. Give them practical mud-dark travel clothes, a short hood or scarf, a strapped parcel and route pouch, wax-stained gloves, and a small emergency pouch of crown-red powder. A green three-leaf cargo seal should be partly covered by crooked crown-red wax, but it must not contain readable text. Their face should be partly visible with a focused, uneasy look: someone who believes an order is safer than a question.
+Show a lean runner caught in motion beside low stacks of crates and old rail grooves. Give him practical mud-dark travel clothes, a short hood or scarf, a strapped parcel and route pouch, wax-stained gloves, and a small emergency pouch of crown-red powder. A green three-leaf cargo seal should be partly covered by crooked crown-red wax, but it must not contain readable text. His face should be partly visible with a focused, uneasy look: someone who believes an order is safer than a question.
 
 Use a simple Westroot Cargo Siding vignette with fitted stone, roots, and covered moss lanterns. Keep the character's silhouette clean and readable at small combat-card size. Mood: false trust in motion, organized road smuggling, quick controlled threat.
 ```
