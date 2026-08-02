@@ -19,7 +19,7 @@ Preserve and evolve Liam’s Game, a storybook fantasy React/TypeScript adventur
 
 The current priority is to complete the playable, fully illustrated prototype through Chapter 5 while preserving the working Chapter 1 baseline.
 
-Chapters 1-3 have automated playable paths. Chapter 3 still needs final human pacing and uninterrupted-playthrough signoff. Chapter 4 should not begin until the closeout, ready-fixture, central-interaction graybox, and executable-contract gates in `docs/planning/chapter-4-development-process.md` are satisfied.
+Chapters 1-3 have automated playable paths, and Chapter 3 received human-playthrough signoff on 2026-08-02. The uninterrupted Chapters 1-3 playthrough is explicitly deferred to the Chapter 4 release-candidate cycle. Chapter 4 story implementation should not begin until its executable-contract and central-interaction graybox gates in `docs/planning/chapter-4-development-process.md` are satisfied.
 
 ## Read First
 

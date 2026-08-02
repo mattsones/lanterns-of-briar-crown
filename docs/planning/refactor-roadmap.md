@@ -283,8 +283,8 @@ Keep this pass small and playable. It should reduce Chapter 3 risk, not become a
 
 Current status:
 
-- Chapter 3 has a complete automated playable route and production art; final human pacing and uninterrupted-playthrough signoff remain.
-- Chapter 4 has story-bible direction but no playable implementation or canonical ready fixture yet.
+- Chapter 3 is closed as a release candidate with automated coverage, production art, human-playthrough signoff, and a canonical Chapter 4-ready fixture. The uninterrupted Chapters 1–3 endurance run is deferred to the Chapter 4 release-candidate cycle.
+- Chapter 4 has story-bible direction and a validated entry fixture but no playable implementation yet; its executable contract and Folded Map graybox are next.
 - Chapter 5 remains planned.
 
 Use `docs/planning/chapter-4-development-process.md` as the required process for closing Chapter 3 and starting Chapter 4. It adds an interaction-state matrix, a Folded Map graybox gate, explicit human-QA milestones, and tooling prerequisites to the general vertical-slice order below.

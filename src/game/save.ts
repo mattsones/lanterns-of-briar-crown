@@ -22,6 +22,7 @@ export const SAVE_FILE_FORMAT = "liams-game-save";
 export const SAVE_FILE_VERSION = 2;
 export const CHAPTER_2_PLAYTEST_SAVE_PATH = "/saves/chapter-2-playtest.json";
 export const CHAPTER_2_COMPLETE_SAVE_PATH = "/saves/chapter-2-complete.json";
+export const CHAPTER_3_COMPLETE_SAVE_PATH = "/saves/chapter-3-complete.json";
 
 export type DiskSaveFile = {
   format: typeof SAVE_FILE_FORMAT;

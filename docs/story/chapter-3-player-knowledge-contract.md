@@ -1,8 +1,8 @@
 # Chapter 3 Player-Knowledge Contract
 
-Last updated: 2026-07-28
+Last updated: 2026-08-02
 
-Status: Implemented acceptance contract paired with `chapter-3-story-truth.md`. The canonical script, runtime, map interaction, quest copy, art, and automated Chapter 3 playtest now carry these required facts. A fresh human comprehension playthrough remains the final release-candidate signoff.
+Status: Release-candidate acceptance contract paired with `chapter-3-story-truth.md`. The canonical script, runtime, map interaction, quest copy, art, automated Chapter 3 playtest, and human playthrough carry these required facts. Chapter 3 received owner signoff on 2026-08-02.
 
 ## Clarity Rules
 
@@ -40,13 +40,13 @@ At the checkpoint, the player can ask two short questions in either order:
 - **What did the courier look like?** The child describes a hooded young traveler whose hands were left free to sell the courier disguise while one handler held his elbow and another blocked the gate.
 - **How did Lio manage to mark the cup?** The girl explains that Lio waited until one handler turned toward the account rail, then used the ordinary tray routine to hide a blue-thread message on the returned cup.
 
-Both questions remain available until asked. The child explains that Lio pulled a short blue thread from his cuff and wound it around the returned cup. Mara identifies Lio's hooked knot, and the player chooses **Restock the tray for the next traveler**. That physical action grants the Rootbread Charm and completes with **The Rootbread Promise reached Lio**.
+Both questions remain available until asked. The child explains that Lio pulled a short blue thread from his cuff and wound it around the returned cup. Mara identifies Lio's hooked knot, and the player chooses **Restock the tray for the next traveler**. That physical action grants the wearable **Rootbread Charm** and completes with **The Rootbread Promise reached Lio**. Its healing-and-guard support is deliberately stronger than the Lantern Pin it resembles.
 
 After completion, the child marker disappears. Inspecting the First Gate may review the restocked tray and the cup entered into Westroot's witness record, but it grants no repeat reward.
 
 ## Optional-Content Boundary
 
-The Rootbread Promise should reward exploration with personal proof that Lio received care and remained resourceful. It requires a deliberate return interaction at the First Gate's Transfer Checkpoint; Lume's dialogue alone cannot complete it. A player who skips it must still learn in Cargo Siding that Lio traveled beside the convoy and was not inside the crate. Likewise, optional Split Hall testimony may add names and emotional weight, but the required path must communicate the two missed water calls and the correct private timing.
+The Rootbread Promise should reward exploration with personal proof that Lio received care and remained resourceful. It requires a deliberate return interaction at the First Gate's Transfer Checkpoint; Lume's dialogue alone cannot complete it. A player who skips it must still learn in Cargo Siding that Lio traveled beside the convoy and was not inside the crate. Chapter 4 and later critical paths must also remain completable without its flags or charm; only optional recognition or bonuses may depend on it. Likewise, optional Split Hall testimony may add names and emotional weight, but the required path must communicate the two missed water calls and the correct private timing.
 
 ## End-Of-Chapter Comprehension Check
 

@@ -1,8 +1,8 @@
 # Chapter 3 Story Truth
 
-Last updated: 2026-07-27
+Last updated: 2026-08-02
 
-Status: Approved story foundation implemented in the canonical Chapter 3 script and playable runtime, including the Witherdeath, sanitation, transfer, hold-scope, and Bramblecross-compact decisions. A fresh human comprehension playthrough remains the final release-candidate signoff.
+Status: Release-candidate story foundation implemented and human-playthrough approved, including the Witherdeath, sanitation, transfer, hold-scope, Rootbread, and Bramblecross-compact decisions.
 
 ## Westroot And Bramblecross
 

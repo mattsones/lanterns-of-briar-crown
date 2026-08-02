@@ -765,7 +765,7 @@ Auntie Lume explains that her young helper served the ordinary Rootbread tray to
 
 The player and Mara restock the checkpoint tray for the next person held there. The action continues Westroot's promise that a guarded boundary may delay passage without making a hungry traveler invisible; it does not retroactively feed Lio or use the retired sealed-hatch scene.
 
-Implemented reward: **Rootbread Charm**, a carried reminder of the witnessed promise rather than a self-acting magical object.
+Implemented reward: **Rootbread Charm**, a wearable healing-and-guard trinket that is deliberately stronger than the Lantern Pin. Its gameplay effect abstracts courage and remembered care rather than literal self-acting magic. Later chapters may recognize it for optional bonuses, but no critical path may require it.
 
 ## Main Investigation: Willow-Sealed Cargo
 
@@ -860,7 +860,7 @@ The party already carries the useful core of Edden's drawings from the Chapter 2
 
 ### Westroot Lower Gate
 
-A guarded old passage that Westroot has not used in years.
+A guarded old passage that Westroot has not used in years. Before the party commits to the Underway, a Westroot smith/gatewright must provide nearby weapon service or a credible new-weapon path so progression does not require backtracking to Hearthhollow. This is an early Chapter 4 executable-contract requirement, not a durability system.
 
 ### The Underway
 
@@ -1521,7 +1521,7 @@ A small stone charm from the Westroot Gate. Possible bonus to Will or Wit.
 ## Chapter 3
 
 **Rootbread Charm**  
-A story token of Westroot hospitality and the witnessed promise. It need not carry literal magic; any gameplay bonus can abstract the courage or care it represents.
+A wearable support trinket of Westroot hospitality and the witnessed promise. Its healing-and-guard skill is stronger than the Lantern Pin; the effect abstracts courage and care rather than literal magic. It remains optional for every later critical path.
 
 **Witness Stone Rubbing**  
 Quest item/lore item. Helps decode later road marks.

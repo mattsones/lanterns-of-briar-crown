@@ -362,7 +362,7 @@ These have also been cleaned and promoted into the item-art registry so Chapter 
 
 | Item | Selected asset | Notes |
 |---|---|---|
-| Rootbread Charm | `assets/icons/items/rootbread-charm-icon-v01.png` | Production-ready hospitality token; distinct warm bread-and-knot silhouette. |
+| Rootbread Charm | `assets/icons/items/rootbread-charm-icon-v01.png` | Production-ready wearable support trinket; distinct warm bread-and-knot silhouette, with stronger healing/guard utility than the Lantern Pin. |
 | Witness Stone Rubbing | `assets/icons/items/witness-stone-rubbing-icon-v02.png` | Selected correction: a loose charcoal crown-mark rubbing, not a book. |
 | Cargo Transfer Tag | `assets/icons/items/cargo-transfer-tag-icon-v02.png` | Selected correction: a tied freight tag with a seal, not a scroll. |
 

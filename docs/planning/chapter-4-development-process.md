@@ -1,8 +1,8 @@
 # Chapter 4 Development Process
 
-Last updated: 2026-07-21
+Last updated: 2026-08-02
 
-Status: approved process plan; execute after Chapter 3 human signoff
+Status: Chapter 3 human signoff and readiness fixture complete; Chapter 4 executable-contract work is next
 
 This document turns the Chapter 2 and Chapter 3 development retrospective into the working process for Chapter 4, **The Riddle Road**. It complements the Chapter 4 story direction in `docs/story/chapters-2-5-story-bible.md`; it does not replace the future Chapter 4 story script or vertical-slice contract.
 
@@ -19,7 +19,7 @@ The process should preserve the working Chapters 1-3 baseline, keep changes revi
 - Chapter 2 implementation ran for 17 commits from initiation through the wrapped prototype, with approximately 8,272 inserted lines and 426 removed lines. During that span, `src/App.tsx` grew from about 3,300 to 5,465 lines and the dedicated Chapter 2 browser suite grew from nothing to more than 500 lines.
 - The three-commit post-Chapter 2 hardening pass briefly reduced `src/App.tsx` to about 5,333 lines while adding the ready fixture, story extraction, typed flags, migrations, validators, QA helpers, and the optimized asset workflow.
 - Chapter 3 and its cross-chapter playtest polish added 16 commits after the stable pre-Chapter 3 baseline. `src/App.tsx` is now approximately 7,200 lines, while the Chapter 3 browser suite has grown to 10 focused tests and roughly 600 lines.
-- The synced Chapter 3 branch currently passes 103 automated tests across rules, Chapters 1-3, and smoke. The full local `verify` command takes approximately 399 seconds, which supports separate fast, affected-chapter, and full verification tiers.
+- The Chapter 3 release-candidate branch passes 107 automated tests across rules, Chapters 1-3, and smoke. The 2026-08-02 full local `verify` run took 430 seconds, which supports separate fast, affected-chapter, and full verification tiers.
 
 ### What Chapter 2 taught us
 
@@ -66,9 +66,9 @@ Human playtesting found issues that the first automated golden path could not ju
 - Browser coverage is strong but the full local `verify` run takes about six and a half minutes.
 - Tests repeat checkpoint construction, storage loading, movement, and dialogue-navigation helpers.
 - Many browser paths navigate through exact story copy, so prose polish causes avoidable test churn.
-- GitHub Actions currently omits the Chapter 3 Playwright suite even though local `verify` includes it.
+- GitHub Actions includes the Chapter 3 Playwright suite.
 - The asset audit reports over-budget files but does not fail CI.
-- There is no canonical Chapter 3-complete / Chapter 4-ready fixture yet.
+- The canonical Chapter 3-complete / Chapter 4-ready fixture is checked in and validated by the rules suite.
 
 These are Chapter 4 process inputs, not reasons for a broad rewrite.
 
@@ -102,17 +102,16 @@ Only the release-candidate milestone should be described as Chapter 4 complete.
 
 Do not start Chapter 4 implementation until these gates are resolved:
 
-- [ ] Human-play Chapter 3 end to end at desktop width.
-- [ ] Human-play Chapter 3 at approximately 430x932.
-- [ ] Run one uninterrupted Chapters 1-3 session with the map-first shell.
+- [x] Human-play Chapter 3 end to end; owner signoff recorded on 2026-08-02. Prior automated browser QA covered desktop and phone widths, and no separate second human viewport pass is required for this release candidate.
+- [ ] Run one uninterrupted Chapters 1-3 session with the map-first shell. **Deferred by owner to the Chapter 4 release-candidate cycle; not a Chapter 3 blocker.**
 - [x] Replace `witness-stones-public-renewal-scene-v02.webp` with the selected v03 public-renewal illustration showing Bramwell and Noma opening the hold, Quill recording the order, and neighbors taking responsibility at the four stones while preserving the established symbols and fallback-safe wiring.
-- [ ] Decide which remaining Chapter 3 findings block a release candidate.
-- [ ] Create a canonical `public/saves/chapter-3-complete.json` fixture.
-- [ ] Verify that the fixture satisfies every Chapter 4 entry requirement.
-- [ ] Integrate the Chapter 3 branch into the agreed stable branch.
-- [ ] Mark a Chapter 3 release-candidate commit or tag.
+- [x] Decide which remaining Chapter 3 findings block a release candidate: none. Cross-chapter endurance testing is deferred as noted above.
+- [x] Create a canonical `public/saves/chapter-3-complete.json` fixture.
+- [x] Verify that the fixture satisfies every Chapter 4 entry requirement, both with canonical Rootbread completion and with all optional Rootbread state removed.
+- [x] Integrate the Chapter 3 branch into the agreed stable branch (`main`, 2026-08-02).
+- [x] Mark the Chapter 3 release candidate with tag `chapter-3-rc.1`.
 
-The ready fixture should represent the required Chapter 3 ending without relying on the user-provided endpoint save or leaving its optional Rootbread state ambiguous. If optional completion materially affects Chapter 4, keep a second focused fixture rather than overloading the canonical one.
+The ready fixture represents the required Chapter 3 ending without relying on the user-provided endpoint save. Canonically, the Rootbread Promise is complete and its wearable charm is owned but not auto-equipped. The executable validator deliberately removes all Rootbread state and still accepts the save as Chapter 4 ready; only optional recognition or bonuses may depend on that side thread.
 
 ## Phase 1 — Define The Executable Chapter Contract
 
@@ -120,6 +119,7 @@ Create a Chapter 4 vertical-slice contract before implementing scenes. It should
 
 - chapter promise and non-goals;
 - entry requirements and checked-in starting fixture;
+- early access to a Westroot smith/gatewright or equivalent new-weapon path before the Underway, without requiring a return to Hearthhollow or adding weapon durability;
 - critical path and optional porter path;
 - map regions and required landmarks;
 - required items, enemies, and fallback art;
@@ -233,8 +233,8 @@ Before the release candidate:
 
 ### Priority 0 — Before Chapter 4 content
 
-- [ ] Add the canonical Chapter 3-complete / Chapter 4-ready fixture.
-- [ ] Add Chapter 3 to GitHub Actions; add Chapter 4 when its suite exists.
+- [x] Add the canonical Chapter 3-complete / Chapter 4-ready fixture.
+- [x] Add Chapter 3 to GitHub Actions; add Chapter 4 when its suite exists.
 - [ ] Split local verification into fast, affected-chapter, and full gates.
 - [ ] Add a reusable Playwright fixture helper for checkpoint construction and loading.
 - [ ] Add stable `sceneId` and `choiceId` test hooks so navigation tests do not depend on final prose.

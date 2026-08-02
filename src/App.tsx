@@ -73,6 +73,7 @@ import { runGameQaChecks } from "./game/qa";
 import {
   CHAPTER_2_PLAYTEST_SAVE_PATH,
   CHAPTER_2_COMPLETE_SAVE_PATH,
+  CHAPTER_3_COMPLETE_SAVE_PATH,
   formatDiskSaveFilename,
   getSavePayload,
   parseCheckpointPayload,
@@ -6692,6 +6693,12 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       "Chapter 2 complete save is missing.",
       "Chapter 2 complete save could not be loaded.",
     );
+  const loadChapter3CompleteSave = () =>
+    loadCheckedInSave(
+      CHAPTER_3_COMPLETE_SAVE_PATH,
+      "Chapter 3 complete save is missing.",
+      "Chapter 3 complete save could not be loaded.",
+    );
   const saveToSlot = (slotId) => {
     const name =
       (saveNameDrafts[slotId] || "").trim() ||
@@ -6757,6 +6764,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
               <Button onClick={loadChapter2CompleteSave}>
                 Begin Chapter 3 Playtest
               </Button>
+              <Button onClick={loadChapter3CompleteSave}>
+                Review Chapter 3 Complete Save
+              </Button>
             </div>
           </div>
         </div>
@@ -6773,6 +6783,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
             importFromDisk={importSaveFromDisk}
             loadChapter2PlaytestSave={loadChapter2PlaytestSave}
             loadChapter2CompleteSave={loadChapter2CompleteSave}
+            loadChapter3CompleteSave={loadChapter3CompleteSave}
             loadCheckpoint={() => {
               loadGame();
               setSaveModalMode(null);
@@ -7208,6 +7219,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           importFromDisk={importSaveFromDisk}
           loadChapter2PlaytestSave={loadChapter2PlaytestSave}
           loadChapter2CompleteSave={loadChapter2CompleteSave}
+          loadChapter3CompleteSave={loadChapter3CompleteSave}
           loadCheckpoint={() => {
             loadGame();
             setSaveModalMode(null);

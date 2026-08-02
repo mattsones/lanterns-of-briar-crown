@@ -370,9 +370,10 @@ The party and child restock the ordinary tray with rootbread and water. Mara ent
 **Outcome**
 
 - Set `rootbreadPromiseKept` and `lioKnotFound`.
-- Receive the **Rootbread Charm**.
+- Receive the wearable **Rootbread Charm**. It grants a healing-and-guard skill and is a strict support upgrade over the Lantern Pin; its effect abstracts remembered care rather than a self-acting magical object.
 - The child marker disappears. Repeat inspection reviews the restocked tray and recorded cup without granting another reward.
 - The interaction proves that Lio received care and remained resourceful, but the required Cargo Siding path must still establish that he walked beside the crate rather than inside it.
+- Later chapters may acknowledge this outcome or offer an optional bonus, but their critical paths must not require the promise flags or charm.
 
 ### Auntie Lume, after completion
 

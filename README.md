@@ -4,7 +4,7 @@ A storybook fantasy adventure prototype about Hearthhollow, Lantern Road, Brambl
 
 ## Current Status
 
-Chapters 1-3 have automated playable paths in the React/TypeScript prototype. Chapter 1 remains the protected baseline, Chapter 2 is playable through the First Westroot Gate, and Chapter 3 is playable through the Westroot resolution and Chapter 4 handoff. Chapter 3 still needs final human pacing and continuous-playthrough signoff before Chapter 4 implementation begins.
+Chapters 1-3 have automated playable paths in the React/TypeScript prototype. Chapter 1 remains the protected baseline, Chapter 2 is playable through the First Westroot Gate, and Chapter 3 is closed as a release candidate through the Westroot resolution and Chapter 4 handoff. Its human playthrough is signed off; the uninterrupted Chapters 1-3 session is deliberately deferred to the Chapter 4 release-candidate cycle.
 
 Current features include:
 
@@ -36,7 +36,7 @@ The current long-term goal is a fully illustrated playable prototype through **C
 Chapter arc:
 
 1. **Chapter 2: The Westroot Trail** - playable through the Three-Sign Hollow, Crown Door Den, Roadwatcher consequences, and First Westroot Gate.
-2. **Chapter 3: The Hidden Root** - automated playable route through Westroot and its Willow-sealed cargo resolution; final human signoff remains.
+2. **Chapter 3: The Hidden Root** - release-candidate route through Westroot and its Willow-sealed cargo resolution, with human-playthrough signoff and a checked-in Chapter 4-ready fixture.
 3. **Chapter 4: The Riddle Road** - planned route following Edden's folded-map clues to Lio's message and the Briarhold lead.
 4. **Chapter 5: Briarhold Waystation** - planned rescue of Lio and reveal of the Briar Crown cell structure.
 
@@ -127,8 +127,8 @@ Visual direction:
 
 ## Short-Term Roadmap
 
-1. Human-playtest the current Chapter 3 route at desktop and phone widths, especially the two full-width ending tableaus.
-2. Run one uninterrupted human Chapter 1–3 session to catch pacing or interaction fatigue that focused automation cannot measure.
-3. Close the Chapter 3 release-candidate gate, create the Chapter 4-ready fixture, and follow `docs/planning/chapter-4-development-process.md`.
+1. Define and approve the Chapter 4 executable contract, including the early Westroot smith/gatewright access requirement.
+2. Graybox and human-test the Folded Map interaction before building the surrounding route or commissioning production art.
+3. Keep the uninterrupted human Chapters 1-3 session on the Chapter 4 release-candidate checklist.
 4. Continue the staged `src/App.tsx` extraction and address the slightly-over-500-KB main bundle as focused technical work.
 5. Continue the source-art, optimized-runtime, and fallback-safe asset workflow as later chapters land.

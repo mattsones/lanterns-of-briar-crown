@@ -4,19 +4,21 @@ This file is the starting point for Codex.
 
 Story-writing work must also follow `docs/story/writing-rules.md`. Singular characters use he/him or she/her; *they/them/their* is reserved for genuinely plural antecedents.
 
-## Latest Handoff — 2026-07-29
+## Latest Handoff — 2026-08-02
 
-The current branch is `codex/chapter-3-vertical-slice`. The latest human-feedback pass removes the unnatural question about why Lio's handlers permitted routine checkpoint food and instead asks how he marked the returned cup. Noma now invites the next question without repeating her “fear makes a loud first draft” line.
+Chapter 3 was integrated from `codex/chapter-3-vertical-slice` into `main` and marked `chapter-3-rc.1`. It received owner human-playthrough signoff and is closed as a release candidate. No remaining Chapter 3 finding is a blocker. The uninterrupted Chapters 1–3 human session was not run and is explicitly deferred to the Chapter 4 release-candidate cycle.
 
-The Cargo Siding sequence now states that the Briar Cargo Runner is one of the two fought enemies, that combat defeat does not kill or bind him, and that he attempts to flee through the visible service passage after the fight. Inspecting the ledger explicitly prepares Quill's shutter and Bramwell's gatekeepers to capture him; the post-battle choices now state that causal link.
+`public/saves/chapter-3-complete.json` is the canonical Chapter 4-ready fixture and has a title-screen review entry. Its story state canonically completes the Rootbread Promise, awards the wearable Rare Rootbread Charm, and leaves it owned but not auto-equipped. The charm grants +2 Heart, +1 Will, and Rootbread Respite; that skill heals more, grants more guard, and cools down faster than the Lantern Pin's Roadwarden's Resolve.
 
-The final Split Hall scene asks the player to name Enna, Captain Hollis, Mayor Anwen, or all three as Bramblecross's first trusted contact. Bramwell's announcement draws an audible gasp and questions from the hall, explains how shared record verification protects both communities, and publicly credits Noma for advocating a witnessed compact.
+`src/game/chapter4Readiness.ts` makes the next-chapter boundary executable. It accepts both the canonical fixture and a copy with every Rootbread flag and reward removed, so later critical paths cannot depend on this optional side thread. Optional recognition or bonuses remain allowed.
 
-Runtime and canonical Chapters 1–3 now use he/him or she/her for singular characters who previously used singular *they*. `docs/story/writing-rules.md` makes that rule explicit for future writing, and rules coverage protects the settled character decisions. Build, rules, and the full Chapter 3 suite pass after this pass. A fresh human uninterrupted playthrough remains the release-candidate signoff.
+Chapter 3 is now included in GitHub Actions. The Chapter 4 executable contract must also provide a Westroot smith/gatewright or equivalent early new-weapon path before the Underway, avoiding a forced return to Hearthhollow without introducing a durability system.
+
+The full local release gate passes: 133 production images audited, build green, 34 rules tests, 30 Chapter 1 tests, 31 Chapter 2 tests, 11 Chapter 3 tests, and 1 smoke test.
 
 ### Next Best Step
 
-Run one fresh, uninterrupted human Chapter 3 playthrough from the checked-in Chapter 2-complete fixture, concentrating on conversation pacing and whether each physical transition is immediately understandable. If that revised path receives signoff, record Chapter 3 as closed and move to the Chapter 4 readiness gates in `docs/planning/chapter-4-development-process.md`; do not begin Chapter 4 story implementation before its closeout, ready-fixture, central-interaction graybox, and executable-contract gates pass.
+Define and approve the Chapter 4 executable contract, including the smith/gatewright requirement and Rootbread-independent entry boundary. Then build and human-test the Folded Map graybox before implementing the surrounding Chapter 4 story route or commissioning final art.
 
 ## Project Summary
 

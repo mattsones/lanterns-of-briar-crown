@@ -1,6 +1,6 @@
-# Current Project Status — 2026-07-29
+# Current Project Status — 2026-08-02
 
-Branch: `codex/chapter-3-vertical-slice`
+Stable branch: `main`, integrated from `codex/chapter-3-vertical-slice`
 
 This is the concise pickup document for the current illustrated prototype. Historical implementation notes remain in `docs/codex-handoff.md`; the detailed dialogue-art inventory remains in `docs/planning/dialog-stock-icon-replacement-plan.md`.
 
@@ -9,7 +9,8 @@ This is the concise pickup document for the current illustrated prototype. Histo
 - Chapters 1, 2, and 3 have automated playable paths.
 - Chapter 1 remains the protected baseline and now includes the full queued human-playtest polish pass.
 - Chapter 2 is complete through the Westroot gate and retains clean, standard, and messy puzzle outcomes.
-- Chapter 3 includes the full Westroot route through Rootmarket, the Rootbread Promise, Witness Stones, Cargo Siding, Split Hall, and the Chapter 4 handoff.
+- Chapter 3 is closed as a release candidate after an owner-played human run through Rootmarket, the Rootbread Promise, Witness Stones, Cargo Siding, Split Hall, and the Chapter 4 handoff.
+- The uninterrupted human Chapters 1–3 run was not performed and is explicitly deferred to the Chapter 4 release-candidate cycle.
 - Chapter 4 has not been implemented as a playable chapter yet.
 
 ## Current UX
@@ -30,6 +31,9 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 
 ## Recent Playtest And Story Decisions
 
+- The August 2 closeout records Chapter 3 human-playthrough signoff with no remaining Chapter 3 blocker. `public/saves/chapter-3-complete.json` is the canonical Chapter 4-ready state and can be opened from the title screen.
+- Canonically, Liam completed the Rootbread Promise. Its reward is now a wearable Rare support trinket whose healing, guard, and cooldown are all better than the Lantern Pin's. Chapter 4 readiness is separately tested with all Rootbread flags and inventory removed, so later critical paths cannot require it; optional recognition or bonuses may.
+- Chapter 4 must introduce a nearby Westroot smith/gatewright or equivalent new-weapon path before the Underway so the player is not sent back to Hearthhollow for weapon progression.
 - The July 29 Chapter 3 pass clarifies the Rootbread cup question and both Cargo Runner outcomes, adds a player-selected Bramblecross contact, gives the sixty-year compact announcement a visible public reaction and concrete rationale, and lets Bramwell publicly acknowledge that Noma's witnessed-contact argument was right.
 - Singular characters in Chapters 1–3 now use he/him or she/her in runtime and canonical writing. `docs/story/writing-rules.md` records the rule and the settled character assignments for future work.
 - Chapter 3 now implements its approved story-foundation package in playable canon. The Transfer Checkpoint, scheduled-convoy versus unscheduled-arrival distinction, Lio's movement beside the crate, scoped holds and reopenings, first restored Bramblecross compact, and Quill's outward warning are all on the required path.
@@ -106,10 +110,10 @@ Complete one fresh uninterrupted human Chapter 3 replay on the revised build. If
 
 ```text
 npm.cmd run build                 passed
-npm.cmd run test:rules            32 passed
+npm.cmd run test:rules            34 passed
 npm.cmd run playtest:chapter1     30 passed
 npm.cmd run playtest:chapter2     31 passed
-npm.cmd run playtest:chapter3     10 passed
+npm.cmd run playtest:chapter3     11 passed
 npm.cmd run playtest:smoke         1 passed
 npm.cmd run audit:assets          133 images scanned; largest assets within targets
 git diff --check                 passed (Windows line-ending warnings only)
@@ -142,7 +146,7 @@ Art/map work in this priority:
 - complete the already-planned public Witness Stones renewal artwork;
 - preserve current fallback-safe wiring and map navigation.
 
-Automated coverage and desktop/phone browser QA are complete. A fresh human comprehension playthrough remains the final signoff before Priority 2 or Chapter 4 work.
+Automated coverage, desktop/phone browser QA, and the owner human playthrough are complete. Chapter 3 received release-candidate signoff on 2026-08-02.
 
 ### Priority 2: Non-Cosmic Consistency Pass
 
@@ -183,9 +187,8 @@ Do not force the Saltwake War, Cinder Vale diaspora, Sea-Peace marriage, Fostere
 
 ### 1. Human Playtesting
 
-1. Play Chapter 3 end to end at desktop width and at approximately 430×932. Focus on pacing, choice clarity, and the deliberate full-width treatment of the Split Hall and Mossgarden ending tableaus.
-2. Do one uninterrupted Chapter 1–3 playthrough with the new map-first shell. Automated paths are green, but a continuous human session may expose fatigue, drawer/sheet friction, or poorly timed feedback.
-3. Tune individual Root Cellar room masks only if playtesting shows a chamber revealing too early or leaving important room art hidden.
+1. During the Chapter 4 release-candidate cycle, do the deferred uninterrupted Chapter 1–3 playthrough before continuing through Chapter 4. This is cross-chapter endurance coverage, not a reopened Chapter 3 blocker.
+2. Tune individual Root Cellar room masks only if later playtesting shows a chamber revealing too early or leaving important room art hidden.
 
 ### 2. Finish The Stock-Icon Migration
 
@@ -198,16 +201,14 @@ Use `docs/planning/dialog-stock-icon-replacement-plan.md` as the inventory.
 
 ### 3. Story Follow-Ups
 
-1. Run a fresh human comprehension playthrough of the implemented Chapter 3 player-knowledge contract before beginning the non-cosmic consistency pass.
-2. Run the focused non-cosmic language pass listed in `docs/story/historical-backdrop-integration-audit.md` through runtime, canonical scripts, Chapters 4–5 plans, and art direction.
-3. Add the Great Survey as a Chapter 2 evidence object and unlock the penciled Westroot version only after Chapter 3; optimize the image before runtime import.
-4. Give Healing Fizzpop's mint-green hair a later comedic payoff. Decide first whether it is one scripted callback, a temporary status flag, or recurring NPC reactivity.
-5. Run a final character-name consistency pass across older planning documents. Runtime intent is Elder Brynn, Sela of the Loom, Mara Brindle, Enna, Hollis, and Ada Willowmarket; legacy asset filenames should not dictate story names.
-6. Human-playtest the revised Chapter 3 ending before implementing Chapter 4.
+1. Run the focused non-cosmic language pass listed in `docs/story/historical-backdrop-integration-audit.md` through runtime, canonical scripts, Chapters 4–5 plans, and art direction.
+2. Add the Great Survey as a Chapter 2 evidence object and unlock the penciled Westroot version only after Chapter 3; optimize the image before runtime import.
+3. Give Healing Fizzpop's mint-green hair a later comedic payoff. Decide first whether it is one scripted callback, a temporary status flag, or recurring NPC reactivity.
+4. Run a final character-name consistency pass across older planning documents. Runtime intent is Elder Brynn, Sela of the Loom, Mara Brindle, Enna, Hollis, and Ada Willowmarket; legacy asset filenames should not dictate story names.
 
 ### 4. Chapter 4 And 5 Production
 
-1. Follow `docs/planning/chapter-4-development-process.md`: finish Chapter 3 human signoff, create the canonical Chapter 4-ready fixture, define the executable contract, and validate the Folded Map graybox before full implementation.
+1. Follow `docs/planning/chapter-4-development-process.md`: define the executable contract, include early Westroot smith/gatewright access, and validate the Folded Map graybox before full implementation. Chapter 3 signoff and the canonical ready fixture are complete.
 2. Implement the Chapter 4 playable route from the existing Chapter 3 handoff before expanding Chapter 5.
 3. Produce the tracked Chapter 4–5 story-item and enemy art only after the relevant interaction and map topology settle: Folded Map Scrap, Lanternwell Drop, True Seal Fragment, Briar Chain Link, Lio's Courier Knot, Briar Relay Guard, Crown Whisperer, Bracken Voss, Thornseal Guard, and Thornroot Sentry.
 4. Continue using the source-art/alternate/runtime asset workflow and retain fallbacks until each asset passes in-game QA.
@@ -229,4 +230,4 @@ npm.cmd run build
 npm.cmd run test:rules
 ```
 
-Then use the title-screen Chapter 2 and Chapter 3 playtest entries for focused testing instead of replaying earlier chapters. There is not yet a canonical Chapter 3-complete / Chapter 4-ready fixture; creating and validating it is the first implementation prerequisite in `docs/planning/chapter-4-development-process.md`.
+Use the title-screen Chapter 2, Chapter 3, and **Review Chapter 3 Complete Save** entries for focused testing instead of replaying earlier chapters. The canonical Chapter 4-ready fixture is `public/saves/chapter-3-complete.json`; the executable Chapter 4 contract and Folded Map graybox are next.

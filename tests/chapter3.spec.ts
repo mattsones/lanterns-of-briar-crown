@@ -48,6 +48,16 @@ async function navigateWestroot(page, start, target, { holdOpen = false } = {}) 
   throw new Error(`No Westroot route from ${startKey} to ${targetKey}`);
 }
 
+test("the title screen loads the canonical Chapter 4-ready fixture", async ({ page }) => {
+  await page.addInitScript(() => window.localStorage.clear());
+  await page.goto("/");
+  await page.getByRole("button", { name: "Review Chapter 3 Complete Save" }).click();
+
+  await expect(page.getByRole("heading", { name: MAPS.westrootHub.name })).toBeVisible();
+  await expect(page.getByText(/Goal: Chapter 3 Complete/)).toBeVisible();
+  await expect(page.getByText("Loaded Chapter 3 Complete - Chapter 4 Ready.")).toBeVisible();
+});
+
 test("the Witness Stone hold blocks its path until Split Hall removes it", async ({ page }) => {
   const payload = buildChapter3CargoCheckpoint();
   payload.position = { x: 5, y: 0 };

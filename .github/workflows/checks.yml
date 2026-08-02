@@ -41,5 +41,8 @@ jobs:
       - name: Chapter 2 golden paths
         run: npm run playtest:chapter2
 
+      - name: Chapter 3 golden paths
+        run: npm run playtest:chapter3
+
       - name: Smoke playtest
         run: npm run playtest:smoke

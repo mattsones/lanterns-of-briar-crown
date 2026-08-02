@@ -20,6 +20,7 @@ import {
 } from "../src/data/artworkPlan";
 import { PLAYER_HERO_ARTWORK, getPlayerArtworkBySelection } from "../src/data/playerArtwork";
 import { ITEM_DB } from "../src/data/items";
+import { SKILL_DB } from "../src/data/skills";
 import { ITEM_ARTWORK } from "../src/data/itemArtwork";
 import { HERO_GROWTH_ARTWORK } from "../src/data/growthArtwork";
 import { MAPS, TILE_META } from "../src/data/maps";
@@ -32,7 +33,7 @@ import {
   getNavigationDestination,
   getNavigationNodeKeys,
 } from "../src/data/mapVisuals";
-import { gainItem, getDefaultBattlePouch, removeItem } from "../src/game/inventory";
+import { gainItem, getDefaultBattlePouch, itemFitsSlot, removeItem } from "../src/game/inventory";
 import {
   buildDefaultCompanion,
   buildDefaultFlags,
@@ -48,7 +49,8 @@ import {
 } from "../src/game/companions";
 import { getRegionCheckpointLabel, getVisitedKey, isBlockedInteractionTile } from "../src/game/map";
 import { getWestrootMapNpcTokens } from "../src/game/westrootMap";
-import { addBonuses } from "../src/game/stats";
+import { addBonuses, getDerivedStats } from "../src/game/stats";
+import { buildCombatSkill, getEquippedSkillIds } from "../src/game/skills";
 import { BATTLE_REWARDS } from "../src/data/battleRewards";
 import { DIALOGUE_SCENE_ART } from "../src/data/dialogueArt";
 import {
@@ -97,6 +99,7 @@ import {
 } from "../src/game/save";
 import { validateAllMapNavigationGraphs } from "../src/game/mapValidation";
 import { runGameQaChecks } from "../src/game/qa";
+import { validateChapter4ReadyPayload } from "../src/game/chapter4Readiness";
 import type { SavePayload } from "../src/game/types";
 
 test("dice helpers format notation and skill checks", () => {
@@ -639,6 +642,78 @@ test("checked-in Chapter 2 complete save is Chapter 3 ready", () => {
     "witness_note_bramblecross",
   ].forEach((id) => expect(payload.player.inventory[id]).toBeGreaterThan(0));
   Object.keys(payload.player.inventory).forEach((id) => expect(ITEM_DB[id]).toBeTruthy());
+});
+
+test("the Rootbread Charm is a wearable support upgrade over the Lantern Pin", () => {
+  const rootbreadCharm = ITEM_DB.rootbread_charm;
+  const lanternPin = ITEM_DB.lantern_pin;
+  const rootbreadSkill = SKILL_DB.rootbread_respite;
+  const lanternSkill = SKILL_DB.roadwarden_resolve;
+
+  expect(rootbreadCharm).toMatchObject({
+    rarity: "Rare",
+    slot: "trinket1",
+    bonuses: { Heart: 2, Will: 1 },
+    skills: ["rootbread_respite"],
+  });
+  expect(itemFitsSlot(rootbreadCharm, "trinket1")).toBe(true);
+  expect(itemFitsSlot(rootbreadCharm, "trinket2")).toBe(true);
+  expect(rootbreadCharm.bonuses.Heart).toBeGreaterThan(lanternPin.bonuses.Heart);
+  expect(rootbreadCharm.bonuses.Will).toBeGreaterThanOrEqual(lanternPin.bonuses.Will);
+  expect(rootbreadSkill.baseHeal).toBeGreaterThan(lanternSkill.baseHeal);
+  expect(rootbreadSkill.baseGuard).toBeGreaterThan(lanternSkill.baseGuard);
+  expect(rootbreadSkill.cooldown).toBeLessThan(lanternSkill.cooldown);
+
+  const hero = buildPlayer({ name: "Liam", gender: "Male", raceId: "human" });
+  hero.inventory.rootbread_charm = 1;
+  hero.equipment.trinket1 = "rootbread_charm";
+  const stats = getDerivedStats(hero);
+  const equippedSkill = buildCombatSkill("rootbread_respite", stats);
+  const lanternBaseline = buildCombatSkill("roadwarden_resolve", stats);
+
+  expect(getEquippedSkillIds(hero)).toContain("rootbread_respite");
+  expect(equippedSkill?.baseHeal).toBeGreaterThan(lanternBaseline?.baseHeal || 0);
+  expect(equippedSkill?.baseGuard).toBeGreaterThan(lanternBaseline?.baseGuard || 0);
+});
+
+test("checked-in Chapter 3 complete save is Chapter 4 ready without requiring Rootbread", () => {
+  const saveText = readFileSync(
+    new URL("../public/saves/chapter-3-complete.json", import.meta.url),
+    "utf8",
+  );
+  const imported = parseDiskSaveText(saveText);
+  const payload = imported.payload;
+
+  expect(imported.name).toBe("Chapter 3 Complete - Chapter 4 Ready");
+  expect(validateChapter4ReadyPayload(payload)).toEqual([]);
+  expect(getChapterProgress(payload.flags)).toMatchObject({
+    currentChapterId: 4,
+    completedChapterIds: [1, 2, 3],
+  });
+  expect(buildQuestJournal(payload.flags, payload.companion, payload.region).currentMain.id).toBe(
+    "ch3-complete",
+  );
+  expect(payload.flags.rootbreadPromiseKept).toBe(true);
+  expect(payload.player.inventory.rootbread_charm).toBe(1);
+  expect(Object.values(payload.player.equipment)).not.toContain("rootbread_charm");
+
+  const noRootbreadPayload = structuredClone(payload);
+  ([
+    "lumeMentionedRootbread",
+    "lumeAskedLio",
+    "lumeAskedHospitality",
+    "lumeAskedPromise",
+    "rootbreadLeadLearned",
+    "metRootbreadChild",
+    "rootbreadChildAskedWhen",
+    "rootbreadChildAskedSafety",
+    "rootbreadPromiseKept",
+    "lioKnotFound",
+  ] as const).forEach((flag) => {
+    noRootbreadPayload.flags[flag] = false;
+  });
+  delete noRootbreadPayload.player.inventory.rootbread_charm;
+  expect(validateChapter4ReadyPayload(noRootbreadPayload)).toEqual([]);
 });
 
 test("save migrations normalize older payloads before load", () => {
