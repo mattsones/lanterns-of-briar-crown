@@ -6,7 +6,7 @@ Story-writing work must also follow `docs/story/writing-rules.md`. Singular char
 
 ## Latest Handoff — 2026-08-02
 
-Chapter 3 was integrated from `codex/chapter-3-vertical-slice` into `main` and marked `chapter-3-rc.1`. It received owner human-playthrough signoff and is closed as a release candidate. No remaining Chapter 3 finding is a blocker. The uninterrupted Chapters 1–3 human session was not run and is explicitly deferred to the Chapter 4 release-candidate cycle.
+Chapter 3 was integrated from `codex/chapter-3-vertical-slice` into `main` and marked `chapter-3-rc.2`. (`rc.1` exposed a stale cross-platform optional-dependency lock before the CI test steps; `rc.2` includes the repaired lockfile.) It received owner human-playthrough signoff and is closed as a release candidate. No remaining Chapter 3 finding is a blocker. The uninterrupted Chapters 1–3 human session was not run and is explicitly deferred to the Chapter 4 release-candidate cycle.
 
 `public/saves/chapter-3-complete.json` is the canonical Chapter 4-ready fixture and has a title-screen review entry. Its story state canonically completes the Rootbread Promise, awards the wearable Rare Rootbread Charm, and leaves it owned but not auto-equipped. The charm grants +2 Heart, +1 Will, and Rootbread Respite; that skill heals more, grants more guard, and cools down faster than the Lantern Pin's Roadwarden's Resolve.
 

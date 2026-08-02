@@ -109,7 +109,7 @@ Do not start Chapter 4 implementation until these gates are resolved:
 - [x] Create a canonical `public/saves/chapter-3-complete.json` fixture.
 - [x] Verify that the fixture satisfies every Chapter 4 entry requirement, both with canonical Rootbread completion and with all optional Rootbread state removed.
 - [x] Integrate the Chapter 3 branch into the agreed stable branch (`main`, 2026-08-02).
-- [x] Mark the Chapter 3 release candidate with tag `chapter-3-rc.1`.
+- [x] Mark the Chapter 3 release candidate with tag `chapter-3-rc.2` (`rc.1` exposed and preceded the CI lockfile repair).
 
 The ready fixture represents the required Chapter 3 ending without relying on the user-provided endpoint save. Canonically, the Rootbread Promise is complete and its wearable charm is owned but not auto-equipped. The executable validator deliberately removes all Rootbread state and still accepts the save as Chapter 4 ready; only optional recognition or bonuses may depend on that side thread.
 
