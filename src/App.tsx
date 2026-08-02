@@ -174,6 +174,11 @@ const BattleModal = React.lazy(() =>
 const SaveModal = React.lazy(() =>
   import("./components/modals").then((module) => ({ default: module.SaveModal })),
 );
+const FoldedMapGraybox = React.lazy(() =>
+  import("./components/FoldedMapGraybox").then((module) => ({
+    default: module.FoldedMapGraybox,
+  })),
+);
 
 function shouldTriggerLanternRoadAmbush(
   region: string,
@@ -458,6 +463,7 @@ export default function LiamsGamePrototype() {
   );
   const [saveModalMode, setSaveModalMode] = useState(null);
   const [levelUpPending, setLevelUpPending] = useState(null);
+  const [foldedMapGrayboxOpen, setFoldedMapGrayboxOpen] = useState(false);
 
   useEffect(() => {
     if (!companion.id) return;
@@ -6677,8 +6683,10 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       const imported = parseDiskSaveText(await response.text());
       applyLoadedPayload(imported.payload, `Loaded ${imported.name}.`);
       setSaveModalMode(null);
+      return true;
     } catch (error) {
       setToast(error?.message || fallbackMessage);
+      return false;
     }
   };
   const loadChapter2PlaytestSave = () =>
@@ -6699,6 +6707,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       "Chapter 3 complete save is missing.",
       "Chapter 3 complete save could not be loaded.",
     );
+  const beginFoldedMapGraybox = async () => {
+    if (await loadChapter3CompleteSave()) setFoldedMapGrayboxOpen(true);
+  };
   const saveToSlot = (slotId) => {
     const name =
       (saveNameDrafts[slotId] || "").trim() ||
@@ -6766,6 +6777,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
               </Button>
               <Button onClick={loadChapter3CompleteSave}>
                 Review Chapter 3 Complete Save
+              </Button>
+              <Button className="bg-amber-500/20" onClick={beginFoldedMapGraybox}>
+                Test Folded Map Graybox
               </Button>
             </div>
           </div>
@@ -7022,6 +7036,14 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
                   ? "Bramblecross understands the shape of the threat. Westroot is the next lead."
                   : "You found the deeper route. Bring what you discovered back to Hollis and Enna."}
             </div>
+            {flags.chapterThreeClear && !flags.chapterFourClear ? (
+              <Button
+                className="mt-2 bg-amber-500/15"
+                onClick={() => setFoldedMapGrayboxOpen(true)}
+              >
+                Review Folded Map Graybox
+              </Button>
+            ) : null}
           </div>
         ) : null}
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_19rem] xl:grid-cols-[minmax(0,1fr)_20rem]">
@@ -7231,6 +7253,15 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           player={player}
           target={levelUpPending.target}
           choose={chooseHeroGrowth}
+        />
+      ) : null}
+      {foldedMapGrayboxOpen ? (
+        <FoldedMapGraybox
+          flags={flags}
+          setFlags={setFlags}
+          player={player}
+          setPlayer={setPlayer}
+          close={() => setFoldedMapGrayboxOpen(false)}
         />
       ) : null}
       {dialogue && !craftOpen ? (

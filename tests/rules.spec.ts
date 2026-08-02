@@ -100,6 +100,18 @@ import {
 import { validateAllMapNavigationGraphs } from "../src/game/mapValidation";
 import { runGameQaChecks } from "../src/game/qa";
 import { validateChapter4ReadyPayload } from "../src/game/chapter4Readiness";
+import {
+  claimFoldedMapCache,
+  getGatewrightOfferPrice,
+  purchaseGatewrightWeapon,
+  resolveFoldedMapPair,
+  validateChapter4Contract,
+} from "../src/game/chapter4";
+import {
+  CHAPTER_4_CONTRACT,
+  CHAPTER_4_OPTIONAL_FLAGS,
+  GATEWRIGHT_WEAPON_CONTRACT,
+} from "../src/story/chapter4";
 import type { SavePayload } from "../src/game/types";
 
 test("dice helpers format notation and skill checks", () => {
@@ -714,6 +726,128 @@ test("checked-in Chapter 3 complete save is Chapter 4 ready without requiring Ro
   });
   delete noRootbreadPayload.player.inventory.rootbread_charm;
   expect(validateChapter4ReadyPayload(noRootbreadPayload)).toEqual([]);
+});
+
+test("Chapter 4 executable contract is complete and keeps optional routes optional", () => {
+  expect(validateChapter4Contract()).toEqual([]);
+  expect(CHAPTER_4_CONTRACT.entry.fixture).toBe("/saves/chapter-3-complete.json");
+  expect(CHAPTER_4_CONTRACT.entry.requiredFlags).toContain("chapterThreeClear");
+  expect(CHAPTER_4_CONTRACT.requiredEndFlags).toContain("briarholdLeadFound");
+  expect(CHAPTER_4_CONTRACT.requiredEndFlags).not.toContain("captivePorterHelped");
+  expect(CHAPTER_4_OPTIONAL_FLAGS).toContain("captivePorterHelped");
+  expect(CHAPTER_4_CONTRACT.requiredEndFlags).not.toContain("rootbreadPromiseKept");
+  expect(GATEWRIGHT_WEAPON_CONTRACT).toMatchObject({
+    purchaseRequired: false,
+    accessRequired: true,
+    durability: false,
+    availableBeforeRegion: "underway",
+  });
+});
+
+test("Chapter 4 save migration infers prerequisite Folded Map state", () => {
+  expect(migrateFlags({ foldedMapDecoded: true })).toMatchObject({
+    chapterFourStarted: true,
+    foldedMapAttempted: true,
+    foldedMapDecoded: true,
+  });
+  expect(migrateFlags({ foldedMapDeeperSolved: true })).toMatchObject({
+    chapterFourStarted: true,
+    foldedMapAttempted: true,
+    foldedMapDecoded: true,
+    foldedMapDeeperSolved: true,
+  });
+  expect(migrateFlags({ gatewrightWeaponPurchased: true })).toMatchObject({
+    gatewrightMet: true,
+    gatewrightWeaponPurchased: true,
+  });
+});
+
+test("Folded Map state separates mistake, route decode, deeper solve, and one-time reward", () => {
+  const initial = buildDefaultFlags();
+  const cleanDecode = resolveFoldedMapPair(initial, "survey_lantern", "keeper_lantern");
+  expect(cleanDecode).toMatchObject({
+    outcome: "true-route",
+    flags: {
+      chapterFourStarted: true,
+      foldedMapAttempted: true,
+      foldedMapDecoded: true,
+    },
+  });
+  expect(cleanDecode.flags.foldedMapMaintenanceDetour).toBeUndefined();
+  expect(cleanDecode.flags.foldedMapFirstAttemptMistake).toBeUndefined();
+
+  const mistake = resolveFoldedMapPair(initial, "survey_lantern", "crown_shortcut");
+  expect(mistake).toMatchObject({
+    outcome: "false-shortcut",
+    flags: {
+      chapterFourStarted: true,
+      foldedMapAttempted: true,
+      foldedMapFirstAttemptMistake: true,
+      foldedMapMaintenanceDetour: true,
+    },
+  });
+
+  const afterMistake = { ...initial, ...mistake.flags };
+  const decoded = resolveFoldedMapPair(afterMistake, "survey_lantern", "keeper_lantern");
+  expect(decoded.outcome).toBe("true-route");
+  expect(decoded.flags.foldedMapDecoded).toBe(true);
+  expect(decoded.flags.foldedMapMaintenanceDetour).toBeUndefined();
+
+  const afterDecode = { ...afterMistake, ...decoded.flags };
+  const deeper = resolveFoldedMapPair(afterDecode, "root_arrow", "broken_bridge");
+  expect(deeper.outcome).toBe("deeper-solve");
+  expect(deeper.flags.foldedMapDeeperSolved).toBe(true);
+
+  const hero = buildPlayer({ name: "Liam", gender: "Male", raceId: "human" });
+  const firstClaim = claimFoldedMapCache(hero, { ...afterDecode, ...deeper.flags });
+  expect(firstClaim.claimed).toBe(true);
+  expect(firstClaim.player.inventory.lanternwell_drop).toBe(1);
+  const secondClaim = claimFoldedMapCache(firstClaim.player, {
+    ...afterDecode,
+    ...deeper.flags,
+    foldedMapCacheClaimed: true,
+  });
+  expect(secondClaim.claimed).toBe(false);
+  expect(secondClaim.player.inventory.lanternwell_drop).toBe(1);
+});
+
+test("Gatewright Hookblade is an affordable Chapter 4 upgrade without durability", () => {
+  const hookblade = ITEM_DB.gatewright_hookblade;
+  const hammer = ITEM_DB.pebbleknock_hammer;
+  const hero = buildPlayer({ name: "Liam", gender: "Male", raceId: "human" });
+  hero.gold = 78;
+  hero.inventory.pebbleknock_hammer = 1;
+  hero.equipment.weapon = "pebbleknock_hammer";
+
+  expect(hookblade).toMatchObject({
+    rarity: "Rare",
+    slot: "weapon",
+    bonuses: { Might: 2, Precision: 2, Craft: 1 },
+    skills: ["keeper_gatehook"],
+  });
+  expect(Object.values(hookblade.bonuses).reduce((sum, value) => sum + value, 0)).toBeGreaterThan(
+    Object.values(hammer.bonuses).reduce((sum, value) => sum + value, 0),
+  );
+  expect(getGatewrightOfferPrice()).toBe(32);
+
+  const purchase = purchaseGatewrightWeapon(hero, buildDefaultFlags());
+  expect(purchase.purchased).toBe(true);
+  expect(purchase.player.gold).toBe(46);
+  expect(purchase.player.inventory.gatewright_hookblade).toBe(1);
+  expect(purchase.player.equipment.weapon).toBe("pebbleknock_hammer");
+  expect(purchase.flags).toEqual({
+    gatewrightMet: true,
+    gatewrightWeaponPurchased: true,
+  });
+
+  const hammerSkill = buildCombatSkill("pebbleknock_slam", getDerivedStats(hero));
+  const hookbladeHero = {
+    ...purchase.player,
+    equipment: { ...purchase.player.equipment, weapon: "gatewright_hookblade" },
+  };
+  const hookbladeSkill = buildCombatSkill("keeper_gatehook", getDerivedStats(hookbladeHero));
+  expect(hookbladeSkill?.sides).toBe(hammerSkill?.sides);
+  expect(hookbladeSkill?.computedBonus).toBeGreaterThan(hammerSkill?.computedBonus || 0);
 });
 
 test("save migrations normalize older payloads before load", () => {

@@ -116,6 +116,8 @@ export function ChoiceButton({ choice, onChoose }) {
   const isPrimary = choice.variant === "primary";
   return (
     <button
+      data-choice-id={choice.id}
+      data-testid={choice.id ? `dialogue-choice-${choice.id}` : undefined}
       disabled={choice.locked}
       onClick={() => !choice.locked && onChoose(choice)}
       className={`min-h-12 w-full rounded-2xl border px-3 py-3 text-left text-sm transition ${

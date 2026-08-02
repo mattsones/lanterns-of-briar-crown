@@ -4,7 +4,7 @@ A storybook fantasy adventure prototype about Hearthhollow, Lantern Road, Brambl
 
 ## Current Status
 
-Chapters 1-3 have automated playable paths in the React/TypeScript prototype. Chapter 1 remains the protected baseline, Chapter 2 is playable through the First Westroot Gate, and Chapter 3 is closed as a release candidate through the Westroot resolution and Chapter 4 handoff. Its human playthrough is signed off; the uninterrupted Chapters 1-3 session is deliberately deferred to the Chapter 4 release-candidate cycle.
+Chapters 1-3 have automated playable paths in the React/TypeScript prototype. Chapter 3 is closed as a release candidate, and Chapter 4 pre-production now includes an executable contract, save-state scaffolding, a tested Folded Map graybox, and a settled Westroot gatewright weapon offer. Full Chapter 4 scene implementation awaits owner acceptance of the graybox interaction direction.
 
 Current features include:
 
@@ -62,12 +62,16 @@ npm.cmd run test:rules
 npm.cmd run playtest:chapter1
 npm.cmd run playtest:chapter2
 npm.cmd run playtest:chapter3
+npm.cmd run playtest:chapter4
 npm.cmd run playtest:smoke
 ```
 
-Run the full pre-commit verification suite with:
+Use the fast pre-production gate, Chapter 4 affected gate, or full suite with:
 
 ```bash
+npm.cmd run verify:fast
+npm.cmd run verify:chapter4
+npm.cmd run verify:full
 npm.cmd run verify
 ```
 
@@ -127,8 +131,8 @@ Visual direction:
 
 ## Short-Term Roadmap
 
-1. Define and approve the Chapter 4 executable contract, including the early Westroot smith/gatewright access requirement.
-2. Graybox and human-test the Folded Map interaction before building the surrounding route or commissioning production art.
+1. Owner-play **Test Folded Map Graybox** from the title screen and decide whether connecting paper edges feels like folding two incomplete records rather than answering a quiz.
+2. If accepted, build the Chapter 4 graybox critical path from the executable contract without final art.
 3. Keep the uninterrupted human Chapters 1-3 session on the Chapter 4 release-candidate checklist.
 4. Continue the staged `src/App.tsx` extraction and address the slightly-over-500-KB main bundle as focused technical work.
 5. Continue the source-art, optimized-runtime, and fallback-safe asset workflow as later chapters land.

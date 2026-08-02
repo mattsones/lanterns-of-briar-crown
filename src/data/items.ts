@@ -19,6 +19,7 @@ export const ITEM_DB = {
   old_hatchet: { id: "old_hatchet", name: "Old Hatchet", rarity: "Common", slot: "weapon", description: "A familiar village hatchet that has split wood, trimmed roots, and somehow become yours.", bonuses: { Might: 1 }, skills: ["scrappy_chop"], icon: "🪓" },
   turnipwood_blade: { id: "turnipwood_blade", name: "Turnipwood Blade", rarity: "Uncommon", slot: "weapon", description: "A surprisingly respectable sword carved from enchanted rootwood.", bonuses: { Might: 1, Precision: 1 }, skills: ["rootcut_lunge"], icon: "🗡️" },
   pebbleknock_hammer: { id: "pebbleknock_hammer", name: "Pebbleknock Hammer", rarity: "Uncommon", slot: "weapon", description: "A squat hammer with an extremely satisfying thunk.", bonuses: { Might: 2, Grit: 1 }, skills: ["pebbleknock_slam"], icon: "🔨" },
+  gatewright_hookblade: { id: "gatewright_hookblade", name: "Gatewright Hookblade", rarity: "Rare", slot: "weapon", description: "A Westroot gatewright's short hooked blade, balanced for clearing roots, catching shields, and working in narrow tunnels.", bonuses: { Might: 2, Precision: 2, Craft: 1 }, skills: ["keeper_gatehook"], icon: "⚒️" },
   kettle_helm: { id: "kettle_helm", name: "Apprentice Kettle Helm", rarity: "Common", slot: "helm", description: "Protective, practical, and a little soup-adjacent.", bonuses: { Guard: 1, Craft: 1 }, icon: "⛑️" },
   briar_vest: { id: "briar_vest", name: "Briarweave Vest", rarity: "Uncommon", slot: "armor", description: "A roadwarden vest stitched with thorn-resistant lining.", bonuses: { Guard: 1, Vitality: 1 }, icon: "🥋" },
   giggleleaf_cloak: { id: "giggleleaf_cloak", name: "Giggleleaf Cloak", rarity: "Uncommon", slot: "cloak", description: "A bright cloak that makes sneaking feel cheerful.", bonuses: { Agility: 1, Charm: 1 }, icon: "🍃" },
@@ -45,5 +46,5 @@ export const BATTLE_CONSUMABLES = {
 export const SHOP_PRICES = {
   old_hatchet: 6, turnipwood_blade: 12, pebbleknock_hammer: 19, kettle_helm: 10, briar_vest: 16, giggleleaf_cloak: 17,
   friendmaker_cloak: 14, stormbell_charm: 18, lantern_pin: 15, warden_chain: 26, healing_fizzpop: 7, trail_snack: 5,
-  fizzberry_handpie: 9, bubbleburst_tonic: 6, moonmint: 4, bubblecap: 4,
+  gatewright_hookblade: 32, fizzberry_handpie: 9, bubbleburst_tonic: 6, moonmint: 4, bubblecap: 4,
 };

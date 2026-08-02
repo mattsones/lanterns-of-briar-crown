@@ -44,5 +44,8 @@ jobs:
       - name: Chapter 3 golden paths
         run: npm run playtest:chapter3
 
+      - name: Chapter 4 pre-production graybox
+        run: npm run playtest:chapter4
+
       - name: Smoke playtest
         run: npm run playtest:smoke

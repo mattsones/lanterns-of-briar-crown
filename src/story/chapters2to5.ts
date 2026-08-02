@@ -97,7 +97,6 @@ export const CHAPTER_STORY_PLANS: Record<Exclude<ChapterId, 1>, ChapterStoryPlan
     requiredEndFlags: [
       "chapterFourClear",
       "foldedMapDecoded",
-      "captivePorterHelped",
       "lioMessageFound",
       "princessNameSeen",
       "briarholdLeadFound",

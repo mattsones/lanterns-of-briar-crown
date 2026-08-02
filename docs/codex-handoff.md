@@ -6,6 +6,14 @@ Story-writing work must also follow `docs/story/writing-rules.md`. Singular char
 
 ## Latest Handoff — 2026-08-02
 
+Chapter 4 pre-production is now executable. `docs/story/chapter-4-vertical-slice-contract.md` owns the readable contract, while `src/story/chapter4.ts` and `src/game/chapter4.ts` own stable IDs, required/optional boundaries, Folded Map outcomes, validation, migration behavior, and the gatewright economy. The captive porter is optional; Rootbread is absent from prerequisites; gatewright access is required while the Hookblade purchase is optional.
+
+The title screen now exposes **Test Folded Map Graybox**. It supports a clean Survey-to-keeper solve, Crown Shortcut fail-forward pressure, an optional root-to-bridge cache fold with a one-time Lanternwell Drop, review state, Back behavior, and phone layout. `verify:fast`, `verify:chapter4`, and `verify:full` are available; Chapter 4 has its own browser suite and CI step. The full gate passes with 38 rules tests, 75 chapter browser tests across Chapters 1-4, and one smoke test (114 checks total). The graybox builds as its own lazy-loaded chunk.
+
+The next decision is human rather than architectural: play the graybox and decide whether selecting two paper edges communicates folding/comparing records strongly enough. Do not build the full Underway route or final Folded Map art until that interaction direction is accepted.
+
+### Previous Chapter 3 Closeout
+
 Chapter 3 was integrated from `codex/chapter-3-vertical-slice` into `main` and marked `chapter-3-rc.2`. (`rc.1` exposed a stale cross-platform optional-dependency lock before the CI test steps; `rc.2` includes the repaired lockfile.) It received owner human-playthrough signoff and is closed as a release candidate. No remaining Chapter 3 finding is a blocker. The uninterrupted Chapters 1–3 human session was not run and is explicitly deferred to the Chapter 4 release-candidate cycle.
 
 `public/saves/chapter-3-complete.json` is the canonical Chapter 4-ready fixture and has a title-screen review entry. Its story state canonically completes the Rootbread Promise, awards the wearable Rare Rootbread Charm, and leaves it owned but not auto-equipped. The charm grants +2 Heart, +1 Will, and Rootbread Respite; that skill heals more, grants more guard, and cools down faster than the Lantern Pin's Roadwarden's Resolve.

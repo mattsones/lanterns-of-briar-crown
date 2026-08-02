@@ -12,6 +12,7 @@ This is the concise pickup document for the current illustrated prototype. Histo
 - Chapter 3 is closed as a release candidate after an owner-played human run through Rootmarket, the Rootbread Promise, Witness Stones, Cargo Siding, Split Hall, and the Chapter 4 handoff.
 - The uninterrupted human Chapters 1–3 run was not performed and is explicitly deferred to the Chapter 4 release-candidate cycle.
 - Chapter 4 has not been implemented as a playable chapter yet.
+- Chapter 4 pre-production is implemented: executable entry/end/interaction contracts, save migrations, a title-screen Folded Map graybox, Gatewright Hookblade economy, stable scene/choice test IDs, reusable save helpers, verification tiers, and Chapter 4 CI coverage. Full story work awaits owner graybox acceptance.
 
 ## Current UX
 
@@ -31,6 +32,9 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 
 ## Recent Playtest And Story Decisions
 
+- The Folded Map graybox compares a Great Survey lantern with an older keeper lantern. The Crown Shortcut creates a persistent but fail-forward maintenance detour; a second root/bridge fold awards one Lanternwell Drop exactly once. Back clears a selected edge before closing, and repeat review is preserved.
+- Westroot's gatewright is a required early encounter, but the 32-gold Rare Gatewright Hookblade purchase is optional. It improves on the Pebbleknock Hammer, does not auto-equip, introduces no durability, and is affordable from the 78-gold canonical save.
+- The captive porter is corrected to an optional Chapter 4 thread and is no longer an end flag.
 - The August 2 closeout records Chapter 3 human-playthrough signoff with no remaining Chapter 3 blocker. `public/saves/chapter-3-complete.json` is the canonical Chapter 4-ready state and can be opened from the title screen.
 - Canonically, Liam completed the Rootbread Promise. Its reward is now a wearable Rare support trinket whose healing, guard, and cooldown are all better than the Lantern Pin's. Chapter 4 readiness is separately tested with all Rootbread flags and inventory removed, so later critical paths cannot require it; optional recognition or bonuses may.
 - Chapter 4 must introduce a nearby Westroot smith/gatewright or equivalent new-weapon path before the Underway so the player is not sent back to Hearthhollow for weapon progression.
@@ -110,10 +114,11 @@ Complete one fresh uninterrupted human Chapter 3 replay on the revised build. If
 
 ```text
 npm.cmd run build                 passed
-npm.cmd run test:rules            34 passed
+npm.cmd run test:rules            38 passed
 npm.cmd run playtest:chapter1     30 passed
 npm.cmd run playtest:chapter2     31 passed
 npm.cmd run playtest:chapter3     11 passed
+npm.cmd run playtest:chapter4      3 passed
 npm.cmd run playtest:smoke         1 passed
 npm.cmd run audit:assets          133 images scanned; largest assets within targets
 git diff --check                 passed (Windows line-ending warnings only)
@@ -230,4 +235,4 @@ npm.cmd run build
 npm.cmd run test:rules
 ```
 
-Use the title-screen Chapter 2, Chapter 3, and **Review Chapter 3 Complete Save** entries for focused testing instead of replaying earlier chapters. The canonical Chapter 4-ready fixture is `public/saves/chapter-3-complete.json`; the executable Chapter 4 contract and Folded Map graybox are next.
+Use the title-screen Chapter 2, Chapter 3, **Review Chapter 3 Complete Save**, and **Test Folded Map Graybox** entries for focused testing. The canonical Chapter 4-ready fixture is `public/saves/chapter-3-complete.json`; owner acceptance of the Folded Map interaction is the only remaining pre-story gate.

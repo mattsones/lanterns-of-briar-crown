@@ -127,6 +127,26 @@ export function migrateFlags(flags: Flags | Record<string, unknown> = {}): GameF
     migrated.roadwatcherDefeated = true;
   }
 
+  if (migrated.gatewrightWeaponPurchased) migrated.gatewrightMet = true;
+  if (migrated.foldedMapDecoded) {
+    migrated.chapterFourStarted = true;
+    migrated.foldedMapAttempted = true;
+  }
+  if (migrated.foldedMapDeeperSolved) {
+    migrated.chapterFourStarted = true;
+    migrated.foldedMapAttempted = true;
+    migrated.foldedMapDecoded = true;
+  }
+  if (migrated.chapterFourClear) {
+    migrated.chapterFourStarted = true;
+    migrated.foldedMapAttempted = true;
+    migrated.foldedMapDecoded = true;
+    migrated.lioMessageFound = true;
+    migrated.princessNameSeen = true;
+    migrated.briarRelayCleared = true;
+    migrated.briarholdLeadFound = true;
+  }
+
   // Chapter 3 saves created before the Hold Bell drama pass have already
   // crossed these story gates if they reached the Witness Stones or beyond.
   if (

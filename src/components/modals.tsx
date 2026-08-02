@@ -531,7 +531,7 @@ export function DialogueModal({ dialogue, close }) {
           >
             {row.choices.map((choice, i) => (
               <ChoiceButton
-                key={`${choice.label}-${i}`}
+                key={choice.id || `${choice.label}-${i}`}
                 choice={choice}
                 onChoose={(selected) => selected.effect?.()}
               />
@@ -548,6 +548,8 @@ export function DialogueModal({ dialogue, close }) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="dialogue-title"
+      data-scene-id={dialogue.sceneId}
+      data-testid={dialogue.sceneId ? `dialogue-scene-${dialogue.sceneId}` : undefined}
       data-content-layout={usesStackedScene ? "stacked" : usesSplitScene || usesSplitVisual ? "split" : "standard"}
       tabIndex={-1}
       className={`flex max-h-[85vh] w-full ${widthClass} flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900 p-5 shadow-2xl`}

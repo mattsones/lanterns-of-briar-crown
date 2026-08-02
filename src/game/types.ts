@@ -6,6 +6,7 @@ export type ChapterId = 1 | 2 | 3 | 4 | 5;
 export type CompanionId = "rowan" | "tilda" | "moss";
 export type CompanionStatus = "recruited" | "declined" | null;
 export type MaraJob = "lioMarks" | "eddenDrawing" | "lanternSigns" | "safety" | null;
+export type ListeningMileOutcome = "guidance" | "maintenance" | null;
 
 export type GameFlags = {
   metElder: boolean;
@@ -200,10 +201,20 @@ export type GameFlags = {
   cargoRunnerEscaped: boolean;
   chapterThreeClear: boolean;
   chapterFourStarted: boolean;
+  gatewrightMet: boolean;
+  gatewrightWeaponPurchased: boolean;
+  foldedMapAttempted: boolean;
+  foldedMapFirstAttemptMistake: boolean;
   foldedMapDecoded: boolean;
+  foldedMapDeeperSolved: boolean;
+  foldedMapMaintenanceDetour: boolean;
+  foldedMapCacheClaimed: boolean;
+  listeningMileAttempted: boolean;
+  listeningMileOutcome: ListeningMileOutcome;
   captivePorterHelped: boolean;
   lioMessageFound: boolean;
   princessNameSeen: boolean;
+  briarRelayCleared: boolean;
   briarholdLeadFound: boolean;
   chapterFourClear: boolean;
   chapterFiveStarted: boolean;

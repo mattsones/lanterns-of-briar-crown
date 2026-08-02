@@ -2,7 +2,7 @@
 
 Last updated: 2026-08-02
 
-Status: Chapter 3 human signoff and readiness fixture complete; Chapter 4 executable-contract work is next
+Status: executable contract, pre-production tooling, gatewright economy, and Folded Map graybox implemented; owner interaction-direction acceptance is the remaining start gate
 
 This document turns the Chapter 2 and Chapter 3 development retrospective into the working process for Chapter 4, **The Riddle Road**. It complements the Chapter 4 story direction in `docs/story/chapters-2-5-story-bible.md`; it does not replace the future Chapter 4 story script or vertical-slice contract.
 
@@ -20,6 +20,7 @@ The process should preserve the working Chapters 1-3 baseline, keep changes revi
 - The three-commit post-Chapter 2 hardening pass briefly reduced `src/App.tsx` to about 5,333 lines while adding the ready fixture, story extraction, typed flags, migrations, validators, QA helpers, and the optimized asset workflow.
 - Chapter 3 and its cross-chapter playtest polish added 16 commits after the stable pre-Chapter 3 baseline. `src/App.tsx` is now approximately 7,200 lines, while the Chapter 3 browser suite has grown to 10 focused tests and roughly 600 lines.
 - The Chapter 3 release-candidate branch passes 107 automated tests across rules, Chapters 1-3, and smoke. The 2026-08-02 full local `verify` run took 430 seconds, which supports separate fast, affected-chapter, and full verification tiers.
+- The Chapter 4 pre-production pass raises the complete local gate to 114 checks: 38 rules tests, 75 chapter browser tests across Chapters 1-4, and one smoke test. `verify:full` passed on 2026-08-02 in 388 seconds; the Folded Map UI builds as a separate lazy-loaded chunk.
 
 ### What Chapter 2 taught us
 
@@ -115,6 +116,8 @@ The ready fixture represents the required Chapter 3 ending without relying on th
 
 ## Phase 1 — Define The Executable Chapter Contract
 
+Implementation status: complete in `docs/story/chapter-4-vertical-slice-contract.md`, `src/story/chapter4.ts`, and `src/game/chapter4.ts`. The captive porter and gatewright purchase are explicitly optional; gatewright access is required.
+
 Create a Chapter 4 vertical-slice contract before implementing scenes. It should declare:
 
 - chapter promise and non-goals;
@@ -149,6 +152,8 @@ For every consequential scene or action, answer these before coding:
 The default interaction rule is to persist attempt, result, and later resolution separately whenever they can diverge.
 
 ## Phase 2 — Spike The Folded Map
+
+Implementation status: functional placeholder graybox available from **Test Folded Map Graybox** on the title screen. Clean, fail-forward, deeper-solve, one-time reward, repeat, Back, desktop, and phone behavior are automated. Owner playtest acceptance remains before full story implementation.
 
 Build the smallest possible functional version before the full chapter:
 
@@ -235,15 +240,17 @@ Before the release candidate:
 
 - [x] Add the canonical Chapter 3-complete / Chapter 4-ready fixture.
 - [x] Add Chapter 3 to GitHub Actions; add Chapter 4 when its suite exists.
-- [ ] Split local verification into fast, affected-chapter, and full gates.
-- [ ] Add a reusable Playwright fixture helper for checkpoint construction and loading.
-- [ ] Add stable `sceneId` and `choiceId` test hooks so navigation tests do not depend on final prose.
+- [x] Split local verification into fast, affected-chapter, and full gates.
+- [x] Add a reusable Playwright fixture helper for checkpoint construction and loading.
+- [x] Add stable `sceneId` and `choiceId` test hooks so navigation tests do not depend on final prose.
 
 Suggested verification tiers:
 
 - `verify:fast` — build, pure rules, contracts, fixtures, and lightweight asset checks;
 - `verify:chapter4` — fast checks plus the Chapter 4 browser suite;
-- `verify:full` — all chapter suites, smoke, and enforced asset budgets.
+- `verify:full` — all chapter suites and smoke, with the current report-only asset audit included through the fast gate.
+
+Implemented command names are `verify:fast`, `verify:chapter4`, and `verify:full`; `verify` remains an alias for the full gate. Asset auditing remains report-only until the separate enforced-budget task lands.
 
 ### Priority 1 — During the vertical slice
 
@@ -291,6 +298,8 @@ Chapter 4 implementation is ready to begin when:
 - the Folded Map spike has an agreed interaction direction;
 - the Chapter 4 entry, end, interaction-state, and map contracts are documented;
 - the fast verification gate is green.
+
+Current status: every item above is complete except owner agreement on the Folded Map interaction direction. The executable contract is `docs/story/chapter-4-vertical-slice-contract.md`; the fast, Chapter 4 affected, and 114-check full gates are green.
 
 ## Definition Of Chapter 4 Release Candidate
 
