@@ -102,14 +102,16 @@ import { runGameQaChecks } from "../src/game/qa";
 import { validateChapter4ReadyPayload } from "../src/game/chapter4Readiness";
 import {
   claimFoldedMapCache,
+  EMPTY_FOLDED_MAP_CONFIGURATION,
   getGatewrightOfferPrice,
   purchaseGatewrightWeapon,
-  resolveFoldedMapPair,
+  resolveFoldedMapConfiguration,
   validateChapter4Contract,
 } from "../src/game/chapter4";
 import {
   CHAPTER_4_CONTRACT,
   CHAPTER_4_OPTIONAL_FLAGS,
+  FOLDED_MAP_CONTRACT,
   GATEWRIGHT_WEAPON_CONTRACT,
 } from "../src/story/chapter4";
 import type { SavePayload } from "../src/game/types";
@@ -764,7 +766,19 @@ test("Chapter 4 save migration infers prerequisite Folded Map state", () => {
 
 test("Folded Map state separates mistake, route decode, deeper solve, and one-time reward", () => {
   const initial = buildDefaultFlags();
-  const cleanDecode = resolveFoldedMapPair(initial, "survey_lantern", "keeper_lantern");
+  expect(FOLDED_MAP_CONTRACT).toMatchObject({
+    configurationCount: 16,
+    requiredFoldCount: 2,
+    deeperFoldCount: 3,
+    trueRouteConfiguration: ["survey", "keeper"],
+    temptingFalseConfiguration: ["survey", "crown"],
+  });
+
+  const cleanDecode = resolveFoldedMapConfiguration(initial, {
+    ...EMPTY_FOLDED_MAP_CONFIGURATION,
+    survey: true,
+    keeper: true,
+  });
   expect(cleanDecode).toMatchObject({
     outcome: "true-route",
     flags: {
@@ -776,7 +790,19 @@ test("Folded Map state separates mistake, route decode, deeper solve, and one-ti
   expect(cleanDecode.flags.foldedMapMaintenanceDetour).toBeUndefined();
   expect(cleanDecode.flags.foldedMapFirstAttemptMistake).toBeUndefined();
 
-  const mistake = resolveFoldedMapPair(initial, "survey_lantern", "crown_shortcut");
+  const ordinaryWrong = resolveFoldedMapConfiguration(initial, {
+    ...EMPTY_FOLDED_MAP_CONFIGURATION,
+    keeper: true,
+    cache: true,
+  });
+  expect(ordinaryWrong.outcome).toBe("not-a-route");
+  expect(ordinaryWrong.flags.foldedMapMaintenanceDetour).toBeUndefined();
+
+  const mistake = resolveFoldedMapConfiguration(initial, {
+    ...EMPTY_FOLDED_MAP_CONFIGURATION,
+    survey: true,
+    crown: true,
+  });
   expect(mistake).toMatchObject({
     outcome: "false-shortcut",
     flags: {
@@ -788,13 +814,22 @@ test("Folded Map state separates mistake, route decode, deeper solve, and one-ti
   });
 
   const afterMistake = { ...initial, ...mistake.flags };
-  const decoded = resolveFoldedMapPair(afterMistake, "survey_lantern", "keeper_lantern");
+  const decoded = resolveFoldedMapConfiguration(afterMistake, {
+    ...EMPTY_FOLDED_MAP_CONFIGURATION,
+    survey: true,
+    keeper: true,
+  });
   expect(decoded.outcome).toBe("true-route");
   expect(decoded.flags.foldedMapDecoded).toBe(true);
   expect(decoded.flags.foldedMapMaintenanceDetour).toBeUndefined();
 
   const afterDecode = { ...afterMistake, ...decoded.flags };
-  const deeper = resolveFoldedMapPair(afterDecode, "root_arrow", "broken_bridge");
+  const deeper = resolveFoldedMapConfiguration(afterDecode, {
+    ...EMPTY_FOLDED_MAP_CONFIGURATION,
+    survey: true,
+    keeper: true,
+    cache: true,
+  });
   expect(deeper.outcome).toBe("deeper-solve");
   expect(deeper.flags.foldedMapDeeperSolved).toBe(true);
 

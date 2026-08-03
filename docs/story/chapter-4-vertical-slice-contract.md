@@ -2,7 +2,7 @@
 
 Last updated: 2026-08-02
 
-Status: executable pre-production contract and Folded Map graybox implemented; interaction direction awaits owner playtest acceptance before full Chapter 4 scene work
+Status: executable pre-production contract and second Folded Map interaction spike implemented; the first card-matching spike was rejected, and the hinged-paper prototype awaits owner acceptance before full Chapter 4 scene work
 
 ## Chapter Promise
 
@@ -42,32 +42,39 @@ The executable source of truth is `src/story/chapter4.ts`; pure transitions and 
 
 ## Folded Map Mechanical Contract
 
-The graybox is available from the title screen through **Test Folded Map Graybox** and can be reopened from the Chapter 3 completion banner.
+The prototype is available from the title screen through **Test Folded Map Graybox** and can be reopened from the Chapter 3 completion banner. It uses schematic vectors and paper textures so interaction can be judged without production art.
 
 Required route solve:
 
-- connect the **Great Survey Lantern** to the **Keeper Lantern**;
-- reject the tempting **Crown Shortcut**;
-- reveal the winding Underway route by comparing two incomplete records.
+- manipulate one cross-shaped map with four hinged paper wings: Great Survey west, keeper correction east, 817 office revision north, and bridge ledger south;
+- drag wings around their visible creases; pressing a paper panel alone does not select an answer;
+- support sixteen flat/folded configurations;
+- fold exactly the Great Survey and keeper correction wings for the required two-fold solution;
+- make the dated lantern benchmark, keeper ring, two contour strokes, and winding Underway road agree simultaneously;
+- give keyboard users the same fold/unfold states through the focused paper wings.
 
 Fail-forward mistake:
 
-- connecting any edge to the Crown Shortcut records a first-attempt mistake when appropriate;
-- the mistake exposes a sealed maintenance approach rather than blocking progress;
+- folding the Great Survey wing with the neutral-colored 817 office revision creates the one deliberately tempting false configuration;
+- its lantern and straight road align convincingly, while its date and terrain evidence do not;
+- ordinary wrong configurations are also possible and do not create route consequences;
+- folding and unfolding is consequence-free; only **Trace this folded route** commits the current configuration;
+- committing the tempting revision exposes a sealed maintenance approach rather than blocking progress;
 - correcting the map still decodes the true route;
 - later Listening Mile or route content may add pressure for the maintenance approach, but may not remove Lio's-message progression.
 
 Optional deeper solve:
 
-- after the true route is decoded, connect the **Root Arrow** to the **Broken Bridge Notch**;
-- reveal a Lanternwell cache mark;
+- after the true route is recorded, leave the Survey and keeper wings folded and add the bridge-ledger wing as a third fold;
+- make the root arrow visibly continue across the broken bridge notation;
+- reveal the Lanternwell cache mark through the layered drawing;
 - award exactly one Lanternwell Drop;
 - repeat visits remain reviewable and cannot repeat the reward.
 
 Back behavior:
 
-- Back clears one selected edge first;
-- Back closes the interaction only when no edge is selected.
+- Back unfolds the most recently folded wing first;
+- Back closes the interaction only when every wing lies flat.
 
 ## Folded Map State
 
@@ -144,6 +151,6 @@ Optional flags, never ending gates:
 
 Before full Chapter 4 story implementation, play **Test Folded Map Graybox** and decide:
 
-> Does choosing two paper edges make the action read as comparing and folding two incomplete records, or does it still feel like selecting the correct answer from a list?
+> Does dragging and layering the hinged paper feel like folding a map, and does the correct construction reveal itself through visible evidence rather than color, labels, or elimination?
 
-If it still feels like a quiz, revise the interaction model before building the Underway route or final art.
+The first answer-card spike failed this gate on both physicality and deduction. The second spike must be judged on its drag interaction, the plausibility of the 817 false route, the readability of ordinary failures, and whether the true and cache alignments visually explain themselves. If it still feels like a quiz, revise again before building the Underway route or final art.

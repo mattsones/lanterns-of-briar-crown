@@ -7,54 +7,44 @@ export const CHAPTER_4_SCENE_IDS = {
 } as const;
 
 export const CHAPTER_4_CHOICE_IDS = {
-  surveyLantern: "folded-map.survey-lantern",
-  keeperLantern: "folded-map.keeper-lantern",
-  crownShortcut: "folded-map.crown-shortcut",
-  rootArrow: "folded-map.root-arrow",
-  brokenBridge: "folded-map.broken-bridge",
+  surveyFold: "folded-map.fold-survey",
+  keeperFold: "folded-map.fold-keeper",
+  crownFold: "folded-map.fold-crown",
+  cacheFold: "folded-map.fold-cache",
+  traceRoute: "folded-map.trace-route",
+  resetFolds: "folded-map.reset-folds",
   back: "folded-map.back",
   close: "folded-map.close",
 } as const;
 
-export const FOLDED_MAP_MARKS = [
+export const FOLDED_MAP_FLAPS = [
   {
-    id: "survey_lantern",
-    label: "Great Survey Lantern",
-    symbol: "◈",
-    description: "An official benchmark lantern beside a dated measurement line.",
-    phase: "route",
+    id: "survey",
+    label: "Great Survey wing",
+    edge: "west",
+    evidence: "811 benchmark lantern and measured contour",
   },
   {
-    id: "keeper_lantern",
-    label: "Keeper Lantern",
-    symbol: "◇",
-    description: "An older operational lantern on a local correction leaf.",
-    phase: "route",
+    id: "keeper",
+    label: "Keeper correction wing",
+    edge: "east",
+    evidence: "794 keeper lantern and hand-corrected root road",
   },
   {
-    id: "crown_shortcut",
-    label: "Crown Shortcut",
-    symbol: "♛",
-    description: "A fast, straight route added in newer red ink.",
-    phase: "route",
+    id: "crown",
+    label: "Westward revision wing",
+    edge: "north",
+    evidence: "817 office revision and unusually straight improvement line",
   },
   {
-    id: "root_arrow",
-    label: "Root Arrow",
-    symbol: "↝",
-    description: "A winding keeper arrow cut off by the flat page edge.",
-    phase: "cache",
-  },
-  {
-    id: "broken_bridge",
-    label: "Broken Bridge Notch",
-    symbol: "⌁",
-    description: "A bridge notch that becomes continuous only across a second fold.",
-    phase: "cache",
+    id: "cache",
+    label: "Bridge ledger wing",
+    edge: "south",
+    evidence: "broken bridge notch, root arrow, and keeper field notation",
   },
 ] as const;
 
-export type FoldedMapMarkId = (typeof FOLDED_MAP_MARKS)[number]["id"];
+export type FoldedMapFlapId = (typeof FOLDED_MAP_FLAPS)[number]["id"];
 
 export const CHAPTER_4_REQUIRED_ENTRY_FLAGS: GameFlagKey[] = [
   "chapterReported",
@@ -136,13 +126,21 @@ export const CHAPTER_4_CONTRACT = {
 } as const;
 
 export const FOLDED_MAP_CONTRACT = {
-  trueRoutePair: ["survey_lantern", "keeper_lantern"],
-  deeperPair: ["root_arrow", "broken_bridge"],
-  decoyMark: "crown_shortcut",
+  flaps: FOLDED_MAP_FLAPS,
+  configurationCount: 16,
+  trueRouteConfiguration: ["survey", "keeper"],
+  temptingFalseConfiguration: ["survey", "crown"],
+  deeperConfiguration: ["survey", "keeper", "cache"],
+  requiredFoldCount: 2,
+  deeperFoldCount: 3,
   mistakeConsequence:
-    "The crown alignment exposes a false straight route. The party corrects it, but the Listening Mile begins through a harder maintenance approach.",
+    "The 817 office revision creates a persuasive straight road when folded over the Survey wing. Committing to it exposes a sealed maintenance approach and adds later pressure without blocking progress.",
   deeperReward: "lanternwell_drop",
-  repeatRule: "Completed alignments remain reviewable and never grant the cache reward twice.",
+  experimentRule:
+    "Folding and unfolding is free. Consequences occur only when the player traces a committed configuration.",
+  evidenceRule:
+    "The true configuration aligns the dated lantern benchmark, keeper ring, contour lines, and winding road at once. It is not identified by answer color or elimination.",
+  repeatRule: "Recorded configurations remain reviewable and never grant the cache reward twice.",
 } as const;
 
 export const GATEWRIGHT_WEAPON_CONTRACT = {
@@ -170,13 +168,13 @@ export const CHAPTER_4_INTERACTION_STATE_MATRIX = {
   foldedMap: {
     knowledge: "Edden wrote that the map lies flat; Westroot identifies Survey and keeper layers.",
     availability: "Chapter 3 is complete and the gatewright has made the Lower Gate route available.",
-    attempt: "foldedMapAttempted",
+    attempt: "Tracing the currently folded configuration sets foldedMapAttempted.",
     result: "foldedMapDecoded",
     laterResolution: "foldedMapDeeperSolved",
-    repeatVisit: "Review both alignments; never repeat the cache reward.",
-    backtracking: "Back clears one selected mark before closing the graybox.",
+    repeatVisit: "Review recorded alignments; never repeat the cache reward.",
+    backtracking: "Back unfolds the most recently folded wing before closing the prototype.",
     companion: "Hints may change, but the interaction never requires a conscious companion.",
-    failure: "The crown shortcut creates foldedMapMaintenanceDetour and remains fail-forward.",
+    failure: "Only committing the persuasive Survey-plus-revision configuration creates foldedMapMaintenanceDetour; ordinary experimentation is free.",
     saveCompatibility: "Decoded or deeper-solved saves infer attempt and Chapter 4 start.",
   },
   listeningMile: {

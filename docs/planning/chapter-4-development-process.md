@@ -153,17 +153,18 @@ The default interaction rule is to persist attempt, result, and later resolution
 
 ## Phase 2 — Spike The Folded Map
 
-Implementation status: functional placeholder graybox available from **Test Folded Map Graybox** on the title screen. Clean, fail-forward, deeper-solve, one-time reward, repeat, Back, desktop, and phone behavior are automated. Owner playtest acceptance remains before full story implementation.
+Implementation status: the first answer-card graybox was human-tested and rejected because it neither felt like folding nor supported real deduction. A second schematic prototype is available from **Test Folded Map Graybox** on the title screen. It uses four draggable hinged wings, sixteen configurations, visible layered evidence, a neutral-colored tempting revision, ordinary wrong constructions, an exact two-fold solution, and an optional third fold. Drag, clean, fail-forward, ordinary-failure, deeper-solve, one-time reward, repeat, Back, desktop, and phone behavior are automated. Owner acceptance of this second interaction remains before full story implementation.
 
 Build the smallest possible functional version before the full chapter:
 
-1. Use placeholder symbols and copy.
-2. Let the player connect the intended lantern marks.
-3. Include the tempting crown-marked shortcut.
-4. Define one fail-forward mistake consequence.
-5. Define the optional deeper alignment reward.
-6. Preserve Back, repeat, and review behavior.
-7. Human-test whether the interaction communicates folding or alignment without an explicit checklist.
+1. Use schematic vector ink and paper textures rather than production art.
+2. Let the player physically drag wings around visible creases; a press alone must not choose an answer.
+3. Provide multiple fold configurations: one persuasive false revision, several ordinary wrong constructions, and one true two-fold route.
+4. Make the correct configuration align several visible facts at once instead of exposing an answer color.
+5. Keep experimentation safe; apply the fail-forward consequence only when the persuasive false route is deliberately traced.
+6. Add an optional third fold whose root-arrow and bridge notation visibly explain the cache.
+7. Preserve Back, repeat, keyboard, and review behavior.
+8. Human-test whether manipulation reads as folding and whether the solution reads as deduction rather than elimination.
 
 Do not generate final Wrong Map Room or Folded Map art until this spike is accepted.
 

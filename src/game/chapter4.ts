@@ -5,55 +5,66 @@ import {
   CHAPTER_4_OPTIONAL_FLAGS,
   FOLDED_MAP_CONTRACT,
   GATEWRIGHT_WEAPON_CONTRACT,
-  type FoldedMapMarkId,
+  type FoldedMapFlapId,
 } from "../story/chapter4";
 import { buildDefaultFlags } from "./state";
 import type { Flags, GameFlags, Player } from "./types";
 
 export type FoldedMapOutcome =
-  | "selected"
   | "true-route"
   | "false-shortcut"
   | "deeper-solve"
-  | "not-a-pair";
+  | "not-a-route";
 
-export function isMarkPair(
-  first: FoldedMapMarkId,
-  second: FoldedMapMarkId,
-  expected: readonly string[],
+export type FoldedMapConfiguration = Record<FoldedMapFlapId, boolean>;
+
+export const EMPTY_FOLDED_MAP_CONFIGURATION: FoldedMapConfiguration = {
+  survey: false,
+  keeper: false,
+  crown: false,
+  cache: false,
+};
+
+export function isFoldedMapConfiguration(
+  folds: FoldedMapConfiguration,
+  expectedFolded: readonly FoldedMapFlapId[],
 ) {
-  return expected.includes(first) && expected.includes(second) && first !== second;
+  return (Object.keys(folds) as FoldedMapFlapId[]).every(
+    (flap) => folds[flap] === expectedFolded.includes(flap),
+  );
 }
 
-export function resolveFoldedMapPair(
+export function resolveFoldedMapConfiguration(
   flags: Flags,
-  first: FoldedMapMarkId,
-  second: FoldedMapMarkId,
+  folds: FoldedMapConfiguration,
 ): { outcome: FoldedMapOutcome; flags: Partial<GameFlags>; message: string } {
   const common: Partial<GameFlags> = {
     chapterFourStarted: true,
     foldedMapAttempted: true,
   };
 
-  if (isMarkPair(first, second, FOLDED_MAP_CONTRACT.trueRoutePair)) {
-    return {
-      outcome: "true-route",
-      flags: { ...common, foldedMapDecoded: true },
-      message:
-        "The Survey lantern meets the older keeper lantern. Their mismatched records agree on one winding route through the Underway.",
-    };
-  }
-
-  if (flags.foldedMapDecoded && isMarkPair(first, second, FOLDED_MAP_CONTRACT.deeperPair)) {
+  if (
+    flags.foldedMapDecoded &&
+    isFoldedMapConfiguration(folds, FOLDED_MAP_CONTRACT.deeperConfiguration)
+  ) {
     return {
       outcome: "deeper-solve",
       flags: { ...common, foldedMapDecoded: true, foldedMapDeeperSolved: true },
       message:
-        "The root arrow crosses the broken bridge notch. A second fold reveals a small keeper cache mark beside Lanternwell.",
+        "The third fold carries the root arrow across the broken bridge notch. Together they draw a keeper cache mark beside Lanternwell.",
     };
   }
 
-  if (first === FOLDED_MAP_CONTRACT.decoyMark || second === FOLDED_MAP_CONTRACT.decoyMark) {
+  if (isFoldedMapConfiguration(folds, FOLDED_MAP_CONTRACT.trueRouteConfiguration)) {
+    return {
+      outcome: "true-route",
+      flags: { ...common, foldedMapDecoded: true },
+      message:
+        "The 811 benchmark lantern sits inside the older keeper ring. Beyond it, both contour strokes and the winding road continue without a break. The folds agree on the Underway.",
+    };
+  }
+
+  if (isFoldedMapConfiguration(folds, FOLDED_MAP_CONTRACT.temptingFalseConfiguration)) {
     return {
       outcome: "false-shortcut",
       flags: {
@@ -62,14 +73,15 @@ export function resolveFoldedMapPair(
         foldedMapMaintenanceDetour: true,
       },
       message:
-        "The crown line makes a beautifully straight route—and sends the old echo marks into a sealed maintenance approach. The mistake is recorded, but the map remains solvable.",
+        "The two lantern marks meet and the 817 revision draws a wonderfully straight road. Traced onward, however, its contour runs backward and ends at a sealed maintenance approach. The persuasive mistake is recorded, but the paper remains yours to refold.",
     };
   }
 
   return {
-    outcome: "not-a-pair",
+    outcome: "not-a-route",
     flags: common,
-    message: "Those edges touch, but their dates and cut marks do not continue across the fold.",
+    message:
+      "The paper holds this shape, but the evidence does not: a terrain stroke doubles back, a dated tick meets empty paper, or the road stops at a cut edge. Unfold and try another construction.",
   };
 }
 
@@ -78,7 +90,7 @@ export function getFoldedMapReview(flags: Flags) {
     return "True route decoded; deeper Lanternwell cache alignment found.";
   }
   if (flags.foldedMapDecoded) {
-    return "True route decoded; the optional root-and-bridge alignment remains.";
+    return "True route recorded; Edden's bridge notation suggests an optional third fold.";
   }
   if (flags.foldedMapMaintenanceDetour) {
     return "Crown shortcut rejected; maintenance-route pressure recorded; true route unresolved.";

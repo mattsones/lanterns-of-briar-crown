@@ -8,9 +8,11 @@ Story-writing work must also follow `docs/story/writing-rules.md`. Singular char
 
 Chapter 4 pre-production is now executable. `docs/story/chapter-4-vertical-slice-contract.md` owns the readable contract, while `src/story/chapter4.ts` and `src/game/chapter4.ts` own stable IDs, required/optional boundaries, Folded Map outcomes, validation, migration behavior, and the gatewright economy. The captive porter is optional; Rootbread is absent from prerequisites; gatewright access is required while the Hookblade purchase is optional.
 
-The title screen now exposes **Test Folded Map Graybox**. It supports a clean Survey-to-keeper solve, Crown Shortcut fail-forward pressure, an optional root-to-bridge cache fold with a one-time Lanternwell Drop, review state, Back behavior, and phone layout. `verify:fast`, `verify:chapter4`, and `verify:full` are available; Chapter 4 has its own browser suite and CI step. The full gate passes with 38 rules tests, 75 chapter browser tests across Chapters 1-4, and one smoke test (114 checks total). The graybox builds as its own lazy-loaded chunk.
+The first Folded Map card matcher failed owner acceptance: clicking labeled boxes did not feel like folding, the Crown route was visually pre-condemned, and the cache answer was forced by elimination. It has been replaced with a schematic paper prototype under **Test Folded Map Graybox**. Four hinged wings drag around visible creases to create sixteen configurations. The true route requires the Survey and keeper wings; the neutral 817 revision creates one persuasive false route; ordinary wrong folds are safe; and the optional bridge-ledger wing becomes a third cache fold. Multiple visible map marks, not answer color, explain the intended construction.
 
-The next decision is human rather than architectural: play the graybox and decide whether selecting two paper edges communicates folding/comparing records strongly enough. Do not build the full Underway route or final Folded Map art until that interaction direction is accepted.
+`verify:fast`, `verify:chapter4`, and `verify:full` remain available; Chapter 4 has its own browser suite and CI step. The replacement preserves fail-forward pressure, a one-time Lanternwell Drop, review state, stack-aware Back behavior, keyboard access, and phone layout. It remains lazy-loaded outside the initial bundle.
+
+The next decision is human rather than architectural: play the replacement and decide whether dragging the hinged paper now feels like folding, whether the 817 route is genuinely tempting, and whether the true and cache alignments visually explain themselves. Do not build the full Underway route or final Folded Map art until that interaction direction is accepted.
 
 ### Previous Chapter 3 Closeout
 

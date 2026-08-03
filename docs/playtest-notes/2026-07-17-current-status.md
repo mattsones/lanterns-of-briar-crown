@@ -12,7 +12,7 @@ This is the concise pickup document for the current illustrated prototype. Histo
 - Chapter 3 is closed as a release candidate after an owner-played human run through Rootmarket, the Rootbread Promise, Witness Stones, Cargo Siding, Split Hall, and the Chapter 4 handoff.
 - The uninterrupted human Chapters 1–3 run was not performed and is explicitly deferred to the Chapter 4 release-candidate cycle.
 - Chapter 4 has not been implemented as a playable chapter yet.
-- Chapter 4 pre-production is implemented: executable entry/end/interaction contracts, save migrations, a title-screen Folded Map graybox, Gatewright Hookblade economy, stable scene/choice test IDs, reusable save helpers, verification tiers, and Chapter 4 CI coverage. Full story work awaits owner graybox acceptance.
+- Chapter 4 pre-production is implemented: executable entry/end/interaction contracts, save migrations, a title-screen Folded Map prototype, Gatewright Hookblade economy, stable scene/choice test IDs, reusable save helpers, verification tiers, and Chapter 4 CI coverage. The first card-matching Folded Map spike failed human acceptance; full story work awaits judgment of the replacement hinged-paper prototype.
 
 ## Current UX
 
@@ -32,7 +32,7 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 
 ## Recent Playtest And Story Decisions
 
-- The Folded Map graybox compares a Great Survey lantern with an older keeper lantern. The Crown Shortcut creates a persistent but fail-forward maintenance detour; a second root/bridge fold awards one Lanternwell Drop exactly once. Back clears a selected edge before closing, and repeat review is preserved.
+- The replacement Folded Map prototype uses four draggable paper wings and sixteen configurations. The exact Survey-plus-keeper construction aligns the lantern, contours, and winding route; the neutral 817 revision is the one persuasive false route; other wrong folds are safe experiments. After the true two-fold route is recorded, a third bridge-ledger fold can reveal and award one Lanternwell Drop exactly once. Back unfolds the top wing before closing, and repeat review is preserved.
 - Westroot's gatewright is a required early encounter, but the 32-gold Rare Gatewright Hookblade purchase is optional. It improves on the Pebbleknock Hammer, does not auto-equip, introduces no durability, and is affordable from the 78-gold canonical save.
 - The captive porter is corrected to an optional Chapter 4 thread and is no longer an end flag.
 - The August 2 closeout records Chapter 3 human-playthrough signoff with no remaining Chapter 3 blocker. `public/saves/chapter-3-complete.json` is the canonical Chapter 4-ready state and can be opened from the title screen.
