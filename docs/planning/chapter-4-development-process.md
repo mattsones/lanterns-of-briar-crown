@@ -153,16 +153,16 @@ The default interaction rule is to persist attempt, result, and later resolution
 
 ## Phase 2 — Spike The Folded Map
 
-Implementation status: the first answer-card graybox was human-tested and rejected because it neither felt like folding nor supported real deduction. A second schematic prototype is available from **Test Folded Map Graybox** on the title screen. It uses four draggable hinged wings, sixteen configurations, visible layered evidence, a neutral-colored tempting revision, ordinary wrong constructions, an exact two-fold solution, and an optional third fold. Drag, clean, fail-forward, ordinary-failure, deeper-solve, one-time reward, repeat, Back, desktop, and phone behavior are automated. Owner acceptance of this second interaction remains before full story implementation.
+Implementation status: the first answer-card graybox was rejected because it neither felt like folding nor supported real deduction. The second cross-wing graybox improved manipulation but was rejected because four binary flaps still made the solution an elimination exercise, the transparent layers felt unlike paper, and the silhouette did not feel like one map. A third schematic prototype is available from **Test Folded Map Graybox** on the title screen. It uses one opaque rectangular sheet with distinct front and back faces, four draggable edges, three landing depths per edge, 54 two-edge configurations, an evidence-backed true construction, a persuasive 817 false construction, many ordinary wrong constructions, and an optional third fold. Drag, clean, fail-forward, ordinary-failure, deeper-solve, one-time reward, repeat, Back, desktop, and phone behavior are automated. Owner acceptance of this third interaction remains before full story implementation.
 
 Build the smallest possible functional version before the full chapter:
 
 1. Use schematic vector ink and paper textures rather than production art.
-2. Let the player physically drag wings around visible creases; a press alone must not choose an answer.
-3. Provide multiple fold configurations: one persuasive false revision, several ordinary wrong constructions, and one true two-fold route.
+2. Let the player physically drag any sheet edge to a quarter, half, or three-quarter landing; clicking the map surface must not choose an answer.
+3. Provide multiple fold configurations: one persuasive false revision, many ordinary wrong constructions, and one true two-fold route.
 4. Make the correct configuration align several visible facts at once instead of exposing an answer color.
 5. Keep experimentation safe; apply the fail-forward consequence only when the persuasive false route is deliberately traced.
-6. Add an optional third fold whose root-arrow and bridge notation visibly explain the cache.
+6. Add an optional third edge fold whose root-arrow and bridge notation visibly explain the cache.
 7. Preserve Back, repeat, keyboard, and review behavior.
 8. Human-test whether manipulation reads as folding and whether the solution reads as deduction rather than elimination.
 

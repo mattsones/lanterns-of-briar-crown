@@ -3,9 +3,13 @@ import { ITEM_DB } from "../data/items";
 import {
   CHAPTER_4_CONTRACT,
   CHAPTER_4_OPTIONAL_FLAGS,
+  FOLDED_MAP_EDGES,
   FOLDED_MAP_CONTRACT,
+  FOLDED_MAP_LANDINGS,
   GATEWRIGHT_WEAPON_CONTRACT,
-  type FoldedMapFlapId,
+  type FoldedMapEdge,
+  type FoldedMapLanding,
+  type FoldedMapSide,
 } from "../story/chapter4";
 import { buildDefaultFlags } from "./state";
 import type { Flags, GameFlags, Player } from "./types";
@@ -16,27 +20,45 @@ export type FoldedMapOutcome =
   | "deeper-solve"
   | "not-a-route";
 
-export type FoldedMapConfiguration = Record<FoldedMapFlapId, boolean>;
+export type FoldedMapConfiguration = {
+  side: FoldedMapSide;
+  folds: Record<FoldedMapEdge, FoldedMapLanding | null>;
+};
 
 export const EMPTY_FOLDED_MAP_CONFIGURATION: FoldedMapConfiguration = {
-  survey: false,
-  keeper: false,
-  crown: false,
-  cache: false,
+  side: "front",
+  folds: {
+    left: null,
+    right: null,
+    top: null,
+    bottom: null,
+  },
 };
 
 export function isFoldedMapConfiguration(
-  folds: FoldedMapConfiguration,
-  expectedFolded: readonly FoldedMapFlapId[],
+  configuration: FoldedMapConfiguration,
+  expected: {
+    readonly side: FoldedMapSide;
+    readonly folds: Readonly<Record<FoldedMapEdge, FoldedMapLanding | null>>;
+  },
 ) {
-  return (Object.keys(folds) as FoldedMapFlapId[]).every(
-    (flap) => folds[flap] === expectedFolded.includes(flap),
+  return configuration.side === expected.side && FOLDED_MAP_EDGES.every(
+    ({ id }) => configuration.folds[id] === expected.folds[id],
   );
+}
+
+export function getFoldedMapFoldCount(configuration: FoldedMapConfiguration) {
+  return FOLDED_MAP_EDGES.filter(({ id }) => configuration.folds[id] !== null).length;
+}
+
+export function getFoldedMapLandingDepth(landing: FoldedMapLanding | null) {
+  if (!landing) return 0;
+  return FOLDED_MAP_LANDINGS.find((option) => option.id === landing)?.depth || 0;
 }
 
 export function resolveFoldedMapConfiguration(
   flags: Flags,
-  folds: FoldedMapConfiguration,
+  configuration: FoldedMapConfiguration,
 ): { outcome: FoldedMapOutcome; flags: Partial<GameFlags>; message: string } {
   const common: Partial<GameFlags> = {
     chapterFourStarted: true,
@@ -45,26 +67,26 @@ export function resolveFoldedMapConfiguration(
 
   if (
     flags.foldedMapDecoded &&
-    isFoldedMapConfiguration(folds, FOLDED_MAP_CONTRACT.deeperConfiguration)
+    isFoldedMapConfiguration(configuration, FOLDED_MAP_CONTRACT.deeperConfiguration)
   ) {
     return {
       outcome: "deeper-solve",
       flags: { ...common, foldedMapDecoded: true, foldedMapDeeperSolved: true },
       message:
-        "The third fold carries the root arrow across the broken bridge notch. Together they draw a keeper cache mark beside Lanternwell.",
+        "With the true route still held, the north edge lands one-quarter across. Its reverse-side root arrow completes the broken bridge mark and circles a keeper cache beside Lanternwell.",
     };
   }
 
-  if (isFoldedMapConfiguration(folds, FOLDED_MAP_CONTRACT.trueRouteConfiguration)) {
+  if (isFoldedMapConfiguration(configuration, FOLDED_MAP_CONTRACT.trueRouteConfiguration)) {
     return {
       outcome: "true-route",
       flags: { ...common, foldedMapDecoded: true },
       message:
-        "The 811 benchmark lantern sits inside the older keeper ring. Beyond it, both contour strokes and the winding road continue without a break. The folds agree on the Underway.",
+        "The west edge lands halfway across and the south edge reaches the three-quarter guide. Reverse-side keeper ink closes the 811 lantern ring, both contour strokes, and one winding road into the Underway.",
     };
   }
 
-  if (isFoldedMapConfiguration(folds, FOLDED_MAP_CONTRACT.temptingFalseConfiguration)) {
+  if (isFoldedMapConfiguration(configuration, FOLDED_MAP_CONTRACT.temptingFalseConfiguration)) {
     return {
       outcome: "false-shortcut",
       flags: {
@@ -73,7 +95,7 @@ export function resolveFoldedMapConfiguration(
         foldedMapMaintenanceDetour: true,
       },
       message:
-        "The two lantern marks meet and the 817 revision draws a wonderfully straight road. Traced onward, however, its contour runs backward and ends at a sealed maintenance approach. The persuasive mistake is recorded, but the paper remains yours to refold.",
+        "The east and north half-folds join the two 817 ticks into a wonderfully straight road. Traced onward, however, its contour runs backward and ends at a sealed maintenance approach. The persuasive mistake is recorded, but the paper remains yours to refold.",
     };
   }
 

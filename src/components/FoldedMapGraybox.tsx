@@ -1,14 +1,15 @@
 import {
-  useEffect,
   useRef,
   useState,
-  type CSSProperties,
   type Dispatch,
   type PointerEvent as ReactPointerEvent,
+  type RefObject,
   type SetStateAction,
 } from "react";
 import {
   EMPTY_FOLDED_MAP_CONFIGURATION,
+  getFoldedMapFoldCount,
+  getFoldedMapLandingDepth,
   getFoldedMapReview,
   resolveFoldedMapConfiguration,
   type FoldedMapConfiguration,
@@ -16,307 +17,353 @@ import {
 import {
   CHAPTER_4_CHOICE_IDS,
   CHAPTER_4_SCENE_IDS,
-  FOLDED_MAP_FLAPS,
-  type FoldedMapFlapId,
+  FOLDED_MAP_EDGES,
+  FOLDED_MAP_LANDINGS,
+  type FoldedMapEdge,
+  type FoldedMapLanding,
 } from "../story/chapter4";
 import type { GameFlags, Player } from "../game/types";
 import { Button } from "./ui";
 
-type FoldDirection = "left" | "right" | "top" | "bottom";
+const SHEET_WIDTH = 1000;
+const SHEET_HEIGHT = 620;
 
-const FLAP_LAYOUT: Record<FoldedMapFlapId, {
-  direction: FoldDirection;
-  position: CSSProperties;
-  choiceId: string;
-}> = {
-  survey: {
-    direction: "left",
-    position: { left: "0%", top: "33.333%", width: "33.334%", height: "33.334%" },
-    choiceId: CHAPTER_4_CHOICE_IDS.surveyFold,
-  },
-  keeper: {
-    direction: "right",
-    position: { left: "66.666%", top: "33.333%", width: "33.334%", height: "33.334%" },
-    choiceId: CHAPTER_4_CHOICE_IDS.keeperFold,
-  },
-  crown: {
-    direction: "top",
-    position: { left: "33.333%", top: "0%", width: "33.334%", height: "33.334%" },
-    choiceId: CHAPTER_4_CHOICE_IDS.crownFold,
-  },
-  cache: {
-    direction: "bottom",
-    position: { left: "33.333%", top: "66.666%", width: "33.334%", height: "33.334%" },
-    choiceId: CHAPTER_4_CHOICE_IDS.cacheFold,
-  },
+const EDGE_META: Record<FoldedMapEdge, { label: string; shortLabel: string; choiceId: string }> = {
+  left: { label: "west edge", shortLabel: "WEST", choiceId: CHAPTER_4_CHOICE_IDS.leftEdge },
+  right: { label: "east edge", shortLabel: "EAST", choiceId: CHAPTER_4_CHOICE_IDS.rightEdge },
+  top: { label: "north edge", shortLabel: "NORTH", choiceId: CHAPTER_4_CHOICE_IDS.topEdge },
+  bottom: { label: "south edge", shortLabel: "SOUTH", choiceId: CHAPTER_4_CHOICE_IDS.bottomEdge },
 };
 
-const PAPER_TEXTURE = {
-  backgroundColor: "rgba(239, 222, 166, 0.96)",
-  backgroundImage:
-    "linear-gradient(115deg, rgba(105,75,33,.08) 1px, transparent 1px), repeating-linear-gradient(4deg, rgba(255,255,255,.06) 0 3px, rgba(73,50,23,.025) 3px 5px)",
-  backgroundSize: "31px 31px, auto",
-} satisfies CSSProperties;
-
-function foldTransform(direction: FoldDirection, progress: number) {
-  const angle = Math.round(progress * 1800) / 10;
-  if (direction === "left") return `rotateY(${angle}deg)`;
-  if (direction === "right") return `rotateY(${-angle}deg)`;
-  if (direction === "top") return `rotateX(${-angle}deg)`;
-  return `rotateX(${angle}deg)`;
+function FrontMapArtwork() {
+  return (
+    <g data-map-face="front">
+      <rect width={SHEET_WIDTH} height={SHEET_HEIGHT} fill="#ead8a0" />
+      <rect width={SHEET_WIDTH} height={SHEET_HEIGHT} fill="url(#paper-grain-front)" opacity=".62" />
+      <g fill="none" stroke="#75623b" strokeWidth="3" opacity=".55">
+        <path d="M28 112 C150 41 257 141 374 75 S626 125 770 64 S920 98 983 54" />
+        <path d="M20 236 C128 175 250 267 371 206 S601 252 733 196 S898 223 985 174" />
+        <path d="M26 432 C162 361 269 468 399 401 S632 451 766 391 S924 419 987 379" />
+        <path d="M35 526 C159 481 258 558 386 509 S627 548 762 500 S920 517 976 487" />
+      </g>
+      <path d="M118 48 C170 134 160 224 224 303 C284 379 270 488 333 581" fill="none" stroke="#4f8290" strokeWidth="14" opacity=".76" />
+      <path d="M500 155 C604 148 690 103 804 106" fill="none" stroke="#563f22" strokeWidth="10" strokeLinecap="round" />
+      <path d="M500 155 C604 148 690 103 804 106" fill="none" stroke="#fff2bd" strokeWidth="2" strokeDasharray="12 12" opacity=".75" />
+      <path d="M804 62 h115 v70 h-115 z M820 78 v38 h83" fill="none" stroke="#4b381e" strokeWidth="5" />
+      <text x="808" y="151" fill="#4b381e" fontSize="19" fontWeight="700" letterSpacing="2">UNDERWAY</text>
+      <path d="M420 139 l16 16 -16 16 -16 -16 z" fill="none" stroke="#4f3b20" strokeWidth="5" />
+      <text x="34" y="48" fill="#55411f" fontSize="25" fontWeight="800" letterSpacing="3">GREAT SURVEY OF WESTROOT</text>
+      <text x="36" y="78" fill="#79663e" fontSize="14" letterSpacing="2">ROUTE FACE · REVISED 811</text>
+      <text x="662" y="586" fill="#79663e" fontSize="13" letterSpacing="2">LOWER GATE DISTRICT · SHEET 4</text>
+      <g stroke="#8b7444" strokeWidth="2" opacity=".45">
+        {Array.from({ length: 9 }, (_, index) => <line key={`v-${index}`} x1={100 + index * 100} y1="92" x2={100 + index * 100} y2="575" />)}
+        {Array.from({ length: 5 }, (_, index) => <line key={`h-${index}`} x1="25" y1={120 + index * 100} x2="975" y2={120 + index * 100} />)}
+      </g>
+    </g>
+  );
 }
 
-function foldOrigin(direction: FoldDirection) {
-  if (direction === "left") return "right center";
-  if (direction === "right") return "left center";
-  if (direction === "top") return "center bottom";
-  return "center top";
+function BackMapArtwork() {
+  return (
+    <g data-map-face="back">
+      <rect width={SHEET_WIDTH} height={SHEET_HEIGHT} fill="#cabd91" />
+      <rect width={SHEET_WIDTH} height={SHEET_HEIGHT} fill="url(#paper-grain-back)" opacity=".72" />
+      <g fill="none" stroke="#51492e" strokeWidth="3" opacity=".58">
+        <path d="M18 91 C151 151 269 48 390 111 S639 62 768 120 S905 78 985 126" />
+        <path d="M22 206 C139 269 262 170 391 231 S631 181 771 244 S913 198 981 252" />
+        <path d="M18 405 C151 470 270 367 395 429 S627 380 765 442 S914 397 984 453" />
+        <path d="M28 531 C146 579 260 492 389 548 S629 502 760 559 S910 522 975 571" />
+      </g>
+
+      {/* True route fragments: west-half and south-three-quarter folds. */}
+      <path d="M0 155 C70 151 136 126 250 110" fill="none" stroke="#3f3a24" strokeWidth="11" strokeLinecap="round" />
+      <path d="M0 155 C70 151 136 126 250 110" fill="none" stroke="#f1e6bb" strokeWidth="2" strokeDasharray="12 12" />
+      <path d="M5 142 l13 13 -13 13 -13 -13 z" fill="none" stroke="#3f3a24" strokeWidth="5" />
+      <circle cx="505" cy="620" r="18" fill="none" stroke="#3f3a24" strokeWidth="5" />
+      <path d="M282 454 C357 430 426 485 502 449 S647 472 733 430" fill="none" stroke="#51492e" strokeWidth="4" />
+      <path d="M284 492 C360 468 430 522 506 487 S652 509 739 468" fill="none" stroke="#51492e" strokeWidth="4" />
+
+      {/* Persuasive 817 straight route: north-half and east-half folds. */}
+      <path d="M350 30 L600 155" fill="none" stroke="#3f3a24" strokeWidth="10" strokeLinecap="round" />
+      <path d="M750 80 L900 155" fill="none" stroke="#3f3a24" strokeWidth="10" strokeLinecap="round" />
+      <path d="M600 140 l15 15 -15 15 -15 -15 z" fill="none" stroke="#3f3a24" strokeWidth="5" />
+      <path d="M884 246 C916 214 944 213 978 181" fill="none" stroke="#51492e" strokeWidth="4" strokeDasharray="12 8" />
+
+      {/* Optional third fold: north-quarter meets south-fold bridge notation. */}
+      <path d="M650 0 C682 22 715 43 760 60" fill="none" stroke="#3f3a24" strokeWidth="6" strokeDasharray="13 8" />
+      <path d="M650 620 l-18 -7 8 18" fill="none" stroke="#3f3a24" strokeWidth="5" />
+      <path d="M622 605 l15 -13 m7 4 l15 -13" stroke="#3f3a24" strokeWidth="6" strokeLinecap="round" />
+      <path d="M755 52 l5 11 12 1 -9 8 3 12 -11 -6 -10 6 2 -12 -9 -8 12 -1 z" fill="none" stroke="#3f3a24" strokeWidth="4" />
+
+      <text x="318" y="286" fill="#4c442b" fontSize="24" fontWeight="800" letterSpacing="3">KEEPER CORRECTION FIELD</text>
+      <text x="383" y="315" fill="#6a6040" fontSize="14" letterSpacing="2">REVERSE FACE · FIELD LEAF 794</text>
+      <text x="438" y="347" fill="#6a6040" fontSize="13" fontStyle="italic">“The map lies flat. Two turns find the road.”</text>
+    </g>
+  );
 }
 
-function backFaceTransform(direction: FoldDirection) {
-  return direction === "left" || direction === "right"
-    ? "rotateY(180deg)"
-    : "rotateX(180deg)";
+function SheetDefinitions() {
+  return (
+    <defs>
+      <pattern id="paper-grain-front" width="26" height="26" patternUnits="userSpaceOnUse">
+        <path d="M0 7 L26 4 M0 19 L26 16" stroke="#7d683e" strokeWidth="1" opacity=".18" />
+        <circle cx="8" cy="12" r="1" fill="#ffffff" opacity=".18" />
+      </pattern>
+      <pattern id="paper-grain-back" width="31" height="31" patternUnits="userSpaceOnUse">
+        <path d="M0 6 L31 11 M0 24 L31 29" stroke="#64593a" strokeWidth="1" opacity=".2" />
+      </pattern>
+      <filter id="fold-shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="5" stdDeviation="7" floodColor="#211609" floodOpacity=".42" />
+      </filter>
+    </defs>
+  );
 }
 
-function PaperDrawing({ flap, reverse = false }: { flap: FoldedMapFlapId; reverse?: boolean }) {
-  const ink = reverse ? "#453719" : "#504426";
-  const faint = reverse ? "#756438" : "#80734e";
+type FoldGeometry = {
+  clip: { x: number; y: number; width: number; height: number };
+  crease: number;
+  transform: string;
+};
 
-  if (!reverse) {
-    const headings = {
-      survey: ["GREAT SURVEY", "benchmark 811"],
-      keeper: ["KEEPER CORRECTION", "field leaf 794"],
-      crown: ["WESTWARD REVISION", "survey office 817"],
-      cache: ["BRIDGE LEDGER", "keeper field note"],
-    } as const;
-    const [heading, detail] = headings[flap];
-    return (
-      <svg viewBox="0 0 300 200" className="h-full w-full" aria-hidden="true">
-        <path d="M16 38 C65 10 103 69 149 34 S238 59 284 23" fill="none" stroke={faint} strokeWidth="1.5" opacity=".5" />
-        <path d="M12 155 C66 111 107 178 165 130 S245 150 289 104" fill="none" stroke={faint} strokeWidth="1.5" opacity=".5" />
-        <path d="M22 174 L278 174" stroke={ink} strokeWidth="1" strokeDasharray="5 6" opacity=".45" />
-        {flap === "survey" ? <path d="M20 140 C80 128 106 100 150 94" fill="none" stroke={ink} strokeWidth="5" strokeLinecap="round" /> : null}
-        {flap === "keeper" ? <path d="M150 96 C193 95 225 70 280 38" fill="none" stroke={ink} strokeWidth="5" strokeLinecap="round" /> : null}
-        {flap === "crown" ? <path d="M20 150 L280 39" fill="none" stroke={ink} strokeWidth="5" strokeLinecap="round" /> : null}
-        {flap === "cache" ? <path d="M42 112 C91 82 117 105 151 92 C190 76 224 104 264 69" fill="none" stroke={ink} strokeWidth="4" strokeDasharray="11 7" /> : null}
-        <text x="18" y="24" fill={ink} fontSize="15" fontWeight="700" letterSpacing="1.6">{heading}</text>
-        <text x="18" y="190" fill={ink} fontSize="11" letterSpacing="1">{detail}</text>
-        <path d="M150 83 l12 12 -12 12 -12 -12 z" fill="none" stroke={ink} strokeWidth="3" />
-      </svg>
-    );
+function getFoldGeometry(edge: FoldedMapEdge, depth: number): FoldGeometry | null {
+  if (depth <= 0) return null;
+  if (edge === "left") {
+    const crease = depth * SHEET_WIDTH / 2;
+    return { clip: { x: crease, y: 0, width: crease, height: SHEET_HEIGHT }, crease, transform: `matrix(-1 0 0 1 ${2 * crease} 0)` };
   }
-
-  return (
-    <svg viewBox="0 0 300 200" className="h-full w-full" aria-hidden="true">
-      <path d="M6 47 C58 22 93 65 144 40 S244 65 294 29" fill="none" stroke={faint} strokeWidth="2" opacity=".72" />
-      <path d="M5 127 C57 102 91 145 145 119 S239 141 295 105" fill="none" stroke={faint} strokeWidth="2" opacity=".72" />
-      {flap === "survey" ? (
-        <>
-          <path d="M12 157 C54 149 92 112 150 96" fill="none" stroke={ink} strokeWidth="6" strokeLinecap="round" />
-          <path d="M150 83 l13 13 -13 13 -13 -13 z" fill="none" stroke={ink} strokeWidth="3" />
-          <path d="M104 60 L145 42" stroke={ink} strokeWidth="2" />
-          <text x="20" y="186" fill={ink} fontSize="12" fontWeight="700">SURVEY 811</text>
-        </>
-      ) : null}
-      {flap === "keeper" ? (
-        <>
-          <path d="M150 96 C184 98 220 72 289 38" fill="none" stroke={ink} strokeWidth="6" strokeLinecap="round" />
-          <circle cx="150" cy="96" r="15" fill="none" stroke={ink} strokeWidth="3" />
-          <path d="M153 145 C190 119 225 132 282 90" fill="none" stroke={ink} strokeWidth="2" />
-          <text x="196" y="186" fill={ink} fontSize="12" fontWeight="700">KEEPER 794</text>
-        </>
-      ) : null}
-      {flap === "crown" ? (
-        <>
-          <path d="M12 157 L289 38" fill="none" stroke={ink} strokeWidth="6" strokeLinecap="round" />
-          <circle cx="150" cy="96" r="15" fill="none" stroke={ink} strokeWidth="3" />
-          <path d="M211 60 l6 -11 7 8 8 -10 7 11 8 -6 -2 18 h-32 z" fill="none" stroke={ink} strokeWidth="2.5" />
-          <path d="M82 44 C117 69 155 36 193 62" fill="none" stroke={ink} strokeWidth="2" strokeDasharray="8 5" />
-          <text x="20" y="186" fill={ink} fontSize="12" fontWeight="700">REVISION 817</text>
-        </>
-      ) : null}
-      {flap === "cache" ? (
-        <>
-          <path d="M31 120 C82 85 119 111 151 96 C190 77 226 103 274 65" fill="none" stroke={ink} strokeWidth="4" strokeDasharray="13 7" />
-          <path d="M125 102 l12 -11 m5 2 l12 -11" stroke={ink} strokeWidth="4" strokeLinecap="round" />
-          <path d="M151 96 l-17 -4 8 15" fill="none" stroke={ink} strokeWidth="3" />
-          <path d="M224 68 l4 9 10 1 -8 7 2 10 -8 -5 -9 5 3 -10 -8 -7 10 -1 z" fill="none" stroke={ink} strokeWidth="2.5" />
-          <text x="20" y="186" fill={ink} fontSize="12" fontWeight="700">BRIDGE FIELD LEAF</text>
-        </>
-      ) : null}
-    </svg>
-  );
+  if (edge === "right") {
+    const distance = depth * SHEET_WIDTH;
+    const crease = SHEET_WIDTH - distance / 2;
+    return { clip: { x: SHEET_WIDTH - distance, y: 0, width: distance / 2, height: SHEET_HEIGHT }, crease, transform: `matrix(-1 0 0 1 ${2 * crease} 0)` };
+  }
+  if (edge === "top") {
+    const crease = depth * SHEET_HEIGHT / 2;
+    return { clip: { x: 0, y: crease, width: SHEET_WIDTH, height: crease }, crease, transform: `matrix(1 0 0 -1 0 ${2 * crease})` };
+  }
+  const distance = depth * SHEET_HEIGHT;
+  const crease = SHEET_HEIGHT - distance / 2;
+  return { clip: { x: 0, y: SHEET_HEIGHT - distance, width: SHEET_WIDTH, height: distance / 2 }, crease, transform: `matrix(1 0 0 -1 0 ${2 * crease})` };
 }
 
-function CentralMap() {
-  return (
-    <div
-      className="absolute border border-amber-950/35 shadow-inner"
-      style={{
-        left: "33.333%",
-        top: "33.333%",
-        width: "33.334%",
-        height: "33.334%",
-        ...PAPER_TEXTURE,
-      }}
-      data-testid="folded-map-center"
-    >
-      <svg viewBox="0 0 300 200" className="h-full w-full" aria-label="Central map panel">
-        <path d="M4 47 C57 21 95 67 145 40 S243 64 296 29" fill="none" stroke="#716039" strokeWidth="2" opacity=".65" />
-        <path d="M4 127 C57 101 92 145 145 119 S240 142 296 105" fill="none" stroke="#716039" strokeWidth="2" opacity=".65" />
-        <path d="M22 25 C55 53 82 42 102 72 C124 105 104 143 76 176" fill="none" stroke="#487586" strokeWidth="6" opacity=".7" />
-        <path d="M219 30 L278 30 L278 74" fill="none" stroke="#493a1e" strokeWidth="3" />
-        <path d="M226 35 v29 h44" fill="none" stroke="#493a1e" strokeWidth="2" />
-        <text x="206" y="91" fill="#493a1e" fontSize="11" fontWeight="700" letterSpacing="1">UNDERWAY?</text>
-        <text x="12" y="191" fill="#67552d" fontSize="10" letterSpacing="1.2">WESTROOT LOWER SURVEY · CENTER PANEL</text>
-      </svg>
-      <div className="pointer-events-none absolute inset-0 border border-dashed border-amber-950/30" />
-    </div>
-  );
+function landingForDepth(depth: number): FoldedMapLanding | null {
+  if (depth < 0.125) return null;
+  return FOLDED_MAP_LANDINGS.reduce((best, option) =>
+    Math.abs(option.depth - depth) < Math.abs(best.depth - depth) ? option : best,
+  ).id;
 }
 
-function FoldablePaperWing({
-  flap,
-  folded,
-  stackIndex,
-  onChange,
+function EdgeHandle({
+  edge,
+  depth,
+  crossPositionPercent,
+  stageRef,
+  onBegin,
+  onPreview,
+  onSnap,
   onNudge,
 }: {
-  flap: FoldedMapFlapId;
-  folded: boolean;
-  stackIndex: number;
-  onChange: (folded: boolean) => void;
+  edge: FoldedMapEdge;
+  depth: number;
+  crossPositionPercent: number;
+  stageRef: RefObject<HTMLDivElement | null>;
+  onBegin: () => boolean;
+  onPreview: (depth: number) => void;
+  onSnap: (landing: FoldedMapLanding | null) => void;
   onNudge: () => void;
 }) {
-  const layout = FLAP_LAYOUT[flap];
-  const [dragProgress, setDragProgress] = useState<number | null>(null);
-  const progressRef = useRef(folded ? 1 : 0);
-  const drag = useRef<null | { pointerId: number; start: number; initial: number; size: number; moved: boolean }>(null);
+  const drag = useRef<null | { pointerId: number; moved: boolean }>(null);
+  const depthRef = useRef(depth);
+  depthRef.current = depth;
+  const meta = EDGE_META[edge];
+  const isVertical = edge === "left" || edge === "right";
+  const position = edge === "left"
+    ? { left: `${depth * 100}%`, top: `${crossPositionPercent}%`, transform: "translate(-50%, -50%)" }
+    : edge === "right"
+      ? { left: `${(1 - depth) * 100}%`, top: `${crossPositionPercent}%`, transform: "translate(-50%, -50%)" }
+      : edge === "top"
+        ? { left: `${crossPositionPercent}%`, top: `${depth * 100}%`, transform: "translate(-50%, -50%)" }
+        : { left: `${crossPositionPercent}%`, top: `${(1 - depth) * 100}%`, transform: "translate(-50%, -50%)" };
 
-  useEffect(() => {
-    if (!drag.current) progressRef.current = folded ? 1 : 0;
-  }, [folded]);
+  const depthFromPointer = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const rect = stageRef.current?.getBoundingClientRect();
+    if (!rect) return depthRef.current;
+    if (edge === "left") return (event.clientX - rect.left) / rect.width;
+    if (edge === "right") return (rect.right - event.clientX) / rect.width;
+    if (edge === "top") return (event.clientY - rect.top) / rect.height;
+    return (rect.bottom - event.clientY) / rect.height;
+  };
 
-  const pointerCoordinate = (event: ReactPointerEvent<HTMLDivElement>) =>
-    layout.direction === "left" || layout.direction === "right" ? event.clientX : event.clientY;
-
-  const signedDelta = (delta: number) =>
-    layout.direction === "right" || layout.direction === "bottom" ? -delta : delta;
-
-  const beginDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const initial = folded ? 1 : 0;
-    const rect = event.currentTarget.getBoundingClientRect();
-    drag.current = {
-      pointerId: event.pointerId,
-      start: pointerCoordinate(event),
-      initial,
-      size: layout.direction === "left" || layout.direction === "right" ? rect.width : rect.height,
-      moved: false,
-    };
-    progressRef.current = initial;
-    setDragProgress(initial);
+  const begin = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!onBegin()) return;
+    drag.current = { pointerId: event.pointerId, moved: false };
     event.currentTarget.setPointerCapture(event.pointerId);
   };
 
-  const moveDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
+  const move = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (!drag.current || drag.current.pointerId !== event.pointerId) return;
-    const delta = signedDelta(pointerCoordinate(event) - drag.current.start);
-    if (Math.abs(delta) > 5) drag.current.moved = true;
-    const next = Math.max(0, Math.min(1, drag.current.initial + delta / Math.max(drag.current.size, 1)));
-    progressRef.current = next;
-    setDragProgress(next);
+    const next = Math.max(0, Math.min(0.75, depthFromPointer(event)));
+    if (Math.abs(next - depthRef.current) > 0.015) drag.current.moved = true;
+    depthRef.current = next;
+    onPreview(next);
   };
 
-  const finishDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
+  const finish = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (!drag.current || drag.current.pointerId !== event.pointerId) return;
     const moved = drag.current.moved;
     drag.current = null;
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
     if (!moved) {
-      setDragProgress(null);
       onNudge();
+      onPreview(getFoldedMapLandingDepth(landingForDepth(depth)));
       return;
     }
-    const nextFolded = progressRef.current >= 0.5;
-    setDragProgress(null);
-    onChange(nextFolded);
+    onSnap(landingForDepth(depthRef.current));
   };
-
-  const progress = dragProgress ?? (folded ? 1 : 0);
-  const flapInfo = FOLDED_MAP_FLAPS.find((entry) => entry.id === flap)!;
-  const foldInstruction = folded ? "Drag away from the center to unfold" : "Drag toward the center to fold";
-  const dragCue = {
-    left: folded ? "← DRAG" : "DRAG →",
-    right: folded ? "DRAG →" : "← DRAG",
-    top: folded ? "DRAG ↑" : "DRAG ↓",
-    bottom: folded ? "DRAG ↓" : "DRAG ↑",
-  }[layout.direction];
-  const cuePosition = {
-    left: "right-1 top-1/2 -translate-y-1/2",
-    right: "left-1 top-1/2 -translate-y-1/2",
-    top: "bottom-1 left-1/2 -translate-x-1/2",
-    bottom: "top-1 left-1/2 -translate-x-1/2",
-  }[layout.direction];
 
   return (
     <div
       role="button"
       tabIndex={0}
-      aria-pressed={folded}
-      aria-label={`${flapInfo.label}, ${folded ? "folded" : "open"}. ${foldInstruction}, or press Enter.`}
-      data-choice-id={layout.choiceId}
-      data-fold-id={flap}
-      data-folded={folded ? "true" : "false"}
-      onPointerDown={beginDrag}
-      onPointerMove={moveDrag}
-      onPointerUp={finishDrag}
-      onPointerCancel={finishDrag}
+      aria-label={`${meta.label} fold handle. Drag inward to the quarter, half, or three-quarter guide.`}
+      data-choice-id={meta.choiceId}
+      data-fold-edge={edge}
+      data-fold-depth={depth.toFixed(2)}
+      onPointerDown={begin}
+      onPointerMove={move}
+      onPointerUp={finish}
+      onPointerCancel={finish}
       onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          onChange(!folded);
-        }
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        if (!onBegin()) return;
+        const currentIndex = FOLDED_MAP_LANDINGS.findIndex((option) => option.depth === depth);
+        onSnap(currentIndex < 0 ? "quarter" : currentIndex === FOLDED_MAP_LANDINGS.length - 1 ? null : FOLDED_MAP_LANDINGS[currentIndex + 1].id);
       }}
-      className="absolute cursor-grab select-none outline-none transition-[filter] duration-150 focus-visible:drop-shadow-[0_0_8px_rgba(253,230,138,.9)] active:cursor-grabbing"
-      style={{
-        ...layout.position,
-        zIndex: folded ? 30 + stackIndex : 10,
-        transform: foldTransform(layout.direction, progress),
-        transformOrigin: foldOrigin(layout.direction),
-        transformStyle: "preserve-3d",
-        transition: dragProgress === null ? "transform 420ms cubic-bezier(.2,.75,.2,1)" : "none",
-        willChange: "transform",
-        touchAction: "none",
-      }}
+      className={`absolute z-40 flex cursor-grab select-none items-center justify-center rounded-full border-2 border-amber-950/50 bg-amber-50 px-2 py-1 text-[9px] font-black tracking-wider text-amber-950 shadow-lg outline-none focus-visible:ring-4 focus-visible:ring-amber-300/70 active:cursor-grabbing sm:text-[11px] ${isVertical ? "min-h-12" : "min-w-16"}`}
+      style={{ ...position, touchAction: "none" }}
     >
-      <div
-        className="absolute inset-0 overflow-hidden border border-amber-950/40 shadow-[0_8px_20px_rgba(43,29,10,.28)]"
-        style={{
-          ...PAPER_TEXTURE,
-          backgroundColor: progress > 0.5 ? "rgba(239, 222, 166, 0.52)" : PAPER_TEXTURE.backgroundColor,
-        }}
-      >
-        <div
-          className="absolute inset-0"
-          style={{
-            transform: progress > 0.5 ? backFaceTransform(layout.direction) : "none",
-            transformStyle: "preserve-3d",
-          }}
-        >
-          <PaperDrawing flap={flap} reverse={progress > 0.5} />
-          {progress > 0.5 ? (
-            <span className="pointer-events-none absolute bottom-1 left-2 text-[8px] font-bold uppercase tracking-wider text-amber-950/55 sm:text-[9px]">
-              {flapInfo.label}
-            </span>
-          ) : null}
-          <span className={`pointer-events-none absolute ${cuePosition} rounded-full border border-amber-950/25 bg-amber-50/80 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-amber-950/70 sm:text-[10px]`}>
-            {dragCue}
-          </span>
-        </div>
-      </div>
+      {meta.shortLabel}
+    </div>
+  );
+}
+
+function FoldedSheet({
+  configuration,
+  previewDepths,
+  foldOrder,
+  draggingEdge,
+  stageRef,
+  onBegin,
+  onPreview,
+  onSnap,
+  onNudge,
+}: {
+  configuration: FoldedMapConfiguration;
+  previewDepths: Record<FoldedMapEdge, number>;
+  foldOrder: FoldedMapEdge[];
+  draggingEdge: FoldedMapEdge | null;
+  stageRef: RefObject<HTMLDivElement | null>;
+  onBegin: (edge: FoldedMapEdge) => boolean;
+  onPreview: (edge: FoldedMapEdge, depth: number) => void;
+  onSnap: (edge: FoldedMapEdge, landing: FoldedMapLanding | null) => void;
+  onNudge: (edge: FoldedMapEdge) => void;
+}) {
+  const depths = previewDepths;
+  const leftCut = depths.left * SHEET_WIDTH / 2;
+  const rightCut = depths.right * SHEET_WIDTH / 2;
+  const topCut = depths.top * SHEET_HEIGHT / 2;
+  const bottomCut = depths.bottom * SHEET_HEIGHT / 2;
+  const remainingWidth = Math.max(0, SHEET_WIDTH - leftCut - rightCut);
+  const remainingHeight = Math.max(0, SHEET_HEIGHT - topCut - bottomCut);
+  const horizontalHandlePosition = (leftCut + remainingWidth * 0.65) / SHEET_WIDTH * 100;
+  const verticalHandlePosition = (topCut + remainingHeight * 0.5) / SHEET_HEIGHT * 100;
+  const renderOrder = [
+    ...foldOrder.filter((edge) => depths[edge] > 0),
+    ...(draggingEdge && !foldOrder.includes(draggingEdge) ? [draggingEdge] : []),
+  ];
+  const BaseArtwork = configuration.side === "front" ? FrontMapArtwork : BackMapArtwork;
+  const ReverseArtwork = configuration.side === "front" ? BackMapArtwork : FrontMapArtwork;
+
+  return (
+    <div
+      ref={stageRef}
+      data-testid="folded-map-sheet"
+      data-map-side={configuration.side}
+      className="relative mx-auto w-full max-w-[1000px] overflow-visible rounded-2xl bg-[#33291c] shadow-inner"
+      style={{ aspectRatio: `${SHEET_WIDTH} / ${SHEET_HEIGHT}` }}
+    >
+      <svg viewBox={`0 0 ${SHEET_WIDTH} ${SHEET_HEIGHT}`} className="absolute inset-0 h-full w-full overflow-visible" aria-label={`${configuration.side} face of one rectangular paper map`}>
+        <SheetDefinitions />
+        <defs>
+          <clipPath id="base-sheet-clip">
+            <rect x={leftCut} y={topCut} width={Math.max(0, SHEET_WIDTH - leftCut - rightCut)} height={Math.max(0, SHEET_HEIGHT - topCut - bottomCut)} />
+          </clipPath>
+          {FOLDED_MAP_EDGES.map(({ id }) => {
+            const geometry = getFoldGeometry(id, depths[id]);
+            const clip = geometry ? { ...geometry.clip } : null;
+            if (clip && (id === "left" || id === "right")) {
+              clip.y = topCut;
+              clip.height = Math.max(0, SHEET_HEIGHT - topCut - bottomCut);
+            }
+            if (clip && (id === "top" || id === "bottom")) {
+              clip.x = leftCut;
+              clip.width = Math.max(0, SHEET_WIDTH - leftCut - rightCut);
+            }
+            return geometry ? (
+              <clipPath id={`fold-clip-${id}`} key={id}>
+                <rect {...clip!} />
+              </clipPath>
+            ) : null;
+          })}
+        </defs>
+
+        <g clipPath="url(#base-sheet-clip)" filter="url(#fold-shadow)">
+          <BaseArtwork />
+        </g>
+
+        {renderOrder.map((edge) => {
+          const geometry = getFoldGeometry(edge, depths[edge]);
+          if (!geometry) return null;
+          return (
+            <g key={edge} clipPath={`url(#fold-clip-${edge})`} filter="url(#fold-shadow)" data-fold-layer={edge}>
+              <g transform={geometry.transform}>
+                <ReverseArtwork />
+              </g>
+              {edge === "left" || edge === "right"
+                ? <line x1={geometry.crease} y1="0" x2={geometry.crease} y2={SHEET_HEIGHT} stroke="#8c7445" strokeWidth="3" strokeDasharray="10 8" />
+                : <line x1="0" y1={geometry.crease} x2={SHEET_WIDTH} y2={geometry.crease} stroke="#8c7445" strokeWidth="3" strokeDasharray="10 8" />}
+            </g>
+          );
+        })}
+
+        {draggingEdge ? FOLDED_MAP_LANDINGS.map((landing) => {
+          const fromFarEdge = draggingEdge === "right" || draggingEdge === "bottom";
+          const coordinate = (fromFarEdge ? 1 - landing.depth : landing.depth) * (draggingEdge === "left" || draggingEdge === "right" ? SHEET_WIDTH : SHEET_HEIGHT);
+          const vertical = draggingEdge === "left" || draggingEdge === "right";
+          return (
+            <g key={landing.id} pointerEvents="none">
+              {vertical
+                ? <line x1={coordinate} y1="0" x2={coordinate} y2={SHEET_HEIGHT} stroke="#fff2bd" strokeWidth="3" strokeDasharray="10 10" opacity=".8" />
+                : <line x1="0" y1={coordinate} x2={SHEET_WIDTH} y2={coordinate} stroke="#fff2bd" strokeWidth="3" strokeDasharray="10 10" opacity=".8" />}
+              <text x={vertical ? coordinate + 8 : 15} y={vertical ? 24 : coordinate - 8} fill="#fff2bd" fontSize="18" fontWeight="700">{landing.id === "quarter" ? "¼" : landing.id === "half" ? "½" : "¾"}</text>
+            </g>
+          );
+        }) : null}
+      </svg>
+
+      {FOLDED_MAP_EDGES.map(({ id }) => (
+        <EdgeHandle
+          key={id}
+              edge={id}
+              depth={depths[id]}
+              crossPositionPercent={id === "left" || id === "right" ? verticalHandlePosition : horizontalHandlePosition}
+              stageRef={stageRef}
+          onBegin={() => onBegin(id)}
+          onPreview={(depth) => onPreview(id, depth)}
+          onSnap={(landing) => onSnap(id, landing)}
+          onNudge={() => onNudge(id)}
+        />
+      ))}
     </div>
   );
 }
@@ -328,67 +375,102 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close }: 
   setPlayer: Dispatch<SetStateAction<Player>>;
   close: () => void;
 }) {
-  const [folds, setFolds] = useState<FoldedMapConfiguration>({ ...EMPTY_FOLDED_MAP_CONFIGURATION });
-  const [foldOrder, setFoldOrder] = useState<FoldedMapFlapId[]>([]);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [configuration, setConfiguration] = useState<FoldedMapConfiguration>({
+    side: EMPTY_FOLDED_MAP_CONFIGURATION.side,
+    folds: { ...EMPTY_FOLDED_MAP_CONFIGURATION.folds },
+  });
+  const [previewDepths, setPreviewDepths] = useState<Record<FoldedMapEdge, number>>({ left: 0, right: 0, top: 0, bottom: 0 });
+  const [foldOrder, setFoldOrder] = useState<FoldedMapEdge[]>([]);
+  const [draggingEdge, setDraggingEdge] = useState<FoldedMapEdge | null>(null);
   const [feedback, setFeedback] = useState(
     flags.foldedMapAttempted
       ? getFoldedMapReview(flags)
-      : "The thin paper carries four hinged wings. Fold freely; nothing is recorded until you trace a route.",
+      : "Inspect either face while the sheet is flat. Then drag an edge inward and release it near a quarter guide.",
   );
 
-  const changeFold = (flap: FoldedMapFlapId, folded: boolean) => {
-    setFolds((current) => ({ ...current, [flap]: folded }));
-    setFoldOrder((current) => folded
-      ? [...current.filter((entry) => entry !== flap), flap]
-      : current.filter((entry) => entry !== flap));
-    setFeedback(
-      folded
-        ? `${FOLDED_MAP_FLAPS.find((entry) => entry.id === flap)!.label} laid over the center. Inspect how its ink meets the layers below.`
-        : `${FOLDED_MAP_FLAPS.find((entry) => entry.id === flap)!.label} opened flat again.`,
-    );
+  const foldCount = getFoldedMapFoldCount(configuration);
+  const maxFolds = flags.foldedMapDecoded ? 3 : 2;
+
+  const beginEdgeDrag = (edge: FoldedMapEdge) => {
+    if (configuration.folds[edge] === null && foldCount >= maxFolds) {
+      setFeedback(flags.foldedMapDecoded
+        ? "Three folds are already stacked. Unfold one before moving another edge."
+        : "Hold the route to two folds for now. Unfold one edge before trying another construction.");
+      return false;
+    }
+    setDraggingEdge(edge);
+    return true;
+  };
+
+  const previewEdge = (edge: FoldedMapEdge, depth: number) => {
+    setPreviewDepths((current) => ({ ...current, [edge]: depth }));
+  };
+
+  const snapEdge = (edge: FoldedMapEdge, landing: FoldedMapLanding | null) => {
+    const depth = getFoldedMapLandingDepth(landing);
+    setPreviewDepths((current) => ({ ...current, [edge]: depth }));
+    setConfiguration((current) => ({ ...current, folds: { ...current.folds, [edge]: landing } }));
+    setFoldOrder((current) => landing
+      ? [...current.filter((candidate) => candidate !== edge), edge]
+      : current.filter((candidate) => candidate !== edge));
+    setDraggingEdge(null);
+    const landingLabel = FOLDED_MAP_LANDINGS.find((option) => option.id === landing)?.label;
+    setFeedback(landing
+      ? `The ${EDGE_META[edge].label} now lands ${landingLabel}. The opposite face is visible on the folded paper; inspect its seams before tracing.`
+      : `The ${EDGE_META[edge].label} lies flat again.`);
   };
 
   const traceRoute = () => {
-    if (!Object.values(folds).some(Boolean)) {
-      setFeedback("The map is still flat. Fold at least one paper wing before tracing a route.");
+    if (foldCount === 0) {
+      setFeedback("The sheet is still flat. Fold an edge before tracing a route.");
       return;
     }
-    const result = resolveFoldedMapConfiguration(flags, folds);
+    const result = resolveFoldedMapConfiguration(flags, configuration);
     const shouldClaimCache = result.outcome === "deeper-solve" && !flags.foldedMapCacheClaimed;
-    setFlags((current) => ({
-      ...current,
-      ...result.flags,
-      ...(shouldClaimCache ? { foldedMapCacheClaimed: true } : {}),
-    }));
+    setFlags((current) => ({ ...current, ...result.flags, ...(shouldClaimCache ? { foldedMapCacheClaimed: true } : {}) }));
     if (shouldClaimCache) {
       setPlayer((current) => ({
         ...current,
-        inventory: {
-          ...current.inventory,
-          lanternwell_drop: (current.inventory.lanternwell_drop || 0) + 1,
-        },
+        inventory: { ...current.inventory, lanternwell_drop: (current.inventory.lanternwell_drop || 0) + 1 },
       }));
     }
     setFeedback(`${result.message}${shouldClaimCache ? " One Lanternwell Drop is recovered from the marked cache." : ""}`);
   };
 
-  const resetFolds = () => {
-    setFolds({ ...EMPTY_FOLDED_MAP_CONFIGURATION });
+  const unfoldAll = () => {
+    setConfiguration((current) => ({ ...current, folds: { ...EMPTY_FOLDED_MAP_CONFIGURATION.folds } }));
+    setPreviewDepths({ left: 0, right: 0, top: 0, bottom: 0 });
     setFoldOrder([]);
-    setFeedback("All four wings lie flat. Previous route records remain, but the paper is ready for another construction.");
+    setDraggingEdge(null);
+    setFeedback("The sheet lies flat. Turn it over for another look, or begin a new fold from any edge.");
+  };
+
+  const flipMap = () => {
+    if (foldCount > 0) {
+      setFeedback("Unfold the sheet before turning the whole map over.");
+      return;
+    }
+    setConfiguration((current) => ({ ...current, side: current.side === "front" ? "back" : "front" }));
+    setFeedback(configuration.side === "front"
+      ? "The keeper-correction reverse is face-up. Its ink is distinct; nothing from the route face shows through."
+      : "The Great Survey route face is up again.");
   };
 
   const goBack = () => {
     const mostRecent = foldOrder[foldOrder.length - 1];
     if (mostRecent) {
-      changeFold(mostRecent, false);
-      setFeedback("The top paper wing was unfolded. Press Back again after every wing lies flat to leave.");
+      snapEdge(mostRecent, null);
+      setFeedback("The most recent fold was opened. Back leaves only after the whole sheet is flat.");
       return;
     }
     close();
   };
 
-  const foldCount = Object.values(folds).filter(Boolean).length;
+  const configurationLabel = `${configuration.side}:${FOLDED_MAP_EDGES
+    .filter(({ id }) => configuration.folds[id])
+    .map(({ id }) => `${id}-${configuration.folds[id]}`)
+    .join(",") || "flat"}`;
 
   return (
     <div className="fixed inset-0 z-[90] flex items-end justify-center bg-black/75 p-2 sm:items-center sm:p-4">
@@ -398,41 +480,35 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close }: 
         aria-labelledby="folded-map-title"
         data-scene-id={flags.foldedMapAttempted ? CHAPTER_4_SCENE_IDS.foldedMapReview : CHAPTER_4_SCENE_IDS.foldedMapGraybox}
         data-testid="folded-map-prototype"
-        data-fold-configuration={FOLDED_MAP_FLAPS.filter((flap) => folds[flap.id]).map((flap) => flap.id).join(",") || "flat"}
+        data-fold-configuration={configurationLabel}
         className="max-h-[96vh] w-full max-w-7xl overflow-y-auto rounded-[1.75rem] border border-amber-200/20 bg-slate-950 p-4 text-white shadow-2xl sm:p-6"
       >
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200/70">Chapter 4 interaction spike · schematic paper prototype</div>
+            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200/70">Chapter 4 interaction spike · rectangular sheet prototype</div>
             <h2 id="folded-map-title" className="mt-1 font-serif text-2xl font-semibold sm:text-3xl">The Folded Map</h2>
-            <p className="mt-2 max-w-4xl text-sm leading-6 text-white/65">Drag a paper wing toward the center crease to fold it. The thin survey paper remains translucent when stacked, so route strokes, dates, lantern marks, and terrain lines can be compared directly.</p>
+            <p className="mt-2 max-w-4xl text-sm leading-6 text-white/65">One opaque map, printed differently on each side. Drag any edge inward; its landing snaps to the ¼, ½, or ¾ guide, and the fold reveals only the opposite face.</p>
           </div>
           <Button data-choice-id={CHAPTER_4_CHOICE_IDS.close} onClick={close}>Close</Button>
         </div>
 
         <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_21rem]">
-          <div className="rounded-3xl border border-amber-100/15 bg-[#2a251b] p-2 sm:p-4">
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-2 px-1 text-xs text-amber-50/65">
-              <span>Four hinged wings · sixteen possible configurations</span>
-              <span data-testid="fold-count">{foldCount} {foldCount === 1 ? "wing" : "wings"} folded</span>
+          <div className="rounded-3xl border border-amber-100/15 bg-[#211b14] p-3 sm:p-5">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-2 text-xs text-amber-50/65">
+              <span>One sheet · two faces · 54 two-fold configurations</span>
+              <span data-testid="fold-count">{foldCount}/{maxFolds} folds active · {configuration.side} face up</span>
             </div>
-            <div
-              className="relative mx-auto w-full max-w-[900px] overflow-visible rounded-2xl bg-[radial-gradient(circle_at_center,rgba(254,243,199,.12),transparent_55%)]"
-              style={{ aspectRatio: "3 / 2", perspective: "1500px", transformStyle: "preserve-3d" }}
-              aria-label="Unfolded cross-shaped map with four draggable paper wings"
-            >
-              <CentralMap />
-              {FOLDED_MAP_FLAPS.map((flap) => (
-                <FoldablePaperWing
-                  key={flap.id}
-                  flap={flap.id}
-                  folded={folds[flap.id]}
-                  stackIndex={Math.max(0, foldOrder.indexOf(flap.id))}
-                  onChange={(folded) => changeFold(flap.id, folded)}
-                  onNudge={() => setFeedback(`Drag the ${flap.label.toLowerCase()} toward the center. A press alone will not choose an answer.`)}
-                />
-              ))}
-            </div>
+            <FoldedSheet
+              configuration={configuration}
+              previewDepths={previewDepths}
+              foldOrder={foldOrder}
+              draggingEdge={draggingEdge}
+              stageRef={stageRef}
+              onBegin={beginEdgeDrag}
+              onPreview={previewEdge}
+              onSnap={snapEdge}
+              onNudge={(edge) => setFeedback(`Drag the ${EDGE_META[edge].label} inward. Pressing the handle alone does not choose a fold.`)}
+            />
           </div>
 
           <aside className="space-y-3">
@@ -440,20 +516,21 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close }: 
             <div className="rounded-3xl border border-white/10 bg-white/5 p-4 text-sm leading-6 text-white/70">
               <div className="font-semibold text-white">Edden's clue</div>
               <div className="mt-1">“The map lies flat. Two turns find the road. The bridge breaks twice.”</div>
-              <div className="mt-4 font-semibold text-white">What can agree?</div>
+              <div className="mt-4 font-semibold text-white">Look for agreement</div>
               <ul className="mt-1 list-inside list-disc space-y-1 text-xs text-white/55">
-                <li>dated lantern benchmark and keeper ring</li>
-                <li>both measured contour strokes</li>
-                <li>one continuous road into the Underway</li>
+                <li>the 811 lantern and an older keeper ring</li>
+                <li>two contour strokes meeting without reversal</li>
+                <li>one road continuing into the Underway</li>
               </ul>
               <div className="mt-4 font-semibold text-white">Recorded state</div>
               <div className="mt-1">{getFoldedMapReview(flags)}</div>
               {flags.foldedMapCacheClaimed ? <div className="mt-3 text-sky-200">Lanternwell cache reward claimed once.</div> : null}
             </div>
+            <Button data-choice-id={CHAPTER_4_CHOICE_IDS.flipMap} onClick={flipMap} disabled={foldCount > 0} className="w-full">Turn the flat map over</Button>
             <Button data-choice-id={CHAPTER_4_CHOICE_IDS.traceRoute} onClick={traceRoute} className="w-full bg-amber-500/25">Trace this folded route</Button>
-            <Button data-choice-id={CHAPTER_4_CHOICE_IDS.resetFolds} onClick={resetFolds} className="w-full">Unfold all wings</Button>
-            <Button data-choice-id={CHAPTER_4_CHOICE_IDS.back} onClick={goBack} className="w-full">{foldOrder.length ? "Back: unfold top wing" : "Back to Westroot"}</Button>
-            <div className="px-2 text-center text-[11px] leading-4 text-white/35">Folding and unfolding is safe. Only tracing commits a route. Rootbread is not consulted.</div>
+            <Button data-choice-id={CHAPTER_4_CHOICE_IDS.resetFolds} onClick={unfoldAll} className="w-full">Unfold the whole sheet</Button>
+            <Button data-choice-id={CHAPTER_4_CHOICE_IDS.back} onClick={goBack} className="w-full">{foldOrder.length ? "Back: open latest fold" : "Back to Westroot"}</Button>
+            <div className="px-2 text-center text-[11px] leading-4 text-white/35">Experimentation is safe. Only tracing commits a route. Rootbread is not consulted.</div>
           </aside>
         </div>
       </section>

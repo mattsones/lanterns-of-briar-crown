@@ -2,7 +2,7 @@
 
 Last updated: 2026-08-02
 
-Status: executable pre-production contract and second Folded Map interaction spike implemented; the first card-matching spike was rejected, and the hinged-paper prototype awaits owner acceptance before full Chapter 4 scene work
+Status: executable pre-production contract and third Folded Map interaction spike implemented; the card matcher and cross-wing prototypes were rejected, and the rectangular-sheet prototype awaits owner acceptance before full Chapter 4 scene work
 
 ## Chapter Promise
 
@@ -46,16 +46,17 @@ The prototype is available from the title screen through **Test Folded Map Grayb
 
 Required route solve:
 
-- manipulate one cross-shaped map with four hinged paper wings: Great Survey west, keeper correction east, 817 office revision north, and bridge ledger south;
-- drag wings around their visible creases; pressing a paper panel alone does not select an answer;
-- support sixteen flat/folded configurations;
-- fold exactly the Great Survey and keeper correction wings for the required two-fold solution;
-- make the dated lantern benchmark, keeper ring, two contour strokes, and winding Underway road agree simultaneously;
-- give keyboard users the same fold/unfold states through the focused paper wings.
+- manipulate one opaque rectangular map whose route face and keeper-correction face are visibly distinct and never transparent;
+- drag any of its four edges inward and snap that edge to the quarter, half, or three-quarter landing guide;
+- support 54 distinct two-edge configurations before considering fold order, single folds, the reverse face, or the optional third fold;
+- land the west edge at one-half and the south edge at three-quarters for the required two-fold solution;
+- make the dated Survey mark, older keeper ring, contour strokes, and winding road into the Underway agree simultaneously;
+- keep the map surface itself non-selectable: only moving an edge changes construction, and only **Trace this folded route** commits it;
+- give keyboard users the same landing states by cycling the focused edge handle.
 
 Fail-forward mistake:
 
-- folding the Great Survey wing with the neutral-colored 817 office revision creates the one deliberately tempting false configuration;
+- landing the east edge at one-half and the north edge at one-half creates the deliberately tempting 817 false configuration;
 - its lantern and straight road align convincingly, while its date and terrain evidence do not;
 - ordinary wrong configurations are also possible and do not create route consequences;
 - folding and unfolding is consequence-free; only **Trace this folded route** commits the current configuration;
@@ -65,7 +66,7 @@ Fail-forward mistake:
 
 Optional deeper solve:
 
-- after the true route is recorded, leave the Survey and keeper wings folded and add the bridge-ledger wing as a third fold;
+- after the true route is recorded, leave the west-half and south-three-quarter edges folded and add the north edge at one-quarter as a third fold;
 - make the root arrow visibly continue across the broken bridge notation;
 - reveal the Lanternwell cache mark through the layered drawing;
 - award exactly one Lanternwell Drop;
@@ -73,8 +74,8 @@ Optional deeper solve:
 
 Back behavior:
 
-- Back unfolds the most recently folded wing first;
-- Back closes the interaction only when every wing lies flat.
+- Back unfolds the most recently folded edge first;
+- Back closes the interaction only when every edge lies flat.
 
 ## Folded Map State
 
@@ -151,6 +152,6 @@ Optional flags, never ending gates:
 
 Before full Chapter 4 story implementation, play **Test Folded Map Graybox** and decide:
 
-> Does dragging and layering the hinged paper feel like folding a map, and does the correct construction reveal itself through visible evidence rather than color, labels, or elimination?
+> Does dragging the edges of one opaque two-sided sheet to different landing points feel like folding a map, and does the correct construction reveal itself through visible evidence rather than color, labels, or elimination?
 
-The first answer-card spike failed this gate on both physicality and deduction. The second spike must be judged on its drag interaction, the plausibility of the 817 false route, the readability of ordinary failures, and whether the true and cache alignments visually explain themselves. If it still feels like a quiz, revise again before building the Underway route or final art.
+The first answer-card spike failed on both physicality and deduction. The second cross-wing spike improved manipulation but still reduced the answer to three of four binary flaps, showed implausible transparency, and did not feel like one map. The third spike must be judged on its rectangular-sheet drag interaction, the usefulness of the three landing choices per edge, the plausibility of the 817 false route, and whether the true and cache alignments visually explain themselves. If it still feels like a quiz, revise again before building the Underway route or final art.

@@ -131,7 +131,7 @@ Visual direction:
 
 ## Short-Term Roadmap
 
-1. Owner-play the second **Test Folded Map Graybox** prototype and judge its hinged drag interaction, multiple constructions, tempting 817 revision, and visible route evidence. The first card-matching version was rejected.
+1. Owner-play the third **Test Folded Map Graybox** prototype and judge its opaque two-sided rectangular sheet, four draggable edges, three landing depths, tempting 817 revision, and visible route evidence. The card-matching and cross-wing versions were rejected.
 2. If accepted, build the Chapter 4 graybox critical path from the executable contract without final art.
 3. Keep the uninterrupted human Chapters 1-3 session on the Chapter 4 release-candidate checklist.
 4. Continue the staged `src/App.tsx` extraction and address the slightly-over-500-KB main bundle as focused technical work.

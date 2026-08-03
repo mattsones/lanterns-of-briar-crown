@@ -1,101 +1,119 @@
 import { expect, test, type Page } from "@playwright/test";
-import { CHAPTER_4_CHOICE_IDS, CHAPTER_4_SCENE_IDS, type FoldedMapFlapId } from "../src/story/chapter4";
+import {
+  CHAPTER_4_CHOICE_IDS,
+  CHAPTER_4_SCENE_IDS,
+  type FoldedMapEdge,
+  type FoldedMapLanding,
+} from "../src/story/chapter4";
 import { choice, openCheckedInFixture, scene } from "./helpers/saveFixtures";
 
-const CHOICE_BY_FLAP: Record<FoldedMapFlapId, string> = {
-  survey: CHAPTER_4_CHOICE_IDS.surveyFold,
-  keeper: CHAPTER_4_CHOICE_IDS.keeperFold,
-  crown: CHAPTER_4_CHOICE_IDS.crownFold,
-  cache: CHAPTER_4_CHOICE_IDS.cacheFold,
+const CHOICE_BY_EDGE: Record<FoldedMapEdge, string> = {
+  left: CHAPTER_4_CHOICE_IDS.leftEdge,
+  right: CHAPTER_4_CHOICE_IDS.rightEdge,
+  top: CHAPTER_4_CHOICE_IDS.topEdge,
+  bottom: CHAPTER_4_CHOICE_IDS.bottomEdge,
 };
 
-async function dragWing(page: Page, flap: FoldedMapFlapId, fold = true) {
-  const wing = choice(page, CHOICE_BY_FLAP[flap]);
-  const box = await wing.boundingBox();
-  if (!box) throw new Error(`Folded Map ${flap} wing has no bounding box.`);
-  const start = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
-  const direction = {
-    survey: { x: 0.82, y: 0 },
-    keeper: { x: -0.82, y: 0 },
-    crown: { x: 0, y: 0.82 },
-    cache: { x: 0, y: -0.82 },
-  }[flap];
-  const multiplier = fold ? 1 : -1;
+const DEPTH_BY_LANDING: Record<FoldedMapLanding, number> = {
+  quarter: 0.25,
+  half: 0.5,
+  "three-quarter": 0.75,
+};
+
+async function dragEdge(page: Page, edge: FoldedMapEdge, landing: FoldedMapLanding) {
+  const handle = choice(page, CHOICE_BY_EDGE[edge]);
+  const sheet = page.getByTestId("folded-map-sheet");
+  await handle.scrollIntoViewIfNeeded();
+  const [handleBox, sheetBox] = await Promise.all([handle.boundingBox(), sheet.boundingBox()]);
+  if (!handleBox || !sheetBox) throw new Error(`Folded Map ${edge} edge is not measurable.`);
+  const depth = DEPTH_BY_LANDING[landing];
+  const start = { x: handleBox.x + handleBox.width / 2, y: handleBox.y + handleBox.height / 2 };
+  const target = edge === "left"
+    ? { x: sheetBox.x + sheetBox.width * depth, y: start.y }
+    : edge === "right"
+      ? { x: sheetBox.x + sheetBox.width * (1 - depth), y: start.y }
+      : edge === "top"
+        ? { x: start.x, y: sheetBox.y + sheetBox.height * depth }
+        : { x: start.x, y: sheetBox.y + sheetBox.height * (1 - depth) };
   await page.mouse.move(start.x, start.y);
   await page.mouse.down();
-  await page.mouse.move(
-    start.x + direction.x * box.width * multiplier,
-    start.y + direction.y * box.height * multiplier,
-    { steps: 8 },
-  );
+  await page.mouse.move(target.x, target.y, { steps: 10 });
   await page.mouse.up();
-  await expect(wing).toHaveAttribute("aria-pressed", fold ? "true" : "false");
+  await expect(handle).toHaveAttribute("data-fold-depth", depth.toFixed(2));
 }
 
-test("Folded Map requires paper manipulation and distinguishes ordinary, tempting, true, and deeper constructions", async ({ page }) => {
+test("rectangular Folded Map supports two faces, many edge landings, false and true routes, and the optional third fold", async ({ page }) => {
   await openCheckedInFixture(page, "Test Folded Map Graybox");
 
   const prototype = page.getByTestId("folded-map-prototype");
+  const sheet = page.getByTestId("folded-map-sheet");
   await expect(page.getByRole("heading", { name: "The Folded Map" })).toBeVisible();
   await expect(scene(page, CHAPTER_4_SCENE_IDS.foldedMapGraybox)).toBeVisible();
-  await expect(prototype).toHaveAttribute("data-fold-configuration", "flat");
+  await expect(prototype).toHaveAttribute("data-fold-configuration", "front:flat");
+  await expect(sheet).toHaveAttribute("data-map-side", "front");
 
-  await choice(page, CHAPTER_4_CHOICE_IDS.surveyFold).click();
-  await expect(prototype).toHaveAttribute("data-fold-configuration", "flat");
-  await expect(page.getByTestId("folded-map-feedback")).toContainText("press alone will not choose");
+  await choice(page, CHAPTER_4_CHOICE_IDS.flipMap).click();
+  await expect(sheet).toHaveAttribute("data-map-side", "back");
+  await expect(page.locator('[data-map-face="back"]')).toHaveCount(1);
+  await choice(page, CHAPTER_4_CHOICE_IDS.flipMap).click();
+  await expect(sheet).toHaveAttribute("data-map-side", "front");
 
-  await dragWing(page, "keeper");
-  await dragWing(page, "cache");
+  await choice(page, CHAPTER_4_CHOICE_IDS.leftEdge).click();
+  await expect(prototype).toHaveAttribute("data-fold-configuration", "front:flat");
+  await expect(page.getByTestId("folded-map-feedback")).toContainText("Pressing the handle alone");
+
+  await dragEdge(page, "left", "quarter");
+  await dragEdge(page, "top", "three-quarter");
+  await expect(prototype).toHaveAttribute("data-fold-configuration", "front:left-quarter,top-three-quarter");
   await choice(page, CHAPTER_4_CHOICE_IDS.traceRoute).click();
   await expect(page.getByTestId("folded-map-feedback")).toContainText("evidence does not");
-  await expect(page.getByText("Crown shortcut rejected", { exact: false })).toHaveCount(0);
 
   await choice(page, CHAPTER_4_CHOICE_IDS.resetFolds).click();
-  await dragWing(page, "survey");
-  await dragWing(page, "crown");
+  await dragEdge(page, "right", "half");
+  await dragEdge(page, "top", "half");
+  await expect(prototype).toHaveAttribute("data-fold-configuration", "front:right-half,top-half");
   await choice(page, CHAPTER_4_CHOICE_IDS.traceRoute).click();
   await expect(page.getByTestId("folded-map-feedback")).toContainText("wonderfully straight road");
   await expect(scene(page, CHAPTER_4_SCENE_IDS.foldedMapReview)).toBeVisible();
 
   await choice(page, CHAPTER_4_CHOICE_IDS.resetFolds).click();
-  await dragWing(page, "survey");
-  await dragWing(page, "keeper");
+  await dragEdge(page, "left", "half");
+  await dragEdge(page, "bottom", "three-quarter");
+  await expect(prototype).toHaveAttribute("data-fold-configuration", "front:left-half,bottom-three-quarter");
   await choice(page, CHAPTER_4_CHOICE_IDS.traceRoute).click();
-  await expect(page.getByTestId("folded-map-feedback")).toContainText("both contour strokes");
+  await expect(page.getByTestId("folded-map-feedback")).toContainText("west edge lands halfway");
   await expect(page.getByText("True route recorded", { exact: false })).toBeVisible();
 
-  await dragWing(page, "cache");
+  await dragEdge(page, "top", "quarter");
+  await expect(prototype).toHaveAttribute("data-fold-configuration", "front:left-half,top-quarter,bottom-three-quarter");
   await choice(page, CHAPTER_4_CHOICE_IDS.traceRoute).click();
   await expect(page.getByTestId("folded-map-feedback")).toContainText("One Lanternwell Drop");
   await expect(page.getByText("Lanternwell cache reward claimed once.")).toBeVisible();
-
   await choice(page, CHAPTER_4_CHOICE_IDS.traceRoute).click();
   await expect(page.getByTestId("folded-map-feedback")).not.toContainText("One Lanternwell Drop");
 });
 
-test("Folded Map Back unfolds the top paper wing before closing", async ({ page }) => {
+test("Folded Map Back opens the latest edge before closing", async ({ page }) => {
   await openCheckedInFixture(page, "Test Folded Map Graybox");
 
-  await dragWing(page, "survey");
-  await dragWing(page, "keeper");
+  const prototype = page.getByTestId("folded-map-prototype");
+  await dragEdge(page, "left", "half");
+  await dragEdge(page, "bottom", "three-quarter");
   await choice(page, CHAPTER_4_CHOICE_IDS.back).click();
-  await expect(choice(page, CHAPTER_4_CHOICE_IDS.keeperFold)).toHaveAttribute("aria-pressed", "false");
-  await expect(choice(page, CHAPTER_4_CHOICE_IDS.surveyFold)).toHaveAttribute("aria-pressed", "true");
-  await expect(scene(page, CHAPTER_4_SCENE_IDS.foldedMapGraybox)).toBeVisible();
-
+  await expect(prototype).toHaveAttribute("data-fold-configuration", "front:left-half");
   await choice(page, CHAPTER_4_CHOICE_IDS.back).click();
-  await expect(choice(page, CHAPTER_4_CHOICE_IDS.surveyFold)).toHaveAttribute("aria-pressed", "false");
+  await expect(prototype).toHaveAttribute("data-fold-configuration", "front:flat");
   await choice(page, CHAPTER_4_CHOICE_IDS.back).click();
   await expect(page.getByRole("heading", { name: "The Folded Map" })).toHaveCount(0);
 });
 
-test("Folded Map paper remains draggable and traceable at phone width", async ({ page }) => {
+test("rectangular Folded Map remains draggable and traceable at phone width", async ({ page }) => {
   await page.setViewportSize({ width: 430, height: 932 });
   await openCheckedInFixture(page, "Test Folded Map Graybox");
 
   await expect(page.getByRole("heading", { name: "The Folded Map" })).toBeInViewport();
-  await dragWing(page, "survey");
-  await dragWing(page, "keeper");
+  await dragEdge(page, "left", "half");
+  await dragEdge(page, "bottom", "three-quarter");
   await choice(page, CHAPTER_4_CHOICE_IDS.traceRoute).click();
   await expect(page.getByTestId("folded-map-feedback")).toContainText("Underway");
 });

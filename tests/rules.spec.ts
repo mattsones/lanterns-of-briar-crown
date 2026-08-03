@@ -767,18 +767,23 @@ test("Chapter 4 save migration infers prerequisite Folded Map state", () => {
 test("Folded Map state separates mistake, route decode, deeper solve, and one-time reward", () => {
   const initial = buildDefaultFlags();
   expect(FOLDED_MAP_CONTRACT).toMatchObject({
-    configurationCount: 16,
+    sheet: "one opaque two-sided rectangle",
+    twoFoldConfigurationCount: 54,
     requiredFoldCount: 2,
     deeperFoldCount: 3,
-    trueRouteConfiguration: ["survey", "keeper"],
-    temptingFalseConfiguration: ["survey", "crown"],
+  });
+  const configuration = (
+    folds: Partial<typeof EMPTY_FOLDED_MAP_CONFIGURATION.folds>,
+    side: "front" | "back" = "front",
+  ) => ({
+    side,
+    folds: { ...EMPTY_FOLDED_MAP_CONFIGURATION.folds, ...folds },
   });
 
-  const cleanDecode = resolveFoldedMapConfiguration(initial, {
-    ...EMPTY_FOLDED_MAP_CONFIGURATION,
-    survey: true,
-    keeper: true,
-  });
+  const cleanDecode = resolveFoldedMapConfiguration(initial, configuration({
+    left: "half",
+    bottom: "three-quarter",
+  }));
   expect(cleanDecode).toMatchObject({
     outcome: "true-route",
     flags: {
@@ -790,19 +795,21 @@ test("Folded Map state separates mistake, route decode, deeper solve, and one-ti
   expect(cleanDecode.flags.foldedMapMaintenanceDetour).toBeUndefined();
   expect(cleanDecode.flags.foldedMapFirstAttemptMistake).toBeUndefined();
 
-  const ordinaryWrong = resolveFoldedMapConfiguration(initial, {
-    ...EMPTY_FOLDED_MAP_CONFIGURATION,
-    keeper: true,
-    cache: true,
-  });
+  const ordinaryWrong = resolveFoldedMapConfiguration(initial, configuration({
+    left: "quarter",
+    top: "three-quarter",
+  }));
   expect(ordinaryWrong.outcome).toBe("not-a-route");
   expect(ordinaryWrong.flags.foldedMapMaintenanceDetour).toBeUndefined();
+  expect(resolveFoldedMapConfiguration(initial, configuration({
+    left: "half",
+    bottom: "three-quarter",
+  }, "back")).outcome).toBe("not-a-route");
 
-  const mistake = resolveFoldedMapConfiguration(initial, {
-    ...EMPTY_FOLDED_MAP_CONFIGURATION,
-    survey: true,
-    crown: true,
-  });
+  const mistake = resolveFoldedMapConfiguration(initial, configuration({
+    right: "half",
+    top: "half",
+  }));
   expect(mistake).toMatchObject({
     outcome: "false-shortcut",
     flags: {
@@ -814,22 +821,20 @@ test("Folded Map state separates mistake, route decode, deeper solve, and one-ti
   });
 
   const afterMistake = { ...initial, ...mistake.flags };
-  const decoded = resolveFoldedMapConfiguration(afterMistake, {
-    ...EMPTY_FOLDED_MAP_CONFIGURATION,
-    survey: true,
-    keeper: true,
-  });
+  const decoded = resolveFoldedMapConfiguration(afterMistake, configuration({
+    left: "half",
+    bottom: "three-quarter",
+  }));
   expect(decoded.outcome).toBe("true-route");
   expect(decoded.flags.foldedMapDecoded).toBe(true);
   expect(decoded.flags.foldedMapMaintenanceDetour).toBeUndefined();
 
   const afterDecode = { ...afterMistake, ...decoded.flags };
-  const deeper = resolveFoldedMapConfiguration(afterDecode, {
-    ...EMPTY_FOLDED_MAP_CONFIGURATION,
-    survey: true,
-    keeper: true,
-    cache: true,
-  });
+  const deeper = resolveFoldedMapConfiguration(afterDecode, configuration({
+    left: "half",
+    top: "quarter",
+    bottom: "three-quarter",
+  }));
   expect(deeper.outcome).toBe("deeper-solve");
   expect(deeper.flags.foldedMapDeeperSolved).toBe(true);
 
