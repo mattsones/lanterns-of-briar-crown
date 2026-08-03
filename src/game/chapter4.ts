@@ -73,7 +73,7 @@ export function resolveFoldedMapConfiguration(
       outcome: "deeper-solve",
       flags: { ...common, foldedMapDecoded: true, foldedMapDeeperSolved: true },
       message:
-        "With the true route still held, the north edge lands one-quarter across. Its reverse-side root arrow completes the broken bridge mark and circles a keeper cache beside Lanternwell.",
+        "With the true route still held, the north edge lands one-quarter across. Its reverse-side root arrow begins at the keeper bridge and leads to a cache star beside Lanternwell.",
     };
   }
 
@@ -82,7 +82,7 @@ export function resolveFoldedMapConfiguration(
       outcome: "true-route",
       flags: { ...common, foldedMapDecoded: true },
       message:
-        "The west edge lands halfway across and the south edge reaches the three-quarter guide. Reverse-side keeper ink closes the 811 lantern ring, both contour strokes, and one winding road into the Underway.",
+        "The west edge lands halfway and supplies the western approach, but leaves the road unfinished. The south edge lands three-quarters across and lifts the keeper ring and bridge span into that gap, joining both contour strokes to one winding road into the Underway.",
     };
   }
 
@@ -95,7 +95,7 @@ export function resolveFoldedMapConfiguration(
         foldedMapMaintenanceDetour: true,
       },
       message:
-        "The east and north half-folds join the two 817 ticks into a wonderfully straight road. Traced onward, however, its contour runs backward and ends at a sealed maintenance approach. The persuasive mistake is recorded, but the paper remains yours to refold.",
+        "The east and north half-folds join the later office marks into a wonderfully straight road. Traced onward, however, its contour runs backward and ends at a sealed maintenance approach. The persuasive mistake is recorded, but the paper remains yours to refold.",
     };
   }
 
@@ -103,7 +103,7 @@ export function resolveFoldedMapConfiguration(
     outcome: "not-a-route",
     flags: common,
     message:
-      "The paper holds this shape, but the evidence does not: a terrain stroke doubles back, a dated tick meets empty paper, or the road stops at a cut edge. Unfold and try another construction.",
+      "The paper holds this shape, but the evidence does not: a terrain stroke doubles back, a revision mark meets empty paper, or the road stops at a cut edge. Unfold and try another construction.",
   };
 }
 
@@ -112,7 +112,7 @@ export function getFoldedMapReview(flags: Flags) {
     return "True route decoded; deeper Lanternwell cache alignment found.";
   }
   if (flags.foldedMapDecoded) {
-    return "True route recorded; Edden's bridge notation suggests an optional third fold.";
+    return "True route recorded; the root mark beside the keeper bridge suggests an optional third fold.";
   }
   if (flags.foldedMapMaintenanceDetour) {
     return "Crown shortcut rejected; maintenance-route pressure recorded; true route unresolved.";

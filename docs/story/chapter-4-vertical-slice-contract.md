@@ -1,8 +1,8 @@
 # Chapter 4 Vertical-Slice Contract
 
-Last updated: 2026-08-02
+Last updated: 2026-08-03
 
-Status: executable pre-production contract complete; the third rectangular-sheet Folded Map direction received owner acceptance on 2026-08-02, with stronger trace confirmation and a more discoverable 817 false route added from the acceptance playtest
+Status: executable pre-production contract complete; the third rectangular-sheet Folded Map direction received owner acceptance on 2026-08-02, with stronger trace confirmation and a more discoverable later office shortcut added from the acceptance playtest
 
 ## Chapter Promise
 
@@ -50,13 +50,13 @@ Required route solve:
 - drag any of its four edges inward and snap that edge to the quarter, half, or three-quarter landing guide;
 - support 54 distinct two-edge configurations before considering fold order, single folds, the reverse face, or the optional third fold;
 - land the west edge at one-half and the south edge at three-quarters for the required two-fold solution;
-- make the dated Survey mark, older keeper ring, contour strokes, and winding road into the Underway agree simultaneously;
+- make the west fold visibly incomplete on its own, then use the south fold's keeper ring and bridge span to close the missing road segment and align the surrounding contours;
 - keep the map surface itself non-selectable: only moving an edge changes construction, and only **Trace this folded route** commits it;
 - give keyboard users the same landing states by cycling the focused edge handle.
 
 Fail-forward mistake:
 
-- landing the east edge at one-half and the north edge at one-half creates the deliberately tempting 817 false configuration;
+- landing the east edge at one-half and the north edge at one-half creates the deliberately tempting later office shortcut;
 - its lantern and straight road align convincingly, while its date and terrain evidence do not;
 - ordinary wrong configurations are also possible and do not create route consequences;
 - folding and unfolding is consequence-free; only **Trace this folded route** commits the current configuration;
@@ -67,7 +67,7 @@ Fail-forward mistake:
 Optional deeper solve:
 
 - after the true route is recorded, leave the west-half and south-three-quarter edges folded and add the north edge at one-quarter as a third fold;
-- make the root arrow visibly continue across the broken bridge notation;
+- make the root arrow visibly continue from the south fold's bridge to a separate cache mark;
 - reveal the Lanternwell cache mark through the layered drawing;
 - award exactly one Lanternwell Drop;
 - repeat visits remain reviewable and cannot repeat the reward.
@@ -154,4 +154,6 @@ Before full Chapter 4 story implementation, play **Test Folded Map Graybox** and
 
 > Does dragging the edges of one opaque two-sided sheet to different landing points feel like folding a map, and does the correct construction reveal itself through visible evidence rather than color, labels, or elimination?
 
-The first answer-card spike failed on both physicality and deduction. The second cross-wing spike improved manipulation but still reduced the answer to three of four binary flaps, showed implausible transparency, and did not feel like one map. The owner accepted the third rectangular-sheet interaction direction on 2026-08-02 as a cool puzzle for the game. The acceptance run exposed two polish findings: committed outcomes needed unmistakable confirmation, and the tempting straight 817 construction needed to be easier to discover. The prototype now gives every traced outcome a large result stamp and distinct treatment, while matching 817 edge marks and clue copy point toward the persuasive false construction without naming its exact folds.
+The first answer-card spike failed on both physicality and deduction. The second cross-wing spike improved manipulation but still reduced the answer to three of four binary flaps, showed implausible transparency, and did not feel like one map. The owner accepted the third rectangular-sheet interaction direction on 2026-08-02 as a cool puzzle for the game. The acceptance run exposed two polish findings: committed outcomes needed unmistakable confirmation, and the tempting straight office-shortcut construction needed to be easier to discover. The prototype now gives every traced outcome a large result stamp and distinct treatment, while matching office marks and clue copy point toward the persuasive false construction without naming its exact folds.
+
+The August 3 follow-up confirmed that real artwork alone must not be expected to repair unclear folding geometry or route alignment. The graybox now visibly separates the fixed folding table from the reduced paper footprint, marks reverse-face flap boundaries and creases, compacts handles after they land, leaves a deliberate road gap after only the west fold, and lets the south fold supply a recognizable bridge segment and keeper ring. Only after the player traces the construction does the interface confirm the keeper route and reject the later office shortcut. The optional north fold points from that bridge to a separate cache mark. Production art must preserve those physical cues and be reviewed in the true, false, and optional-cache folded compositions—not only as two attractive flat faces. Numeric revision years remain deferred until the story establishes a calendar the player can understand.
