@@ -4,7 +4,7 @@ A storybook fantasy adventure prototype about Hearthhollow, Lantern Road, Brambl
 
 ## Current Status
 
-Chapters 1-3 have automated playable paths in the React/TypeScript prototype. Chapter 3 is closed as a release candidate, and Chapter 4 pre-production now includes an executable contract, save-state scaffolding, a tested Folded Map graybox, and a settled Westroot gatewright weapon offer. Full Chapter 4 scene implementation awaits owner acceptance of the graybox interaction direction.
+Chapters 1-3 have automated playable paths in the React/TypeScript prototype. Chapter 3 is closed as a release candidate, and Chapter 4 pre-production now includes an executable contract, save-state scaffolding, an owner-accepted Folded Map interaction, and a settled Westroot gatewright weapon offer. The Chapter 4 graybox critical path is ready to begin.
 
 Current features include:
 
@@ -131,8 +131,8 @@ Visual direction:
 
 ## Short-Term Roadmap
 
-1. Owner-play the third **Test Folded Map Graybox** prototype and judge its opaque two-sided rectangular sheet, four draggable edges, three landing depths, tempting 817 revision, and visible route evidence. The card-matching and cross-wing versions were rejected.
-2. If accepted, build the Chapter 4 graybox critical path from the executable contract without final art.
+1. Build the Chapter 4 graybox critical path from the accepted Folded Map direction and executable contract without final art.
+2. Preserve the accepted interaction's opaque two-sided sheet, discoverable 817 false route, unmistakable trace results, and optional third fold while surrounding scenes are added.
 3. Keep the uninterrupted human Chapters 1-3 session on the Chapter 4 release-candidate checklist.
 4. Continue the staged `src/App.tsx` extraction and address the slightly-over-500-KB main bundle as focused technical work.
 5. Continue the source-art, optimized-runtime, and fallback-safe asset workflow as later chapters land.

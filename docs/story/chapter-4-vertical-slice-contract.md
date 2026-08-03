@@ -2,7 +2,7 @@
 
 Last updated: 2026-08-02
 
-Status: executable pre-production contract and third Folded Map interaction spike implemented; the card matcher and cross-wing prototypes were rejected, and the rectangular-sheet prototype awaits owner acceptance before full Chapter 4 scene work
+Status: executable pre-production contract complete; the third rectangular-sheet Folded Map direction received owner acceptance on 2026-08-02, with stronger trace confirmation and a more discoverable 817 false route added from the acceptance playtest
 
 ## Chapter Promise
 
@@ -148,10 +148,10 @@ Optional flags, never ending gates:
 - Chapter 4 navigation tests use stable scene and choice IDs instead of prose labels
 - `tests/helpers/saveFixtures.ts` owns reusable storage and checked-in-fixture loading helpers
 
-## Owner Acceptance Question
+## Owner Acceptance Record
 
 Before full Chapter 4 story implementation, play **Test Folded Map Graybox** and decide:
 
 > Does dragging the edges of one opaque two-sided sheet to different landing points feel like folding a map, and does the correct construction reveal itself through visible evidence rather than color, labels, or elimination?
 
-The first answer-card spike failed on both physicality and deduction. The second cross-wing spike improved manipulation but still reduced the answer to three of four binary flaps, showed implausible transparency, and did not feel like one map. The third spike must be judged on its rectangular-sheet drag interaction, the usefulness of the three landing choices per edge, the plausibility of the 817 false route, and whether the true and cache alignments visually explain themselves. If it still feels like a quiz, revise again before building the Underway route or final art.
+The first answer-card spike failed on both physicality and deduction. The second cross-wing spike improved manipulation but still reduced the answer to three of four binary flaps, showed implausible transparency, and did not feel like one map. The owner accepted the third rectangular-sheet interaction direction on 2026-08-02 as a cool puzzle for the game. The acceptance run exposed two polish findings: committed outcomes needed unmistakable confirmation, and the tempting straight 817 construction needed to be easier to discover. The prototype now gives every traced outcome a large result stamp and distinct treatment, while matching 817 edge marks and clue copy point toward the persuasive false construction without naming its exact folds.

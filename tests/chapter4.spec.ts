@@ -66,6 +66,8 @@ test("rectangular Folded Map supports two faces, many edge landings, false and t
   await dragEdge(page, "top", "three-quarter");
   await expect(prototype).toHaveAttribute("data-fold-configuration", "front:left-quarter,top-three-quarter");
   await choice(page, CHAPTER_4_CHOICE_IDS.traceRoute).click();
+  await expect(prototype).toHaveAttribute("data-trace-outcome", "not-a-route");
+  await expect(page.getByTestId("folded-map-result-stamp")).toContainText("NO CONTINUOUS ROUTE");
   await expect(page.getByTestId("folded-map-feedback")).toContainText("evidence does not");
 
   await choice(page, CHAPTER_4_CHOICE_IDS.resetFolds).click();
@@ -73,6 +75,8 @@ test("rectangular Folded Map supports two faces, many edge landings, false and t
   await dragEdge(page, "top", "half");
   await expect(prototype).toHaveAttribute("data-fold-configuration", "front:right-half,top-half");
   await choice(page, CHAPTER_4_CHOICE_IDS.traceRoute).click();
+  await expect(prototype).toHaveAttribute("data-trace-outcome", "false-shortcut");
+  await expect(page.getByTestId("folded-map-result-stamp")).toContainText("TEMPTING ROUTE REJECTED");
   await expect(page.getByTestId("folded-map-feedback")).toContainText("wonderfully straight road");
   await expect(scene(page, CHAPTER_4_SCENE_IDS.foldedMapReview)).toBeVisible();
 
@@ -81,12 +85,17 @@ test("rectangular Folded Map supports two faces, many edge landings, false and t
   await dragEdge(page, "bottom", "three-quarter");
   await expect(prototype).toHaveAttribute("data-fold-configuration", "front:left-half,bottom-three-quarter");
   await choice(page, CHAPTER_4_CHOICE_IDS.traceRoute).click();
+  await expect(prototype).toHaveAttribute("data-trace-outcome", "true-route");
+  await expect(page.getByTestId("folded-map-result-stamp")).toContainText("TRUE ROUTE FOUND");
+  await expect(page.getByTestId("folded-map-result-stamp")).toContainText("UNDERWAY DECODED");
   await expect(page.getByTestId("folded-map-feedback")).toContainText("west edge lands halfway");
   await expect(page.getByText("True route recorded", { exact: false })).toBeVisible();
 
   await dragEdge(page, "top", "quarter");
   await expect(prototype).toHaveAttribute("data-fold-configuration", "front:left-half,top-quarter,bottom-three-quarter");
   await choice(page, CHAPTER_4_CHOICE_IDS.traceRoute).click();
+  await expect(prototype).toHaveAttribute("data-trace-outcome", "deeper-solve");
+  await expect(page.getByTestId("folded-map-result-stamp")).toContainText("LANTERNWELL CACHE FOUND");
   await expect(page.getByTestId("folded-map-feedback")).toContainText("One Lanternwell Drop");
   await expect(page.getByText("Lanternwell cache reward claimed once.")).toBeVisible();
   await choice(page, CHAPTER_4_CHOICE_IDS.traceRoute).click();

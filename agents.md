@@ -19,7 +19,7 @@ Preserve and evolve Liam’s Game, a storybook fantasy React/TypeScript adventur
 
 The current priority is to complete the playable, fully illustrated prototype through Chapter 5 while preserving the working Chapter 1 baseline.
 
-Chapters 1-3 have automated playable paths, and Chapter 3 received human-playthrough signoff on 2026-08-02. Chapter 4 now has an executable vertical-slice contract, a tested opaque rectangular-sheet Folded Map prototype, stable interaction test hooks, and a settled gatewright weapon economy. The card-matching and cross-wing map spikes were rejected; full Chapter 4 story implementation should wait only for owner acceptance of the replacement interaction direction. The uninterrupted Chapters 1-3 playthrough remains deferred to the Chapter 4 release-candidate cycle.
+Chapters 1-3 have automated playable paths, and Chapter 3 received human-playthrough signoff on 2026-08-02. Chapter 4 now has an executable vertical-slice contract, an owner-accepted opaque rectangular-sheet Folded Map interaction, stable interaction test hooks, and a settled gatewright weapon economy. The card-matching and cross-wing map spikes were rejected; the accepted third prototype has stronger result feedback and a more discoverable 817 false route. The Chapter 4 graybox critical path may begin. The uninterrupted Chapters 1-3 playthrough remains deferred to the Chapter 4 release-candidate cycle.
 
 ## Read First
 

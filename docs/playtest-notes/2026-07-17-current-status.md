@@ -12,7 +12,7 @@ This is the concise pickup document for the current illustrated prototype. Histo
 - Chapter 3 is closed as a release candidate after an owner-played human run through Rootmarket, the Rootbread Promise, Witness Stones, Cargo Siding, Split Hall, and the Chapter 4 handoff.
 - The uninterrupted human Chapters 1–3 run was not performed and is explicitly deferred to the Chapter 4 release-candidate cycle.
 - Chapter 4 has not been implemented as a playable chapter yet.
-- Chapter 4 pre-production is implemented: executable entry/end/interaction contracts, save migrations, a title-screen Folded Map prototype, Gatewright Hookblade economy, stable scene/choice test IDs, reusable save helpers, verification tiers, and Chapter 4 CI coverage. The card-matching and cross-wing Folded Map spikes failed human acceptance; full story work awaits judgment of the replacement opaque rectangular-sheet prototype.
+- Chapter 4 pre-production is implemented: executable entry/end/interaction contracts, save migrations, a title-screen Folded Map prototype, Gatewright Hookblade economy, stable scene/choice test IDs, reusable save helpers, verification tiers, and Chapter 4 CI coverage. The card-matching and cross-wing Folded Map spikes failed human acceptance; the replacement opaque rectangular-sheet interaction direction was accepted on 2026-08-02.
 
 ## Current UX
 
@@ -32,7 +32,7 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 
 ## Recent Playtest And Story Decisions
 
-- The current Folded Map prototype uses one opaque two-sided rectangular sheet. Each of four draggable edges can land at the quarter, half, or three-quarter guide, producing 54 two-edge configurations. West-half plus south-three-quarter aligns the Survey and keeper evidence into the true route; east-half plus north-half creates the persuasive 817 false route; other constructions are safe experiments. After the true route is recorded, north-quarter becomes an optional third fold that can reveal and award one Lanternwell Drop exactly once. Back unfolds the latest edge before closing, and repeat review is preserved.
+- The accepted Folded Map prototype uses one opaque two-sided rectangular sheet. Each of four draggable edges can land at the quarter, half, or three-quarter guide, producing 54 two-edge configurations. West-half plus south-three-quarter aligns the Survey and keeper evidence into the true route; east-half plus north-half creates the persuasive 817 false route; other constructions are safe experiments. The acceptance follow-up makes the 817 construction easier to discover through matching straight edge marks and gives ordinary failure, false route, true route, and cache solve unmistakable result stamps. After the true route is recorded, north-quarter becomes an optional third fold that can reveal and award one Lanternwell Drop exactly once. Back unfolds the latest edge before closing, and repeat review is preserved.
 - Westroot's gatewright is a required early encounter, but the 32-gold Rare Gatewright Hookblade purchase is optional. It improves on the Pebbleknock Hammer, does not auto-equip, introduces no durability, and is affordable from the 78-gold canonical save.
 - The captive porter is corrected to an optional Chapter 4 thread and is no longer an end flag.
 - The August 2 closeout records Chapter 3 human-playthrough signoff with no remaining Chapter 3 blocker. `public/saves/chapter-3-complete.json` is the canonical Chapter 4-ready state and can be opened from the title screen.
@@ -93,7 +93,7 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 
 ## Next Best Step
 
-Owner-play the current rectangular-sheet Folded Map prototype. If the physical manipulation, wrong constructions, true alignment, and optional deeper fold read clearly without answer labels or final art, accept the interaction direction and begin the Chapter 4 graybox critical path. Keep the uninterrupted Chapters 1–3 session deferred to the Chapter 4 release-candidate cycle.
+Begin the Chapter 4 graybox critical path from the accepted Folded Map and executable contract. Keep the uninterrupted Chapters 1–3 session deferred to the Chapter 4 release-candidate cycle.
 
 ## Production Art Status
 

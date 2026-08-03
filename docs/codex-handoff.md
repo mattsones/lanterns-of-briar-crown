@@ -10,9 +10,9 @@ Chapter 4 pre-production is now executable. `docs/story/chapter-4-vertical-slice
 
 The first Folded Map card matcher failed owner acceptance: clicking labeled boxes did not feel like folding, the Crown route was visually pre-condemned, and the cache answer was forced by elimination. The second cross-wing prototype improved the physical action but also failed: four binary flaps still made the answer too easy to exhaust, the transparent layers felt unlike paper, and the silhouette did not read as one map. **Test Folded Map Graybox** now opens the third prototype: one opaque rectangular sheet with distinct route and keeper faces. Each edge drags to quarter, half, or three-quarter landings, creating 54 two-edge configurations. West-half plus south-three-quarter reveals the true route; east-half plus north-half is the persuasive 817 false route; ordinary wrong folds are safe; and north-quarter becomes an optional third cache fold after the true route is recorded.
 
-`verify:fast`, `verify:chapter4`, and `verify:full` remain available; Chapter 4 has its own browser suite and CI step. The replacement preserves fail-forward pressure, a one-time Lanternwell Drop, review state, stack-aware Back behavior, keyboard access, and phone layout. It remains lazy-loaded outside the initial bundle.
+`verify:fast`, `verify:chapter4`, and `verify:full` remain available; Chapter 4 has its own browser suite and CI step. The replacement preserves fail-forward pressure, a one-time Lanternwell Drop, review state, stack-aware Back behavior, keyboard access, and phone layout. It remains lazy-loaded outside the initial bundle. The owner accepted the rectangular-sheet interaction direction on 2026-08-02. The acceptance follow-up adds large outcome-specific trace stamps and makes the persuasive straight 817 construction easier to discover through matching edge marks and clue copy.
 
-The next decision is human rather than architectural: play the rectangular-sheet replacement and decide whether moving edges among several landing points feels like folding, whether the 817 route is genuinely tempting, and whether the true and cache alignments visually explain themselves. Do not build the full Underway route or final Folded Map art until that interaction direction is accepted.
+The interaction-direction gate is closed. Begin the Chapter 4 graybox critical path from the executable contract, preserving the accepted Folded Map behavior. Final Folded Map art should still wait until the surrounding route confirms its presentation needs.
 
 ### Previous Chapter 3 Closeout
 
@@ -28,7 +28,7 @@ The full local release gate passes: 133 production images audited, build green, 
 
 ### Next Best Step
 
-Human-test and approve the current rectangular-sheet Folded Map direction. Then build the Chapter 4 graybox critical path from the existing executable contract before commissioning final interaction art.
+Build the Chapter 4 graybox critical path from the accepted Folded Map direction and existing executable contract before commissioning final interaction art.
 
 ## Project Summary
 

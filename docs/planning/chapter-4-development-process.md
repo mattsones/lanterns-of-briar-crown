@@ -2,7 +2,7 @@
 
 Last updated: 2026-08-02
 
-Status: executable contract, pre-production tooling, gatewright economy, and Folded Map graybox implemented; owner interaction-direction acceptance is the remaining start gate
+Status: executable contract, pre-production tooling, gatewright economy, and Folded Map interaction direction accepted; the Chapter 4 graybox critical path may begin
 
 This document turns the Chapter 2 and Chapter 3 development retrospective into the working process for Chapter 4, **The Riddle Road**. It complements the Chapter 4 story direction in `docs/story/chapters-2-5-story-bible.md`; it does not replace the future Chapter 4 story script or vertical-slice contract.
 
@@ -153,7 +153,7 @@ The default interaction rule is to persist attempt, result, and later resolution
 
 ## Phase 2 — Spike The Folded Map
 
-Implementation status: the first answer-card graybox was rejected because it neither felt like folding nor supported real deduction. The second cross-wing graybox improved manipulation but was rejected because four binary flaps still made the solution an elimination exercise, the transparent layers felt unlike paper, and the silhouette did not feel like one map. A third schematic prototype is available from **Test Folded Map Graybox** on the title screen. It uses one opaque rectangular sheet with distinct front and back faces, four draggable edges, three landing depths per edge, 54 two-edge configurations, an evidence-backed true construction, a persuasive 817 false construction, many ordinary wrong constructions, and an optional third fold. Drag, clean, fail-forward, ordinary-failure, deeper-solve, one-time reward, repeat, Back, desktop, and phone behavior are automated. Owner acceptance of this third interaction remains before full story implementation.
+Implementation status: the first answer-card graybox was rejected because it neither felt like folding nor supported real deduction. The second cross-wing graybox improved manipulation but was rejected because four binary flaps still made the solution an elimination exercise, the transparent layers felt unlike paper, and the silhouette did not feel like one map. The third schematic prototype under **Test Folded Map Graybox** uses one opaque rectangular sheet with distinct front and back faces, four draggable edges, three landing depths per edge, 54 two-edge configurations, an evidence-backed true construction, a persuasive 817 false construction, many ordinary wrong constructions, and an optional third fold. The owner accepted this interaction direction on 2026-08-02. Acceptance follow-up added unmistakable result stamps for every traced outcome and clearer matching marks for discovering the 817 straight-road construction. Drag, clean, fail-forward, ordinary-failure, deeper-solve, one-time reward, repeat, Back, desktop, and phone behavior are automated.
 
 Build the smallest possible functional version before the full chapter:
 
@@ -300,7 +300,7 @@ Chapter 4 implementation is ready to begin when:
 - the Chapter 4 entry, end, interaction-state, and map contracts are documented;
 - the fast verification gate is green.
 
-Current status: every item above is complete except owner agreement on the Folded Map interaction direction. The executable contract is `docs/story/chapter-4-vertical-slice-contract.md`; the fast, Chapter 4 affected, and 114-check full gates are green.
+Current status: every item above is complete, including owner agreement on the Folded Map interaction direction. The executable contract is `docs/story/chapter-4-vertical-slice-contract.md`; the fast and Chapter 4 affected gates are the normal implementation checks, while the full gate remains reserved for release-candidate and handoff milestones.
 
 ## Definition Of Chapter 4 Release Candidate
 

@@ -13,6 +13,7 @@ import {
   getFoldedMapReview,
   resolveFoldedMapConfiguration,
   type FoldedMapConfiguration,
+  type FoldedMapOutcome,
 } from "../game/chapter4";
 import {
   CHAPTER_4_CHOICE_IDS,
@@ -35,6 +36,43 @@ const EDGE_META: Record<FoldedMapEdge, { label: string; shortLabel: string; choi
   bottom: { label: "south edge", shortLabel: "SOUTH", choiceId: CHAPTER_4_CHOICE_IDS.bottomEdge },
 };
 
+const TRACE_PRESENTATION: Record<FoldedMapOutcome, {
+  icon: string;
+  title: string;
+  summary: string;
+  panelClass: string;
+  stampClass: string;
+}> = {
+  "true-route": {
+    icon: "✓",
+    title: "TRUE ROUTE FOUND",
+    summary: "UNDERWAY DECODED · The continuous keeper road is now recorded.",
+    panelClass: "border-emerald-300/70 bg-emerald-400/15 text-emerald-50 shadow-[0_0_34px_rgba(52,211,153,0.24)]",
+    stampClass: "border-emerald-200/70 bg-emerald-950/95 text-emerald-50 shadow-[0_0_38px_rgba(52,211,153,0.38)]",
+  },
+  "false-shortcut": {
+    icon: "!",
+    title: "TEMPTING ROUTE REJECTED",
+    summary: "817 SHORTCUT · Straight and convincing, but the terrain runs backward.",
+    panelClass: "border-amber-300/60 bg-amber-400/15 text-amber-50 shadow-[0_0_28px_rgba(251,191,36,0.18)]",
+    stampClass: "border-amber-200/70 bg-amber-950/95 text-amber-50 shadow-[0_0_32px_rgba(251,191,36,0.28)]",
+  },
+  "deeper-solve": {
+    icon: "✦",
+    title: "LANTERNWELL CACHE FOUND",
+    summary: "OPTIONAL THIRD FOLD · The hidden keeper mark is complete.",
+    panelClass: "border-sky-300/60 bg-sky-400/15 text-sky-50 shadow-[0_0_30px_rgba(56,189,248,0.22)]",
+    stampClass: "border-sky-200/70 bg-sky-950/95 text-sky-50 shadow-[0_0_34px_rgba(56,189,248,0.3)]",
+  },
+  "not-a-route": {
+    icon: "×",
+    title: "NO CONTINUOUS ROUTE",
+    summary: "The marks disagree. Nothing has been committed; refold freely.",
+    panelClass: "border-slate-300/30 bg-slate-300/10 text-slate-100",
+    stampClass: "border-slate-300/50 bg-slate-950/95 text-slate-100",
+  },
+};
+
 function FrontMapArtwork() {
   return (
     <g data-map-face="front">
@@ -47,6 +85,13 @@ function FrontMapArtwork() {
         <path d="M35 526 C159 481 258 558 386 509 S627 548 762 500 S920 517 976 487" />
       </g>
       <path d="M118 48 C170 134 160 224 224 303 C284 379 270 488 333 581" fill="none" stroke="#4f8290" strokeWidth="14" opacity=".76" />
+      <g fill="none" stroke="#6d5730" opacity=".86">
+        <path d="M648 18 L785 86" strokeWidth="7" strokeLinecap="round" />
+        <path d="M925 236 L987 267" strokeWidth="7" strokeLinecap="round" />
+        <path d="M648 18 L785 86 M925 236 L987 267" stroke="#f7e7ad" strokeWidth="2" strokeDasharray="10 9" />
+      </g>
+      <text x="520" y="32" fill="#6d5730" fontSize="13" fontWeight="700" letterSpacing="2">817 PROPOSED SHORTCUT</text>
+      <text x="932" y="225" fill="#6d5730" fontSize="13" fontWeight="700" letterSpacing="2">817</text>
       <path d="M500 155 C604 148 690 103 804 106" fill="none" stroke="#563f22" strokeWidth="10" strokeLinecap="round" />
       <path d="M500 155 C604 148 690 103 804 106" fill="none" stroke="#fff2bd" strokeWidth="2" strokeDasharray="12 12" opacity=".75" />
       <path d="M804 62 h115 v70 h-115 z M820 78 v38 h83" fill="none" stroke="#4b381e" strokeWidth="5" />
@@ -84,9 +129,9 @@ function BackMapArtwork() {
       <path d="M284 492 C360 468 430 522 506 487 S652 509 739 468" fill="none" stroke="#51492e" strokeWidth="4" />
 
       {/* Persuasive 817 straight route: north-half and east-half folds. */}
-      <path d="M350 30 L600 155" fill="none" stroke="#3f3a24" strokeWidth="10" strokeLinecap="round" />
-      <path d="M750 80 L900 155" fill="none" stroke="#3f3a24" strokeWidth="10" strokeLinecap="round" />
-      <path d="M600 140 l15 15 -15 15 -15 -15 z" fill="none" stroke="#3f3a24" strokeWidth="5" />
+      <path d="M350 96 L650 0" fill="none" stroke="#3f3a24" strokeWidth="15" strokeLinecap="round" />
+      <path d="M850 310 L750 342" fill="none" stroke="#3f3a24" strokeWidth="15" strokeLinecap="round" />
+      <path d="M350 96 L650 0 M850 310 L750 342" fill="none" stroke="#f1e6bb" strokeWidth="3" strokeDasharray="13 10" />
       <path d="M884 246 C916 214 944 213 978 181" fill="none" stroke="#51492e" strokeWidth="4" strokeDasharray="12 8" />
 
       {/* Optional third fold: north-quarter meets south-fold bridge notation. */}
@@ -278,8 +323,8 @@ function FoldedSheet({
   const horizontalHandlePosition = (leftCut + remainingWidth * 0.65) / SHEET_WIDTH * 100;
   const verticalHandlePosition = (topCut + remainingHeight * 0.5) / SHEET_HEIGHT * 100;
   const renderOrder = [
-    ...foldOrder.filter((edge) => depths[edge] > 0),
-    ...(draggingEdge && !foldOrder.includes(draggingEdge) ? [draggingEdge] : []),
+    ...FOLDED_MAP_EDGES.map(({ id }) => id).filter((edge) => depths[edge] > 0 && edge !== draggingEdge),
+    ...(draggingEdge && depths[draggingEdge] > 0 ? [draggingEdge] : []),
   ];
   const BaseArtwork = configuration.side === "front" ? FrontMapArtwork : BackMapArtwork;
   const ReverseArtwork = configuration.side === "front" ? BackMapArtwork : FrontMapArtwork;
@@ -383,6 +428,7 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close }: 
   const [previewDepths, setPreviewDepths] = useState<Record<FoldedMapEdge, number>>({ left: 0, right: 0, top: 0, bottom: 0 });
   const [foldOrder, setFoldOrder] = useState<FoldedMapEdge[]>([]);
   const [draggingEdge, setDraggingEdge] = useState<FoldedMapEdge | null>(null);
+  const [traceOutcome, setTraceOutcome] = useState<FoldedMapOutcome | null>(null);
   const [feedback, setFeedback] = useState(
     flags.foldedMapAttempted
       ? getFoldedMapReview(flags)
@@ -391,6 +437,7 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close }: 
 
   const foldCount = getFoldedMapFoldCount(configuration);
   const maxFolds = flags.foldedMapDecoded ? 3 : 2;
+  const tracePresentation = traceOutcome ? TRACE_PRESENTATION[traceOutcome] : null;
 
   const beginEdgeDrag = (edge: FoldedMapEdge) => {
     if (configuration.folds[edge] === null && foldCount >= maxFolds) {
@@ -415,6 +462,7 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close }: 
       ? [...current.filter((candidate) => candidate !== edge), edge]
       : current.filter((candidate) => candidate !== edge));
     setDraggingEdge(null);
+    setTraceOutcome(null);
     const landingLabel = FOLDED_MAP_LANDINGS.find((option) => option.id === landing)?.label;
     setFeedback(landing
       ? `The ${EDGE_META[edge].label} now lands ${landingLabel}. The opposite face is visible on the folded paper; inspect its seams before tracing.`
@@ -423,6 +471,7 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close }: 
 
   const traceRoute = () => {
     if (foldCount === 0) {
+      setTraceOutcome(null);
       setFeedback("The sheet is still flat. Fold an edge before tracing a route.");
       return;
     }
@@ -435,6 +484,7 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close }: 
         inventory: { ...current.inventory, lanternwell_drop: (current.inventory.lanternwell_drop || 0) + 1 },
       }));
     }
+    setTraceOutcome(result.outcome);
     setFeedback(`${result.message}${shouldClaimCache ? " One Lanternwell Drop is recovered from the marked cache." : ""}`);
   };
 
@@ -443,6 +493,7 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close }: 
     setPreviewDepths({ left: 0, right: 0, top: 0, bottom: 0 });
     setFoldOrder([]);
     setDraggingEdge(null);
+    setTraceOutcome(null);
     setFeedback("The sheet lies flat. Turn it over for another look, or begin a new fold from any edge.");
   };
 
@@ -452,6 +503,7 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close }: 
       return;
     }
     setConfiguration((current) => ({ ...current, side: current.side === "front" ? "back" : "front" }));
+    setTraceOutcome(null);
     setFeedback(configuration.side === "front"
       ? "The keeper-correction reverse is face-up. Its ink is distinct; nothing from the route face shows through."
       : "The Great Survey route face is up again.");
@@ -481,6 +533,7 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close }: 
         data-scene-id={flags.foldedMapAttempted ? CHAPTER_4_SCENE_IDS.foldedMapReview : CHAPTER_4_SCENE_IDS.foldedMapGraybox}
         data-testid="folded-map-prototype"
         data-fold-configuration={configurationLabel}
+        data-trace-outcome={traceOutcome || "untraced"}
         className="max-h-[96vh] w-full max-w-7xl overflow-y-auto rounded-[1.75rem] border border-amber-200/20 bg-slate-950 p-4 text-white shadow-2xl sm:p-6"
       >
         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -493,26 +546,54 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close }: 
         </div>
 
         <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_21rem]">
-          <div className="rounded-3xl border border-amber-100/15 bg-[#211b14] p-3 sm:p-5">
+          <div className={`relative rounded-3xl border bg-[#211b14] p-3 transition-all sm:p-5 ${tracePresentation ? tracePresentation.panelClass : "border-amber-100/15"}`}>
             <div className="mb-4 flex flex-wrap items-center justify-between gap-2 text-xs text-amber-50/65">
               <span>One sheet · two faces · 54 two-fold configurations</span>
               <span data-testid="fold-count">{foldCount}/{maxFolds} folds active · {configuration.side} face up</span>
             </div>
-            <FoldedSheet
-              configuration={configuration}
-              previewDepths={previewDepths}
-              foldOrder={foldOrder}
-              draggingEdge={draggingEdge}
-              stageRef={stageRef}
-              onBegin={beginEdgeDrag}
-              onPreview={previewEdge}
-              onSnap={snapEdge}
-              onNudge={(edge) => setFeedback(`Drag the ${EDGE_META[edge].label} inward. Pressing the handle alone does not choose a fold.`)}
-            />
+            <div className="relative">
+              <FoldedSheet
+                configuration={configuration}
+                previewDepths={previewDepths}
+                foldOrder={foldOrder}
+                draggingEdge={draggingEdge}
+                stageRef={stageRef}
+                onBegin={beginEdgeDrag}
+                onPreview={previewEdge}
+                onSnap={snapEdge}
+                onNudge={(edge) => setFeedback(`Drag the ${EDGE_META[edge].label} inward. Pressing the handle alone does not choose a fold.`)}
+              />
+              {tracePresentation ? (
+                <div
+                  data-testid="folded-map-result-stamp"
+                  className={`pointer-events-none absolute bottom-7 left-1/2 z-50 flex w-[min(88%,34rem)] -translate-x-1/2 items-center gap-3 rounded-2xl border-2 px-4 py-3 ${tracePresentation.stampClass}`}
+                >
+                  <div aria-hidden="true" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 border-current text-2xl font-black">{tracePresentation.icon}</div>
+                  <div>
+                    <div className="text-sm font-black tracking-[0.14em] sm:text-base">{tracePresentation.title}</div>
+                    <div className="mt-1 text-[11px] font-semibold leading-4 opacity-80 sm:text-xs">{tracePresentation.summary}</div>
+                  </div>
+                </div>
+              ) : null}
+            </div>
           </div>
 
           <aside className="space-y-3">
-            <div role="status" data-testid="folded-map-feedback" className="rounded-3xl border border-emerald-200/20 bg-emerald-400/10 p-4 text-sm leading-6 text-emerald-50">{feedback}</div>
+            <div
+              role="status"
+              aria-live="assertive"
+              data-testid="folded-map-feedback"
+              className={`rounded-3xl border p-4 text-sm leading-6 ${tracePresentation ? tracePresentation.panelClass : "border-emerald-200/20 bg-emerald-400/10 text-emerald-50"}`}
+            >
+              {tracePresentation ? (
+                <>
+                  <div className="text-xs font-black tracking-[0.14em]">{tracePresentation.icon} {tracePresentation.title}</div>
+                  <div className="mt-1 text-xs font-semibold opacity-75">{tracePresentation.summary}</div>
+                  <div className="my-3 h-px bg-current opacity-20" />
+                </>
+              ) : null}
+              <div>{feedback}</div>
+            </div>
             <div className="rounded-3xl border border-white/10 bg-white/5 p-4 text-sm leading-6 text-white/70">
               <div className="font-semibold text-white">Edden's clue</div>
               <div className="mt-1">“The map lies flat. Two turns find the road. The bridge breaks twice.”</div>
@@ -521,6 +602,7 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close }: 
                 <li>the 811 lantern and an older keeper ring</li>
                 <li>two contour strokes meeting without reversal</li>
                 <li>one road continuing into the Underway</li>
+                <li>the newer 817 office shortcut is strikingly straight</li>
               </ul>
               <div className="mt-4 font-semibold text-white">Recorded state</div>
               <div className="mt-1">{getFoldedMapReview(flags)}</div>
