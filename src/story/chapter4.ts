@@ -134,12 +134,12 @@ export const FOLDED_MAP_CONTRACT = {
   requiredFoldCount: 2,
   deeperFoldCount: 3,
   mistakeConsequence:
-    "Folding the east edge halfway and the north edge halfway creates a persuasive 817 straight road. Committing to it exposes a sealed maintenance approach and adds later pressure without blocking progress.",
+    "Folding the east edge halfway and the north edge halfway creates a persuasive later office shortcut. Committing to it exposes a sealed maintenance approach and adds later pressure without blocking progress.",
   deeperReward: "lanternwell_drop",
   experimentRule:
     "Folding, unfolding, and turning over the flat sheet are free. Consequences occur only when the player traces a committed configuration.",
   evidenceRule:
-    "With the front up, the west edge halfway and south edge three-quarters across align the dated lantern benchmark, keeper ring, contour lines, and winding road at once. It is not identified by answer color or elimination.",
+    "With the front up, the west edge halfway supplies an incomplete western approach; the south edge three-quarters across fills its visible gap with the keeper ring and bridge span so the contours and winding road agree at once. It is not identified by answer color or elimination.",
   repeatRule: "Recorded configurations remain reviewable and never grant the cache reward twice.",
 } as const;
 
