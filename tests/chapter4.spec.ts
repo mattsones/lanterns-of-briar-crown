@@ -42,6 +42,40 @@ async function dragEdge(page: Page, edge: FoldedMapEdge, landing: FoldedMapLandi
   await expect(handle).toHaveAttribute("data-fold-depth", depth.toFixed(2));
 }
 
+async function beginChapter4AtGatewright(page: Page) {
+  await openCheckedInFixture(page, "Review Chapter 3 Complete Save");
+  await choice(page, CHAPTER_4_CHOICE_IDS.beginChapter).click();
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.lowerGateArrival)).toBeVisible();
+  await choice(page, CHAPTER_4_CHOICE_IDS.meetGatewright).click();
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.gatewrightOffer)).toBeVisible();
+}
+
+test("real Chapter 3 fixture reaches the Folded Map through the required Gatewright encounter", async ({ page }) => {
+  await beginChapter4AtGatewright(page);
+
+  await expect(page.getByText("The Rare Gatewright Hookblade costs 32 gold.")).toBeVisible();
+  await choice(page, CHAPTER_4_CHOICE_IDS.declineHookblade).click();
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.foldedMapBriefing)).toBeVisible();
+  await choice(page, CHAPTER_4_CHOICE_IDS.openFoldedMap).click();
+
+  await expect(page.getByRole("heading", { name: "The Folded Map" })).toBeVisible();
+  await expect(page.getByText("Goal: Decode the Folded Map", { exact: true })).toBeVisible();
+});
+
+test("Gatewright Hookblade purchase is optional, affordable, and does not auto-equip", async ({ page }) => {
+  await beginChapter4AtGatewright(page);
+
+  await choice(page, CHAPTER_4_CHOICE_IDS.buyHookblade).click();
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.gatewrightPurchase)).toBeVisible();
+  await expect(page.getByTestId("dialogue-feedback")).toContainText(
+    "No equipment was changed automatically.",
+  );
+  await expect(page.getByText("You pay 32 gold and have 46 remaining.")).toBeVisible();
+  await choice(page, CHAPTER_4_CHOICE_IDS.continueToMap).click();
+  await choice(page, CHAPTER_4_CHOICE_IDS.openFoldedMap).click();
+  await expect(page.getByRole("heading", { name: "The Folded Map" })).toBeVisible();
+});
+
 test("rectangular Folded Map supports two faces, many edge landings, false and true routes, and the optional third fold", async ({ page }) => {
   await openCheckedInFixture(page, "Test Folded Map Graybox");
 

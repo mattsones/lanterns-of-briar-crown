@@ -4,7 +4,21 @@ This file is the starting point for Codex.
 
 Story-writing work must also follow `docs/story/writing-rules.md`. Singular characters use he/him or she/her; *they/them/their* is reserved for genuinely plural antecedents.
 
-## Latest Handoff — 2026-08-02
+## Latest Handoff — 2026-08-04
+
+Branch `codex/chapter-4-graybox-entry` contains the first playable Chapter 4 critical-path slice. From the canonical Chapter 3-complete fixture, the Westroot completion banner now commits to Chapter 4, opens the Lower Gate sequence, requires a meeting with Stonekin gatewright Tamsin Rootbrace, offers the optional 32-gold Rare Gatewright Hookblade without auto-equipping it, and carries both purchase and decline paths through a Survey-case briefing into the accepted Folded Map.
+
+The entry boundary is enforced by pure Chapter 4 helpers that verify required flags and carried evidence before setting `chapterFourStarted`. Stable scene and choice IDs cover the Lower Gate, Gatewright offer and purchase, Survey briefing, and map handoff. Quest objectives advance through the Gatewright and Folded Map to an explicit **Enter the Underway — Next Graybox Milestone** endpoint, while the optional Hookblade remains available as a side objective.
+
+The manual desktop and 430px pass is recorded in `docs/playtest-notes/2026-08-04-chapter-4-graybox-entry.md`. It confirmed both weapon paths, keyboard map solving, review/Back behavior, phone layout, and endpoint clarity. The pass also fixed Enter/Space leaking from a Folded Map handle into Westroot Inspect, updated the chapter header after commitment, and made Folded Map results update the map overlay.
+
+The full local gate passes: 133 production images audited, build green, 39 rules tests, 30 Chapter 1 tests, 31 Chapter 2 tests, 11 Chapter 3 tests, 6 Chapter 4 tests, and 1 smoke test. The existing report-only warning for the main bundle remaining above 500 KB is unchanged.
+
+### Next Best Step
+
+Build the Underway traversal and Listening Mile graybox from the decoded Folded Map endpoint. Decide map topology through that route, preserve the 817 maintenance detour as pressure rather than a blocker, and converge both Listening Mile outcomes before Lio's message.
+
+## Previous Handoff — 2026-08-02
 
 Chapter 4 pre-production is now executable. `docs/story/chapter-4-vertical-slice-contract.md` owns the readable contract, while `src/story/chapter4.ts` and `src/game/chapter4.ts` own stable IDs, required/optional boundaries, Folded Map outcomes, validation, migration behavior, and the gatewright economy. The captive porter is optional; Rootbread is absent from prerequisites; gatewright access is required while the Hookblade purchase is optional.
 

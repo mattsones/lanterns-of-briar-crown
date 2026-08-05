@@ -44,6 +44,13 @@ import {
   isCompanionConscious,
 } from "./game/companions";
 import { getChapterProgress } from "./game/chapterProgress";
+import {
+  beginChapter4,
+  canPurchaseGatewrightWeapon,
+  getGatewrightOfferPrice,
+  meetGatewright,
+  purchaseGatewrightWeapon,
+} from "./game/chapter4";
 import { checkSummary, resolveRoll, resolveSkillCheck } from "./game/dice";
 import { getActiveGuestNpc } from "./game/guestNpcs";
 import {
@@ -130,6 +137,12 @@ import {
   getSplitHallResolution,
 } from "./story/chapter3";
 import type { BramblecrossContactChoice } from "./story/chapter3";
+import {
+  CHAPTER_4_CHOICE_IDS,
+  CHAPTER_4_ENTRY_COPY,
+  CHAPTER_4_GATEWRIGHT,
+  CHAPTER_4_SCENE_IDS,
+} from "./story/chapter4";
 
 const QuestTab = React.lazy(() =>
   import("./components/tabs").then((module) => ({ default: module.QuestTab })),
@@ -6631,6 +6644,142 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     setToast("Combat flags reset.");
   };
 
+  const openChapter4FoldedMapBriefing = () => {
+    setDialogue({
+      sceneId: CHAPTER_4_SCENE_IDS.foldedMapBriefing,
+      portrait: "🗺️",
+      name: CHAPTER_4_ENTRY_COPY.foldedMapBriefing.name,
+      text: CHAPTER_4_ENTRY_COPY.foldedMapBriefing.text,
+      choices: [
+        {
+          id: CHAPTER_4_CHOICE_IDS.openFoldedMap,
+          label: flags.foldedMapDecoded ? "Review the recorded fold." : "Unfold the map under Tamsin's lamp.",
+          variant: "primary",
+          effect: () => {
+            setDialogue(null);
+            setFoldedMapGrayboxOpen(true);
+          },
+        },
+        {
+          id: CHAPTER_4_CHOICE_IDS.backToGatewright,
+          label: "Ask Tamsin about the Lower Gate again.",
+          variant: "quiet",
+          effect: () => openChapter4GatewrightDialogue(),
+        },
+      ],
+    });
+  };
+
+  const completeGatewrightPurchase = () => {
+    const purchase = purchaseGatewrightWeapon(player, flags);
+    if (!purchase.purchased) {
+      setToast(
+        flags.gatewrightWeaponPurchased
+          ? "The Gatewright Hookblade is already in your inventory."
+          : `The Hookblade costs ${getGatewrightOfferPrice()} gold.`,
+      );
+      return;
+    }
+    setPlayer(purchase.player);
+    setFlags((current) => ({ ...current, ...purchase.flags }));
+    setToast("Gatewright Hookblade acquired; the Pebbleknock Hammer remains equipped.");
+    setDialogue({
+      sceneId: CHAPTER_4_SCENE_IDS.gatewrightPurchase,
+      portrait: "⚒️",
+      name: CHAPTER_4_GATEWRIGHT.name,
+      text:
+        `Tamsin wraps the Gatewright Hookblade in oiled cloth and leaves the clasp loose enough to inspect. “A gate tool before it is a weapon,” she says. “Catch roots, lift latches, break a guard if someone insists.”\n\nYou pay ${getGatewrightOfferPrice()} gold and have ${purchase.player.gold} remaining. The Hookblade goes into your inventory; the Pebbleknock Hammer remains equipped until you choose otherwise.`,
+      feedback: "Gatewright Hookblade acquired. No equipment was changed automatically.",
+      choices: [
+        {
+          id: CHAPTER_4_CHOICE_IDS.continueToMap,
+          label: "Compare the Survey and keeper records.",
+          variant: "primary",
+          effect: openChapter4FoldedMapBriefing,
+        },
+        {
+          id: CHAPTER_4_CHOICE_IDS.returnToWestroot,
+          label: "Return to Westroot before opening the map.",
+          variant: "quiet",
+          effect: () => setDialogue(null),
+        },
+      ],
+    });
+  };
+
+  const openChapter4GatewrightDialogue = () => {
+    setFlags((current) => ({ ...current, ...meetGatewright() }));
+    setToast("Tamsin opens the Lower Gate ledger and both Survey cases.");
+    const alreadyPurchased = !!flags.gatewrightWeaponPurchased;
+    const canPurchase = canPurchaseGatewrightWeapon(player, flags);
+    setDialogue({
+      sceneId: CHAPTER_4_SCENE_IDS.gatewrightOffer,
+      portrait: "⚒️",
+      name: CHAPTER_4_GATEWRIGHT.name,
+      text: alreadyPurchased
+        ? `${CHAPTER_4_ENTRY_COPY.gatewrightOffer.text}\n\nYour Hookblade is already packed. Tamsin keeps the map cases open for review.`
+        : CHAPTER_4_ENTRY_COPY.gatewrightOffer.text,
+      choices: [
+        !alreadyPurchased
+          ? {
+              id: CHAPTER_4_CHOICE_IDS.buyHookblade,
+              label: `Buy the Gatewright Hookblade — ${getGatewrightOfferPrice()} gold.`,
+              requirement: canPurchase
+                ? `${player.gold} gold available • added to inventory, not auto-equipped`
+                : `${player.gold} gold available • ${getGatewrightOfferPrice()} required`,
+              locked: !canPurchase,
+              effect: completeGatewrightPurchase,
+            }
+          : null,
+        {
+          id: CHAPTER_4_CHOICE_IDS.declineHookblade,
+          label: alreadyPurchased
+            ? "Continue to the route records."
+            : "Keep the current weapon and continue to the route records.",
+          requirement: "The purchase is optional; the Underway remains open.",
+          variant: "primary",
+          effect: openChapter4FoldedMapBriefing,
+        },
+        {
+          id: CHAPTER_4_CHOICE_IDS.returnToWestroot,
+          label: "Return to Westroot for now.",
+          variant: "quiet",
+          effect: () => setDialogue(null),
+        },
+      ].filter(Boolean),
+    });
+  };
+
+  const beginChapter4Entry = () => {
+    const entry = beginChapter4(player, flags);
+    if (!entry.started) {
+      setToast(entry.errors[0] || "This save is not ready to begin Chapter 4.");
+      return;
+    }
+    setFlags((current) => ({ ...current, ...entry.flags }));
+    setToast("Chapter 4 begins at Westroot's Lower Gate.");
+    setDialogue({
+      sceneId: CHAPTER_4_SCENE_IDS.lowerGateArrival,
+      portrait: "🜨",
+      name: CHAPTER_4_ENTRY_COPY.lowerGate.name,
+      text: CHAPTER_4_ENTRY_COPY.lowerGate.text,
+      choices: [
+        {
+          id: CHAPTER_4_CHOICE_IDS.meetGatewright,
+          label: `Meet ${CHAPTER_4_GATEWRIGHT.name}.`,
+          variant: "primary",
+          effect: openChapter4GatewrightDialogue,
+        },
+        {
+          id: CHAPTER_4_CHOICE_IDS.leaveLowerGate,
+          label: "Return to Westroot and prepare.",
+          variant: "quiet",
+          effect: () => setDialogue(null),
+        },
+      ],
+    });
+  };
+
   const openSaveSlotModal = () => {
     setSaveNameDrafts(
       Object.fromEntries(saveSlots.map((s) => [s.id, s.name || ""])),
@@ -6975,7 +7124,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
             <h1 className="text-xl font-bold sm:text-3xl">Lanterns of Briar Crown</h1>
             <div className="mt-0.5 text-xs text-white/65 sm:mt-1 sm:text-sm">
               <span className="sm:hidden">{currentRegionInfo.name}</span>
-              <span className="hidden sm:inline">Prototype slice • {currentRegionInfo.name} • {currentRegionInfo.subtitle}</span>
+              <span className="hidden sm:inline">Prototype slice • {currentRegionInfo.name} • {flags.chapterFourStarted ? "Chapter 4: The Riddle Road" : currentRegionInfo.subtitle}</span>
             </div>
           </div>
           <div className="hidden flex-wrap gap-2 sm:flex">
@@ -7007,7 +7156,11 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
             <div className="font-semibold text-emerald-200">
               {chapterProgress.currentChapterId >= 2
                 ? flags.chapterThreeClear
-                  ? "Chapter 3 complete: The Hidden Root"
+                  ? flags.chapterFourStarted
+                    ? flags.foldedMapDecoded
+                      ? "Chapter 4 graybox entry complete: The Riddle Road"
+                      : "Chapter 4: The Riddle Road"
+                    : "Chapter 3 complete: The Hidden Root"
                   : chapterProgress.currentChapterId >= 3
                     ? "Chapter 3: The Hidden Root"
                     : flags.chapterTwoClear
@@ -7020,13 +7173,19 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
             <div className="mt-0.5 hidden sm:block">
               {chapterProgress.currentChapterId >= 2
                 ? flags.chapterThreeClear
-                  ? flags.rootbreadPromiseKept
-                    ? "The current playable story ends here. Westroot now points toward Chapter 4 and the deeper western road."
-                    : flags.rootbreadLeadLearned
-                      ? "The main story ends here for now. Lume's Transfer Checkpoint lead remains open in Westroot."
-                      : flags.metAuntieLume
-                        ? "The main story ends here for now. Lume may still know whether anyone saw a sign of Lio."
-                        : "The main story ends here for now. The Mossback baker in Rootmarket may still have heard something about Lio."
+                  ? flags.chapterFourStarted
+                    ? flags.foldedMapDecoded
+                      ? "The Lower Gate is open, the true keeper route is recorded, and the Underway is the next graybox milestone."
+                      : flags.gatewrightMet
+                        ? "Tamsin has opened the Survey cases. Resolve the Folded Map before entering the Underway."
+                        : "The Lower Gate route is active. Meet Westroot's gatewright before touching the old Survey records."
+                    : flags.rootbreadPromiseKept
+                      ? "Westroot's compact is restored. Commit to the Lower Gate when you are ready to begin Chapter 4."
+                      : flags.rootbreadLeadLearned
+                        ? "Chapter 3 is complete. Lume's optional Transfer Checkpoint lead remains open before the Lower Gate."
+                        : flags.metAuntieLume
+                          ? "Chapter 3 is complete. Lume may still know whether anyone saw a sign of Lio before you leave."
+                          : "Chapter 3 is complete. The Mossback baker in Rootmarket may still have heard something about Lio."
                   : chapterProgress.currentChapterId >= 3
                     ? "Earn Westroot's trust, renew the road promises, and expose the false cargo route."
                     : flags.chapterTwoClear
@@ -7037,12 +7196,29 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
                   : "You found the deeper route. Bring what you discovered back to Hollis and Enna."}
             </div>
             {flags.chapterThreeClear && !flags.chapterFourClear ? (
-              <Button
-                className="mt-2 bg-amber-500/15"
-                onClick={() => setFoldedMapGrayboxOpen(true)}
-              >
-                Review Folded Map Graybox
-              </Button>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {!flags.chapterFourStarted || !flags.gatewrightMet ? (
+                  <Button
+                    data-choice-id={CHAPTER_4_CHOICE_IDS.beginChapter}
+                    className="bg-amber-500/20"
+                    onClick={beginChapter4Entry}
+                  >
+                    {flags.chapterFourStarted ? "Resume the Lower Gate" : "Begin Chapter 4 Graybox"}
+                  </Button>
+                ) : (
+                  <>
+                    <Button onClick={openChapter4GatewrightDialogue}>
+                      Visit Tamsin Rootbrace
+                    </Button>
+                    <Button
+                      className="bg-amber-500/15"
+                      onClick={openChapter4FoldedMapBriefing}
+                    >
+                      {flags.foldedMapDecoded ? "Review Folded Map" : "Open Folded Map"}
+                    </Button>
+                  </>
+                )}
+              </div>
             ) : null}
           </div>
         ) : null}
@@ -7262,6 +7438,17 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           player={player}
           setPlayer={setPlayer}
           close={() => setFoldedMapGrayboxOpen(false)}
+          onTraceOutcome={(outcome) => {
+            if (outcome === "true-route") {
+              setToast("True keeper route recorded. The Underway is the next graybox milestone.");
+            } else if (outcome === "false-shortcut") {
+              setToast("Route 817 rejected; the maintenance approach remains a fail-forward option.");
+            } else if (outcome === "deeper-solve") {
+              setToast("Lanternwell cache alignment recorded.");
+            } else {
+              setToast("That fold does not produce a continuous route.");
+            }
+          }}
         />
       ) : null}
       {dialogue && !craftOpen ? (

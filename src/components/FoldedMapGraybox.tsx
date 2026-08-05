@@ -414,12 +414,13 @@ function FoldedSheet({
   );
 }
 
-export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close }: {
+export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close, onTraceOutcome }: {
   flags: GameFlags;
   setFlags: Dispatch<SetStateAction<GameFlags>>;
   player: Player;
   setPlayer: Dispatch<SetStateAction<Player>>;
   close: () => void;
+  onTraceOutcome?: (outcome: FoldedMapOutcome) => void;
 }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const [configuration, setConfiguration] = useState<FoldedMapConfiguration>({
@@ -487,6 +488,7 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close }: 
     }
     setTraceOutcome(result.outcome);
     setFeedback(`${result.message}${shouldClaimCache ? " One Lanternwell Drop is recovered from the marked cache." : ""}`);
+    onTraceOutcome?.(result.outcome);
   };
 
   const unfoldAll = () => {

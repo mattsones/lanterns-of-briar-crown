@@ -1,6 +1,6 @@
-# Current Project Status — 2026-08-02
+# Current Project Status — 2026-08-04
 
-Stable branch: `main`, integrated from `codex/chapter-3-vertical-slice`
+Stable branch: `main`; current handoff branch: `codex/chapter-4-graybox-entry`
 
 This is the concise pickup document for the current illustrated prototype. Historical implementation notes remain in `docs/codex-handoff.md`; the detailed dialogue-art inventory remains in `docs/planning/dialog-stock-icon-replacement-plan.md`.
 
@@ -11,8 +11,8 @@ This is the concise pickup document for the current illustrated prototype. Histo
 - Chapter 2 is complete through the Westroot gate and retains clean, standard, and messy puzzle outcomes.
 - Chapter 3 is closed as a release candidate after an owner-played human run through Rootmarket, the Rootbread Promise, Witness Stones, Cargo Siding, Split Hall, and the Chapter 4 handoff.
 - The uninterrupted human Chapters 1–3 run was not performed and is explicitly deferred to the Chapter 4 release-candidate cycle.
-- Chapter 4 has not been implemented as a playable chapter yet.
-- Chapter 4 pre-production is implemented: executable entry/end/interaction contracts, save migrations, a title-screen Folded Map prototype, Gatewright Hookblade economy, stable scene/choice test IDs, reusable save helpers, verification tiers, and Chapter 4 CI coverage. The card-matching and cross-wing Folded Map spikes failed human acceptance; the replacement opaque rectangular-sheet interaction direction was accepted on 2026-08-02.
+- Chapter 4 now has a playable graybox entry from the canonical Chapter 3-complete fixture through the Westroot Lower Gate, required Tamsin Rootbrace gatewright encounter, optional Gatewright Hookblade purchase, Survey-case briefing, and accepted Folded Map route decode.
+- The playable endpoint names the Underway as the next graybox milestone. The Underway, Listening Mile, Lio message, Relay Post, and Chapter 5 handoff are not implemented yet.
 
 ## Current UX
 
@@ -32,6 +32,9 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 
 ## Recent Playtest And Story Decisions
 
+- The August 4 graybox entry pass names Tamsin Rootbrace as Westroot's Stonekin gatewright and makes her encounter mandatory before the Folded Map. Her 32-gold Hookblade remains optional, stays in inventory instead of auto-equipping, and can be revisited after declining. The canonical 78-gold fixture reaches the map with or without buying it.
+- Chapter 4 begins only when the player commits through the Westroot completion banner; merely loading the Chapter 3-complete fixture preserves its ending state. Main objectives now advance through Lower Gate, Folded Map, and an explicit Underway-next endpoint.
+- Desktop and 430px manual browser passes covered the entry, purchase, Survey briefing, keyboard map solve, true-route result, Back behavior, repeat review, and endpoint. The pass fixed a Folded Map keyboard event leak, Chapter 3 header carryover, and stale Latest Update feedback. See `docs/playtest-notes/2026-08-04-chapter-4-graybox-entry.md`.
 - The accepted Folded Map prototype uses one opaque two-sided rectangular sheet. Each of four draggable edges can land at the quarter, half, or three-quarter guide, producing 54 two-edge configurations. West-half plus south-three-quarter aligns the Survey and keeper evidence into the true route; east-half plus north-half creates the persuasive 817 false route; other constructions are safe experiments. The acceptance follow-up makes the 817 construction easier to discover through matching straight edge marks and gives ordinary failure, false route, true route, and cache solve unmistakable result stamps. After the true route is recorded, north-quarter becomes an optional third fold that can reveal and award one Lanternwell Drop exactly once. Back unfolds the latest edge before closing, and repeat review is preserved.
 - Westroot's gatewright is a required early encounter, but the 32-gold Rare Gatewright Hookblade purchase is optional. It improves on the Pebbleknock Hammer, does not auto-equip, introduces no durability, and is affordable from the 78-gold canonical save.
 - The captive porter is corrected to an optional Chapter 4 thread and is no longer an end flag.
@@ -93,7 +96,7 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 
 ## Next Best Step
 
-Begin the Chapter 4 graybox critical path from the accepted Folded Map and executable contract. Keep the uninterrupted Chapters 1–3 session deferred to the Chapter 4 release-candidate cycle.
+Build the Underway traversal and Listening Mile graybox from the decoded Folded Map endpoint. Keep both guidance and maintenance outcomes fail-forward, and keep the uninterrupted Chapters 1–3 session deferred to the Chapter 4 release-candidate cycle.
 
 ## Production Art Status
 
@@ -114,11 +117,11 @@ Begin the Chapter 4 graybox critical path from the accepted Folded Map and execu
 
 ```text
 npm.cmd run build                 passed
-npm.cmd run test:rules            38 passed
+npm.cmd run test:rules            39 passed
 npm.cmd run playtest:chapter1     30 passed
 npm.cmd run playtest:chapter2     31 passed
 npm.cmd run playtest:chapter3     11 passed
-npm.cmd run playtest:chapter4      3 passed
+npm.cmd run playtest:chapter4      6 passed
 npm.cmd run playtest:smoke         1 passed
 npm.cmd run audit:assets          133 images scanned; largest assets within targets
 git diff --check                 passed (Windows line-ending warnings only)
@@ -228,11 +231,11 @@ Use `docs/planning/dialog-stock-icon-replacement-plan.md` as the inventory.
 
 ```bash
 git fetch --all --prune
-git switch codex/chapter-3-vertical-slice
+git switch codex/chapter-4-graybox-entry
 git pull --ff-only
 npm install
 npm.cmd run build
 npm.cmd run test:rules
 ```
 
-Use the title-screen Chapter 2, Chapter 3, **Review Chapter 3 Complete Save**, and **Test Folded Map Graybox** entries for focused testing. The canonical Chapter 4-ready fixture is `public/saves/chapter-3-complete.json`; owner acceptance of the Folded Map interaction is the only remaining pre-story gate.
+Use **Review Chapter 3 Complete Save** and then **Begin Chapter 4 Graybox** for the real entry slice. **Test Folded Map Graybox** remains the focused interaction hook. The canonical entry fixture is `public/saves/chapter-3-complete.json`; the decoded map now hands off explicitly to the unimplemented Underway milestone.

@@ -2,7 +2,7 @@
 
 Last updated: 2026-08-02
 
-Status: executable pre-production contract complete; the third rectangular-sheet Folded Map direction received owner acceptance on 2026-08-02, with stronger trace confirmation and a more discoverable 817 false route added from the acceptance playtest
+Status: executable contract complete; the graybox entry is playable through the Lower Gate, gatewright, and accepted Folded Map, with the Underway as the next critical-path milestone
 
 ## Chapter Promise
 
@@ -28,6 +28,8 @@ The executable source of truth is `src/story/chapter4.ts`; pure transitions and 
 - Chapter 4 starts only when the player commits to a Chapter 4 interaction; loading the fixture alone does not mutate its ending state
 
 ## Critical Path
+
+Implementation status: steps 1–3 are playable as the first graybox entry slice. Step 4 is next.
 
 1. Meet the Westroot gatewright at the Lower Gate.
 2. Receive access to a nearby weapon upgrade; purchase remains optional.
@@ -106,6 +108,7 @@ The gatewright encounter is mandatory before the Underway; the purchase is optio
 
 | Decision | Contract |
 |---|---|
+| Gatewright | Tamsin Rootbrace, Stonekin Westroot gatewright |
 | Item | Gatewright Hookblade |
 | Rarity | Rare |
 | Price | 32 gold |

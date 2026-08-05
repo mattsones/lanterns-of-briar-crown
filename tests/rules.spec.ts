@@ -101,9 +101,12 @@ import { validateAllMapNavigationGraphs } from "../src/game/mapValidation";
 import { runGameQaChecks } from "../src/game/qa";
 import { validateChapter4ReadyPayload } from "../src/game/chapter4Readiness";
 import {
+  beginChapter4,
   claimFoldedMapCache,
   EMPTY_FOLDED_MAP_CONFIGURATION,
+  getChapter4EntryErrors,
   getGatewrightOfferPrice,
+  meetGatewright,
   purchaseGatewrightWeapon,
   resolveFoldedMapConfiguration,
   validateChapter4Contract,
@@ -744,6 +747,55 @@ test("Chapter 4 executable contract is complete and keeps optional routes option
     durability: false,
     availableBeforeRegion: "underway",
   });
+});
+
+test("Chapter 4 entry commits only from a ready save and reaches the required gatewright seam", () => {
+  const saveText = readFileSync(
+    new URL("../public/saves/chapter-3-complete.json", import.meta.url),
+    "utf8",
+  );
+  const payload = parseDiskSaveText(saveText).payload;
+
+  expect(getChapter4EntryErrors(payload.player, payload.flags)).toEqual([]);
+  expect(beginChapter4(payload.player, payload.flags)).toEqual({
+    started: true,
+    errors: [],
+    flags: { chapterFourStarted: true },
+  });
+  expect(meetGatewright()).toEqual({
+    chapterFourStarted: true,
+    gatewrightMet: true,
+  });
+  expect(buildQuestJournal(
+    { ...payload.flags, chapterFourStarted: true },
+    payload.companion,
+    payload.region,
+  ).currentMain.id).toBe("ch4-gatewright");
+  expect(buildQuestJournal(
+    { ...payload.flags, chapterFourStarted: true, gatewrightMet: true },
+    payload.companion,
+    payload.region,
+  ).currentMain.id).toBe("ch4-folded-map");
+  expect(buildQuestJournal(
+    {
+      ...payload.flags,
+      chapterFourStarted: true,
+      gatewrightMet: true,
+      foldedMapDecoded: true,
+    },
+    payload.companion,
+    payload.region,
+  ).currentMain.id).toBe("ch4-underway");
+
+  const missingEvidence = structuredClone(payload.player);
+  delete missingEvidence.inventory.cargo_transfer_tag;
+  expect(beginChapter4(missingEvidence, payload.flags)).toMatchObject({
+    started: false,
+    flags: {},
+  });
+  expect(getChapter4EntryErrors(missingEvidence, payload.flags)).toContain(
+    "Missing Chapter 4 entry item: cargo_transfer_tag.",
+  );
 });
 
 test("Chapter 4 save migration infers prerequisite Folded Map state", () => {

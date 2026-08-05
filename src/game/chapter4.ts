@@ -25,6 +25,34 @@ export type FoldedMapConfiguration = {
   folds: Record<FoldedMapEdge, FoldedMapLanding | null>;
 };
 
+export function getChapter4EntryErrors(player: Player, flags: Flags) {
+  const errors = CHAPTER_4_CONTRACT.entry.requiredFlags
+    .filter((flag) => !flags[flag])
+    .map((flag) => `Missing Chapter 4 entry flag: ${flag}.`);
+  CHAPTER_4_CONTRACT.entry.requiredItems.forEach((itemId) => {
+    if (!player.inventory[itemId]) errors.push(`Missing Chapter 4 entry item: ${itemId}.`);
+  });
+  return errors;
+}
+
+export function beginChapter4(player: Player, flags: Flags) {
+  const errors = getChapter4EntryErrors(player, flags);
+  return {
+    started: errors.length === 0,
+    errors,
+    flags: errors.length === 0
+      ? ({ chapterFourStarted: true } satisfies Partial<GameFlags>)
+      : {},
+  };
+}
+
+export function meetGatewright() {
+  return {
+    chapterFourStarted: true,
+    gatewrightMet: true,
+  } satisfies Partial<GameFlags>;
+}
+
 export const EMPTY_FOLDED_MAP_CONFIGURATION: FoldedMapConfiguration = {
   side: "front",
   folds: {

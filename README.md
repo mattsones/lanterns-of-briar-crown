@@ -4,7 +4,7 @@ A storybook fantasy adventure prototype about Hearthhollow, Lantern Road, Brambl
 
 ## Current Status
 
-Chapters 1-3 have automated playable paths in the React/TypeScript prototype. Chapter 3 is closed as a release candidate, and Chapter 4 pre-production now includes an executable contract, save-state scaffolding, an owner-accepted Folded Map interaction, and a settled Westroot gatewright weapon offer. The Chapter 4 graybox critical path is ready to begin.
+Chapters 1-3 have automated playable paths in the React/TypeScript prototype. Chapter 3 is closed as a release candidate. Chapter 4 now has a playable graybox entry from the canonical Chapter 3 save through the Westroot Lower Gate, Tamsin Rootbrace's required gatewright encounter, the optional Hookblade purchase, and the accepted Folded Map interaction. The Underway is the next critical-path milestone.
 
 Current features include:
 
@@ -19,6 +19,7 @@ Current features include:
 - Chapter 1 story arc through the Root Cellar and report-back scene
 - Chapter 2 Westroot Trail, Three-Door Hollow, Crown Door Den, and clean/messy Roadwatcher outcomes
 - Chapter 3 Rootmarket, Hold Bell, Witness Stones, Cargo Siding, Split Hall, and Rootbread Promise routes
+- Chapter 4 graybox entry through the Lower Gate, optional Gatewright Hookblade offer, and Folded Map route decode
 - painted Chapter 1-3 maps, portrait integration, scene art, and custom item icons with fallback-safe presentation
 
 ## Chapter 1
@@ -37,7 +38,7 @@ Chapter arc:
 
 1. **Chapter 2: The Westroot Trail** - playable through the Three-Sign Hollow, Crown Door Den, Roadwatcher consequences, and First Westroot Gate.
 2. **Chapter 3: The Hidden Root** - release-candidate route through Westroot and its Willow-sealed cargo resolution, with human-playthrough signoff and a checked-in Chapter 4-ready fixture.
-3. **Chapter 4: The Riddle Road** - planned route following Edden's folded-map clues to Lio's message and the Briarhold lead.
+3. **Chapter 4: The Riddle Road** - graybox entry playable through the Folded Map; the Underway, Listening Mile, Lio's message, and Briarhold lead remain in development.
 4. **Chapter 5: Briarhold Waystation** - planned rescue of Lio and reveal of the Briar Crown cell structure.
 
 Implementation should move in vertical slices: executable chapter contract, central-interaction graybox, data and placeholder map, critical path, automated QA, human playthrough, then production art and release-candidate QA. The Chapter 4 process is documented in [`docs/planning/chapter-4-development-process.md`](docs/planning/chapter-4-development-process.md).
@@ -131,8 +132,8 @@ Visual direction:
 
 ## Short-Term Roadmap
 
-1. Build the Chapter 4 graybox critical path from the accepted Folded Map direction and executable contract without final art.
-2. Preserve the accepted interaction's opaque two-sided sheet, discoverable 817 false route, unmistakable trace results, and optional third fold while surrounding scenes are added.
+1. Extend the Chapter 4 graybox from the decoded Folded Map into the Underway and Listening Mile without final art.
+2. Preserve the Lower Gate/Gatewright entry seam and the accepted interaction's opaque two-sided sheet, discoverable 817 false route, unmistakable trace results, and optional third fold.
 3. Keep the uninterrupted human Chapters 1-3 session on the Chapter 4 release-candidate checklist.
 4. Continue the staged `src/App.tsx` extraction and address the slightly-over-500-KB main bundle as focused technical work.
 5. Continue the source-art, optimized-runtime, and fallback-safe asset workflow as later chapters land.

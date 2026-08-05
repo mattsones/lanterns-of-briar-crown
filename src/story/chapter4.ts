@@ -1,12 +1,24 @@
 import type { GameFlagKey } from "../game/types";
 
 export const CHAPTER_4_SCENE_IDS = {
+  lowerGateArrival: "chapter4.lower-gate.arrival",
   foldedMapGraybox: "chapter4.folded-map.graybox",
   foldedMapReview: "chapter4.folded-map.review",
   gatewrightOffer: "chapter4.gatewright.offer",
+  gatewrightPurchase: "chapter4.gatewright.purchase",
+  foldedMapBriefing: "chapter4.folded-map.briefing",
 } as const;
 
 export const CHAPTER_4_CHOICE_IDS = {
+  beginChapter: "chapter4.begin",
+  meetGatewright: "chapter4.lower-gate.meet-gatewright",
+  leaveLowerGate: "chapter4.lower-gate.leave",
+  buyHookblade: "chapter4.gatewright.buy-hookblade",
+  declineHookblade: "chapter4.gatewright.decline-hookblade",
+  returnToWestroot: "chapter4.gatewright.return-westroot",
+  continueToMap: "chapter4.gatewright.continue-to-map",
+  openFoldedMap: "chapter4.folded-map.open",
+  backToGatewright: "chapter4.folded-map.back-to-gatewright",
   leftEdge: "folded-map.edge-left",
   rightEdge: "folded-map.edge-right",
   topEdge: "folded-map.edge-top",
@@ -16,6 +28,30 @@ export const CHAPTER_4_CHOICE_IDS = {
   resetFolds: "folded-map.reset-folds",
   back: "folded-map.back",
   close: "folded-map.close",
+} as const;
+
+export const CHAPTER_4_GATEWRIGHT = {
+  name: "Tamsin Rootbrace",
+  role: "Westroot gatewright",
+  pronouns: { subject: "she", object: "her", possessive: "her" },
+} as const;
+
+export const CHAPTER_4_ENTRY_COPY = {
+  lowerGate: {
+    name: "Westroot Lower Gate",
+    text:
+      "Below the public gate, Westroot's fitted stone narrows around an iron leaf that has not opened in years. Fresh chalk now marks the old hinge checks. Beyond it, the Underway slopes west beneath Rainroot—not toward the border, but toward keeper roads erased from newer Survey copies.\n\nA Stonekin gatewright waits beside a workbench and two map cases. Mara reaches for the latch. The gatewright reaches it first.",
+  },
+  gatewrightOffer: {
+    name: "Tamsin Rootbrace",
+    text:
+      "“Tamsin Rootbrace,” the gatewright says. “I open old roads after I know what will come back through them.” She compares your cargo transfer tag with a witnessed Lower Gate ledger, then sets two records side by side: the Great Survey's revised route face and an older keeper correction leaf.\n\n“The newer sheet promises route 817—straight, official, quick. The keeper leaf still marks 811 and a winding approach. Compare both before you trust either.”\n\nTamsin also lays out a short hooked blade built for roots, shield rims, and narrow stonework. The Rare Gatewright Hookblade costs 32 gold. It improves on the Pebbleknock Hammer, but buying it is optional and it will remain in your inventory until you choose to equip it.",
+  },
+  foldedMapBriefing: {
+    name: "The Survey Cases",
+    text:
+      "Tamsin opens both cases under the same lamp. The Great Survey records a clean revision. The keeper correction records the older operating marks Westroot actually used: an 811 lantern ring, broken contour strokes, and a road that reaches the Underway only when the sheet is folded.\n\nEdden's note supplies the missing instruction: “The map lies flat. Two turns find the road. The bridge breaks twice.” Mara takes one steadying breath. “We follow clever,” she says. “Show me what agrees.”",
+  },
 } as const;
 
 export const FOLDED_MAP_EDGES = [
@@ -144,7 +180,7 @@ export const FOLDED_MAP_CONTRACT = {
 } as const;
 
 export const GATEWRIGHT_WEAPON_CONTRACT = {
-  npcRole: "Westroot gatewright (name to be chosen with Chapter 4 dialogue)",
+  npcRole: `${CHAPTER_4_GATEWRIGHT.name}, ${CHAPTER_4_GATEWRIGHT.role}`,
   itemId: "gatewright_hookblade",
   price: 32,
   availableBeforeRegion: "underway",
