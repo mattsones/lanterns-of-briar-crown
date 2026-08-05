@@ -116,6 +116,17 @@ test("Folded Map Back opens the latest edge before closing", async ({ page }) =>
   await expect(page.getByRole("heading", { name: "The Folded Map" })).toHaveCount(0);
 });
 
+test("Folded Map keyboard controls do not trigger the underlying map interaction", async ({ page }) => {
+  await openCheckedInFixture(page, "Test Folded Map Graybox");
+
+  const prototype = page.getByTestId("folded-map-prototype");
+  const westHandle = choice(page, CHAPTER_4_CHOICE_IDS.leftEdge);
+  await westHandle.press("Enter");
+
+  await expect(prototype).toHaveAttribute("data-fold-configuration", "front:left-quarter");
+  await expect(page.getByRole("dialog", { name: "Noma Greenstill" })).toHaveCount(0);
+});
+
 test("rectangular Folded Map remains draggable and traceable at phone width", async ({ page }) => {
   await page.setViewportSize({ width: 430, height: 932 });
   await openCheckedInFixture(page, "Test Folded Map Graybox");

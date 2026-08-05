@@ -280,6 +280,7 @@ function EdgeHandle({
       onKeyDown={(event) => {
         if (event.key !== "Enter" && event.key !== " ") return;
         event.preventDefault();
+        event.stopPropagation();
         if (!onBegin()) return;
         const currentIndex = FOLDED_MAP_LANDINGS.findIndex((option) => option.depth === depth);
         onSnap(currentIndex < 0 ? "quarter" : currentIndex === FOLDED_MAP_LANDINGS.length - 1 ? null : FOLDED_MAP_LANDINGS[currentIndex + 1].id);
