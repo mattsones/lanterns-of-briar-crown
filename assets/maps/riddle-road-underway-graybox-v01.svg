@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Riddle Road Underway graybox map</title>
+  <desc id="desc">A schematic storybook map showing a mapped road, a later posted detour into maintenance works, a concealed ambush junction, and three listening posts separated by dark tunnel.</desc>
+  <defs>
+    <linearGradient id="stone" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#172033"/>
+      <stop offset="0.55" stop-color="#28364a"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <radialGradient id="lamp" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#fbbf24" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="rough"><feTurbulence baseFrequency=".025" numOctaves="3" seed="8" result="noise"/><feBlend in="SourceGraphic" in2="noise" mode="soft-light"/></filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#stone)"/>
+  <g opacity=".23" filter="url(#rough)" fill="none" stroke="#94a3b8" stroke-width="5">
+    <path d="M0 130C210 190 350 70 560 150S930 220 1160 120s290-30 440 20"/>
+    <path d="M0 760c230-110 410 50 620-35s410-70 600 25 270 25 380-10"/>
+    <path d="M180 0c-50 220 55 330 5 530s40 270 20 370"/>
+  </g>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M88 455L448 455L592 260L768 260L928 455L1072 455L1200 455L1296 455L1392 455L1472 455L1544 455" stroke="#d6c596" stroke-width="76" opacity=".2"/>
+    <path d="M448 455L592 670L768 650L928 455" stroke="#b8845a" stroke-width="70" opacity=".2"/>
+    <path d="M88 455L448 455L592 260L768 260L928 455L1072 455L1200 455L1296 455L1392 455L1472 455L1544 455" stroke="#e5d6a4" stroke-width="8" stroke-dasharray="20 15"/>
+    <path d="M448 455L592 670L768 650L928 455" stroke="#c98c5e" stroke-width="8" stroke-dasharray="16 18"/>
+  </g>
+  <g font-family="Georgia,serif" text-anchor="middle">
+    <text x="88" y="400" fill="#f8fafc" font-size="30">LOWER GATE</text>
+    <text x="680" y="190" fill="#fde68a" font-size="36">MAPPED ROUTE 811</text>
+    <text x="520" y="790" fill="#fdba74" font-size="34">MAINTENANCE 817</text>
+    <text x="448" y="390" fill="#fef08a" font-size="25">POSTED DETOUR</text>
+    <text x="1072" y="370" fill="#fca5a5" font-size="28">BLIND JUNCTION</text>
+    <text x="1380" y="350" fill="#bfdbfe" font-size="34">LISTENING MILE</text>
+  </g>
+  <g fill="#fbbf24">
+    <circle cx="448" cy="455" r="18"/><circle cx="592" cy="260" r="18"/><circle cx="768" cy="260" r="18"/>
+    <circle cx="1072" cy="455" r="18"/><circle cx="1200" cy="455" r="18"/><circle cx="1392" cy="455" r="18"/><circle cx="1544" cy="455" r="18"/>
+  </g>
+  <g fill="url(#lamp)">
+    <circle cx="448" cy="455" r="95"/><circle cx="1072" cy="455" r="95"/><circle cx="1200" cy="455" r="82"/><circle cx="1392" cy="455" r="82"/><circle cx="1544" cy="455" r="82"/>
+  </g>
+  <g stroke="#64748b" stroke-width="16" opacity=".8">
+    <path d="M400 610l65 120M460 600l55 120M630 615l80 110"/>
+  </g>
+  <g fill="#93c5fd" opacity=".8">
+    <rect x="1188" y="415" width="24" height="80" rx="8"/>
+    <rect x="1380" y="415" width="24" height="80" rx="8"/>
+    <rect x="1532" y="415" width="24" height="80" rx="8"/>
+  </g>
+  <text x="800" y="855" fill="#cbd5e1" font-family="system-ui,sans-serif" font-size="24" text-anchor="middle">GRAYBOX • route topology and interaction placement only • final art deferred</text>
+</svg>

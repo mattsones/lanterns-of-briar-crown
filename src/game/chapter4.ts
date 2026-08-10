@@ -7,6 +7,8 @@ import {
   FOLDED_MAP_CONTRACT,
   FOLDED_MAP_LANDINGS,
   GATEWRIGHT_WEAPON_CONTRACT,
+  GATEWRIGHT_WEAPON_CONTRACTS,
+  type GatewrightWeaponId,
   type FoldedMapEdge,
   type FoldedMapLanding,
   type FoldedMapSide,
@@ -101,7 +103,7 @@ export function resolveFoldedMapConfiguration(
       outcome: "deeper-solve",
       flags: { ...common, foldedMapDecoded: true, foldedMapDeeperSolved: true },
       message:
-        "With the true route still held, the north edge lands one-quarter across. Its reverse-side root arrow completes the broken bridge mark and circles a keeper cache beside Lanternwell.",
+        "With the true route still held, the north edge lands one-quarter across. Its reverse-side root arrow completes the broken bridge mark and circles a road-crew cache beside Lanternwell.",
     };
   }
 
@@ -110,7 +112,7 @@ export function resolveFoldedMapConfiguration(
       outcome: "true-route",
       flags: { ...common, foldedMapDecoded: true },
       message:
-        "The west edge lands halfway across and the south edge reaches the three-quarter guide. Reverse-side keeper ink closes the 811 lantern ring, both contour strokes, and one winding road into the Underway.",
+        "The west edge lands halfway across and the south edge reaches the three-quarter guide. Reverse-side road-crew ink closes the 811 lantern ring, both contour strokes, and one winding road into the Underway.",
     };
   }
 
@@ -143,7 +145,7 @@ export function getFoldedMapReview(flags: Flags) {
     return "True route recorded; Edden's bridge notation suggests an optional third fold.";
   }
   if (flags.foldedMapMaintenanceDetour) {
-    return "Crown shortcut rejected; maintenance-route pressure recorded; true route unresolved.";
+    return "Persuasive 817 shortcut rejected; its notation may still matter later; true route unresolved.";
   }
   if (flags.foldedMapAttempted) return "The map has been handled, but no route is decoded yet.";
   return "No fold has been attempted.";
@@ -171,25 +173,39 @@ export function getGatewrightOfferPrice() {
   return GATEWRIGHT_WEAPON_CONTRACT.price;
 }
 
-export function canPurchaseGatewrightWeapon(player: Player, flags: Flags) {
+export function getGatewrightWeaponContract(itemId: GatewrightWeaponId = GATEWRIGHT_WEAPON_CONTRACT.itemId) {
+  return GATEWRIGHT_WEAPON_CONTRACTS.find((option) => option.itemId === itemId);
+}
+
+export function canPurchaseGatewrightWeapon(
+  player: Player,
+  _flags: Flags,
+  itemId: GatewrightWeaponId = GATEWRIGHT_WEAPON_CONTRACT.itemId,
+) {
+  const offer = getGatewrightWeaponContract(itemId);
   return (
-    !flags.gatewrightWeaponPurchased &&
-    !player.inventory[GATEWRIGHT_WEAPON_CONTRACT.itemId] &&
-    player.gold >= getGatewrightOfferPrice()
+    !!offer &&
+    !player.inventory[offer.itemId] &&
+    player.gold >= offer.price
   );
 }
 
-export function purchaseGatewrightWeapon(player: Player, flags: Flags) {
-  if (!canPurchaseGatewrightWeapon(player, flags)) {
+export function purchaseGatewrightWeapon(
+  player: Player,
+  flags: Flags,
+  itemId: GatewrightWeaponId = GATEWRIGHT_WEAPON_CONTRACT.itemId,
+) {
+  const offer = getGatewrightWeaponContract(itemId);
+  if (!offer || !canPurchaseGatewrightWeapon(player, flags, itemId)) {
     return { player, flags: {}, purchased: false };
   }
   return {
     player: {
       ...player,
-      gold: player.gold - getGatewrightOfferPrice(),
+      gold: player.gold - offer.price,
       inventory: {
         ...player.inventory,
-        [GATEWRIGHT_WEAPON_CONTRACT.itemId]: 1,
+        [offer.itemId]: 1,
       },
     },
     flags: {
@@ -197,6 +213,36 @@ export function purchaseGatewrightWeapon(player: Player, flags: Flags) {
       gatewrightWeaponPurchased: true,
     } satisfies Partial<GameFlags>,
     purchased: true,
+  };
+}
+
+export function resolveListeningMileClue() {
+  const outcome = "marker-found";
+  return {
+    outcome,
+    flags: {
+      listeningMileAttempted: true,
+      listeningMileOutcome: outcome,
+    } satisfies Partial<GameFlags>,
+  } as const;
+}
+
+export function getUnderwayApproach(flags: Flags) {
+  return flags.underwayDetourFollowed ? "maintenance-gallery" : "mapped-gallery";
+}
+
+export function resolveUnderwayDetour(followDetour: boolean) {
+  return {
+    underwayDetourDecisionMade: true,
+    underwayDetourFollowed: followDetour,
+  } satisfies Partial<GameFlags>;
+}
+
+export function resolveUnderwayAmbushDiscovery(total: number, dc = 16) {
+  return {
+    attempted: true,
+    revealed: total >= dc,
+    dc,
   };
 }
 

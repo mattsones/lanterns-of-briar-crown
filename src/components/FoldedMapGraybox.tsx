@@ -46,7 +46,7 @@ const TRACE_PRESENTATION: Record<FoldedMapOutcome, {
   "true-route": {
     icon: "✓",
     title: "TRUE ROUTE FOUND",
-    summary: "UNDERWAY DECODED · The continuous keeper road is now recorded.",
+    summary: "UNDERWAY DECODED · The continuous road-crew route is now recorded.",
     panelClass: "border-emerald-300/70 bg-emerald-400/15 text-emerald-50 shadow-[0_0_34px_rgba(52,211,153,0.24)]",
     stampClass: "border-emerald-200/70 bg-emerald-950/95 text-emerald-50 shadow-[0_0_38px_rgba(52,211,153,0.38)]",
   },
@@ -60,7 +60,7 @@ const TRACE_PRESENTATION: Record<FoldedMapOutcome, {
   "deeper-solve": {
     icon: "✦",
     title: "LANTERNWELL CACHE FOUND",
-    summary: "OPTIONAL THIRD FOLD · The hidden keeper mark is complete.",
+    summary: "OPTIONAL THIRD FOLD · The hidden road-crew mark is complete.",
     panelClass: "border-sky-300/60 bg-sky-400/15 text-sky-50 shadow-[0_0_30px_rgba(56,189,248,0.22)]",
     stampClass: "border-sky-200/70 bg-sky-950/95 text-sky-50 shadow-[0_0_34px_rgba(56,189,248,0.3)]",
   },
@@ -84,21 +84,21 @@ function FrontMapArtwork() {
         <path d="M26 432 C162 361 269 468 399 401 S632 451 766 391 S924 419 987 379" />
         <path d="M35 526 C159 481 258 558 386 509 S627 548 762 500 S920 517 976 487" />
       </g>
-      <path d="M118 48 C170 134 160 224 224 303 C284 379 270 488 333 581" fill="none" stroke="#4f8290" strokeWidth="14" opacity=".76" />
+      <path d="M600 -18 C642 42 584 101 620 155 C661 226 586 314 620 402 C650 480 598 548 620 638" fill="none" stroke="#4f8290" strokeWidth="14" opacity=".76" />
       <g fill="none" stroke="#6d5730" opacity=".86">
         <path d="M648 18 L785 86" strokeWidth="7" strokeLinecap="round" />
         <path d="M925 236 L987 267" strokeWidth="7" strokeLinecap="round" />
         <path d="M648 18 L785 86 M925 236 L987 267" stroke="#f7e7ad" strokeWidth="2" strokeDasharray="10 9" />
       </g>
-      <text x="520" y="32" fill="#6d5730" fontSize="13" fontWeight="700" letterSpacing="2">817 PROPOSED SHORTCUT</text>
-      <text x="932" y="225" fill="#6d5730" fontSize="13" fontWeight="700" letterSpacing="2">817</text>
-      <path d="M500 155 C604 148 690 103 804 106" fill="none" stroke="#563f22" strokeWidth="10" strokeLinecap="round" />
-      <path d="M500 155 C604 148 690 103 804 106" fill="none" stroke="#fff2bd" strokeWidth="2" strokeDasharray="12 12" opacity=".75" />
+      <text x="520" y="32" fill="#6d5730" fontSize="13" fontWeight="700" letterSpacing="2">ROUTE 817 · OFFICE REVISION</text>
+      <text x="900" y="225" fill="#6d5730" fontSize="12" fontWeight="700" letterSpacing="1.6">817</text>
+      <path d="M690 165 C735 158 768 122 804 106" fill="none" stroke="#563f22" strokeWidth="10" strokeLinecap="round" />
+      <path d="M690 165 C735 158 768 122 804 106" fill="none" stroke="#fff2bd" strokeWidth="2" strokeDasharray="12 12" opacity=".75" />
       <path d="M804 62 h115 v70 h-115 z M820 78 v38 h83" fill="none" stroke="#4b381e" strokeWidth="5" />
       <text x="808" y="151" fill="#4b381e" fontSize="19" fontWeight="700" letterSpacing="2">UNDERWAY</text>
       <path d="M420 139 l16 16 -16 16 -16 -16 z" fill="none" stroke="#4f3b20" strokeWidth="5" />
       <text x="34" y="48" fill="#55411f" fontSize="25" fontWeight="800" letterSpacing="3">GREAT SURVEY OF WESTROOT</text>
-      <text x="36" y="78" fill="#79663e" fontSize="14" letterSpacing="2">ROUTE FACE · REVISED 811</text>
+      <text x="36" y="78" fill="#79663e" fontSize="14" letterSpacing="2">SURVEY ROUTE FACE · WESTROOT REVISION</text>
       <text x="662" y="586" fill="#79663e" fontSize="13" letterSpacing="2">LOWER GATE DISTRICT · SHEET 4</text>
       <g stroke="#8b7444" strokeWidth="2" opacity=".45">
         {Array.from({ length: 9 }, (_, index) => <line key={`v-${index}`} x1={100 + index * 100} y1="92" x2={100 + index * 100} y2="575" />)}
@@ -121,27 +121,35 @@ function BackMapArtwork() {
       </g>
 
       {/* True route fragments: west-half and south-three-quarter folds. */}
-      <path d="M0 155 C70 151 136 126 250 110" fill="none" stroke="#3f3a24" strokeWidth="11" strokeLinecap="round" />
-      <path d="M0 155 C70 151 136 126 250 110" fill="none" stroke="#f1e6bb" strokeWidth="2" strokeDasharray="12 12" />
-      <path d="M5 142 l13 13 -13 13 -13 -13 z" fill="none" stroke="#3f3a24" strokeWidth="5" />
-      <circle cx="505" cy="620" r="18" fill="none" stroke="#3f3a24" strokeWidth="5" />
+      <path d="M0 165 C70 161 136 126 250 110" fill="none" stroke="#3f3a24" strokeWidth="11" strokeLinecap="round" />
+      <path d="M0 165 C70 161 136 126 250 110" fill="none" stroke="#f1e6bb" strokeWidth="2" strokeDasharray="12 12" />
+      <path d="M5 152 l13 13 -13 13 -13 -13 z" fill="none" stroke="#3f3a24" strokeWidth="5" />
+
+      {/* The south-three-quarter fold supplies the missing middle road, road-crew ring, and bridge. */}
+      <path d="M500 610 C555 602 635 602 690 610" fill="none" stroke="#3f3a24" strokeWidth="11" strokeLinecap="round" />
+      <path d="M500 610 C555 602 635 602 690 610" fill="none" stroke="#f1e6bb" strokeWidth="2" strokeDasharray="12 12" />
+      <circle cx="505" cy="610" r="18" fill="none" stroke="#3f3a24" strokeWidth="5" />
+      <path d="M620 620 C592 565 650 512 620 454 C596 410 608 385 620 366" fill="none" stroke="#4f8290" strokeWidth="12" opacity=".76" />
+      <g stroke="#3f3a24" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="594" y="596" width="52" height="24" rx="4" fill="#d8c894" strokeWidth="5" />
+        <path d="M607 598 V618 M620 598 V618 M633 598 V618" strokeWidth="3" />
+      </g>
       <path d="M282 454 C357 430 426 485 502 449 S647 472 733 430" fill="none" stroke="#51492e" strokeWidth="4" />
       <path d="M284 492 C360 468 430 522 506 487 S652 509 739 468" fill="none" stroke="#51492e" strokeWidth="4" />
 
-      {/* Persuasive 817 straight route: north-half and east-half folds. */}
+      {/* Persuasive later straight route: north-half and east-half folds. */}
       <path d="M350 96 L650 0" fill="none" stroke="#3f3a24" strokeWidth="15" strokeLinecap="round" />
       <path d="M850 310 L750 342" fill="none" stroke="#3f3a24" strokeWidth="15" strokeLinecap="round" />
       <path d="M350 96 L650 0 M850 310 L750 342" fill="none" stroke="#f1e6bb" strokeWidth="3" strokeDasharray="13 10" />
       <path d="M884 246 C916 214 944 213 978 181" fill="none" stroke="#51492e" strokeWidth="4" strokeDasharray="12 8" />
 
-      {/* Optional third fold: north-quarter meets south-fold bridge notation. */}
-      <path d="M650 0 C682 22 715 43 760 60" fill="none" stroke="#3f3a24" strokeWidth="6" strokeDasharray="13 8" />
-      <path d="M650 620 l-18 -7 8 18" fill="none" stroke="#3f3a24" strokeWidth="5" />
-      <path d="M622 605 l15 -13 m7 4 l15 -13" stroke="#3f3a24" strokeWidth="6" strokeLinecap="round" />
+      {/* Optional third fold: the north-quarter root arrow touches the south-fold bridge. */}
+      <path d="M620 0 C650 22 715 43 760 60" fill="none" stroke="#3f3a24" strokeWidth="6" strokeDasharray="13 8" />
+      <path d="M620 0 l18 4 -11 14" fill="none" stroke="#3f3a24" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M755 52 l5 11 12 1 -9 8 3 12 -11 -6 -10 6 2 -12 -9 -8 12 -1 z" fill="none" stroke="#3f3a24" strokeWidth="4" />
 
-      <text x="318" y="286" fill="#4c442b" fontSize="24" fontWeight="800" letterSpacing="3">KEEPER CORRECTION FIELD</text>
-      <text x="383" y="315" fill="#6a6040" fontSize="14" letterSpacing="2">REVERSE FACE · FIELD LEAF 794</text>
+      <text x="318" y="286" fill="#4c442b" fontSize="24" fontWeight="800" letterSpacing="3">ROAD-CREW CORRECTION FIELD</text>
+      <text x="383" y="315" fill="#6a6040" fontSize="14" letterSpacing="2">REVERSE FACE · OLDER ROAD-CREW FIELD LEAF</text>
       <text x="438" y="347" fill="#6a6040" fontSize="13" fontStyle="italic">“The map lies flat. Two turns find the road.”</text>
     </g>
   );
@@ -157,6 +165,11 @@ function SheetDefinitions() {
       <pattern id="paper-grain-back" width="31" height="31" patternUnits="userSpaceOnUse">
         <path d="M0 6 L31 11 M0 24 L31 29" stroke="#64593a" strokeWidth="1" opacity=".2" />
       </pattern>
+      <linearGradient id="fold-sheen" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="#fff7d6" stopOpacity=".72" />
+        <stop offset=".45" stopColor="#fff7d6" stopOpacity=".08" />
+        <stop offset="1" stopColor="#594522" stopOpacity=".38" />
+      </linearGradient>
       <filter id="fold-shadow" x="-20%" y="-20%" width="140%" height="140%">
         <feDropShadow dx="0" dy="5" stdDeviation="7" floodColor="#211609" floodOpacity=".42" />
       </filter>
@@ -221,6 +234,8 @@ function EdgeHandle({
   depthRef.current = depth;
   const meta = EDGE_META[edge];
   const isVertical = edge === "left" || edge === "right";
+  const snappedLanding = landingForDepth(depth);
+  const landingMark = snappedLanding === "quarter" ? "¼" : snappedLanding === "half" ? "½" : snappedLanding === "three-quarter" ? "¾" : "";
   const position = edge === "left"
     ? { left: `${depth * 100}%`, top: `${crossPositionPercent}%`, transform: "translate(-50%, -50%)" }
     : edge === "right"
@@ -285,10 +300,10 @@ function EdgeHandle({
         const currentIndex = FOLDED_MAP_LANDINGS.findIndex((option) => option.depth === depth);
         onSnap(currentIndex < 0 ? "quarter" : currentIndex === FOLDED_MAP_LANDINGS.length - 1 ? null : FOLDED_MAP_LANDINGS[currentIndex + 1].id);
       }}
-      className={`absolute z-40 flex cursor-grab select-none items-center justify-center rounded-full border-2 border-amber-950/50 bg-amber-50 px-2 py-1 text-[9px] font-black tracking-wider text-amber-950 shadow-lg outline-none focus-visible:ring-4 focus-visible:ring-amber-300/70 active:cursor-grabbing sm:text-[11px] ${isVertical ? "min-h-12" : "min-w-16"}`}
+      className={`absolute z-40 flex cursor-grab select-none items-center justify-center rounded-full border-2 border-amber-950/50 bg-amber-50 text-[9px] font-black tracking-wider text-amber-950 shadow-lg outline-none focus-visible:ring-4 focus-visible:ring-amber-300/70 active:cursor-grabbing sm:text-[11px] ${snappedLanding ? "h-10 w-10 px-0" : isVertical ? "min-h-12 px-2 py-1" : "min-w-16 px-2 py-1"}`}
       style={{ ...position, touchAction: "none" }}
     >
-      {meta.shortLabel}
+      {snappedLanding ? `${meta.shortLabel[0]}${landingMark}` : meta.shortLabel}
     </div>
   );
 }
@@ -298,6 +313,7 @@ function FoldedSheet({
   previewDepths,
   foldOrder,
   draggingEdge,
+  traceOutcome,
   stageRef,
   onBegin,
   onPreview,
@@ -308,6 +324,7 @@ function FoldedSheet({
   previewDepths: Record<FoldedMapEdge, number>;
   foldOrder: FoldedMapEdge[];
   draggingEdge: FoldedMapEdge | null;
+  traceOutcome: FoldedMapOutcome | null;
   stageRef: RefObject<HTMLDivElement | null>;
   onBegin: (edge: FoldedMapEdge) => boolean;
   onPreview: (edge: FoldedMapEdge, depth: number) => void;
@@ -321,8 +338,9 @@ function FoldedSheet({
   const bottomCut = depths.bottom * SHEET_HEIGHT / 2;
   const remainingWidth = Math.max(0, SHEET_WIDTH - leftCut - rightCut);
   const remainingHeight = Math.max(0, SHEET_HEIGHT - topCut - bottomCut);
-  const horizontalHandlePosition = (leftCut + remainingWidth * 0.65) / SHEET_WIDTH * 100;
-  const verticalHandlePosition = (topCut + remainingHeight * 0.5) / SHEET_HEIGHT * 100;
+  const topHandlePosition = (leftCut + remainingWidth * 0.65) / SHEET_WIDTH * 100;
+  const bottomHandlePosition = (leftCut + remainingWidth * 0.92) / SHEET_WIDTH * 100;
+  const verticalHandlePosition = (topCut + remainingHeight * 0.78) / SHEET_HEIGHT * 100;
   const renderOrder = [
     ...FOLDED_MAP_EDGES.map(({ id }) => id).filter((edge) => depths[edge] > 0 && edge !== draggingEdge),
     ...(draggingEdge && depths[draggingEdge] > 0 ? [draggingEdge] : []),
@@ -335,9 +353,16 @@ function FoldedSheet({
       ref={stageRef}
       data-testid="folded-map-sheet"
       data-map-side={configuration.side}
-      className="relative mx-auto w-full max-w-[1000px] overflow-visible rounded-2xl bg-[#33291c] shadow-inner"
-      style={{ aspectRatio: `${SHEET_WIDTH} / ${SHEET_HEIGHT}` }}
+      className="relative mx-auto w-full max-w-[1000px] overflow-visible rounded-2xl border border-amber-100/10 bg-[#33291c] shadow-inner"
+      style={{
+        aspectRatio: `${SHEET_WIDTH} / ${SHEET_HEIGHT}`,
+        backgroundImage: "radial-gradient(circle at center, rgba(255,244,194,.09) 0 1px, transparent 1.5px)",
+        backgroundSize: "18px 18px",
+      }}
     >
+      <div className="pointer-events-none absolute bottom-2 right-3 z-10 rounded bg-[#211b14]/80 px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-amber-100/45">
+        Folding table · dashed frame is the flat sheet
+      </div>
       <svg viewBox={`0 0 ${SHEET_WIDTH} ${SHEET_HEIGHT}`} className="absolute inset-0 h-full w-full overflow-visible" aria-label={`${configuration.side} face of one rectangular paper map`}>
         <SheetDefinitions />
         <defs>
@@ -363,9 +388,12 @@ function FoldedSheet({
           })}
         </defs>
 
+        <rect x="1.5" y="1.5" width={SHEET_WIDTH - 3} height={SHEET_HEIGHT - 3} rx="14" fill="none" stroke="#f4df9a" strokeWidth="3" strokeDasharray="12 12" opacity=".2" />
+
         <g clipPath="url(#base-sheet-clip)" filter="url(#fold-shadow)">
           <BaseArtwork />
         </g>
+        <rect x={leftCut} y={topCut} width={remainingWidth} height={remainingHeight} fill="none" stroke="#f3e3b3" strokeWidth="3" opacity=".5" />
 
         {renderOrder.map((edge) => {
           const geometry = getFoldGeometry(edge, depths[edge]);
@@ -375,12 +403,36 @@ function FoldedSheet({
               <g transform={geometry.transform}>
                 <ReverseArtwork />
               </g>
+              <rect {...geometry.clip} fill="url(#fold-sheen)" opacity=".3" />
+              <rect {...geometry.clip} fill="none" stroke="#fff1bf" strokeWidth="4" opacity=".7" />
+              <text x={geometry.clip.x + 12} y={geometry.clip.y + 22} fill="#51452b" fontSize="11" fontWeight="800" letterSpacing="1.5" opacity=".72">REVERSE</text>
               {edge === "left" || edge === "right"
-                ? <line x1={geometry.crease} y1="0" x2={geometry.crease} y2={SHEET_HEIGHT} stroke="#8c7445" strokeWidth="3" strokeDasharray="10 8" />
-                : <line x1="0" y1={geometry.crease} x2={SHEET_WIDTH} y2={geometry.crease} stroke="#8c7445" strokeWidth="3" strokeDasharray="10 8" />}
+                ? <><line x1={geometry.crease} y1="0" x2={geometry.crease} y2={SHEET_HEIGHT} stroke="#211609" strokeWidth="12" opacity=".28" /><line x1={geometry.crease} y1="0" x2={geometry.crease} y2={SHEET_HEIGHT} stroke="#f6e7b6" strokeWidth="3" strokeDasharray="10 8" /></>
+                : <><line x1="0" y1={geometry.crease} x2={SHEET_WIDTH} y2={geometry.crease} stroke="#211609" strokeWidth="12" opacity=".28" /><line x1="0" y1={geometry.crease} x2={SHEET_WIDTH} y2={geometry.crease} stroke="#f6e7b6" strokeWidth="3" strokeDasharray="10 8" /></>}
             </g>
           );
         })}
+
+        {traceOutcome === "true-route" || traceOutcome === "deeper-solve" ? (
+          <g data-testid="folded-map-true-evidence" pointerEvents="none">
+            <path d="M252 110 C360 119 424 151 500 165 C555 173 635 173 690 165 C735 158 768 122 804 106" fill="none" stroke="#0f766e" strokeWidth="18" strokeLinecap="round" opacity=".34" />
+            <path d="M252 110 C360 119 424 151 500 165 C555 173 635 173 690 165 C735 158 768 122 804 106" fill="none" stroke="#d1fae5" strokeWidth="4" strokeDasharray="14 10" strokeLinecap="round" />
+            <circle cx="505" cy="165" r="27" fill="none" stroke="#d1fae5" strokeWidth="5" />
+            <text x="420" y="214" fill="#134e4a" fontSize="15" fontWeight="900" letterSpacing="2">ROAD-CREW ROUTE CONFIRMED</text>
+            <g transform="translate(430 8)">
+              <rect width="365" height="42" rx="8" fill="#e5d8a8" stroke="#7f1d1d" strokeWidth="3" />
+              <path d="M12 10 L353 32 M353 10 L12 32" stroke="#991b1b" strokeWidth="4" opacity=".72" />
+              <text x="18" y="27" fill="#571b16" fontSize="12.5" fontWeight="900" letterSpacing="1.2">ROUTE 817 VOID · TERRAIN REVERSED</text>
+            </g>
+          </g>
+        ) : null}
+        {traceOutcome === "deeper-solve" ? (
+          <g data-testid="folded-map-cache-evidence" pointerEvents="none">
+            <path d="M620 155 C650 133 715 112 760 95" fill="none" stroke="#7dd3fc" strokeWidth="9" strokeDasharray="12 9" strokeLinecap="round" />
+            <circle cx="760" cy="95" r="24" fill="#082f49" stroke="#bae6fd" strokeWidth="4" />
+            <text x="760" y="103" fill="#e0f2fe" fontSize="24" fontWeight="900" textAnchor="middle">✦</text>
+          </g>
+        ) : null}
 
         {draggingEdge ? FOLDED_MAP_LANDINGS.map((landing) => {
           const fromFarEdge = draggingEdge === "right" || draggingEdge === "bottom";
@@ -402,7 +454,11 @@ function FoldedSheet({
           key={id}
               edge={id}
               depth={depths[id]}
-              crossPositionPercent={id === "left" || id === "right" ? verticalHandlePosition : horizontalHandlePosition}
+              crossPositionPercent={id === "left" || id === "right"
+                ? verticalHandlePosition
+                : id === "bottom"
+                  ? bottomHandlePosition
+                  : topHandlePosition}
               stageRef={stageRef}
           onBegin={() => onBegin(id)}
           onPreview={(depth) => onPreview(id, depth)}
@@ -508,7 +564,7 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close, on
     setConfiguration((current) => ({ ...current, side: current.side === "front" ? "back" : "front" }));
     setTraceOutcome(null);
     setFeedback(configuration.side === "front"
-      ? "The keeper-correction reverse is face-up. Its ink is distinct; nothing from the route face shows through."
+      ? "The road-crew correction is face-up, its dark field ink crossing the paper grain."
       : "The Great Survey route face is up again.");
   };
 
@@ -541,7 +597,7 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close, on
       >
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200/70">Chapter 4 interaction spike · rectangular sheet prototype</div>
+            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200/70">Westroot Lower Gate · Survey working sheet</div>
             <h2 id="folded-map-title" className="mt-1 font-serif text-2xl font-semibold sm:text-3xl">The Folded Map</h2>
             <p className="mt-2 max-w-4xl text-sm leading-6 text-white/65">One opaque map, printed differently on each side. Drag any edge inward; its landing snaps to the ¼, ½, or ¾ guide, and the fold reveals only the opposite face.</p>
           </div>
@@ -560,6 +616,7 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close, on
                 previewDepths={previewDepths}
                 foldOrder={foldOrder}
                 draggingEdge={draggingEdge}
+                traceOutcome={traceOutcome}
                 stageRef={stageRef}
                 onBegin={beginEdgeDrag}
                 onPreview={previewEdge}
@@ -599,13 +656,13 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close, on
             </div>
             <div className="rounded-3xl border border-white/10 bg-white/5 p-4 text-sm leading-6 text-white/70">
               <div className="font-semibold text-white">Edden's clue</div>
-              <div className="mt-1">“The map lies flat. Two turns find the road. The bridge breaks twice.”</div>
+              <div className="mt-1">“The map lies flat. Two turns find the road. At the road-crew bridge, roots point beyond it.”</div>
               <div className="mt-4 font-semibold text-white">Look for agreement</div>
               <ul className="mt-1 list-inside list-disc space-y-1 text-xs text-white/55">
-                <li>the 811 lantern and an older keeper ring</li>
+                <li>the Survey lantern benchmark and an older road-crew ring</li>
                 <li>two contour strokes meeting without reversal</li>
                 <li>one road continuing into the Underway</li>
-                <li>the newer 817 office shortcut is strikingly straight</li>
+                <li>route 817 is strikingly straight</li>
               </ul>
               <div className="mt-4 font-semibold text-white">Recorded state</div>
               <div className="mt-1">{getFoldedMapReview(flags)}</div>
@@ -615,7 +672,7 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close, on
             <Button data-choice-id={CHAPTER_4_CHOICE_IDS.traceRoute} onClick={traceRoute} className="w-full bg-amber-500/25">Trace this folded route</Button>
             <Button data-choice-id={CHAPTER_4_CHOICE_IDS.resetFolds} onClick={unfoldAll} className="w-full">Unfold the whole sheet</Button>
             <Button data-choice-id={CHAPTER_4_CHOICE_IDS.back} onClick={goBack} className="w-full">{foldOrder.length ? "Back: open latest fold" : "Back to Westroot"}</Button>
-            <div className="px-2 text-center text-[11px] leading-4 text-white/35">Experimentation is safe. Only tracing commits a route. Rootbread is not consulted.</div>
+            <div className="px-2 text-center text-[11px] leading-4 text-white/35">Experimentation is safe. Only tracing commits a route.</div>
           </aside>
         </div>
       </section>

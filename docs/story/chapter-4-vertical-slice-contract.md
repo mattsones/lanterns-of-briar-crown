@@ -1,12 +1,12 @@
 # Chapter 4 Vertical-Slice Contract
 
-Last updated: 2026-08-02
+Last updated: 2026-08-10
 
-Status: executable contract complete; the graybox entry is playable through the Lower Gate, gatewright, and accepted Folded Map, with the Underway as the next critical-path milestone
+Status: executable contract complete; the graybox route is playable through the Lower Gate sendoff, Tasmine's full smithy, accepted Folded Map, posted Underway detour, concealed ambush, and Listening Mile signal trace, with Lio's written message as the next critical-path milestone
 
 ## Chapter Promise
 
-Follow keeper evidence instead of counterfeit speed, find Lio's own message, and identify Briarhold Waystation as the Chapter 5 rescue target.
+Follow corroborated route evidence instead of counterfeit speed, find Lio's own message, and identify Briarhold Waystation as the Chapter 5 rescue target.
 
 ## Non-Goals
 
@@ -29,13 +29,13 @@ The executable source of truth is `src/story/chapter4.ts`; pure transitions and 
 
 ## Critical Path
 
-Implementation status: steps 1–3 are playable as the first graybox entry slice. Step 4 is next.
+Implementation status: steps 1–5 are playable. Step 6 remains optional future content; step 7 is the next required slice.
 
-1. Meet the Westroot gatewright at the Lower Gate.
-2. Receive access to a nearby weapon upgrade; purchase remains optional.
-3. Compare the Great Survey layer and the older keeper correction in the Folded Map interaction.
-4. Enter the Underway by the decoded true route or its harder fail-forward maintenance approach.
-5. Resolve the keeper-built Listening Mile circuit.
+1. Walk to the Lower Gate with Bramwell and Noma and receive a friendly introduction to Tasmine Rootbrace.
+2. Visit Tasmine's full buy/sell smithy; every purchase remains optional.
+3. Compare the Great Survey layer and the older road-crew correction in the Folded Map interaction.
+4. Enter the Underway on decoded route 811, then decide at a later posted detour whether to stay with the map or trust current safety guidance into maintenance route 817.
+5. Travel through the lantern-dark Listening Mile, using three separate acoustic hoods to follow westbound road sounds and find Lio's quickly hidden courier knot.
 6. Optionally help the captive porter.
 7. Find Lio's message.
 8. Clear the Briar Relay Post.
@@ -48,11 +48,11 @@ The prototype is available from the title screen through **Test Folded Map Grayb
 
 Required route solve:
 
-- manipulate one opaque rectangular map whose route face and keeper-correction face are visibly distinct and never transparent;
+- manipulate one opaque rectangular map whose Survey face and road-crew-correction face are visibly distinct and never transparent;
 - drag any of its four edges inward and snap that edge to the quarter, half, or three-quarter landing guide;
 - support 54 distinct two-edge configurations before considering fold order, single folds, the reverse face, or the optional third fold;
 - land the west edge at one-half and the south edge at three-quarters for the required two-fold solution;
-- make the dated Survey mark, older keeper ring, contour strokes, and winding road into the Underway agree simultaneously;
+- make the west fold visibly incomplete on its own, then use the south fold's road-crew ring and bridge span to close the road and align the surrounding contours;
 - keep the map surface itself non-selectable: only moving an edge changes construction, and only **Trace this folded route** commits it;
 - give keyboard users the same landing states by cycling the focused edge handle.
 
@@ -62,14 +62,14 @@ Fail-forward mistake:
 - its lantern and straight road align convincingly, while its date and terrain evidence do not;
 - ordinary wrong configurations are also possible and do not create route consequences;
 - folding and unfolding is consequence-free; only **Trace this folded route** commits the current configuration;
-- committing the tempting revision exposes a sealed maintenance approach rather than blocking progress;
+- committing the tempting revision records the persuasive 817 notation but does not choose the later route branch;
 - correcting the map still decodes the true route;
-- later Listening Mile or route content may add pressure for the maintenance approach, but may not remove Lio's-message progression.
+- the actual route choice occurs later at a posted closure board, and neither branch may remove Lio's-message progression.
 
 Optional deeper solve:
 
 - after the true route is recorded, leave the west-half and south-three-quarter edges folded and add the north edge at one-quarter as a third fold;
-- make the root arrow visibly continue across the broken bridge notation;
+- make the root arrow visibly continue from the south fold's bridge to a separate cache mark;
 - reveal the Lanternwell cache mark through the layered drawing;
 - award exactly one Lanternwell Drop;
 - repeat visits remain reviewable and cannot repeat the reward.
@@ -86,7 +86,7 @@ Back behavior:
 | Started | `chapterFourStarted` |
 | Attempted | `foldedMapAttempted` |
 | First mistake | `foldedMapFirstAttemptMistake` |
-| Fail-forward pressure | `foldedMapMaintenanceDetour` |
+| Persuasive 817 construction found | `foldedMapMaintenanceDetour` |
 | Required solve | `foldedMapDecoded` |
 | Optional deeper solve | `foldedMapDeeperSolved` |
 | One-time reward | `foldedMapCacheClaimed` |
@@ -95,32 +95,42 @@ Back behavior:
 
 ## Listening Mile Contract
 
-The Listening Mile uses choice plates, echo tubes, and signal shutters. It records route practice; it does not read thoughts or judge honesty.
+The Listening Mile uses three flared wall hoods connected to fired-clay conduits. Each post occupies its own navigation node, with dark tunnel between them.
 
-- `guidance`: the selected answers emphasize guidance, warning, shelter, and memory.
-- `maintenance`: command-first or fear-driven answers route the party through a harder keeper-designed maintenance passage.
+- The first post establishes the physical rule by carrying the party's own recent movement behind them and fresh westbound footsteps ahead.
+- The second post carries present boots, a chain scrape, and an inspection shutter being opened farther west.
+- At the final post, Mara finds a familiar blue courier knot hidden behind the hood's rim and a tiny scratch pointing toward Lio's written message.
+- The nearby stiff shutter explains why the guards had to stop; hiding the knot and scratch took Lio only seconds.
+- After each of the first two listening beats, dialogue closes and the player physically travels to the next post.
 
-Both outcomes reach Lio's message. Attempt and result remain separate through `listeningMileAttempted` and `listeningMileOutcome`.
+Attempt and result remain separate through `listeningMileAttempted` and the `marker-found` value in `listeningMileOutcome`.
+
+## Underway Graybox Contract
+
+The first Underway graybox uses one focused navigation graph and local lantern visibility. Black covers the map outside the hero and the immediately connected passage segments; explored tunnel does not remain lit after the party moves away. The party travels some distance along mapped route 811 before encountering a legitimate-looking closure board. That board redirects westbound travelers into maintenance route 817. The map is credible evidence about destination; the closure is credible evidence about present safety. Inspecting the plate reveals a real old hazard stamp, a newer holding cord, fresh traffic into 817, and stone movement beyond 811 without making either choice obviously wrong. The two branches converge at a blind junction before the Listening Mile.
+
+The blind junction contains an intentionally concealed ambush:
+
+- every route reaches it, so the playable slice cannot bypass the encounter;
+- the 811 route faces one Briar Relay Guard;
+- following the posted 817 detour faces the guard plus a Seal-Forged Sentry;
+- a hidden Instinct DC 16 check occurs at the approach;
+- a normal miss reveals no enemy marker and no failure message before the attack;
+- exceptional success reveals the physical signal cord and enemy marker;
+- the revealed route allows a prepared opening: hero acts first with 4 guard;
+- every ambush state converges on the Listening Mile.
 
 ## Gatewright Weapon Economy
 
-The gatewright encounter is mandatory before the Underway; the purchase is optional.
+The Lower Gate introduction is mandatory before the Underway; every purchase is optional. Tasmine's smithy uses the same full buy/sell interface as the established shops, but its stock is regional rather than cumulative. She sells five Westroot pieces: three gate tools, Ironroot Ribplate, and a Low-Arch Roothelm. She does not stock Orin's equipment, cloaks, charms, or general supplies. Tasmine still buys ordinary non-story inventory; story evidence cannot be sold.
 
-| Decision | Contract |
-|---|---|
-| Gatewright | Tamsin Rootbrace, Stonekin Westroot gatewright |
-| Item | Gatewright Hookblade |
-| Rarity | Rare |
-| Price | 32 gold |
-| Canonical entry gold | 78 gold |
-| Bonuses | +2 Might, +2 Precision, +1 Craft |
-| Skill | Keeper Gatehook: 1d10, Might/Precision scaling, guard break |
-| Previous baseline | Pebbleknock Hammer: +2 Might, +1 Grit, 1d10 guard break |
-| Auto-equip | No; buying does not silently replace the current weapon |
-| Durability | None |
-| Backtracking | Never required |
+| Pattern | Role | Price | Bonuses | Skill |
+|---|---|---:|---|---|
+| Gatewright Hookblade | Control | 32 gold | +2 Might, +2 Precision, +1 Craft | Passage Gatehook: 1d10, mixed scaling, guard break |
+| Gatewright Passage Pike | Precision | 30 gold | +2 Precision, +2 Instinct, +1 Guard | Sightline Thrust: 1d10, mixed scaling, pierce |
+| Gatewright Counterweight Maul | Force | 34 gold | +3 Might, +2 Grit | Counterweight Drop: 2d6, mixed scaling, guard break |
 
-The Hookblade is a clear Chapter 4 upgrade while leaving the Hammer functional. The 32-gold price is immediately affordable from the canonical save and leaves 46 gold for supplies. A player who declines it may continue.
+Every pattern is Rare and individually affordable from the canonical 78-gold save. The player may buy more than one if gold allows. Purchases never auto-equip, introduce durability, gate progression, or make the Pebbleknock Hammer nonfunctional.
 
 ## Required Ending
 
@@ -158,3 +168,5 @@ Before full Chapter 4 story implementation, play **Test Folded Map Graybox** and
 > Does dragging the edges of one opaque two-sided sheet to different landing points feel like folding a map, and does the correct construction reveal itself through visible evidence rather than color, labels, or elimination?
 
 The first answer-card spike failed on both physicality and deduction. The second cross-wing spike improved manipulation but still reduced the answer to three of four binary flaps, showed implausible transparency, and did not feel like one map. The owner accepted the third rectangular-sheet interaction direction on 2026-08-02 as a cool puzzle for the game. The acceptance run exposed two polish findings: committed outcomes needed unmistakable confirmation, and the tempting straight 817 construction needed to be easier to discover. The prototype now gives every traced outcome a large result stamp and distinct treatment, while matching 817 edge marks and clue copy point toward the persuasive false construction without naming its exact folds.
+
+The recovered August 3 presentation follow-up shows the flat-sheet boundary on a folding table, marks every reverse flap and crease, compacts handles at landed fractions, makes the west fold leave a visible road gap, and gives the south fold the bridge and road-crew ring that complete the route. Tracing overlays the confirmed route and rejected 817 revision; the optional north fold points from the bridge to a separate cache mark. These cues are requirements for eventual production art.

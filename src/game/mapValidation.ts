@@ -64,6 +64,18 @@ export const REQUIRED_GRAPH_LANDMARKS: Record<string, string[]> = {
     "false_map",
     "den_guard",
   ],
+  underway: [
+    "underway_gate",
+    "underway_threshold",
+    "detour_notice",
+    "mapped_gallery",
+    "maintenance_hatch",
+    "ambush_approach",
+    "underway_ambush",
+    "listening_post_one",
+    "listening_post_two",
+    "listening_post_three",
+  ],
 };
 
 export const DOCUMENTED_ONE_WAY_LINKS: Record<string, Record<string, string>> = {

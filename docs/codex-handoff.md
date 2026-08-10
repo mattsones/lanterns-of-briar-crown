@@ -4,9 +4,31 @@ This file is the starting point for Codex.
 
 Story-writing work must also follow `docs/story/writing-rules.md`. Singular characters use he/him or she/her; *they/them/their* is reserved for genuinely plural antecedents.
 
-## Latest Handoff — 2026-08-04
+## Latest Handoff — 2026-08-10
 
-Branch `codex/chapter-4-graybox-entry` contains the first playable Chapter 4 critical-path slice. From the canonical Chapter 3-complete fixture, the Westroot completion banner now commits to Chapter 4, opens the Lower Gate sequence, requires a meeting with Stonekin gatewright Tamsin Rootbrace, offers the optional 32-gold Rare Gatewright Hookblade without auto-equipping it, and carries both purchase and decline paths through a Survey-case briefing into the accepted Folded Map.
+Branch `codex/chapter-4-graybox-entry` now carries the revised Chapter 4 graybox through the Underway and Listening Mile. Bramwell and Noma walk the party to the Lower Gate and introduce Tasmine Rootbrace. Bramwell's tag check is a friendly route lookup, Noma connects Edden's bundle of drawings to Westroot's records, and both see the party off when the gate opens.
+
+The party begins on mapped route 811. Well inside the passage, a legitimate-looking closure board redirects travelers into maintenance route 817. The player chooses whether to trust the older corroborated map or present safety guidance; inspecting the board clarifies both risks without making either choice foolish. Both branches converge at a concealed blind-junction ambush. Choosing 817 adds a Seal-Forged Sentry. A hidden Instinct DC 16 check stays invisible on an ordinary miss; exceptional success reveals a physical signal cord and enemy marker, then allows a prepared first turn with 4 guard.
+
+The Underway now uses local lantern visibility rather than permanently clearing exploration fog. The map is black outside a warm circle around the hero and the short connected passage immediately ahead and behind. Previously traveled tunnel falls back into darkness. The Listening Mile is three separate navigation posts with tunnel travel between them: the first catches the cleared shutter behind and boots ahead, the second catches the party's own fading steps plus a chain and inspection shutter farther west, and the third holds Lio's hurried blue courier knot and scratch pointing toward his written message.
+
+Tasmine's smithy uses the full buy/sell interface but stocks a fresh regional catalog rather than Orin's cumulative inventory. Its five Westroot pieces are the optional 32-gold Gatewright Hookblade, 30-gold Gatewright Passage Pike, 34-gold Gatewright Counterweight Maul, 29-gold Ironroot Ribplate, and 23-gold Low-Arch Roothelm. Tasmine carries no cloak, charm, or general supplies, though she buys ordinary non-story inventory. Story evidence cannot be sold. Nothing auto-equips, no purchase gates the route, and durability remains absent.
+
+The Folded Map now includes the recovered August 3 polish from remote commit `ba6a3dd`: a visible folding-table frame, reverse-face flap boundaries, stronger crease shadows, compact landed handles, a west-fold road gap completed by the south-fold bridge and road-crew ring, post-trace route overlays, and an optional north-fold pointer to the cache. Current 811/817 route language and road-crew terminology remain authoritative. The Cargo Transfer Tag identifies the Lower Gate route, the Witness Stone rubbing authenticates the correction, and Edden's already-carried bundle supplies the fold instruction.
+
+Chapter 4 player-facing dialogue received an editorial pass. Removed-prototype rebuttals were deleted from Tasmine, the concealed ambush, and every Listening Mile beat. The durable rule is recorded in `docs/planning/chapter-4-dark-underway-experience.md`: describe what the party observes and does; keep explanations of rejected implementations in development notes.
+
+### Deferred Cross-Chapter Clarity Follow-up
+
+At the beginning of Chapter 2, revise Edden's handoff so the party clearly receives a **bundle of route drawings**, not only one drawing of the three doors. The three-door sheet is the first page the party understands. Update the Chapter 2 briefing, Edden scene, inventory item name/description, and later references together in a separate reviewable copy slice.
+
+### Next Best Step
+
+**Start with the August 10 dark-tunnel conversation.** Read `docs/planning/chapter-4-dark-underway-experience.md`, then human-play from the Lower Gate through all three listening posts. Decide whether the lantern halo, junction visibility, and travel spacing feel tense but fair. Only after that review should work continue into Lio's message and Mara's immediate response.
+
+## Previous Handoff — 2026-08-04
+
+Branch `codex/chapter-4-graybox-entry` contains the first playable Chapter 4 critical-path slice. From the canonical Chapter 3-complete fixture, the Westroot completion banner now commits to Chapter 4, opens the Lower Gate sequence, requires a meeting with Stonekin gatewright Tasmine Rootbrace, offers the optional 32-gold Rare Gatewright Hookblade without auto-equipping it, and carries both purchase and decline paths through a Survey-case briefing into the accepted Folded Map.
 
 The entry boundary is enforced by pure Chapter 4 helpers that verify required flags and carried evidence before setting `chapterFourStarted`. Stable scene and choice IDs cover the Lower Gate, Gatewright offer and purchase, Survey briefing, and map handoff. Quest objectives advance through the Gatewright and Folded Map to an explicit **Enter the Underway — Next Graybox Milestone** endpoint, while the optional Hookblade remains available as a side objective.
 

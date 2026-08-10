@@ -838,7 +838,7 @@ Recommended title: **The Riddle Road**
 
 ## Chapter Promise
 
-The party enters the deeper Lantern Road system, where old keeper-designed mechanisms and route practices distinguish guidance from command. Edden’s drawings become essential. Lio is confirmed alive in a more direct way, and the Briar Crown cell’s hideout is located.
+The party enters the deeper Lantern Road system, where old road-crew mechanisms and route records distinguish trustworthy guidance from counterfeit command. Edden’s bundle of drawings becomes essential. Lio is confirmed alive in a more direct way, and the Briar Crown cell’s hideout is located.
 
 Before the first order bearing Elowen's name appears, required-path dialogue establishes that Elowen is Alderreach's heir apparent, is conducting her first independent Royal Progress, and may lawfully request route records and temporary safety measures. The forgery works because it imitates a known public responsibility.
 
@@ -854,13 +854,13 @@ Can the party follow truth when lies offer a faster path?
 
 The Underway, Listening Mile, Briar Relay Post, and Briarhold Waystation remain inside Rainroot and east of Riverwatch and the disputed Veyran river march. The route may point west without crossing the international frontier. This preserves the Briar Crown as a domestic Alderreach conspiracy unless a later chapter deliberately chooses a separate Veyran-intelligence thread.
 
-The party already carries the useful core of Edden's drawings from the Chapter 2 briefing. Quill may later deliver a small addendum after completing the first witnessed round trip under the new compact, but no same-hour bird or runner should collapse the meaningful travel time between Bramblecross and Westroot.
+The party already carries Edden's bundle of route drawings from the Chapter 2 briefing; the three-door sheet was only the first page the party understood. Quill may later deliver a small addendum after completing the first witnessed round trip under the new compact, but no same-hour bird or runner should collapse the meaningful travel time between Bramblecross and Westroot.
 
 ## Main Locations
 
 ### Westroot Lower Gate
 
-A guarded old passage that Westroot has not used in years. Before the party commits to the Underway, a Westroot smith/gatewright must provide nearby weapon service or a credible new-weapon path so progression does not require backtracking to Hearthhollow. This is an early Chapter 4 executable-contract requirement, not a durability system.
+A guarded old passage that Westroot has not used in years. Bramwell and Noma walk the party there and introduce Tasmine Rootbrace, Westroot's smith and gatewright. Bramwell checks the recovered transfer tag as a friendly route lookup while Noma connects Edden's bundle to the older records. Tasmine operates a full buy/sell smithy before departure; no purchase is required and no durability system is introduced.
 
 ### The Underway
 
@@ -868,11 +868,11 @@ A linked system of tunnels, maintenance galleries, culverts, old route chambers,
 
 ### The Survey Correction Room / Overlay Archive
 
-A keeper archive containing Great Survey benchmarks, older route sheets, transparent correction overlays, folding leaves, dated shutters, and witnessed annotations. Different layers reveal different dates and operating conditions; the maps do not alter themselves.
+Two old map cases beside Tasmine's workbench contain Great Survey benchmarks, an older road-crew correction, dated route notches, and witnessed annotations. Tasmine stitches the two records into one opaque two-sided working sheet. Different faces reveal different dates and operating conditions; the map does not alter itself.
 
 ### The Listening Mile
 
-A keeper-built review circuit where inscriptions, choice plates, echo tubes, and signal shutters return route clues. Incorrect alignments distort or redirect the echo; the mile does not detect lies.
+An old acoustic safety line where flared wall hoods connect to fired-clay conduits and carry footsteps, tools, and shutters around blind bends. The party travels through darkness between three separate posts, following westbound traffic to a stiff inspection shutter. While his guards stopped to open it, Lio looped a familiar blue courier knot behind the final hood and scratched a tiny direction mark toward his hidden message.
 
 ### Lanternwell
 
@@ -885,7 +885,7 @@ A captured old waystation used by the Briar Crown to relay messages and prisoner
 ## Major NPCs
 
 - Mara
-- Westroot guide, possibly Quill Pebbleturn or Noma Greenstill
+- Bramwell, Noma Greenstill, and Tasmine Rootbrace at the Lower Gate
 - Edden indirectly through sketches sent with the party
 - Briar Crown relay captain
 - captive messenger or porter who saw Lio
@@ -935,25 +935,17 @@ Optional deeper puzzle:
 
 **Tilda:** “A flat map is only one opinion. I prefer maps that admit they have secrets.”
 
-**Moss:** “Fold record to record. Lantern to lantern. The keeper who made this was not measuring speed.”
+**Moss:** “Fold record to record. Lantern to lantern. Whoever corrected this was not measuring speed.”
 
 **Mara:** “Lio folds notes into triangles when he wants me to find them. Try the corners.”
 
 ## The Listening Mile
 
-This is a strong thematic set-piece.
+This is a physical investigation set-piece rather than a personality quiz.
 
-Old route keepers built this mile as a training and review circuit. Inscriptions pose questions at successive signs, while choice plates and lantern shutters record which marked answer a traveler selects. Echo tubes or crafted signal lamps can repeat stored phrases without giving the road a mind.
+Road crews built the mile with flared wall hoods connected to hollow fired-clay conduits. At the first post, the party hears its own recent movement behind and fresh footsteps ahead. The second post carries current metal-shod boots, a chain scrape, and an inspection shutter being opened farther west. At the final post, Mara finds Lio's familiar blue courier knot hidden behind the hood's rim. Scrapes around the stiff shutter explain why his guards had to stop, and hiding the knot plus a tiny directional scratch would take only seconds. The scratch points toward his hidden written message.
 
-Possible prompts:
-
-- “What does a road owe the traveler?”
-- “When should a sign command?”
-- “Who is safest when truth is hidden?”
-
-The correct answers do not need to be exact. They should reflect guidance, warning, shelter, and memory.
-
-If the player selects selfish or fear-driven answers, the old mechanism routes them through a harder inspection or maintenance passage. The consequence was designed by keepers; it is not a moral judgment made by the road.
+The system carries only present sound from another part of the road. It does not talk, preserve earlier noise, run on water, repeat stored philosophy, ask questions, judge the player, or contain a device Lio had time to build.
 
 ## Side Thread: The Captive Porter
 

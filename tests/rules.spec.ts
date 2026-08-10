@@ -20,6 +20,7 @@ import {
 } from "../src/data/artworkPlan";
 import { PLAYER_HERO_ARTWORK, getPlayerArtworkBySelection } from "../src/data/playerArtwork";
 import { ITEM_DB } from "../src/data/items";
+import { SHOP_INVENTORIES } from "../src/data/shops";
 import { SKILL_DB } from "../src/data/skills";
 import { ITEM_ARTWORK } from "../src/data/itemArtwork";
 import { HERO_GROWTH_ARTWORK } from "../src/data/growthArtwork";
@@ -106,9 +107,13 @@ import {
   EMPTY_FOLDED_MAP_CONFIGURATION,
   getChapter4EntryErrors,
   getGatewrightOfferPrice,
+  getUnderwayApproach,
   meetGatewright,
   purchaseGatewrightWeapon,
   resolveFoldedMapConfiguration,
+  resolveListeningMileClue,
+  resolveUnderwayDetour,
+  resolveUnderwayAmbushDiscovery,
   validateChapter4Contract,
 } from "../src/game/chapter4";
 import {
@@ -116,6 +121,9 @@ import {
   CHAPTER_4_OPTIONAL_FLAGS,
   FOLDED_MAP_CONTRACT,
   GATEWRIGHT_WEAPON_CONTRACT,
+  GATEWRIGHT_WEAPON_CONTRACTS,
+  LISTENING_MILE_CONTRACT,
+  UNDERWAY_CONTRACT,
 } from "../src/story/chapter4";
 import type { SavePayload } from "../src/game/types";
 
@@ -814,6 +822,20 @@ test("Chapter 4 save migration infers prerequisite Folded Map state", () => {
     gatewrightMet: true,
     gatewrightWeaponPurchased: true,
   });
+  expect(migrateFlags({
+    foldedMapMaintenanceDetour: true,
+    underwayAmbushCleared: true,
+  })).toMatchObject({
+    underwayDetourDecisionMade: true,
+    underwayDetourFollowed: true,
+  });
+  expect(migrateFlags({
+    listeningMileAttempted: true,
+    listeningMileOutcome: "maintenance",
+  })).toMatchObject({
+    underwayDetourDecisionMade: true,
+    listeningMileOutcome: "marker-found",
+  });
 });
 
 test("Folded Map state separates mistake, route decode, deeper solve, and one-time reward", () => {
@@ -903,7 +925,7 @@ test("Folded Map state separates mistake, route decode, deeper solve, and one-ti
   expect(secondClaim.player.inventory.lanternwell_drop).toBe(1);
 });
 
-test("Gatewright Hookblade is an affordable Chapter 4 upgrade without durability", () => {
+test("Tasmine's full smithy includes three affordable optional weapon patterns without durability", () => {
   const hookblade = ITEM_DB.gatewright_hookblade;
   const hammer = ITEM_DB.pebbleknock_hammer;
   const hero = buildPlayer({ name: "Liam", gender: "Male", raceId: "human" });
@@ -921,6 +943,39 @@ test("Gatewright Hookblade is an affordable Chapter 4 upgrade without durability
     Object.values(hammer.bonuses).reduce((sum, value) => sum + value, 0),
   );
   expect(getGatewrightOfferPrice()).toBe(32);
+  expect(GATEWRIGHT_WEAPON_CONTRACTS.map((offer) => offer.itemId)).toEqual([
+    "gatewright_hookblade",
+    "gatewright_passage_pike",
+    "gatewright_counterweight_maul",
+  ]);
+  GATEWRIGHT_WEAPON_CONTRACTS.forEach((offer) => {
+    expect(offer.price).toBeLessThanOrEqual(78);
+    expect(ITEM_DB[offer.itemId]).toMatchObject({ rarity: "Rare", slot: "weapon" });
+  });
+  expect(SHOP_INVENTORIES.gatewright).toHaveLength(5);
+  expect(SHOP_INVENTORIES.gatewright).toEqual(expect.arrayContaining([
+    "gatewright_hookblade",
+    "gatewright_passage_pike",
+    "gatewright_counterweight_maul",
+    "ironroot_ribplate",
+    "low_arch_roothelm",
+  ]));
+  expect(SHOP_INVENTORIES.gatewright).not.toEqual(expect.arrayContaining([
+    "pebbleknock_hammer",
+    "giggleleaf_cloak",
+    "rootbread_charm",
+    "healing_fizzpop",
+  ]));
+  expect(ITEM_DB.ironroot_ribplate).toMatchObject({
+    rarity: "Rare",
+    slot: "armor",
+    bonuses: { Guard: 2, Vitality: 2, Grit: 1 },
+  });
+  expect(ITEM_DB.low_arch_roothelm).toMatchObject({
+    rarity: "Uncommon",
+    slot: "helm",
+    bonuses: { Guard: 2, Instinct: 1, Craft: 1 },
+  });
 
   const purchase = purchaseGatewrightWeapon(hero, buildDefaultFlags());
   expect(purchase.purchased).toBe(true);
@@ -940,6 +995,50 @@ test("Gatewright Hookblade is an affordable Chapter 4 upgrade without durability
   const hookbladeSkill = buildCombatSkill("keeper_gatehook", getDerivedStats(hookbladeHero));
   expect(hookbladeSkill?.sides).toBe(hammerSkill?.sides);
   expect(hookbladeSkill?.computedBonus).toBeGreaterThan(hammerSkill?.computedBonus || 0);
+
+  const secondPurchase = purchaseGatewrightWeapon(
+    purchase.player,
+    { ...buildDefaultFlags(), ...purchase.flags },
+    "gatewright_passage_pike",
+  );
+  expect(secondPurchase.purchased).toBe(true);
+  expect(secondPurchase.player.gold).toBe(16);
+  expect(secondPurchase.player.inventory.gatewright_passage_pike).toBe(1);
+  expect(secondPurchase.player.equipment.weapon).toBe("pebbleknock_hammer");
+});
+
+test("Underway presents a later detour choice, applies 817 pressure, hides ordinary ambush misses, and converges", () => {
+  expect(UNDERWAY_CONTRACT).toMatchObject({
+    region: "underway",
+    trueRoute: "mapped-gallery",
+    pressuredRoute: "maintenance-gallery",
+  });
+  expect(getUnderwayApproach(buildDefaultFlags())).toBe("mapped-gallery");
+  expect(getUnderwayApproach({ foldedMapMaintenanceDetour: true })).toBe("mapped-gallery");
+  expect(resolveUnderwayDetour(false)).toEqual({
+    underwayDetourDecisionMade: true,
+    underwayDetourFollowed: false,
+  });
+  expect(resolveUnderwayDetour(true)).toEqual({
+    underwayDetourDecisionMade: true,
+    underwayDetourFollowed: true,
+  });
+  expect(getUnderwayApproach({ underwayDetourFollowed: true })).toBe("maintenance-gallery");
+  expect(resolveUnderwayAmbushDiscovery(15)).toEqual({ attempted: true, revealed: false, dc: 16 });
+  expect(resolveUnderwayAmbushDiscovery(16)).toEqual({ attempted: true, revealed: true, dc: 16 });
+  expect(ENCOUNTERS.underwayAmbush).toEqual(["briar_relay_guard"]);
+  expect(ENCOUNTERS.underwayAmbushHard).toEqual(["briar_relay_guard", "seal_forged_sentry"]);
+  expect(BATTLE_REWARDS.underwayAmbush.flagUpdate).toEqual({ underwayAmbushCleared: true });
+  expect(BATTLE_REWARDS.underwayAmbushHard.flagUpdate).toEqual({ underwayAmbushCleared: true });
+});
+
+test("Listening Mile finds Lio's quick trail marker without a personality quiz or automated device", () => {
+  expect(resolveListeningMileClue()).toEqual({
+    outcome: "marker-found",
+    flags: { listeningMileAttempted: true, listeningMileOutcome: "marker-found" },
+  });
+  expect(LISTENING_MILE_CONTRACT.mechanism).toContain("fired-clay conduits");
+  expect(LISTENING_MILE_CONTRACT.mechanism).toContain("Three separate map posts");
 });
 
 test("save migrations normalize older payloads before load", () => {
@@ -1721,6 +1820,7 @@ test("hand-authored map navigation graphs pass reusable validation", () => {
   expect(results.map((result) => result.region).sort()).toEqual([
     "crownDoorDen",
     "rootCellar",
+    "underway",
     "westrootHub",
     "westrootTrail",
   ]);

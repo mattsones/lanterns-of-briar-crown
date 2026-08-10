@@ -34,6 +34,10 @@ const westrootHubOpenStonesMap = new URL(
   "../../assets/maps/westroot-hub-map-v02-open-stones.webp",
   import.meta.url,
 ).href;
+const underwayGrayboxMap = new URL(
+  "../../assets/maps/riddle-road-underway-graybox-v01.svg",
+  import.meta.url,
+).href;
 
 export const MAPS = {
   hearthhollow: {
@@ -695,6 +699,19 @@ export const MAPS = {
       ["wall", "wall", "wall", "rootmarket", "wall", "westroot_path", "westroot_path", "westroot_path", "westroot_path"],
     ],
   },
+  underway: {
+    name: "Riddle Road Underway",
+    subtitle: "Chapter 4: Old roadworks beneath Rainroot",
+    start: { x: 0, y: 2 },
+    backgroundImage: underwayGrayboxMap,
+    tiles: [
+      ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+      ["wall", "wall", "wall", "wall", "mapped_gallery", "underway_path", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+      ["underway_gate", "underway_threshold", "underway_path", "detour_notice", "wall", "wall", "ambush_approach", "underway_ambush", "listening_post_one", "underway_path", "listening_post_two", "underway_path", "listening_post_three"],
+      ["wall", "wall", "wall", "wall", "maintenance_hatch", "underway_path", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+      ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+    ],
+  },
 };
 
 function makeTile(icon, label, blocked, classes) {
@@ -819,4 +836,15 @@ Object.assign(TILE_META, {
   witness_stones: makeTile("◌", "Weathered Stones", false, "bg-teal-800/85"),
   split_hall: makeTile("▤", "Split Hall", false, "bg-stone-700/85"),
   cargo_siding: makeTile("▰", "Cargo Siding", false, "bg-rose-950/85"),
+  underway_path: makeTile("·", "Underway Passage", false, "bg-slate-700/80"),
+  underway_gate: makeTile("▣", "Westroot Lower Gate", false, "bg-stone-700/90"),
+  underway_threshold: makeTile("◇", "Route Dial", false, "bg-amber-900/80"),
+  detour_notice: makeTile("↯", "Posted Detour", false, "bg-yellow-950/90"),
+  mapped_gallery: makeTile("811", "Mapped Route 811", false, "bg-amber-800/80"),
+  maintenance_hatch: makeTile("817", "Maintenance Gallery 817", false, "bg-orange-950/85"),
+  ambush_approach: makeTile("", "Blind Junction", false, "bg-slate-800/85"),
+  underway_ambush: makeTile("!", "Concealed Briar Ambush", false, "bg-red-950/90"),
+  listening_post_one: makeTile("◫", "First Listening Post", false, "bg-sky-900/85"),
+  listening_post_two: makeTile("◫", "Second Listening Post", false, "bg-sky-900/85"),
+  listening_post_three: makeTile("🪢", "Third Listening Post", false, "bg-sky-900/85"),
 });

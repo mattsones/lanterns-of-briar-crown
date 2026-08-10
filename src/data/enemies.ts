@@ -182,6 +182,8 @@ export const ENCOUNTERS = {
   crownDenHound: ["thorn_collared_hound"],
   crownDenGuard: ["false_sign_scratcher", "thorn_collared_hound", "false_sign_scratcher"],
   westrootCargo: ["briar_cargo_runner", "seal_forged_sentry"],
+  underwayAmbush: ["briar_relay_guard"],
+  underwayAmbushHard: ["briar_relay_guard", "seal_forged_sentry"],
   briarRelay: ["briar_relay_guard", "seal_forged_sentry"],
   briarholdBoss: ["bracken_voss", "thornseal_guard", "thornroot_sentry"],
 };

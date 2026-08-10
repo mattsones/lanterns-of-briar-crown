@@ -857,30 +857,30 @@ function ShopkeeperPortrait({ shopMode, flags }) {
   const portraitName =
     shopMode === "smith"
       ? "Smith Orin"
+      : shopMode === "gatewright"
+        ? "Tasmine Rootbrace"
       : shopMode === "market"
         ? flags?.adaSealLessonComplete
           ? "Ada Willowmarket No Lens"
           : "Ada Willowmarket"
         : null;
   const portrait = portraitName ? getDialoguePortrait(portraitName) : null;
-  if (!portrait) return null;
-
   return (
     <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-black/20 text-3xl">
-      <span aria-hidden="true">{shopMode === "smith" ? "O" : "A"}</span>
-      <img
-        src={portrait.src}
-        alt={portrait.alt}
-        className="absolute inset-0 h-full w-full object-cover object-top"
-        onError={(event) => {
-          event.currentTarget.style.display = "none";
-        }}
-      />
+      <span aria-hidden="true">{shopMode === "smith" ? "O" : shopMode === "gatewright" ? "T" : "A"}</span>
+      {portrait ? <img
+          src={portrait.src}
+          alt={portrait.alt}
+          className="absolute inset-0 h-full w-full object-cover object-top"
+          onError={(event) => {
+            event.currentTarget.style.display = "none";
+          }}
+        /> : null}
     </div>
   );
 }
 
-export function ShopModal({ shop, player, close, buyItem, sellItem, shopMode, flags }) { return <div className="fixed inset-0 z-30 overflow-y-auto bg-black/50 p-4"><div className="mx-auto my-8 max-w-3xl rounded-[2rem] border border-white/10 bg-slate-900 p-5"><div className="mb-4 flex justify-between gap-4"><div className="flex min-w-0 items-center gap-4"><ShopkeeperPortrait shopMode={shopMode} flags={flags} /><div><div className="text-2xl font-semibold">{shop.title}</div><div className="text-sm text-yellow-300">Gold: {player.gold}</div>{shopMode === "smith" && flags.elderGavePurse && !flags.smithStarterDiscountUsed ? <div className="text-sm text-emerald-300">Starter discount available.</div> : null}</div></div><Button onClick={close}>Close</Button></div><div className="grid gap-5 lg:grid-cols-2"><div><div className="mb-2 text-sm font-semibold text-emerald-300">Buy</div><div className="grid gap-3">{shop.inventory.map((id) => { const item = ITEM_DB[id]; const discount = shopMode === "smith" && item?.slot && flags.elderGavePurse && !flags.smithStarterDiscountUsed ? 4 : shopMode === "market" && flags.marketDiscount ? 2 : 0; const cost = Math.max(1, getBuyPrice(id) - discount); return <div key={id} className="rounded-2xl border border-white/10 bg-white/5 p-3"><div className="flex justify-between gap-3"><div className="flex min-w-0 items-start gap-3"><ItemIcon item={item} size="sm" /><div className="min-w-0"><div className="font-medium">{item.name}</div><div className="mt-1 text-xs text-white/70">{item.description}</div>{getItemHighlights(item).slice(0, 2).map((line) => <div key={line} className="mt-1 text-[11px] text-emerald-300/90">{line}</div>)}</div></div><Button onClick={() => buyItem(id)} disabled={player.gold < cost}>Buy • {cost}g</Button></div></div>; })}</div></div><div><div className="mb-2 text-sm font-semibold text-amber-300">Sell</div><div className="grid gap-3">{(Object.entries(player.inventory) as [string, number][]).filter(([, c]) => c > 0).map(([id, count]) => <div key={id} className="rounded-2xl border border-white/10 bg-white/5 p-3"><div className="flex justify-between gap-3"><div className="flex min-w-0 items-center gap-2"><ItemIcon item={ITEM_DB[id]} size="sm" /><span>{ITEM_DB[id]?.name} <span className="text-xs text-white/60">x{count}</span></span></div><Button onClick={() => sellItem(id)}>Sell • {getSellPrice(id)}g</Button></div></div>)}</div></div></div></div></div>; }
+export function ShopModal({ shop, player, close, buyItem, sellItem, shopMode, flags }) { return <div data-testid="shop-modal" data-shop-mode={shopMode} className="fixed inset-0 z-30 overflow-y-auto bg-black/50 p-4"><div className="mx-auto my-8 max-w-3xl rounded-[2rem] border border-white/10 bg-slate-900 p-5"><div className="mb-4 flex justify-between gap-4"><div className="flex min-w-0 items-center gap-4"><ShopkeeperPortrait shopMode={shopMode} flags={flags} /><div><div className="text-2xl font-semibold">{shop.title}</div><div className="text-sm text-yellow-300">Gold: {player.gold}</div>{shopMode === "smith" && flags.elderGavePurse && !flags.smithStarterDiscountUsed ? <div className="text-sm text-emerald-300">Starter discount available.</div> : null}</div></div><Button onClick={close}>Close</Button></div><div className="grid gap-5 lg:grid-cols-2"><div><div className="mb-2 text-sm font-semibold text-emerald-300">Buy</div><div className="grid gap-3">{shop.inventory.map((id) => { const item = ITEM_DB[id]; const discount = shopMode === "smith" && item?.slot && flags.elderGavePurse && !flags.smithStarterDiscountUsed ? 4 : shopMode === "market" && flags.marketDiscount ? 2 : 0; const cost = Math.max(1, getBuyPrice(id) - discount); return <div key={id} data-shop-buy-item={id} className="rounded-2xl border border-white/10 bg-white/5 p-3"><div className="flex justify-between gap-3"><div className="flex min-w-0 items-start gap-3"><ItemIcon item={item} size="sm" /><div className="min-w-0"><div className="font-medium">{item.name}</div><div className="mt-1 text-xs text-white/70">{item.description}</div>{getItemHighlights(item).slice(0, 2).map((line) => <div key={line} className="mt-1 text-[11px] text-emerald-300/90">{line}</div>)}</div></div><Button onClick={() => buyItem(id)} disabled={player.gold < cost}>Buy • {cost}g</Button></div></div>; })}</div></div><div><div className="mb-2 text-sm font-semibold text-amber-300">Sell</div><div className="grid gap-3">{(Object.entries(player.inventory) as [string, number][]).filter(([id, c]) => c > 0 && ITEM_DB[id]?.type !== "story").map(([id, count]) => <div key={id} data-shop-sell-item={id} className="rounded-2xl border border-white/10 bg-white/5 p-3"><div className="flex justify-between gap-3"><div className="flex min-w-0 items-center gap-2"><ItemIcon item={ITEM_DB[id]} size="sm" /><span>{ITEM_DB[id]?.name} <span className="text-xs text-white/60">x{count}</span></span></div><Button onClick={() => sellItem(id)}>Sell • {getSellPrice(id)}g</Button></div></div>)}</div></div></div></div></div>; }
 export function CraftModal({ player, close, craftRecipe, context = "potionShed" }) {
   const isRoadCamp = context === "roadCamp";
   return (

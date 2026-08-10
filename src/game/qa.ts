@@ -102,7 +102,11 @@ export function runGameQaChecks({
   );
 
   const shopIds = [
-    ...new Set([...SHOP_INVENTORIES.smith, ...SHOP_INVENTORIES.market]),
+    ...new Set([
+      ...SHOP_INVENTORIES.smith,
+      ...SHOP_INVENTORIES.gatewright,
+      ...SHOP_INVENTORIES.market,
+    ]),
   ];
   addResult(
     results,

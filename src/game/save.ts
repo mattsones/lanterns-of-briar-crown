@@ -137,10 +137,37 @@ export function migrateFlags(flags: Flags | Record<string, unknown> = {}): GameF
     migrated.foldedMapAttempted = true;
     migrated.foldedMapDecoded = true;
   }
+  if (
+    source.underwayDetourDecisionMade === undefined &&
+    (
+      migrated.underwayAmbushDetectionAttempted ||
+      migrated.underwayAmbushRevealed ||
+      migrated.underwayAmbushPrepared ||
+      migrated.underwayAmbushCleared ||
+      migrated.listeningMileAttempted
+    )
+  ) {
+    migrated.underwayDetourDecisionMade = true;
+    migrated.underwayDetourFollowed = !!migrated.foldedMapMaintenanceDetour;
+  }
+  if (migrated.listeningMileAttempted) {
+    migrated.chapterFourStarted = true;
+    migrated.foldedMapAttempted = true;
+    migrated.foldedMapDecoded = true;
+    migrated.underwayEntered = true;
+    migrated.underwayDetourDecisionMade = true;
+    migrated.underwayAmbushCleared = true;
+    migrated.listeningMileOutcome = "marker-found";
+  }
   if (migrated.chapterFourClear) {
     migrated.chapterFourStarted = true;
     migrated.foldedMapAttempted = true;
     migrated.foldedMapDecoded = true;
+    migrated.underwayEntered = true;
+    migrated.underwayDetourDecisionMade = true;
+    migrated.underwayAmbushCleared = true;
+    migrated.listeningMileAttempted = true;
+    migrated.listeningMileOutcome = "marker-found";
     migrated.lioMessageFound = true;
     migrated.princessNameSeen = true;
     migrated.briarRelayCleared = true;

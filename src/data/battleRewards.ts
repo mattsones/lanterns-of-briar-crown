@@ -111,6 +111,22 @@ export const BATTLE_REWARDS = {
     name: "Cargo Siding Cleared",
     text: "The Seal-Forged Sentry collapses into wet wax, snapped cord, and paper that has forgotten how to stand up. You disarm the Briar Cargo Runner and drive him to one knee. The fight is won, but he is not bound: he flings crown-red powder toward the lantern and bolts for the narrow service passage.",
   },
+  underwayAmbush: {
+    item: "trail_snack",
+    gold: 12,
+    xp: 18,
+    flagUpdate: { underwayAmbushCleared: true },
+    name: "Blind Junction Cleared",
+    text: "The relay guard drops a shutter key and a chalked route tally. Someone reached this junction before you and prepared to stop whoever followed the mapped road. The Listening Mile remains open beyond him.",
+  },
+  underwayAmbushHard: {
+    item: "healing_fizzpop",
+    gold: 18,
+    xp: 24,
+    flagUpdate: { underwayAmbushCleared: true },
+    name: "Maintenance Ambush Cleared",
+    text: "The relay guard falls and the false-paper sentry slumps into wax, route tags, and thorn cord. Route 817 delivered you to a prepared killing point, but it did not stop the road. The Listening Mile remains open beyond the junction.",
+  },
 };
 
 export function getBattleReward(rewardKey) {

@@ -64,9 +64,9 @@ The current game repeatedly says that roads, roots, stones, hills, and maps list
 
 Preserve the warmth and wonder by giving the action to:
 
-- old keepers and their written practices;
-- crafted phrase-locks and choice plates;
-- echo tubes and signal lanterns;
+- named workers and their written practices;
+- crafted phrase-locks and passive acoustic conduits;
+- listening hoods and signal lanterns;
 - public records and people who remember names;
 - mechanisms responding to a mark, phrase, shutter, weight, or sequence.
 
@@ -160,9 +160,9 @@ Chapter 4 should expose the conspiracy's political argument and make Elowen's na
 
 | Planned beat | Recommended change |
 |---|---|
-| Wrong Map Room | Recast as a **Survey Correction Room** or **Overlay Archive**. Maps do not alter themselves; old transparent overlays, shutters, folding leaves, or keeper annotations reveal routes at different dates and conditions. |
-| Folded Map puzzle | Let the fold join a Great Survey benchmark to an older keeper mark. The player learns that official and local records become useful when compared, not when one automatically defeats the other. |
-| Listening Mile | Keep the name if desired, but establish it as a keeper-built training/review circuit using inscriptions, choice plates, echo tubes, and signal shutters. It records choices; it does not judge them. |
+| Wrong Map Room | Recast as Tasmine's paired **Survey Cases**. Maps do not alter themselves; the accepted opaque two-sided working sheet compares a Great Survey revision with an older road-crew correction. |
+| Folded Map puzzle | Let the fold join a Great Survey benchmark to an older road-crew mark. The player learns that official and local records become useful when compared, not when one automatically defeats the other. |
+| Listening Mile | Keep the name, but establish it as a passive acoustic safety line. Flared wall hoods carry footsteps and working sounds through fired-clay conduits. During a brief inspection stop, Lio loops a familiar blue courier knot behind one hood and scratches a tiny direction mark toward his message. |
 | Edden's drawings | Let the party carry the core drawings it already reviewed in Chapter 2. Any later addendum arrives through Quill only after an explicit witnessed round trip; do not use an instant bird or runner to collapse Bramblecross–Westroot travel time. |
 | Route geography | Keep the Underway, Listening Mile, relay post, and Briarhold inside Rainroot, east of Riverwatch and the disputed march. Westward pursuit does not make the conspiracy Veyran. |
 | Captive porter | Make the porter able to name the office or jurisdiction that should have received the missing transfer. This continues the nested-government logic from Chapter 1. |

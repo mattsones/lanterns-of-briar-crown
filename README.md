@@ -4,7 +4,7 @@ A storybook fantasy adventure prototype about Hearthhollow, Lantern Road, Brambl
 
 ## Current Status
 
-Chapters 1-3 have automated playable paths in the React/TypeScript prototype. Chapter 3 is closed as a release candidate. Chapter 4 now has a playable graybox entry from the canonical Chapter 3 save through the Westroot Lower Gate, Tamsin Rootbrace's required gatewright encounter, the optional Hookblade purchase, and the accepted Folded Map interaction. The Underway is the next critical-path milestone.
+Chapters 1-3 have automated playable paths in the React/TypeScript prototype. Chapter 3 is closed as a release candidate. Chapter 4 now has a playable graybox route from the canonical Chapter 3 save through Bramwell and Noma's Lower Gate sendoff, Tasmine Rootbrace's regional smithy, the accepted Folded Map, the posted Underway detour, the concealed ambush, and Lio's quickly hidden trail marker in the Listening Mile. Lio's written message is the next critical-path milestone.
 
 Current features include:
 
@@ -132,8 +132,9 @@ Visual direction:
 
 ## Short-Term Roadmap
 
-1. Extend the Chapter 4 graybox from the decoded Folded Map into the Underway and Listening Mile without final art.
-2. Preserve the Lower Gate/Gatewright entry seam and the accepted interaction's opaque two-sided sheet, discoverable 817 false route, unmistakable trace results, and optional third fold.
-3. Keep the uninterrupted human Chapters 1-3 session on the Chapter 4 release-candidate checklist.
-4. Continue the staged `src/App.tsx` extraction and address the slightly-over-500-KB main bundle as focused technical work.
-5. Continue the source-art, optimized-runtime, and fallback-safe asset workflow as later chapters land.
+1. Start the next session with the documented human feel-check of the lantern-dark Underway and travel spacing between its three Listening Mile posts.
+2. After that review, build Lio's hidden message and immediate aftermath without beginning the Briar Relay Post early.
+3. Preserve the Lower Gate/Gatewright entry seam and the accepted interaction's opaque two-sided sheet, discoverable 817 false route, unmistakable trace results, and optional third fold.
+4. Keep the uninterrupted human Chapters 1-3 session on the Chapter 4 release-candidate checklist.
+5. Continue the staged `src/App.tsx` extraction and address the slightly-over-500-KB main bundle as focused technical work.
+6. Continue the source-art, optimized-runtime, and fallback-safe asset workflow as later chapters land.

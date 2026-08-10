@@ -6,7 +6,7 @@ Played the canonical Chapter 3-complete fixture into the first Chapter 4 graybox
 
 1. commit to Chapter 4 from the Westroot completion banner;
 2. enter the Westroot Lower Gate sequence;
-3. meet Tamsin Rootbrace;
+3. meet Tasmine Rootbrace;
 4. buy or decline the optional Gatewright Hookblade;
 5. compare the Survey cases;
 6. open and solve the accepted Folded Map;
@@ -15,7 +15,7 @@ Played the canonical Chapter 3-complete fixture into the first Chapter 4 graybox
 ## Decisions
 
 - Keep the Lower Gate as a dialogue-driven graybox entrance from the existing Westroot hub. Do not settle final Underway map topology yet.
-- Tamsin Rootbrace is the Westroot gatewright. Meeting her is required; buying her 32-gold Rare Hookblade is optional.
+- Tasmine Rootbrace is the Westroot gatewright. Meeting her is required; buying her 32-gold Rare Hookblade is optional.
 - Buying the Hookblade leaves the Pebbleknock Hammer equipped and reports the remaining 46 gold explicitly.
 - The quest journal advances through Lower Gate, Folded Map, and Underway-next objectives.
 - The existing Folded Map remains the accepted interaction and is now reached through story context rather than only a title-screen test hook.

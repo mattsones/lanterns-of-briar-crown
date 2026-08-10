@@ -153,6 +153,18 @@ const MAP_TOKEN_CONFIG: Record<
     artworkMode: "enemy",
     hideWhenSpent: true,
   },
+  underway_gate: { kind: "action" },
+  underway_threshold: { kind: "action" },
+  detour_notice: { kind: "action" },
+  mapped_gallery: { kind: "action" },
+  maintenance_hatch: { kind: "action" },
+  listening_post_one: { kind: "action" },
+  listening_post_two: { kind: "action" },
+  listening_post_three: { kind: "action" },
+  underway_ambush: {
+    kind: "threat",
+    hideWhenSpent: true,
+  },
   stairs_up: { kind: "action" },
   sigil: { kind: "action" },
   mural: { kind: "action" },
@@ -210,6 +222,7 @@ export function MapStage({
   const rows = map.length;
   const columns = map[0]?.length || 1;
   const revealAll = !!visual.revealAll;
+  const localLantern = !!visual.localLantern;
   const usesNavigationGraph = hasNavigationGraph(region);
   const fogMaskId = `map-fog-${region}`;
   const fogBlurId = `${fogMaskId}-blur`;
@@ -220,7 +233,8 @@ export function MapStage({
       const point = getMapNodePoint(region, x, y, columns, rows);
       const isPlayer = position.x === x && position.y === y;
       const explored = !!exploredMap[getVisitedKey(x, y)] || isPlayer;
-      const visible = revealAll || explored || debug;
+      const withinLantern = isPlayer || areMapNodesConnected(region, position, { x, y });
+      const visible = revealAll || (localLantern ? withinLantern : explored) || debug;
       const meta = TILE_META[tile] || TILE_META.hidden;
       const tokenState = getTokenState(tile, region);
       const clickable =
@@ -235,6 +249,7 @@ export function MapStage({
         point,
         isPlayer,
         explored,
+        withinLantern,
         visible,
         meta,
         tokenState,
@@ -252,7 +267,9 @@ export function MapStage({
         (node) => node.isPlayer || isMapNavigationNode(region, node.x, node.y),
       )
     : nodes;
-  const fogNodes = renderedNodes.filter((node) => node.explored);
+  const fogNodes = renderedNodes.filter((node) =>
+    localLantern ? node.withinLantern : node.explored,
+  );
   const fogNodeKeys = new Set(fogNodes.map((node) => `${node.x},${node.y}`));
   const fogRevealAreas = (visual.fogRevealAreas || []).filter((area) => {
     const visitedNodeCount = area.nodeKeys.filter((key) => fogNodeKeys.has(key)).length;
@@ -262,6 +279,7 @@ export function MapStage({
     ? getNavigationNodeKeys(region)
     : [];
   const graphFullyExplored =
+    !localLantern &&
     usesNavigationGraph &&
     navigationNodeKeys.length > 0 &&
     navigationNodeKeys.every((key) => fogNodeKeys.has(key));
@@ -308,6 +326,7 @@ export function MapStage({
   return (
     <div
       data-testid="map-stage"
+      data-visibility-mode={localLantern ? "local-lantern" : "exploration-fog"}
       className="painted-map-stage"
       style={{ aspectRatio: visual.aspectRatio }}
     >
@@ -339,6 +358,13 @@ export function MapStage({
             >
               <feGaussianBlur stdDeviation="0.9" />
             </filter>
+            {localLantern ? (
+              <radialGradient id={`${fogMaskId}-lantern`}>
+                <stop offset="0" stopColor="#fef3c7" stopOpacity=".3" />
+                <stop offset=".55" stopColor="#f59e0b" stopOpacity=".12" />
+                <stop offset="1" stopColor="#f59e0b" stopOpacity="0" />
+              </radialGradient>
+            ) : null}
             <mask
               id={fogMaskId}
               x="0"
@@ -390,10 +416,20 @@ export function MapStage({
               </g>
             </mask>
           </defs>
+          {localLantern ? (
+            <circle
+              data-testid="underway-lantern-halo"
+              cx={heroPoint.x}
+              cy={heroPoint.y}
+              r={(visual.fogRadius || 8) * 1.45}
+              fill={`url(#${fogMaskId}-lantern)`}
+            />
+          ) : null}
           <rect
+            data-testid={localLantern ? "underway-darkness" : undefined}
             width="100"
             height="100"
-            fill="#020617"
+            fill={visual.fogColor || "#020617"}
             opacity={fogOpacity}
             mask={`url(#${fogMaskId})`}
           />

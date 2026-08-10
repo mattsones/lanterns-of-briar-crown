@@ -6,7 +6,7 @@ export type ChapterId = 1 | 2 | 3 | 4 | 5;
 export type CompanionId = "rowan" | "tilda" | "moss";
 export type CompanionStatus = "recruited" | "declined" | null;
 export type MaraJob = "lioMarks" | "eddenDrawing" | "lanternSigns" | "safety" | null;
-export type ListeningMileOutcome = "guidance" | "maintenance" | null;
+export type ListeningMileOutcome = "marker-found" | "signal-traced" | "guidance" | "maintenance" | null;
 
 export type GameFlags = {
   metElder: boolean;
@@ -209,6 +209,14 @@ export type GameFlags = {
   foldedMapDeeperSolved: boolean;
   foldedMapMaintenanceDetour: boolean;
   foldedMapCacheClaimed: boolean;
+  underwayEntered: boolean;
+  underwayDetourNoticeInspected: boolean;
+  underwayDetourDecisionMade: boolean;
+  underwayDetourFollowed: boolean;
+  underwayAmbushDetectionAttempted: boolean;
+  underwayAmbushRevealed: boolean;
+  underwayAmbushPrepared: boolean;
+  underwayAmbushCleared: boolean;
   listeningMileAttempted: boolean;
   listeningMileOutcome: ListeningMileOutcome;
   captivePorterHelped: boolean;

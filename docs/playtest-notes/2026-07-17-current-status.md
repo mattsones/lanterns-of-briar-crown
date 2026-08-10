@@ -1,4 +1,4 @@
-# Current Project Status — 2026-08-04
+# Current Project Status — 2026-08-10
 
 Stable branch: `main`; current handoff branch: `codex/chapter-4-graybox-entry`
 
@@ -11,8 +11,8 @@ This is the concise pickup document for the current illustrated prototype. Histo
 - Chapter 2 is complete through the Westroot gate and retains clean, standard, and messy puzzle outcomes.
 - Chapter 3 is closed as a release candidate after an owner-played human run through Rootmarket, the Rootbread Promise, Witness Stones, Cargo Siding, Split Hall, and the Chapter 4 handoff.
 - The uninterrupted human Chapters 1–3 run was not performed and is explicitly deferred to the Chapter 4 release-candidate cycle.
-- Chapter 4 now has a playable graybox entry from the canonical Chapter 3-complete fixture through the Westroot Lower Gate, required Tamsin Rootbrace gatewright encounter, optional Gatewright Hookblade purchase, Survey-case briefing, and accepted Folded Map route decode.
-- The playable endpoint names the Underway as the next graybox milestone. The Underway, Listening Mile, Lio message, Relay Post, and Chapter 5 handoff are not implemented yet.
+- Chapter 4 now has a playable graybox route from the canonical Chapter 3-complete fixture through Bramwell and Noma's Lower Gate sendoff, Tasmine Rootbrace's full buy/sell smithy, Survey Correction Room briefing, accepted and visually polished Folded Map, lantern-dark Underway, posted detour decision, concealed ambush, and three traveled Listening Mile posts.
+- The playable endpoint is Lio's knot and hidden route plate. The captive porter, Lio message, Relay Post, and Chapter 5 handoff are not implemented yet.
 
 ## Current UX
 
@@ -32,7 +32,14 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 
 ## Recent Playtest And Story Decisions
 
-- The August 4 graybox entry pass names Tamsin Rootbrace as Westroot's Stonekin gatewright and makes her encounter mandatory before the Folded Map. Her 32-gold Hookblade remains optional, stays in inventory instead of auto-equipping, and can be revisited after declining. The canonical 78-gold fixture reaches the map with or without buying it.
+- The Underway graybox uses one focused graph. The party starts on mapped route 811 and encounters a legitimate-looking closure board well inside the passage. Staying with 811 and following the posted 817 detour are both presented as rational choices; both converge at a blind junction before the Listening Mile.
+- Both Underway routes meet a concealed ambush. Route 811 faces one relay guard; choosing the posted 817 detour adds a Seal-Forged Sentry. A hidden Instinct DC 16 check reveals no marker or failure copy on an ordinary miss; exceptional success exposes a physical signal cord, reveals the enemy marker, and allows the party to start first with 4 guard.
+- The Underway map is black outside a local lantern halo. Only the hero and immediately connected passage segments remain visible; traveled tunnel returns to darkness. The three Listening Mile hoods are separate map locations with quiet travel between them.
+- Tasmine's five-item regional smithy uses the full buy/sell interface. It stocks the optional 32-gold Hookblade, 30-gold Passage Pike, 34-gold Counterweight Maul, 29-gold Ironroot Ribplate, and 23-gold Low-Arch Roothelm. It carries no Orin gear, cloak, charm, or general supplies. Story evidence cannot be sold, nothing auto-equips, and the Underway never checks a purchase.
+- The Folded Map story bridge uses the Cargo Transfer Tag, Witness Stone rubbing, and Edden's existing bundle. The recovered August 3 polish makes the folding table, flap boundaries, crease shadows, bridge-completed route, trace result, and optional cache relationship visible in the current branch.
+- The first task next session is the dark-tunnel owner conversation and human feel-check recorded in `docs/planning/chapter-4-dark-underway-experience.md`; defer Lio's message until that experience is reviewed.
+- The automated Underway/Listening Mile graybox record is `docs/playtest-notes/2026-08-09-chapter-4-underway-listening-mile-graybox.md`.
+- Tasmine Rootbrace is Westroot's Stonekin smith and gatewright. Bramwell and Noma introduce her in a friendly Lower Gate scene; Bramwell performs the route-tag check as a practical lookup rather than an adversarial test. The canonical 78-gold fixture reaches the map with or without buying anything.
 - Chapter 4 begins only when the player commits through the Westroot completion banner; merely loading the Chapter 3-complete fixture preserves its ending state. Main objectives now advance through Lower Gate, Folded Map, and an explicit Underway-next endpoint.
 - Desktop and 430px manual browser passes covered the entry, purchase, Survey briefing, keyboard map solve, true-route result, Back behavior, repeat review, and endpoint. The pass fixed a Folded Map keyboard event leak, Chapter 3 header carryover, and stale Latest Update feedback. See `docs/playtest-notes/2026-08-04-chapter-4-graybox-entry.md`.
 - The accepted Folded Map prototype uses one opaque two-sided rectangular sheet. Each of four draggable edges can land at the quarter, half, or three-quarter guide, producing 54 two-edge configurations. West-half plus south-three-quarter aligns the Survey and keeper evidence into the true route; east-half plus north-half creates the persuasive 817 false route; other constructions are safe experiments. The acceptance follow-up makes the 817 construction easier to discover through matching straight edge marks and gives ordinary failure, false route, true route, and cache solve unmistakable result stamps. After the true route is recorded, north-quarter becomes an optional third fold that can reveal and award one Lanternwell Drop exactly once. Back unfolds the latest edge before closing, and repeat review is preserved.
@@ -96,7 +103,7 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 
 ## Next Best Step
 
-Build the Underway traversal and Listening Mile graybox from the decoded Folded Map endpoint. Keep both guidance and maintenance outcomes fail-forward, and keep the uninterrupted Chapters 1–3 session deferred to the Chapter 4 release-candidate cycle.
+Build Lio's written message and Mara's immediate response from the hidden blue courier knot and directional scratch. Keep the captive porter optional, prove the message knowledge order before starting the Briar Relay Post, and keep the uninterrupted Chapters 1–3 session deferred to the Chapter 4 release-candidate cycle.
 
 ## Production Art Status
 
@@ -166,7 +173,7 @@ Apply the inventory in `docs/story/historical-backdrop-integration-audit.md` acr
 - the Chapters 2–5 story bible;
 - art direction and relevant art prompts.
 
-Replace literal road/stone/root agency with keeper practices, crafted locks, echo tubes, signals, records, and human memory. Metaphor may remain only after the physical mechanism is clear. Preserve Chapter 1 behavior and do not combine this prose pass with broad refactoring.
+Replace literal road/stone/root agency with named worker practices, crafted locks, mechanical signals, records, and human memory. Metaphor may remain only after the physical mechanism is clear. Preserve Chapter 1 behavior and do not combine this prose pass with broad refactoring.
 
 ### Priority 3: Great Survey Story Integration
 
@@ -180,7 +187,7 @@ Replace literal road/stone/root agency with keeper practices, crafted locks, ech
 Before the Chapter 4 executable-contract gate:
 
 - replace the self-changing Wrong Map Room with a Survey Correction Room or overlay archive;
-- define the Listening Mile as a keeper-built review circuit;
+- define the Listening Mile as a mechanical acoustic safety line that Lio can deliberately alter;
 - make Elowen's first independent Royal Progress the reason her forged authority is plausible;
 - place a lawful Crownward argument beside secret Briar operational evidence;
 - replace every living-mark or awakening beat with proof of genuine Roadwarden, Survey, seal, contractor, or council access above Bracken.
@@ -238,4 +245,4 @@ npm.cmd run build
 npm.cmd run test:rules
 ```
 
-Use **Review Chapter 3 Complete Save** and then **Begin Chapter 4 Graybox** for the real entry slice. **Test Folded Map Graybox** remains the focused interaction hook. The canonical entry fixture is `public/saves/chapter-3-complete.json`; the decoded map now hands off explicitly to the unimplemented Underway milestone.
+Use **Review Chapter 3 Complete Save** and then **Begin Chapter 4 Graybox** for the real entry slice. **Test Folded Map Graybox** remains the focused interaction hook. The canonical entry fixture is `public/saves/chapter-3-complete.json`; the playable route now continues through the Underway and Listening Mile to Lio's hidden-message milestone.

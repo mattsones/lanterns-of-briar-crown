@@ -11,6 +11,8 @@ type MapVisualConfig = {
   aspectRatio: string;
   navBounds: MapBounds;
   revealAll?: boolean;
+  localLantern?: boolean;
+  fogColor?: string;
   fogRadius?: number;
   fogPathWidth?: number;
   fogRevealAreas?: Array<{
@@ -247,6 +249,24 @@ const WESTROOT_HUB_NAVIGATION_ALIASES: NavConnection[] = [
   { from: "8,0", to: "8,1", direction: "down" },
   { from: "8,1", to: "8,2", direction: "down" },
   { from: "8,2", to: "8,3", direction: "down" },
+];
+
+const UNDERWAY_NAV_CONNECTIONS: NavConnection[] = [
+  { from: "0,2", to: "1,2", direction: "right" },
+  { from: "1,2", to: "2,2", direction: "right" },
+  { from: "2,2", to: "3,2", direction: "right" },
+  { from: "3,2", to: "4,1", direction: "up" },
+  { from: "3,2", to: "4,3", direction: "down" },
+  { from: "4,1", to: "5,1", direction: "right" },
+  { from: "5,1", to: "6,2", direction: "down" },
+  { from: "4,3", to: "5,3", direction: "right" },
+  { from: "5,3", to: "6,2", direction: "up" },
+  { from: "6,2", to: "7,2", direction: "right" },
+  { from: "7,2", to: "8,2", direction: "right" },
+  { from: "8,2", to: "9,2", direction: "right" },
+  { from: "9,2", to: "10,2", direction: "right" },
+  { from: "10,2", to: "11,2", direction: "right" },
+  { from: "11,2", to: "12,2", direction: "right" },
 ];
 
 function buildNavigationLinks(
@@ -596,6 +616,33 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
       "5,3": { x: 86, y: 65 },
       "1,4": { x: 17.5, y: 80 },
       "2,4": { x: 34, y: 78 },
+    },
+  },
+  underway: {
+    aspectRatio: "16 / 9",
+    navBounds: { left: 4, top: 8, width: 92, height: 84 },
+    localLantern: true,
+    fogColor: "#000000",
+    fogRadius: 7,
+    fogPathWidth: 9,
+    nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
+    navigationLinks: buildNavigationLinks(UNDERWAY_NAV_CONNECTIONS),
+    pointOverrides: {
+      "0,2": { x: 5.5, y: 50.5 },
+      "1,2": { x: 11.5, y: 50.5 },
+      "2,2": { x: 19, y: 50.5 },
+      "3,2": { x: 28, y: 50.5 },
+      "4,1": { x: 37, y: 29 },
+      "5,1": { x: 48, y: 29 },
+      "4,3": { x: 37, y: 74 },
+      "5,3": { x: 48, y: 70 },
+      "6,2": { x: 58, y: 50.5 },
+      "7,2": { x: 67, y: 50.5 },
+      "8,2": { x: 75, y: 50.5 },
+      "9,2": { x: 81, y: 50.5 },
+      "10,2": { x: 87, y: 50.5 },
+      "11,2": { x: 92, y: 50.5 },
+      "12,2": { x: 96.5, y: 50.5 },
     },
   },
 };
