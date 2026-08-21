@@ -7237,7 +7237,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       sceneId: CHAPTER_4_SCENE_IDS.relayArrival,
       portrait: "♜",
       name: "Briar Relay Post",
-      text: "The tunnel changes by degrees. The walls widen first. Then the ceiling lifts into a shallow vault, and the wet mineral smell gives way to lamp oil, old paper, and the cold ash of a stove allowed to die. Brass letters set into the lintel name the place: BRIAR RELAY POST. Someone has pressed red wax into every old keeper's mark beneath them.\n\nThis was built as a place for messages to change hands. Signal slits overlook the westbound road; numbered pigeonholes climb one wall; a long bench bears fresh cups, fresh mud, and pale grooves where chain has rubbed the wood. The prisoners passed through here, but they did not leave alone.\n\nA colored broadside hangs in the entrance frame. It shows a young woman in a road cloak, one hand resting on an open map. Briars have been inked over the bottom edge, but her face and the large printed heading remain untouched.",
+      text: "The tunnel changes by degrees. The walls widen first. Then the ceiling lifts into a shallow vault, and the wet mineral smell gives way to lamp oil, old paper, and the faint woodsmoke of a banked stove. Shielded work lamps and desk candles cast separate pools of amber across the relay floor; the root-bound edges remain cool and dark. Brass letters set into the lintel name the place: BRIAR RELAY POST. Someone has pressed red wax into every old keeper's mark beneath them.\n\nThis was built as a place for messages to change hands. Signal slits overlook the westbound road; numbered pigeonholes climb one wall; a long bench bears fresh cups, fresh mud, and pale grooves where chain has rubbed the wood. The prisoners passed through here, but they did not leave alone.\n\nA colored broadside hangs in the entrance frame. It shows a young woman in an ornate sapphire gown, painted from the waist up against bare parchment. Briars have been inked over the bottom edge, but her face and the large printed heading remain untouched.",
       choices: [
         {
           id: CHAPTER_4_CHOICE_IDS.enterRelayPost,
@@ -7255,6 +7255,8 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         sceneId: CHAPTER_4_SCENE_IDS.royalProgressBroadside,
         portrait: "♔",
         name: "Royal Progress Broadside",
+        artKey: "princessElowenProgressNotice",
+        size: "wide",
         text: "The broadside introduces Princess Elowen, heir apparent to Alderreach, and announces her first Royal Progress undertaken without the King and Queen. Every five years, the royal family travels the roads, hears petitions, and compares official maps with the country people actually live in.\n\nElowen may request route ledgers and temporary safety measures along the roads she inspects. The dated seal, named witnesses, and printer's mark set the boundaries of that authority in plain view.",
         choices: [{ label: "Return to the relay floor.", effect: () => setDialogue(null) }],
       });
@@ -7264,7 +7266,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       sceneId: CHAPTER_4_SCENE_IDS.royalProgressBroadside,
       portrait: "♔",
       name: "Royal Progress Broadside",
-      text: "The portrait gives a face to the name Tasmine mentioned at the Lower Gate: Princess Elowen, heir apparent to Alderreach. She looks younger than the title above her and more interested in the map beneath her hand than in the little painted circlet at her brow. This will be her first Royal Progress undertaken without the King and Queen.\n\nThe smaller print explains the custom. Every five years, the royal family travels the realm's roads, hears petitions in the settlements along them, and compares official maps with bridges, shelters, and boundaries as they now stand. Elowen may request route ledgers and temporary safety measures on the roads she personally inspects. Each request must carry a date, named witnesses, and the public Progress seal shown at the foot of the page.\n\nMara reads the limits twice. “A village would open its books for this,” she says. “It might even close a road for her. But the request would have to be seen. People would know who gave it and why.”",
+      artKey: "princessElowenProgressNotice",
+      size: "wide",
+      text: "The portrait gives a face to the name Tasmine mentioned at the Lower Gate: Princess Elowen, heir apparent to Alderreach. Painted from the waist up in a sapphire royal gown, she looks younger than the title above her but entirely at ease beneath the little gold circlet at her brow. This will be her first Royal Progress undertaken without the King and Queen.\n\nThe smaller print explains the custom. Every five years, the royal family travels the realm's roads, hears petitions in the settlements along them, and compares official maps with bridges, shelters, and boundaries as they now stand. Elowen may request route ledgers and temporary safety measures on the roads she personally inspects. Each request must carry a date, named witnesses, and the public Progress seal shown at the foot of the page.\n\nMara reads the limits twice. “A village would open its books for this,” she says. “It might even close a road for her. But the request would have to be seen. People would know who gave it and why.”",
       choices: [
         {
           id: CHAPTER_4_CHOICE_IDS.readRoyalProgress,

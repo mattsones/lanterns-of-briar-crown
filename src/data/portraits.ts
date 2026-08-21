@@ -44,6 +44,10 @@ const westrootRootbreadChildPortrait = new URL(
   "../../assets/portraits/characters/westroot-rootbread-child-portrait-v02.webp",
   import.meta.url,
 ).href;
+const princessElowenPortrait = new URL(
+  "../../assets/portraits/characters/princess-elowen-portrait-v01.webp",
+  import.meta.url,
+).href;
 const brambleBoarPortrait = new URL(
   "../../assets/portraits/enemies/bramble-boar-v01.webp",
   import.meta.url,
@@ -78,6 +82,10 @@ export const DIALOGUE_PORTRAITS = {
   "Westroot Rootbread Child": {
     src: westrootRootbreadChildPortrait,
     alt: "Portrait of the Westroot Rootbread child",
+  },
+  "Princess Elowen": {
+    src: princessElowenPortrait,
+    alt: "Portrait of Princess Elowen studying a road map during her Royal Progress",
   },
   "Rowan Reedshield": { src: rowanPortrait, alt: "Portrait of Rowan Reedshield" },
   "Tilda Quickstep": { src: tildaPortrait, alt: "Portrait of Tilda Quickstep" },

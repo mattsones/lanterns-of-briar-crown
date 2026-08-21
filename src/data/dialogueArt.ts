@@ -28,6 +28,14 @@ const briarCrownPrimaryMark = new URL(
   "../../assets/icons/ui/briar-crown-primary-mark-v01.png",
   import.meta.url,
 ).href;
+const princessElowenRoyalPortrait = new URL(
+  "../../assets/portraits/characters/princess-elowen-royal-portrait-v01.webp",
+  import.meta.url,
+).href;
+const princessElowenProgressNotice = new URL(
+  "../../assets/scenes/princess-elowen-progress-notice-v01.webp",
+  import.meta.url,
+).href;
 
 export const DIALOGUE_SCENE_ART: Record<string, DialogueSceneArt> = {
   chapterOneEnding: {
@@ -103,6 +111,22 @@ export const DIALOGUE_SCENE_ART: Record<string, DialogueSceneArt> = {
     src: briarCrownPrimaryMark,
     alt: "A counterfeit crown assembled from five crooked briar points, red wax, and an overwritten road slat",
     presentation: "emblem",
+  },
+  princessElowenRoyalPortrait: {
+    id: "princess-elowen-royal-portrait",
+    src: princessElowenRoyalPortrait,
+    alt: "Princess Elowen in her sapphire royal gown on a palace garden terrace",
+    focusX: 50,
+    focusY: 50,
+    zoom: 66,
+  },
+  princessElowenProgressNotice: {
+    id: "princess-elowen-progress-notice",
+    src: princessElowenProgressNotice,
+    alt: "The Royal Progress notice showing Princess Elowen in sapphire royal attire above the public limits of her route authority",
+    focusX: 50,
+    focusY: 50,
+    zoom: 66,
   },
 };
 

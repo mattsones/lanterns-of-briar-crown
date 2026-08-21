@@ -4,6 +4,20 @@ This file is the starting point for Codex.
 
 Story-writing work must also follow `docs/story/writing-rules.md`. Singular characters use he/him or she/her; *they/them/their* is reserved for genuinely plural antecedents.
 
+## Latest Handoff — 2026-08-21
+
+Princess Elowen and the Briar Relay Post now have their approved visual identities. Elowen is a human heir in her early twenties who strongly resembles her Selvaran-born, Sunreach-heritage mother, with cool blue-green eyes inherited from her Hearthvale father. Her canonical traveling portrait keeps the practical scholar-princess clothing, removes the satchel and held map divider, relaxes one hand to her side, and balances a warmer expression with a subtly low, quietly authoritative viewpoint. Her separate official royal portrait places the same identity in an ornate sapphire fairy-tale gown on a palace-garden terrace.
+
+The Royal Progress Notice derives a waist-up likeness from that formal portrait without carrying over the garden background. Its readable public copy identifies Elowen as heir apparent, announces her first independent Progress, invites route ledgers and petitions, and states that requests for records or temporary safety measures require a date, named witnesses, and the Public Progress Seal. The notice is wired into both first-read and repeat Broadside dialogues. Relay arrival and broadside prose now describe the sapphire royal portrait rather than the retired road-cloak/map concept.
+
+The final Briar Relay Post map replaces the graybox SVG. The occupied station has a banked stove, shielded work lanterns, and desk candles that create localized amber pools while leaving cool root-bound gaps for the party lantern. The approved Progress Notice hangs on the upper-left wall with restrained briar defacement below Elowen's face and heading. The Relay's entrances, long bench, signal hardware, pigeonholes, record desk, route ledger, and open movement floor remain intact.
+
+Approved full-resolution PNG masters live under `assets/reference/source-art/assets/`; optimized runtime WebPs live under `assets/maps/`, `assets/portraits/characters/`, and `assets/scenes/`. Earlier Elowen and Relay passes remain in their project concept folders. The optimization manifest now records the complete Chapter 4 Underway map suite as well as the new Relay and Elowen assets, preventing already-optimized WebPs from being mistaken for missing source masters on future runs.
+
+### Next Best Step
+
+Start with a focused desktop and phone playtest of the final Briar Relay Post. Check the five logical overlay nodes against the entrance, wall notice, guarded relay floor, forged-order desk, and westbound ledger; verify the party-lantern halo complements rather than obscures the fixed room lighting; and confirm the tall Progress Notice is comfortably readable in the dialogue modal. Then produce the remaining Relay evidence/encounter art, especially the forged-authority desk comparison and Briarhold route-ledger reveal. The captive porter remains optional. Finish with the batched Chapter 4 browser suite, build/rules/asset gates, and uninterrupted Chapters 1-4 release-candidate QA.
+
 ## Latest Handoff — 2026-08-20
 
 The complete Chapter 4 Underway travel-art set is now integrated from the Lower Gate approach through the gate of the Briar Relay Post. The owner selected the Rootwork Continuity candidate, approved its unlit A2 revision, then approved `underway-approach-map-v03.webp` as the binding scale master. Every map now uses long cumulative road geometry, small paving and landmarks, massive/medium/fine woven-root hierarchy, and cool matte source art whose only perceived light comes from the runtime party lantern. The suite includes the revised `old-keeper-road-map-v02.webp` and `construction-detour-map-v03.webp`, the Blind Junction, three distinct Listening Mile hood maps, and the final Relay approach. Earlier production derivatives are preserved in reference alternates.

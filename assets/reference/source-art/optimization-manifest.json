@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-27T19:40:37.666Z",
+  "generatedAt": "2026-08-21T04:44:14.951Z",
   "sourceArtRoot": "assets/reference/source-art",
   "alternatesRoot": "assets/reference/alternates",
   "conversions": [
@@ -1442,6 +1442,149 @@
       "outputBytes": 483806,
       "width": 1600,
       "height": 900,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/briar-relay-post-map-v01.webp",
+      "original": "assets/reference/source-art/assets/maps/briar-relay-post-map-v01.png",
+      "output": "assets/maps/briar-relay-post-map-v01.webp",
+      "format": "webp",
+      "originalBytes": 2945453,
+      "outputBytes": 288940,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/construction-detour-map-v03.webp",
+      "original": "assets/reference/source-art/assets/maps/construction-detour-map-v03.png",
+      "output": "assets/maps/construction-detour-map-v03.webp",
+      "format": "webp",
+      "originalBytes": 3377218,
+      "outputBytes": 390922,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/listening-mile-first-hood-map-v01.webp",
+      "original": "assets/reference/source-art/assets/maps/listening-mile-first-hood-map-v01.png",
+      "output": "assets/maps/listening-mile-first-hood-map-v01.webp",
+      "format": "webp",
+      "originalBytes": 3208636,
+      "outputBytes": 324110,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/listening-mile-second-hood-map-v01.webp",
+      "original": "assets/reference/source-art/assets/maps/listening-mile-second-hood-map-v01.png",
+      "output": "assets/maps/listening-mile-second-hood-map-v01.webp",
+      "format": "webp",
+      "originalBytes": 3103150,
+      "outputBytes": 311306,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/listening-mile-third-hood-map-v01.webp",
+      "original": "assets/reference/source-art/assets/maps/listening-mile-third-hood-map-v01.png",
+      "output": "assets/maps/listening-mile-third-hood-map-v01.webp",
+      "format": "webp",
+      "originalBytes": 3270006,
+      "outputBytes": 345874,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/old-keeper-road-map-v02.webp",
+      "original": "assets/reference/source-art/assets/maps/old-keeper-road-map-v02.png",
+      "output": "assets/maps/old-keeper-road-map-v02.webp",
+      "format": "webp",
+      "originalBytes": 3300699,
+      "outputBytes": 343436,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/relay-approach-map-v01.webp",
+      "original": "assets/reference/source-art/assets/maps/relay-approach-map-v01.png",
+      "output": "assets/maps/relay-approach-map-v01.webp",
+      "format": "webp",
+      "originalBytes": 3354296,
+      "outputBytes": 374090,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/underway-approach-map-v03.webp",
+      "original": "assets/reference/source-art/assets/maps/underway-approach-map-v03.png",
+      "output": "assets/maps/underway-approach-map-v03.webp",
+      "format": "webp",
+      "originalBytes": 3280894,
+      "outputBytes": 339798,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/underway-convergence-map-v01.webp",
+      "original": "assets/reference/source-art/assets/maps/underway-convergence-map-v01.png",
+      "output": "assets/maps/underway-convergence-map-v01.webp",
+      "format": "webp",
+      "originalBytes": 3422880,
+      "outputBytes": 383274,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/westroot-hub-map-v02-open-stones.webp",
+      "original": "assets/reference/source-art/assets/maps/westroot-hub-map-v02-open-stones.png",
+      "output": "assets/maps/westroot-hub-map-v02-open-stones.webp",
+      "format": "webp",
+      "originalBytes": 3163286,
+      "outputBytes": 445920,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/portraits/characters/princess-elowen-portrait-v01.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/princess-elowen-portrait-v01.png",
+      "output": "assets/portraits/characters/princess-elowen-portrait-v01.webp",
+      "format": "webp",
+      "originalBytes": 2430486,
+      "outputBytes": 122014,
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/portraits/characters/princess-elowen-royal-portrait-v01.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/princess-elowen-royal-portrait-v01.png",
+      "output": "assets/portraits/characters/princess-elowen-royal-portrait-v01.webp",
+      "format": "webp",
+      "originalBytes": 3255878,
+      "outputBytes": 247026,
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/scenes/princess-elowen-progress-notice-v01.webp",
+      "original": "assets/reference/source-art/assets/scenes/princess-elowen-progress-notice-v01.png",
+      "output": "assets/scenes/princess-elowen-progress-notice-v01.webp",
+      "format": "webp",
+      "originalBytes": 3493158,
+      "outputBytes": 377524,
+      "width": 1024,
+      "height": 1536,
       "hasAlpha": false
     }
   ],

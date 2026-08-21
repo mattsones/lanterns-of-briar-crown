@@ -66,8 +66,8 @@ const relayApproachMap = new URL(
   "../../assets/maps/relay-approach-map-v01.webp",
   import.meta.url,
 ).href;
-const briarRelayPostGrayboxMap = new URL(
-  "../../assets/maps/briar-relay-post-graybox-v01.svg",
+const briarRelayPostMap = new URL(
+  "../../assets/maps/briar-relay-post-map-v01.webp",
   import.meta.url,
 ).href;
 
@@ -839,7 +839,7 @@ export const MAPS = {
     name: "Briar Relay Post",
     subtitle: "Chapter 4: A captured road station",
     start: { x: 0, y: 1 },
-    backgroundImage: briarRelayPostGrayboxMap,
+    backgroundImage: briarRelayPostMap,
     tiles: [
       ["wall", "wall", "wall", "wall", "wall"],
       ["relay_entry", "royal_progress_broadside", "relay_guard", "forged_order_desk", "briarhold_route_ledger"],

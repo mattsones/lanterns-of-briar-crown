@@ -114,6 +114,7 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Blind Junction gameplay map | `underway-convergence-map-v01.webp` | The two exclusive routes have already merged offscreen. One root-woven fitted road crosses a concealed blind bend with overlay-safe ambush space; no fork or enemy is baked into the map. |
 | Listening Mile gameplay maps | `listening-mile-first-hood-map-v01.webp`, `listening-mile-second-hood-map-v01.webp`, `listening-mile-third-hood-map-v01.webp` | Three distinct long road stretches at the approved scale. Each contains exactly one small cold-brass acoustic hood and fired-clay conduit. The final stretch adds a scored inspection shutter and subtle loose route-record plate; Lio's blue knot remains an interaction reveal. |
 | Westbound Relay approach gameplay map | `relay-approach-map-v01.webp` | Final long Underway stretch. Root-bound fitted road gradually transitions into formal old civic masonry and ends at a small closed Relay gate; the station interior remains a separate map. |
+| Briar Relay Post gameplay map | `briar-relay-post-map-v01.webp` | Final Chapter 4 captured-station interior. Fixed light comes from a banked stove, shielded work lanterns, and desk candles while cool root-bound edges preserve a role for the party lantern. The upper-left wall carries the approved waist-up Princess Elowen Progress Notice with restrained briar defacement below her face and heading. Full PNG source is preserved under `assets/reference/source-art/assets/maps/`. |
 | Great Survey political world map | `assets/reference/source-art/assets/maps/great-survey-of-alderreach-v05.png` | Selected reference source. Terrain defines Alderreach's overlapping regions; Veyrun and Rainroot share a settled but disputed river valley; a waterfall escarpment separates Sunreach from the broad mainland Ember Coast; Selvara, Whiteharbor, Tideglass, Cinder Vale, and Valehaven sit on that mainland while the Saltwake Isles remain offshore. Distinct stars, diamonds, hexagons, dots, and squares separate national capitals, provincial capitals, council seats, towns, and fortresses. Westroot remains a later graphite correction. V01–V04 are preserved as superseded compositions. Not wired into runtime; create an optimized derivative before import. Generation prompts and diegetic timing live in `docs/art/prompts/great-survey-world-map.md`. |
 
 ## Scenes
@@ -138,6 +139,7 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Bramblecross Watchhouse case wall | `bramblecross-watchhouse-case-wall-scene-v01.webp` | Selected shared evidence master; full scene and focused crops cover the evidence board, duty ledger, wall map, and forged-orders file. |
 | Root Cellar evidence wall | `root-cellar-evidence-wall-scene-v01.webp` | Selected shared evidence master; separate crops distinguish the recent coercive Root Sigil from the older communal Route Mural. |
 | Chapter 1 ending tableau | `chapter-1-ending-the-road-that-lied-v01.webp` | Selected Chapter 1 completion scene; the fallen Warden, recovered chain, blue watch cloth, and sealed old-road door frame the discovery after the boss climax. |
+| Princess Elowen Royal Progress Notice | `princess-elowen-progress-notice-v01.webp` | Selected full-color public broadside shown in the Relay interaction. The waist-up formal likeness uses Elowen's approved sapphire gown without a scenic background; readable copy identifies her as heir apparent, announces her first independent Progress, and states the dated, witnessed, sealed limits of her authority. Full PNG source is preserved under `assets/reference/source-art/assets/scenes/`. |
 
 ## Map Tokens
 
@@ -184,6 +186,8 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Noma Greenstill | `noma-greenstill-portrait-v02.webp` | Selected Chapter 3 Mossgarden memory-keeper portrait; older and steadier than v01. |
 | Westroot Rootbread Child | `westroot-rootbread-child-portrait-v02.webp` | Selected Chapter 3 portrait; visibly young Mossback girl with the Transfer Checkpoint/rootbread story read. |
 | Worried Road Traveler | `worried-road-traveler-portrait-v01.webp` | Production-usable generic traveler; includes baked-in sign text, so use sparingly. |
+| Princess Elowen | `princess-elowen-portrait-v01.webp` | Approved canonical traveling profile: a human heir in her early twenties who strongly resembles her Selvaran-born, Sunreach-heritage mother, with blue-green eyes inherited from her Hearthvale father. Practical scholar-princess attire, quiet warmth, and regal authority; no satchel and no held map tool. |
+| Princess Elowen, formal royal portrait | `princess-elowen-royal-portrait-v01.webp` | Approved official likeness in an ornate sapphire fairy-tale gown on a palace-garden terrace. This is the identity and costume source for public royal portraiture and the Progress Notice. Full PNG sources for both Elowen portraits are preserved under `assets/reference/source-art/assets/portraits/characters/`. |
 
 ## Enemies
 
@@ -208,6 +212,8 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 |---|---|
 | First busier Chapter 1 key art | Too many lanterns/lights; useful style reference. |
 | First Hearthhollow concept map with baked-in labels | Nice concept, but too much text for gameplay map. |
+| Princess Elowen profile candidates v01-v02 | Superseded identity passes retained under `assets/reference/concept/characters/princess-elowen/`; v03 was promoted as the production traveling portrait. |
+| Briar Relay Post candidates v01-v02 | Earlier unlit and first lit room passes retained under `assets/reference/concept/environments/chapter-4-briar-relay-post/`; the final pass replaces the placeholder broadside with Elowen's approved Progress Notice. |
 | Hearthhollow map with boar sign above gate | Rejected; south gate should not have permanent boar warning sign. |
 | Earlier `briar-crown-primary-mark-v01.png` candidate from 2026-07-16 | Rejected; strong silhouette, but the checkerboard was painted into an opaque RGB image. Superseded by the selected true-alpha regeneration. |
 | Hearthhollow gameplay map v03 | Preserved as concept/reference; replaced in production by icon-free v04. |
