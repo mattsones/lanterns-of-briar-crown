@@ -139,7 +139,7 @@ test("the decoded story map opens the playable Old Keeper Road Underway graph", 
 
   await expect(page.getByTestId("map-background")).toHaveAttribute(
     "src",
-    /^data:image\/svg\+xml/,
+    /underway-approach-map-v03\.webp$/,
   );
   await moveRight(page, 5);
   await expect(page.getByRole("button", { name: "Inspect Underway Passage" })).toBeVisible();
@@ -177,6 +177,10 @@ test("posted detour choice occurs at the far side of the first map and commits t
   await expect(choice(page, CHAPTER_4_CHOICE_IDS.followMappedRoute)).toContainText("Old Keeper Road");
   await expect(choice(page, CHAPTER_4_CHOICE_IDS.followPostedDetour)).toContainText("construction detour");
   await choice(page, CHAPTER_4_CHOICE_IDS.followPostedDetour).click();
+  await expect(page.getByTestId("map-background")).toHaveAttribute(
+    "src",
+    /construction-detour-map-v03\.webp$/,
+  );
   await expect(page.getByRole("button", { name: "Inspect Posted construction detour" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Inspect Old Keeper Road" })).toHaveCount(0);
   await moveRight(page, 5);
@@ -203,6 +207,12 @@ test("the Old Keeper Road contains a unique waykeeper cache before convergence",
   });
   payload.region = "underwayRoute811";
   await continueCheckpoint(page, payload);
+
+  await expect(page.getByTestId("map-background")).toHaveAttribute(
+    "src",
+    /old-keeper-road-map-v02\.webp$/,
+  );
+  await expect(page.getByTestId("map-stage")).toHaveClass(/painted-map-stage--local-lantern/);
 
   await moveRight(page, 5);
   await expect(scene(page, CHAPTER_4_SCENE_IDS.route811Cache)).toBeVisible();

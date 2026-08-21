@@ -345,7 +345,7 @@ export function MapStage({
     <div
       data-testid="map-stage"
       data-visibility-mode={localLantern ? "local-lantern" : "exploration-fog"}
-      className="painted-map-stage"
+      className={`painted-map-stage${localLantern ? " painted-map-stage--local-lantern" : ""}`}
       style={{ aspectRatio: visual.aspectRatio }}
     >
       {backgroundImage ? (
@@ -378,9 +378,10 @@ export function MapStage({
             </filter>
             {localLantern ? (
               <radialGradient id={`${fogMaskId}-lantern`}>
-                <stop offset="0" stopColor="#fef3c7" stopOpacity=".3" />
-                <stop offset=".55" stopColor="#f59e0b" stopOpacity=".12" />
-                <stop offset="1" stopColor="#f59e0b" stopOpacity="0" />
+                <stop offset="0" stopColor="#fff7d6" stopOpacity=".48" />
+                <stop offset=".38" stopColor="#fbbf24" stopOpacity=".28" />
+                <stop offset=".72" stopColor="#d97706" stopOpacity=".08" />
+                <stop offset="1" stopColor="#d97706" stopOpacity="0" />
               </radialGradient>
             ) : null}
             <mask
@@ -437,6 +438,7 @@ export function MapStage({
           {localLantern ? (
             <circle
               data-testid="underway-lantern-halo"
+              className="underway-lantern-halo"
               cx={heroPoint.x}
               cy={heroPoint.y}
               r={(visual.fogRadius || 8) * 1.45}

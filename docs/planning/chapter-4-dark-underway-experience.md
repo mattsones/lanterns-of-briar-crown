@@ -2,7 +2,7 @@
 
 Last updated: 2026-08-20
 
-Status: owner accepted the expanded multi-map pacing on 2026-08-20; route-shape differentiation and Relay prose polish implemented; placeholder art and step seams remain deferred
+Status: owner accepted the expanded multi-map pacing and approved the Underway approach scale master on 2026-08-20; the complete approach-through-Relay tunnel art set is integrated; batched runtime verification and step-seam polish remain
 
 ## Start Here Next Time
 
@@ -60,7 +60,7 @@ When an old implementation creates a continuity concern, solve it by making the 
 - `src/data/maps.ts` separates the fork, Old Keeper Road, construction detour, convergence, three listening hoods, and Relay approach into focused maps.
 - The first map never displays the route branches. After the decision, only the chosen route exists on screen.
 - The Old Keeper Road contains a one-time abandoned cache with the Old Waykeeper Helm. The construction detour contains a live construction signal rig that reveals the convergence ambush and guarantees the prepared-opening option against its larger fight.
-- A neutral fitted-stone tunnel SVG replaces the modern-road diagram beneath the fog for the expanded maps; final illustrated art remains deferred.
+- Every Chapter 4 tunnel-travel region from the Lower Gate approach through the Relay approach now uses a cool, unlit production WebP beneath the runtime darkness and party-centered amber halo. The approved approach V03 is the scale master: long cumulative routes, 8–10% road widths, small fitted paving and landmarks, and a hierarchy of massive, medium, and fine rootwork.
 - Chapter 4 browser coverage asserts the black cover, moving halo, intervening travel, and final trail marker.
 
-Final Underway art remains deferred. Any production map must be judged through the lantern mask, because most of the full painting will never be visible at once during play.
+The Briar Relay Post interior remains a separate room-scale art task. The tunnel suite's production rule is settled: source paintings contain no fixed light, and every candidate is judged through the lantern mask because most of the full painting is never visible at once during play.

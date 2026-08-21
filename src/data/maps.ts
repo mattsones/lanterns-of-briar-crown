@@ -34,8 +34,36 @@ const westrootHubOpenStonesMap = new URL(
   "../../assets/maps/westroot-hub-map-v02-open-stones.webp",
   import.meta.url,
 ).href;
-const tunnelJourneyGrayboxMap = new URL(
-  "../../assets/maps/riddle-road-tunnel-journey-graybox-v01.svg",
+const underwayApproachMap = new URL(
+  "../../assets/maps/underway-approach-map-v03.webp",
+  import.meta.url,
+).href;
+const oldKeeperRoadMap = new URL(
+  "../../assets/maps/old-keeper-road-map-v02.webp",
+  import.meta.url,
+).href;
+const constructionDetourMap = new URL(
+  "../../assets/maps/construction-detour-map-v03.webp",
+  import.meta.url,
+).href;
+const underwayConvergenceMap = new URL(
+  "../../assets/maps/underway-convergence-map-v01.webp",
+  import.meta.url,
+).href;
+const listeningMileFirstHoodMap = new URL(
+  "../../assets/maps/listening-mile-first-hood-map-v01.webp",
+  import.meta.url,
+).href;
+const listeningMileSecondHoodMap = new URL(
+  "../../assets/maps/listening-mile-second-hood-map-v01.webp",
+  import.meta.url,
+).href;
+const listeningMileThirdHoodMap = new URL(
+  "../../assets/maps/listening-mile-third-hood-map-v01.webp",
+  import.meta.url,
+).href;
+const relayApproachMap = new URL(
+  "../../assets/maps/relay-approach-map-v01.webp",
   import.meta.url,
 ).href;
 const briarRelayPostGrayboxMap = new URL(
@@ -707,7 +735,7 @@ export const MAPS = {
     name: "Riddle Road Underway",
     subtitle: "Chapter 4: The fork beneath Rainroot",
     start: { x: 0, y: 2 },
-    backgroundImage: tunnelJourneyGrayboxMap,
+    backgroundImage: underwayApproachMap,
     tiles: [
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
       ["wall", "wall", "wall", "underway_path", "underway_path", "wall", "wall", "wall"],
@@ -720,7 +748,7 @@ export const MAPS = {
     name: "Old Keeper Road",
     subtitle: "Chapter 4: The old keeper road",
     start: { x: 0, y: 2 },
-    backgroundImage: tunnelJourneyGrayboxMap,
+    backgroundImage: oldKeeperRoadMap,
     tiles: [
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
       ["wall", "wall", "underway_path", "underway_path", "wall", "wall", "wall", "wall", "underway_path", "wall"],
@@ -733,7 +761,7 @@ export const MAPS = {
     name: "A construction detour",
     subtitle: "Chapter 4: The posted construction detour",
     start: { x: 0, y: 2 },
-    backgroundImage: tunnelJourneyGrayboxMap,
+    backgroundImage: constructionDetourMap,
     tiles: [
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
       ["wall", "wall", "wall", "wall", "underway_path", "construction_signal_rig", "wall", "wall", "wall", "wall"],
@@ -746,7 +774,7 @@ export const MAPS = {
     name: "Blind Junction",
     subtitle: "Chapter 4: Where the tunnel routes converge",
     start: { x: 0, y: 2 },
-    backgroundImage: tunnelJourneyGrayboxMap,
+    backgroundImage: underwayConvergenceMap,
     tiles: [
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
       ["wall", "underway_path", "underway_path", "wall", "wall", "wall", "wall", "underway_path", "underway_path", "wall"],
@@ -759,7 +787,7 @@ export const MAPS = {
     name: "The Listening Mile",
     subtitle: "Chapter 4: Sound travels farther than lantern light",
     start: { x: 0, y: 2 },
-    backgroundImage: tunnelJourneyGrayboxMap,
+    backgroundImage: listeningMileFirstHoodMap,
     tiles: [
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
       ["wall", "wall", "underway_path", "underway_path", "wall", "wall", "listening_post_one", "wall", "underway_path", "wall"],
@@ -772,7 +800,7 @@ export const MAPS = {
     name: "Listening Mile: Second Hood",
     subtitle: "Chapter 4: Deeper beneath Rainroot",
     start: { x: 0, y: 2 },
-    backgroundImage: tunnelJourneyGrayboxMap,
+    backgroundImage: listeningMileSecondHoodMap,
     tiles: [
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
       ["wall", "underway_path", "underway_path", "wall", "wall", "wall", "wall", "wall", "underway_path", "wall"],
@@ -785,7 +813,7 @@ export const MAPS = {
     name: "Listening Mile: Third Hood",
     subtitle: "Chapter 4: The last sound before Lio's message",
     start: { x: 0, y: 2 },
-    backgroundImage: tunnelJourneyGrayboxMap,
+    backgroundImage: listeningMileThirdHoodMap,
     tiles: [
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
       ["wall", "wall", "underway_path", "underway_path", "wall", "wall", "listening_post_three", "wall", "wall"],
@@ -798,7 +826,7 @@ export const MAPS = {
     name: "Westbound Relay Approach",
     subtitle: "Chapter 4: Beyond the Listening Mile",
     start: { x: 0, y: 2 },
-    backgroundImage: tunnelJourneyGrayboxMap,
+    backgroundImage: relayApproachMap,
     tiles: [
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
       ["wall", "underway_path", "underway_path", "wall", "wall", "wall", "wall", "underway_path", "underway_path", "wall"],
