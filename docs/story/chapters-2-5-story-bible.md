@@ -61,7 +61,7 @@ Working theme:
 
 The hero knows there is a princess, but does not know much about her.
 
-Chapter 4 should first establish that the heir apparent is conducting an independent Royal Progress with lawful authority to request route records and temporary safety measures. Her name should then appear on a suspicious order. One companion, likely Rowan or Tilda, recognizes both the name and why such an order could initially pass:
+Chapter 4 first name-drops Elowen's independent Royal Progress during Tasmine's Lower Gate ledger briefing. The later public broadside gives Elowen a face, identifies her as heir apparent, and establishes her lawful authority to request route records and temporary safety measures. Only after that should her name appear on a suspicious order. One companion, likely Rowan or Tilda, recognizes both the name and why such an order could initially pass:
 
 > “Wait. That is not just a royal name. That is the princess.”
 
@@ -925,10 +925,6 @@ Required simple puzzle:
 - Choose the two lantern marks that belong together.
 - Ignore the crown-marked shortcut.
 
-Optional deeper puzzle:
-
-- Align all four symbols correctly to unlock a hidden cache or lore memory.
-
 ### Companion hints
 
 **Rowan:** “The fast road gives us no shelter, no warning, and no witnesses. That is not a road. That is a trap with better posture.”
@@ -943,7 +939,7 @@ Optional deeper puzzle:
 
 This is a physical investigation set-piece rather than a personality quiz.
 
-Road crews built the mile with flared wall hoods connected to hollow fired-clay conduits. At the first post, the party hears its own recent movement behind and fresh footsteps ahead. The second post carries current metal-shod boots, a chain scrape, and an inspection shutter being opened farther west. At the final post, Mara finds Lio's familiar blue courier knot hidden behind the hood's rim. Scrapes around the stiff shutter explain why his guards had to stop, and hiding the knot plus a tiny directional scratch would take only seconds. The scratch points toward his hidden written message.
+Road crews built the mile with flared wall hoods connected to hollow fired-clay conduits. The party discovers each hood only after reaching it; the first hood does not establish that more exist beyond the lantern's reach. At the first post, a damaged wheel and accompanying footsteps establish that the conduit carries living sound around blind stone. The second carries unidentified voices, a stumble, a cough, a jammed shutter, and a hurried scrape against bronze. At the final post, the travelers are already fading west. Fresh bronze dust and shutter scores identify the place where the earlier scratching occurred before Mara finds Lio's familiar blue courier knot hidden behind the hood's rim. Hiding the knot plus a tiny directional scratch would take only seconds. The scratch points toward his hidden written message.
 
 The system carries only present sound from another part of the road. It does not talk, preserve earlier noise, run on water, repeat stored philosophy, ask questions, judge the player, or contain a device Lio had time to build.
 
@@ -967,7 +963,7 @@ It should not be too polished. He likely scratched it quickly or encoded it in c
 
 Possible message:
 
-> **Mara, if you find this, do not follow angry. Follow clever. I am west of the relay. Still breathing. Still me. — L**
+> **M—do not follow angry. Follow clever. Taking us west. Still me. — L**
 
 Mara reacts strongly.
 

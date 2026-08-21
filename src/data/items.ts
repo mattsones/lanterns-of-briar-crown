@@ -24,6 +24,7 @@ export const ITEM_DB = {
   gatewright_counterweight_maul: { id: "gatewright_counterweight_maul", name: "Gatewright Counterweight Maul", rarity: "Rare", slot: "weapon", description: "A compact maul patterned after a gate counterweight: slow to commit, difficult to argue with, and made for breaking a held line.", bonuses: { Might: 3, Grit: 2 }, skills: ["counterweight_drop"], icon: "🔨" },
   ironroot_ribplate: { id: "ironroot_ribplate", name: "Ironroot Ribplate", rarity: "Rare", slot: "armor", description: "Steamed ironroot ribs bound over padded barkcloth with flat stone buckles. Westroot workers built it to turn sideways through narrow passages without giving up protection.", bonuses: { Guard: 2, Vitality: 2, Grit: 1 }, icon: "🪵" },
   low_arch_roothelm: { id: "low_arch_roothelm", name: "Low-Arch Roothelm", rarity: "Uncommon", slot: "helm", description: "A close-fitted ironroot brow with bronze temple plates and no plume to catch on a tunnel roof. Its open sides leave room to hear stone shift.", bonuses: { Guard: 2, Instinct: 1, Craft: 1 }, icon: "⛑️" },
+  old_waykeeper_helm: { id: "old_waykeeper_helm", name: "Old Waykeeper Helm", rarity: "Rare", slot: "helm", description: "A discarded brass-and-leather road helm from the Old Keeper Road. Its swept ear guards turn small changes in a tunnel's echo into an early warning.", bonuses: { Guard: 2, Instinct: 2, Will: 1 }, icon: "🪖" },
   kettle_helm: { id: "kettle_helm", name: "Apprentice Kettle Helm", rarity: "Common", slot: "helm", description: "Protective, practical, and a little soup-adjacent.", bonuses: { Guard: 1, Craft: 1 }, icon: "⛑️" },
   briar_vest: { id: "briar_vest", name: "Briarweave Vest", rarity: "Uncommon", slot: "armor", description: "A roadwarden vest stitched with thorn-resistant lining.", bonuses: { Guard: 1, Vitality: 1 }, icon: "🥋" },
   giggleleaf_cloak: { id: "giggleleaf_cloak", name: "Giggleleaf Cloak", rarity: "Uncommon", slot: "cloak", description: "A bright cloak that makes sneaking feel cheerful.", bonuses: { Agility: 1, Charm: 1 }, icon: "🍃" },
@@ -50,5 +51,5 @@ export const BATTLE_CONSUMABLES = {
 export const SHOP_PRICES = {
   old_hatchet: 6, turnipwood_blade: 12, pebbleknock_hammer: 19, kettle_helm: 10, briar_vest: 16, giggleleaf_cloak: 17,
   friendmaker_cloak: 14, stormbell_charm: 18, lantern_pin: 15, warden_chain: 26, healing_fizzpop: 7, trail_snack: 5,
-  gatewright_hookblade: 32, gatewright_passage_pike: 30, gatewright_counterweight_maul: 34, ironroot_ribplate: 29, low_arch_roothelm: 23, fizzberry_handpie: 9, bubbleburst_tonic: 6, moonmint: 4, bubblecap: 4,
+  gatewright_hookblade: 32, gatewright_passage_pike: 30, gatewright_counterweight_maul: 34, ironroot_ribplate: 29, low_arch_roothelm: 23, old_waykeeper_helm: 28, fizzberry_handpie: 9, bubbleburst_tonic: 6, moonmint: 4, bubblecap: 4,
 };

@@ -126,7 +126,7 @@ Create a Chapter 4 vertical-slice contract before implementing scenes. It should
 - critical path and optional porter path;
 - map regions and required landmarks;
 - required items, enemies, and fallback art;
-- Folded Map success, mistake, and deeper-solve outcomes;
+- Folded Map success and fail-forward mistake outcomes;
 - Listening Mile response categories and fail-forward effects;
 - required chapter-end flags;
 - save migration expectations;
@@ -153,7 +153,7 @@ The default interaction rule is to persist attempt, result, and later resolution
 
 ## Phase 2 — Spike The Folded Map
 
-Implementation status: the first answer-card graybox was rejected because it neither felt like folding nor supported real deduction. The second cross-wing graybox improved manipulation but was rejected because four binary flaps still made the solution an elimination exercise, the transparent layers felt unlike paper, and the silhouette did not feel like one map. The third schematic prototype under **Test Folded Map Graybox** uses one opaque rectangular sheet with distinct front and back faces, four draggable edges, three landing depths per edge, 54 two-edge configurations, an evidence-backed true construction, a persuasive 817 false construction, many ordinary wrong constructions, and an optional third fold. The owner accepted this interaction direction on 2026-08-02. Acceptance follow-up added unmistakable result stamps for every traced outcome and clearer matching marks for discovering the 817 straight-road construction. Drag, clean, fail-forward, ordinary-failure, deeper-solve, one-time reward, repeat, Back, desktop, and phone behavior are automated.
+Implementation status: the first answer-card graybox was rejected because it neither felt like folding nor supported real deduction. The second cross-wing graybox improved manipulation but was rejected because four binary flaps still made the solution an elimination exercise, the transparent layers felt unlike paper, and the silhouette did not feel like one map. The third schematic prototype under **Test Folded Map Graybox** uses one opaque rectangular sheet with distinct front and back faces, four draggable edges, three landing depths per edge, 54 two-edge configurations, an evidence-backed Old Keeper Road construction, a persuasive false Survey Shortcut, and many ordinary wrong constructions. The owner accepted this interaction direction on 2026-08-02. Acceptance follow-up added unmistakable result stamps for every traced outcome and clearer matching marks for discovering the straight Survey Shortcut. On 2026-08-20 the owner retired the unrelated optional third-fold Lanternwell cache idea while preserving the complete two-fold puzzle, then separated the false Survey Shortcut from the later physical construction detour. Drag, clean, fail-forward, ordinary-failure, repeat, Back, desktop, and phone behavior are automated.
 
 Build the smallest possible functional version before the full chapter:
 
@@ -162,7 +162,7 @@ Build the smallest possible functional version before the full chapter:
 3. Provide multiple fold configurations: one persuasive false revision, many ordinary wrong constructions, and one true two-fold route.
 4. Make the correct configuration align several visible facts at once instead of exposing an answer color.
 5. Keep experimentation safe; apply the fail-forward consequence only when the persuasive false route is deliberately traced.
-6. Add an optional third edge fold whose root-arrow and bridge notation visibly explain the cache.
+6. Keep the interaction at a maximum of two active folds; the required route solve is the complete puzzle.
 7. Preserve Back, repeat, keyboard, and review behavior.
 8. Human-test whether manipulation reads as folding and whether the solution reads as deduction rather than elimination.
 

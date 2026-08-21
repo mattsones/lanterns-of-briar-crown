@@ -184,7 +184,7 @@ export const ENCOUNTERS = {
   westrootCargo: ["briar_cargo_runner", "seal_forged_sentry"],
   underwayAmbush: ["briar_relay_guard"],
   underwayAmbushHard: ["briar_relay_guard", "seal_forged_sentry"],
-  briarRelay: ["briar_relay_guard", "seal_forged_sentry"],
+  briarRelay: ["briar_relay_guard", "seal_forged_sentry", "crown_whisperer"],
   briarholdBoss: ["bracken_voss", "thornseal_guard", "thornroot_sentry"],
 };
 

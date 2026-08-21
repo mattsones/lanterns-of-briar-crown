@@ -159,6 +159,20 @@ export function migrateFlags(flags: Flags | Record<string, unknown> = {}): GameF
     migrated.underwayAmbushCleared = true;
     migrated.listeningMileOutcome = "marker-found";
   }
+  if (migrated.princessNameSeen || migrated.briarRelayCleared || migrated.briarholdLeadFound) {
+    migrated.royalProgressLearned = true;
+    migrated.lioMessageFound = true;
+  }
+  if (migrated.lioMessageFound) {
+    migrated.chapterFourStarted = true;
+    migrated.foldedMapAttempted = true;
+    migrated.foldedMapDecoded = true;
+    migrated.underwayEntered = true;
+    migrated.underwayDetourDecisionMade = true;
+    migrated.underwayAmbushCleared = true;
+    migrated.listeningMileAttempted = true;
+    migrated.listeningMileOutcome = "marker-found";
+  }
   if (migrated.chapterFourClear) {
     migrated.chapterFourStarted = true;
     migrated.foldedMapAttempted = true;
@@ -169,6 +183,7 @@ export function migrateFlags(flags: Flags | Record<string, unknown> = {}): GameF
     migrated.listeningMileAttempted = true;
     migrated.listeningMileOutcome = "marker-found";
     migrated.lioMessageFound = true;
+    migrated.royalProgressLearned = true;
     migrated.princessNameSeen = true;
     migrated.briarRelayCleared = true;
     migrated.briarholdLeadFound = true;
@@ -208,7 +223,32 @@ export function migrateFlags(flags: Flags | Record<string, unknown> = {}): GameF
 export function migrateSavePayload(payload: SavePayload, sourceVersion = SAVE_FILE_VERSION): SavePayload {
   const sourceFlags = (payload.flags || {}) as Record<string, unknown>;
   const flags = migrateFlags(payload.flags || {});
-  const region = normalizeRegionId(payload.region);
+  let region = normalizeRegionId(payload.region);
+  let sourcePosition = payload.position || MAPS[region].start;
+  if (region === "underway") {
+    const oldX = typeof sourcePosition.x === "number" ? sourcePosition.x : 0;
+    if (flags.lioMessageFound || flags.listeningMileAttempted) {
+      region = "listeningPostThree";
+      sourcePosition = { x: 8, y: 2 };
+    } else if (flags.underwayAmbushCleared && oldX >= 12) {
+      region = "listeningPostThree";
+      sourcePosition = MAPS.listeningPostThree.start;
+    } else if (flags.underwayAmbushCleared && oldX >= 10) {
+      region = "listeningPostTwo";
+      sourcePosition = MAPS.listeningPostTwo.start;
+    } else if (flags.underwayAmbushCleared && oldX >= 8) {
+      region = "listeningPostOne";
+      sourcePosition = MAPS.listeningPostOne.start;
+    } else if (flags.underwayDetourDecisionMade && oldX >= 6) {
+      region = "underwayConvergence";
+      sourcePosition = MAPS.underwayConvergence.start;
+    } else if (flags.underwayDetourDecisionMade && oldX >= 4) {
+      region = flags.underwayDetourFollowed ? "underwayRoute817" : "underwayRoute811";
+      sourcePosition = MAPS[region].start;
+    } else if (oldX === 3 && sourcePosition.y === 2) {
+      sourcePosition = { x: 7, y: 2 };
+    }
+  }
   if (
     sourceFlags.reportedSatchelToElder === undefined &&
     sourceFlags.reportedSatchelToMira === undefined &&
@@ -223,11 +263,17 @@ export function migrateSavePayload(payload: SavePayload, sourceVersion = SAVE_FI
   ) {
     flags.reportedSatchelToElder = true;
   }
-  const position = normalizeMapPosition(region, payload.position || MAPS[region].start);
-  const player = normalizePlayerData({
+  const position = normalizeMapPosition(region, sourcePosition);
+  const normalizedPlayer = normalizePlayerData({
     ...payload.player,
     appearanceId: (payload.player as Partial<Player>).appearanceId || DEFAULT_APPEARANCE_ID,
   } as Player) as Player;
+  const player = flags.lioMessageFound && !normalizedPlayer.inventory.lios_courier_knot
+    ? {
+        ...normalizedPlayer,
+        inventory: { ...normalizedPlayer.inventory, lios_courier_knot: 1 },
+      }
+    : normalizedPlayer;
   const companion = normalizeCompanionData(payload.companion || buildDefaultCompanion());
   const companionRoster = Object.fromEntries(
     Object.entries(payload.companionRoster || {}).map(([id, savedCompanion]) => [

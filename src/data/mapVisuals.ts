@@ -41,6 +41,14 @@ type NavConnection = {
   direction: Direction;
 };
 
+function buildRightwardRoute(nodeKeys: string[]): NavConnection[] {
+  return nodeKeys.slice(1).map((to, index) => ({
+    from: nodeKeys[index],
+    to,
+    direction: "right" as const,
+  }));
+}
+
 // Root Cellar is intentionally graph-driven. The painted corridors do not fit
 // an even grid, so only these connected tile keys render as movement nodes.
 const OPPOSITE_DIRECTION: Record<Direction, Direction> = {
@@ -251,22 +259,43 @@ const WESTROOT_HUB_NAVIGATION_ALIASES: NavConnection[] = [
   { from: "8,2", to: "8,3", direction: "down" },
 ];
 
-const UNDERWAY_NAV_CONNECTIONS: NavConnection[] = [
-  { from: "0,2", to: "1,2", direction: "right" },
-  { from: "1,2", to: "2,2", direction: "right" },
-  { from: "2,2", to: "3,2", direction: "right" },
-  { from: "3,2", to: "4,1", direction: "up" },
-  { from: "3,2", to: "4,3", direction: "down" },
-  { from: "4,1", to: "5,1", direction: "right" },
-  { from: "5,1", to: "6,2", direction: "down" },
-  { from: "4,3", to: "5,3", direction: "right" },
-  { from: "5,3", to: "6,2", direction: "up" },
-  { from: "6,2", to: "7,2", direction: "right" },
-  { from: "7,2", to: "8,2", direction: "right" },
-  { from: "8,2", to: "9,2", direction: "right" },
-  { from: "9,2", to: "10,2", direction: "right" },
-  { from: "10,2", to: "11,2", direction: "right" },
-  { from: "11,2", to: "12,2", direction: "right" },
+const UNDERWAY_NAV_CONNECTIONS = buildRightwardRoute([
+  "0,2", "1,2", "2,2", "3,1", "4,1", "5,2", "6,2", "7,2",
+]);
+
+const UNDERWAY_ROUTE_811_NAV_CONNECTIONS = buildRightwardRoute([
+  "0,2", "1,2", "2,1", "3,1", "4,2", "5,3", "6,3", "7,2", "8,1", "9,2",
+]);
+
+const UNDERWAY_ROUTE_817_NAV_CONNECTIONS = buildRightwardRoute([
+  "0,2", "1,3", "2,3", "3,2", "4,1", "5,1", "6,2", "7,3", "8,2", "9,2",
+]);
+
+const UNDERWAY_CONVERGENCE_NAV_CONNECTIONS = buildRightwardRoute([
+  "0,2", "1,1", "2,1", "3,2", "4,3", "5,2", "6,2", "7,1", "8,1", "9,2",
+]);
+
+const LISTENING_POST_ONE_NAV_CONNECTIONS = buildRightwardRoute([
+  "0,2", "1,2", "2,1", "3,1", "4,2", "5,2", "6,1", "7,2", "8,1", "9,2",
+]);
+
+const LISTENING_POST_TWO_NAV_CONNECTIONS = buildRightwardRoute([
+  "0,2", "1,1", "2,1", "3,2", "4,2", "5,3", "6,3", "7,2", "8,1", "9,2",
+]);
+
+const LISTENING_POST_THREE_NAV_CONNECTIONS = buildRightwardRoute([
+  "0,2", "1,2", "2,1", "3,1", "4,2", "5,2", "6,1", "7,2", "8,2",
+]);
+
+const RELAY_APPROACH_NAV_CONNECTIONS = buildRightwardRoute([
+  "0,2", "1,1", "2,1", "3,2", "4,2", "5,3", "6,2", "7,1", "8,1", "9,2",
+]);
+
+const BRIAR_RELAY_POST_NAV_CONNECTIONS: NavConnection[] = [
+  { from: "0,1", to: "1,1", direction: "right" },
+  { from: "1,1", to: "2,1", direction: "right" },
+  { from: "2,1", to: "3,1", direction: "right" },
+  { from: "3,1", to: "4,1", direction: "right" },
 ];
 
 function buildNavigationLinks(
@@ -628,21 +657,111 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
     nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
     navigationLinks: buildNavigationLinks(UNDERWAY_NAV_CONNECTIONS),
     pointOverrides: {
-      "0,2": { x: 5.5, y: 50.5 },
-      "1,2": { x: 11.5, y: 50.5 },
-      "2,2": { x: 19, y: 50.5 },
-      "3,2": { x: 28, y: 50.5 },
-      "4,1": { x: 37, y: 29 },
-      "5,1": { x: 48, y: 29 },
-      "4,3": { x: 37, y: 74 },
-      "5,3": { x: 48, y: 70 },
-      "6,2": { x: 58, y: 50.5 },
-      "7,2": { x: 67, y: 50.5 },
-      "8,2": { x: 75, y: 50.5 },
-      "9,2": { x: 81, y: 50.5 },
-      "10,2": { x: 87, y: 50.5 },
-      "11,2": { x: 92, y: 50.5 },
-      "12,2": { x: 96.5, y: 50.5 },
+      "0,2": { x: 6, y: 57 },
+      "1,2": { x: 18, y: 55 },
+      "2,2": { x: 30, y: 51 },
+      "3,1": { x: 43, y: 39 },
+      "4,1": { x: 57, y: 34 },
+      "5,2": { x: 70, y: 46 },
+      "6,2": { x: 82, y: 53 },
+      "7,2": { x: 94, y: 56 },
+    },
+  },
+  underwayRoute811: {
+    aspectRatio: "16 / 9", navBounds: { left: 4, top: 8, width: 92, height: 84 },
+    localLantern: true, fogColor: "#000000", fogRadius: 7, fogPathWidth: 9,
+    nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
+    navigationLinks: buildNavigationLinks(UNDERWAY_ROUTE_811_NAV_CONNECTIONS),
+    pointOverrides: {
+      "0,2": { x: 5, y: 56 }, "1,2": { x: 15, y: 54 }, "2,1": { x: 25, y: 34 },
+      "3,1": { x: 35, y: 28 }, "4,2": { x: 45, y: 49 }, "5,3": { x: 55, y: 74 },
+      "6,3": { x: 65, y: 78 }, "7,2": { x: 75, y: 57 }, "8,1": { x: 85, y: 30 },
+      "9,2": { x: 95, y: 52 },
+    },
+  },
+  underwayRoute817: {
+    aspectRatio: "16 / 9", navBounds: { left: 4, top: 8, width: 92, height: 84 },
+    localLantern: true, fogColor: "#000000", fogRadius: 7, fogPathWidth: 9,
+    nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
+    navigationLinks: buildNavigationLinks(UNDERWAY_ROUTE_817_NAV_CONNECTIONS),
+    pointOverrides: {
+      "0,2": { x: 5, y: 54 }, "1,3": { x: 15, y: 53 }, "2,3": { x: 25, y: 52 },
+      "3,2": { x: 35, y: 51 }, "4,1": { x: 45, y: 50 }, "5,1": { x: 55, y: 49 },
+      "6,2": { x: 65, y: 50 }, "7,3": { x: 75, y: 51 }, "8,2": { x: 85, y: 52 },
+      "9,2": { x: 95, y: 53 },
+    },
+  },
+  underwayConvergence: {
+    aspectRatio: "16 / 9", navBounds: { left: 4, top: 8, width: 92, height: 84 },
+    localLantern: true, fogColor: "#000000", fogRadius: 7, fogPathWidth: 9,
+    nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
+    navigationLinks: buildNavigationLinks(UNDERWAY_CONVERGENCE_NAV_CONNECTIONS),
+    pointOverrides: {
+      "0,2": { x: 5, y: 55 }, "1,1": { x: 15, y: 38 }, "2,1": { x: 25, y: 34 },
+      "3,2": { x: 35, y: 50 }, "4,3": { x: 45, y: 69 }, "5,2": { x: 57, y: 55 },
+      "6,2": { x: 68, y: 52 }, "7,1": { x: 79, y: 38 }, "8,1": { x: 89, y: 35 },
+      "9,2": { x: 96, y: 51 },
+    },
+  },
+  listeningPostOne: {
+    aspectRatio: "16 / 9", navBounds: { left: 4, top: 8, width: 92, height: 84 },
+    localLantern: true, fogColor: "#000000", fogRadius: 7, fogPathWidth: 9,
+    nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
+    navigationLinks: buildNavigationLinks(LISTENING_POST_ONE_NAV_CONNECTIONS),
+    pointOverrides: {
+      "0,2": { x: 5, y: 56 }, "1,2": { x: 15, y: 55 }, "2,1": { x: 25, y: 40 },
+      "3,1": { x: 35, y: 34 }, "4,2": { x: 45, y: 48 }, "5,2": { x: 55, y: 54 },
+      "6,1": { x: 65, y: 39 }, "7,2": { x: 75, y: 52 }, "8,1": { x: 85, y: 38 },
+      "9,2": { x: 95, y: 53 },
+    },
+  },
+  listeningPostTwo: {
+    aspectRatio: "16 / 9", navBounds: { left: 4, top: 8, width: 92, height: 84 },
+    localLantern: true, fogColor: "#000000", fogRadius: 7, fogPathWidth: 9,
+    nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
+    navigationLinks: buildNavigationLinks(LISTENING_POST_TWO_NAV_CONNECTIONS),
+    pointOverrides: {
+      "0,2": { x: 5, y: 53 }, "1,1": { x: 15, y: 38 }, "2,1": { x: 25, y: 34 },
+      "3,2": { x: 35, y: 49 }, "4,2": { x: 45, y: 55 }, "5,3": { x: 55, y: 69 },
+      "6,3": { x: 65, y: 72 }, "7,2": { x: 75, y: 56 }, "8,1": { x: 85, y: 39 },
+      "9,2": { x: 95, y: 52 },
+    },
+  },
+  listeningPostThree: {
+    aspectRatio: "16 / 9", navBounds: { left: 4, top: 8, width: 92, height: 84 },
+    localLantern: true, fogColor: "#000000", fogRadius: 7, fogPathWidth: 9,
+    nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
+    navigationLinks: buildNavigationLinks(LISTENING_POST_THREE_NAV_CONNECTIONS),
+    pointOverrides: {
+      "0,2": { x: 5, y: 56 }, "1,2": { x: 16, y: 55 }, "2,1": { x: 27, y: 39 },
+      "3,1": { x: 38, y: 34 }, "4,2": { x: 49, y: 49 }, "5,2": { x: 60, y: 55 },
+      "6,1": { x: 71, y: 39 }, "7,2": { x: 83, y: 52 }, "8,2": { x: 95, y: 53 },
+    },
+  },
+  relayApproach: {
+    aspectRatio: "16 / 9", navBounds: { left: 4, top: 8, width: 92, height: 84 },
+    localLantern: true, fogColor: "#000000", fogRadius: 7, fogPathWidth: 9,
+    nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
+    navigationLinks: buildNavigationLinks(RELAY_APPROACH_NAV_CONNECTIONS),
+    pointOverrides: {
+      "0,2": { x: 5, y: 54 }, "1,1": { x: 15, y: 38 }, "2,1": { x: 25, y: 34 },
+      "3,2": { x: 35, y: 49 }, "4,2": { x: 45, y: 55 }, "5,3": { x: 55, y: 70 },
+      "6,2": { x: 65, y: 54 }, "7,1": { x: 75, y: 39 }, "8,1": { x: 85, y: 35 },
+      "9,2": { x: 95, y: 52 },
+    },
+  },
+  briarRelayPost: {
+    aspectRatio: "16 / 9",
+    navBounds: { left: 5, top: 12, width: 90, height: 76 },
+    revealAll: true,
+    nodeHitboxSize: "clamp(1.6rem, 4.5%, 2.5rem)",
+    navigationLinks: buildNavigationLinks(BRIAR_RELAY_POST_NAV_CONNECTIONS),
+    pointOverrides: {
+      "0,1": { x: 8, y: 55 },
+      "1,1": { x: 25, y: 54 },
+      "2,1": { x: 50, y: 52 },
+      "3,1": { x: 72, y: 53 },
+      "4,1": { x: 91, y: 54 },
     },
   },
 };

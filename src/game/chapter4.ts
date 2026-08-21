@@ -8,6 +8,7 @@ import {
   FOLDED_MAP_LANDINGS,
   GATEWRIGHT_WEAPON_CONTRACT,
   GATEWRIGHT_WEAPON_CONTRACTS,
+  LIO_MESSAGE_CONTRACT,
   type GatewrightWeaponId,
   type FoldedMapEdge,
   type FoldedMapLanding,
@@ -19,7 +20,6 @@ import type { Flags, GameFlags, Player } from "./types";
 export type FoldedMapOutcome =
   | "true-route"
   | "false-shortcut"
-  | "deeper-solve"
   | "not-a-route";
 
 export type FoldedMapConfiguration = {
@@ -95,24 +95,12 @@ export function resolveFoldedMapConfiguration(
     foldedMapAttempted: true,
   };
 
-  if (
-    flags.foldedMapDecoded &&
-    isFoldedMapConfiguration(configuration, FOLDED_MAP_CONTRACT.deeperConfiguration)
-  ) {
-    return {
-      outcome: "deeper-solve",
-      flags: { ...common, foldedMapDecoded: true, foldedMapDeeperSolved: true },
-      message:
-        "With the true route still held, the north edge lands one-quarter across. Its reverse-side root arrow completes the broken bridge mark and circles a road-crew cache beside Lanternwell.",
-    };
-  }
-
   if (isFoldedMapConfiguration(configuration, FOLDED_MAP_CONTRACT.trueRouteConfiguration)) {
     return {
       outcome: "true-route",
       flags: { ...common, foldedMapDecoded: true },
       message:
-        "The west edge lands halfway across and the south edge reaches the three-quarter guide. Reverse-side road-crew ink closes the 811 lantern ring, both contour strokes, and one winding road into the Underway.",
+        "The west edge lands halfway across and the south edge reaches the three-quarter guide. Reverse-side road-crew ink closes the old keeper lantern ring, both contour strokes, and one winding road into the Underway.",
     };
   }
 
@@ -125,7 +113,7 @@ export function resolveFoldedMapConfiguration(
         foldedMapMaintenanceDetour: true,
       },
       message:
-        "The east and north half-folds join the two 817 ticks into a wonderfully straight road. Traced onward, however, its contour runs backward and ends at a sealed maintenance approach. The persuasive mistake is recorded, but the paper remains yours to refold.",
+        "The east and north half-folds join the newer Survey ticks into a wonderfully straight shortcut. Traced onward, however, its contour runs backward and ends against unbroken stone. The persuasive mistake is recorded, but the paper remains yours to refold.",
     };
   }
 
@@ -138,35 +126,14 @@ export function resolveFoldedMapConfiguration(
 }
 
 export function getFoldedMapReview(flags: Flags) {
-  if (flags.foldedMapDeeperSolved) {
-    return "True route decoded; deeper Lanternwell cache alignment found.";
-  }
   if (flags.foldedMapDecoded) {
-    return "True route recorded; Edden's bridge notation suggests an optional third fold.";
+    return "True route recorded; the Old Keeper Road is ready to follow into the Underway.";
   }
   if (flags.foldedMapMaintenanceDetour) {
-    return "Persuasive 817 shortcut rejected; its notation may still matter later; true route unresolved.";
+    return "Persuasive Survey Shortcut rejected; true route unresolved.";
   }
   if (flags.foldedMapAttempted) return "The map has been handled, but no route is decoded yet.";
   return "No fold has been attempted.";
-}
-
-export function claimFoldedMapCache(player: Player, flags: Flags) {
-  if (!flags.foldedMapDeeperSolved || flags.foldedMapCacheClaimed) {
-    return { player, flags: {}, claimed: false };
-  }
-  return {
-    player: {
-      ...player,
-      inventory: {
-        ...player.inventory,
-        [FOLDED_MAP_CONTRACT.deeperReward]:
-          (player.inventory[FOLDED_MAP_CONTRACT.deeperReward] || 0) + 1,
-      },
-    },
-    flags: { foldedMapCacheClaimed: true } satisfies Partial<GameFlags>,
-    claimed: true,
-  };
 }
 
 export function getGatewrightOfferPrice() {
@@ -225,6 +192,45 @@ export function resolveListeningMileClue() {
       listeningMileOutcome: outcome,
     } satisfies Partial<GameFlags>,
   } as const;
+}
+
+export function resolveLioMessage(player: Player, flags: Flags) {
+  if (!flags.listeningMileAttempted) {
+    return { player, flags: {}, found: false, awardedKnot: false };
+  }
+
+  const awardedKnot = !flags.lioMessageFound && !player.inventory[LIO_MESSAGE_CONTRACT.item];
+  return {
+    player: awardedKnot
+      ? {
+          ...player,
+          inventory: {
+            ...player.inventory,
+            [LIO_MESSAGE_CONTRACT.item]: 1,
+          },
+        }
+      : player,
+    flags: { lioMessageFound: true } satisfies Partial<GameFlags>,
+    found: !flags.lioMessageFound,
+    awardedKnot,
+  };
+}
+
+export function learnRoyalProgressAuthority() {
+  return { royalProgressLearned: true } satisfies Partial<GameFlags>;
+}
+
+export function recordForgedRoyalAuthority(flags: Flags) {
+  if (!flags.royalProgressLearned || !flags.briarRelayCleared) return {};
+  return { princessNameSeen: true } satisfies Partial<GameFlags>;
+}
+
+export function completeChapter4FromRelay(flags: Flags) {
+  if (!flags.lioMessageFound || !flags.princessNameSeen || !flags.briarRelayCleared) return {};
+  return {
+    briarholdLeadFound: true,
+    chapterFourClear: true,
+  } satisfies Partial<GameFlags>;
 }
 
 export function getUnderwayApproach(flags: Flags) {

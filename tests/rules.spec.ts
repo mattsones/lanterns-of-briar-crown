@@ -103,15 +103,18 @@ import { runGameQaChecks } from "../src/game/qa";
 import { validateChapter4ReadyPayload } from "../src/game/chapter4Readiness";
 import {
   beginChapter4,
-  claimFoldedMapCache,
+  completeChapter4FromRelay,
   EMPTY_FOLDED_MAP_CONFIGURATION,
   getChapter4EntryErrors,
   getGatewrightOfferPrice,
   getUnderwayApproach,
+  learnRoyalProgressAuthority,
   meetGatewright,
   purchaseGatewrightWeapon,
   resolveFoldedMapConfiguration,
+  resolveLioMessage,
   resolveListeningMileClue,
+  recordForgedRoyalAuthority,
   resolveUnderwayDetour,
   resolveUnderwayAmbushDiscovery,
   validateChapter4Contract,
@@ -122,6 +125,7 @@ import {
   FOLDED_MAP_CONTRACT,
   GATEWRIGHT_WEAPON_CONTRACT,
   GATEWRIGHT_WEAPON_CONTRACTS,
+  LIO_MESSAGE_CONTRACT,
   LISTENING_MILE_CONTRACT,
   UNDERWAY_CONTRACT,
 } from "../src/story/chapter4";
@@ -748,6 +752,21 @@ test("Chapter 4 executable contract is complete and keeps optional routes option
   expect(CHAPTER_4_CONTRACT.requiredEndFlags).toContain("briarholdLeadFound");
   expect(CHAPTER_4_CONTRACT.requiredEndFlags).not.toContain("captivePorterHelped");
   expect(CHAPTER_4_OPTIONAL_FLAGS).toContain("captivePorterHelped");
+  expect(CHAPTER_4_OPTIONAL_FLAGS).toEqual(expect.arrayContaining([
+    "underway811CacheFound",
+    "underway817SignalRigRead",
+  ]));
+  expect(CHAPTER_4_OPTIONAL_FLAGS).not.toEqual(expect.arrayContaining([
+    "foldedMapDeeperSolved",
+    "foldedMapCacheClaimed",
+  ]));
+  expect(CHAPTER_4_CONTRACT.optionalItems).not.toContain("lanternwell_drop");
+  expect(CHAPTER_4_CONTRACT.optionalItems).toContain("old_waykeeper_helm");
+  expect(ITEM_DB.old_waykeeper_helm).toMatchObject({
+    rarity: "Rare",
+    slot: "helm",
+    bonuses: { Guard: 2, Instinct: 2, Will: 1 },
+  });
   expect(CHAPTER_4_CONTRACT.requiredEndFlags).not.toContain("rootbreadPromiseKept");
   expect(GATEWRIGHT_WEAPON_CONTRACT).toMatchObject({
     purchaseRequired: false,
@@ -838,13 +857,12 @@ test("Chapter 4 save migration infers prerequisite Folded Map state", () => {
   });
 });
 
-test("Folded Map state separates mistake, route decode, deeper solve, and one-time reward", () => {
+test("Folded Map state separates mistakes from the complete two-fold route decode", () => {
   const initial = buildDefaultFlags();
   expect(FOLDED_MAP_CONTRACT).toMatchObject({
     sheet: "one opaque two-sided rectangle",
     twoFoldConfigurationCount: 54,
     requiredFoldCount: 2,
-    deeperFoldCount: 3,
   });
   const configuration = (
     folds: Partial<typeof EMPTY_FOLDED_MAP_CONFIGURATION.folds>,
@@ -903,26 +921,16 @@ test("Folded Map state separates mistake, route decode, deeper solve, and one-ti
   expect(decoded.flags.foldedMapDecoded).toBe(true);
   expect(decoded.flags.foldedMapMaintenanceDetour).toBeUndefined();
 
-  const afterDecode = { ...afterMistake, ...decoded.flags };
-  const deeper = resolveFoldedMapConfiguration(afterDecode, configuration({
+  const retiredThirdFold = resolveFoldedMapConfiguration(
+    { ...afterMistake, ...decoded.flags },
+    configuration({
     left: "half",
     top: "quarter",
     bottom: "three-quarter",
-  }));
-  expect(deeper.outcome).toBe("deeper-solve");
-  expect(deeper.flags.foldedMapDeeperSolved).toBe(true);
-
-  const hero = buildPlayer({ name: "Liam", gender: "Male", raceId: "human" });
-  const firstClaim = claimFoldedMapCache(hero, { ...afterDecode, ...deeper.flags });
-  expect(firstClaim.claimed).toBe(true);
-  expect(firstClaim.player.inventory.lanternwell_drop).toBe(1);
-  const secondClaim = claimFoldedMapCache(firstClaim.player, {
-    ...afterDecode,
-    ...deeper.flags,
-    foldedMapCacheClaimed: true,
-  });
-  expect(secondClaim.claimed).toBe(false);
-  expect(secondClaim.player.inventory.lanternwell_drop).toBe(1);
+    }),
+  );
+  expect(retiredThirdFold.outcome).toBe("not-a-route");
+  expect(retiredThirdFold.flags.foldedMapDeeperSolved).toBeUndefined();
 });
 
 test("Tasmine's full smithy includes three affordable optional weapon patterns without durability", () => {
@@ -1007,7 +1015,7 @@ test("Tasmine's full smithy includes three affordable optional weapon patterns w
   expect(secondPurchase.player.equipment.weapon).toBe("pebbleknock_hammer");
 });
 
-test("Underway presents a later detour choice, applies 817 pressure, hides ordinary ambush misses, and converges", () => {
+test("Underway presents a later construction detour choice, applies route pressure, hides ordinary ambush misses, and converges", () => {
   expect(UNDERWAY_CONTRACT).toMatchObject({
     region: "underway",
     trueRoute: "mapped-gallery",
@@ -1038,7 +1046,108 @@ test("Listening Mile finds Lio's quick trail marker without a personality quiz o
     flags: { listeningMileAttempted: true, listeningMileOutcome: "marker-found" },
   });
   expect(LISTENING_MILE_CONTRACT.mechanism).toContain("fired-clay conduits");
-  expect(LISTENING_MILE_CONTRACT.mechanism).toContain("Three separate map posts");
+  expect(LISTENING_MILE_CONTRACT.mechanism).toContain("Each later hood is discovered");
+});
+
+test("Lio's message follows the physical trail, awards his knot once, and requires no check", () => {
+  const player = buildPlayer({
+    name: "Message Tester",
+    gender: "Male",
+    raceId: "human",
+  });
+  expect(resolveLioMessage(player, buildDefaultFlags())).toMatchObject({
+    player,
+    flags: {},
+    found: false,
+    awardedKnot: false,
+  });
+
+  const first = resolveLioMessage(player, { listeningMileAttempted: true });
+  expect(first).toMatchObject({
+    flags: { lioMessageFound: true },
+    found: true,
+    awardedKnot: true,
+  });
+  expect(first.player.inventory.lios_courier_knot).toBe(1);
+
+  const repeat = resolveLioMessage(first.player, {
+    listeningMileAttempted: true,
+    lioMessageFound: true,
+  });
+  expect(repeat).toMatchObject({ found: false, awardedKnot: false });
+  expect(repeat.player.inventory.lios_courier_knot).toBe(1);
+  expect(LIO_MESSAGE_CONTRACT.message).toContain("do not follow angry. Follow clever");
+  expect(LIO_MESSAGE_CONTRACT.message).toMatch(/^M—/);
+  expect(LIO_MESSAGE_CONTRACT.message).toContain("Taking us west");
+  expect(LIO_MESSAGE_CONTRACT.message).not.toContain("Still breathing");
+});
+
+test("Relay Post evidence separates Elowen's lawful authority from the forged order before revealing Briarhold", () => {
+  expect(learnRoyalProgressAuthority()).toEqual({ royalProgressLearned: true });
+  expect(recordForgedRoyalAuthority({ briarRelayCleared: true })).toEqual({});
+  expect(recordForgedRoyalAuthority({ royalProgressLearned: true, briarRelayCleared: true })).toEqual({
+    princessNameSeen: true,
+  });
+  expect(completeChapter4FromRelay({ lioMessageFound: true, princessNameSeen: true })).toEqual({});
+  expect(completeChapter4FromRelay({
+    lioMessageFound: true,
+    princessNameSeen: true,
+    briarRelayCleared: true,
+  })).toEqual({ briarholdLeadFound: true, chapterFourClear: true });
+  expect(ENCOUNTERS.briarRelay).toEqual([
+    "briar_relay_guard",
+    "seal_forged_sentry",
+    "crown_whisperer",
+  ]);
+  expect(BATTLE_REWARDS.briarRelay.flagUpdate).toEqual({ briarRelayCleared: true });
+});
+
+test("Lio-message saves infer the trail state and retain the one-time courier knot", () => {
+  const payload = parseDiskSaveText(readFileSync(
+    new URL("../public/saves/chapter-3-complete.json", import.meta.url),
+    "utf8",
+  )).payload;
+  const migrated = migrateSavePayload({
+    ...payload,
+    flags: { ...payload.flags, lioMessageFound: true },
+  });
+  expect(migrated.flags).toMatchObject({
+    chapterFourStarted: true,
+    underwayAmbushCleared: true,
+    listeningMileAttempted: true,
+    listeningMileOutcome: "marker-found",
+    lioMessageFound: true,
+  });
+  expect(migrated.player.inventory.lios_courier_knot).toBe(1);
+});
+
+test("legacy single-map Underway checkpoints migrate onto the expanded tunnel journey", () => {
+  const payload = parseDiskSaveText(readFileSync(
+    new URL("../public/saves/chapter-3-complete.json", import.meta.url),
+    "utf8",
+  )).payload;
+  const atOldJunction = migrateSavePayload({
+    ...payload,
+    region: "underway",
+    position: { x: 6, y: 2 },
+    flags: {
+      ...payload.flags,
+      underwayEntered: true,
+      underwayDetourDecisionMade: true,
+      underwayDetourFollowed: true,
+    },
+  });
+  expect(atOldJunction.region).toBe("underwayConvergence");
+  expect(atOldJunction.position).toEqual(MAPS.underwayConvergence.start);
+
+  const atOldMessage = migrateSavePayload({
+    ...payload,
+    region: "underway",
+    position: { x: 12, y: 3 },
+    flags: { ...payload.flags, lioMessageFound: true },
+  });
+  expect(atOldMessage.region).toBe("listeningPostThree");
+  expect(atOldMessage.position).toEqual({ x: 8, y: 2 });
 });
 
 test("save migrations normalize older payloads before load", () => {
@@ -1818,9 +1927,17 @@ test("chapter two contract keeps required flags, map prompt, and reveal boundari
 test("hand-authored map navigation graphs pass reusable validation", () => {
   const results = validateAllMapNavigationGraphs();
   expect(results.map((result) => result.region).sort()).toEqual([
+    "briarRelayPost",
     "crownDoorDen",
+    "listeningPostOne",
+    "listeningPostThree",
+    "listeningPostTwo",
+    "relayApproach",
     "rootCellar",
     "underway",
+    "underwayConvergence",
+    "underwayRoute811",
+    "underwayRoute817",
     "westrootHub",
     "westrootTrail",
   ]);

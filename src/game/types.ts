@@ -213,6 +213,8 @@ export type GameFlags = {
   underwayDetourNoticeInspected: boolean;
   underwayDetourDecisionMade: boolean;
   underwayDetourFollowed: boolean;
+  underway811CacheFound: boolean;
+  underway817SignalRigRead: boolean;
   underwayAmbushDetectionAttempted: boolean;
   underwayAmbushRevealed: boolean;
   underwayAmbushPrepared: boolean;
@@ -221,6 +223,7 @@ export type GameFlags = {
   listeningMileOutcome: ListeningMileOutcome;
   captivePorterHelped: boolean;
   lioMessageFound: boolean;
+  royalProgressLearned: boolean;
   princessNameSeen: boolean;
   briarRelayCleared: boolean;
   briarholdLeadFound: boolean;

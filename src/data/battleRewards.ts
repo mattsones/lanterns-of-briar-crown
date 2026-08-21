@@ -125,7 +125,15 @@ export const BATTLE_REWARDS = {
     xp: 24,
     flagUpdate: { underwayAmbushCleared: true },
     name: "Maintenance Ambush Cleared",
-    text: "The relay guard falls and the false-paper sentry slumps into wax, route tags, and thorn cord. Route 817 delivered you to a prepared killing point, but it did not stop the road. The Listening Mile remains open beyond the junction.",
+    text: "The relay guard falls and the false-paper sentry slumps into wax, route tags, and thorn cord. The construction detour delivered you to a prepared killing point, but it did not stop the road. The Listening Mile remains open beyond the junction.",
+  },
+  briarRelay: {
+    item: "healing_fizzpop",
+    gold: 24,
+    xp: 28,
+    flagUpdate: { briarRelayCleared: true },
+    name: "Briar Relay Post Cleared",
+    text: "The relay guard falls across the signal floor, and the Seal-Forged Sentry collapses into stamped paper, red wax, and thorn cord. The captured post is quiet. Its public broadside, secret instructions, and westbound route ledger remain intact.",
   },
 };
 

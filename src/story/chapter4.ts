@@ -10,11 +10,21 @@ export const CHAPTER_4_SCENE_IDS = {
   underwayArrival: "chapter4.underway.arrival",
   underwayRoute: "chapter4.underway.route",
   underwayDetour: "chapter4.underway.detour",
+  route811Cache: "chapter4.underway.route-811-cache",
+  route817SignalRig: "chapter4.underway.route-817-signal-rig",
   underwayAmbush: "chapter4.underway.ambush",
   listeningMileIntro: "chapter4.listening-mile.intro",
   listeningMileStationOne: "chapter4.listening-mile.station-one",
   listeningMileStationTwo: "chapter4.listening-mile.station-two",
   listeningMileResult: "chapter4.listening-mile.result",
+  lioMessageDiscovery: "chapter4.lio-message.discovery",
+  lioMessageResponse: "chapter4.lio-message.response",
+  lioMessageReview: "chapter4.lio-message.review",
+  relayArrival: "chapter4.relay.arrival",
+  royalProgressBroadside: "chapter4.relay.royal-progress",
+  relayGuard: "chapter4.relay.guard",
+  forgedAuthority: "chapter4.relay.forged-authority",
+  briarholdReveal: "chapter4.relay.briarhold-reveal",
 } as const;
 
 export const CHAPTER_4_CHOICE_IDS = {
@@ -45,6 +55,8 @@ export const CHAPTER_4_CHOICE_IDS = {
   followPostedDetour: "chapter4.underway.follow-posted-detour",
   followKeeperRoute: "chapter4.underway.follow-keeper-route",
   followMaintenanceRoute: "chapter4.underway.follow-maintenance-route",
+  takeWaykeeperHelm: "chapter4.underway.take-waykeeper-helm",
+  studySignalRig: "chapter4.underway.study-signal-rig",
   prepareAmbush: "chapter4.underway.prepare-ambush",
   faceAmbush: "chapter4.underway.face-ambush",
   beginListeningMile: "chapter4.listening-mile.begin",
@@ -58,6 +70,15 @@ export const CHAPTER_4_CHOICE_IDS = {
   answerRemember: "chapter4.listening-mile.answer-remember",
   answerConceal: "chapter4.listening-mile.answer-conceal",
   finishListeningMile: "chapter4.listening-mile.finish",
+  inspectLioMessage: "chapter4.lio-message.inspect",
+  readLioMessage: "chapter4.lio-message.read",
+  finishLioMessage: "chapter4.lio-message.finish",
+  enterRelayPost: "chapter4.relay.enter",
+  readRoyalProgress: "chapter4.relay.read-royal-progress",
+  faceRelayGuard: "chapter4.relay.face-guard",
+  inspectForgedOrder: "chapter4.relay.inspect-forged-order",
+  traceBriarhold: "chapter4.relay.trace-briarhold",
+  finishChapterFour: "chapter4.finish",
 } as const;
 
 export const CHAPTER_4_GATEWRIGHT = {
@@ -75,7 +96,7 @@ export const CHAPTER_4_ENTRY_COPY = {
   gatewrightOffer: {
     name: "Tasmine Rootbrace",
     text:
-      "“Tasmine Rootbrace,” Bramwell says. “She keeps the Lower Gate moving and half our hinges honest.”\n\n“The other half know what they did,” Tasmine says. She accepts the transfer tag from Bramwell, finds its stamp in the Lower Gate ledger, and traces the entry to the route notch used by the captured courier. Noma lays the Witness Stone rubbing beside it, then opens Edden's bundle to the drawings with the same broken contours.\n\nThe records agree on old route 811. A newer Survey revision draws 817 as a straighter line, but its dates and terrain marks do not agree. Tasmine sets the stitched working sheet beneath her lamp. “We can settle the route together. Before that, use the smithy. Buy, sell, compare, change your gear—whatever helps. The Underway will still be here when you are ready.”",
+      "“Tasmine Rootbrace,” Bramwell says. “She keeps the Lower Gate moving and half our hinges honest.”\n\n“The other half know what they did,” Tasmine says. She accepts the transfer tag from Bramwell, finds its stamp in the Lower Gate ledger, and traces the entry to the route notch used by the captured courier. Noma lays the Witness Stone rubbing beside it, then opens Edden's bundle to the drawings with the same broken contours.\n\nThe records agree on the Old Keeper Road. A newer Survey revision proposes a straighter shortcut, but its dates and terrain marks do not agree. Tasmine taps a fresh circular tucked into the ledger. “Princess Elowen is making her first Royal Progress without the King and Queen this year. Every road office has been told to ready its books. If she reaches Rainroot, I would rather show her an honest disagreement than a tidy lie.”\n\nTasmine sets the stitched working sheet beneath her lamp. “We can settle the route together. Before that, use the smithy. Buy, sell, compare, change your gear—whatever helps. The Underway will still be here when you are ready.”",
   },
   foldedMapBriefing: {
     name: "The Survey Cases",
@@ -85,12 +106,12 @@ export const CHAPTER_4_ENTRY_COPY = {
   underwayArrival: {
     name: "The Riddle Road Underway",
     text:
-      "Tasmine rests the corrected fold beside the Lower Gate's bronze route dial, finds the 811 notch, and works three counterweight levers in order. Iron settles. Cold air moves through the seam.\n\nBramwell returns the transfer tag. “Right people, right evidence, right road.” Noma hugs Mara, asks the rest of you to bring one another home, and walks back with Bramwell as the gate opens.\n\nYour lantern reaches only a short way into the fitted-stone passage. Route 811 bends west beyond the light.",
+      "Tasmine rests the corrected fold beside the Lower Gate's bronze route dial, finds the old keeper notch, and works three counterweight levers in order. Iron settles. Cold air moves through the seam.\n\nBramwell returns the transfer tag. “Right people, right evidence, right road.” Noma hugs Mara, asks the rest of you to bring one another home, and walks back with Bramwell as the gate opens.\n\nYour lantern reaches only a short way into the fitted-stone passage. The Old Keeper Road bends west beyond the light.",
   },
   listeningMileIntro: {
     name: "The Listening Mile",
     text:
-      "The lantern catches a brass rim in the wall: the first of three flared listening hoods. Fired-clay throats disappear into the stone toward distant bends, carrying the small sounds of the road to anyone who stops here.\n\nFresh boot scuffs continue west. Mara runs a thumb along the hood's deep rim and the old retaining pegs behind it. “If they brought Lio this way, he would know we might stop to listen.”",
+      "The lantern catches a brass rim in the wall: a flared listening hood set at shoulder height. Its fired-clay throat disappears into the stone toward a bend your light cannot reach. A second mouth faces back the way you came.\n\nFresh boot scuffs continue west. Mara runs a thumb along the hood's deep rim and the old retaining pegs behind it. “Road crews used these to hear around blind stone,” she says. “If they brought Lio this way, he would know we might stop here.”",
   },
 } as const;
 
@@ -132,6 +153,7 @@ export const CHAPTER_4_REQUIRED_END_FLAGS: GameFlagKey[] = [
   "foldedMapDecoded",
   "listeningMileAttempted",
   "lioMessageFound",
+  "royalProgressLearned",
   "princessNameSeen",
   "briarRelayCleared",
   "briarholdLeadFound",
@@ -140,11 +162,11 @@ export const CHAPTER_4_REQUIRED_END_FLAGS: GameFlagKey[] = [
 
 export const CHAPTER_4_OPTIONAL_FLAGS: GameFlagKey[] = [
   "gatewrightWeaponPurchased",
-  "foldedMapDeeperSolved",
-  "foldedMapCacheClaimed",
   "captivePorterHelped",
   "underwayAmbushRevealed",
   "underwayAmbushPrepared",
+  "underway811CacheFound",
+  "underway817SignalRigRead",
 ];
 
 export const CHAPTER_4_CONTRACT = {
@@ -181,17 +203,27 @@ export const CHAPTER_4_CONTRACT = {
   ],
   regions: {
     existingEntry: "westrootHub",
-    current: ["underway"],
-    planned: ["briarRelayPost"],
+    current: [
+      "underway",
+      "underwayRoute811",
+      "underwayRoute817",
+      "underwayConvergence",
+      "listeningPostOne",
+      "listeningPostTwo",
+      "listeningPostThree",
+      "relayApproach",
+      "briarRelayPost",
+    ],
+    planned: [],
   },
   requiredItems: ["folded_map_scrap", "lios_courier_knot"],
   optionalItems: [
-    "lanternwell_drop",
     "gatewright_hookblade",
     "gatewright_passage_pike",
     "gatewright_counterweight_maul",
     "ironroot_ribplate",
     "low_arch_roothelm",
+    "old_waykeeper_helm",
   ],
   enemies: ["briar_relay_guard", "seal_forged_sentry", "crown_whisperer"],
   encounter: "briarRelay",
@@ -214,20 +246,14 @@ export const FOLDED_MAP_CONTRACT = {
     side: "front",
     folds: { left: null, right: "half", top: "half", bottom: null },
   },
-  deeperConfiguration: {
-    side: "front",
-    folds: { left: "half", right: null, top: "quarter", bottom: "three-quarter" },
-  },
   requiredFoldCount: 2,
-  deeperFoldCount: 3,
   mistakeConsequence:
-    "Folding the east edge halfway and the north edge halfway creates a persuasive 817 straight road. Tracing it records why the later posted detour looks plausible, but it does not choose the party's route.",
-  deeperReward: "lanternwell_drop",
+    "Folding the east edge halfway and the north edge halfway creates a persuasive Survey Shortcut. Its failed terrain evidence is separate from the later in-world construction detour.",
   experimentRule:
     "Folding, unfolding, and turning over the flat sheet are free. Consequences occur only when the player traces a committed configuration.",
   evidenceRule:
     "With the front up, the west edge halfway and south edge three-quarters across align the dated lantern benchmark, road-crew ring, contour lines, and winding road at once. It is not identified by answer color or elimination.",
-  repeatRule: "Recorded configurations remain reviewable and never grant the cache reward twice.",
+  repeatRule: "Recorded configurations remain reviewable without changing the chosen Underway route.",
 } as const;
 
 export const GATEWRIGHT_WEAPON_CONTRACTS = [
@@ -273,7 +299,7 @@ export const UNDERWAY_CONTRACT = {
   trueRoute: "mapped-gallery",
   pressuredRoute: "maintenance-gallery",
   decision:
-    "The party is already following mapped route 811 when a legitimate-looking closure board directs traffic into maintenance route 817. Current safety guidance and older route evidence are both reasonable to trust.",
+    "The party is already following the Old Keeper Road when a legitimate-looking closure board directs traffic into a construction detour that does not appear in the Folded Map. Current safety guidance and older route evidence are both reasonable to trust.",
   ambush: {
     hiddenCheck: "Instinct DC 16",
     normalEncounter: "underwayAmbush",
@@ -288,7 +314,18 @@ export const LISTENING_MILE_CONTRACT = {
   outcomes: ["marker-found"],
   failForward: "The acoustic investigation can be retried and always reaches Lio's quickly hidden trail marker.",
   mechanism:
-    "Flared wall hoods carry footsteps, tools, and shutters around blind bends through fired-clay conduits. Three separate map posts make the player travel between each listening beat.",
+    "Flared wall hoods carry present footsteps, voices, tools, and shutters around blind bends through fired-clay conduits. Each later hood is discovered only after crossing its own separate tunnel map.",
+} as const;
+
+export const LIO_MESSAGE_CONTRACT = {
+  prerequisite: "listeningMileAttempted",
+  result: "lioMessageFound",
+  item: "lios_courier_knot",
+  message:
+    "M—do not follow angry. Follow clever. Taking us west. Still me. — L",
+  confirmation:
+    "Lio was being taken west with at least one other prisoner and left Mara a deliberate warning about how to follow.",
+  repeatRule: "The message and Mara's reading remain reviewable; the courier knot is awarded only once.",
 } as const;
 
 export const CHAPTER_4_INTERACTION_STATE_MATRIX = {
@@ -297,12 +334,12 @@ export const CHAPTER_4_INTERACTION_STATE_MATRIX = {
     availability: "Chapter 3 is complete and the gatewright has made the Lower Gate route available.",
     attempt: "Tracing the currently folded configuration sets foldedMapAttempted.",
     result: "foldedMapDecoded",
-    laterResolution: "foldedMapDeeperSolved",
-    repeatVisit: "Review recorded alignments; never repeat the cache reward.",
+    laterResolution: "The two-fold Old Keeper Road decode completes the interaction.",
+    repeatVisit: "Review recorded alignments without changing the chosen Underway route.",
     backtracking: "Back unfolds the most recently moved edge before closing the prototype.",
     companion: "Hints may change, but the interaction never requires a conscious companion.",
-    failure: "Only committing the persuasive east-half plus north-half configuration creates foldedMapMaintenanceDetour; ordinary experimentation is free.",
-    saveCompatibility: "Decoded or deeper-solved saves infer attempt and Chapter 4 start.",
+    failure: "Only committing the persuasive east-half plus north-half Survey Shortcut sets the legacy foldedMapMaintenanceDetour field; ordinary experimentation is free.",
+    saveCompatibility: "Decoded saves infer attempt and Chapter 4 start; retired deeper-solve saves still migrate as decoded.",
   },
   listeningMile: {
     knowledge: "The party learns that passive listening hoods carry present sounds around blind bends, then finds Lio's familiar blue courier knot hidden behind one hood.",
@@ -315,5 +352,17 @@ export const CHAPTER_4_INTERACTION_STATE_MATRIX = {
     companion: "Companions provide hints only.",
     failure: "No route or moral answer can fail; the party follows present road sounds and inspects the hood where Lio's captors had to stop.",
     saveCompatibility: "Chapter 4 completion infers that the circuit was attempted.",
+  },
+  lioMessage: {
+    knowledge: "Lio's knot and scratch point from the final listening hood to a loose route-record plate.",
+    availability: "The Listening Mile trail marker has been found.",
+    attempt: "Opening the plate reveals the message without a check.",
+    result: "lioMessageFound",
+    laterResolution: "The message points west; the party must identify the Relay Post and later destination from separate physical records.",
+    repeatVisit: "Review Lio's exact words and Mara's settled reading without awarding the knot again.",
+    backtracking: "Return to the third listening post and the dark Underway.",
+    companion: "Mara is the required story reader; the recruited combat companion does not gate the scene.",
+    failure: "There is no failure branch after the physical trail has been found.",
+    saveCompatibility: "Chapter 4 completion infers that Lio's message was found.",
   },
 } as const;

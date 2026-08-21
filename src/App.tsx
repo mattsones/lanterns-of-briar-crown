@@ -46,8 +46,12 @@ import {
 import { getChapterProgress } from "./game/chapterProgress";
 import {
   beginChapter4,
+  completeChapter4FromRelay,
   getUnderwayApproach,
+  learnRoyalProgressAuthority,
   meetGatewright,
+  recordForgedRoyalAuthority,
+  resolveLioMessage,
   resolveListeningMileClue,
   resolveUnderwayDetour,
   resolveUnderwayAmbushDiscovery,
@@ -144,6 +148,7 @@ import {
   CHAPTER_4_GATEWRIGHT,
   CHAPTER_4_SCENE_IDS,
   GATEWRIGHT_WEAPON_CONTRACTS,
+  LIO_MESSAGE_CONTRACT,
 } from "./story/chapter4";
 
 const QuestTab = React.lazy(() =>
@@ -194,6 +199,17 @@ const FoldedMapGraybox = React.lazy(() =>
     default: module.FoldedMapGraybox,
   })),
 );
+
+const CHAPTER_4_TUNNEL_REGIONS = new Set([
+  "underway",
+  "underwayRoute811",
+  "underwayRoute817",
+  "underwayConvergence",
+  "listeningPostOne",
+  "listeningPostTwo",
+  "listeningPostThree",
+  "relayApproach",
+]);
 
 function shouldTriggerLanternRoadAmbush(
   region: string,
@@ -527,8 +543,11 @@ export default function LiamsGamePrototype() {
       return "floor";
     if (tileRegion === "westrootHub" && tile === "cargo_siding" && flags.willowCargoExposed)
       return "westroot_path";
-    if (tileRegion === "underway" && tile === "underway_ambush") {
+    if (tileRegion === "underwayConvergence" && tile === "underway_ambush") {
       if (flags.underwayAmbushCleared || !flags.underwayAmbushRevealed) return "underway_path";
+    }
+    if (tileRegion === "briarRelayPost" && tile === "relay_guard" && flags.briarRelayCleared) {
+      return "relay_entry";
     }
     return tile;
   };
@@ -616,8 +635,23 @@ export default function LiamsGamePrototype() {
     }
     if (region === "underway") {
       if (tile === "detour_notice" && flags.underwayDetourDecisionMade) return true;
+    }
+    if (region === "underwayRoute811" && tile === "waykeeper_cache" && flags.underway811CacheFound)
+      return true;
+    if (region === "underwayRoute817" && tile === "construction_signal_rig" && flags.underway817SignalRigRead)
+      return true;
+    if (region === "underwayConvergence") {
       if (tile === "ambush_approach" && flags.underwayAmbushDetectionAttempted) return true;
       if (tile === "underway_ambush" && flags.underwayAmbushCleared) return true;
+    }
+    if (region === "listeningPostThree") {
+      if (tile === "lio_message_plate" && flags.lioMessageFound) return true;
+    }
+    if (region === "briarRelayPost") {
+      if (tile === "royal_progress_broadside" && flags.royalProgressLearned) return true;
+      if (tile === "relay_guard" && flags.briarRelayCleared) return true;
+      if (tile === "forged_order_desk" && flags.princessNameSeen) return true;
+      if (tile === "briarhold_route_ledger" && flags.briarholdLeadFound) return true;
     }
     return false;
   };
@@ -654,8 +688,15 @@ export default function LiamsGamePrototype() {
       if (tile === "cargo_siding" && flags.willowCargoExposed) return "spent";
       if (tile === "witness_stones" && flags.witnessStoneSequenceSolved) return "spent";
     }
-    if (tileRegion === "underway" && tile === "underway_ambush") {
+    if (tileRegion === "underwayConvergence" && tile === "underway_ambush") {
       if (flags.underwayAmbushCleared) return "spent";
+    }
+    if (tileRegion === "underwayRoute811" && tile === "waykeeper_cache" && flags.underway811CacheFound)
+      return "spent";
+    if (tileRegion === "underwayRoute817" && tile === "construction_signal_rig" && flags.underway817SignalRigRead)
+      return "spent";
+    if (tileRegion === "briarRelayPost" && tile === "relay_guard" && flags.briarRelayCleared) {
+      return "spent";
     }
     return "active";
   };
@@ -1098,11 +1139,19 @@ export default function LiamsGamePrototype() {
     )
       return;
     if (
-      region === "underway" &&
+      region === "underwayConvergence" &&
       currentMap[position.y]?.[position.x] === "underway_ambush" &&
       !flags.underwayAmbushCleared
     ) {
       openUnderwayAmbushDialogue();
+      return;
+    }
+    if (
+      region === "briarRelayPost" &&
+      currentMap[position.y]?.[position.x] === "relay_guard" &&
+      !flags.briarRelayCleared
+    ) {
+      openRelayGuardDialogue();
       return;
     }
     if (routeUnintroducedPartyToBramwell()) return;
@@ -1132,6 +1181,22 @@ export default function LiamsGamePrototype() {
       return;
     const rawTile = currentMap[ny][nx];
     if (
+      region === "briarRelayPost" &&
+      rawTile === "relay_guard" &&
+      !flags.royalProgressLearned
+    ) {
+      openRoyalProgressBroadside();
+      return;
+    }
+    if (region === "briarRelayPost" && rawTile === "relay_guard" && !flags.briarRelayCleared) {
+      const previousPosition = { x: position.x, y: position.y };
+      previousPositionByRegionRef.current[region] = previousPosition;
+      setPosition({ x: nx, y: ny });
+      revealArea(region, nx, ny);
+      openRelayGuardDialogue();
+      return;
+    }
+    if (
       region === "underway" &&
       currentMap[position.y]?.[position.x] === "detour_notice" &&
       !flags.underwayDetourDecisionMade &&
@@ -1140,7 +1205,7 @@ export default function LiamsGamePrototype() {
       openUnderwayDetourDialogue();
       return;
     }
-    if (region === "underway" && rawTile === "underway_ambush" && !flags.underwayAmbushCleared) {
+    if (region === "underwayConvergence" && rawTile === "underway_ambush" && !flags.underwayAmbushCleared) {
       const previousPosition = { x: position.x, y: position.y };
       previousPositionByRegionRef.current[region] = previousPosition;
       setPosition({ x: nx, y: ny });
@@ -5991,7 +6056,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           sceneId: CHAPTER_4_SCENE_IDS.underwayArrival,
           portrait: "▣",
           name: "Westroot Lower Gate",
-          text: "The opened gate remains behind you. Tasmine's route dial is fixed at the recorded 811 alignment, and Westroot can still receive the party if you turn back.",
+          text: "The opened gate remains behind you. Tasmine's route dial is fixed at the recorded Old Keeper Road alignment, and Westroot can still receive the party if you turn back.",
           choices: [
             {
               id: CHAPTER_4_CHOICE_IDS.returnToWestroot,
@@ -6004,17 +6069,70 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       }
       if (tile === "underway_threshold") openUnderwayRouteDialogue();
       if (tile === "detour_notice") openUnderwayDetourDialogue();
+    }
+    if (region === "underwayRoute811") {
       if (tile === "mapped_gallery") {
-        setToast("Mapped route 811 continues past the closure board through older fitted stone.");
+        setToast("The Old Keeper Road continues through older fitted stone.");
       }
+      if (tile === "waykeeper_cache") openRoute811CacheDialogue();
+      if (tile === "underway_route_exit") {
+        travelToRegion("underwayConvergence", MAPS.underwayConvergence.start, "Blind Junction", "After a long descent, the Old Keeper Road reaches a tunnel where the two approaches converge.");
+      }
+    }
+    if (region === "underwayRoute817") {
       if (tile === "maintenance_hatch") {
-        setToast("Posted detour 817 narrows into blind maintenance works marked by fresh boot traffic.");
+        setToast("The construction detour continues through fresh braces and construction cuts.");
       }
+      if (tile === "construction_signal_rig") openRoute817SignalRigDialogue();
+      if (tile === "underway_route_exit") {
+        travelToRegion("underwayConvergence", MAPS.underwayConvergence.start, "Blind Junction", "After a long construction passage, the detour reaches a tunnel where the two approaches converge.");
+      }
+    }
+    if (region === "underwayConvergence") {
       if (tile === "ambush_approach") inspectUnderwayAmbushApproach();
       if (tile === "underway_ambush" && !flags.underwayAmbushCleared) openUnderwayAmbushDialogue();
+      if (tile === "convergence_exit") {
+        if (!flags.underwayAmbushCleared) setToast("The concealed junction must be cleared before the Listening Mile can be reached.");
+        else travelToRegion("listeningPostOne", MAPS.listeningPostOne.start, "The Listening Mile", "Beyond the blind junction, a long acoustic tunnel begins.");
+      }
+    }
+    if (region === "listeningPostOne") {
       if (tile === "listening_post_one") openListeningMileDialogue();
+      if (tile === "listening_mile_exit") travelToRegion("listeningPostTwo", MAPS.listeningPostTwo.start, "Listening Mile: Second Hood", "The first hood falls behind as the party follows the tunnel deeper west.");
+    }
+    if (region === "listeningPostTwo") {
       if (tile === "listening_post_two") openListeningMileStationTwo();
+      if (tile === "listening_mile_exit") travelToRegion("listeningPostThree", MAPS.listeningPostThree.start, "Listening Mile: Third Hood", "The boot sounds lead onward into a third separate tunnel stretch.");
+    }
+    if (region === "listeningPostThree") {
       if (tile === "listening_post_three") finishListeningMile();
+      if (tile === "lio_message_plate") openLioMessageDialogue();
+    }
+    if (region === "relayApproach") {
+      if (tile === "relay_approach_entry") setToast("Lio's direction leads west through another long tunnel beyond the listening hoods.");
+      if (tile === "relay_post_gate") arriveAtBriarRelayPost();
+    }
+    if (region === "briarRelayPost") {
+      if (tile === "relay_entry") {
+        setDialogue({
+          sceneId: CHAPTER_4_SCENE_IDS.relayArrival,
+          portrait: "♜",
+          name: "Briar Relay Post Approach",
+          text: "The captured road station waits ahead. The public Royal Progress broadside hangs inside the entrance; Lio's westbound trail continues through the guarded relay floor.",
+          choices: [
+            { label: "Continue into the post.", effect: () => setDialogue(null) },
+            {
+              label: "Return to the Listening Mile.",
+              variant: "quiet",
+              effect: () => travelToRegion("relayApproach", { x: 9, y: 2 }, "Westbound Relay Approach", "You return to the tunnel outside the captured Relay Post."),
+            },
+          ],
+        });
+      }
+      if (tile === "royal_progress_broadside") openRoyalProgressBroadside();
+      if (tile === "relay_guard" && !flags.briarRelayCleared) openRelayGuardDialogue();
+      if (tile === "forged_order_desk") openForgedAuthorityDialogue();
+      if (tile === "briarhold_route_ledger") openBriarholdLedgerDialogue();
     }
   };
 
@@ -6024,7 +6142,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     const isConnectedNode = areMapNodesConnected(region, position, { x, y });
     if (isConnectedNode) {
       if (
-        region === "underway" &&
+        region === "underwayConvergence" &&
         currentMap[position.y]?.[position.x] === "underway_ambush" &&
         !flags.underwayAmbushCleared
       ) {
@@ -6032,6 +6150,22 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         return;
       }
       const rawClickedTile = currentMap[y]?.[x];
+      if (
+        region === "briarRelayPost" &&
+        rawClickedTile === "relay_guard" &&
+        !flags.royalProgressLearned
+      ) {
+        openRoyalProgressBroadside();
+        return;
+      }
+      if (region === "briarRelayPost" && rawClickedTile === "relay_guard" && !flags.briarRelayCleared) {
+        const previousPosition = { x: position.x, y: position.y };
+        previousPositionByRegionRef.current[region] = previousPosition;
+        setPosition({ x, y });
+        revealArea(region, x, y);
+        openRelayGuardDialogue();
+        return;
+      }
       if (
         region === "underway" &&
         currentMap[position.y]?.[position.x] === "detour_notice" &&
@@ -6041,7 +6175,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         openUnderwayDetourDialogue();
         return;
       }
-      if (region === "underway" && rawClickedTile === "underway_ambush" && !flags.underwayAmbushCleared) {
+      if (region === "underwayConvergence" && rawClickedTile === "underway_ambush" && !flags.underwayAmbushCleared) {
         const previousPosition = { x: position.x, y: position.y };
         previousPositionByRegionRef.current[region] = previousPosition;
         setPosition({ x, y });
@@ -6752,13 +6886,13 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
   const openUnderwayRouteDialogue = () => {
     setDialogue({
       sceneId: CHAPTER_4_SCENE_IDS.underwayRoute,
-      portrait: "811",
-      name: "Mapped Route 811",
-      text: "The Lower Gate notch, the Witness Stone rubbing, and Edden's contours all agree here. Route 811 bends west through fitted stone. There is no decision to make yet; this is the road the evidence found.",
+      portrait: "◇",
+      name: "Old Keeper Road",
+      text: "The Lower Gate notch, the Witness Stone rubbing, and Edden's contours all agree here. The Old Keeper Road bends west through fitted stone.",
       choices: [
         {
           id: CHAPTER_4_CHOICE_IDS.followMappedRoute,
-          label: "Continue along mapped route 811.",
+          label: "Continue along the Old Keeper Road.",
           variant: "primary",
           effect: () => setDialogue(null),
         },
@@ -6777,20 +6911,25 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       const detour = !!viewFlags.underwayDetourFollowed;
       setDialogue({
         sceneId: CHAPTER_4_SCENE_IDS.underwayDetour,
-        portrait: detour ? "817" : "811",
+        portrait: detour ? "↯" : "◇",
         name: "The Posted Detour",
         text: detour
-          ? "You chose to follow the posted safety detour into maintenance route 817. The closure board remains behind you at the fork."
-          : "You chose to keep following mapped route 811 past the closure board. The posted detour remains behind you at the fork.",
+          ? "You chose to follow the posted construction detour. The closure board remains behind you at the fork."
+          : "You chose to remain on the Old Keeper Road past the closure board. The posted detour remains behind you at the fork.",
         choices: [
           {
-            label: detour ? "Continue through maintenance route 817." : "Continue along mapped route 811.",
+            label: detour ? "Continue through the construction detour." : "Continue along the Old Keeper Road.",
             variant: "primary",
             effect: () => {
-              const destination = detour ? { x: 4, y: 3 } : { x: 4, y: 1 };
-              setPosition(destination);
-              revealArea("underway", destination.x, destination.y, 1);
-              setDialogue(null);
+              const nextRegion = detour ? "underwayRoute817" : "underwayRoute811";
+              travelToRegion(
+                nextRegion,
+                MAPS[nextRegion].start,
+                MAPS[nextRegion].name,
+                detour
+                  ? "The party commits to the construction detour."
+                  : "The party stays with the Old Keeper Road.",
+              );
             },
           },
           { label: "Stay at the fork.", variant: "quiet", effect: () => setDialogue(null) },
@@ -6800,24 +6939,26 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     }
 
     const inspectedText = viewFlags.underwayDetourNoticeInspected
-      ? "\n\nThe bronze closure plate belongs to this road and carries a real old Westroot hazard stamp. Its holding cord is much newer than the dust around the frame. Fresh boot traffic enters 817, while route 811 answers with an occasional deep stone groan. Both passages carry a different warning."
+      ? "\n\nThe bronze closure plate belongs to this road and carries a real old Westroot hazard stamp. Its holding cord is much newer than the dust around the frame. Fresh boot traffic enters the construction detour, while the Old Keeper Road answers with an occasional deep stone groan. Both passages carry a different warning."
       : "";
     const chooseRoute = (followDetour: boolean) => {
       const decision = resolveUnderwayDetour(followDetour);
-      const destination = followDetour ? { x: 4, y: 3 } : { x: 4, y: 1 };
       setFlags((current) => ({ ...current, ...decision }));
-      setPosition(destination);
-      revealArea("underway", destination.x, destination.y, 1);
-      setDialogue(null);
-      setToast(followDetour
-        ? "The party follows the posted safety detour into maintenance route 817."
-        : "The party stays with mapped route 811 despite the closure board.");
+      const nextRegion = followDetour ? "underwayRoute817" : "underwayRoute811";
+      travelToRegion(
+        nextRegion,
+        MAPS[nextRegion].start,
+        MAPS[nextRegion].name,
+        followDetour
+          ? "The party follows the posted construction detour."
+          : "The party stays with the Old Keeper Road despite the closure board.",
+      );
     };
     setDialogue({
       sceneId: CHAPTER_4_SCENE_IDS.underwayDetour,
       portrait: "↯",
       name: "A Posted Detour",
-      text: `Well inside the Underway, a bronze closure board has been pulled across route 811. Its stamped arrow sends westbound travelers down maintenance route 817. Dusty boot marks follow the detour, and somewhere beyond the blocked 811 arch, stone shifts with a low grinding sound.\n\nThe Folded Map establishes where route 811 leads; it cannot tell you whether that road is safe today. A posted closure should protect travelers from exactly this kind of danger—but somebody hostile has been using these passages.${inspectedText}`,
+      text: `Well inside the Underway, a bronze closure board has been pulled across the Old Keeper Road. Its stamped arrow sends westbound travelers down a construction detour. Dusty boot marks follow the detour, and somewhere beyond the blocked old arch, stone shifts with a low grinding sound.\n\nThe Folded Map establishes where the Old Keeper Road leads; it cannot tell you whether that road is safe today. A posted closure should protect travelers from exactly this kind of danger—but somebody hostile has been using these passages.${inspectedText}`,
       choices: [
         !viewFlags.underwayDetourNoticeInspected
           ? {
@@ -6832,14 +6973,14 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           : null,
         {
           id: CHAPTER_4_CHOICE_IDS.followMappedRoute,
-          label: "Keep following the mapped route through 811.",
+          label: "Keep following the Old Keeper Road.",
           requirement: "Trust the corroborated route despite the posted closure",
           variant: "primary",
           effect: () => chooseRoute(false),
         },
         {
           id: CHAPTER_4_CHOICE_IDS.followPostedDetour,
-          label: "Follow the posted safety detour into 817.",
+          label: "Follow the posted construction detour.",
           requirement: "Trust current hazard guidance over an older map",
           effect: () => chooseRoute(true),
         },
@@ -6861,7 +7002,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         folded_map_scrap: Math.max(1, current.inventory.folded_map_scrap || 0),
       },
     }));
-    travelToRegion("underway", MAPS.underway.start, "Riddle Road Underway", "Tasmine opens mapped route 811 into the Underway.");
+    travelToRegion("underway", MAPS.underway.start, "Riddle Road Underway", "Tasmine opens the Old Keeper Road into the Underway.");
     setDialogue({
       sceneId: CHAPTER_4_SCENE_IDS.underwayArrival,
       portrait: "▣",
@@ -6870,7 +7011,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       choices: [
         {
           id: CHAPTER_4_CHOICE_IDS.enterUnderway,
-          label: "Set out along mapped route 811.",
+          label: "Set out along the Old Keeper Road.",
           variant: "primary",
           effect: () => setDialogue(null),
         },
@@ -6899,6 +7040,76 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     }
   };
 
+  const openRoute811CacheDialogue = () => {
+    if (flags.underway811CacheFound) {
+      setDialogue({
+        sceneId: CHAPTER_4_SCENE_IDS.route811Cache,
+        portrait: "🪖",
+        name: "The Empty Waykeeper Niche",
+        text: "The old rest niche stands open. Its lamp cup is dry, and the dustless outline where the waykeeper helm waited is the only sign that anyone stopped here.",
+        choices: [{ label: "Continue west along the Old Keeper Road.", effect: () => setDialogue(null) }],
+      });
+      return;
+    }
+    setDialogue({
+      sceneId: CHAPTER_4_SCENE_IDS.route811Cache,
+      portrait: "🪖",
+      name: "An Abandoned Waykeeper Cache",
+      text: "The Old Keeper Road bows around a shallow keeper's niche cut into the older stone. A clay water flask has long since dried to dust, but one object remains beneath a collapsed oilcloth: a brass-and-leather road helm, green at the rivets and sound everywhere it matters.\n\nIts ear guards are swept forward like two small listening hoods. When you lift it, the scrape of your glove comes back from the next bend with startling clarity. Whoever discarded it left no body, no blood, and no name—only a worn keeper's lantern stamped on the inner band.",
+      choices: [
+        {
+          id: CHAPTER_4_CHOICE_IDS.takeWaykeeperHelm,
+          label: "Take the Old Waykeeper Helm and continue west.",
+          requirement: "Unique helm • Guard +2 • Instinct +2 • Will +1",
+          variant: "primary",
+          effect: () => {
+            setFlags((current) => ({ ...current, underway811CacheFound: true }));
+            gainItem(setPlayer, "old_waykeeper_helm", 1);
+            announce("Old Waykeeper Helm recovered from the Old Keeper Road.", [{ id: "old_waykeeper_helm", qty: 1 }]);
+            setDialogue(null);
+          },
+        },
+      ],
+    });
+  };
+
+  const openRoute817SignalRigDialogue = () => {
+    if (flags.underway817SignalRigRead) {
+      setDialogue({
+        sceneId: CHAPTER_4_SCENE_IDS.route817SignalRig,
+        portrait: "pulley",
+        name: "The Jammed Signal Rig",
+        text: "The fresh signal cord remains wedged between two construction pulleys. Its westbound line still marks the hidden listening point at the converged tunnel.",
+        choices: [{ label: "Continue west through the construction detour.", effect: () => setDialogue(null) }],
+      });
+      return;
+    }
+    setDialogue({
+      sceneId: CHAPTER_4_SCENE_IDS.route817SignalRig,
+      portrait: "pulley",
+      name: "A Live Construction Signal",
+      text: "The maintenance cut narrows between fresh timber braces. A surveyor's bell hangs from one of them, but its cord does not run back toward a work crew. It threads through new iron eyes, vanishes into a drilled hole, and pulls taut toward the west whenever your boots strike the floor.\n\nMara shades the line with her lantern. Pine pitch darkens the newest knots—the same quick black weatherproofing used on the false cargo lashings. This is no abandoned construction warning. Someone ahead is using the work rig to count travelers coming through the construction detour.",
+      choices: [
+        {
+          id: CHAPTER_4_CHOICE_IDS.studySignalRig,
+          label: "Jam the bell and trace the cord toward whoever is listening.",
+          requirement: "Reveal the blind-junction ambush • prepared opening available",
+          variant: "primary",
+          effect: () => {
+            setFlags((current) => ({
+              ...current,
+              underway817SignalRigRead: true,
+              underwayAmbushDetectionAttempted: true,
+              underwayAmbushRevealed: true,
+            }));
+            setToast("The construction signal is silenced, and its cord marks the ambush position ahead.");
+            setDialogue(null);
+          },
+        },
+      ],
+    });
+  };
+
   const openUnderwayAmbushDialogue = () => {
     if (flags.underwayAmbushCleared) {
       setToast("The blind junction is clear.");
@@ -6924,7 +7135,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         : pressured
           ? {
               heroStarts: false,
-              openingLog: "Route 817 delivers the party into a relay guard and a seal-paper sentry waiting behind the maintenance shutter.",
+              openingLog: "The construction detour delivers the party into a relay guard and a seal-paper sentry waiting behind the maintenance shutter.",
             }
           : {
               heroStarts: false,
@@ -6966,7 +7177,15 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         portrait: "🪢",
         name: "Lio's Trail Marker",
         text: "Lio's blue courier knot remains looped behind the final hood. The tiny scratch beneath it points toward the loose route-record plate and the written message hidden beyond.",
-        choices: [{ id: CHAPTER_4_CHOICE_IDS.finishListeningMile, label: "Return to the tunnel.", effect: () => setDialogue(null) }],
+        choices: [{
+          id: CHAPTER_4_CHOICE_IDS.finishListeningMile,
+          label: "Inspect the loose route-record plate.",
+          effect: () => {
+            setPosition({ x: 8, y: 2 });
+            revealArea("listeningPostThree", 8, 2);
+            openLioMessageDialogue(true);
+          },
+        }],
       });
       return;
     }
@@ -6977,13 +7196,254 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       sceneId: CHAPTER_4_SCENE_IDS.listeningMileResult,
       portrait: "🪢",
       name: "Lio's Trail Marker",
-      text: "At the third listening post, metal-shod boots scrape somewhere farther west. One step drags. A chain answers, then the effortful clank of an inspection shutter.\n\nMara reaches behind the hood's deep rim and finds a short blue courier string looped once around a retaining peg—the quick knot Lio used when he wanted her to look twice. A tiny scratch beneath it points toward a loose route-record plate. The knot is small, hurried, and unmistakably his. Lio's written message waits behind that plate.",
+      text: "At this hood, the westward conduit carries the procession only faintly: the damaged wheel knocking somewhere farther west, a scatter of uneven footfalls, and then silence. The sounds are moving away.\n\nThe stone beside you tells the closer story. Fresh bronze dust lies below a stiff inspection shutter, and bright scores cross its lower edge where someone forced it open. Mara reaches behind the hood's deep rim and finds a short blue courier string looped once around a retaining peg—the quick knot Lio used when he wanted her to look twice. A tiny mark beneath it points toward a loose route-record plate. The knot is small, hurried, and unmistakably his. Lio left something behind that plate.",
       feedback: "Mara presses the blue knot between her fingers. “He knew I would look twice.”",
       choices: [
         {
           id: CHAPTER_4_CHOICE_IDS.finishListeningMile,
           label: "Inspect the loose route-record plate.",
           variant: "primary",
+          effect: () => {
+            setPosition({ x: 8, y: 2 });
+            revealArea("listeningPostThree", 8, 2);
+            openLioMessageDialogue(true);
+          },
+        },
+      ],
+    });
+  };
+
+  const enterBriarRelayPost = (messageFound = !!flags.lioMessageFound) => {
+    if (!messageFound) {
+      setToast("Lio's westbound direction must be found before leaving the Listening Mile.");
+      return;
+    }
+    travelToRegion(
+      "relayApproach",
+      MAPS.relayApproach.start,
+      "Westbound Relay Approach",
+      "Lio's direction leads west into another long tunnel beyond the last listening hood.",
+    );
+  };
+
+  const arriveAtBriarRelayPost = () => {
+    travelToRegion(
+      "briarRelayPost",
+      MAPS.briarRelayPost.start,
+      "Briar Relay Post",
+      "The long westbound tunnel finally opens beneath a captured road station.",
+    );
+    setDialogue({
+      sceneId: CHAPTER_4_SCENE_IDS.relayArrival,
+      portrait: "♜",
+      name: "Briar Relay Post",
+      text: "The tunnel changes by degrees. The walls widen first. Then the ceiling lifts into a shallow vault, and the wet mineral smell gives way to lamp oil, old paper, and the cold ash of a stove allowed to die. Brass letters set into the lintel name the place: BRIAR RELAY POST. Someone has pressed red wax into every old keeper's mark beneath them.\n\nThis was built as a place for messages to change hands. Signal slits overlook the westbound road; numbered pigeonholes climb one wall; a long bench bears fresh cups, fresh mud, and pale grooves where chain has rubbed the wood. The prisoners passed through here, but they did not leave alone.\n\nA colored broadside hangs in the entrance frame. It shows a young woman in a road cloak, one hand resting on an open map. Briars have been inked over the bottom edge, but her face and the large printed heading remain untouched.",
+      choices: [
+        {
+          id: CHAPTER_4_CHOICE_IDS.enterRelayPost,
+          label: "Enter the station and read the broadside.",
+          variant: "primary",
+          effect: () => setDialogue(null),
+        },
+      ],
+    });
+  };
+
+  const openRoyalProgressBroadside = () => {
+    if (flags.royalProgressLearned) {
+      setDialogue({
+        sceneId: CHAPTER_4_SCENE_IDS.royalProgressBroadside,
+        portrait: "♔",
+        name: "Royal Progress Broadside",
+        text: "The broadside introduces Princess Elowen, heir apparent to Alderreach, and announces her first Royal Progress undertaken without the King and Queen. Every five years, the royal family travels the roads, hears petitions, and compares official maps with the country people actually live in.\n\nElowen may request route ledgers and temporary safety measures along the roads she inspects. The dated seal, named witnesses, and printer's mark set the boundaries of that authority in plain view.",
+        choices: [{ label: "Return to the relay floor.", effect: () => setDialogue(null) }],
+      });
+      return;
+    }
+    setDialogue({
+      sceneId: CHAPTER_4_SCENE_IDS.royalProgressBroadside,
+      portrait: "♔",
+      name: "Royal Progress Broadside",
+      text: "The portrait gives a face to the name Tasmine mentioned at the Lower Gate: Princess Elowen, heir apparent to Alderreach. She looks younger than the title above her and more interested in the map beneath her hand than in the little painted circlet at her brow. This will be her first Royal Progress undertaken without the King and Queen.\n\nThe smaller print explains the custom. Every five years, the royal family travels the realm's roads, hears petitions in the settlements along them, and compares official maps with bridges, shelters, and boundaries as they now stand. Elowen may request route ledgers and temporary safety measures on the roads she personally inspects. Each request must carry a date, named witnesses, and the public Progress seal shown at the foot of the page.\n\nMara reads the limits twice. “A village would open its books for this,” she says. “It might even close a road for her. But the request would have to be seen. People would know who gave it and why.”",
+      choices: [
+        {
+          id: CHAPTER_4_CHOICE_IDS.readRoyalProgress,
+          label: "Record the lawful scope of Elowen's Progress.",
+          variant: "primary",
+          effect: () => {
+            setFlags((current) => ({ ...current, ...learnRoyalProgressAuthority() }));
+            setToast("Princess Elowen's real, limited route authority is now established.");
+            setDialogue(null);
+          },
+        },
+      ],
+    });
+  };
+
+  const openRelayGuardDialogue = () => {
+    if (!flags.royalProgressLearned) {
+      openRoyalProgressBroadside();
+      return;
+    }
+    if (flags.briarRelayCleared) {
+      setToast("The captured relay floor is clear. Its records remain to the west.");
+      return;
+    }
+    setDialogue({
+      sceneId: CHAPTER_4_SCENE_IDS.relayGuard,
+      portrait: "!",
+      name: "Guarded Relay Floor",
+      text: "The moment the broadside settles back against the wall, a latch answers from the dark.\n\nA Briar Relay Guard steps out from behind the signal desk and lowers a short iron bar across the passage. At his left, stamped route slips peel themselves from a wax frame. They fold around a red-hot seal until paper, wire, and sealing wax stand upright as a narrow sentry. Above them, on the signal gallery, a third figure leans over the rail in a travel-stained court coat.\n\n“By the authority of Princess Elowen,” the Crown Whisperer calls, “this station and every record in it are closed.”\n\nThe words are chosen well. You have just read enough to know they are not enough. The Whisperer sees that recognition and draws a hooked knife. The guard advances. Behind them, the westbound ledgers wait with their pages still open.",
+      choices: [
+        {
+          id: CHAPTER_4_CHOICE_IDS.faceRelayGuard,
+          label: "Clear the relay floor and preserve its records.",
+          variant: "primary",
+          effect: () => {
+            setDialogue(null);
+            startBattle(buildEncounterEnemies("briarRelay"), "briarRelay");
+          },
+        },
+        { label: "Withdraw to the entrance.", variant: "quiet", effect: () => setDialogue(null) },
+      ],
+    });
+  };
+
+  const openForgedAuthorityDialogue = () => {
+    if (!flags.briarRelayCleared) {
+      setToast("The relay guard still controls the records desk.");
+      return;
+    }
+    const evidenceText = "When the last movement stops, scraps of the Seal-Forged Sentry drift across the relay floor like burnt leaves. One strip carries Elowen's printed face. Another carries a prisoner tally. Mara waits until both have gone still before she kneels at the signal desk.\n\nThe public broadside is pinned above a Crownward League appeal for faster, more consistent national roads. Beneath the desk, hidden inside a false ledger cover, lies the cell's working instruction. Its header copies the Progress seal. Princess Elowen's name has been written across the authorization line in a careful imitation of the broadside's formal hand.\n\nDELAY EVERY PETITION, the inner order reads. CLOSE THE SAFE ROADS. LET EACH TOWN BLAME THE PROGRESS BEFORE ITS ANSWER CAN REACH THE PRINCESS. Farther down, it assigns route-confusers to manufacture hazards and relay keepers to intercept replies. Prisoner transfers appear among the same columns as shutter repairs and missing bridge reports.\n\nThe public request asks communities to show Elowen their roads. The hidden order uses her name to isolate those communities, take people from them, and prevent their warnings from reaching her. The argument for national road standards is printed where anyone may answer it; the kidnapping, forgery, and manufactured panic are the machinery hidden underneath.\n\n“They aren't only borrowing her authority,” Mara says. “They're making the roads fail in her name—and making sure she never hears what they did.”";
+    if (flags.princessNameSeen) {
+      setDialogue({
+        sceneId: CHAPTER_4_SCENE_IDS.forgedAuthority,
+        portrait: "seal",
+        name: "Forged Authority",
+        text: evidenceText,
+        choices: [{ label: "Turn to the westbound ledger.", effect: () => setDialogue(null) }],
+      });
+      return;
+    }
+    setDialogue({
+      sceneId: CHAPTER_4_SCENE_IDS.forgedAuthority,
+      portrait: "seal",
+      name: "Forged Authority",
+      text: evidenceText,
+      choices: [
+        {
+          id: CHAPTER_4_CHOICE_IDS.inspectForgedOrder,
+          label: "Record the forged use of Elowen's name.",
+          variant: "primary",
+          effect: () => {
+            setFlags((current) => ({ ...current, ...recordForgedRoyalAuthority({ ...flags, briarRelayCleared: true }) }));
+            setToast("The cell is using Princess Elowen's lawful Progress authority to disguise criminal orders.");
+            setDialogue(null);
+          },
+        },
+      ],
+    });
+  };
+
+  const openBriarholdLedgerDialogue = () => {
+    if (!flags.briarRelayCleared || !flags.princessNameSeen) {
+      setToast("Compare the captured public and secret orders before tracing the westbound ledger.");
+      return;
+    }
+    if (flags.briarholdLeadFound) {
+      setDialogue({
+        sceneId: CHAPTER_4_SCENE_IDS.briarholdReveal,
+        portrait: "book",
+        name: "Briarhold Waystation",
+        text: "The westbound ledger remains open to tonight's transfers. Lio's entry is bracketed with four other prisoners beneath a destination none of you had seen before: Briarhold Waystation. The route coordinates place it inside Rainroot, east of Riverwatch, and the final notation orders the whole group moved again before dawn.\n\nThe station's upper signal slit gives one narrow view of the marked ridge. Among the distant gold road lights, several lanterns burn a sickly green behind briar-shaped hoods.",
+        choices: [{ label: "Close the ledger.", effect: () => setDialogue(null) }],
+      });
+      return;
+    }
+    const completion = completeChapter4FromRelay(flags);
+    setFlags((current) => ({ ...current, ...completion }));
+    setToast("Chapter 4 complete: Briarhold Waystation is the rescue target.");
+    setDialogue({
+      sceneId: CHAPTER_4_SCENE_IDS.briarholdReveal,
+      portrait: "book",
+      name: "Briarhold Waystation",
+      text: "The westbound ledger has been scorched at one corner, but tonight's transfer page survived beneath the heavy cover. Its columns separate people by description, escort, condition, and destination. Five entries share the same bracket. Four are reduced to age, trade, or the place where they were taken. The fifth reads: L.B. — COURIER — ALIVE — REFUSES ROUTE MARKS.\n\nAcross all five lines, a clerk has drawn one arrow to a name none of you have heard before: BRIARHOLD WAYSTATION. The route notation places it deeper inside Rainroot, still east of Riverwatch. A fresh instruction in the margin orders every prisoner moved again before dawn, before the intercepted petitions can be missed and before any warning from this station travels east.\n\nLio was alive when they entered him here. He was transferred with four others to a hidden waystation that expects to be empty by morning.\n\nYou climb the relay's narrow signal stair and force open the upper slit. Cold night air cuts into the room. Far across the dark, the ledger's bearings settle on a low ridge. Honest road lanterns burn gold along its feet. Higher up, several lights glow a sickly green behind briar-shaped hoods.\n\nMara ties Lio's blue knot tighter around her wrist. For a long moment she says nothing. Then she fixes the bearings in her mind. “I am following clever,” she says. Her voice is quiet now, and steady. “But I am still going.”",
+      choices: [
+        {
+          id: CHAPTER_4_CHOICE_IDS.finishChapterFour,
+          label: "Record Briarhold Waystation for the Chapter 5 rescue.",
+          variant: "primary",
+          effect: () => setDialogue(null),
+        },
+      ],
+    });
+  };
+
+  const openLioMessageDialogue = (trailFound = !!flags.listeningMileAttempted) => {
+    if (!trailFound) {
+      setToast("The scratch at the final listening hood has not been found yet.");
+      return;
+    }
+    if (flags.lioMessageFound) {
+      setDialogue({
+        sceneId: CHAPTER_4_SCENE_IDS.lioMessageReview,
+        portrait: "✉",
+        name: "Lio's Hidden Message",
+        text: `The loose route-record plate rests against the wall. Lio's hurried message remains scratched into its inner face:\n\n“${LIO_MESSAGE_CONTRACT.message}”\n\nMara keeps the blue courier knot tied around her wrist. Fresh traffic continues west toward a captured road station.`,
+        choices: [
+          {
+            id: CHAPTER_4_CHOICE_IDS.enterRelayPost,
+            label: "Follow Lio's westbound trail.",
+            variant: "primary",
+            effect: () => enterBriarRelayPost(true),
+          },
+          {
+            id: CHAPTER_4_CHOICE_IDS.finishLioMessage,
+            label: "Return to the tunnel.",
+            effect: () => setDialogue(null),
+          },
+        ],
+      });
+      return;
+    }
+    setDialogue({
+      sceneId: CHAPTER_4_SCENE_IDS.lioMessageDiscovery,
+      portrait: "▤",
+      name: "Loose Route-Record Plate",
+      text: "The scratch beneath Lio's knot ends at one corner of a bronze route-record plate. Its retaining pin sits crooked, polished by a recent hand. You ease the plate away from the wall. On the hidden inner face, fresh letters cross the old stamped route table.",
+      choices: [
+        {
+          id: CHAPTER_4_CHOICE_IDS.readLioMessage,
+          label: "Let Mara read Lio's message.",
+          variant: "primary",
+          effect: () => {
+            const result = resolveLioMessage(player, {
+              ...flags,
+              listeningMileAttempted: true,
+            });
+            setPlayer(result.player);
+            setFlags((current) => ({ ...current, ...result.flags }));
+            setToast("Lio was being taken west with other prisoners. His blue courier knot is now a story item.");
+            setDialogue({
+              sceneId: CHAPTER_4_SCENE_IDS.lioMessageResponse,
+              portrait: "✉",
+              name: "Still Me",
+              text: `Mara reads the hurried scratches aloud:\n\n“${LIO_MESSAGE_CONTRACT.message}”\n\nThe letters run smaller near the edge, but the final words are cut twice as deep. This is Lio's own hand, hidden while the stiff shutter delayed his guards. He was alive here, traveling west with other prisoners, and he knew Mara might follow.`,
+              feedback: "Mara folds the blue knot around her wrist. “Still me. He wrote still me.” Her voice catches once. Then she looks west. “All right. We follow clever.”",
+              choices: [
+                {
+                  id: CHAPTER_4_CHOICE_IDS.finishLioMessage,
+                  label: "Follow Lio's westbound direction.",
+                  variant: "primary",
+                  effect: () => enterBriarRelayPost(true),
+                },
+              ],
+            });
+          },
+        },
+        {
+          label: "Set the plate back for now.",
+          variant: "quiet",
           effect: () => setDialogue(null),
         },
       ],
@@ -6994,7 +7454,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     sceneId: CHAPTER_4_SCENE_IDS.listeningMileStationTwo,
     portrait: "II",
     name: "Second Listening Station",
-    text: "Your own footsteps arrive faintly through the east-facing hood. From the west-facing hood come metal-shod boots, a brief chain scrape, and the effortful clank of an inspection shutter. Mara listens until the boots move on. “Same direction,” she whispers. “Keep going.”",
+    text: "The next hood stands alone beyond a long sweep of tunnel. Here the westward conduit carries voices before footsteps. A voice says, “Keep them together.” Another voice answers too softly to make out. Someone stumbles; several people stop at once, leather strains, and someone coughs.\n\nThen a shutter refuses to open. Metal strikes metal once, twice, then again. Beneath those blows comes a much smaller sound: a thin, hurried scrape against bronze. When the shutter finally groans upward, the scraping stops and the unseen travelers begin moving again.\n\nMara's hand closes around the rim. “More than one person,” she whispers. “And they had to stop farther west.”",
     choices: [
       {
         id: CHAPTER_4_CHOICE_IDS.isolateSignal,
@@ -7009,8 +7469,8 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
   const openListeningMileStationOne = () => setDialogue({
     sceneId: CHAPTER_4_SCENE_IDS.listeningMileStationOne,
     portrait: "I",
-    name: "First Listening Station",
-    text: "The east-facing hood carries the settling click of the ambush shutter behind you. In the west-facing hood, boots cross fitted stone somewhere past the lantern's reach, then vanish around another bend. Mara lifts her head. “They went that way.”",
+    name: "Wall Listening Hood",
+    text: "The brass is cold against your ear. At first there is only water ticking somewhere inside the wall. Then the westward throat gathers a slow iron knock—one damaged wheel striking the fitted road at every turn—and the measured tread of people walking beside it. The sounds swell, pass an unseen crossing, and fade.\n\nNothing in your lantern light moves. The road has simply carried the living sound around a bend you cannot see. Mara lifts her head. “West,” she says. “Someone with a bad wheel went west.”",
     choices: [
       {
         id: CHAPTER_4_CHOICE_IDS.traceSignal,
@@ -7033,7 +7493,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       name: CHAPTER_4_ENTRY_COPY.listeningMileIntro.name,
       text: CHAPTER_4_ENTRY_COPY.listeningMileIntro.text,
       choices: [
-        { id: CHAPTER_4_CHOICE_IDS.beginListeningMile, label: "Listen at the first wall hood.", variant: "primary", effect: openListeningMileStationOne },
+        { id: CHAPTER_4_CHOICE_IDS.beginListeningMile, label: "Listen at the wall hood.", variant: "primary", effect: openListeningMileStationOne },
         { label: "Step back from the hood.", variant: "quiet", effect: () => setDialogue(null) },
       ],
     });
@@ -7511,12 +7971,18 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
               {chapterProgress.currentChapterId >= 2
                 ? flags.chapterThreeClear
                   ? flags.chapterFourStarted
-                    ? flags.listeningMileAttempted
-                      ? "Chapter 4 Underway graybox complete: The Riddle Road"
-                      : flags.underwayEntered
-                        ? "Chapter 4 Underway graybox: The Riddle Road"
-                        : flags.foldedMapDecoded
-                          ? "Chapter 4 graybox entry complete: The Riddle Road"
+                    ? flags.chapterFourClear
+                      ? "Chapter 4 complete: The Riddle Road"
+                      : flags.lioMessageFound
+                        ? region === "briarRelayPost"
+                          ? "Chapter 4 Relay Post graybox: The Riddle Road"
+                          : "Chapter 4 westbound trail: The Riddle Road"
+                      : flags.listeningMileAttempted
+                        ? "Chapter 4 Underway graybox complete: The Riddle Road"
+                        : flags.underwayEntered
+                          ? "Chapter 4 Underway graybox: The Riddle Road"
+                          : flags.foldedMapDecoded
+                            ? "Chapter 4 graybox entry complete: The Riddle Road"
                       : "Chapter 4: The Riddle Road"
                     : "Chapter 3 complete: The Hidden Root"
                   : chapterProgress.currentChapterId >= 3
@@ -7532,16 +7998,22 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
               {chapterProgress.currentChapterId >= 2
                 ? flags.chapterThreeClear
                   ? flags.chapterFourStarted
-                    ? flags.listeningMileAttempted
-                      ? "The Listening Mile led to Lio's hidden blue courier knot. His written message waits behind the loose route-record plate."
-                      : flags.underwayAmbushCleared
-                        ? "The blind junction is clear. Use the Listening Mile to follow the road ahead and look for Lio's trail."
-                        : flags.underwayEntered
-                          ? flags.underwayDetourDecisionMade
-                            ? "Follow the chosen branch, survive the concealed junction, and reach the Listening Mile."
-                            : "Follow mapped route 811 until the road itself gives you a reason to choose."
-                          : flags.foldedMapDecoded
-                            ? "The Lower Gate is open and mapped route 811 is recorded. Enter the Underway."
+                    ? flags.chapterFourClear
+                      ? "Lio is alive at Briarhold Waystation. The party has the rescue route and proof that the cell forged Princess Elowen's authority."
+                      : flags.lioMessageFound
+                        ? region === "briarRelayPost"
+                          ? "Lio's trail reached the Briar Relay Post. Clear the station and preserve its westbound records."
+                          : "Lio's note says his captors are taking multiple prisoners west. Follow their direction and learn where they are going."
+                      : flags.listeningMileAttempted
+                        ? "The Listening Mile led to Lio's hidden blue courier knot. His written message waits behind the loose route-record plate."
+                        : flags.underwayAmbushCleared
+                          ? "The blind junction is clear. Use the Listening Mile to follow the road ahead and look for Lio's trail."
+                          : flags.underwayEntered
+                            ? flags.underwayDetourDecisionMade
+                              ? "Follow the chosen branch, survive the concealed junction, and reach the Listening Mile."
+                              : "Follow the Old Keeper Road until the road itself gives you a reason to choose."
+                            : flags.foldedMapDecoded
+                              ? "The Lower Gate is open and the Old Keeper Road is recorded. Enter the Underway."
                       : flags.gatewrightMet
                         ? "Tasmine's smithy and the Survey cases are open. Prepare, then resolve the Folded Map."
                         : "Walk to the Lower Gate with Bramwell and Noma and meet Tasmine Rootbrace."
@@ -7580,17 +8052,17 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
                     ) : null}
                     <Button
                       className="bg-amber-500/15"
-                      onClick={region === "underway"
+                      onClick={CHAPTER_4_TUNNEL_REGIONS.has(region)
                         ? () => setFoldedMapGrayboxOpen(true)
                         : openChapter4FoldedMapBriefing}
                     >
-                      {region === "underway"
+                      {CHAPTER_4_TUNNEL_REGIONS.has(region)
                         ? "Review Carried Folded Map"
                         : flags.foldedMapDecoded
                           ? "Review Folded Map"
                           : "Open Folded Map"}
                     </Button>
-                    {flags.foldedMapDecoded && region !== "underway" ? (
+                    {flags.foldedMapDecoded && !CHAPTER_4_TUNNEL_REGIONS.has(region) ? (
                       <Button
                         data-choice-id={CHAPTER_4_CHOICE_IDS.enterUnderway}
                         className="bg-emerald-500/20"
@@ -7818,16 +8290,12 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         <FoldedMapGraybox
           flags={flags}
           setFlags={setFlags}
-          player={player}
-          setPlayer={setPlayer}
           close={() => setFoldedMapGrayboxOpen(false)}
           onTraceOutcome={(outcome) => {
             if (outcome === "true-route") {
-              setToast("Mapped route 811 recorded. Enter the Underway from the Chapter 4 banner.");
+              setToast("Old Keeper Road recorded. Enter the Underway from the Chapter 4 banner.");
             } else if (outcome === "false-shortcut") {
-              setToast("Route 817 rejected; the maintenance approach remains a fail-forward option.");
-            } else if (outcome === "deeper-solve") {
-              setToast("Lanternwell cache alignment recorded.");
+              setToast("Survey Shortcut rejected; refold the map to find the real road.");
             } else {
               setToast("That fold does not produce a continuous route.");
             }

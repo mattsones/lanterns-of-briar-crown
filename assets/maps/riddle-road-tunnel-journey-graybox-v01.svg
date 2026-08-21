@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Riddle Road tunnel journey graybox</title>
+  <desc id="desc">A dark fitted-stone tunnel placeholder without a visible road, used behind the lantern-limited Chapter 4 travel maps.</desc>
+  <defs>
+    <radialGradient id="depth" cx="50%" cy="48%" r="72%">
+      <stop offset="0" stop-color="#334155"/>
+      <stop offset="0.55" stop-color="#1e293b"/>
+      <stop offset="1" stop-color="#070b12"/>
+    </radialGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#273449"/>
+      <stop offset="1" stop-color="#101722"/>
+    </linearGradient>
+    <filter id="stone-noise">
+      <feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="3" seed="41" result="noise"/>
+      <feBlend in="SourceGraphic" in2="noise" mode="soft-light"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#depth)"/>
+  <path d="M0 620C260 540 430 570 650 625S1110 690 1600 585V900H0Z" fill="url(#floor)"/>
+  <g fill="none" stroke="#64748b" stroke-width="9" opacity=".28" filter="url(#stone-noise)">
+    <path d="M0 165C210 80 410 120 570 205S925 280 1100 160 1400 90 1600 180"/>
+    <path d="M0 320C205 245 370 285 535 345M1070 345c180-75 355-70 530 15"/>
+    <path d="M185 0c-45 165-30 330 5 495M1385 0c40 175 25 350-10 520"/>
+  </g>
+  <g stroke="#94a3b8" stroke-width="5" opacity=".22">
+    <path d="M120 690l150-18M385 715l175-26M690 735l190-18M1015 720l160 22M1300 690l170-18"/>
+    <path d="M290 105l35 150M760 85l-15 180M1240 100l-35 165"/>
+  </g>
+  <g fill="#f59e0b" opacity=".3">
+    <circle cx="120" cy="455" r="10"/><circle cx="1480" cy="455" r="10"/>
+  </g>
+  <text x="800" y="850" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="24" text-anchor="middle">GRAYBOX • LONG TUNNEL TRAVEL • FINAL ART DEFERRED</text>
+</svg>

@@ -23,7 +23,7 @@ import {
   type FoldedMapEdge,
   type FoldedMapLanding,
 } from "../story/chapter4";
-import type { GameFlags, Player } from "../game/types";
+import type { GameFlags } from "../game/types";
 import { Button } from "./ui";
 
 const SHEET_WIDTH = 1000;
@@ -53,16 +53,9 @@ const TRACE_PRESENTATION: Record<FoldedMapOutcome, {
   "false-shortcut": {
     icon: "!",
     title: "TEMPTING ROUTE REJECTED",
-    summary: "817 SHORTCUT · Straight and convincing, but the terrain runs backward.",
+    summary: "SURVEY SHORTCUT · Straight and convincing, but the terrain runs backward.",
     panelClass: "border-amber-300/60 bg-amber-400/15 text-amber-50 shadow-[0_0_28px_rgba(251,191,36,0.18)]",
     stampClass: "border-amber-200/70 bg-amber-950/95 text-amber-50 shadow-[0_0_32px_rgba(251,191,36,0.28)]",
-  },
-  "deeper-solve": {
-    icon: "✦",
-    title: "LANTERNWELL CACHE FOUND",
-    summary: "OPTIONAL THIRD FOLD · The hidden road-crew mark is complete.",
-    panelClass: "border-sky-300/60 bg-sky-400/15 text-sky-50 shadow-[0_0_30px_rgba(56,189,248,0.22)]",
-    stampClass: "border-sky-200/70 bg-sky-950/95 text-sky-50 shadow-[0_0_34px_rgba(56,189,248,0.3)]",
   },
   "not-a-route": {
     icon: "×",
@@ -90,8 +83,8 @@ function FrontMapArtwork() {
         <path d="M925 236 L987 267" strokeWidth="7" strokeLinecap="round" />
         <path d="M648 18 L785 86 M925 236 L987 267" stroke="#f7e7ad" strokeWidth="2" strokeDasharray="10 9" />
       </g>
-      <text x="520" y="32" fill="#6d5730" fontSize="13" fontWeight="700" letterSpacing="2">ROUTE 817 · OFFICE REVISION</text>
-      <text x="900" y="225" fill="#6d5730" fontSize="12" fontWeight="700" letterSpacing="1.6">817</text>
+      <text x="520" y="32" fill="#6d5730" fontSize="13" fontWeight="700" letterSpacing="2">SURVEY SHORTCUT · OFFICE REVISION</text>
+      <text x="900" y="225" fill="#6d5730" fontSize="10" fontWeight="700" letterSpacing="1.2">DETOUR</text>
       <path d="M690 165 C735 158 768 122 804 106" fill="none" stroke="#563f22" strokeWidth="10" strokeLinecap="round" />
       <path d="M690 165 C735 158 768 122 804 106" fill="none" stroke="#fff2bd" strokeWidth="2" strokeDasharray="12 12" opacity=".75" />
       <path d="M804 62 h115 v70 h-115 z M820 78 v38 h83" fill="none" stroke="#4b381e" strokeWidth="5" />
@@ -142,11 +135,6 @@ function BackMapArtwork() {
       <path d="M850 310 L750 342" fill="none" stroke="#3f3a24" strokeWidth="15" strokeLinecap="round" />
       <path d="M350 96 L650 0 M850 310 L750 342" fill="none" stroke="#f1e6bb" strokeWidth="3" strokeDasharray="13 10" />
       <path d="M884 246 C916 214 944 213 978 181" fill="none" stroke="#51492e" strokeWidth="4" strokeDasharray="12 8" />
-
-      {/* Optional third fold: the north-quarter root arrow touches the south-fold bridge. */}
-      <path d="M620 0 C650 22 715 43 760 60" fill="none" stroke="#3f3a24" strokeWidth="6" strokeDasharray="13 8" />
-      <path d="M620 0 l18 4 -11 14" fill="none" stroke="#3f3a24" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M755 52 l5 11 12 1 -9 8 3 12 -11 -6 -10 6 2 -12 -9 -8 12 -1 z" fill="none" stroke="#3f3a24" strokeWidth="4" />
 
       <text x="318" y="286" fill="#4c442b" fontSize="24" fontWeight="800" letterSpacing="3">ROAD-CREW CORRECTION FIELD</text>
       <text x="383" y="315" fill="#6a6040" fontSize="14" letterSpacing="2">REVERSE FACE · OLDER ROAD-CREW FIELD LEAF</text>
@@ -413,7 +401,7 @@ function FoldedSheet({
           );
         })}
 
-        {traceOutcome === "true-route" || traceOutcome === "deeper-solve" ? (
+        {traceOutcome === "true-route" ? (
           <g data-testid="folded-map-true-evidence" pointerEvents="none">
             <path d="M252 110 C360 119 424 151 500 165 C555 173 635 173 690 165 C735 158 768 122 804 106" fill="none" stroke="#0f766e" strokeWidth="18" strokeLinecap="round" opacity=".34" />
             <path d="M252 110 C360 119 424 151 500 165 C555 173 635 173 690 165 C735 158 768 122 804 106" fill="none" stroke="#d1fae5" strokeWidth="4" strokeDasharray="14 10" strokeLinecap="round" />
@@ -422,18 +410,10 @@ function FoldedSheet({
             <g transform="translate(430 8)">
               <rect width="365" height="42" rx="8" fill="#e5d8a8" stroke="#7f1d1d" strokeWidth="3" />
               <path d="M12 10 L353 32 M353 10 L12 32" stroke="#991b1b" strokeWidth="4" opacity=".72" />
-              <text x="18" y="27" fill="#571b16" fontSize="12.5" fontWeight="900" letterSpacing="1.2">ROUTE 817 VOID · TERRAIN REVERSED</text>
+              <text x="18" y="27" fill="#571b16" fontSize="12.5" fontWeight="900" letterSpacing="1.2">SURVEY SHORTCUT VOID · TERRAIN REVERSED</text>
             </g>
           </g>
         ) : null}
-        {traceOutcome === "deeper-solve" ? (
-          <g data-testid="folded-map-cache-evidence" pointerEvents="none">
-            <path d="M620 155 C650 133 715 112 760 95" fill="none" stroke="#7dd3fc" strokeWidth="9" strokeDasharray="12 9" strokeLinecap="round" />
-            <circle cx="760" cy="95" r="24" fill="#082f49" stroke="#bae6fd" strokeWidth="4" />
-            <text x="760" y="103" fill="#e0f2fe" fontSize="24" fontWeight="900" textAnchor="middle">✦</text>
-          </g>
-        ) : null}
-
         {draggingEdge ? FOLDED_MAP_LANDINGS.map((landing) => {
           const fromFarEdge = draggingEdge === "right" || draggingEdge === "bottom";
           const coordinate = (fromFarEdge ? 1 - landing.depth : landing.depth) * (draggingEdge === "left" || draggingEdge === "right" ? SHEET_WIDTH : SHEET_HEIGHT);
@@ -470,11 +450,9 @@ function FoldedSheet({
   );
 }
 
-export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close, onTraceOutcome }: {
+export function FoldedMapGraybox({ flags, setFlags, close, onTraceOutcome }: {
   flags: GameFlags;
   setFlags: Dispatch<SetStateAction<GameFlags>>;
-  player: Player;
-  setPlayer: Dispatch<SetStateAction<Player>>;
   close: () => void;
   onTraceOutcome?: (outcome: FoldedMapOutcome) => void;
 }) {
@@ -494,14 +472,12 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close, on
   );
 
   const foldCount = getFoldedMapFoldCount(configuration);
-  const maxFolds = flags.foldedMapDecoded ? 3 : 2;
+  const maxFolds = 2;
   const tracePresentation = traceOutcome ? TRACE_PRESENTATION[traceOutcome] : null;
 
   const beginEdgeDrag = (edge: FoldedMapEdge) => {
     if (configuration.folds[edge] === null && foldCount >= maxFolds) {
-      setFeedback(flags.foldedMapDecoded
-        ? "Three folds are already stacked. Unfold one before moving another edge."
-        : "Hold the route to two folds for now. Unfold one edge before trying another construction.");
+      setFeedback("Hold the route to two folds. Unfold one edge before trying another construction.");
       return false;
     }
     setDraggingEdge(edge);
@@ -534,16 +510,9 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close, on
       return;
     }
     const result = resolveFoldedMapConfiguration(flags, configuration);
-    const shouldClaimCache = result.outcome === "deeper-solve" && !flags.foldedMapCacheClaimed;
-    setFlags((current) => ({ ...current, ...result.flags, ...(shouldClaimCache ? { foldedMapCacheClaimed: true } : {}) }));
-    if (shouldClaimCache) {
-      setPlayer((current) => ({
-        ...current,
-        inventory: { ...current.inventory, lanternwell_drop: (current.inventory.lanternwell_drop || 0) + 1 },
-      }));
-    }
+    setFlags((current) => ({ ...current, ...result.flags }));
     setTraceOutcome(result.outcome);
-    setFeedback(`${result.message}${shouldClaimCache ? " One Lanternwell Drop is recovered from the marked cache." : ""}`);
+    setFeedback(result.message);
     onTraceOutcome?.(result.outcome);
   };
 
@@ -656,17 +625,16 @@ export function FoldedMapGraybox({ flags, setFlags, player, setPlayer, close, on
             </div>
             <div className="rounded-3xl border border-white/10 bg-white/5 p-4 text-sm leading-6 text-white/70">
               <div className="font-semibold text-white">Edden's clue</div>
-              <div className="mt-1">“The map lies flat. Two turns find the road. At the road-crew bridge, roots point beyond it.”</div>
+              <div className="mt-1">“The map lies flat. Two turns find the road.”</div>
               <div className="mt-4 font-semibold text-white">Look for agreement</div>
               <ul className="mt-1 list-inside list-disc space-y-1 text-xs text-white/55">
                 <li>the Survey lantern benchmark and an older road-crew ring</li>
                 <li>two contour strokes meeting without reversal</li>
                 <li>one road continuing into the Underway</li>
-                <li>route 817 is strikingly straight</li>
+                <li>the Survey Shortcut is strikingly straight</li>
               </ul>
               <div className="mt-4 font-semibold text-white">Recorded state</div>
               <div className="mt-1">{getFoldedMapReview(flags)}</div>
-              {flags.foldedMapCacheClaimed ? <div className="mt-3 text-sky-200">Lanternwell cache reward claimed once.</div> : null}
             </div>
             <Button data-choice-id={CHAPTER_4_CHOICE_IDS.flipMap} onClick={flipMap} disabled={foldCount > 0} className="w-full">Turn the flat map over</Button>
             <Button data-choice-id={CHAPTER_4_CHOICE_IDS.traceRoute} onClick={traceRoute} className="w-full bg-amber-500/25">Trace this folded route</Button>

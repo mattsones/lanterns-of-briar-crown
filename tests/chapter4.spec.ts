@@ -69,6 +69,12 @@ async function dragEdge(page: Page, edge: FoldedMapEdge, landing: FoldedMapLandi
   await expect(handle).toHaveAttribute("data-fold-depth", depth.toFixed(2));
 }
 
+async function moveRight(page: Page, steps: number) {
+  for (let step = 0; step < steps; step += 1) {
+    await page.getByTestId("move-right").click();
+  }
+}
+
 async function beginChapter4AtGatewright(page: Page) {
   await openCheckedInFixture(page, "Review Chapter 3 Complete Save");
   await choice(page, CHAPTER_4_CHOICE_IDS.beginChapter).click();
@@ -82,12 +88,18 @@ test("real Chapter 3 fixture reaches the Folded Map through the required Gatewri
 
   await expect(page.getByText("Bramwell", { exact: false })).toBeVisible();
   await expect(page.getByText("buy, sell, compare", { exact: false })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Tasmine Rootbrace" })).toContainText(
+    "Princess Elowen is making her first Royal Progress",
+  );
   await choice(page, CHAPTER_4_CHOICE_IDS.openSmithy).click();
   await expect(page.getByTestId("shop-modal")).toHaveAttribute("data-shop-mode", "gatewright");
   await expect(page.getByText("Tasmine Rootbrace's Smithy", { exact: true })).toBeVisible();
   await expect(page.locator("[data-shop-buy-item]")).toHaveCount(5);
   await expect(page.locator("[data-shop-sell-item]").first()).toBeVisible();
   await expect(page.locator('[data-shop-sell-item="cargo_transfer_tag"]')).toHaveCount(0);
+  const equippedHelm = page.locator('[data-shop-sell-item="kettle_helm"]');
+  await expect(equippedHelm).toContainText("Equipped — unequip it before selling");
+  await expect(equippedHelm.getByRole("button", { name: "Equipped" })).toBeDisabled();
   await page.getByRole("button", { name: "Close" }).click();
   await page.getByRole("button", { name: "Visit Tasmine Rootbrace" }).click();
   await choice(page, CHAPTER_4_CHOICE_IDS.continueToMap).click();
@@ -109,7 +121,7 @@ test("Tasmine's full smithy buys and sells before the Underway", async ({ page }
   await expect(page.locator('[data-shop-sell-item="trail_snack"]')).toContainText("x4");
 });
 
-test("the decoded story map opens the playable 811 Underway graph", async ({ page }) => {
+test("the decoded story map opens the playable Old Keeper Road Underway graph", async ({ page }) => {
   await beginChapter4AtGatewright(page);
   await choice(page, CHAPTER_4_CHOICE_IDS.continueToMap).click();
   await choice(page, CHAPTER_4_CHOICE_IDS.openFoldedMap).click();
@@ -129,7 +141,7 @@ test("the decoded story map opens the playable 811 Underway graph", async ({ pag
     "src",
     /^data:image\/svg\+xml/,
   );
-  await page.getByTestId("move-right").click();
+  await moveRight(page, 5);
   await expect(page.getByRole("button", { name: "Inspect Underway Passage" })).toBeVisible();
   await page.getByTestId("move-right").click();
   await expect(scene(page, CHAPTER_4_SCENE_IDS.underwayDetour)).toBeVisible();
@@ -154,24 +166,67 @@ test("Tasmine stocks only Westroot weapons and root-built armor", async ({ page 
   await expect(page.getByText("Gold: 14", { exact: true })).toBeVisible();
 });
 
-test("posted detour choice occurs inside the Underway and both routes remain plausible", async ({ page }) => {
-  await continueCheckpoint(page, chapter4Checkpoint({}, { x: 3, y: 2 }));
+test("posted detour choice occurs at the far side of the first map and commits to one exclusive route map", async ({ page }) => {
+  test.slow();
+  await continueCheckpoint(page, chapter4Checkpoint({}, { x: 7, y: 2 }));
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
   await expect(scene(page, CHAPTER_4_SCENE_IDS.underwayDetour)).toBeVisible();
   await choice(page, CHAPTER_4_CHOICE_IDS.inspectDetour).click();
   await expect(page.getByText("real old Westroot hazard stamp", { exact: false })).toBeVisible();
-  await expect(choice(page, CHAPTER_4_CHOICE_IDS.followMappedRoute)).toContainText("mapped route");
-  await expect(choice(page, CHAPTER_4_CHOICE_IDS.followPostedDetour)).toContainText("posted safety detour");
+  await expect(choice(page, CHAPTER_4_CHOICE_IDS.followMappedRoute)).toContainText("Old Keeper Road");
+  await expect(choice(page, CHAPTER_4_CHOICE_IDS.followPostedDetour)).toContainText("construction detour");
   await choice(page, CHAPTER_4_CHOICE_IDS.followPostedDetour).click();
-  await expect(page.getByRole("button", { name: "Inspect Maintenance Gallery 817" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Inspect Posted construction detour" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Inspect Old Keeper Road" })).toHaveCount(0);
+  await moveRight(page, 5);
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.route817SignalRig)).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "A Live Construction Signal" })).toContainText(
+    "count travelers coming through the construction detour",
+  );
+  await choice(page, CHAPTER_4_CHOICE_IDS.studySignalRig).click();
+  await expect(page.getByTestId("map-status-overlay")).toContainText("ambush position ahead");
+  await moveRight(page, 4);
+  await expect(page.getByRole("button", { name: "Inspect Converged Tunnel" })).toBeVisible();
+  await moveRight(page, 6);
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.underwayAmbush)).toBeVisible();
+  await expect(choice(page, CHAPTER_4_CHOICE_IDS.prepareAmbush)).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Ambush Revealed" })).toContainText(
+    "a Briar relay guard and a Seal-Forged Sentry wait",
+  );
+});
+
+test("the Old Keeper Road contains a unique waykeeper cache before convergence", async ({ page }) => {
+  const payload = chapter4Checkpoint({
+    underwayDetourDecisionMade: true,
+    underwayDetourFollowed: false,
+  });
+  payload.region = "underwayRoute811";
+  await continueCheckpoint(page, payload);
+
+  await moveRight(page, 5);
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.route811Cache)).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "An Abandoned Waykeeper Cache" })).toContainText(
+    "keeper's lantern stamped on the inner band",
+  );
+  await expect(choice(page, CHAPTER_4_CHOICE_IDS.takeWaykeeperHelm)).toContainText(
+    "Old Waykeeper Helm",
+  );
+  await choice(page, CHAPTER_4_CHOICE_IDS.takeWaykeeperHelm).click();
+  await expect(page.getByTestId("map-status-overlay")).toContainText(
+    "Old Waykeeper Helm recovered from the Old Keeper Road.",
+  );
+  await moveRight(page, 4);
+  await expect(page.getByRole("button", { name: "Inspect Converged Tunnel" })).toBeVisible();
 });
 
 test("Underway hides an ordinary ambush miss and reveals the attack only at the blind junction", async ({ page }) => {
   await page.addInitScript(() => {
     Math.random = () => 0.01;
   });
-  await continueCheckpoint(page, chapter4Checkpoint({ underwayDetourDecisionMade: true }, { x: 6, y: 2 }));
+  const payload = chapter4Checkpoint({ underwayDetourDecisionMade: true }, { x: 5, y: 2 });
+  payload.region = "underwayConvergence";
+  await continueCheckpoint(page, payload);
 
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
   await expect(page.getByTestId("map-status-overlay")).toContainText("gives away nothing else");
@@ -184,7 +239,8 @@ test("Underway hides an ordinary ambush miss and reveals the attack only at the 
 });
 
 test("exceptional Instinct reveals the Underway ambush and unlocks a prepared opening", async ({ page }) => {
-  const payload = chapter4Checkpoint({ underwayDetourDecisionMade: true }, { x: 6, y: 2 });
+  const payload = chapter4Checkpoint({ underwayDetourDecisionMade: true }, { x: 5, y: 2 });
+  payload.region = "underwayConvergence";
   payload.player.baseStats.Instinct = 40;
   await continueCheckpoint(page, payload);
 
@@ -200,35 +256,125 @@ test("exceptional Instinct reveals the Underway ambush and unlocks a prepared op
 });
 
 test("Listening Mile spaces Lio's trail across three lantern-dark travel beats", async ({ page }) => {
-  await continueCheckpoint(page, chapter4Checkpoint({ underwayDetourDecisionMade: true, underwayAmbushCleared: true }, { x: 8, y: 2 }));
+  const payload = chapter4Checkpoint({ underwayDetourDecisionMade: true, underwayAmbushCleared: true }, { x: 0, y: 2 });
+  payload.region = "listeningPostOne";
+  await continueCheckpoint(page, payload);
 
+  await expect(page.getByRole("heading", { name: "The Listening Mile", exact: true })).toBeVisible();
   await expect(page.getByTestId("map-stage")).toHaveAttribute("data-visibility-mode", "local-lantern");
   await expect(page.getByTestId("underway-darkness")).toHaveAttribute("fill", "#000000");
   await expect(page.getByTestId("underway-lantern-halo")).toBeVisible();
-  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await moveRight(page, 6);
   await expect(scene(page, CHAPTER_4_SCENE_IDS.listeningMileIntro)).toBeVisible();
-  await expect(page.getByRole("dialog")).toContainText("small sounds of the road");
+  await expect(page.getByRole("dialog")).toContainText("hear around blind stone");
+  await expect(page.getByRole("dialog")).not.toContainText("three flared listening hoods");
   await choice(page, CHAPTER_4_CHOICE_IDS.beginListeningMile).click();
   await expect(scene(page, CHAPTER_4_SCENE_IDS.listeningMileStationOne)).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Wall Listening Hood" })).toBeVisible();
+  await expect(page.getByRole("dialog")).toContainText("one damaged wheel");
+  await expect(page.getByRole("dialog")).not.toContainText("ambush shutter");
   await choice(page, CHAPTER_4_CHOICE_IDS.traceSignal).click();
 
   await expect(scene(page, CHAPTER_4_SCENE_IDS.listeningMileStationTwo)).toHaveCount(0);
-  await page.getByTestId("move-right").click();
-  await page.getByTestId("move-right").click();
+  await moveRight(page, 3);
+  await expect(page.getByRole("button", { name: "Inspect Listening-Mile Passage" })).toBeVisible();
+  await moveRight(page, 6);
   await expect(scene(page, CHAPTER_4_SCENE_IDS.listeningMileStationTwo)).toBeVisible();
+  await expect(page.getByRole("dialog")).toContainText("A voice says, “Keep them together.”");
+  await expect(page.getByRole("dialog")).toContainText("someone coughs");
+  await expect(page.getByRole("dialog")).toContainText("a thin, hurried scrape against bronze");
+  await expect(page.getByRole("dialog")).not.toContainText("guard");
+  await expect(page.getByRole("dialog")).not.toContainText("captive");
   await choice(page, CHAPTER_4_CHOICE_IDS.isolateSignal).click();
-  await page.getByTestId("move-right").click();
-  await page.getByTestId("move-right").click();
+  await moveRight(page, 3);
+  await expect(page.getByRole("button", { name: "Inspect Listening-Mile Passage" })).toBeVisible();
+  await moveRight(page, 6);
 
   await expect(scene(page, CHAPTER_4_SCENE_IDS.listeningMileResult)).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Lio's Trail Marker" })).toContainText(
+    "Fresh bronze dust lies below a stiff inspection shutter",
+  );
+  await expect(page.getByRole("dialog", { name: "Lio's Trail Marker" })).toContainText(
+    "The sounds are moving away",
+  );
   await expect(page.getByRole("dialog", { name: "Lio's Trail Marker" })).toContainText("small, hurried, and unmistakably his");
   await expect(page.getByTestId("dialogue-feedback")).toContainText("He knew I would look twice");
   await expect(choice(page, CHAPTER_4_CHOICE_IDS.finishListeningMile)).toContainText(
     "loose route-record plate",
   );
+  await choice(page, CHAPTER_4_CHOICE_IDS.finishListeningMile).click();
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.lioMessageDiscovery)).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Loose Route-Record Plate" })).toContainText(
+    "fresh letters cross the old stamped route table",
+  );
+  await choice(page, CHAPTER_4_CHOICE_IDS.readLioMessage).click();
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.lioMessageResponse)).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Still Me" })).toContainText(
+    "do not follow angry. Follow clever",
+  );
+  await expect(page.getByRole("dialog", { name: "Still Me" })).toContainText("M—do not follow");
+  await expect(page.getByRole("dialog", { name: "Still Me" })).toContainText("Taking us west");
+  await expect(page.getByRole("dialog", { name: "Still Me" })).not.toContainText("Still breathing");
+  await expect(page.getByTestId("dialogue-feedback")).toContainText("We follow clever");
+  await expect(choice(page, CHAPTER_4_CHOICE_IDS.finishLioMessage)).toHaveText(
+    "Follow Lio's westbound direction.",
+  );
+  await choice(page, CHAPTER_4_CHOICE_IDS.finishLioMessage).click();
+
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.relayArrival)).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Inspect Westbound Relay Tunnel" })).toBeVisible();
+  await moveRight(page, 9);
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.relayArrival)).toBeVisible();
+  await choice(page, CHAPTER_4_CHOICE_IDS.enterRelayPost).click();
+  await page.getByTestId("move-right").click();
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.royalProgressBroadside)).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Royal Progress Broadside" })).toContainText("heir apparent");
+  await expect(page.getByRole("dialog", { name: "Royal Progress Broadside" })).toContainText(
+    "the name Tasmine mentioned at the Lower Gate",
+  );
+  await expect(page.getByRole("dialog", { name: "Royal Progress Broadside" })).toContainText("Every five years");
+  await choice(page, CHAPTER_4_CHOICE_IDS.readRoyalProgress).click();
+  await page.getByTestId("move-right").click();
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.relayGuard)).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Guarded Relay Floor" })).toContainText("Crown Whisperer");
+  await expect(choice(page, CHAPTER_4_CHOICE_IDS.faceRelayGuard)).toBeVisible();
 });
 
-test("rectangular Folded Map supports two faces, many edge landings, false and true routes, and the optional third fold", async ({ page }) => {
+test("captured Relay Post records expose the forged authority and Chapter 5 rescue target", async ({ page }) => {
+  const payload = chapter4Checkpoint({
+    underwayDetourDecisionMade: true,
+    underwayAmbushCleared: true,
+    listeningMileAttempted: true,
+    listeningMileOutcome: "marker-found",
+    lioMessageFound: true,
+    royalProgressLearned: true,
+    briarRelayCleared: true,
+  }, { x: 2, y: 1 });
+  payload.region = "briarRelayPost";
+  await continueCheckpoint(page, payload);
+
+  await page.getByTestId("move-right").click();
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.forgedAuthority)).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Forged Authority" })).toContainText(
+    "argument for national road standards",
+  );
+  await expect(page.getByRole("dialog", { name: "Forged Authority" })).toContainText("manufactured panic");
+  await choice(page, CHAPTER_4_CHOICE_IDS.inspectForgedOrder).click();
+
+  await page.getByTestId("move-right").click();
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.briarholdReveal)).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Briarhold Waystation" })).toContainText("L.B. — COURIER — ALIVE");
+  await expect(page.getByRole("dialog", { name: "Briarhold Waystation" })).toContainText("with four others");
+  await expect(page.getByRole("dialog", { name: "Briarhold Waystation" })).not.toContainText(
+    "not being carried to a known prison",
+  );
+  await expect(page.getByRole("dialog", { name: "Briarhold Waystation" })).toContainText("Briarhold Waystation");
+  await choice(page, CHAPTER_4_CHOICE_IDS.finishChapterFour).click();
+  await expect(page.getByText("Chapter 4 complete: The Riddle Road", { exact: true })).toBeVisible();
+});
+
+test("rectangular Folded Map supports two faces, many edge landings, and false and true two-fold routes", async ({ page }) => {
+  test.slow();
   await openCheckedInFixture(page, "Test Folded Map Graybox");
 
   const prototype = page.getByTestId("folded-map-prototype");
@@ -263,7 +409,8 @@ test("rectangular Folded Map supports two faces, many edge landings, false and t
   await choice(page, CHAPTER_4_CHOICE_IDS.traceRoute).click();
   await expect(prototype).toHaveAttribute("data-trace-outcome", "false-shortcut");
   await expect(page.getByTestId("folded-map-result-stamp")).toContainText("TEMPTING ROUTE REJECTED");
-  await expect(page.getByTestId("folded-map-feedback")).toContainText("wonderfully straight road");
+  await expect(page.getByTestId("folded-map-result-stamp")).toContainText("SURVEY SHORTCUT");
+  await expect(page.getByTestId("folded-map-feedback")).toContainText("wonderfully straight shortcut");
   await expect(scene(page, CHAPTER_4_SCENE_IDS.foldedMapReview)).toBeVisible();
 
   await choice(page, CHAPTER_4_CHOICE_IDS.resetFolds).click();
@@ -278,16 +425,10 @@ test("rectangular Folded Map supports two faces, many edge landings, false and t
   await expect(page.getByTestId("folded-map-feedback")).toContainText("west edge lands halfway");
   await expect(page.getByText("True route recorded", { exact: false })).toBeVisible();
 
-  await dragEdge(page, "top", "quarter");
-  await expect(prototype).toHaveAttribute("data-fold-configuration", "front:left-half,top-quarter,bottom-three-quarter");
-  await choice(page, CHAPTER_4_CHOICE_IDS.traceRoute).click();
-  await expect(prototype).toHaveAttribute("data-trace-outcome", "deeper-solve");
-  await expect(page.getByTestId("folded-map-result-stamp")).toContainText("LANTERNWELL CACHE FOUND");
-  await expect(page.getByTestId("folded-map-cache-evidence")).toBeVisible();
-  await expect(page.getByTestId("folded-map-feedback")).toContainText("One Lanternwell Drop");
-  await expect(page.getByText("Lanternwell cache reward claimed once.")).toBeVisible();
-  await choice(page, CHAPTER_4_CHOICE_IDS.traceRoute).click();
-  await expect(page.getByTestId("folded-map-feedback")).not.toContainText("One Lanternwell Drop");
+  await choice(page, CHAPTER_4_CHOICE_IDS.topEdge).press("Enter");
+  await expect(prototype).toHaveAttribute("data-fold-configuration", "front:left-half,bottom-three-quarter");
+  await expect(page.getByTestId("folded-map-feedback")).toContainText("Hold the route to two folds");
+  await expect(page.getByTestId("fold-count")).toContainText("2/2 folds active");
 });
 
 test("Folded Map Back opens the latest edge before closing", async ({ page }) => {

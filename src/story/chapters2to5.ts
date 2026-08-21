@@ -98,6 +98,8 @@ export const CHAPTER_STORY_PLANS: Record<Exclude<ChapterId, 1>, ChapterStoryPlan
       "chapterFourClear",
       "foldedMapDecoded",
       "lioMessageFound",
+      "royalProgressLearned",
+      "briarRelayCleared",
       "princessNameSeen",
       "briarholdLeadFound",
     ],
@@ -111,7 +113,7 @@ export const CHAPTER_STORY_PLANS: Record<Exclude<ChapterId, 1>, ChapterStoryPlan
       "Learn Lio is being moved toward Briarhold Waystation",
     ],
     keyLines: [
-      "Do not follow angry. Follow clever. I am west of the relay. Still breathing. Still me.",
+      "M—do not follow angry. Follow clever. Taking us west. Still me. — L",
       "He is leaving truth in small places. That is how roads begin healing.",
       "I am following clever. But I am still going.",
     ],

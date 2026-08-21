@@ -68,13 +68,45 @@ export const REQUIRED_GRAPH_LANDMARKS: Record<string, string[]> = {
     "underway_gate",
     "underway_threshold",
     "detour_notice",
+  ],
+  underwayRoute811: [
     "mapped_gallery",
+    "waykeeper_cache",
+    "underway_route_exit",
+  ],
+  underwayRoute817: [
     "maintenance_hatch",
+    "construction_signal_rig",
+    "underway_route_exit",
+  ],
+  underwayConvergence: [
+    "convergence_entry",
     "ambush_approach",
     "underway_ambush",
+    "convergence_exit",
+  ],
+  listeningPostOne: [
     "listening_post_one",
+    "listening_mile_exit",
+  ],
+  listeningPostTwo: [
     "listening_post_two",
+    "listening_mile_exit",
+  ],
+  listeningPostThree: [
     "listening_post_three",
+    "lio_message_plate",
+  ],
+  relayApproach: [
+    "relay_approach_entry",
+    "relay_post_gate",
+  ],
+  briarRelayPost: [
+    "relay_entry",
+    "royal_progress_broadside",
+    "relay_guard",
+    "forged_order_desk",
+    "briarhold_route_ledger",
   ],
 };
 
