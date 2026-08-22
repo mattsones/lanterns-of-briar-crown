@@ -654,14 +654,14 @@ These are the current first-pass art assets worth carrying forward into the repo
 
 ## Characters
 
-- `mira-portrait-v01.png`
-- `enna-portrait-v02.png`
-- `hollis-portrait-v01.png`
-- `nix-portrait-v01.png`
-- `pibble-portrait-v01.png`
-- `rowan-portrait-v02.png`
-- `tilda-portrait-v01.png`
-- `moss-portrait-v01.png`
+- `mira-portrait-v02.png`
+- `enna-portrait-v03.png`
+- `hollis-portrait-v02.png`
+- `nix-portrait-v02.png`
+- `pibble-portrait-v02.png`
+- `rowan-portrait-v03.png`
+- `tilda-portrait-v02.png`
+- `moss-portrait-v02.png`
 
 These filenames are suggestions for the repo. Actual downloaded/generated filenames can be renamed when copied into the asset folders.
 

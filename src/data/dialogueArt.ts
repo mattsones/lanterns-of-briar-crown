@@ -29,7 +29,7 @@ const briarCrownPrimaryMark = new URL(
   import.meta.url,
 ).href;
 const princessElowenRoyalPortrait = new URL(
-  "../../assets/portraits/characters/princess-elowen-royal-portrait-v01.webp",
+  "../../assets/portraits/characters/princess-elowen-royal-portrait-v02.webp",
   import.meta.url,
 ).href;
 const princessElowenProgressNotice = new URL(

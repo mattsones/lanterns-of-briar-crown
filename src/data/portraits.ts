@@ -1,51 +1,51 @@
-const adaPortrait = new URL("../../assets/portraits/characters/ada-willowmarket-portrait-v01.webp", import.meta.url)
+const adaPortrait = new URL("../../assets/portraits/characters/ada-willowmarket-portrait-v02.webp", import.meta.url)
   .href;
-const adaNoLensPortrait = new URL("../../assets/portraits/characters/ada-willowmarket-portrait-no-lens-v01.webp", import.meta.url)
+const adaNoLensPortrait = new URL("../../assets/portraits/characters/ada-willowmarket-portrait-no-lens-v02.webp", import.meta.url)
   .href;
-const eddenPortrait = new URL("../../assets/portraits/characters/edden-vale-portrait-v01.webp", import.meta.url).href;
-const ennaPortrait = new URL("../../assets/portraits/characters/enna-portrait-v02.webp", import.meta.url).href;
-const hollisPortrait = new URL("../../assets/portraits/characters/hollis-portrait-v01.webp", import.meta.url).href;
-const lioPortrait = new URL("../../assets/portraits/characters/lio-brindle-portrait-v01.webp", import.meta.url).href;
-const maraPortrait = new URL("../../assets/portraits/characters/mara-brindle-portrait-v01.webp", import.meta.url).href;
-const mayorAnwenPortrait = new URL("../../assets/portraits/characters/mayor-anwen-portrait-v01.webp", import.meta.url)
+const eddenPortrait = new URL("../../assets/portraits/characters/edden-vale-portrait-v02.webp", import.meta.url).href;
+const ennaPortrait = new URL("../../assets/portraits/characters/enna-portrait-v03.webp", import.meta.url).href;
+const hollisPortrait = new URL("../../assets/portraits/characters/hollis-portrait-v02.webp", import.meta.url).href;
+const lioPortrait = new URL("../../assets/portraits/characters/lio-brindle-portrait-v02.webp", import.meta.url).href;
+const maraPortrait = new URL("../../assets/portraits/characters/mara-brindle-portrait-v02.webp", import.meta.url).href;
+const mayorAnwenPortrait = new URL("../../assets/portraits/characters/mayor-anwen-portrait-v02.webp", import.meta.url)
   .href;
-const elderBrynnPortrait = new URL("../../assets/portraits/characters/mira-portrait-v01.webp", import.meta.url).href;
-const selaPortrait = new URL("../../assets/portraits/characters/miri-portrait-v02.webp", import.meta.url).href;
-const mossPortrait = new URL("../../assets/portraits/characters/moss-portrait-v01.webp", import.meta.url).href;
-const nellaPortrait = new URL("../../assets/portraits/characters/nella-portrait-v03.webp", import.meta.url).href;
-const nixPortrait = new URL("../../assets/portraits/characters/nix-portrait-v01.webp", import.meta.url).href;
-const pibblePortrait = new URL("../../assets/portraits/characters/pibble-portrait-v01.webp", import.meta.url).href;
-const rowanPortrait = new URL("../../assets/portraits/characters/rowan-portrait-v02.webp", import.meta.url).href;
-const smithOrinPortrait = new URL("../../assets/portraits/characters/smith-orin-portrait-v02.webp", import.meta.url)
+const elderBrynnPortrait = new URL("../../assets/portraits/characters/mira-portrait-v02.webp", import.meta.url).href;
+const selaPortrait = new URL("../../assets/portraits/characters/miri-portrait-v03.webp", import.meta.url).href;
+const mossPortrait = new URL("../../assets/portraits/characters/moss-portrait-v02.webp", import.meta.url).href;
+const nellaPortrait = new URL("../../assets/portraits/characters/nella-portrait-v04.webp", import.meta.url).href;
+const nixPortrait = new URL("../../assets/portraits/characters/nix-portrait-v02.webp", import.meta.url).href;
+const pibblePortrait = new URL("../../assets/portraits/characters/pibble-portrait-v02.webp", import.meta.url).href;
+const rowanPortrait = new URL("../../assets/portraits/characters/rowan-portrait-v03.webp", import.meta.url).href;
+const smithOrinPortrait = new URL("../../assets/portraits/characters/smith-orin-portrait-v03.webp", import.meta.url)
   .href;
-const tildaPortrait = new URL("../../assets/portraits/characters/tilda-portrait-v01.webp", import.meta.url).href;
-const tomaPortrait = new URL("../../assets/portraits/characters/toma-fielding-portrait-v02.webp", import.meta.url).href;
+const tildaPortrait = new URL("../../assets/portraits/characters/tilda-portrait-v02.webp", import.meta.url).href;
+const tomaPortrait = new URL("../../assets/portraits/characters/toma-fielding-portrait-v03.webp", import.meta.url).href;
 const worriedRoadTravelerPortrait = new URL(
-  "../../assets/portraits/characters/worried-road-traveler-portrait-v01.webp",
+  "../../assets/portraits/characters/worried-road-traveler-portrait-v02.webp",
   import.meta.url,
 ).href;
 const auntieLumePortrait = new URL(
-  "../../assets/portraits/characters/auntie-lume-portrait-v02.webp",
+  "../../assets/portraits/characters/auntie-lume-portrait-v03.webp",
   import.meta.url,
 ).href;
 const bramwellGatehandPortrait = new URL(
-  "../../assets/portraits/characters/bramwell-gatehand-portrait-v01.webp",
+  "../../assets/portraits/characters/bramwell-gatehand-portrait-v02.webp",
   import.meta.url,
 ).href;
 const nomaGreenstillPortrait = new URL(
-  "../../assets/portraits/characters/noma-greenstill-portrait-v02.webp",
+  "../../assets/portraits/characters/noma-greenstill-portrait-v03.webp",
   import.meta.url,
 ).href;
 const quillPebbleturnPortrait = new URL(
-  "../../assets/portraits/characters/quill-pebbleturn-portrait-v01.webp",
+  "../../assets/portraits/characters/quill-pebbleturn-portrait-v02.webp",
   import.meta.url,
 ).href;
 const westrootRootbreadChildPortrait = new URL(
-  "../../assets/portraits/characters/westroot-rootbread-child-portrait-v02.webp",
+  "../../assets/portraits/characters/westroot-rootbread-child-portrait-v03.webp",
   import.meta.url,
 ).href;
 const princessElowenPortrait = new URL(
-  "../../assets/portraits/characters/princess-elowen-portrait-v01.webp",
+  "../../assets/portraits/characters/princess-elowen-portrait-v02.webp",
   import.meta.url,
 ).href;
 const queenIsaraPortrait = new URL(

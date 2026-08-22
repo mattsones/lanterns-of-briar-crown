@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-22T04:46:37.083Z",
+  "generatedAt": "2026-08-22T12:16:09.591Z",
   "sourceArtRoot": "assets/reference/source-art",
   "alternatesRoot": "assets/reference/alternates",
   "conversions": [
@@ -730,78 +730,78 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/ada-willowmarket-portrait-no-lens-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/ada-willowmarket-portrait-no-lens-v01.png",
-      "output": "assets/portraits/characters/ada-willowmarket-portrait-no-lens-v01.webp",
+      "source": "assets/portraits/characters/ada-willowmarket-portrait-no-lens-v02.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/ada-willowmarket-portrait-no-lens-v02.png",
+      "output": "assets/portraits/characters/ada-willowmarket-portrait-no-lens-v02.webp",
       "format": "webp",
-      "originalBytes": 2450670,
-      "outputBytes": 144280,
+      "originalBytes": 3705749,
+      "outputBytes": 126844,
       "width": 1024,
       "height": 1535,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/ada-willowmarket-portrait-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/ada-willowmarket-portrait-v01.png",
-      "output": "assets/portraits/characters/ada-willowmarket-portrait-v01.webp",
+      "source": "assets/portraits/characters/ada-willowmarket-portrait-v02.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/ada-willowmarket-portrait-v02.png",
+      "output": "assets/portraits/characters/ada-willowmarket-portrait-v02.webp",
       "format": "webp",
-      "originalBytes": 2635185,
-      "outputBytes": 143290,
+      "originalBytes": 2516365,
+      "outputBytes": 131174,
       "width": 1024,
       "height": 1536,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/auntie-lume-portrait-v02.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/auntie-lume-portrait-v02.png",
-      "output": "assets/portraits/characters/auntie-lume-portrait-v02.webp",
+      "source": "assets/portraits/characters/auntie-lume-portrait-v03.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/auntie-lume-portrait-v03.png",
+      "output": "assets/portraits/characters/auntie-lume-portrait-v03.webp",
       "format": "webp",
-      "originalBytes": 3110372,
-      "outputBytes": 220168,
+      "originalBytes": 3784973,
+      "outputBytes": 180982,
       "width": 1024,
       "height": 1536,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/bramwell-gatehand-portrait-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/bramwell-gatehand-portrait-v01.png",
-      "output": "assets/portraits/characters/bramwell-gatehand-portrait-v01.webp",
+      "source": "assets/portraits/characters/bramwell-gatehand-portrait-v02.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/bramwell-gatehand-portrait-v02.png",
+      "output": "assets/portraits/characters/bramwell-gatehand-portrait-v02.webp",
       "format": "webp",
-      "originalBytes": 2958606,
-      "outputBytes": 159280,
+      "originalBytes": 2614151,
+      "outputBytes": 123402,
       "width": 1024,
       "height": 1536,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/edden-vale-portrait-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/edden-vale-portrait-v01.png",
-      "output": "assets/portraits/characters/edden-vale-portrait-v01.webp",
+      "source": "assets/portraits/characters/edden-vale-portrait-v02.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/edden-vale-portrait-v02.png",
+      "output": "assets/portraits/characters/edden-vale-portrait-v02.webp",
       "format": "webp",
-      "originalBytes": 2780841,
-      "outputBytes": 149644,
+      "originalBytes": 2655755,
+      "outputBytes": 139376,
       "width": 1024,
       "height": 1536,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/enna-portrait-v02.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/enna-portrait-v02.png",
-      "output": "assets/portraits/characters/enna-portrait-v02.webp",
+      "source": "assets/portraits/characters/enna-portrait-v03.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/enna-portrait-v03.png",
+      "output": "assets/portraits/characters/enna-portrait-v03.webp",
       "format": "webp",
-      "originalBytes": 2654798,
-      "outputBytes": 197824,
+      "originalBytes": 2500722,
+      "outputBytes": 160788,
       "width": 1122,
       "height": 1402,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/hollis-portrait-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/hollis-portrait-v01.png",
-      "output": "assets/portraits/characters/hollis-portrait-v01.webp",
+      "source": "assets/portraits/characters/hollis-portrait-v02.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/hollis-portrait-v02.png",
+      "output": "assets/portraits/characters/hollis-portrait-v02.webp",
       "format": "webp",
-      "originalBytes": 2576121,
-      "outputBytes": 167690,
+      "originalBytes": 2370717,
+      "outputBytes": 112834,
       "width": 1122,
       "height": 1402,
       "hasAlpha": false
@@ -818,133 +818,133 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/lio-brindle-portrait-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/lio-brindle-portrait-v01.png",
-      "output": "assets/portraits/characters/lio-brindle-portrait-v01.webp",
+      "source": "assets/portraits/characters/lio-brindle-portrait-v02.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/lio-brindle-portrait-v02.png",
+      "output": "assets/portraits/characters/lio-brindle-portrait-v02.webp",
       "format": "webp",
-      "originalBytes": 2544569,
-      "outputBytes": 113328,
+      "originalBytes": 2402874,
+      "outputBytes": 104072,
       "width": 1024,
       "height": 1536,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/mara-brindle-portrait-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/mara-brindle-portrait-v01.png",
-      "output": "assets/portraits/characters/mara-brindle-portrait-v01.webp",
+      "source": "assets/portraits/characters/mara-brindle-portrait-v02.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/mara-brindle-portrait-v02.png",
+      "output": "assets/portraits/characters/mara-brindle-portrait-v02.webp",
       "format": "webp",
-      "originalBytes": 2584609,
-      "outputBytes": 118324,
+      "originalBytes": 2410652,
+      "outputBytes": 105718,
       "width": 1024,
       "height": 1536,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/mayor-anwen-portrait-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/mayor-anwen-portrait-v01.png",
-      "output": "assets/portraits/characters/mayor-anwen-portrait-v01.webp",
+      "source": "assets/portraits/characters/mayor-anwen-portrait-v02.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/mayor-anwen-portrait-v02.png",
+      "output": "assets/portraits/characters/mayor-anwen-portrait-v02.webp",
       "format": "webp",
-      "originalBytes": 3031936,
-      "outputBytes": 172636,
+      "originalBytes": 2757237,
+      "outputBytes": 146390,
       "width": 1024,
       "height": 1536,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/mira-portrait-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/mira-portrait-v01.png",
-      "output": "assets/portraits/characters/mira-portrait-v01.webp",
+      "source": "assets/portraits/characters/mira-portrait-v02.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/mira-portrait-v02.png",
+      "output": "assets/portraits/characters/mira-portrait-v02.webp",
       "format": "webp",
-      "originalBytes": 2489934,
-      "outputBytes": 164514,
+      "originalBytes": 2307528,
+      "outputBytes": 133866,
       "width": 1122,
       "height": 1402,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/miri-portrait-v02.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/miri-portrait-v02.png",
-      "output": "assets/portraits/characters/miri-portrait-v02.webp",
+      "source": "assets/portraits/characters/miri-portrait-v03.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/miri-portrait-v03.png",
+      "output": "assets/portraits/characters/miri-portrait-v03.webp",
       "format": "webp",
-      "originalBytes": 2738538,
-      "outputBytes": 148764,
+      "originalBytes": 2567604,
+      "outputBytes": 136866,
       "width": 1024,
       "height": 1536,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/moss-portrait-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/moss-portrait-v01.png",
-      "output": "assets/portraits/characters/moss-portrait-v01.webp",
+      "source": "assets/portraits/characters/moss-portrait-v02.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/moss-portrait-v02.png",
+      "output": "assets/portraits/characters/moss-portrait-v02.webp",
       "format": "webp",
-      "originalBytes": 2665666,
-      "outputBytes": 202974,
+      "originalBytes": 2541427,
+      "outputBytes": 160686,
       "width": 1122,
       "height": 1402,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/nella-portrait-v03.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/nella-portrait-v03.png",
-      "output": "assets/portraits/characters/nella-portrait-v03.webp",
+      "source": "assets/portraits/characters/nella-portrait-v04.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/nella-portrait-v04.png",
+      "output": "assets/portraits/characters/nella-portrait-v04.webp",
       "format": "webp",
-      "originalBytes": 2994036,
-      "outputBytes": 177102,
+      "originalBytes": 2651798,
+      "outputBytes": 138604,
       "width": 1024,
       "height": 1536,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/nix-portrait-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/nix-portrait-v01.png",
-      "output": "assets/portraits/characters/nix-portrait-v01.webp",
+      "source": "assets/portraits/characters/nix-portrait-v02.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/nix-portrait-v02.png",
+      "output": "assets/portraits/characters/nix-portrait-v02.webp",
       "format": "webp",
-      "originalBytes": 3019082,
-      "outputBytes": 250772,
+      "originalBytes": 2585446,
+      "outputBytes": 180004,
       "width": 1122,
       "height": 1402,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/noma-greenstill-portrait-v02.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/noma-greenstill-portrait-v02.png",
-      "output": "assets/portraits/characters/noma-greenstill-portrait-v02.webp",
+      "source": "assets/portraits/characters/noma-greenstill-portrait-v03.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/noma-greenstill-portrait-v03.png",
+      "output": "assets/portraits/characters/noma-greenstill-portrait-v03.webp",
       "format": "webp",
-      "originalBytes": 3153426,
-      "outputBytes": 239116,
+      "originalBytes": 2842572,
+      "outputBytes": 200576,
       "width": 1024,
       "height": 1536,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/pibble-portrait-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/pibble-portrait-v01.png",
-      "output": "assets/portraits/characters/pibble-portrait-v01.webp",
+      "source": "assets/portraits/characters/pibble-portrait-v02.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/pibble-portrait-v02.png",
+      "output": "assets/portraits/characters/pibble-portrait-v02.webp",
       "format": "webp",
-      "originalBytes": 2434739,
-      "outputBytes": 168062,
+      "originalBytes": 2306811,
+      "outputBytes": 130600,
       "width": 1122,
       "height": 1402,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/princess-elowen-portrait-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/princess-elowen-portrait-v01.png",
-      "output": "assets/portraits/characters/princess-elowen-portrait-v01.webp",
+      "source": "assets/portraits/characters/princess-elowen-portrait-v02.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/princess-elowen-portrait-v02.png",
+      "output": "assets/portraits/characters/princess-elowen-portrait-v02.webp",
       "format": "webp",
-      "originalBytes": 2430486,
-      "outputBytes": 122014,
+      "originalBytes": 2407733,
+      "outputBytes": 114892,
       "width": 1024,
       "height": 1536,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/princess-elowen-royal-portrait-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/princess-elowen-royal-portrait-v01.png",
-      "output": "assets/portraits/characters/princess-elowen-royal-portrait-v01.webp",
+      "source": "assets/portraits/characters/princess-elowen-royal-portrait-v02.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/princess-elowen-royal-portrait-v02.png",
+      "output": "assets/portraits/characters/princess-elowen-royal-portrait-v02.webp",
       "format": "webp",
-      "originalBytes": 3255878,
-      "outputBytes": 247026,
+      "originalBytes": 3039555,
+      "outputBytes": 213328,
       "width": 1024,
       "height": 1536,
       "hasAlpha": false
@@ -961,78 +961,78 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/quill-pebbleturn-portrait-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/quill-pebbleturn-portrait-v01.png",
-      "output": "assets/portraits/characters/quill-pebbleturn-portrait-v01.webp",
+      "source": "assets/portraits/characters/quill-pebbleturn-portrait-v02.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/quill-pebbleturn-portrait-v02.png",
+      "output": "assets/portraits/characters/quill-pebbleturn-portrait-v02.webp",
       "format": "webp",
-      "originalBytes": 3156341,
-      "outputBytes": 204880,
+      "originalBytes": 2794832,
+      "outputBytes": 159426,
       "width": 1024,
       "height": 1536,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/rowan-portrait-v02.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/rowan-portrait-v02.png",
-      "output": "assets/portraits/characters/rowan-portrait-v02.webp",
+      "source": "assets/portraits/characters/rowan-portrait-v03.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/rowan-portrait-v03.png",
+      "output": "assets/portraits/characters/rowan-portrait-v03.webp",
       "format": "webp",
-      "originalBytes": 2350893,
-      "outputBytes": 145630,
+      "originalBytes": 2317315,
+      "outputBytes": 94910,
       "width": 1122,
       "height": 1402,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/smith-orin-portrait-v02.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/smith-orin-portrait-v02.png",
-      "output": "assets/portraits/characters/smith-orin-portrait-v02.webp",
+      "source": "assets/portraits/characters/smith-orin-portrait-v03.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/smith-orin-portrait-v03.png",
+      "output": "assets/portraits/characters/smith-orin-portrait-v03.webp",
       "format": "webp",
-      "originalBytes": 2573335,
-      "outputBytes": 135798,
+      "originalBytes": 2375191,
+      "outputBytes": 103186,
       "width": 1024,
       "height": 1536,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/tilda-portrait-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/tilda-portrait-v01.png",
-      "output": "assets/portraits/characters/tilda-portrait-v01.webp",
+      "source": "assets/portraits/characters/tilda-portrait-v02.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/tilda-portrait-v02.png",
+      "output": "assets/portraits/characters/tilda-portrait-v02.webp",
       "format": "webp",
-      "originalBytes": 2563379,
-      "outputBytes": 184740,
+      "originalBytes": 2395340,
+      "outputBytes": 145378,
       "width": 1122,
       "height": 1402,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/toma-fielding-portrait-v02.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/toma-fielding-portrait-v02.png",
-      "output": "assets/portraits/characters/toma-fielding-portrait-v02.webp",
+      "source": "assets/portraits/characters/toma-fielding-portrait-v03.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/toma-fielding-portrait-v03.png",
+      "output": "assets/portraits/characters/toma-fielding-portrait-v03.webp",
       "format": "webp",
-      "originalBytes": 2498212,
-      "outputBytes": 116252,
+      "originalBytes": 2416523,
+      "outputBytes": 103270,
       "width": 1024,
       "height": 1536,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/westroot-rootbread-child-portrait-v02.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/westroot-rootbread-child-portrait-v02.png",
-      "output": "assets/portraits/characters/westroot-rootbread-child-portrait-v02.webp",
+      "source": "assets/portraits/characters/westroot-rootbread-child-portrait-v03.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/westroot-rootbread-child-portrait-v03.png",
+      "output": "assets/portraits/characters/westroot-rootbread-child-portrait-v03.webp",
       "format": "webp",
-      "originalBytes": 2694246,
-      "outputBytes": 160244,
+      "originalBytes": 2559369,
+      "outputBytes": 148740,
       "width": 1024,
       "height": 1536,
       "hasAlpha": false
     },
     {
-      "source": "assets/portraits/characters/worried-road-traveler-portrait-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/worried-road-traveler-portrait-v01.png",
-      "output": "assets/portraits/characters/worried-road-traveler-portrait-v01.webp",
+      "source": "assets/portraits/characters/worried-road-traveler-portrait-v02.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/worried-road-traveler-portrait-v02.png",
+      "output": "assets/portraits/characters/worried-road-traveler-portrait-v02.webp",
       "format": "webp",
-      "originalBytes": 2289391,
-      "outputBytes": 105996,
+      "originalBytes": 3334889,
+      "outputBytes": 91634,
       "width": 1024,
       "height": 1535,
       "hasAlpha": false
@@ -1644,6 +1644,110 @@
     {
       "source": "assets/scenes/witness-stones-public-renewal-scene-v02.webp",
       "destination": "assets/reference/alternates/assets/scenes/witness-stones-public-renewal-scene-v02.webp"
+    },
+    {
+      "source": "assets/portraits/characters/ada-willowmarket-portrait-no-lens-v01.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/ada-willowmarket-portrait-no-lens-v01.webp"
+    },
+    {
+      "source": "assets/portraits/characters/ada-willowmarket-portrait-v01.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/ada-willowmarket-portrait-v01.webp"
+    },
+    {
+      "source": "assets/portraits/characters/auntie-lume-portrait-v02.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/auntie-lume-portrait-v02.webp"
+    },
+    {
+      "source": "assets/portraits/characters/bramwell-gatehand-portrait-v01.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/bramwell-gatehand-portrait-v01.webp"
+    },
+    {
+      "source": "assets/portraits/characters/edden-vale-portrait-v01.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/edden-vale-portrait-v01.webp"
+    },
+    {
+      "source": "assets/portraits/characters/enna-portrait-v02.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/enna-portrait-v02.webp"
+    },
+    {
+      "source": "assets/portraits/characters/hollis-portrait-v01.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/hollis-portrait-v01.webp"
+    },
+    {
+      "source": "assets/portraits/characters/lio-brindle-portrait-v01.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/lio-brindle-portrait-v01.webp"
+    },
+    {
+      "source": "assets/portraits/characters/mara-brindle-portrait-v01.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/mara-brindle-portrait-v01.webp"
+    },
+    {
+      "source": "assets/portraits/characters/mayor-anwen-portrait-v01.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/mayor-anwen-portrait-v01.webp"
+    },
+    {
+      "source": "assets/portraits/characters/mira-portrait-v01.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/mira-portrait-v01.webp"
+    },
+    {
+      "source": "assets/portraits/characters/miri-portrait-v02.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/miri-portrait-v02.webp"
+    },
+    {
+      "source": "assets/portraits/characters/moss-portrait-v01.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/moss-portrait-v01.webp"
+    },
+    {
+      "source": "assets/portraits/characters/nella-portrait-v03.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/nella-portrait-v03.webp"
+    },
+    {
+      "source": "assets/portraits/characters/nix-portrait-v01.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/nix-portrait-v01.webp"
+    },
+    {
+      "source": "assets/portraits/characters/noma-greenstill-portrait-v02.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/noma-greenstill-portrait-v02.webp"
+    },
+    {
+      "source": "assets/portraits/characters/pibble-portrait-v01.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/pibble-portrait-v01.webp"
+    },
+    {
+      "source": "assets/portraits/characters/princess-elowen-portrait-v01.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/princess-elowen-portrait-v01.webp"
+    },
+    {
+      "source": "assets/portraits/characters/princess-elowen-royal-portrait-v01.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/princess-elowen-royal-portrait-v01.webp"
+    },
+    {
+      "source": "assets/portraits/characters/quill-pebbleturn-portrait-v01.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/quill-pebbleturn-portrait-v01.webp"
+    },
+    {
+      "source": "assets/portraits/characters/rowan-portrait-v02.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/rowan-portrait-v02.webp"
+    },
+    {
+      "source": "assets/portraits/characters/smith-orin-portrait-v02.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/smith-orin-portrait-v02.webp"
+    },
+    {
+      "source": "assets/portraits/characters/tilda-portrait-v01.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/tilda-portrait-v01.webp"
+    },
+    {
+      "source": "assets/portraits/characters/toma-fielding-portrait-v02.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/toma-fielding-portrait-v02.webp"
+    },
+    {
+      "source": "assets/portraits/characters/westroot-rootbread-child-portrait-v02.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/westroot-rootbread-child-portrait-v02.webp"
+    },
+    {
+      "source": "assets/portraits/characters/worried-road-traveler-portrait-v01.webp",
+      "destination": "assets/reference/alternates/assets/portraits/characters/worried-road-traveler-portrait-v01.webp"
     }
   ]
 }

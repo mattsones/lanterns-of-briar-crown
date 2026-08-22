@@ -16,7 +16,7 @@ The final Briar Relay Post map replaces the graybox SVG. The occupied station ha
 
 Approved full-resolution PNG masters live under `assets/reference/source-art/assets/`; optimized runtime WebPs live under `assets/maps/`, `assets/portraits/characters/`, and `assets/scenes/`. Earlier Elowen and Relay passes remain in their project concept folders. The optimization manifest records the complete Chapter 4 Underway map suite, Relay and Elowen assets, and the approved Isara and Edran portraits, preventing already-optimized WebPs from being mistaken for missing source masters on future runs.
 
-The versioned portrait-finish candidate pass is complete. Twenty-six full-resolution candidates apply the Queen Isara and King Edran facial-rendering standard to every other approved character portrait while preserving the current runtime and approved source masters. The review sheet and paired before/after sheets live under `assets/reference/concepts/portrait-smoothing/`; the exact scope, prompt direction, selected filenames, and promotion gate are documented in `docs/art/portrait-smoothing-pass.md`. Edden's wet-eyed first attempt was rejected and replaced by the dry-eyed V02 candidate.
+The versioned portrait-finish pass is approved and integrated. Twenty-six new versioned source masters apply the Queen Isara and King Edran facial-rendering standard to every other approved character portrait, and their optimized WebPs are now the live dialogue, map-token, companion, and Elowen formal-portrait assets. The review sheet and paired before/after sheets remain under `assets/reference/concepts/portrait-smoothing/`; the exact scope, prompt direction, promotion map, and verification record are documented in `docs/art/portrait-smoothing-pass.md`. Edden's wet-eyed first attempt remains rejected; the dry-eyed V02 is live. Superseded source masters remain versioned in source art, and superseded runtime derivatives are archived under reference alternates. The 149-image production audit, TypeScript/Vite build, all 46 rules tests, and browser smoke test pass with the integrated set.
 
 `Coravene` and `Coraveni` replace the retired working names `Selvara` and `Selvaran` throughout textual canon, planning notes, and art prompts. No gameplay state, save key, or runtime ID depends on the retired name. `great-survey-of-alderreach-v06.png` now completes the composition-preserving painted-label revision; V05 remains preserved as the pre-rename source. Queen Isara's portrait contains no text and needs no rename-specific visual edit.
 
@@ -24,7 +24,7 @@ The two required Relay evidence illustrations are now integrated. `relay-forged-
 
 ### Next Best Step
 
-Review the portrait-smoothing comparison sheets and approve, reject, or request targeted revisions per character. Only after that review should selected candidates be promoted into versioned source masters and optimized runtime WebPs. Then finish the Chapter 4 milestone with the remaining batched browser suite and uninterrupted Chapters 1-4 release-candidate QA. The captive porter remains optional.
+Finish the Chapter 4 milestone with the remaining batched browser suite and uninterrupted Chapters 1-4 release-candidate QA. The portrait-smoothing batch is already approved, integrated, optimized, and covered by the production asset and portrait regression checks. The captive porter remains optional.
 
 ## Latest Handoff — 2026-08-20
 

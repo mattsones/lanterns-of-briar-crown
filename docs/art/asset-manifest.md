@@ -164,36 +164,36 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 
 | Character | Suggested filename | Notes |
 |---|---|---|
-| Elder Brynn | `mira-portrait-v01.webp` | Warm, wise Hearthhollow elder. |
-| Enna | `enna-portrait-v02.webp` | Black woman, darker skin, tough and focused. |
-| Captain Hollis | `hollis-portrait-v01.webp` | Worn, responsible watch captain. |
-| Nix Fernwhistle | `nix-portrait-v01.webp` | Wiry road-scout, Lantern Road guide. |
-| Pibble Thatch | `pibble-portrait-v01.webp` | Curious, helpful, odd village clue-noticer. |
-| Rowan Reedshield | `rowan-portrait-v02.webp` | Defensive companion; sturdy playable-ancestry look, not fox-person. |
-| Tilda Quickstep | `tilda-portrait-v01.webp` | Quick, clever, mischievous companion. |
-| Moss Fenmere | `moss-portrait-v01.webp` | Mossback companion; calm, rooted, ancient-adjacent. |
-| Ada Willowmarket | `ada-willowmarket-portrait-v01.webp` | Production portrait; organized market authority and Willow seal identity. |
-| Ada Willowmarket, no lens | `ada-willowmarket-portrait-no-lens-v01.webp` | Post-borrow portrait variant for after the player takes the Willowmark Lens. |
-| Smith Orin | `smith-orin-portrait-v02.webp` | Selected Emberling/fireperson blacksmith direction. |
-| Mayor Anwen | `mayor-anwen-portrait-v01.webp` | Production portrait; Bramblecross civic leader. |
-| Nella the Baker | `nella-portrait-v03.webp` | Selected Tideborn/water-person baker direction. |
-| Toma Fielding | `toma-fielding-portrait-v02.webp` | Selected farmer portrait with clearer tool silhouette. |
-| Sela of the Loom | `miri-portrait-v02.webp` | Selected loom/thread portrait with stronger face variety. |
-| Mara Brindle | `mara-brindle-portrait-v01.webp` | Production portrait for Chapter 2 protected guest role. |
-| Edden Vale | `edden-vale-portrait-v01.webp` | Production portrait for the recovery-room witness. |
-| Lio Brindle | `lio-brindle-portrait-v01.webp` | Pre-rescue or remembered courier portrait; generate a later rescued variant if needed. |
-| Bramwell Gatehand | `bramwell-gatehand-portrait-v01.webp` | Chapter 3 Stonekin gatehand; distinct elder/gate-tool silhouette. |
-| Quill Pebbleturn | `quill-pebbleturn-portrait-v01.webp` | Chapter 3 Rootmarket technician with lantern-shutter identity. |
-| Auntie Lume | `auntie-lume-portrait-v02.webp` | Selected Chapter 3 Rootmarket host portrait; clearer and warmer than v01. |
-| Noma Greenstill | `noma-greenstill-portrait-v02.webp` | Selected Chapter 3 Mossgarden memory-keeper portrait; older and steadier than v01. |
-| Westroot Rootbread Child | `westroot-rootbread-child-portrait-v02.webp` | Selected Chapter 3 portrait; visibly young Mossback girl with the Transfer Checkpoint/rootbread story read. |
-| Worried Road Traveler | `worried-road-traveler-portrait-v01.webp` | Production-usable generic traveler; includes baked-in sign text, so use sparingly. |
-| Princess Elowen | `princess-elowen-portrait-v01.webp` | Approved canonical traveling profile: a human heir in her early twenties who strongly resembles her Coraveni-born, Sunreach-heritage mother, with blue-green eyes inherited from her Hearthvale father. Practical scholar-princess attire, quiet warmth, and regal authority; no satchel and no held map tool. |
-| Princess Elowen, formal royal portrait | `princess-elowen-royal-portrait-v01.webp` | Approved official likeness in an ornate sapphire fairy-tale gown on a palace-garden terrace. This is the identity and costume source for public royal portraiture and the Progress Notice. Full PNG sources for both Elowen portraits are preserved under `assets/reference/source-art/assets/portraits/characters/`. |
+| Elder Brynn | `mira-portrait-v02.webp` | Warm, wise Hearthhollow elder; approved smoother facial finish. |
+| Enna | `enna-portrait-v03.webp` | Black woman, darker skin, tough and focused; approved smoother facial finish. |
+| Captain Hollis | `hollis-portrait-v02.webp` | Worn, responsible watch captain; approved smoother facial finish. |
+| Nix Fernwhistle | `nix-portrait-v02.webp` | Wiry road-scout and Lantern Road guide; approved smoother facial finish. |
+| Pibble Thatch | `pibble-portrait-v02.webp` | Curious, helpful, odd village clue-noticer; approved smoother facial finish. |
+| Rowan Reedshield | `rowan-portrait-v03.webp` | Defensive companion; sturdy playable-ancestry look, not fox-person; approved smoother facial finish. |
+| Tilda Quickstep | `tilda-portrait-v02.webp` | Quick, clever, mischievous companion; approved smoother facial finish. |
+| Moss Fenmere | `moss-portrait-v02.webp` | Mossback companion; calm, rooted, ancient-adjacent; approved smoother facial finish. |
+| Ada Willowmarket | `ada-willowmarket-portrait-v02.webp` | Organized market authority and Willow seal identity; approved smoother facial finish. |
+| Ada Willowmarket, no lens | `ada-willowmarket-portrait-no-lens-v02.webp` | Smoothed post-borrow variant for after the player takes the Willowmark Lens. |
+| Smith Orin | `smith-orin-portrait-v03.webp` | Selected Emberling/fireperson blacksmith direction; approved smoother facial finish. |
+| Mayor Anwen | `mayor-anwen-portrait-v02.webp` | Bramblecross civic leader; approved smoother facial finish. |
+| Nella the Baker | `nella-portrait-v04.webp` | Selected Tideborn/water-person baker direction; approved smoother facial finish. |
+| Toma Fielding | `toma-fielding-portrait-v03.webp` | Selected farmer portrait with clearer tool silhouette and approved smoother facial finish. |
+| Sela of the Loom | `miri-portrait-v03.webp` | Selected loom/thread portrait with stronger face variety and approved smoother facial finish. |
+| Mara Brindle | `mara-brindle-portrait-v02.webp` | Chapter 2 protected guest portrait; approved smoother facial finish. |
+| Edden Vale | `edden-vale-portrait-v02.webp` | Dry-eyed recovery-room witness portrait with the approved smoother facial finish. |
+| Lio Brindle | `lio-brindle-portrait-v02.webp` | Smoothed pre-rescue or remembered courier portrait; generate a later rescued variant if needed. |
+| Bramwell Gatehand | `bramwell-gatehand-portrait-v02.webp` | Chapter 3 Stonekin gatehand; distinct elder/gate-tool silhouette and approved smoother facial finish. |
+| Quill Pebbleturn | `quill-pebbleturn-portrait-v02.webp` | Chapter 3 Rootmarket technician with lantern-shutter identity and approved smoother facial finish. |
+| Auntie Lume | `auntie-lume-portrait-v03.webp` | Chapter 3 Rootmarket host portrait with the approved warmer composition and smoother facial finish. |
+| Noma Greenstill | `noma-greenstill-portrait-v03.webp` | Chapter 3 Mossgarden memory-keeper portrait; older, steady, and smoothly rendered. |
+| Westroot Rootbread Child | `westroot-rootbread-child-portrait-v03.webp` | Young Mossback girl with the Transfer Checkpoint/rootbread story read and approved smoother facial finish. |
+| Worried Road Traveler | `worried-road-traveler-portrait-v02.webp` | Smoothed generic traveler; includes baked-in sign text, so use sparingly. |
+| Princess Elowen | `princess-elowen-portrait-v02.webp` | Approved canonical traveling profile with the smoother royal-family facial finish: a human heir in her early twenties who strongly resembles her Coraveni-born, Sunreach-heritage mother, with blue-green eyes inherited from her Hearthvale father. Practical scholar-princess attire, quiet warmth, and regal authority; no satchel and no held map tool. |
+| Princess Elowen, formal royal portrait | `princess-elowen-royal-portrait-v02.webp` | Approved smoothed official likeness in an ornate sapphire fairy-tale gown on a palace-garden terrace. This is the identity and costume source for public royal portraiture and the Progress Notice. Full PNG sources for both Elowen portraits are preserved under `assets/reference/source-art/assets/portraits/characters/`. |
 | Queen Isara of Coravene | `queen-isara-portrait-v01.webp` | Approved canonical Chamber of Compacts profile: a very dark-skinned Coraveni-born queen of Sunreach heritage, age fifty-three, with an entirely black sculptural updo and dark amber eyes. Her pearl-white sleeveless high-collared gown, saturated teal cape and lining, wave-and-frond embroidery, shell clasps, compact sea-glass earrings, restrained pearl necklace, and sunlit pale-stone Hearthvale chamber preserve both her foreign-born royal identity and present authority. Facial and skin rendering uses the approved smoother portrait finish. |
 | King Edran of Alderreach | `king-edran-portrait-v01.webp` | Approved canonical seated council profile: a broad sixty-three-year-old Hearthvale human with former-blond silver-gray hair, a groomed gray beard, and Elowen's clear blue-green eyes. He sits upright with relaxed hands in a restrained pale council chair, wearing formal navy, royal green, bright gold alder embroidery, and a narrow circlet before charter banners. His bearing balances settled royal authority, patience, kindness, scholarship, and private weariness. |
 
-The versioned portrait-smoothing candidate batch is documented in `docs/art/portrait-smoothing-pass.md`. Twenty-six full-resolution review candidates live under `assets/reference/concepts/portrait-smoothing/candidates/`, with paired comparison sheets beside them. These are not production selections and must not replace the approved source masters or runtime WebPs before owner review.
+The versioned portrait-smoothing batch is documented in `docs/art/portrait-smoothing-pass.md`. All twenty-six candidates were owner-approved on 2026-08-22, promoted as new versioned source masters, optimized as runtime WebPs, and wired into the game. The original comparison materials remain under `assets/reference/concepts/portrait-smoothing/`; superseded runtime derivatives are preserved under `assets/reference/alternates/assets/portraits/characters/`.
 
 ## Enemies
 

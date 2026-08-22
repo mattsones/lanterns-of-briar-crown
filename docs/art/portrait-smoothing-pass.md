@@ -1,8 +1,8 @@
-# Portrait Smoothing Candidate Pass
+# Portrait Smoothing Pass
 
 Date: 2026-08-22
 
-Status: Complete candidate batch awaiting owner review. No runtime portrait, approved source master, dialogue mapping, save data, or gameplay state has changed.
+Status: Owner-approved and integrated on 2026-08-22. All 26 selected candidates are now new versioned source masters and optimized runtime portraits; no prior source master was overwritten.
 
 ## Review Materials
 
@@ -44,7 +44,7 @@ westroot-rootbread-child-portrait-smooth-v01.png
 worried-road-traveler-portrait-smooth-v01.png
 ```
 
-Edden's first smoothing candidate introduced wet-looking tear streaks and is preserved under `assets/reference/concepts/portrait-smoothing/rejected/`. V02 restores the approved dry-eyed, worried expression and is the review candidate.
+Edden's first smoothing candidate introduced wet-looking tear streaks and is preserved under `assets/reference/concepts/portrait-smoothing/rejected/`. V02 restores the approved dry-eyed, worried expression and is the promoted production portrait.
 
 ## Generation Direction
 
@@ -54,17 +54,16 @@ The built-in identity-preserving image-edit workflow used each approved full-res
 
 Species-specific prompts explicitly preserved bark, leaf, moss, stone, mineral, blue-skin, pointed-ear, and other ancestry traits. Ada's no-lens state used the no-lens source as the authoritative composition and her smoothed lens portrait only as a supporting identity/finish reference.
 
-## Approval And Promotion Gate
+## Promotion Record
 
-1. Review the two paired comparison sheets and inspect any uncertain candidate at full size.
-2. Approve, reject, or request a targeted second pass per character. Do not treat batch generation as automatic approval.
-3. After approval, promote selected candidates as new versioned source masters, create optimized runtime WebPs, update portrait mappings and the optimization manifest, and run the portrait/rules/build verification set.
-4. Preserve the currently approved runtime files until that promotion commit is explicitly accepted.
+The owner approved the complete review sheet on 2026-08-22. Each candidate was copied into `assets/reference/source-art/assets/portraits/characters/` with the next available character-specific version number, optimized to a height of at most 1200 pixels as an opaque quality-82 WebP, and wired into `src/data/portraits.ts`, `src/data/companions.ts`, or `src/data/dialogueArt.ts` as applicable. Queen Isara and King Edran remain unchanged as the finish benchmarks. Superseded runtime WebPs moved to `assets/reference/alternates/assets/portraits/characters/`; the earlier full-resolution source masters remain in source art.
 
 ## Verification
 
 - Candidate inventory: 26 selected PNGs, each mapped to one approved source portrait and normalized to that source's exact pixel dimensions.
 - Visual review: full-set contact sheet plus two paired before/after sheets inspected; Edden V01 rejected and V02 selected after targeted correction.
-- `npm.cmd run audit:assets`: passed (149 production images; candidate concepts remain outside the production scan).
+- Promotion integrity: 26/26 source masters are byte-identical to their approved candidates; 26/26 runtime WebPs and optimization-manifest entries are present; the production character set contains those 26 portraits plus unchanged Isara and Edran.
+- `npm.cmd run audit:assets`: passed (149 production images).
 - `npm.cmd run build`: passed.
-- `npm.cmd run test:rules`: passed (45 tests).
+- `npm.cmd run test:rules`: passed (46 tests, including the complete smoothing-batch selection regression).
+- `npm.cmd run playtest:smoke`: passed.

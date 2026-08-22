@@ -593,12 +593,12 @@ test("Westroot map NPC markers follow the story's physical staging", () => {
 
 test("Chapter 3 production artwork is selected and fallback-safe", () => {
   expect(DIALOGUE_PORTRAITS["Bramble Boar"].src).toContain("bramble-boar-v01");
-  expect(DIALOGUE_PORTRAITS["Bramwell Gatehand"].src).toContain("bramwell-gatehand-portrait-v01");
-  expect(DIALOGUE_PORTRAITS["Quill Pebbleturn"].src).toContain("quill-pebbleturn-portrait-v01");
-  expect(DIALOGUE_PORTRAITS["Auntie Lume"].src).toContain("auntie-lume-portrait-v02");
-  expect(DIALOGUE_PORTRAITS["Noma Greenstill"].src).toContain("noma-greenstill-portrait-v02");
+  expect(DIALOGUE_PORTRAITS["Bramwell Gatehand"].src).toContain("bramwell-gatehand-portrait-v02");
+  expect(DIALOGUE_PORTRAITS["Quill Pebbleturn"].src).toContain("quill-pebbleturn-portrait-v02");
+  expect(DIALOGUE_PORTRAITS["Auntie Lume"].src).toContain("auntie-lume-portrait-v03");
+  expect(DIALOGUE_PORTRAITS["Noma Greenstill"].src).toContain("noma-greenstill-portrait-v03");
   expect(DIALOGUE_PORTRAITS["Westroot Rootbread Child"].src).toContain(
-    "westroot-rootbread-child-portrait-v02",
+    "westroot-rootbread-child-portrait-v03",
   );
   expect(ENEMY_DB.briar_cargo_runner.artwork?.src).toContain("briar-cargo-runner-v01");
   expect(ENEMY_DB.seal_forged_sentry.artwork?.src).toContain("seal-forged-sentry-v01");
@@ -612,6 +612,47 @@ test("Chapter 3 production artwork is selected and fallback-safe", () => {
   expect(ARTWORK_PLAN_GROUPS.enemies.briar_cargo_runner.status).toBe("available");
   expect(ARTWORK_PLAN_GROUPS.enemies.seal_forged_sentry.status).toBe("available");
   expect(ARTWORK_PLAN_GROUPS.items.cargo_transfer_tag.status).toBe("available");
+});
+
+test("the approved portrait smoothing batch is selected everywhere it is used", () => {
+  const expectedDialoguePortraits = {
+    "Elder Brynn": "mira-portrait-v02",
+    "Pibble Thatch": "pibble-portrait-v02",
+    "Nix Fernwhistle": "nix-portrait-v02",
+    "Smith Orin": "smith-orin-portrait-v03",
+    "Mayor Anwen": "mayor-anwen-portrait-v02",
+    "Nella the Baker": "nella-portrait-v04",
+    "Toma Fielding": "toma-fielding-portrait-v03",
+    "Sela of the Loom": "miri-portrait-v03",
+    "Ada Willowmarket": "ada-willowmarket-portrait-v02",
+    "Ada Willowmarket No Lens": "ada-willowmarket-portrait-no-lens-v02",
+    "Mara Brindle": "mara-brindle-portrait-v02",
+    "Edden Vale": "edden-vale-portrait-v02",
+    "Lio Brindle": "lio-brindle-portrait-v02",
+    "Worried Road Traveler": "worried-road-traveler-portrait-v02",
+    Enna: "enna-portrait-v03",
+    "Captain Hollis": "hollis-portrait-v02",
+    "Bramwell Gatehand": "bramwell-gatehand-portrait-v02",
+    "Quill Pebbleturn": "quill-pebbleturn-portrait-v02",
+    "Auntie Lume": "auntie-lume-portrait-v03",
+    "Noma Greenstill": "noma-greenstill-portrait-v03",
+    "Westroot Rootbread Child": "westroot-rootbread-child-portrait-v03",
+    "Princess Elowen": "princess-elowen-portrait-v02",
+    "Rowan Reedshield": "rowan-portrait-v03",
+    "Tilda Quickstep": "tilda-portrait-v02",
+    "Moss Fenmere": "moss-portrait-v02",
+  } as const;
+
+  for (const [name, version] of Object.entries(expectedDialoguePortraits)) {
+    expect(DIALOGUE_PORTRAITS[name as keyof typeof DIALOGUE_PORTRAITS].src).toContain(version);
+  }
+
+  expect(COMPANION_OPTIONS.rowan.portraitSrc).toContain("rowan-portrait-v03");
+  expect(COMPANION_OPTIONS.tilda.portraitSrc).toContain("tilda-portrait-v02");
+  expect(COMPANION_OPTIONS.moss.portraitSrc).toContain("moss-portrait-v02");
+  expect(DIALOGUE_SCENE_ART.princessElowenRoyalPortrait.src).toContain(
+    "princess-elowen-royal-portrait-v02",
+  );
 });
 
 test("level-up growth choices use the coordinated production emblem set", () => {
