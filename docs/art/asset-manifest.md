@@ -193,6 +193,8 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Queen Isara of Coravene | `queen-isara-portrait-v01.webp` | Approved canonical Chamber of Compacts profile: a very dark-skinned Coraveni-born queen of Sunreach heritage, age fifty-three, with an entirely black sculptural updo and dark amber eyes. Her pearl-white sleeveless high-collared gown, saturated teal cape and lining, wave-and-frond embroidery, shell clasps, compact sea-glass earrings, restrained pearl necklace, and sunlit pale-stone Hearthvale chamber preserve both her foreign-born royal identity and present authority. Facial and skin rendering uses the approved smoother portrait finish. |
 | King Edran of Alderreach | `king-edran-portrait-v01.webp` | Approved canonical seated council profile: a broad sixty-three-year-old Hearthvale human with former-blond silver-gray hair, a groomed gray beard, and Elowen's clear blue-green eyes. He sits upright with relaxed hands in a restrained pale council chair, wearing formal navy, royal green, bright gold alder embroidery, and a narrow circlet before charter banners. His bearing balances settled royal authority, patience, kindness, scholarship, and private weariness. |
 
+The versioned portrait-smoothing candidate batch is documented in `docs/art/portrait-smoothing-pass.md`. Twenty-six full-resolution review candidates live under `assets/reference/concepts/portrait-smoothing/candidates/`, with paired comparison sheets beside them. These are not production selections and must not replace the approved source masters or runtime WebPs before owner review.
+
 ## Enemies
 
 | Enemy | Suggested filename | Notes |
