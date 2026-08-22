@@ -1,16 +1,16 @@
 # The Great Survey Of Alderreach — Political World Map
 
-Last updated: 2026-07-27
+Last updated: 2026-08-22
 
-Status: Selected reference artwork and reusable generation prompt. The map is not wired into the playable build yet.
+Status: Selected geographic reference artwork and reusable generation prompt. The map is not wired into the playable build yet. V06 completes the approved composition-preserving lettering revision from the retired principality name to `CORAVENE`.
 
 ## Selected Artwork
 
-`assets/reference/source-art/assets/maps/great-survey-of-alderreach-v05.png`
+`assets/reference/source-art/assets/maps/great-survey-of-alderreach-v06.png`
 
 The selected image is a full-size reference source, not an optimized runtime asset. If it enters the game, create a web-ready derivative rather than importing the source PNG directly.
 
-Version 05 supersedes the first four compositions. It retains v04's terrain-led regions and named political geography while rebuilding the Ember Coast as a broad mainland shelf below the escarpment, placing Selvara, Whiteharbor, and Tideglass on that mainland, separating the Saltwake Isles offshore, and making national, provincial, council, city, and fortress symbols unmistakably different. V01–V04 remain preserved as earlier references.
+Version 06 preserves Version 05's accepted terrain-led composition, broad mainland Ember Coast, separate Saltwake Isles, and distinct national, provincial, council, city, and fortress symbols. Its sole intended revision is the painted `CORAVENE` principality label. V01–V04 remain preserved as earlier geographic references, and V05 remains preserved as the superseded pre-rename source.
 
 ## What The Object Is
 
@@ -31,18 +31,18 @@ Do not display the penciled Westroot version before the party has found Westroot
 
 ## Required Diegetic Map States
 
-The selected v05 source is the **post-Chapter-3 reference state** because the graphite Westroot circle, route, and note are already present. It is not the clean Survey copy that Enna can display during Chapters 1–2.
+The selected v06 source is the **post-Chapter-3 reference state** because the graphite Westroot circle, route, and note are already present. It is not the clean Survey copy that Enna can display during Chapters 1–2.
 
-Any later runtime integration should derive two clearly named states without rewriting the v05 source:
+Any later runtime integration should derive two clearly named states without rewriting the v06 source:
 
 1. **Clean Survey, before Chapter 3:** preserve all official ink and remove or mask only the later graphite Westroot circle, connector, and note. Enna may compare this copy with older courier scraps and explain that the Survey ends where verified knowledge ended.
-2. **Witnessed correction, after Chapter 3:** show the graphite Westroot correction only after Quill's first named warning reaches Bramblecross. Add the responsible witness name and in-story date in a legible annotation, overlay, caption, or transition treatment. The current v05 pixels do not contain that name or date, so the surrounding presentation must supply them before the image is treated as the completed diegetic correction.
+2. **Witnessed correction, after Chapter 3:** show the graphite Westroot correction only after Quill's first named warning reaches Bramblecross. Add the responsible witness name and in-story date in a legible annotation, overlay, caption, or transition treatment. The current v06 pixels do not contain that name or date, so the surrounding presentation must supply them before the image is treated as the completed diegetic correction.
 
-Do not use the annotated v05 source as an ordinary wall map in an earlier chapter, and do not imply that the original surveyors placed or erased Westroot.
+Do not use the annotated v06 source as an ordinary wall map in an earlier chapter, and do not imply that the original surveyors placed or erased Westroot.
 
 ## Scale And Local Travel Use
 
-V05 is the selected national political composition, not the executable travel-time contract for the playable local routes. Its settlement labels and symbols are spaced for national readability, while Chapters 1–3 already establish the playable pacing from Hearthhollow to Bramblecross and from Bramblecross to Westroot.
+V06 is the selected national political composition, not the executable travel-time contract for the playable local routes. Its settlement labels and symbols are spaced for national readability, while Chapters 1–3 already establish the playable pacing from Hearthhollow to Bramblecross and from Bramblecross to Westroot.
 
 Before runtime integration, validate those local relationships in a dedicated Rainroot crop or local route inset. If literal distances cannot be reconciled with the national scale bar, treat the local labels in the national composition as displaced for legibility and say so in the artifact presentation; do not silently lengthen chapter travel or move the story communities to satisfy an illustrative spacing choice.
 
@@ -66,7 +66,7 @@ The conservative Chapter 4–5 direction keeps the Underway, Listening Mile, Bri
 | Cairn Cantons / Cairnmeet | Northern mountain cantons and their accessible conclave seat |
 | Mereward League / Sevenbridge | Eastern river-and-lake city-state league and its council seat |
 | Ember Coast Principalities / Tideglass | Southern mainland coastal polities and their shared mainland Sea Council port |
-| Selvara / Whiteharbor | The queen's mainland Ember Coast principality and its capital port |
+| Coravene / Whiteharbor | The queen's mainland Ember Coast principality and its capital port |
 | Cinder Vale / Valehaven | Emberling-majority glassmaking and metalworking coastal district and its ordinary civic chief city |
 | Saltwake Isles | Separate rugged offshore island chain associated with the Saltwake War |
 
@@ -201,7 +201,7 @@ GEOGRAPHY CORRECTIONS
 1. VEYRUN: remove the heavy mountain wall from the land immediately west of the disputed western river march. Make Veyrun there a broad inhabited river valley comparable to Rainroot: green river plains, tributaries, forests, farms, and roads on both sides of the braided contested river system. Veyrun should feel like a centralized, settled neighboring kingdom, with slightly more regular fields, planned roads, and controlled crossings. Retain mountains only along the far western and northwestern outer edge. Keep the braided north-south river march and its red disputed boundary; the political uncertainty comes from competing river channels, not a mountain wall.
 2. SOUTHERN ESCARPMENT: extend the dramatic cliff/escarpment formation into a long but naturally broken east-west geographic boundary across most of the separation between Alderreach's southern province of Sunreach and the Ember Coast Principalities. Let several rivers cut gorges through it, with small visible waterfalls where plateau rivers descend to the warmer coastal lowlands. Add a few believable passes and switchback roads. Keep the Ember Coast below the cliffs as warm maritime lowland with bays, deltas, ports, and coastal agriculture.
 3. CINDER VALE: remove the conspicuous industrial or factory-looking skyline. Make Cinder Vale a natural broad river valley or major break through the escarpment. Its main settlement is an ordinary civic city shown only with the same restrained survey hierarchy used elsewhere; label that city VALEHAVEN. Keep CINDER VALE as a regional label and preserve a subtle disputed boundary.
-4. SELVARA: within the Ember Coast Principalities, add a subtle internal principality boundary and regional label SELVARA. Place WHITEHARBOR on its coast as its capital.
+4. CORAVENE: within the Ember Coast Principalities, add a subtle internal principality boundary and regional label CORAVENE. Place WHITEHARBOR on its coast as its capital.
 
 SETTLEMENT HIERARCHY
 Reduce exaggerated castles and city miniatures across the map. Use professional, restrained Great Survey symbols: national capitals as small double-ring stars; regional capitals, assembly seats, and council seats as small single-ring stars; other cities as large solid dots; towns as medium dots; villages as small dots; fortresses as small square/tower symbols. Keep these symbols legible but much smaller than the oversized scenic city drawings. Hearthhollow must remain a tiny labeled village and Bramblecross a modest labeled town. Riverwatch must be a modest fortress, not a giant castle.
@@ -215,7 +215,7 @@ PLACE THE FOLLOWING EXACT NAMES IN CLEAN, LEGIBLE SERIF CAPITALS, WITH THEIR APP
 - CAIRNMEET: conclave seat of the Cairn Cantons, in an accessible highland meeting valley or pass, single-ring star; do not place it on an inaccessible summit.
 - SEVENBRIDGE: council seat of the Mereward League, at a conspicuous cluster of river, causeway, or lake crossings, single-ring star.
 - TIDEGLASS: Sea Council port on the Ember Coast, on the coast, single-ring star.
-- WHITEHARBOR: capital of the Principality of Selvara, on Selvara's coast, single-ring star.
+- WHITEHARBOR: capital of the Principality of Coravene, on Coravene's coast, single-ring star.
 - VALEHAVEN: ordinary civic chief city within Cinder Vale, large solid dot, no factory imagery.
 - RIVERWATCH: Alderreach border fortress on the eastern side of the braided disputed river march, small square/tower symbol.
 
@@ -238,7 +238,7 @@ CINDER VALE
 SALTWAKE ISLES
 WESTROOT — NOT IN SURVEY (this remains a small graphite pencil annotation at its current Rainroot ridge location, with circled mark and penciled connector)
 
-Add all ten new exact labels: BELLWATER, SAFFRON GATE, KESTOVAR, CAIRNMEET, SEVENBRIDGE, TIDEGLASS, VALEHAVEN, SELVARA, WHITEHARBOR, RIVERWATCH. Do not invent any other place names and do not add gibberish text.
+Add all ten new exact labels: BELLWATER, SAFFRON GATE, KESTOVAR, CAIRNMEET, SEVENBRIDGE, TIDEGLASS, VALEHAVEN, CORAVENE, WHITEHARBOR, RIVERWATCH. Do not invent any other place names and do not add gibberish text.
 
 LEGEND
 Keep the existing bottom-left route/boundary legend if space permits. Add a compact symbol key, spelled exactly: NATIONAL CAPITAL; REGIONAL / COUNCIL SEAT; CITY / TOWN; FORTRESS. Preserve ROYAL ROAD; REGIONAL BOUNDARY; DISPUTED BOUNDARY; PENCILED CORRECTION.
@@ -255,7 +255,7 @@ Make one localized cartographic correction to this exact map and otherwise prese
 
 SAFFRON GATE is the regional capital of SUNREACH and must be on the Sunreach plateau, north/above the long southern escarpment—not in the Ember Coast lowlands below it. Remove the current SAFFRON GATE star and label from below the cliffs. Place the same small regional-capital single-ring star and the exact label SAFFRON GATE on the plateau immediately north of the escarpment, beside a believable major pass where a royal road descends by switchbacks through a river-cut gorge. Keep it clearly within SUNREACH and geographically positioned to control that pass.
 
-Do not change any other geography, labels, spelling, symbols, boundaries, roads, waterways, settlements, title, legend, frame, scale, compass, colors, or art style. In particular preserve KESTOVAR, RIVERWATCH, WESTROOT — NOT IN SURVEY, CAIRNMEET, BELLWATER, LANTHORNE, HEARTHWARD, SEVENBRIDGE, VALEHAVEN, TIDEGLASS, SELVARA, WHITEHARBOR, all region/country labels, the western braided river march, and the long waterfall escarpment exactly as they are.
+Do not change any other geography, labels, spelling, symbols, boundaries, roads, waterways, settlements, title, legend, frame, scale, compass, colors, or art style. In particular preserve KESTOVAR, RIVERWATCH, WESTROOT — NOT IN SURVEY, CAIRNMEET, BELLWATER, LANTHORNE, HEARTHWARD, SEVENBRIDGE, VALEHAVEN, TIDEGLASS, CORAVENE, WHITEHARBOR, all region/country labels, the western braided river march, and the long waterfall escarpment exactly as they are.
 ```
 
 ## Version 05 Ember Coast And Symbol-Hierarchy Revision Prompt
@@ -270,12 +270,12 @@ Primary request: Correct the political geography of the Ember Coast and make the
 
 EMBER COAST GEOGRAPHY — REWORK THE SOUTHERN THIRD
 1. The Ember Coast Principalities are MAINLAND coastal polities directly south of Sunreach's long waterfall escarpment. Broaden the warm mainland coastal shelf between the foot of the cliffs and the southern sea, with bays, river mouths, deltas, coastal farms, and roads. Keep the long cliffs, waterfall gorges, passes, and switchbacks.
-2. Move SELVARA completely off the Saltwake Isles and onto this mainland Ember Coast shelf. Give it a subtle principality boundary on the mainland and place the regional label SELVARA inside that mainland territory.
-3. Move WHITEHARBOR completely off the islands. Place WHITEHARBOR at a sheltered mainland bay or river mouth within Selvara. It is the capital of the Principality of Selvara.
-4. Move TIDEGLASS completely off the islands. Place TIDEGLASS at a different mainland Ember Coast harbor, outside Selvara if practical. It is the shared Sea Council port for the several principalities, not the capital of a unified coastal country.
+2. Move CORAVENE completely off the Saltwake Isles and onto this mainland Ember Coast shelf. Give it a subtle principality boundary on the mainland and place the regional label CORAVENE inside that mainland territory.
+3. Move WHITEHARBOR completely off the islands. Place WHITEHARBOR at a sheltered mainland bay or river mouth within Coravene. It is the capital of the Principality of Coravene.
+4. Move TIDEGLASS completely off the islands. Place TIDEGLASS at a different mainland Ember Coast harbor, outside Coravene if practical. It is the shared Sea Council port for the several principalities, not the capital of a unified coastal country.
 5. Keep CINDER VALE on the eastern mainland as a natural river valley or broad break in the escarpment. Keep VALEHAVEN as its ordinary civic district capital. No factory, furnace, industrial skyline, or giant castle imagery.
 6. Put the label THE EMBER COAST PRINCIPALITIES across the mainland coastal belt, not across open water.
-7. The SALTWAKE ISLES remain a separate rugged offshore island chain farther south, divided from the mainland by visible sea. Keep the label SALTWAKE ISLES only across those offshore islands. Remove SELVARA, WHITEHARBOR, and TIDEGLASS from the islands. Do not add any named island city or new place name.
+7. The SALTWAKE ISLES remain a separate rugged offshore island chain farther south, divided from the mainland by visible sea. Keep the label SALTWAKE ISLES only across those offshore islands. Remove CORAVENE, WHITEHARBOR, and TIDEGLASS from the islands. Do not add any named island city or new place name.
 
 SETTLEMENT SYMBOL HIERARCHY — REDRAW THE LEGEND AND ALL NAMED MARKERS
 The current national-capital and regional/council symbols look too similar. Replace them with four unmistakably different survey symbols:
@@ -330,14 +330,14 @@ CAIRNMEET
 THE MEREWARD LEAGUE
 SEVENBRIDGE
 THE EMBER COAST PRINCIPALITIES
-SELVARA
+CORAVENE
 WHITEHARBOR
 TIDEGLASS
 CINDER VALE
 VALEHAVEN
 SALTWAKE ISLES
 
-Constraints: Selvara, Whiteharbor, and Tideglass must all be on the mainland Ember Coast and visibly north of the sea channel separating the Saltwake Isles. National capitals and provincial capitals must not share the same marker. Preserve the strong v04 northern and central geography. No extra names, no gibberish, no duplicate labels, no modern objects, no magical terrain, no oversized scenic cities, no watermark.
+Constraints: Coravene, Whiteharbor, and Tideglass must all be on the mainland Ember Coast and visibly north of the sea channel separating the Saltwake Isles. National capitals and provincial capitals must not share the same marker. Preserve the strong v04 northern and central geography. No extra names, no gibberish, no duplicate labels, no modern objects, no magical terrain, no oversized scenic cities, no watermark.
 ```
 
 ## Art Review Notes
@@ -356,7 +356,7 @@ Constraints: Selvara, Whiteharbor, and Tideglass must all be on the mainland Emb
 - The Cairn mountains, Mereward watershed and marshes, and southern escarpment give the other international relationships legible terrain.
 - Cairnmeet, Sevenbridge, Tideglass, Whiteharbor, and Valehaven give the neighboring polities political anchors without oversized castles.
 - The waterfall escarpment spans most of the Alderreach–Ember Coast boundary and gives the coast a distinct lowland identity.
-- The Ember Coast is now a broad mainland belt below the cliffs. Selvara, Whiteharbor, Tideglass, Cinder Vale, and Valehaven all sit on that mainland.
+- The Ember Coast is now a broad mainland belt below the cliffs. Coravene, Whiteharbor, Tideglass, Cinder Vale, and Valehaven all sit on that mainland.
 - The Saltwake Isles are a separate, smaller offshore chain divided from the principalities by open water.
 - Cinder Vale is now a geographic valley centered on the ordinary civic city of Valehaven; its glassmaking and metalworking history belongs in lore rather than factory iconography.
 - The Lantern Road reads as civic infrastructure, not a conscious or cosmic magical system.

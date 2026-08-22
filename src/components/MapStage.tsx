@@ -378,9 +378,9 @@ export function MapStage({
             </filter>
             {localLantern ? (
               <radialGradient id={`${fogMaskId}-lantern`}>
-                <stop offset="0" stopColor="#fff7d6" stopOpacity=".48" />
-                <stop offset=".38" stopColor="#fbbf24" stopOpacity=".28" />
-                <stop offset=".72" stopColor="#d97706" stopOpacity=".08" />
+                <stop offset="0" stopColor="#fff3c4" stopOpacity=".55" />
+                <stop offset=".38" stopColor="#f59e0b" stopOpacity=".3" />
+                <stop offset=".72" stopColor="#c2410c" stopOpacity=".09" />
                 <stop offset="1" stopColor="#d97706" stopOpacity="0" />
               </radialGradient>
             ) : null}
@@ -441,7 +441,7 @@ export function MapStage({
               className="underway-lantern-halo"
               cx={heroPoint.x}
               cy={heroPoint.y}
-              r={(visual.fogRadius || 8) * 1.45}
+              r={(visual.fogRadius || 8) * 1.6}
               fill={`url(#${fogMaskId}-lantern)`}
             />
           ) : null}

@@ -113,6 +113,8 @@ Preferred texture qualities:
 - watercolor / gouache-inspired layering
 - light paper grain
 - gentle ink-like line definition
+
+For faces and other exposed skin, keep the painterly finish especially restrained. Use smooth tonal blending with subtle natural skin texture; avoid chunky brush marks, square or mosaic-like artifacts, heavy crosshatching, and canvas grain that makes a portrait look pixelated at dialogue size.
 - warm illustrated-book finish
 
 Avoid:

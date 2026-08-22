@@ -7322,6 +7322,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     if (flags.princessNameSeen) {
       setDialogue({
         sceneId: CHAPTER_4_SCENE_IDS.forgedAuthority,
+        artKey: "relayForgedAuthority",
+        size: "wide",
+        contentLayout: "stacked",
         portrait: "seal",
         name: "Forged Authority",
         text: evidenceText,
@@ -7331,6 +7334,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     }
     setDialogue({
       sceneId: CHAPTER_4_SCENE_IDS.forgedAuthority,
+      artKey: "relayForgedAuthority",
+      size: "wide",
+      contentLayout: "stacked",
       portrait: "seal",
       name: "Forged Authority",
       text: evidenceText,
@@ -7357,6 +7363,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     if (flags.briarholdLeadFound) {
       setDialogue({
         sceneId: CHAPTER_4_SCENE_IDS.briarholdReveal,
+        artKey: "briarholdRouteLedgerReveal",
+        size: "wide",
+        contentLayout: "stacked",
         portrait: "book",
         name: "Briarhold Waystation",
         text: "The westbound ledger remains open to tonight's transfers. Lio's entry is bracketed with four other prisoners beneath a destination none of you had seen before: Briarhold Waystation. The route coordinates place it inside Rainroot, east of Riverwatch, and the final notation orders the whole group moved again before dawn.\n\nThe station's upper signal slit gives one narrow view of the marked ridge. Among the distant gold road lights, several lanterns burn a sickly green behind briar-shaped hoods.",
@@ -7369,6 +7378,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     setToast("Chapter 4 complete: Briarhold Waystation is the rescue target.");
     setDialogue({
       sceneId: CHAPTER_4_SCENE_IDS.briarholdReveal,
+      artKey: "briarholdRouteLedgerReveal",
+      size: "wide",
+      contentLayout: "stacked",
       portrait: "book",
       name: "Briarhold Waystation",
       text: "The westbound ledger has been scorched at one corner, but tonight's transfer page survived beneath the heavy cover. Its columns separate people by description, escort, condition, and destination. Five entries share the same bracket. Four are reduced to age, trade, or the place where they were taken. The fifth reads: L.B. — COURIER — ALIVE — REFUSES ROUTE MARKS.\n\nAcross all five lines, a clerk has drawn one arrow to a name none of you have heard before: BRIARHOLD WAYSTATION. The route notation places it deeper inside Rainroot, still east of Riverwatch. A fresh instruction in the margin orders every prisoner moved again before dawn, before the intercepted petitions can be missed and before any warning from this station travels east.\n\nLio was alive when they entered him here. He was transferred with four others to a hidden waystation that expects to be empty by morning.\n\nYou climb the relay's narrow signal stair and force open the upper slit. Cold night air cuts into the room. Far across the dark, the ledger's bearings settle on a low ridge. Honest road lanterns burn gold along its feet. Higher up, several lights glow a sickly green behind briar-shaped hoods.\n\nMara ties Lio's blue knot tighter around her wrist. For a long moment she says nothing. Then she fixes the bearings in her mind. “I am following clever,” she says. Her voice is quiet now, and steady. “But I am still going.”",

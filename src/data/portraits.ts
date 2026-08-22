@@ -48,6 +48,14 @@ const princessElowenPortrait = new URL(
   "../../assets/portraits/characters/princess-elowen-portrait-v01.webp",
   import.meta.url,
 ).href;
+const queenIsaraPortrait = new URL(
+  "../../assets/portraits/characters/queen-isara-portrait-v01.webp",
+  import.meta.url,
+).href;
+const kingEdranPortrait = new URL(
+  "../../assets/portraits/characters/king-edran-portrait-v01.webp",
+  import.meta.url,
+).href;
 const brambleBoarPortrait = new URL(
   "../../assets/portraits/enemies/bramble-boar-v01.webp",
   import.meta.url,
@@ -86,6 +94,14 @@ export const DIALOGUE_PORTRAITS = {
   "Princess Elowen": {
     src: princessElowenPortrait,
     alt: "Portrait of Princess Elowen studying a road map during her Royal Progress",
+  },
+  "Queen Isara": {
+    src: queenIsaraPortrait,
+    alt: "Portrait of Queen Isara presiding over the Chamber of Compacts",
+  },
+  "King Edran": {
+    src: kingEdranPortrait,
+    alt: "Portrait of King Edran seated in a Hearthvale council chamber",
   },
   "Rowan Reedshield": { src: rowanPortrait, alt: "Portrait of Rowan Reedshield" },
   "Tilda Quickstep": { src: tildaPortrait, alt: "Portrait of Tilda Quickstep" },

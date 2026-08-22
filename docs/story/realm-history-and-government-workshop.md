@@ -2,7 +2,7 @@
 
 Last updated: 2026-07-27
 
-Status: Worldbuilding workshop, not yet fully canonical story truth. Existing chapter facts take precedence until their documents are revised. This revision incorporates the approved map geography and place-name direction through 2026-07-26: Alderreach and its four regional seats, named neighboring capitals and council seats, the Principality of Selvara, the Veyran river march, the southern waterfall escarpment, a nested charter monarchy, the Saltwake War and Cinder Vale diaspora, the two-year Witherdeath crisis, Westroot's sixty-year isolation, a powerful foreign-born queen, Elowen's independent Royal Progress, Moonmark performing companies, and a non-cosmic Lantern Road.
+Status: Worldbuilding workshop, not yet fully canonical story truth. Existing chapter facts take precedence until their documents are revised. This revision incorporates the approved map geography and place-name direction through 2026-07-26: Alderreach and its four regional seats, named neighboring capitals and council seats, the Principality of Coravene, the Veyran river march, the southern waterfall escarpment, a nested charter monarchy, the Saltwake War and Cinder Vale diaspora, the two-year Witherdeath crisis, Westroot's sixty-year isolation, a powerful foreign-born queen, Elowen's independent Royal Progress, Moonmark performing companies, and a non-cosmic Lantern Road.
 
 ## Why This Document Exists
 
@@ -30,7 +30,7 @@ The following names have survived map review and are the current worldbuilding d
 - **Cairnmeet** is the accessible conclave seat of the Cairn Cantons.
 - **Sevenbridge** is the council seat of the Mereward League.
 - **Tideglass** is the mainland Sea Council port for the Ember Coast Principalities; it is a meeting place, not the capital of a unified coastal country.
-- **Selvara** is the queen's mainland Ember Coast principality, whose capital is **Whiteharbor**.
+- **Coravene** is the queen's mainland Ember Coast principality, whose capital is **Whiteharbor**.
 - **Valehaven** is the chief civic city of Cinder Vale.
 - **Riverwatch** is the Alderreach fortress at a major crossing of the disputed western river march.
 
@@ -124,10 +124,11 @@ Most disputes stay local. Cross-charter cases go to traveling circuit judges. Fo
 
 The existing story works best if:
 
-- the king is responsible and decent, but receives increasingly filtered information;
-- the queen is a human of Sunreach heritage, born a princess of Selvara on the Ember Coast;
-- she married the current king while he was still a prince, as part of the Sea-Peace settlement;
+- **King Edran**, a sixty-three-year-old Hearthvale human, is responsible, decent, patient, and studious, but receives increasingly filtered information;
+- **Queen Isara of Coravene**, fifty-three, is a very dark-skinned human of Sunreach heritage, born a princess of Coravene on the Ember Coast;
+- she married Edran while he was still a prince, as part of the Sea-Peace settlement;
 - she is now a significant power broker and royal councillor whose foreign birth and influence attract both principled opposition and ugly resentment;
+- she chairs the **Chamber of Compacts**, bringing treaties, charter disputes, port relationships, and foreign accords into the royal council;
 - she understands that law depends on memory, custom, and promises as much as seals;
 - Princess Elowen is the acknowledged heir, not a spare child whose importance appears suddenly;
 - Elowen is old enough to conduct a formal **Royal Progress**, during which a royal representative visits charters, checks the Survey against lived conditions, hears petitions, and learns the routes the Crown may need to defend;
@@ -230,11 +231,11 @@ Several mainland coastal principalities linked by marriage, rivalry, and shared 
 
 No single prince can speak for the whole coast. Alderreach may be allied with two principalities and feuding with a third at the same time.
 
-The coast forms a broad mainland shelf below a long escarpment extending across most of its boundary with Sunreach. Rivers descend through waterfall gorges, and a limited number of passes concentrate trade and defense. The principalities form around bays, river mouths, port valleys, and defensible coastal roads. Selvara is one of these mainland principalities, with Whiteharbor as its capital and royal harbor.
+The coast forms a broad mainland shelf below a long escarpment extending across most of its boundary with Sunreach. Rivers descend through waterfall gorges, and a limited number of passes concentrate trade and defense. The principalities form around bays, river mouths, port valleys, and defensible coastal roads. Coravene is one of these mainland principalities, with Whiteharbor as its capital and royal harbor.
 
 Cinder Vale is a natural river valley and broad break in the escarpment. Its glassworks, furnaces, and metalworking are important to its history and economy, but do not make the landscape or Valehaven look like a modern factory complex. Valehaven is an ordinary civic city and regional center, not a palace state or separate giant fortress.
 
-The Saltwake Isles are a separate offshore chain south of the principalities, divided from the mainland by open water. Their captains intervened in mainland politics during the Saltwake War, but Selvara, Whiteharbor, and Tideglass are not part of the island chain.
+The Saltwake Isles are a separate offshore chain south of the principalities, divided from the mainland by open water. Their captains intervened in mainland politics during the Saltwake War, but Coravene, Whiteharbor, and Tideglass are not part of the island chain.
 
 ### Veyrun, west
 
@@ -360,11 +361,11 @@ The selected v05 artwork represents a surviving copy **after** Chapter 3 because
 
 ### About 30 years ago: the Sea-Peace Marriage
 
-A trade and naval crisis with the Ember Coast ends when the current king, still a prince, marries a Selvaran-born human princess whose family carries Sunreach heritage. She is not a princess from Alderreach's Sunreach province. By the time he inherits the throne, she has spent years building relationships with Alderreach merchants, Sunreach leaders, coastal courts, and the royal council.
+A trade and naval crisis with the Ember Coast ends when Edran, still a prince, marries Isara, a Coraveni-born human princess whose family carries Sunreach heritage. She is not a princess from Alderreach's Sunreach province. By the time he inherits the throne, she has spent years building relationships with Alderreach merchants, Sunreach leaders, coastal courts, and the royal council.
 
 The marriage secures shipping and food imports during poor harvests, establishes a lasting southern alliance, and makes the future queen a significant power broker before she is queen. Some Hearthvale families resent both the abandoned expectation that the prince would marry domestically and the continuing influence of a foreign-born consort.
 
-The queen becomes a serious reader of compacts and archives. Elowen grows up hearing more than one country's account of the same treaty and learning that official histories are arguments as well as records.
+Isara becomes a serious reader of compacts and archives and eventually chairs the Chamber of Compacts. Elowen grows up hearing more than one country's account of the same treaty and learning that official histories are arguments as well as records. She strongly resembles Isara, with her mother's sharper features softened, while inheriting Edran's blue-green eyes, patience, kindness, and love of inquiry.
 
 ### About 20-25 years ago: Princess Elowen is born
 
@@ -498,7 +499,7 @@ The leases are cancelled. Charter towns gain stronger audit rights, and the Crow
 
 **Period:** about 30 years ago
 
-The current king, while still a prince, marries a Selvaran-born human princess whose family carries Sunreach heritage after a naval and trade crisis. She later becomes Alderreach's queen. Her marriage secures food and shipping during poor harvests, but court critics call her foreign whenever she challenges an old privilege.
+The current king, while still a prince, marries a Coraveni-born human princess whose family carries Sunreach heritage after a naval and trade crisis. She later becomes Alderreach's queen. Her marriage secures food and shipping during poor harvests, but court critics call her foreign whenever she challenges an old privilege.
 
 She brings coastal archive practices and becomes a leading reader of old compacts. Elowen grows up hearing more than one country's account of the same event.
 
@@ -752,7 +753,7 @@ This framework resolves several questions without requiring a history lecture in
 4. Decide Cinder Vale's present condition: restored principality, divided coastal district, semi-independent foundry league, or homeland that survives mainly in diaspora memory.
 5. Decide whether the historical event and disease are both called **Witherdeath**, or whether the illness has a softer medical name such as Wither Ache.
 6. Confirm **Elowen** as the final playable name before the Chapter 4 executable contract.
-7. Name Alderreach's queen, the Selvaran princess, and define the council responsibilities through which she exercises power.
+7. Define the Chamber of Compacts' membership and exact relationship to the wider royal council before it becomes a playable institution.
 8. Name or outline the Moonmark Counselor of Songs and decide whether they accompany Elowen or remain at court.
 9. Name the old Hearthvale family and its claimant, and define the strength of her collateral claim.
 10. Decide whether the king's sister is a loyal centralizer, neutral dynastic rival, or future suspect.

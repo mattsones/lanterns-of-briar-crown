@@ -738,8 +738,8 @@ export const MAPS = {
     backgroundImage: underwayApproachMap,
     tiles: [
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-      ["wall", "wall", "wall", "underway_path", "underway_path", "wall", "wall", "wall"],
-      ["underway_gate", "underway_threshold", "underway_path", "wall", "wall", "underway_path", "underway_path", "detour_notice"],
+      ["underway_threshold", "underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "wall"],
+      ["underway_gate", "underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "detour_notice"],
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
     ],

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-21T04:44:14.951Z",
+  "generatedAt": "2026-08-22T04:46:37.083Z",
   "sourceArtRoot": "assets/reference/source-art",
   "alternatesRoot": "assets/reference/alternates",
   "conversions": [
@@ -543,6 +543,28 @@
       "hasAlpha": false
     },
     {
+      "source": "assets/maps/briar-relay-post-map-v01.webp",
+      "original": "assets/reference/source-art/assets/maps/briar-relay-post-map-v01.png",
+      "output": "assets/maps/briar-relay-post-map-v01.webp",
+      "format": "webp",
+      "originalBytes": 2945453,
+      "outputBytes": 288940,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/construction-detour-map-v03.webp",
+      "original": "assets/reference/source-art/assets/maps/construction-detour-map-v03.png",
+      "output": "assets/maps/construction-detour-map-v03.webp",
+      "format": "webp",
+      "originalBytes": 3377218,
+      "outputBytes": 390922,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
       "source": "assets/maps/crown-door-den-map-v01.webp",
       "original": "assets/reference/source-art/assets/maps/crown-door-den-map-v01.png",
       "output": "assets/maps/crown-door-den-map-v01.webp",
@@ -576,6 +598,61 @@
       "hasAlpha": false
     },
     {
+      "source": "assets/maps/listening-mile-first-hood-map-v01.webp",
+      "original": "assets/reference/source-art/assets/maps/listening-mile-first-hood-map-v01.png",
+      "output": "assets/maps/listening-mile-first-hood-map-v01.webp",
+      "format": "webp",
+      "originalBytes": 3208636,
+      "outputBytes": 324110,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/listening-mile-second-hood-map-v01.webp",
+      "original": "assets/reference/source-art/assets/maps/listening-mile-second-hood-map-v01.png",
+      "output": "assets/maps/listening-mile-second-hood-map-v01.webp",
+      "format": "webp",
+      "originalBytes": 3103150,
+      "outputBytes": 311306,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/listening-mile-third-hood-map-v01.webp",
+      "original": "assets/reference/source-art/assets/maps/listening-mile-third-hood-map-v01.png",
+      "output": "assets/maps/listening-mile-third-hood-map-v01.webp",
+      "format": "webp",
+      "originalBytes": 3270006,
+      "outputBytes": 345874,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/old-keeper-road-map-v02.webp",
+      "original": "assets/reference/source-art/assets/maps/old-keeper-road-map-v02.png",
+      "output": "assets/maps/old-keeper-road-map-v02.webp",
+      "format": "webp",
+      "originalBytes": 3300699,
+      "outputBytes": 343436,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/relay-approach-map-v01.webp",
+      "original": "assets/reference/source-art/assets/maps/relay-approach-map-v01.png",
+      "output": "assets/maps/relay-approach-map-v01.webp",
+      "format": "webp",
+      "originalBytes": 3354296,
+      "outputBytes": 374090,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
       "source": "assets/maps/root-cellar-map-v01.webp",
       "original": "assets/reference/source-art/assets/maps/root-cellar-map-v01.png",
       "output": "assets/maps/root-cellar-map-v01.webp",
@@ -598,12 +675,45 @@
       "hasAlpha": false
     },
     {
+      "source": "assets/maps/underway-approach-map-v03.webp",
+      "original": "assets/reference/source-art/assets/maps/underway-approach-map-v03.png",
+      "output": "assets/maps/underway-approach-map-v03.webp",
+      "format": "webp",
+      "originalBytes": 3280894,
+      "outputBytes": 339798,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/underway-convergence-map-v01.webp",
+      "original": "assets/reference/source-art/assets/maps/underway-convergence-map-v01.png",
+      "output": "assets/maps/underway-convergence-map-v01.webp",
+      "format": "webp",
+      "originalBytes": 3422880,
+      "outputBytes": 383274,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
       "source": "assets/maps/westroot-hub-map-v01.webp",
       "original": "assets/reference/source-art/assets/maps/westroot-hub-map-v01.png",
       "output": "assets/maps/westroot-hub-map-v01.webp",
       "format": "webp",
       "originalBytes": 3384142,
       "outputBytes": 423148,
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/maps/westroot-hub-map-v02-open-stones.webp",
+      "original": "assets/reference/source-art/assets/maps/westroot-hub-map-v02-open-stones.png",
+      "output": "assets/maps/westroot-hub-map-v02-open-stones.webp",
+      "format": "webp",
+      "originalBytes": 3163286,
+      "outputBytes": 445920,
       "width": 1672,
       "height": 941,
       "hasAlpha": false
@@ -694,6 +804,17 @@
       "outputBytes": 167690,
       "width": 1122,
       "height": 1402,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/portraits/characters/king-edran-portrait-v01.png",
+      "original": "assets/reference/source-art/assets/portraits/characters/king-edran-portrait-v01.png",
+      "output": "assets/portraits/characters/king-edran-portrait-v01.webp",
+      "format": "webp",
+      "originalBytes": 2490543,
+      "outputBytes": 145986,
+      "width": 1023,
+      "height": 1537,
       "hasAlpha": false
     },
     {
@@ -804,6 +925,39 @@
       "outputBytes": 168062,
       "width": 1122,
       "height": 1402,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/portraits/characters/princess-elowen-portrait-v01.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/princess-elowen-portrait-v01.png",
+      "output": "assets/portraits/characters/princess-elowen-portrait-v01.webp",
+      "format": "webp",
+      "originalBytes": 2430486,
+      "outputBytes": 122014,
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/portraits/characters/princess-elowen-royal-portrait-v01.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/princess-elowen-royal-portrait-v01.png",
+      "output": "assets/portraits/characters/princess-elowen-royal-portrait-v01.webp",
+      "format": "webp",
+      "originalBytes": 3255878,
+      "outputBytes": 247026,
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/portraits/characters/queen-isara-portrait-v01.png",
+      "original": "assets/reference/source-art/assets/portraits/characters/queen-isara-portrait-v01.png",
+      "output": "assets/portraits/characters/queen-isara-portrait-v01.webp",
+      "format": "webp",
+      "originalBytes": 2770737,
+      "outputBytes": 168850,
+      "width": 1024,
+      "height": 1536,
       "hasAlpha": false
     },
     {
@@ -1247,6 +1401,17 @@
       "hasAlpha": false
     },
     {
+      "source": "assets/scenes/briarhold-route-ledger-reveal-scene-v02.png",
+      "original": "assets/reference/source-art/assets/scenes/briarhold-route-ledger-reveal-scene-v02.png",
+      "output": "assets/scenes/briarhold-route-ledger-reveal-scene-v02.webp",
+      "format": "webp",
+      "originalBytes": 2811112,
+      "outputBytes": 219816,
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": false
+    },
+    {
       "source": "assets/scenes/cargo-siding-evidence-scene-v01.webp",
       "original": "assets/reference/source-art/assets/scenes/cargo-siding-evidence-scene-v01.png",
       "output": "assets/scenes/cargo-siding-evidence-scene-v01.webp",
@@ -1332,6 +1497,28 @@
       "outputBytes": 203808,
       "width": 1600,
       "height": 1200,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/scenes/princess-elowen-progress-notice-v01.webp",
+      "original": "assets/reference/source-art/assets/scenes/princess-elowen-progress-notice-v01.png",
+      "output": "assets/scenes/princess-elowen-progress-notice-v01.webp",
+      "format": "webp",
+      "originalBytes": 3493158,
+      "outputBytes": 377524,
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/scenes/relay-forged-authority-scene-v01.png",
+      "original": "assets/reference/source-art/assets/scenes/relay-forged-authority-scene-v01.png",
+      "output": "assets/scenes/relay-forged-authority-scene-v01.webp",
+      "format": "webp",
+      "originalBytes": 3292683,
+      "outputBytes": 344902,
+      "width": 1536,
+      "height": 1024,
       "hasAlpha": false
     },
     {
@@ -1423,17 +1610,6 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/scenes/witness-stones-scene-v01.webp",
-      "original": "assets/reference/source-art/assets/scenes/witness-stones-scene-v01.png",
-      "output": "assets/scenes/witness-stones-scene-v01.webp",
-      "format": "webp",
-      "originalBytes": 3191789,
-      "outputBytes": 385584,
-      "width": 1672,
-      "height": 941,
-      "hasAlpha": false
-    },
-    {
       "source": "assets/scenes/witness-stones-public-renewal-scene-v03.png",
       "original": "assets/reference/source-art/assets/scenes/witness-stones-public-renewal-scene-v03.png",
       "output": "assets/scenes/witness-stones-public-renewal-scene-v03.webp",
@@ -1445,146 +1621,14 @@
       "hasAlpha": false
     },
     {
-      "source": "assets/maps/briar-relay-post-map-v01.webp",
-      "original": "assets/reference/source-art/assets/maps/briar-relay-post-map-v01.png",
-      "output": "assets/maps/briar-relay-post-map-v01.webp",
+      "source": "assets/scenes/witness-stones-scene-v01.webp",
+      "original": "assets/reference/source-art/assets/scenes/witness-stones-scene-v01.png",
+      "output": "assets/scenes/witness-stones-scene-v01.webp",
       "format": "webp",
-      "originalBytes": 2945453,
-      "outputBytes": 288940,
+      "originalBytes": 3191789,
+      "outputBytes": 385584,
       "width": 1672,
       "height": 941,
-      "hasAlpha": false
-    },
-    {
-      "source": "assets/maps/construction-detour-map-v03.webp",
-      "original": "assets/reference/source-art/assets/maps/construction-detour-map-v03.png",
-      "output": "assets/maps/construction-detour-map-v03.webp",
-      "format": "webp",
-      "originalBytes": 3377218,
-      "outputBytes": 390922,
-      "width": 1672,
-      "height": 941,
-      "hasAlpha": false
-    },
-    {
-      "source": "assets/maps/listening-mile-first-hood-map-v01.webp",
-      "original": "assets/reference/source-art/assets/maps/listening-mile-first-hood-map-v01.png",
-      "output": "assets/maps/listening-mile-first-hood-map-v01.webp",
-      "format": "webp",
-      "originalBytes": 3208636,
-      "outputBytes": 324110,
-      "width": 1672,
-      "height": 941,
-      "hasAlpha": false
-    },
-    {
-      "source": "assets/maps/listening-mile-second-hood-map-v01.webp",
-      "original": "assets/reference/source-art/assets/maps/listening-mile-second-hood-map-v01.png",
-      "output": "assets/maps/listening-mile-second-hood-map-v01.webp",
-      "format": "webp",
-      "originalBytes": 3103150,
-      "outputBytes": 311306,
-      "width": 1672,
-      "height": 941,
-      "hasAlpha": false
-    },
-    {
-      "source": "assets/maps/listening-mile-third-hood-map-v01.webp",
-      "original": "assets/reference/source-art/assets/maps/listening-mile-third-hood-map-v01.png",
-      "output": "assets/maps/listening-mile-third-hood-map-v01.webp",
-      "format": "webp",
-      "originalBytes": 3270006,
-      "outputBytes": 345874,
-      "width": 1672,
-      "height": 941,
-      "hasAlpha": false
-    },
-    {
-      "source": "assets/maps/old-keeper-road-map-v02.webp",
-      "original": "assets/reference/source-art/assets/maps/old-keeper-road-map-v02.png",
-      "output": "assets/maps/old-keeper-road-map-v02.webp",
-      "format": "webp",
-      "originalBytes": 3300699,
-      "outputBytes": 343436,
-      "width": 1672,
-      "height": 941,
-      "hasAlpha": false
-    },
-    {
-      "source": "assets/maps/relay-approach-map-v01.webp",
-      "original": "assets/reference/source-art/assets/maps/relay-approach-map-v01.png",
-      "output": "assets/maps/relay-approach-map-v01.webp",
-      "format": "webp",
-      "originalBytes": 3354296,
-      "outputBytes": 374090,
-      "width": 1672,
-      "height": 941,
-      "hasAlpha": false
-    },
-    {
-      "source": "assets/maps/underway-approach-map-v03.webp",
-      "original": "assets/reference/source-art/assets/maps/underway-approach-map-v03.png",
-      "output": "assets/maps/underway-approach-map-v03.webp",
-      "format": "webp",
-      "originalBytes": 3280894,
-      "outputBytes": 339798,
-      "width": 1672,
-      "height": 941,
-      "hasAlpha": false
-    },
-    {
-      "source": "assets/maps/underway-convergence-map-v01.webp",
-      "original": "assets/reference/source-art/assets/maps/underway-convergence-map-v01.png",
-      "output": "assets/maps/underway-convergence-map-v01.webp",
-      "format": "webp",
-      "originalBytes": 3422880,
-      "outputBytes": 383274,
-      "width": 1672,
-      "height": 941,
-      "hasAlpha": false
-    },
-    {
-      "source": "assets/maps/westroot-hub-map-v02-open-stones.webp",
-      "original": "assets/reference/source-art/assets/maps/westroot-hub-map-v02-open-stones.png",
-      "output": "assets/maps/westroot-hub-map-v02-open-stones.webp",
-      "format": "webp",
-      "originalBytes": 3163286,
-      "outputBytes": 445920,
-      "width": 1672,
-      "height": 941,
-      "hasAlpha": false
-    },
-    {
-      "source": "assets/portraits/characters/princess-elowen-portrait-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/princess-elowen-portrait-v01.png",
-      "output": "assets/portraits/characters/princess-elowen-portrait-v01.webp",
-      "format": "webp",
-      "originalBytes": 2430486,
-      "outputBytes": 122014,
-      "width": 1024,
-      "height": 1536,
-      "hasAlpha": false
-    },
-    {
-      "source": "assets/portraits/characters/princess-elowen-royal-portrait-v01.webp",
-      "original": "assets/reference/source-art/assets/portraits/characters/princess-elowen-royal-portrait-v01.png",
-      "output": "assets/portraits/characters/princess-elowen-royal-portrait-v01.webp",
-      "format": "webp",
-      "originalBytes": 3255878,
-      "outputBytes": 247026,
-      "width": 1024,
-      "height": 1536,
-      "hasAlpha": false
-    },
-    {
-      "source": "assets/scenes/princess-elowen-progress-notice-v01.webp",
-      "original": "assets/reference/source-art/assets/scenes/princess-elowen-progress-notice-v01.png",
-      "output": "assets/scenes/princess-elowen-progress-notice-v01.webp",
-      "format": "webp",
-      "originalBytes": 3493158,
-      "outputBytes": 377524,
-      "width": 1024,
-      "height": 1536,
       "hasAlpha": false
     }
   ],
@@ -1592,6 +1636,10 @@
     {
       "source": "assets/scenes/rootbread-promise-scene-v01.webp",
       "destination": "assets/reference/alternates/assets/scenes/rootbread-promise-scene-v01.webp"
+    },
+    {
+      "source": "assets/scenes/briarhold-route-ledger-reveal-scene-v01.webp",
+      "destination": "assets/reference/alternates/assets/scenes/briarhold-route-ledger-reveal-scene-v01.webp"
     },
     {
       "source": "assets/scenes/witness-stones-public-renewal-scene-v02.webp",

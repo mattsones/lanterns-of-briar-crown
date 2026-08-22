@@ -218,11 +218,15 @@ He may provide resources, access, and watch support. He should also protect Edde
 
 ### King
 
-Good, responsible, somewhat distant. He likely cares for the kingdom but is receiving corrupted information.
+**King Edran of Alderreach** is a sixty-three-year-old Hearthvale human. Broadly built and formally regal, he has silver-gray hair that retains faint traces of its former gold, a carefully groomed gray beard, and the same blue-green eyes inherited by Elowen. He is good, responsible, patient, studious, and fundamentally kind, though years of ceremony and governing through councils and reports have made him seem somewhat distant. He cares for the kingdom but is receiving increasingly filtered information; his private weariness should suggest difficult compromises and a growing awareness that the systems he trusted no longer tell him the whole truth.
+
+Edran's formal profile seats him upright in a restrained pale council chair before Alderreach charter banners. He wears a navy court tunic, royal-green mantle, bright antique-gold alder and charter embroidery, and a narrow circlet. The seated pose and relaxed hands communicate settled authority; the clear blue-green eyes, patient expression, and private fatigue remain the portrait's emotional center.
 
 ### Queen
 
-The queen was born a princess of Selvara, a mainland Ember Coast principality. She has Sunreach family and cultural heritage, but she is Selvaran-born rather than a princess from Alderreach's Sunreach province. She married the current king while he was still a prince as part of the Sea-Peace settlement.
+**Queen Isara of Coravene** is fifty-three. She was born a princess of Coravene, a mainland Ember Coast principality. She has Sunreach family and cultural heritage, but she is Coraveni-born rather than a princess from Alderreach's Sunreach province. She married Edran while he was still a prince as part of the Sea-Peace settlement.
+
+Isara is stunning, tall, sculptural, controlled, intensely attentive, and breathtakingly self-possessed. She has very deep ebony-brown skin with warm East African undertones, entirely black curls arranged in a compact sculptural updo, dark amber eyes, and the sharper version of the elegant features Elowen inherited. Her formal court dress favors a pearl-white sleeveless high-collared gown, a saturated teal cape with matching teal lining, antique-gold wave and frond embroidery, shell clasps, compact gold-and-sea-glass earrings, and a restrained pearl-and-sea-glass necklace. She chairs the **Chamber of Compacts**; her authority rests as much on attention, memory, and judgment as on rank.
 
 She is a significant power broker, an experienced reader of compacts and archives, and a royal councillor in her own right. Some domestic families resent her foreign birth, the influence she gained before becoming queen, and the domestic marriage the prince abandoned for the alliance.
 
@@ -231,6 +235,8 @@ The king and queen retain a Moonmark Counselor of Songs who gathers oral history
 ### Princess
 
 Princess Elowen is the acknowledged heir apparent, known publicly but not personally by the hero. Chapter 4 establishes her Progress before her name first appears on a suspicious order. Eventually she should be revealed as someone who has been investigating the same corruption.
+
+Elowen strongly resembles Isara, with her mother's beauty and quiet royal authority expressed in a softer form. She inherited Edran's blue-green eyes, patience, approachable kindness, and love of inquiry; her disciplined scholarship also reflects Isara's archival and political education.
 
 Working characterization:
 
@@ -1537,10 +1543,10 @@ Story item from Lio/Mara reunion. Symbol of rescued truth and sibling bond.
 
 # Open Questions for Later
 
-The map roles of **Hearthward**, **Lanthorne**, **Selvara**, and the other v05 seats are settled planning direction. That does not automatically place every name in playable dialogue. The following choices remain genuinely open:
+The map roles of **Hearthward**, **Lanthorne**, **Coravene**, and the other v05 seats are settled planning direction. That does not automatically place every name in playable dialogue. The following choices remain genuinely open:
 
 1. Confirm **Elowen** as the final playable name before the Chapter 4 executable contract, and decide when Hearthward, Lanthorne, and the wider map names first enter dialogue.
-2. What is the Selvaran-born queen's personal name, and which council office or archive responsibility does she hold?
+2. Define the Chamber of Compacts' membership and exact relationship to the wider royal council before it becomes a playable institution.
 3. What are the final names of the Crownward claimant and the Deputy Roadwarden or Survey official who runs Briar operations? Is **Crownward League** the final public name?
 4. How soon after the Chapter 5 evidence should the party meet Elowen in person or in disguise?
 5. Does the Moonmark Counselor of Songs travel with Elowen or remain at court?

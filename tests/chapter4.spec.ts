@@ -141,7 +141,7 @@ test("the decoded story map opens the playable Old Keeper Road Underway graph", 
     "src",
     /underway-approach-map-v03\.webp$/,
   );
-  await moveRight(page, 5);
+  await moveRight(page, 12);
   await expect(page.getByRole("button", { name: "Inspect Underway Passage" })).toBeVisible();
   await page.getByTestId("move-right").click();
   await expect(scene(page, CHAPTER_4_SCENE_IDS.underwayDetour)).toBeVisible();
@@ -365,6 +365,11 @@ test("captured Relay Post records expose the forged authority and Chapter 5 resc
 
   await page.getByTestId("move-right").click();
   await expect(scene(page, CHAPTER_4_SCENE_IDS.forgedAuthority)).toBeVisible();
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.forgedAuthority)).toHaveAttribute("data-content-layout", "stacked");
+  await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute(
+    "src",
+    /relay-forged-authority-scene-v01/,
+  );
   await expect(page.getByRole("dialog", { name: "Forged Authority" })).toContainText(
     "argument for national road standards",
   );
@@ -373,6 +378,11 @@ test("captured Relay Post records expose the forged authority and Chapter 5 resc
 
   await page.getByTestId("move-right").click();
   await expect(scene(page, CHAPTER_4_SCENE_IDS.briarholdReveal)).toBeVisible();
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.briarholdReveal)).toHaveAttribute("data-content-layout", "stacked");
+  await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute(
+    "src",
+    /briarhold-route-ledger-reveal-scene-v02/,
+  );
   await expect(page.getByRole("dialog", { name: "Briarhold Waystation" })).toContainText("L.B. — COURIER — ALIVE");
   await expect(page.getByRole("dialog", { name: "Briarhold Waystation" })).toContainText("with four others");
   await expect(page.getByRole("dialog", { name: "Briarhold Waystation" })).not.toContainText(

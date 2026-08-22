@@ -1021,6 +1021,7 @@ test("Underway presents a later construction detour choice, applies route pressu
     trueRoute: "mapped-gallery",
     pressuredRoute: "maintenance-gallery",
   });
+  expect(getNavigationNodeKeys("underway")).toHaveLength(15);
   expect(getUnderwayApproach(buildDefaultFlags())).toBe("mapped-gallery");
   expect(getUnderwayApproach({ foldedMapMaintenanceDetour: true })).toBe("mapped-gallery");
   expect(resolveUnderwayDetour(false)).toEqual({

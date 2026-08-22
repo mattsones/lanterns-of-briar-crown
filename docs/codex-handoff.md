@@ -1,22 +1,30 @@
-﻿# Liam’s Game — Codex Handoff
+# Liam’s Game — Codex Handoff
 
 This file is the starting point for Codex.
 
 Story-writing work must also follow `docs/story/writing-rules.md`. Singular characters use he/him or she/her; *they/them/their* is reserved for genuinely plural antecedents.
 
-## Latest Handoff — 2026-08-21
+## Latest Handoff — 2026-08-22
 
-Princess Elowen and the Briar Relay Post now have their approved visual identities. Elowen is a human heir in her early twenties who strongly resembles her Selvaran-born, Sunreach-heritage mother, with cool blue-green eyes inherited from her Hearthvale father. Her canonical traveling portrait keeps the practical scholar-princess clothing, removes the satchel and held map divider, relaxes one hand to her side, and balances a warmer expression with a subtly low, quietly authoritative viewpoint. Her separate official royal portrait places the same identity in an ornate sapphire fairy-tale gown on a palace-garden terrace.
+Princess Elowen and the Briar Relay Post now have their approved visual identities. Elowen is a human heir in her early twenties who strongly resembles her Coraveni-born, Sunreach-heritage mother, with cool blue-green eyes inherited from her Hearthvale father. Her canonical traveling portrait keeps the practical scholar-princess clothing, removes the satchel and held map divider, relaxes one hand to her side, and balances a warmer expression with a subtly low, quietly authoritative viewpoint. Her separate official royal portrait places the same identity in an ornate sapphire fairy-tale gown on a palace-garden terrace.
+
+The royal parents are now canonical and have approved portraits. Queen Isara of Coravene is fifty-three, Coraveni-born with Sunreach heritage, and chairs the Chamber of Compacts. She is tall, sculptural, very deep ebony-brown, dark amber-eyed, stunning, controlled, intensely attentive, and breathtakingly self-possessed; Elowen inherits a softened, lighter-skinned version of her sharper features and royal authority. Isara wears her entirely black curls in a compact sculptural updo. Her approved portrait uses a pearl-white sleeveless high-collared gown, saturated teal cape and lining, antique-gold wave-and-frond embroidery, shell clasps, compact gold-and-sea-glass earrings, a restrained pearl necklace, and a low viewpoint in a sunlit pale-stone Hearthvale chamber. King Edran is a sixty-three-year-old Hearthvale human with a broad build, formerly golden-blond hair now silver-gray, a groomed gray beard, and Elowen's clear blue-green eyes. His approved portrait seats him upright with relaxed hands in a restrained pale council chair, wearing formal navy, royal green, bright gold alder embroidery, and a narrow circlet before charter banners. He is patient, studious, responsible, kind, formally regal, and privately weary from filtered reports and difficult compromises.
 
 The Royal Progress Notice derives a waist-up likeness from that formal portrait without carrying over the garden background. Its readable public copy identifies Elowen as heir apparent, announces her first independent Progress, invites route ledgers and petitions, and states that requests for records or temporary safety measures require a date, named witnesses, and the Public Progress Seal. The notice is wired into both first-read and repeat Broadside dialogues. Relay arrival and broadside prose now describe the sapphire royal portrait rather than the retired road-cloak/map concept.
 
 The final Briar Relay Post map replaces the graybox SVG. The occupied station has a banked stove, shielded work lanterns, and desk candles that create localized amber pools while leaving cool root-bound gaps for the party lantern. The approved Progress Notice hangs on the upper-left wall with restrained briar defacement below Elowen's face and heading. The Relay's entrances, long bench, signal hardware, pigeonholes, record desk, route ledger, and open movement floor remain intact.
 
-Approved full-resolution PNG masters live under `assets/reference/source-art/assets/`; optimized runtime WebPs live under `assets/maps/`, `assets/portraits/characters/`, and `assets/scenes/`. Earlier Elowen and Relay passes remain in their project concept folders. The optimization manifest now records the complete Chapter 4 Underway map suite as well as the new Relay and Elowen assets, preventing already-optimized WebPs from being mistaken for missing source masters on future runs.
+Approved full-resolution PNG masters live under `assets/reference/source-art/assets/`; optimized runtime WebPs live under `assets/maps/`, `assets/portraits/characters/`, and `assets/scenes/`. Earlier Elowen and Relay passes remain in their project concept folders. The optimization manifest records the complete Chapter 4 Underway map suite, Relay and Elowen assets, and the approved Isara and Edran portraits, preventing already-optimized WebPs from being mistaken for missing source masters on future runs.
+
+A deferred portrait-finish pass should revisit every approved character portrait with the Queen Isara facial-rendering standard: preserve identity, age, expression, costume, and composition while smoothing conspicuous chunky brushwork, crosshatching, canvas grain, and mosaic-like skin artifacts. Perform this as a versioned, reviewable art pass rather than silently overwriting the approved source masters.
+
+`Coravene` and `Coraveni` replace the retired working names `Selvara` and `Selvaran` throughout textual canon, planning notes, and art prompts. No gameplay state, save key, or runtime ID depends on the retired name. `great-survey-of-alderreach-v06.png` now completes the composition-preserving painted-label revision; V05 remains preserved as the pre-rename source. Queen Isara's portrait contains no text and needs no rename-specific visual edit.
+
+The two required Relay evidence illustrations are now integrated. `relay-forged-authority-scene-v01.webp` appears when Mara compares Elowen's lawful public Progress with the hidden forged orders, and `briarhold-route-ledger-reveal-scene-v02.webp` appears for both the first and repeat Briarhold ledger readings. V02 replaces the rejected oversized clue-card lettering with five small handwritten transfer rows; Lio is an ordinary entry among the other prisoners, and Briarhold appears in the working destination column. The rejected V01 runtime is preserved under reference alternates. Full PNG masters live under source art and optimized runtime WebPs live under `assets/scenes/`. Both scenes use the stacked wide-dialogue treatment.
 
 ### Next Best Step
 
-Start with a focused desktop and phone playtest of the final Briar Relay Post. Check the five logical overlay nodes against the entrance, wall notice, guarded relay floor, forged-order desk, and westbound ledger; verify the party-lantern halo complements rather than obscures the fixed room lighting; and confirm the tall Progress Notice is comfortably readable in the dialogue modal. Then produce the remaining Relay evidence/encounter art, especially the forged-authority desk comparison and Briarhold route-ledger reveal. The captive porter remains optional. Finish with the batched Chapter 4 browser suite, build/rules/asset gates, and uninterrupted Chapters 1-4 release-candidate QA.
+Finish the Chapter 4 milestone with the remaining batched browser suite and uninterrupted Chapters 1-4 release-candidate QA. The focused Relay desktop/phone check, build, rules suite, asset audit, full Chapter 4 browser suite, and the new evidence-art regression assertions already pass. The captive porter remains optional. A later versioned portrait-finish batch should apply Isara and Edran's smoother facial-rendering standard to the earlier character portraits.
 
 ## Latest Handoff — 2026-08-20
 
@@ -1986,8 +1994,8 @@ Branch: `codex/chapter-3-vertical-slice`
 - Extended the Sunreach escarpment across most of the southern international boundary. Rivers descend through visible waterfall gorges, and a small number of switchback passes explain trade and defense between Alderreach and the Ember Coast.
 - Recast Cinder Vale as a natural river valley centered on the ordinary civic city of Valehaven. Glassmaking and metalworking remain historical and economic facts, but the map no longer represents the region with factory or furnace imagery.
 - Replaced oversized city and castle miniatures with a restrained survey hierarchy for national capitals, regional or council seats, cities and towns, and fortresses.
-- Added the approved map names and placements: Hearthward, Lanthorne, Bellwater, Saffron Gate, Kestovar, Cairnmeet, Sevenbridge, Tideglass, Selvara, Whiteharbor, Valehaven, and Riverwatch.
-- Established Selvara as the queen's Ember Coast principality, Whiteharbor as its capital, Tideglass as the Sea Council port, Cairnmeet as a conclave seat rather than a dominating capital, and Sevenbridge as the Mereward council seat.
+- Added the approved map names and placements: Hearthward, Lanthorne, Bellwater, Saffron Gate, Kestovar, Cairnmeet, Sevenbridge, Tideglass, Coravene, Whiteharbor, Valehaven, and Riverwatch.
+- Established Coravene as the queen's Ember Coast principality, Whiteharbor as its capital, Tideglass as the Sea Council port, Cairnmeet as a conclave seat rather than a dominating capital, and Sevenbridge as the Mereward council seat.
 - Corrected Saffron Gate after the first v04 generation so it sits on the Sunreach plateau at a major escarpment pass rather than in the coastal lowlands.
 - Saved the exact v04 image-edit and Saffron Gate correction prompts in `docs/art/prompts/great-survey-world-map.md`.
 - Updated the realm workshop, current-status pickup, and asset manifest to use v04 and the approved place names.
@@ -2011,8 +2019,8 @@ Branch: `codex/chapter-3-vertical-slice`
 
 - Selected `assets/reference/source-art/assets/maps/great-survey-of-alderreach-v05.png` as the current full-resolution reference map. V01–V04 remain preserved as superseded compositions.
 - Rebuilt the southern third so the Ember Coast Principalities occupy a broad mainland shelf below Sunreach's waterfall escarpment.
-- Moved Selvara and its capital, Whiteharbor, onto the mainland Ember Coast. Moved Tideglass onto the mainland as the shared Sea Council port.
-- Reduced the Saltwake Isles to a clearly separate offshore chain with no Selvaran or Sea Council labels.
+- Moved Coravene and its capital, Whiteharbor, onto the mainland Ember Coast. Moved Tideglass onto the mainland as the shared Sea Council port.
+- Reduced the Saltwake Isles to a clearly separate offshore chain with no Coraveni or Sea Council labels.
 - Kept Cinder Vale and Valehaven on the eastern mainland without industrial skyline imagery.
 - Replaced the ambiguous settlement markers with a clear hierarchy: stars for Alderreach and Veyrun's national capitals, diamonds for provincial or district capitals, hexagons for council or conclave seats, dots for cities and towns, and squares for fortresses.
 - Saved the exact built-in image-editing prompt in `docs/art/prompts/great-survey-world-map.md` and updated the realm workshop, current-status pickup, and asset manifest.

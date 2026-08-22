@@ -260,7 +260,8 @@ const WESTROOT_HUB_NAVIGATION_ALIASES: NavConnection[] = [
 ];
 
 const UNDERWAY_NAV_CONNECTIONS = buildRightwardRoute([
-  "0,2", "1,2", "2,2", "3,1", "4,1", "5,2", "6,2", "7,2",
+  "0,2", "0,1", "1,2", "1,1", "2,2", "2,1", "3,1", "3,2",
+  "4,1", "4,2", "5,2", "5,1", "6,2", "6,1", "7,2",
 ]);
 
 const UNDERWAY_ROUTE_811_NAV_CONNECTIONS = buildRightwardRoute([
@@ -657,14 +658,21 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
     nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
     navigationLinks: buildNavigationLinks(UNDERWAY_NAV_CONNECTIONS),
     pointOverrides: {
-      "0,2": { x: 5, y: 58 },
-      "1,2": { x: 16, y: 70 },
-      "2,2": { x: 29, y: 60 },
-      "3,1": { x: 41, y: 35 },
-      "4,1": { x: 53, y: 27 },
-      "5,2": { x: 65, y: 45 },
-      "6,2": { x: 77, y: 68 },
-      "7,2": { x: 95, y: 50 },
+      "0,2": { x: 4, y: 62 },
+      "0,1": { x: 9, y: 69 },
+      "1,2": { x: 15, y: 72 },
+      "1,1": { x: 22, y: 69 },
+      "2,2": { x: 28, y: 63 },
+      "2,1": { x: 35, y: 59 },
+      "3,1": { x: 40, y: 54 },
+      "3,2": { x: 44, y: 42 },
+      "4,1": { x: 50, y: 32 },
+      "4,2": { x: 58, y: 33 },
+      "5,2": { x: 64, y: 48 },
+      "5,1": { x: 70, y: 62 },
+      "6,2": { x: 76, y: 70 },
+      "6,1": { x: 84, y: 66 },
+      "7,2": { x: 96, y: 50 },
     },
   },
   underwayRoute811: {
@@ -699,8 +707,8 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
     pointOverrides: {
       "0,2": { x: 5, y: 43 }, "1,1": { x: 15, y: 33 }, "2,1": { x: 25, y: 36 },
       "3,2": { x: 35, y: 49 }, "4,3": { x: 45, y: 56 }, "5,2": { x: 57, y: 62 },
-      "6,2": { x: 68, y: 57 }, "7,1": { x: 79, y: 53 }, "8,1": { x: 89, y: 55 },
-      "9,2": { x: 96, y: 43 },
+      "6,2": { x: 68, y: 66 }, "7,1": { x: 79, y: 69 }, "8,1": { x: 89, y: 60 },
+      "9,2": { x: 96, y: 49 },
     },
   },
   listeningPostOne: {

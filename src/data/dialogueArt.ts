@@ -36,6 +36,14 @@ const princessElowenProgressNotice = new URL(
   "../../assets/scenes/princess-elowen-progress-notice-v01.webp",
   import.meta.url,
 ).href;
+const relayForgedAuthorityScene = new URL(
+  "../../assets/scenes/relay-forged-authority-scene-v01.webp",
+  import.meta.url,
+).href;
+const briarholdRouteLedgerRevealScene = new URL(
+  "../../assets/scenes/briarhold-route-ledger-reveal-scene-v02.webp",
+  import.meta.url,
+).href;
 
 export const DIALOGUE_SCENE_ART: Record<string, DialogueSceneArt> = {
   chapterOneEnding: {
@@ -127,6 +135,16 @@ export const DIALOGUE_SCENE_ART: Record<string, DialogueSceneArt> = {
     focusX: 50,
     focusY: 50,
     zoom: 66,
+  },
+  relayForgedAuthority: {
+    id: "relay-forged-authority",
+    src: relayForgedAuthorityScene,
+    alt: "The Relay desk comparing Princess Elowen's public Royal Progress notice with the false ledger and forged secret orders hidden beneath it",
+  },
+  briarholdRouteLedgerReveal: {
+    id: "briarhold-route-ledger-reveal",
+    src: briarholdRouteLedgerRevealScene,
+    alt: "The scorched westbound ledger naming Lio alive and bound for Briarhold Waystation, with gold and sickly green route lights visible beyond the signal slit",
   },
 };
 
