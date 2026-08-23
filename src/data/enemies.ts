@@ -26,6 +26,14 @@ const sealForgedSentryArtwork = new URL(
   "../../assets/portraits/enemies/seal-forged-sentry-v01.webp",
   import.meta.url,
 ).href;
+const briarRelayGuardArtwork = new URL(
+  "../../assets/portraits/enemies/briar-relay-guard-v02.webp",
+  import.meta.url,
+).href;
+const crownWhispererArtwork = new URL(
+  "../../assets/portraits/enemies/crown-whisperer-v02.webp",
+  import.meta.url,
+).href;
 
 export const ENEMY_DB = {
   bramble_boar: {
@@ -106,12 +114,14 @@ export const ENEMY_DB = {
   },
   briar_relay_guard: {
     name: "Briar Relay Guard",
+    artwork: { src: briarRelayGuardArtwork, alt: "Portrait of a Briar Relay Guard" },
     icon: "🛡️",
-    hp: 30,
+    hp: 32,
     intentA: "Bar the Route",
     intentB: "Seal-Cloth Strike",
-    attackA: { count: 1, sides: 8, bonus: 2 },
+    attackA: { count: 1, sides: 6, bonus: 1 },
     attackB: { count: 2, sides: 4, bonus: 2 },
+    effectA: { guardSelf: 4, guardAlly: 4 },
   },
   seal_forged_sentry: {
     name: "Seal-Forged Sentry",
@@ -135,12 +145,15 @@ export const ENEMY_DB = {
   },
   crown_whisperer: {
     name: "Crown Whisperer",
+    artwork: { src: crownWhispererArtwork, alt: "Portrait of a Crown Whisperer" },
     icon: "♛",
     hp: 24,
     intentA: "Frighten the Road",
     intentB: "Wrong-Way Murmur",
-    attackA: { count: 2, sides: 4, bonus: 2 },
-    attackB: { count: 1, sides: 10, bonus: 0 },
+    attackA: { count: 2, sides: 4, bonus: 1 },
+    attackB: { count: 1, sides: 8, bonus: 1 },
+    effectA: { heroAttackPenalty: 2 },
+    effectB: { heroGuardBypass: 3 },
   },
   bracken_voss: {
     name: "Bracken Voss",
@@ -207,6 +220,10 @@ export function buildEnemy(enemyId) {
     currentAttackSpec: attackA,
     attackA,
     attackB,
+    currentEffect: enemy.effectA,
+    effectA: enemy.effectA,
+    effectB: enemy.effectB,
+    guard: 0,
     guardBroken: false,
     weakened: false,
   };

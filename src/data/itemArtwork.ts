@@ -42,6 +42,38 @@ const cargoTransferTagIcon = new URL(
   "../../assets/icons/items/cargo-transfer-tag-icon-v02.png",
   import.meta.url,
 ).href;
+const foldedMapScrapIcon = new URL(
+  "../../assets/icons/items/folded-map-scrap-icon-v01.png",
+  import.meta.url,
+).href;
+const gatewrightHookbladeIcon = new URL(
+  "../../assets/icons/items/gatewright-hookblade-icon-v01.png",
+  import.meta.url,
+).href;
+const gatewrightPassagePikeIcon = new URL(
+  "../../assets/icons/items/gatewright-passage-pike-icon-v01.png",
+  import.meta.url,
+).href;
+const gatewrightCounterweightMaulIcon = new URL(
+  "../../assets/icons/items/gatewright-counterweight-maul-icon-v01.png",
+  import.meta.url,
+).href;
+const ironrootRibplateIcon = new URL(
+  "../../assets/icons/items/ironroot-ribplate-icon-v01.png",
+  import.meta.url,
+).href;
+const lowArchRoothelmIcon = new URL(
+  "../../assets/icons/items/low-arch-roothelm-icon-v01.png",
+  import.meta.url,
+).href;
+const oldWaykeeperHelmIcon = new URL(
+  "../../assets/icons/items/old-waykeeper-helm-icon-v01.png",
+  import.meta.url,
+).href;
+const liosCourierKnotIcon = new URL(
+  "../../assets/icons/items/lios-courier-knot-icon-v01.png",
+  import.meta.url,
+).href;
 const splitCrownSlatIcon = new URL(
   "../../assets/icons/map-tokens/crown-den-slat-rack-broken-token-v01.png",
   import.meta.url,
@@ -165,6 +197,38 @@ export const ITEM_ARTWORK: Record<string, ItemArtwork> = {
   cargo_transfer_tag: {
     src: cargoTransferTagIcon,
     alt: "Painted icon of the Cargo Transfer Tag",
+  },
+  folded_map_scrap: {
+    src: foldedMapScrapIcon,
+    alt: "Painted icon of the Folded Map Scrap",
+  },
+  gatewright_hookblade: {
+    src: gatewrightHookbladeIcon,
+    alt: "Painted icon of the Gatewright Hookblade",
+  },
+  gatewright_passage_pike: {
+    src: gatewrightPassagePikeIcon,
+    alt: "Painted icon of the Gatewright Passage Pike",
+  },
+  gatewright_counterweight_maul: {
+    src: gatewrightCounterweightMaulIcon,
+    alt: "Painted icon of the Gatewright Counterweight Maul",
+  },
+  ironroot_ribplate: {
+    src: ironrootRibplateIcon,
+    alt: "Painted icon of the Ironroot Ribplate",
+  },
+  low_arch_roothelm: {
+    src: lowArchRoothelmIcon,
+    alt: "Painted icon of the Low-Arch Roothelm",
+  },
+  old_waykeeper_helm: {
+    src: oldWaykeeperHelmIcon,
+    alt: "Painted icon of the Old Waykeeper Helm",
+  },
+  lios_courier_knot: {
+    src: liosCourierKnotIcon,
+    alt: "Painted icon of Lio's Courier Knot",
   },
   split_crown_slat: {
     src: splitCrownSlatIcon,

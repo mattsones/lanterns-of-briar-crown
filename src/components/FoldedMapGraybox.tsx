@@ -28,6 +28,14 @@ import { Button } from "./ui";
 
 const SHEET_WIDTH = 1000;
 const SHEET_HEIGHT = 620;
+const surveyFaceArtwork = new URL(
+  "../../assets/maps/folded-map-survey-face-v01.webp",
+  import.meta.url,
+).href;
+const roadCrewFaceArtwork = new URL(
+  "../../assets/maps/folded-map-road-crew-face-v01.webp",
+  import.meta.url,
+).href;
 
 const EDGE_META: Record<FoldedMapEdge, { label: string; shortLabel: string; choiceId: string }> = {
   left: { label: "west edge", shortLabel: "WEST", choiceId: CHAPTER_4_CHOICE_IDS.leftEdge },
@@ -69,31 +77,31 @@ const TRACE_PRESENTATION: Record<FoldedMapOutcome, {
 function FrontMapArtwork() {
   return (
     <g data-map-face="front">
-      <rect width={SHEET_WIDTH} height={SHEET_HEIGHT} fill="#ead8a0" />
-      <rect width={SHEET_WIDTH} height={SHEET_HEIGHT} fill="url(#paper-grain-front)" opacity=".62" />
-      <g fill="none" stroke="#75623b" strokeWidth="3" opacity=".55">
-        <path d="M28 112 C150 41 257 141 374 75 S626 125 770 64 S920 98 983 54" />
-        <path d="M20 236 C128 175 250 267 371 206 S601 252 733 196 S898 223 985 174" />
-        <path d="M26 432 C162 361 269 468 399 401 S632 451 766 391 S924 419 987 379" />
-        <path d="M35 526 C159 481 258 558 386 509 S627 548 762 500 S920 517 976 487" />
-      </g>
-      <path d="M600 -18 C642 42 584 101 620 155 C661 226 586 314 620 402 C650 480 598 548 620 638" fill="none" stroke="#4f8290" strokeWidth="14" opacity=".76" />
+      <image
+        href={surveyFaceArtwork}
+        width={SHEET_WIDTH}
+        height={SHEET_HEIGHT}
+        preserveAspectRatio="xMidYMid slice"
+        data-testid="folded-map-survey-artwork"
+      />
+      <rect width={SHEET_WIDTH} height={SHEET_HEIGHT} fill="#f7e8b5" opacity=".07" />
       <g fill="none" stroke="#6d5730" opacity=".86">
         <path d="M648 18 L785 86" strokeWidth="7" strokeLinecap="round" />
         <path d="M925 236 L987 267" strokeWidth="7" strokeLinecap="round" />
         <path d="M648 18 L785 86 M925 236 L987 267" stroke="#f7e7ad" strokeWidth="2" strokeDasharray="10 9" />
       </g>
-      <text x="520" y="32" fill="#6d5730" fontSize="13" fontWeight="700" letterSpacing="2">SURVEY SHORTCUT · OFFICE REVISION</text>
-      <text x="900" y="225" fill="#6d5730" fontSize="10" fontWeight="700" letterSpacing="1.2">DETOUR</text>
+      <text x="520" y="32" fill="#4f3b20" stroke="#ead8a0" strokeWidth="4" paintOrder="stroke" fontSize="13" fontWeight="800" letterSpacing="2">SURVEY SHORTCUT · OFFICE REVISION</text>
+      <text x="900" y="225" fill="#4f3b20" stroke="#ead8a0" strokeWidth="3" paintOrder="stroke" fontSize="10" fontWeight="800" letterSpacing="1.2">DETOUR</text>
       <path d="M690 165 C735 158 768 122 804 106" fill="none" stroke="#563f22" strokeWidth="10" strokeLinecap="round" />
       <path d="M690 165 C735 158 768 122 804 106" fill="none" stroke="#fff2bd" strokeWidth="2" strokeDasharray="12 12" opacity=".75" />
       <path d="M804 62 h115 v70 h-115 z M820 78 v38 h83" fill="none" stroke="#4b381e" strokeWidth="5" />
-      <text x="808" y="151" fill="#4b381e" fontSize="19" fontWeight="700" letterSpacing="2">UNDERWAY</text>
+      <text x="808" y="151" fill="#4b381e" stroke="#ead8a0" strokeWidth="4" paintOrder="stroke" fontSize="19" fontWeight="800" letterSpacing="2">UNDERWAY</text>
       <path d="M420 139 l16 16 -16 16 -16 -16 z" fill="none" stroke="#4f3b20" strokeWidth="5" />
+      <rect x="23" y="16" width="438" height="72" rx="8" fill="#ead8a0" opacity=".76" />
       <text x="34" y="48" fill="#55411f" fontSize="25" fontWeight="800" letterSpacing="3">GREAT SURVEY OF WESTROOT</text>
-      <text x="36" y="78" fill="#79663e" fontSize="14" letterSpacing="2">SURVEY ROUTE FACE · WESTROOT REVISION</text>
-      <text x="662" y="586" fill="#79663e" fontSize="13" letterSpacing="2">LOWER GATE DISTRICT · SHEET 4</text>
-      <g stroke="#8b7444" strokeWidth="2" opacity=".45">
+      <text x="36" y="78" fill="#6b5732" fontSize="14" fontWeight="700" letterSpacing="2">SURVEY ROUTE FACE · WESTROOT REVISION</text>
+      <text x="662" y="586" fill="#4f3b20" stroke="#ead8a0" strokeWidth="4" paintOrder="stroke" fontSize="13" fontWeight="800" letterSpacing="2">LOWER GATE DISTRICT · SHEET 4</text>
+      <g stroke="#8b7444" strokeWidth="1.5" opacity=".16">
         {Array.from({ length: 9 }, (_, index) => <line key={`v-${index}`} x1={100 + index * 100} y1="92" x2={100 + index * 100} y2="575" />)}
         {Array.from({ length: 5 }, (_, index) => <line key={`h-${index}`} x1="25" y1={120 + index * 100} x2="975" y2={120 + index * 100} />)}
       </g>
@@ -104,14 +112,14 @@ function FrontMapArtwork() {
 function BackMapArtwork() {
   return (
     <g data-map-face="back">
-      <rect width={SHEET_WIDTH} height={SHEET_HEIGHT} fill="#cabd91" />
-      <rect width={SHEET_WIDTH} height={SHEET_HEIGHT} fill="url(#paper-grain-back)" opacity=".72" />
-      <g fill="none" stroke="#51492e" strokeWidth="3" opacity=".58">
-        <path d="M18 91 C151 151 269 48 390 111 S639 62 768 120 S905 78 985 126" />
-        <path d="M22 206 C139 269 262 170 391 231 S631 181 771 244 S913 198 981 252" />
-        <path d="M18 405 C151 470 270 367 395 429 S627 380 765 442 S914 397 984 453" />
-        <path d="M28 531 C146 579 260 492 389 548 S629 502 760 559 S910 522 975 571" />
-      </g>
+      <image
+        href={roadCrewFaceArtwork}
+        width={SHEET_WIDTH}
+        height={SHEET_HEIGHT}
+        preserveAspectRatio="xMidYMid slice"
+        data-testid="folded-map-road-crew-artwork"
+      />
+      <rect width={SHEET_WIDTH} height={SHEET_HEIGHT} fill="#7b6a43" opacity=".08" />
 
       {/* True route fragments: west-half and south-three-quarter folds. */}
       <path d="M0 165 C70 161 136 126 250 110" fill="none" stroke="#3f3a24" strokeWidth="11" strokeLinecap="round" />
@@ -136,9 +144,10 @@ function BackMapArtwork() {
       <path d="M350 96 L650 0 M850 310 L750 342" fill="none" stroke="#f1e6bb" strokeWidth="3" strokeDasharray="13 10" />
       <path d="M884 246 C916 214 944 213 978 181" fill="none" stroke="#51492e" strokeWidth="4" strokeDasharray="12 8" />
 
-      <text x="318" y="286" fill="#4c442b" fontSize="24" fontWeight="800" letterSpacing="3">ROAD-CREW CORRECTION FIELD</text>
-      <text x="383" y="315" fill="#6a6040" fontSize="14" letterSpacing="2">REVERSE FACE · OLDER ROAD-CREW FIELD LEAF</text>
-      <text x="438" y="347" fill="#6a6040" fontSize="13" fontStyle="italic">“The map lies flat. Two turns find the road.”</text>
+      <rect x="301" y="259" width="540" height="102" rx="10" fill="#c8b889" opacity=".77" />
+      <text x="318" y="286" fill="#3f3925" fontSize="24" fontWeight="800" letterSpacing="3">ROAD-CREW CORRECTION FIELD</text>
+      <text x="383" y="315" fill="#51482f" fontSize="14" fontWeight="700" letterSpacing="2">REVERSE FACE · OLDER ROAD-CREW FIELD LEAF</text>
+      <text x="438" y="347" fill="#51482f" fontSize="13" fontWeight="700" fontStyle="italic">“The map lies flat. Two turns find the road.”</text>
     </g>
   );
 }
@@ -407,11 +416,6 @@ function FoldedSheet({
             <path d="M252 110 C360 119 424 151 500 165 C555 173 635 173 690 165 C735 158 768 122 804 106" fill="none" stroke="#d1fae5" strokeWidth="4" strokeDasharray="14 10" strokeLinecap="round" />
             <circle cx="505" cy="165" r="27" fill="none" stroke="#d1fae5" strokeWidth="5" />
             <text x="420" y="214" fill="#134e4a" fontSize="15" fontWeight="900" letterSpacing="2">ROAD-CREW ROUTE CONFIRMED</text>
-            <g transform="translate(430 8)">
-              <rect width="365" height="42" rx="8" fill="#e5d8a8" stroke="#7f1d1d" strokeWidth="3" />
-              <path d="M12 10 L353 32 M353 10 L12 32" stroke="#991b1b" strokeWidth="4" opacity=".72" />
-              <text x="18" y="27" fill="#571b16" fontSize="12.5" fontWeight="900" letterSpacing="1.2">SURVEY SHORTCUT VOID · TERRAIN REVERSED</text>
-            </g>
           </g>
         ) : null}
         {draggingEdge ? FOLDED_MAP_LANDINGS.map((landing) => {

@@ -72,7 +72,8 @@ export const MAP_ARTWORK_PLAN: Record<string, ArtworkPlanEntry> = {
   westroot_trail: entry("westroot_trail", "Westroot Trail Map", "map", 2, "painted-map-fallback", "available"),
   crown_door_den: entry("crown_door_den", "Crown Door Den Map", "map", 2, "painted-map-fallback", "available", "Roadwatcher signworks behind the false Crown Door."),
   westroot_hub: entry("westroot_hub", "Westroot Hub Map", "map", 3, "painted-map-fallback", "available", "Westroot Hub v01 keeps the Witness Stone hold-shutter closed; v02 opens the stone walk after the public renewal."),
-  riddle_road_underway: entry("riddle_road_underway", "Riddle Road Underway Map", "map", 4, "painted-map-fallback"),
+  folded_map_faces: entry("folded_map_faces", "Folded Map Puzzle Faces", "map", 4, "painted parchment and SVG route marks", "available", "Two painted, geographically matched map faces sit beneath the accepted opaque-sheet fold geometry; exact clue and route registration remains deterministic in SVG."),
+  riddle_road_underway: entry("riddle_road_underway", "Riddle Road Underway Map", "map", 4, "painted-map-fallback", "available", "The complete multi-map Underway, Listening Mile, and Relay approach suite is integrated."),
   briarhold_waystation: entry("briarhold_waystation", "Briarhold Waystation Map", "map", 5, "painted-map-fallback"),
 };
 
@@ -116,9 +117,9 @@ export const ENEMY_ARTWORK_PLAN: Record<string, ArtworkPlanEntry> = {
   thorn_collared_hound: entry("thorn_collared_hound", "Thorn-Collared Hound", "enemy", 2, "enemy emoji", "available"),
   false_sign_scratcher: entry("false_sign_scratcher", "False Sign Scratcher", "enemy", 2, "enemy emoji", "available"),
   briar_cargo_runner: entry("briar_cargo_runner", "Briar Cargo Runner", "enemy", 3, "enemy emoji", "available"),
-  briar_relay_guard: entry("briar_relay_guard", "Briar Relay Guard", "enemy", 4, "enemy emoji"),
+  briar_relay_guard: entry("briar_relay_guard", "Briar Relay Guard", "enemy", 4, "enemy emoji", "available"),
   seal_forged_sentry: entry("seal_forged_sentry", "Seal-Forged Sentry", "enemy", 3, "enemy emoji", "available"),
-  crown_whisperer: entry("crown_whisperer", "Crown Whisperer", "enemy", 4, "enemy emoji"),
+  crown_whisperer: entry("crown_whisperer", "Crown Whisperer", "enemy", 4, "enemy emoji", "available"),
   bracken_voss: entry("bracken_voss", "Bracken Voss", "enemy", 5, "enemy emoji"),
   thornseal_guard: entry("thornseal_guard", "Thornseal Guard", "enemy", 5, "enemy emoji"),
   thornroot_sentry: entry("thornroot_sentry", "Thornroot Sentry", "enemy", 5, "enemy emoji"),
@@ -128,11 +129,16 @@ export const ITEM_ARTWORK_BACKLOG: Record<string, ArtworkPlanEntry> = {
   rootbread_charm: entry("rootbread_charm", "Rootbread Charm", "item", 3, "item emoji", "available"),
   witness_stone_rubbing: entry("witness_stone_rubbing", "Witness Stone Rubbing", "item", 3, "item emoji", "available"),
   cargo_transfer_tag: entry("cargo_transfer_tag", "Cargo Transfer Tag", "item", 3, "item emoji", "available"),
-  folded_map_scrap: entry("folded_map_scrap", "Folded Map Scrap", "item", 4, "item emoji"),
-  lanternwell_drop: entry("lanternwell_drop", "Lanternwell Drop", "item", 4, "item emoji"),
+  folded_map_scrap: entry("folded_map_scrap", "Folded Map Scrap", "item", 4, "item emoji", "available"),
+  gatewright_hookblade: entry("gatewright_hookblade", "Gatewright Hookblade", "item", 4, "item emoji", "available"),
+  gatewright_passage_pike: entry("gatewright_passage_pike", "Gatewright Passage Pike", "item", 4, "item emoji", "available"),
+  gatewright_counterweight_maul: entry("gatewright_counterweight_maul", "Gatewright Counterweight Maul", "item", 4, "item emoji", "available"),
+  ironroot_ribplate: entry("ironroot_ribplate", "Ironroot Ribplate", "item", 4, "item emoji", "available"),
+  low_arch_roothelm: entry("low_arch_roothelm", "Low-Arch Roothelm", "item", 4, "item emoji", "available"),
+  old_waykeeper_helm: entry("old_waykeeper_helm", "Old Waykeeper Helm", "item", 4, "item emoji", "available"),
   true_seal_fragment: entry("true_seal_fragment", "True Seal Fragment", "item", 5, "item emoji"),
   briar_chain_link: entry("briar_chain_link", "Briar Chain Link", "item", 5, "item emoji"),
-  lios_courier_knot: entry("lios_courier_knot", "Lio's Courier Knot", "item", 5, "item emoji"),
+  lios_courier_knot: entry("lios_courier_knot", "Lio's Courier Knot", "item", 4, "item emoji", "available"),
 };
 
 export const SYMBOL_UI_ARTWORK_PLAN: Record<string, ArtworkPlanEntry> = {

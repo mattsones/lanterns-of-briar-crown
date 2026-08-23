@@ -8,6 +8,13 @@ export function tickCooldowns(cooldowns: Record<string, number> = {}) {
 
 export type AttackSpec = { count: number; sides: number; bonus?: number };
 
+export type EnemyIntentEffect = {
+  guardSelf?: number;
+  guardAlly?: number;
+  heroAttackPenalty?: number;
+  heroGuardBypass?: number;
+};
+
 export type BattleEnemy = {
   battleId: string;
   name: string;
@@ -21,6 +28,10 @@ export type BattleEnemy = {
   currentAttackSpec: AttackSpec;
   attackA: AttackSpec;
   attackB: AttackSpec;
+  currentEffect?: EnemyIntentEffect;
+  effectA?: EnemyIntentEffect;
+  effectB?: EnemyIntentEffect;
+  guard?: number;
   guardBroken?: boolean;
   weakened?: boolean;
 };
@@ -55,14 +66,82 @@ export function damageBattleEnemy(
 ) {
   return enemies.map((enemy) =>
     enemy.battleId === battleId
-      ? {
-          ...enemy,
-          hp: Math.max(0, enemy.hp - damage),
-          weakened: !!effects.weaken || enemy.weakened,
-          guardBroken: !!effects.guardBreak || enemy.guardBroken,
-        }
+      ? (() => {
+          const availableGuard = effects.guardBreak ? 0 : (enemy.guard || 0);
+          const absorbed = Math.min(availableGuard, Math.max(0, damage));
+          return {
+            ...enemy,
+            hp: Math.max(0, enemy.hp - Math.max(0, damage - absorbed)),
+            guard: effects.guardBreak ? 0 : availableGuard - absorbed,
+            weakened: !!effects.weaken || enemy.weakened,
+            guardBroken: !!effects.guardBreak || enemy.guardBroken,
+          };
+        })()
       : enemy,
   );
+}
+
+export function resolveEnemyIntentEffects(enemies: BattleEnemy[]) {
+  let nextEnemies = enemies.map((enemy) => ({ ...enemy }));
+  let heroAttackPenalty = 0;
+  const logs: string[] = [];
+
+  getLivingEnemies(enemies).forEach((actingEnemy) => {
+    const effect = actingEnemy.currentEffect;
+    if (!effect) return;
+    const guardedNames: string[] = [];
+
+    if (effect.guardSelf) {
+      nextEnemies = nextEnemies.map((enemy) =>
+        enemy.battleId === actingEnemy.battleId
+          ? { ...enemy, guard: Math.max(enemy.guard || 0, effect.guardSelf || 0) }
+          : enemy,
+      );
+      guardedNames.push(actingEnemy.name);
+    }
+
+    if (effect.guardAlly) {
+      const ally = getLivingEnemies(nextEnemies).find(
+        (enemy) => enemy.battleId !== actingEnemy.battleId,
+      );
+      if (ally) {
+        nextEnemies = nextEnemies.map((enemy) =>
+          enemy.battleId === ally.battleId
+            ? { ...enemy, guard: Math.max(enemy.guard || 0, effect.guardAlly || 0) }
+            : enemy,
+        );
+        guardedNames.push(ally.name);
+      }
+    }
+
+    if (guardedNames.length) {
+      logs.push(`${actingEnemy.name} bars the route, granting ${effect.guardSelf || effect.guardAlly} Guard to ${guardedNames.join(" and ")}.`);
+    }
+
+    if (effect.heroAttackPenalty) {
+      heroAttackPenalty = Math.max(heroAttackPenalty, effect.heroAttackPenalty);
+      logs.push(`${actingEnemy.name}'s words leave the hero Shaken: -${effect.heroAttackPenalty} damage on the next attack.`);
+    }
+  });
+
+  return { enemies: nextEnemies, heroAttackPenalty, logs };
+}
+
+export function describeEnemyIntentEffect(enemy: BattleEnemy) {
+  const effect = enemy.currentEffect;
+  if (!effect) return null;
+  const parts = [
+    effect.guardSelf
+      ? `${effect.guardSelf} Guard${effect.guardAlly ? " to self + ally" : ""}`
+      : null,
+    effect.heroAttackPenalty
+      ? `Shaken: -${effect.heroAttackPenalty} next attack`
+      : null,
+    effect.heroGuardBypass
+      ? `bypasses ${effect.heroGuardBypass} party Guard`
+      : null,
+  ].filter(Boolean);
+  return parts.join(" • ") || null;
 }
 
 export function rotateEnemyIntent(enemy: BattleEnemy): BattleEnemy {
@@ -71,6 +150,7 @@ export function rotateEnemyIntent(enemy: BattleEnemy): BattleEnemy {
     ...enemy,
     intent: usedIntentA ? enemy.intentB : enemy.intentA,
     currentAttackSpec: usedIntentA ? enemy.attackB : enemy.attackA,
+    currentEffect: usedIntentA ? enemy.effectB : enemy.effectA,
     weakened: false,
     guardBroken: false,
   };

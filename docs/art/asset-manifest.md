@@ -115,6 +115,7 @@ For imported opaque art, the runtime file usually keeps the selected basename an
 | Listening Mile gameplay maps | `listening-mile-first-hood-map-v01.webp`, `listening-mile-second-hood-map-v01.webp`, `listening-mile-third-hood-map-v01.webp` | Three distinct long road stretches at the approved scale. Each contains exactly one small cold-brass acoustic hood and fired-clay conduit. The final stretch adds a scored inspection shutter and subtle loose route-record plate; Lio's blue knot remains an interaction reveal. |
 | Westbound Relay approach gameplay map | `relay-approach-map-v01.webp` | Final long Underway stretch. Root-bound fitted road gradually transitions into formal old civic masonry and ends at a small closed Relay gate; the station interior remains a separate map. |
 | Briar Relay Post gameplay map | `briar-relay-post-map-v01.webp` | Final Chapter 4 captured-station interior. Fixed light comes from a banked stove, shielded work lanterns, and desk candles while cool root-bound edges preserve a role for the party lantern. The upper-left wall carries the approved waist-up Princess Elowen Progress Notice with restrained briar defacement below her face and heading. Full PNG source is preserved under `assets/reference/source-art/assets/maps/`. |
+| Folded Map puzzle faces | `folded-map-survey-face-v01.webp`, `folded-map-road-crew-face-v01.webp` | Painted front and reverse faces for the accepted opaque-sheet puzzle. The geographically matched root-city maps provide terrain, fitted-stone works, parchment character, and the shared river; exact Survey Shortcut, road-crew route, bridge, ring, labels, and fold registration remain SVG overlays so the puzzle answer is never baked into generated art. Full PNG masters are preserved under `assets/reference/source-art/assets/maps/`; generation and integration constraints live in `docs/art/prompts/chapter-4-folded-map-faces.md`. |
 | Great Survey political world map | `assets/reference/source-art/assets/maps/great-survey-of-alderreach-v06.png` | Selected geographic reference source. V06 preserves the accepted V05 geography and symbol hierarchy while replacing the retired painted principality label with `CORAVENE`. V05 remains preserved as the superseded pre-rename source. Create an optimized derivative before any runtime import. Generation prompts and diegetic timing live in `docs/art/prompts/great-survey-world-map.md`. |
 
 ## Scenes
@@ -209,6 +210,8 @@ The versioned portrait-smoothing batch is documented in `docs/art/portrait-smoot
 | False Sign Scratcher | `false-sign-scratcher-v02.webp` | Selected support enemy; clearer face and less Warden overlap than v1. |
 | Briar Cargo Runner | `briar-cargo-runner-v01.webp` | Chapter 3 cargo encounter portrait; clear runner/smuggler silhouette. |
 | Seal-Forged Sentry | `seal-forged-sentry-v01.webp` | Chapter 3 cargo encounter portrait; false-seal, wax, and sentry identity stay readable at battle-card size. |
+| Briar Relay Guard | `briar-relay-guard-v02.webp` | Smoothed Chapter 4 production portrait. The hooked gate-polearm, defensive stance, relay masonry, and signal hardware match his guard-and-brace combat kit. |
+| Crown Whisperer | `crown-whisperer-v02.webp` | Smoothed Chapter 4 production portrait. The composed infiltrator, whispering hand, sealed papers, and relay shadows match her Shaken debuff and Guard-piercing pressure. |
 
 ---
 
@@ -242,8 +245,6 @@ The versioned portrait-smoothing batch is documented in `docs/art/portrait-smoot
 
 ## Enemies
 
-- Briar Relay Guard
-- Crown Whisperer
 - Thornseal Guard
 - Thornroot Sentry
 
@@ -251,7 +252,7 @@ The versioned portrait-smoothing batch is documented in `docs/art/portrait-smoot
 
 - Optional expanded Briar Crown symbol sheet; the primary production mark is complete
 - Lantern Road symbol sheet
-- custom item icon set
+- custom item icons beyond the completed Chapters 1-4 sets
 - skill icon sheet
 - parchment dialogue panel
 - quest journal panel
@@ -383,6 +384,23 @@ These have also been cleaned and promoted into the item-art registry so Chapter 
 | Rootbread Charm | `assets/icons/items/rootbread-charm-icon-v01.png` | Production-ready wearable support trinket; distinct warm bread-and-knot silhouette, with stronger healing/guard utility than the Lantern Pin. |
 | Witness Stone Rubbing | `assets/icons/items/witness-stone-rubbing-icon-v02.png` | Selected correction: a loose charcoal crown-mark rubbing, not a book. |
 | Cargo Transfer Tag | `assets/icons/items/cargo-transfer-tag-icon-v02.png` | Selected correction: a tied freight tag with a seal, not a scroll. |
+
+---
+
+## Selected Chapter 4 Item Icons
+
+The complete Chapter 4 set is promoted into `src/data/itemArtwork.ts`; the item emoji remain as fallback content.
+
+| Item | Selected asset | Notes |
+|---|---|---|
+| Folded Map Scrap | `assets/icons/items/folded-map-scrap-icon-v01.png` | Worn two-sided survey fragment; supports the map-puzzle identity without implying the retired Lanternwell cache. |
+| Gatewright Hookblade | `assets/icons/items/gatewright-hookblade-icon-v01.png` | Compact hooked passage tool with a quick, close-control silhouette. |
+| Gatewright Passage Pike | `assets/icons/items/gatewright-passage-pike-icon-v01.png` | Long defensive reach weapon built for narrow civic tunnels. |
+| Gatewright Counterweight Maul | `assets/icons/items/gatewright-counterweight-maul-icon-v01.png` | Heavy architectural tool-weapon with a clear counterweight read. |
+| Ironroot Ribplate | `assets/icons/items/ironroot-ribplate-icon-v01.png` | Root-braced fitted armor with Underway craft language. |
+| Low-Arch Roothelm | `assets/icons/items/low-arch-roothelm-icon-v01.png` | Compact protective helm shaped for constrained passages. |
+| Old Waykeeper Helm | `assets/icons/items/old-waykeeper-helm-icon-v01.png` | Distinct weathered route-cache reward with older civic construction. |
+| Lio's Courier Knot | `assets/icons/items/lios-courier-knot-icon-v01.png` | Blue courier-string evidence token from the last Listening Mile hood. |
 
 ---
 

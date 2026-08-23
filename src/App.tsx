@@ -36,6 +36,7 @@ import {
   getLivingEnemies,
   getSelectedBattleEnemy,
   prepareBattleEnemies,
+  resolveEnemyIntentEffects,
   rotateEnemyIntent,
   tickCooldowns,
 } from "./game/battle";
@@ -6230,6 +6231,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       rewardKey,
       turn: heroStarts ? "hero" : "enemy",
       heroGuard: options.heroGuard || 0,
+      heroAttackPenalty: 0,
       cooldowns: {},
       finished: false,
       log: [
@@ -6320,8 +6322,10 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     );
     const bonusDamage = bonusVsApplies ? 2 : 0;
     const guardPenalty = skill.pierce || skill.guardBreak || target.guardBroken ? 0 : 1;
-    const damage = Math.max(1, roll.total + bonusDamage - guardPenalty);
-    const targetWillFall = target.hp - damage <= 0;
+    const attackPenalty = battle.heroAttackPenalty || 0;
+    const damage = Math.max(1, roll.total + bonusDamage - guardPenalty - attackPenalty);
+    const guardedDamage = Math.max(0, damage - (skill.guardBreak ? 0 : (target.guard || 0)));
+    const targetWillFall = target.hp - guardedDamage <= 0;
     const otherLivingEnemies = getLivingEnemies(battle.enemies).filter(
       (enemy) => enemy.battleId !== target.battleId,
     );
@@ -6334,16 +6338,22 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         weaken: skill.weaken,
         guardBreak: skill.guardBreak,
       });
+      const damagedTarget = nextEnemies.find((enemy) => enemy.battleId === activeTarget.battleId);
+      const hpDamage = activeTarget.hp - (damagedTarget?.hp ?? activeTarget.hp);
+      const guardAbsorbed = skill.guardBreak
+        ? 0
+        : Math.max(0, (activeTarget.guard || 0) - (damagedTarget?.guard || 0));
       const updated = {
         ...prev,
         enemies: nextEnemies,
+        heroAttackPenalty: 0,
         cooldowns: skill.cooldown
           ? { ...(prev.cooldowns || {}), [skill.id]: skill.cooldown }
           : prev.cooldowns,
         log: [
           ...prev.log.slice(-7),
-          `${player.name} uses ${skill.name} on ${activeTarget.name} for ${damage} damage (${roll.notation}).`,
-          ...(activeTarget.hp - damage <= 0 ? [`${activeTarget.name} falls!`] : []),
+          `${player.name} uses ${skill.name} on ${activeTarget.name} for ${hpDamage} damage (${roll.notation}${attackPenalty ? `, Shaken -${attackPenalty}` : ""})${guardAbsorbed ? `; ${guardAbsorbed} absorbed by Guard` : ""}${skill.guardBreak && activeTarget.guard ? "; enemy Guard broken" : ""}.`,
+          ...((damagedTarget?.hp ?? activeTarget.hp) <= 0 ? [`${activeTarget.name} falls!`] : []),
         ].slice(-8),
       };
       if (!getLivingEnemies(nextEnemies).length)
@@ -6406,9 +6416,12 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
                 weaken: ability.effect.weaken,
               })
             : prev.enemies;
+        const damagedTarget = nextEnemies.find((enemy) => enemy.battleId === target.battleId);
+        const hpDamage = target.hp - (damagedTarget?.hp ?? target.hp);
+        const guardAbsorbed = Math.max(0, (target.guard || 0) - (damagedTarget?.guard || 0));
         allEnemiesDefeated = !getLivingEnemies(nextEnemies).length;
         const effectSummary = [
-          roll ? `${damage} damage (${roll.notation})` : null,
+          roll ? `${hpDamage} damage (${roll.notation})${guardAbsorbed ? `, ${guardAbsorbed} absorbed by Guard` : ""}` : null,
           ability.effect.heroGuard
             ? `${ability.effect.heroGuard} Guard for ${player.name}`
             : null,
@@ -6432,7 +6445,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           log: [
             ...prev.log.slice(-7),
             `${companion.name} uses ${ability.name}: ${effectSummary.join(", ")}.`,
-            ...(damage > 0 && target.hp - damage <= 0
+            ...(damage > 0 && (damagedTarget?.hp ?? target.hp) <= 0
               ? [`${target.name} falls!`]
               : []),
           ].slice(-8),
@@ -6464,16 +6477,22 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           const companionStanding =
             companion.recruited && companion.hp - totalCompanionDamage > 0;
           const targetHero = !companionStanding || Math.random() < 0.7;
+          const guardBypass = enemy.currentEffect?.heroGuardBypass || 0;
+          const effectiveHeroGuard = Math.max(0, (prev.heroGuard || 0) - guardBypass);
           const damage = targetHero
             ? Math.max(
                 1,
-                base - Math.floor(derivedStats.Guard / 3) - (prev.heroGuard || 0),
+                base - Math.floor(derivedStats.Guard / 3) - effectiveHeroGuard,
               )
             : Math.max(1, base - 2);
           if (targetHero) totalHeroDamage += damage;
           else totalCompanionDamage += damage;
-          return `${enemy.name} uses ${enemy.intent} for ${damage} damage${targetHero ? "" : ` to ${companion.name}`}.`;
+          const bypassedGuard = targetHero
+            ? Math.min(prev.heroGuard || 0, guardBypass)
+            : 0;
+          return `${enemy.name} uses ${enemy.intent} for ${damage} damage${targetHero ? "" : ` to ${companion.name}`}${bypassedGuard ? `, bypassing ${bypassedGuard} Guard` : ""}.`;
         });
+        const intentEffects = resolveEnemyIntentEffects(prev.enemies);
         if (totalHeroDamage)
           setPlayer((p) => ({ ...p, hp: Math.max(0, p.hp - totalHeroDamage) }));
         if (totalCompanionDamage)
@@ -6485,11 +6504,15 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           ...prev,
           turn: "hero",
           heroGuard: 0,
+          heroAttackPenalty: Math.max(
+            prev.heroAttackPenalty || 0,
+            intentEffects.heroAttackPenalty,
+          ),
           cooldowns: tickCooldowns(prev.cooldowns),
-          enemies: prev.enemies.map((enemy) =>
+          enemies: intentEffects.enemies.map((enemy) =>
             enemy.hp > 0 ? rotateEnemyIntent(enemy) : enemy,
           ),
-          log: [...prev.log, ...attackLogs].slice(-8),
+          log: [...prev.log, ...attackLogs, ...intentEffects.logs].slice(-8),
         };
       });
     }, 450);

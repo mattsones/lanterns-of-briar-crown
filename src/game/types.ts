@@ -357,6 +357,13 @@ export type SkillCheckResult = {
   label: string;
 };
 
+export type EnemyIntentEffect = {
+  guardSelf?: number;
+  guardAlly?: number;
+  heroAttackPenalty?: number;
+  heroGuardBypass?: number;
+};
+
 export type Enemy = {
   name: string;
   icon: string;
@@ -372,6 +379,10 @@ export type Enemy = {
   currentAttackSpec: RollSpec;
   attackA: RollSpec;
   attackB: RollSpec;
+  currentEffect?: EnemyIntentEffect;
+  effectA?: EnemyIntentEffect;
+  effectB?: EnemyIntentEffect;
+  guard: number;
   guardBroken: boolean;
   weakened: boolean;
 };
@@ -383,6 +394,7 @@ export type Battle = {
   rewardKey: string;
   turn: string;
   heroGuard: number;
+  heroAttackPenalty: number;
   cooldowns: Record<string, number>;
   finished: boolean;
   log: string[];

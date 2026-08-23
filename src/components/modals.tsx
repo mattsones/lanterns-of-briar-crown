@@ -11,6 +11,7 @@ import {
   getCompanionCommandHint,
   isCompanionConscious,
 } from "../game/companions";
+import { describeEnemyIntentEffect } from "../game/battle";
 import { checkSummary, resolveSkillCheck } from "../game/dice";
 import { canCraftRecipe, formatIngredients, gainItem, getBuyPrice, getEquippedCount, getItemHighlights, getSellPrice } from "../game/inventory";
 import { formatSaveTimestamp } from "../game/save";
@@ -1018,6 +1019,10 @@ export function BattleModal({ battle, player, companion, heroSkills, heroAttack,
                 <div className="min-w-0">
                   <div className="truncate text-lg font-semibold">{player.name}</div>
                   <div className="mt-2"><Meter value={player.hp} max={player.maxHp} label="Hero HP" /></div>
+                  <div className="mt-2 flex flex-wrap gap-2 text-xs">
+                    {battle.heroGuard > 0 ? <span className="rounded-full bg-sky-300/15 px-2 py-1 text-sky-100">Guard {battle.heroGuard}</span> : null}
+                    {battle.heroAttackPenalty > 0 ? <span className="rounded-full bg-violet-300/15 px-2 py-1 text-violet-100">Shaken −{battle.heroAttackPenalty} next attack</span> : null}
+                  </div>
                 </div>
               </article>
               {companion.recruited ? (
@@ -1048,7 +1053,9 @@ export function BattleModal({ battle, player, companion, heroSkills, heroAttack,
                       {defeated ? <span className="text-xs text-white/50">Defeated</span> : null}
                     </div>
                     <div className="mt-2"><Meter value={enemy.hp} max={enemy.maxHp} label="HP" colorClass="bg-orange-400" /></div>
+                    {enemy.guard > 0 ? <div className="mt-2 rounded-xl bg-sky-300/10 px-3 py-2 text-xs text-sky-100">Guard: {enemy.guard}</div> : null}
                     <div className="mt-2 rounded-xl bg-white/5 px-3 py-2 text-xs text-white/65">Intent: <span className="text-orange-100">{enemy.intent}</span></div>
+                    {describeEnemyIntentEffect(enemy) ? <div className="mt-1 px-3 text-xs text-amber-100/75">{describeEnemyIntentEffect(enemy)}</div> : null}
                   </button>
                 );
               })}

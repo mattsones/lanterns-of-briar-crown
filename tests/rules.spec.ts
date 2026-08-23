@@ -7,9 +7,11 @@ import { COMPANION_OPTIONS } from "../src/data/companions";
 import { buildEncounterEnemies, ENCOUNTERS, ENEMY_DB } from "../src/data/enemies";
 import {
   damageBattleEnemy,
+  describeEnemyIntentEffect,
   getLivingEnemies,
   getSelectedBattleEnemy,
   prepareBattleEnemies,
+  resolveEnemyIntentEffects,
   rotateEnemyIntent,
 } from "../src/game/battle";
 import {
@@ -268,6 +270,52 @@ test("simultaneous combat keeps every enemy active and targetable", () => {
   const rotated = rotateEnemyIntent(enemies[0]);
   expect(rotated.intent).toBe(enemies[0].intentB);
   expect(rotated.currentAttackSpec).toEqual(enemies[0].attackB);
+});
+
+test("Chapter 4 relay enemies turn their visual roles into readable combat effects", () => {
+  const enemies = prepareBattleEnemies(buildEncounterEnemies("briarRelay") as any);
+  const [guard, sentry, whisperer] = enemies;
+
+  expect(guard).toMatchObject({
+    name: "Briar Relay Guard",
+    hp: 32,
+    intent: "Bar the Route",
+    currentAttackSpec: { count: 1, sides: 6, bonus: 1 },
+    currentEffect: { guardSelf: 4, guardAlly: 4 },
+  });
+  expect(whisperer).toMatchObject({
+    name: "Crown Whisperer",
+    hp: 24,
+    intent: "Frighten the Road",
+    currentEffect: { heroAttackPenalty: 2 },
+  });
+
+  const protectedSide = resolveEnemyIntentEffects(enemies);
+  expect(protectedSide.heroAttackPenalty).toBe(2);
+  expect(protectedSide.enemies.find((enemy) => enemy.battleId === guard.battleId)?.guard).toBe(4);
+  expect(protectedSide.enemies.find((enemy) => enemy.battleId === sentry.battleId)?.guard).toBe(4);
+  expect(protectedSide.enemies.find((enemy) => enemy.battleId === whisperer.battleId)?.guard).toBe(0);
+  expect(protectedSide.logs.join(" ")).toContain("Shaken");
+
+  const absorbed = damageBattleEnemy(protectedSide.enemies, sentry.battleId, 3);
+  expect(absorbed.find((enemy) => enemy.battleId === sentry.battleId)).toMatchObject({
+    hp: sentry.hp,
+    guard: 1,
+  });
+  const broken = damageBattleEnemy(protectedSide.enemies, sentry.battleId, 6, { guardBreak: true });
+  expect(broken.find((enemy) => enemy.battleId === sentry.battleId)).toMatchObject({
+    hp: sentry.hp - 6,
+    guard: 0,
+    guardBroken: true,
+  });
+
+  const wrongWay = rotateEnemyIntent(whisperer);
+  expect(wrongWay).toMatchObject({
+    intent: "Wrong-Way Murmur",
+    currentAttackSpec: { count: 1, sides: 8, bonus: 1 },
+    currentEffect: { heroGuardBypass: 3 },
+  });
+  expect(describeEnemyIntentEffect(wrongWay)).toBe("bypasses 3 party Guard");
 });
 
 test("Chapter 3 scaffold has explicit entry, hub, and completion contracts", () => {
@@ -612,6 +660,49 @@ test("Chapter 3 production artwork is selected and fallback-safe", () => {
   expect(ARTWORK_PLAN_GROUPS.enemies.briar_cargo_runner.status).toBe("available");
   expect(ARTWORK_PLAN_GROUPS.enemies.seal_forged_sentry.status).toBe("available");
   expect(ARTWORK_PLAN_GROUPS.items.cargo_transfer_tag.status).toBe("available");
+});
+
+test("Chapter 4 item, enemy, and Folded Map artwork is integrated with fallbacks", () => {
+  const expectedItems = {
+    folded_map_scrap: "folded-map-scrap-icon-v01",
+    gatewright_hookblade: "gatewright-hookblade-icon-v01",
+    gatewright_passage_pike: "gatewright-passage-pike-icon-v01",
+    gatewright_counterweight_maul: "gatewright-counterweight-maul-icon-v01",
+    ironroot_ribplate: "ironroot-ribplate-icon-v01",
+    low_arch_roothelm: "low-arch-roothelm-icon-v01",
+    old_waykeeper_helm: "old-waykeeper-helm-icon-v01",
+    lios_courier_knot: "lios-courier-knot-icon-v01",
+  } as const;
+
+  for (const [id, filename] of Object.entries(expectedItems)) {
+    expect(ITEM_DB[id].icon).toBeTruthy();
+    expect(ITEM_ARTWORK[id]?.src).toContain(filename);
+    expect(ARTWORK_PLAN_GROUPS.items[id].status).toBe("available");
+  }
+
+  expect(ENEMY_DB.briar_relay_guard.artwork?.src).toContain("briar-relay-guard-v02");
+  expect(ENEMY_DB.crown_whisperer.artwork?.src).toContain("crown-whisperer-v02");
+  expect(ENEMY_DB.briar_relay_guard.icon).toBeTruthy();
+  expect(ENEMY_DB.crown_whisperer.icon).toBeTruthy();
+  expect(ARTWORK_PLAN_GROUPS.enemies.briar_relay_guard.status).toBe("available");
+  expect(ARTWORK_PLAN_GROUPS.enemies.crown_whisperer.status).toBe("available");
+  expect(MAP_ARTWORK_PLAN.folded_map_faces.status).toBe("available");
+
+  [
+    "../assets/maps/folded-map-survey-face-v01.webp",
+    "../assets/maps/folded-map-road-crew-face-v01.webp",
+    "../assets/reference/source-art/assets/maps/folded-map-survey-face-v01.png",
+    "../assets/reference/source-art/assets/maps/folded-map-road-crew-face-v01.png",
+  ].forEach((path) => expect(existsSync(new URL(path, import.meta.url))).toBe(true));
+
+  const foldedMapSource = readFileSync(
+    new URL("../src/components/FoldedMapGraybox.tsx", import.meta.url),
+    "utf8",
+  );
+  expect(foldedMapSource).toContain("folded-map-survey-face-v01.webp");
+  expect(foldedMapSource).toContain("folded-map-road-crew-face-v01.webp");
+  expect(foldedMapSource).not.toContain("SURVEY SHORTCUT VOID");
+  expect(foldedMapSource.toLowerCase()).not.toContain("lanternwell");
 });
 
 test("the approved portrait smoothing batch is selected everywhere it is used", () => {
