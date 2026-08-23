@@ -30,9 +30,9 @@ The two required Relay evidence illustrations are now integrated. `relay-forged-
 
 ### Next Best Step
 
-Finish the Chapter 4 milestone with the remaining batched browser suite and uninterrupted Chapters 1-4 release-candidate QA. The portrait-smoothing batch is already approved, integrated, optimized, and covered by the production asset and portrait regression checks. The captive porter remains optional.
+Start the next session with a fresh owner playtest of Chapter 4 from its opening through the Briar Relay Post. The playthrough should validate the painted Folded Map, route choice, Underway pacing, revised enemy roles, Relay encounters, and evidence handoff as one complete experience.
 
-The next new-art milestone is Chapter 5: establish Bracken Voss, the Thornseal Guard, and the Thornroot Sentry against the completed cohesion record before producing their portraits. The captive porter remains optional.
+After resolving the owner playthrough notes, finish the Chapter 4 release-candidate milestone with uninterrupted Chapters 1-4 QA. The next new-art milestone is Chapter 5: establish Bracken Voss, the Thornseal Guard, and the Thornroot Sentry against the completed cohesion record before producing their portraits. The captive porter remains optional.
 
 ## Latest Handoff — 2026-08-20
 
