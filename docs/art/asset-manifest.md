@@ -213,6 +213,8 @@ The versioned portrait-smoothing batch is documented in `docs/art/portrait-smoot
 | Briar Relay Guard | `briar-relay-guard-v02.webp` | Smoothed Chapter 4 production portrait. The hooked gate-polearm, defensive stance, relay masonry, and signal hardware match his guard-and-brace combat kit. |
 | Crown Whisperer | `crown-whisperer-v02.webp` | Smoothed Chapter 4 production portrait. The composed infiltrator, whispering hand, sealed papers, and relay shadows match her Shaken debuff and Guard-piercing pressure. |
 
+The complete live roster was rechecked at the 4:3 battle-card crop on 2026-08-22. No further smoothing was warranted: exposed humanoid faces remain clean, and the stronger texture on animals, root shells, masks, and obscured faces is material rather than artifact. The review sheet is `assets/reference/concepts/enemy-cohesion-pass/enemy-roster-review-v01.webp`; the combined art/mechanics audit is `docs/planning/enemy-cohesion-pass.md`.
+
 ---
 
 # Generated But Not Selected

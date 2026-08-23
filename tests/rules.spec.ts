@@ -4,7 +4,7 @@ import { resolve } from "node:path";
 import { resolveRoll, resolveSkillCheck } from "../src/game/dice";
 import { DEFAULT_HUMAN_HERITAGE_ID, GENDERS, HUMAN_HERITAGES, RACES } from "../src/data/character";
 import { COMPANION_OPTIONS } from "../src/data/companions";
-import { buildEncounterEnemies, ENCOUNTERS, ENEMY_DB } from "../src/data/enemies";
+import { buildEncounterEnemies, buildEnemy, ENCOUNTERS, ENEMY_DB } from "../src/data/enemies";
 import {
   damageBattleEnemy,
   describeEnemyIntentEffect,
@@ -316,6 +316,50 @@ test("Chapter 4 relay enemies turn their visual roles into readable combat effec
     currentEffect: { heroGuardBypass: 3 },
   });
   expect(describeEnemyIntentEffect(wrongWay)).toBe("bypasses 3 party Guard");
+});
+
+test("every enemy's named role is reflected in at least one readable combat effect", () => {
+  const expectedIntentEffects = {
+    bramble_boar: ["bypasses 2 party Guard", "Shaken: -1 next attack"],
+    thorncoat_ruffian: ["bypasses 1 party Guard", "Shaken: -1 next attack"],
+    thorny_hound: ["bypasses 1 party Guard", "Shaken: -1 next attack"],
+    rustroot_skulk: [null, "bypasses 2 party Guard"],
+    briar_knot_warden: ["bypasses 2 party Guard", "5 Guard to self"],
+    briar_roadwatcher: ["Shaken: -1 next attack", "bypasses 2 party Guard"],
+    false_sign_scratcher: ["3 Guard to ally", "Shaken: -1 next attack"],
+    thorn_collared_hound: [null, "bypasses 2 party Guard"],
+    briar_relay_guard: ["4 Guard to self + ally", null],
+    seal_forged_sentry: ["Shaken: -1 next attack", "3 Guard to self + ally"],
+    briar_cargo_runner: ["3 Guard to self", "Shaken: -1 next attack"],
+    crown_whisperer: ["Shaken: -2 next attack", "bypasses 3 party Guard"],
+    bracken_voss: ["Shaken: -2 next attack", "5 Guard to self + ally"],
+    thornseal_guard: ["4 Guard to self + ally", "bypasses 2 party Guard"],
+    thornroot_sentry: ["Shaken: -2 next attack", "bypasses 2 party Guard"],
+  } as const;
+
+  for (const [enemyId, [intentAEffect, intentBEffect]] of Object.entries(expectedIntentEffects)) {
+    const intentA = prepareBattleEnemies([buildEnemy(enemyId) as any])[0];
+    const intentB = rotateEnemyIntent(intentA);
+    expect(describeEnemyIntentEffect(intentA)).toBe(intentAEffect);
+    expect(describeEnemyIntentEffect(intentB)).toBe(intentBEffect);
+    expect([intentAEffect, intentBEffect].some(Boolean)).toBe(true);
+  }
+
+  const boarBurst = rotateEnemyIntent(
+    prepareBattleEnemies([buildEnemy("bramble_boar") as any])[0],
+  );
+  expect(resolveEnemyIntentEffects([boarBurst]).logs.join(" ")).toContain(
+    "scatters hooked briars",
+  );
+
+  const roadwatcherSide = prepareBattleEnemies(
+    buildEncounterEnemies("roadwatcherHard") as any,
+  );
+  const scratcherEffects = resolveEnemyIntentEffects(roadwatcherSide);
+  expect(
+    scratcherEffects.enemies.find((enemy) => enemy.name === "Briar Roadwatcher")?.guard,
+  ).toBe(3);
+  expect(scratcherEffects.logs.join(" ")).toContain("scratches a false safe line");
 });
 
 test("Chapter 3 scaffold has explicit entry, hub, and completion contracts", () => {

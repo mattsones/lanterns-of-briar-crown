@@ -362,6 +362,8 @@ export type EnemyIntentEffect = {
   guardAlly?: number;
   heroAttackPenalty?: number;
   heroGuardBypass?: number;
+  guardNarration?: string;
+  shakenNarration?: string;
 };
 
 export type Enemy = {

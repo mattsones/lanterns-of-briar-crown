@@ -13,6 +13,8 @@ export type EnemyIntentEffect = {
   guardAlly?: number;
   heroAttackPenalty?: number;
   heroGuardBypass?: number;
+  guardNarration?: string;
+  shakenNarration?: string;
 };
 
 export type BattleEnemy = {
@@ -115,12 +117,12 @@ export function resolveEnemyIntentEffects(enemies: BattleEnemy[]) {
     }
 
     if (guardedNames.length) {
-      logs.push(`${actingEnemy.name} bars the route, granting ${effect.guardSelf || effect.guardAlly} Guard to ${guardedNames.join(" and ")}.`);
+      logs.push(`${actingEnemy.name} ${effect.guardNarration || "braces"}, granting ${effect.guardSelf || effect.guardAlly} Guard to ${guardedNames.join(" and ")}.`);
     }
 
     if (effect.heroAttackPenalty) {
       heroAttackPenalty = Math.max(heroAttackPenalty, effect.heroAttackPenalty);
-      logs.push(`${actingEnemy.name}'s words leave the hero Shaken: -${effect.heroAttackPenalty} damage on the next attack.`);
+      logs.push(`${actingEnemy.name} ${effect.shakenNarration || "breaks the hero's focus"}: Shaken, -${effect.heroAttackPenalty} damage on the next attack.`);
     }
   });
 
@@ -131,9 +133,13 @@ export function describeEnemyIntentEffect(enemy: BattleEnemy) {
   const effect = enemy.currentEffect;
   if (!effect) return null;
   const parts = [
-    effect.guardSelf
-      ? `${effect.guardSelf} Guard${effect.guardAlly ? " to self + ally" : ""}`
-      : null,
+    effect.guardSelf && effect.guardAlly
+      ? `${effect.guardSelf} Guard to self + ally`
+      : effect.guardSelf
+        ? `${effect.guardSelf} Guard to self`
+        : effect.guardAlly
+          ? `${effect.guardAlly} Guard to ally`
+          : null,
     effect.heroAttackPenalty
       ? `Shaken: -${effect.heroAttackPenalty} next attack`
       : null,

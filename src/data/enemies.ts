@@ -43,6 +43,8 @@ export const ENEMY_DB = {
     hp: 24,
     intentA: "Wild Charge",
     intentB: "Briar Burst",
+    effectA: { heroGuardBypass: 2 },
+    effectB: { heroAttackPenalty: 1, shakenNarration: "scatters hooked briars across the hero's footing" },
   },
   thorncoat_ruffian: {
     name: "Thorncoat Ruffian",
@@ -51,6 +53,8 @@ export const ENEMY_DB = {
     hp: 22,
     intentA: "Knife Rush",
     intentB: "Dirty Trick",
+    effectA: { heroGuardBypass: 1 },
+    effectB: { heroAttackPenalty: 1, shakenNarration: "turns a cheap feint into a moment of doubt" },
   },
   thorny_hound: {
     name: "Thorny Hound",
@@ -61,6 +65,8 @@ export const ENEMY_DB = {
     intentB: "Briar Bark",
     attackA: { count: 1, sides: 4, bonus: 1 },
     attackB: { count: 1, sides: 6, bonus: 1 },
+    effectA: { heroGuardBypass: 1 },
+    effectB: { heroAttackPenalty: 1, shakenNarration: "fills the road with a thorn-rasped bark" },
   },
   rustroot_skulk: {
     name: "Rustroot Skulk",
@@ -71,6 +77,7 @@ export const ENEMY_DB = {
     intentB: "Root Snap",
     attackA: { count: 2, sides: 4, bonus: 1 },
     attackB: { count: 1, sides: 8, bonus: 2 },
+    effectB: { heroGuardBypass: 2 },
   },
   briar_knot_warden: {
     name: "Briar Knot Warden",
@@ -81,6 +88,8 @@ export const ENEMY_DB = {
     intentB: "Root Surge",
     attackA: { count: 1, sides: 8, bonus: 3 },
     attackB: { count: 2, sides: 6, bonus: 2 },
+    effectA: { heroGuardBypass: 2 },
+    effectB: { guardSelf: 5, guardNarration: "knots the cellar roots into a moving barricade" },
   },
   briar_roadwatcher: {
     name: "Briar Roadwatcher",
@@ -91,6 +100,8 @@ export const ENEMY_DB = {
     intentB: "Thorn Lash",
     attackA: { count: 1, sides: 8, bonus: 2 },
     attackB: { count: 2, sides: 4, bonus: 2 },
+    effectA: { heroAttackPenalty: 1, shakenNarration: "barks a false command with practiced authority" },
+    effectB: { heroGuardBypass: 2 },
   },
   false_sign_scratcher: {
     name: "False Sign Scratcher",
@@ -101,6 +112,8 @@ export const ENEMY_DB = {
     intentB: "Pocket Sand",
     attackA: { count: 1, sides: 6, bonus: 1 },
     attackB: { count: 1, sides: 4, bonus: 2 },
+    effectA: { guardAlly: 3, guardNarration: "scratches a false safe line through the fight" },
+    effectB: { heroAttackPenalty: 1, shakenNarration: "flings grit into the hero's eyes" },
   },
   thorn_collared_hound: {
     name: "Thorn-Collared Hound",
@@ -111,6 +124,7 @@ export const ENEMY_DB = {
     intentB: "Forced Lunge",
     attackA: { count: 1, sides: 6, bonus: 2 },
     attackB: { count: 2, sides: 4, bonus: 1 },
+    effectB: { heroGuardBypass: 2 },
   },
   briar_relay_guard: {
     name: "Briar Relay Guard",
@@ -121,7 +135,7 @@ export const ENEMY_DB = {
     intentB: "Seal-Cloth Strike",
     attackA: { count: 1, sides: 6, bonus: 1 },
     attackB: { count: 2, sides: 4, bonus: 2 },
-    effectA: { guardSelf: 4, guardAlly: 4 },
+    effectA: { guardSelf: 4, guardAlly: 4, guardNarration: "bars the route with his gate-pole" },
   },
   seal_forged_sentry: {
     name: "Seal-Forged Sentry",
@@ -132,6 +146,8 @@ export const ENEMY_DB = {
     intentB: "Waxen Guard",
     attackA: { count: 1, sides: 6, bonus: 3 },
     attackB: { count: 1, sides: 8, bonus: 1 },
+    effectA: { heroAttackPenalty: 1, shakenNarration: "stamps a false command into the dust" },
+    effectB: { guardSelf: 3, guardAlly: 3, guardNarration: "hardens its loose orders into a waxen screen" },
   },
   briar_cargo_runner: {
     name: "Briar Cargo Runner",
@@ -142,6 +158,8 @@ export const ENEMY_DB = {
     intentB: "Seal-Cloth Feint",
     attackA: { count: 1, sides: 6, bonus: 3 },
     attackB: { count: 2, sides: 4, bonus: 1 },
+    effectA: { guardSelf: 3, guardNarration: "slips behind the siding's stacked freight" },
+    effectB: { heroAttackPenalty: 1, shakenNarration: "snaps a forged seal-cloth across the hero's sightline" },
   },
   crown_whisperer: {
     name: "Crown Whisperer",
@@ -152,7 +170,7 @@ export const ENEMY_DB = {
     intentB: "Wrong-Way Murmur",
     attackA: { count: 2, sides: 4, bonus: 1 },
     attackB: { count: 1, sides: 8, bonus: 1 },
-    effectA: { heroAttackPenalty: 2 },
+    effectA: { heroAttackPenalty: 2, shakenNarration: "frightens the road with a soft, certain lie" },
     effectB: { heroGuardBypass: 3 },
   },
   bracken_voss: {
@@ -163,6 +181,8 @@ export const ENEMY_DB = {
     intentB: "Commanding Seal",
     attackA: { count: 2, sides: 6, bonus: 3 },
     attackB: { count: 1, sides: 10, bonus: 3 },
+    effectA: { heroAttackPenalty: 2, shakenNarration: "speaks a false order as if obedience were already settled" },
+    effectB: { guardSelf: 5, guardAlly: 5, guardNarration: "sets his commanding seal over the whole defense" },
   },
   thornseal_guard: {
     name: "Thornseal Guard",
@@ -172,6 +192,8 @@ export const ENEMY_DB = {
     intentB: "Thornseal Bash",
     attackA: { count: 1, sides: 8, bonus: 2 },
     attackB: { count: 2, sides: 4, bonus: 2 },
+    effectA: { guardSelf: 4, guardAlly: 4, guardNarration: "locks shield and ledger into one defended line" },
+    effectB: { heroGuardBypass: 2 },
   },
   thornroot_sentry: {
     name: "Thornroot Sentry",
@@ -181,6 +203,8 @@ export const ENEMY_DB = {
     intentB: "Briar Sweep",
     attackA: { count: 1, sides: 8, bonus: 2 },
     attackB: { count: 2, sides: 6, bonus: 1 },
+    effectA: { heroAttackPenalty: 2, shakenNarration: "snaps roots around the hero's stance" },
+    effectB: { heroGuardBypass: 2 },
   },
 };
 
