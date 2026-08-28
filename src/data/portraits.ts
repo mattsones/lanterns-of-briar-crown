@@ -36,6 +36,10 @@ const nomaGreenstillPortrait = new URL(
   "../../assets/portraits/characters/noma-greenstill-portrait-v03.webp",
   import.meta.url,
 ).href;
+const tasmineRootbracePortrait = new URL(
+  "../../assets/portraits/characters/tasmine-rootbrace-portrait-v01.webp",
+  import.meta.url,
+).href;
 const quillPebbleturnPortrait = new URL(
   "../../assets/portraits/characters/quill-pebbleturn-portrait-v02.webp",
   import.meta.url,
@@ -87,6 +91,7 @@ export const DIALOGUE_PORTRAITS = {
   "Quill Pebbleturn": { src: quillPebbleturnPortrait, alt: "Portrait of Quill Pebbleturn" },
   "Auntie Lume": { src: auntieLumePortrait, alt: "Portrait of Auntie Lume" },
   "Noma Greenstill": { src: nomaGreenstillPortrait, alt: "Portrait of Noma Greenstill" },
+  "Tasmine Rootbrace": { src: tasmineRootbracePortrait, alt: "Portrait of Tasmine Rootbrace in her Lower Gate smithy" },
   "Westroot Rootbread Child": {
     src: westrootRootbreadChildPortrait,
     alt: "Portrait of the Westroot Rootbread child",

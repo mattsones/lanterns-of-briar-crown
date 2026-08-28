@@ -77,10 +77,18 @@ async function moveRight(page: Page, steps: number) {
 
 async function beginChapter4AtGatewright(page: Page) {
   await openCheckedInFixture(page, "Review Chapter 3 Complete Save");
-  await choice(page, CHAPTER_4_CHOICE_IDS.beginChapter).click();
+  await expect(page.getByRole("button", { name: "Begin Chapter 4 Graybox" })).toHaveCount(0);
+  for (const node of [
+    "1,0", "1,2", "1,1", "2,1", "3,1", "3,2", "2,2", "3,4",
+    "3,3", "8,4", "8,5", "8,6", "7,6", "6,6", "5,6", "8,3", "6,5", "7,0",
+  ]) {
+    await page.locator(`[data-map-node="${node}"]`).click();
+  }
   await expect(scene(page, CHAPTER_4_SCENE_IDS.lowerGateArrival)).toBeVisible();
+  await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute("src", /lower-gate-smithy-scene-v01/);
   await choice(page, CHAPTER_4_CHOICE_IDS.meetGatewright).click();
   await expect(scene(page, CHAPTER_4_SCENE_IDS.gatewrightOffer)).toBeVisible();
+  await expect(page.getByAltText("Portrait of Tasmine Rootbrace in her Lower Gate smithy")).toBeVisible();
 }
 
 test("real Chapter 3 fixture reaches the Folded Map through the required Gatewright encounter", async ({ page }) => {
@@ -101,7 +109,7 @@ test("real Chapter 3 fixture reaches the Folded Map through the required Gatewri
   await expect(equippedHelm).toContainText("Equipped — unequip it before selling");
   await expect(equippedHelm.getByRole("button", { name: "Equipped" })).toBeDisabled();
   await page.getByRole("button", { name: "Close" }).click();
-  await page.getByRole("button", { name: "Visit Tasmine Rootbrace" }).click();
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.gatewrightOffer)).toBeVisible();
   await choice(page, CHAPTER_4_CHOICE_IDS.continueToMap).click();
   await expect(scene(page, CHAPTER_4_SCENE_IDS.foldedMapBriefing)).toBeVisible();
   await choice(page, CHAPTER_4_CHOICE_IDS.openFoldedMap).click();
@@ -128,20 +136,16 @@ test("the decoded story map opens the playable Old Keeper Road Underway graph", 
   await dragEdge(page, "left", "half");
   await dragEdge(page, "bottom", "three-quarter");
   await choice(page, CHAPTER_4_CHOICE_IDS.traceRoute).click();
-  await choice(page, CHAPTER_4_CHOICE_IDS.close).click();
-
+  await expect(choice(page, CHAPTER_4_CHOICE_IDS.traceRoute)).toHaveText("Check this route against the evidence");
   await choice(page, CHAPTER_4_CHOICE_IDS.enterUnderway).click();
   await expect(scene(page, CHAPTER_4_SCENE_IDS.underwayArrival)).toBeVisible();
   await choice(page, CHAPTER_4_CHOICE_IDS.enterUnderway).click();
-  await page.getByTestId("move-right").click();
-  await expect(scene(page, CHAPTER_4_SCENE_IDS.underwayRoute)).toBeVisible();
-  await choice(page, CHAPTER_4_CHOICE_IDS.followMappedRoute).click();
 
   await expect(page.getByTestId("map-background")).toHaveAttribute(
     "src",
     /underway-approach-map-v03\.webp$/,
   );
-  await moveRight(page, 12);
+  await moveRight(page, 13);
   await expect(page.getByRole("button", { name: "Inspect Underway Passage" })).toBeVisible();
   await page.getByTestId("move-right").click();
   await expect(scene(page, CHAPTER_4_SCENE_IDS.underwayDetour)).toBeVisible();
@@ -176,6 +180,9 @@ test("posted detour choice occurs at the far side of the first map and commits t
   await expect(page.getByText("real old Westroot hazard stamp", { exact: false })).toBeVisible();
   await expect(choice(page, CHAPTER_4_CHOICE_IDS.followMappedRoute)).toContainText("Old Keeper Road");
   await expect(choice(page, CHAPTER_4_CHOICE_IDS.followPostedDetour)).toContainText("construction detour");
+  await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute("src", /underway-posted-detour-scene-v01/);
+  expect(await choice(page, CHAPTER_4_CHOICE_IDS.followMappedRoute).getAttribute("class"))
+    .toBe(await choice(page, CHAPTER_4_CHOICE_IDS.followPostedDetour).getAttribute("class"));
   await choice(page, CHAPTER_4_CHOICE_IDS.followPostedDetour).click();
   await expect(page.getByTestId("map-background")).toHaveAttribute(
     "src",
@@ -276,6 +283,7 @@ test("Listening Mile spaces Lio's trail across three lantern-dark travel beats",
   await expect(page.getByTestId("underway-lantern-halo")).toBeVisible();
   await moveRight(page, 6);
   await expect(scene(page, CHAPTER_4_SCENE_IDS.listeningMileIntro)).toBeVisible();
+  await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute("src", /listening-mile-first-hood-scene-v01/);
   await expect(page.getByRole("dialog")).toContainText("hear around blind stone");
   await expect(page.getByRole("dialog")).not.toContainText("three flared listening hoods");
   await choice(page, CHAPTER_4_CHOICE_IDS.beginListeningMile).click();
@@ -301,6 +309,7 @@ test("Listening Mile spaces Lio's trail across three lantern-dark travel beats",
   await moveRight(page, 6);
 
   await expect(scene(page, CHAPTER_4_SCENE_IDS.listeningMileResult)).toBeVisible();
+  await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute("src", /listening-mile-third-hood-scene-v01/);
   await expect(page.getByRole("dialog", { name: "Lio's Trail Marker" })).toContainText(
     "Fresh bronze dust lies below a stiff inspection shutter",
   );
@@ -335,6 +344,7 @@ test("Listening Mile spaces Lio's trail across three lantern-dark travel beats",
   await expect(page.getByRole("button", { name: "Inspect Westbound Relay Tunnel" })).toBeVisible();
   await moveRight(page, 9);
   await expect(scene(page, CHAPTER_4_SCENE_IDS.relayArrival)).toBeVisible();
+  await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute("src", /briar-relay-post-approach-scene-v01/);
   await choice(page, CHAPTER_4_CHOICE_IDS.enterRelayPost).click();
   await page.getByTestId("move-right").click();
   await expect(scene(page, CHAPTER_4_SCENE_IDS.royalProgressBroadside)).toBeVisible();
@@ -343,6 +353,8 @@ test("Listening Mile spaces Lio's trail across three lantern-dark travel beats",
     "the name Tasmine mentioned at the Lower Gate",
   );
   await expect(page.getByRole("dialog", { name: "Royal Progress Broadside" })).toContainText("Every five years");
+  await expect(page.getByRole("dialog", { name: "Royal Progress Broadside" })).not.toContainText("sapphire royal gown");
+  await expect(page.getByTestId("dialogue-scene-image")).toHaveClass(/object-contain/);
   await choice(page, CHAPTER_4_CHOICE_IDS.readRoyalProgress).click();
   await page.getByTestId("move-right").click();
   await expect(scene(page, CHAPTER_4_SCENE_IDS.relayGuard)).toBeVisible();
@@ -385,6 +397,9 @@ test("captured Relay Post records expose the forged authority and Chapter 5 resc
   );
   await expect(page.getByRole("dialog", { name: "Briarhold Waystation" })).toContainText("L.B. — COURIER — ALIVE");
   await expect(page.getByRole("dialog", { name: "Briarhold Waystation" })).toContainText("with four others");
+  await expect(page.getByRole("dialog", { name: "Briarhold Waystation" })).toContainText(
+    "tipped a lamp across the westbound ledger to burn the evidence",
+  );
   await expect(page.getByRole("dialog", { name: "Briarhold Waystation" })).not.toContainText(
     "not being carried to a known prison",
   );

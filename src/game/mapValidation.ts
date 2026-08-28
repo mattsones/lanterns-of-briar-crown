@@ -66,7 +66,6 @@ export const REQUIRED_GRAPH_LANDMARKS: Record<string, string[]> = {
   ],
   underway: [
     "underway_gate",
-    "underway_threshold",
     "detour_notice",
   ],
   underwayRoute811: [

@@ -731,6 +731,12 @@ test("Chapter 4 item, enemy, and Folded Map artwork is integrated with fallbacks
   expect(ARTWORK_PLAN_GROUPS.enemies.briar_relay_guard.status).toBe("available");
   expect(ARTWORK_PLAN_GROUPS.enemies.crown_whisperer.status).toBe("available");
   expect(MAP_ARTWORK_PLAN.folded_map_faces.status).toBe("available");
+  expect(DIALOGUE_SCENE_ART.lowerGateSmithy.src).toContain("lower-gate-smithy-scene-v01");
+  expect(DIALOGUE_SCENE_ART.underwayPostedDetour.src).toContain("underway-posted-detour-scene-v01");
+  expect(DIALOGUE_SCENE_ART.listeningMileFirstHood.src).toContain("listening-mile-first-hood-scene-v01");
+  expect(DIALOGUE_SCENE_ART.listeningMileThirdHood.src).toContain("listening-mile-third-hood-scene-v01");
+  expect(DIALOGUE_SCENE_ART.briarRelayPostApproach.src).toContain("briar-relay-post-approach-scene-v01");
+  expect(DIALOGUE_SCENE_ART.princessElowenProgressNotice.presentation).toBe("document");
 
   [
     "../assets/maps/folded-map-survey-face-v01.webp",
@@ -771,6 +777,7 @@ test("the approved portrait smoothing batch is selected everywhere it is used", 
     "Quill Pebbleturn": "quill-pebbleturn-portrait-v02",
     "Auntie Lume": "auntie-lume-portrait-v03",
     "Noma Greenstill": "noma-greenstill-portrait-v03",
+    "Tasmine Rootbrace": "tasmine-rootbrace-portrait-v01",
     "Westroot Rootbread Child": "westroot-rootbread-child-portrait-v03",
     "Princess Elowen": "princess-elowen-portrait-v02",
     "Rowan Reedshield": "rowan-portrait-v03",
@@ -896,7 +903,7 @@ test("checked-in Chapter 3 complete save is Chapter 4 ready without requiring Ro
     completedChapterIds: [1, 2, 3],
   });
   expect(buildQuestJournal(payload.flags, payload.companion, payload.region).currentMain.id).toBe(
-    "ch3-complete",
+    "ch4-gatewright",
   );
   expect(payload.flags.rootbreadPromiseKept).toBe(true);
   expect(payload.player.inventory.rootbread_charm).toBe(1);
@@ -2122,6 +2129,17 @@ test("hand-authored map navigation graphs pass reusable validation", () => {
     expect(result.issues).toEqual([]);
     expect(result.ok).toBe(true);
   });
+});
+
+test("Chapter 4 tunnel lights and nodes follow the painted road bends", () => {
+  expect(MAPS.westrootHub.tiles[0][7]).toBe("westroot_lower_gate");
+  expect(getNavigationDestination("westrootHub", 6, 5, "right")).toEqual({ x: 7, y: 0 });
+  expect(getMapNodePoint("westrootHub", 7, 0, 9, 7)).toEqual({ x: 90.5, y: 74.5 });
+  expect(getMapNodePoint("listeningPostTwo", 7, 2, 10, 5)).toEqual({ x: 75, y: 58 });
+  expect(getMapNodePoint("listeningPostTwo", 8, 1, 10, 5)).toEqual({ x: 85, y: 50 });
+  expect(getMapNodePoint("relayApproach", 2, 1, 10, 5)).toEqual({ x: 25, y: 55 });
+  expect(getMapNodePoint("relayApproach", 3, 2, 10, 5)).toEqual({ x: 35, y: 37 });
+  expect(getMapNodePoint("relayApproach", 5, 3, 10, 5)).toEqual({ x: 55, y: 56 });
 });
 
 test("reusable game QA checks pass without rendering App", () => {

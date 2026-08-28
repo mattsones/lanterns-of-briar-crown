@@ -416,18 +416,19 @@ function DialogueSceneImage({ image, compact = false }) {
   const focusY = image.focusY ?? 50;
   const zoom = image.zoom ?? 100;
   const isEmblem = image.presentation === "emblem";
+  const isDocument = image.presentation === "document";
 
   return (
     <figure
       data-art-key={image.id}
-      className={`relative overflow-hidden rounded-xl border border-white/10 ${compact ? "mt-0" : "mt-4"} ${isEmblem ? "aspect-[5/2] bg-[radial-gradient(circle_at_center,_rgba(127,29,29,0.28),_rgba(2,6,23,0.72)_68%)]" : "aspect-video bg-black/20"}`}
+      className={`relative overflow-hidden rounded-xl border border-white/10 ${compact ? "mt-0" : "mt-4"} ${isEmblem ? "aspect-[5/2] bg-[radial-gradient(circle_at_center,_rgba(127,29,29,0.28),_rgba(2,6,23,0.72)_68%)]" : isDocument ? "mx-auto aspect-[2/3] max-h-[60vh] w-full max-w-sm bg-[#111827]" : "aspect-video bg-black/20"}`}
     >
       <img
         data-testid="dialogue-scene-image"
         src={image.src}
         alt={image.alt || ""}
-        className={isEmblem ? "absolute inset-0 h-full w-full object-contain p-5 sm:p-7" : "absolute left-1/2 top-1/2 h-auto max-w-none"}
-        style={isEmblem ? undefined : {
+        className={isEmblem ? "absolute inset-0 h-full w-full object-contain p-5 sm:p-7" : isDocument ? "absolute inset-0 h-full w-full object-contain p-2" : "absolute left-1/2 top-1/2 h-auto max-w-none"}
+        style={isEmblem || isDocument ? undefined : {
           width: `${zoom}%`,
           transform: `translate(-${focusX}%, -${focusY}%)`,
         }}

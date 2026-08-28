@@ -722,7 +722,7 @@ export const MAPS = {
     backgroundImage: westrootHubMap,
     restoredBackgroundImage: westrootHubOpenStonesMap,
     tiles: [
-      ["wall", "westroot_path", "westroot_path", "mossgarden", "westroot_path", "westroot_path", "westroot_path", "wall", "westroot_path"],
+      ["wall", "westroot_path", "westroot_path", "mossgarden", "westroot_path", "westroot_path", "westroot_path", "westroot_lower_gate", "westroot_path"],
       ["wall", "westroot_path", "westroot_path", "westroot_path", "witness_stones", "westroot_path", "westroot_path", "cargo_siding", "westroot_path"],
       ["wall", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "split_hall", "westroot_path", "westroot_path", "westroot_path"],
       ["wall", "westroot_first_gate", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path", "westroot_path"],
@@ -738,7 +738,7 @@ export const MAPS = {
     backgroundImage: underwayApproachMap,
     tiles: [
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-      ["underway_threshold", "underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "wall"],
+      ["underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "wall"],
       ["underway_gate", "underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "detour_notice"],
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
@@ -964,6 +964,7 @@ Object.assign(TILE_META, {
   false_map: makeTile("map", "False Map Room", false, "bg-emerald-900/80"),
   den_guard: makeTile("!", "False Sign Guard", false, "bg-red-900/85"),
   westroot_path: makeTile("", "Westroot Path", false, "bg-emerald-900/70"),
+  westroot_lower_gate: makeTile("▣", "Westroot Lower Gate", false, "bg-amber-950/90"),
   westroot_first_gate: makeTile("◈", "First Westroot Gate", false, "bg-emerald-950/90"),
   rootmarket: makeTile("⌂", "Rootmarket", false, "bg-amber-800/80"),
   mossgarden: makeTile("✿", "Mossgarden", false, "bg-emerald-800/80"),

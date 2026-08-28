@@ -5,7 +5,7 @@ export type DialogueSceneArt = {
   focusX?: number;
   focusY?: number;
   zoom?: number;
-  presentation?: "scene" | "emblem";
+  presentation?: "scene" | "emblem" | "document";
 };
 
 const courierSatchelScene = new URL(
@@ -42,6 +42,26 @@ const relayForgedAuthorityScene = new URL(
 ).href;
 const briarholdRouteLedgerRevealScene = new URL(
   "../../assets/scenes/briarhold-route-ledger-reveal-scene-v02.webp",
+  import.meta.url,
+).href;
+const lowerGateSmithyScene = new URL(
+  "../../assets/scenes/lower-gate-smithy-scene-v01.webp",
+  import.meta.url,
+).href;
+const underwayPostedDetourScene = new URL(
+  "../../assets/scenes/underway-posted-detour-scene-v01.webp",
+  import.meta.url,
+).href;
+const listeningMileFirstHoodScene = new URL(
+  "../../assets/scenes/listening-mile-first-hood-scene-v01.webp",
+  import.meta.url,
+).href;
+const listeningMileThirdHoodScene = new URL(
+  "../../assets/scenes/listening-mile-third-hood-scene-v01.webp",
+  import.meta.url,
+).href;
+const briarRelayPostApproachScene = new URL(
+  "../../assets/scenes/briar-relay-post-approach-scene-v01.webp",
   import.meta.url,
 ).href;
 
@@ -135,6 +155,32 @@ export const DIALOGUE_SCENE_ART: Record<string, DialogueSceneArt> = {
     focusX: 50,
     focusY: 50,
     zoom: 66,
+    presentation: "document",
+  },
+  lowerGateSmithy: {
+    id: "lower-gate-smithy",
+    src: lowerGateSmithyScene,
+    alt: "Tasmine, Bramwell, Noma, and Mara gathered around route evidence in the Lower Gate smithy",
+  },
+  underwayPostedDetour: {
+    id: "underway-posted-detour",
+    src: underwayPostedDetourScene,
+    alt: "A rope and closure board block the old Keeper Road while the timber-braced construction detour remains open",
+  },
+  listeningMileFirstHood: {
+    id: "listening-mile-first-hood",
+    src: listeningMileFirstHoodScene,
+    alt: "Mara listens at the first brass wall hood in the lantern-dark Underway",
+  },
+  listeningMileThirdHood: {
+    id: "listening-mile-third-hood",
+    src: listeningMileThirdHoodScene,
+    alt: "Mara finds Lio's blue courier knot behind the final listening hood",
+  },
+  briarRelayPostApproach: {
+    id: "briar-relay-post-approach",
+    src: briarRelayPostApproachScene,
+    alt: "The party approaches the amber-lit entrance to the captured Briar Relay Post",
   },
   relayForgedAuthority: {
     id: "relay-forged-authority",

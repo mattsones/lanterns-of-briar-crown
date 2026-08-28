@@ -4,7 +4,23 @@ This file is the starting point for Codex.
 
 Story-writing work must also follow `docs/story/writing-rules.md`. Singular characters use he/him or she/her; *they/them/their* is reserved for genuinely plural antecedents.
 
-## Latest Handoff — 2026-08-22
+## Latest Handoff — 2026-08-28
+
+The owner Chapter 4 polish pass is implemented. Chapter 3's closing scene now continues directly to the Lower Gate, while existing Chapter 3-complete saves receive **Walk to the Lower Gate** as their active objective instead of a developer-facing “Begin Chapter 4 Graybox” button. Tasmine's smithy and the sealed Underway entrance are a real inspectable landmark at the lower-right edge of the Westroot map. The Lower Gate arrival uses a new smithy tableau; Tasmine has a dedicated portrait; closing her buy/sell shop returns to her dialogue and its Folded Map action.
+
+The Folded Map now presents a short three-step workflow and labels its committing action **Check this route against the evidence** in a distinct emerald treatment. Once the true route is confirmed, the same map interface opens the Lower Gate and enters the Underway. The external Chapter 4 banner buttons are gone. The obsolete Old Keeper Road confirmation dialogue one step inside the Underway is also gone.
+
+The posted detour, first listening hood, final listening hood, and Briar Relay Post approach now have illustrated scenes. The accepted detour scene blocks only the closed Old Keeper Road; the timber-braced construction route is completely open, matching the posted arrow. Both route choices use the same visual treatment. Listening Mile and Relay Approach node coordinates were retuned to follow the painted paving and lighting through their bends. The Royal Progress broadside uses a document-specific contained layout so the full sheet remains visible, and its prose no longer narrates visible clothing. Relay ledger copy now states that someone tipped a lamp over it during the fight to destroy the evidence and that the heavy cover smothered the flame.
+
+Source masters and optimized runtime derivatives are integrated for all six new assets. Their complete prompt record is `docs/art/prompts/chapter-4-playtest-polish-scenes.md`; the implementation and verification record is `docs/playtest-notes/2026-08-28-chapter-4-owner-polish.md`.
+
+Verification is green: production build, 50 rules tests, all 14 Chapter 4 browser tests, and the two affected Chapter 3 fixture/endpoint tests. A visible in-app-browser pass confirmed the Lower Gate placement, arrival tableau, Tasmine portrait, and smithy-close return. The playtest server remains available at `http://127.0.0.1:5173/`.
+
+### Next Best Step
+
+Run one owner playthrough from the Chapter 3 ending through the Chapter 4 Briarhold reveal using the corrected flow. If that pass signs off, Chapter 4 is at release-candidate closeout: run the deferred uninterrupted Chapters 1–4 gate and then begin Chapter 5's illustrated rescue slice. The captive porter remains optional.
+
+## Previous Handoff — 2026-08-22
 
 Chapter 4's approved item and enemy artwork is now integrated. Eight transparent item icons cover the Folded Map Scrap, Tasmine's five gatewright pieces, the Old Waykeeper Helm, and Lio's Courier Knot, with full PNG masters under `assets/reference/source-art/assets/icons/items/` and runtime icons under `assets/icons/items/`. Smoothed V02 Briar Relay Guard and Crown Whisperer portraits are live in battle cards, with source masters under `assets/reference/source-art/assets/portraits/enemies/` and optimized runtime WebPs under `assets/portraits/enemies/`. Emoji fallbacks remain intact.
 

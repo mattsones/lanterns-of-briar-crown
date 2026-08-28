@@ -245,6 +245,7 @@ const WESTROOT_HUB_NAV_CONNECTIONS: NavConnection[] = [
   { from: "7,3", to: "7,4", direction: "down" },
   { from: "7,4", to: "6,5", direction: "down" },
   { from: "6,5", to: "5,5", direction: "down" },
+  { from: "6,5", to: "7,0", direction: "right" },
   { from: "5,5", to: "7,5", direction: "down" },
 ];
 
@@ -467,6 +468,7 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
       "7,1": { x: 91.7, y: 35.4 },
       "7,4": { x: 78, y: 62 },
       "6,5": { x: 80, y: 72.5 },
+      "7,0": { x: 90.5, y: 74.5 },
       "5,5": { x: 83.3, y: 79 },
       "7,5": { x: 86.6, y: 84.7 },
       "8,0": { x: 58.51, y: 58.83 },
@@ -717,10 +719,10 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
     nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
     navigationLinks: buildNavigationLinks(LISTENING_POST_ONE_NAV_CONNECTIONS),
     pointOverrides: {
-      "0,2": { x: 5, y: 55 }, "1,2": { x: 15, y: 52 }, "2,1": { x: 25, y: 43 },
-      "3,1": { x: 35, y: 40 }, "4,2": { x: 45, y: 45 }, "5,2": { x: 55, y: 51 },
-      "6,1": { x: 65, y: 46 }, "7,2": { x: 75, y: 56 }, "8,1": { x: 85, y: 61 },
-      "9,2": { x: 95, y: 63 },
+      "0,2": { x: 5, y: 52 }, "1,2": { x: 15, y: 47 }, "2,1": { x: 25, y: 39 },
+      "3,1": { x: 35, y: 39 }, "4,2": { x: 45, y: 45 }, "5,2": { x: 55, y: 51 },
+      "6,1": { x: 65, y: 49 }, "7,2": { x: 75, y: 50 }, "8,1": { x: 85, y: 56 },
+      "9,2": { x: 95, y: 64 },
     },
   },
   listeningPostTwo: {
@@ -729,10 +731,10 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
     nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
     navigationLinks: buildNavigationLinks(LISTENING_POST_TWO_NAV_CONNECTIONS),
     pointOverrides: {
-      "0,2": { x: 5, y: 52 }, "1,1": { x: 15, y: 43 }, "2,1": { x: 25, y: 33 },
-      "3,2": { x: 35, y: 38 }, "4,2": { x: 45, y: 51 }, "5,3": { x: 55, y: 59 },
-      "6,3": { x: 65, y: 61 }, "7,2": { x: 75, y: 54 }, "8,1": { x: 85, y: 42 },
-      "9,2": { x: 95, y: 36 },
+      "0,2": { x: 5, y: 42 }, "1,1": { x: 15, y: 32 }, "2,1": { x: 25, y: 34 },
+      "3,2": { x: 35, y: 45 }, "4,2": { x: 45, y: 55 }, "5,3": { x: 55, y: 60 },
+      "6,3": { x: 65, y: 60 }, "7,2": { x: 75, y: 58 }, "8,1": { x: 85, y: 50 },
+      "9,2": { x: 95, y: 38 },
     },
   },
   listeningPostThree: {
@@ -741,9 +743,9 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
     nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
     navigationLinks: buildNavigationLinks(LISTENING_POST_THREE_NAV_CONNECTIONS),
     pointOverrides: {
-      "0,2": { x: 5, y: 52 }, "1,2": { x: 16, y: 51 }, "2,1": { x: 27, y: 36 },
-      "3,1": { x: 38, y: 40 }, "4,2": { x: 49, y: 49 }, "5,2": { x: 60, y: 50 },
-      "6,1": { x: 71, y: 41 }, "7,2": { x: 83, y: 56 }, "8,2": { x: 95, y: 58 },
+      "0,2": { x: 5, y: 50 }, "1,2": { x: 16, y: 48 }, "2,1": { x: 27, y: 39 },
+      "3,1": { x: 38, y: 44 }, "4,2": { x: 49, y: 52 }, "5,2": { x: 60, y: 50 },
+      "6,1": { x: 71, y: 44 }, "7,2": { x: 83, y: 55 }, "8,2": { x: 95, y: 63 },
     },
   },
   relayApproach: {
@@ -752,10 +754,10 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
     nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
     navigationLinks: buildNavigationLinks(RELAY_APPROACH_NAV_CONNECTIONS),
     pointOverrides: {
-      "0,2": { x: 5, y: 48 }, "1,1": { x: 15, y: 41 }, "2,1": { x: 25, y: 52 },
-      "3,2": { x: 35, y: 46 }, "4,2": { x: 45, y: 36 }, "5,3": { x: 55, y: 44 },
-      "6,2": { x: 65, y: 49 }, "7,1": { x: 75, y: 48 }, "8,1": { x: 85, y: 48 },
-      "9,2": { x: 95, y: 48 },
+      "0,2": { x: 5, y: 48 }, "1,1": { x: 15, y: 44 }, "2,1": { x: 25, y: 55 },
+      "3,2": { x: 35, y: 37 }, "4,2": { x: 45, y: 43 }, "5,3": { x: 55, y: 56 },
+      "6,2": { x: 65, y: 50 }, "7,1": { x: 75, y: 49 }, "8,1": { x: 85, y: 49 },
+      "9,2": { x: 95, y: 49 },
     },
   },
   briarRelayPost: {

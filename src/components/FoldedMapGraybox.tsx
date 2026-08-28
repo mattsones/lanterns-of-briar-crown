@@ -454,11 +454,12 @@ function FoldedSheet({
   );
 }
 
-export function FoldedMapGraybox({ flags, setFlags, close, onTraceOutcome }: {
+export function FoldedMapGraybox({ flags, setFlags, close, onTraceOutcome, onEnterUnderway }: {
   flags: GameFlags;
   setFlags: Dispatch<SetStateAction<GameFlags>>;
   close: () => void;
   onTraceOutcome?: (outcome: FoldedMapOutcome) => void;
+  onEnterUnderway?: () => void;
 }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const [configuration, setConfiguration] = useState<FoldedMapConfiguration>({
@@ -612,6 +613,11 @@ export function FoldedMapGraybox({ flags, setFlags, close, onTraceOutcome }: {
           </div>
 
           <aside className="space-y-3">
+            <div className="rounded-3xl border border-amber-200/20 bg-amber-300/10 p-4 text-xs font-semibold leading-5 text-amber-50/80">
+              <div>1. Fold exactly two edges.</div>
+              <div>2. Align the benchmark, contours, and road.</div>
+              <div>3. Check the route against the evidence.</div>
+            </div>
             <div
               role="status"
               aria-live="assertive"
@@ -641,10 +647,19 @@ export function FoldedMapGraybox({ flags, setFlags, close, onTraceOutcome }: {
               <div className="mt-1">{getFoldedMapReview(flags)}</div>
             </div>
             <Button data-choice-id={CHAPTER_4_CHOICE_IDS.flipMap} onClick={flipMap} disabled={foldCount > 0} className="w-full">Turn the flat map over</Button>
-            <Button data-choice-id={CHAPTER_4_CHOICE_IDS.traceRoute} onClick={traceRoute} className="w-full bg-amber-500/25">Trace this folded route</Button>
+            <Button data-choice-id={CHAPTER_4_CHOICE_IDS.traceRoute} onClick={traceRoute} className="w-full border-emerald-200/50 bg-emerald-500/35 text-emerald-50">Check this route against the evidence</Button>
+            {flags.foldedMapDecoded && onEnterUnderway ? (
+              <Button
+                data-choice-id={CHAPTER_4_CHOICE_IDS.enterUnderway}
+                onClick={onEnterUnderway}
+                className="w-full border-amber-200/60 bg-amber-400/30 text-amber-50"
+              >
+                Open the Lower Gate and enter the Underway
+              </Button>
+            ) : null}
             <Button data-choice-id={CHAPTER_4_CHOICE_IDS.resetFolds} onClick={unfoldAll} className="w-full">Unfold the whole sheet</Button>
             <Button data-choice-id={CHAPTER_4_CHOICE_IDS.back} onClick={goBack} className="w-full">{foldOrder.length ? "Back: open latest fold" : "Back to Westroot"}</Button>
-            <div className="px-2 text-center text-[11px] leading-4 text-white/35">Experimentation is safe. Only tracing commits a route.</div>
+            <div className="px-2 text-center text-[11px] leading-4 text-white/35">Experimentation is safe. Checking a route records the result; a confirmed road can be entered here.</div>
           </aside>
         </div>
       </section>

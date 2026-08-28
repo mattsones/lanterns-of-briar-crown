@@ -1630,6 +1630,72 @@
       "width": 1672,
       "height": 941,
       "hasAlpha": false
+    },
+    {
+      "source": "assets/portraits/characters/tasmine-rootbrace-portrait-v01.webp",
+      "original": "assets/reference/source-art/assets/portraits/characters/tasmine-rootbrace-portrait-v01.png",
+      "output": "assets/portraits/characters/tasmine-rootbrace-portrait-v01.webp",
+      "format": "webp",
+      "originalBytes": 2717880,
+      "outputBytes": 135160,
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/scenes/lower-gate-smithy-scene-v01.webp",
+      "original": "assets/reference/source-art/assets/scenes/lower-gate-smithy-scene-v01.png",
+      "output": "assets/scenes/lower-gate-smithy-scene-v01.webp",
+      "format": "webp",
+      "originalBytes": 3244510,
+      "outputBytes": 312390,
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/scenes/underway-posted-detour-scene-v01.webp",
+      "original": "assets/reference/source-art/assets/scenes/underway-posted-detour-scene-v01.png",
+      "output": "assets/scenes/underway-posted-detour-scene-v01.webp",
+      "format": "webp",
+      "originalBytes": 3235102,
+      "outputBytes": 313402,
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/scenes/listening-mile-first-hood-scene-v01.webp",
+      "original": "assets/reference/source-art/assets/scenes/listening-mile-first-hood-scene-v01.png",
+      "output": "assets/scenes/listening-mile-first-hood-scene-v01.webp",
+      "format": "webp",
+      "originalBytes": 2752385,
+      "outputBytes": 200072,
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/scenes/listening-mile-third-hood-scene-v01.webp",
+      "original": "assets/reference/source-art/assets/scenes/listening-mile-third-hood-scene-v01.png",
+      "output": "assets/scenes/listening-mile-third-hood-scene-v01.webp",
+      "format": "webp",
+      "originalBytes": 2674716,
+      "outputBytes": 197652,
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": false
+    },
+    {
+      "source": "assets/scenes/briar-relay-post-approach-scene-v01.webp",
+      "original": "assets/reference/source-art/assets/scenes/briar-relay-post-approach-scene-v01.png",
+      "output": "assets/scenes/briar-relay-post-approach-scene-v01.webp",
+      "format": "webp",
+      "originalBytes": 3195336,
+      "outputBytes": 308768,
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": false
     }
   ],
   "movedAlternates": [

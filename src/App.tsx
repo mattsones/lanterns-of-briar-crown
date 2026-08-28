@@ -544,6 +544,8 @@ export default function LiamsGamePrototype() {
       return "floor";
     if (tileRegion === "westrootHub" && tile === "cargo_siding" && flags.willowCargoExposed)
       return "westroot_path";
+    if (tileRegion === "westrootHub" && tile === "westroot_lower_gate" && !flags.chapterThreeClear)
+      return "westroot_path";
     if (tileRegion === "underwayConvergence" && tile === "underway_ambush") {
       if (flags.underwayAmbushCleared || !flags.underwayAmbushRevealed) return "underway_path";
     }
@@ -5429,14 +5431,22 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       contentLayout: "stacked",
       text: `${CHAPTER_3_SCENE_COPY.closing.text}\n\n${
         flags.rootbreadPromiseKept
-          ? "Chapter 3 is complete. The playable story currently ends here; the westward lead continues in Chapter 4."
+          ? "Chapter 3 is complete. Bramwell and Noma are ready to walk with you to the Lower Gate, where Tasmine Rootbrace keeps the sealed road into the Underway."
           : flags.rootbreadLeadLearned
-            ? "Chapter 3's main story is complete. The playable story currently ends here, but one optional lead remains: return to the Transfer Checkpoint and ask Lume's helper about the unnamed courier."
+            ? "Chapter 3's main story is complete. One optional lead remains at the Transfer Checkpoint, but Bramwell and Noma can take you to the Lower Gate whenever you are ready."
             : flags.metAuntieLume
-              ? "Chapter 3's main story is complete. The playable story currently ends here. Lume may still know whether anyone in Westroot saw a sign of Lio."
-              : "Chapter 3's main story is complete. The playable story currently ends here. The Mossback baker in Rootmarket may still have heard something about Lio."
+              ? "Chapter 3's main story is complete. Lume may still know whether anyone in Westroot saw a sign of Lio, or you can continue now to the Lower Gate."
+              : "Chapter 3's main story is complete. The Mossback baker in Rootmarket may still have heard something about Lio, or you can continue now to the Lower Gate."
       }`,
-      choices: [{ label: "Finish Chapter 3 for now.", effect: () => setDialogue(null) }],
+      choices: [
+        {
+          id: CHAPTER_4_CHOICE_IDS.beginChapter,
+          label: "Continue with Bramwell and Noma to the Lower Gate.",
+          variant: "primary",
+          effect: () => beginChapter4Entry(),
+        },
+        { label: "Stay in Westroot a little longer.", variant: "quiet", effect: () => setDialogue(null) },
+      ],
       size: "wide",
     });
 
@@ -6050,6 +6060,11 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       if (tile === "witness_stones") openWitnessStonesDialogue();
       if (tile === "cargo_siding") openCargoSidingDialogue();
       if (tile === "split_hall") openSplitHallDialogue();
+      if (tile === "westroot_lower_gate") {
+        if (!flags.chapterThreeClear) setToast("The Lower Gate remains sealed until Westroot's compact is restored.");
+        else if (!flags.gatewrightMet) beginChapter4Entry();
+        else openChapter4GatewrightDialogue();
+      }
     }
     if (region === "underway") {
       if (tile === "underway_gate") {
@@ -6068,7 +6083,6 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           ],
         });
       }
-      if (tile === "underway_threshold") openUnderwayRouteDialogue();
       if (tile === "detour_notice") openUnderwayDetourDialogue();
     }
     if (region === "underwayRoute811") {
@@ -6906,29 +6920,6 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     setToast("Combat flags reset.");
   };
 
-  const openUnderwayRouteDialogue = () => {
-    setDialogue({
-      sceneId: CHAPTER_4_SCENE_IDS.underwayRoute,
-      portrait: "◇",
-      name: "Old Keeper Road",
-      text: "The Lower Gate notch, the Witness Stone rubbing, and Edden's contours all agree here. The Old Keeper Road bends west through fitted stone.",
-      choices: [
-        {
-          id: CHAPTER_4_CHOICE_IDS.followMappedRoute,
-          label: "Continue along the Old Keeper Road.",
-          variant: "primary",
-          effect: () => setDialogue(null),
-        },
-        {
-          id: CHAPTER_4_CHOICE_IDS.returnToWestroot,
-          label: "Return to Westroot before committing.",
-          variant: "quiet",
-          effect: () => travelToRegion("westrootHub", MAPS.westrootHub.start, player.checkpointLabel, "You return to Westroot through the Lower Gate."),
-        },
-      ],
-    });
-  };
-
   const openUnderwayDetourDialogue = (viewFlags = flags) => {
     if (viewFlags.underwayDetourDecisionMade) {
       const detour = !!viewFlags.underwayDetourFollowed;
@@ -6936,6 +6927,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         sceneId: CHAPTER_4_SCENE_IDS.underwayDetour,
         portrait: detour ? "↯" : "◇",
         name: "The Posted Detour",
+        artKey: "underwayPostedDetour",
+        size: "wide",
+        contentLayout: "stacked",
         text: detour
           ? "You chose to follow the posted construction detour. The closure board remains behind you at the fork."
           : "You chose to remain on the Old Keeper Road past the closure board. The posted detour remains behind you at the fork.",
@@ -6981,6 +6975,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       sceneId: CHAPTER_4_SCENE_IDS.underwayDetour,
       portrait: "↯",
       name: "A Posted Detour",
+      artKey: "underwayPostedDetour",
+      size: "wide",
+      contentLayout: "stacked",
       text: `Well inside the Underway, a bronze closure board has been pulled across the Old Keeper Road. Its stamped arrow sends westbound travelers down a construction detour. Dusty boot marks follow the detour, and somewhere beyond the blocked old arch, stone shifts with a low grinding sound.\n\nThe Folded Map establishes where the Old Keeper Road leads; it cannot tell you whether that road is safe today. A posted closure should protect travelers from exactly this kind of danger—but somebody hostile has been using these passages.${inspectedText}`,
       choices: [
         !viewFlags.underwayDetourNoticeInspected
@@ -7005,6 +7002,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           id: CHAPTER_4_CHOICE_IDS.followPostedDetour,
           label: "Follow the posted construction detour.",
           requirement: "Trust current hazard guidance over an older map",
+          variant: "primary",
           effect: () => chooseRoute(true),
         },
         { label: "Step back and consider.", variant: "quiet", effect: () => setDialogue(null) },
@@ -7199,6 +7197,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         sceneId: CHAPTER_4_SCENE_IDS.listeningMileResult,
         portrait: "🪢",
         name: "Lio's Trail Marker",
+        artKey: "listeningMileThirdHood",
+        size: "wide",
+        contentLayout: "stacked",
         text: "Lio's blue courier knot remains looped behind the final hood. The tiny scratch beneath it points toward the loose route-record plate and the written message hidden beyond.",
         choices: [{
           id: CHAPTER_4_CHOICE_IDS.finishListeningMile,
@@ -7219,6 +7220,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       sceneId: CHAPTER_4_SCENE_IDS.listeningMileResult,
       portrait: "🪢",
       name: "Lio's Trail Marker",
+      artKey: "listeningMileThirdHood",
+      size: "wide",
+      contentLayout: "stacked",
       text: "At this hood, the westward conduit carries the procession only faintly: the damaged wheel knocking somewhere farther west, a scatter of uneven footfalls, and then silence. The sounds are moving away.\n\nThe stone beside you tells the closer story. Fresh bronze dust lies below a stiff inspection shutter, and bright scores cross its lower edge where someone forced it open. Mara reaches behind the hood's deep rim and finds a short blue courier string looped once around a retaining peg—the quick knot Lio used when he wanted her to look twice. A tiny mark beneath it points toward a loose route-record plate. The knot is small, hurried, and unmistakably his. Lio left something behind that plate.",
       feedback: "Mara presses the blue knot between her fingers. “He knew I would look twice.”",
       choices: [
@@ -7260,7 +7264,10 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       sceneId: CHAPTER_4_SCENE_IDS.relayArrival,
       portrait: "♜",
       name: "Briar Relay Post",
-      text: "The tunnel changes by degrees. The walls widen first. Then the ceiling lifts into a shallow vault, and the wet mineral smell gives way to lamp oil, old paper, and the faint woodsmoke of a banked stove. Shielded work lamps and desk candles cast separate pools of amber across the relay floor; the root-bound edges remain cool and dark. Brass letters set into the lintel name the place: BRIAR RELAY POST. Someone has pressed red wax into every old keeper's mark beneath them.\n\nThis was built as a place for messages to change hands. Signal slits overlook the westbound road; numbered pigeonholes climb one wall; a long bench bears fresh cups, fresh mud, and pale grooves where chain has rubbed the wood. The prisoners passed through here, but they did not leave alone.\n\nA colored broadside hangs in the entrance frame. It shows a young woman in an ornate sapphire gown, painted from the waist up against bare parchment. Briars have been inked over the bottom edge, but her face and the large printed heading remain untouched.",
+      artKey: "briarRelayPostApproach",
+      size: "wide",
+      contentLayout: "stacked",
+      text: "The tunnel changes by degrees. The walls widen first. Then the ceiling lifts into a shallow vault, and the wet mineral smell gives way to lamp oil, old paper, and the faint woodsmoke of a banked stove. Shielded work lamps and desk candles cast separate pools of amber across the relay floor; the root-bound edges remain cool and dark. Brass letters set into the lintel name the place: BRIAR RELAY POST. Someone has pressed red wax into every old keeper's mark beneath them.\n\nThis was built as a place for messages to change hands. Signal slits overlook the westbound road; numbered pigeonholes climb one wall; a long bench bears fresh cups, fresh mud, and pale grooves where chain has rubbed the wood. The prisoners passed through here, but they did not leave alone.\n\nA Royal Progress broadside hangs in the entrance frame. Briars have been inked over its bottom edge, but the public heading and seal remain readable.",
       choices: [
         {
           id: CHAPTER_4_CHOICE_IDS.enterRelayPost,
@@ -7291,7 +7298,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       name: "Royal Progress Broadside",
       artKey: "princessElowenProgressNotice",
       size: "wide",
-      text: "The portrait gives a face to the name Tasmine mentioned at the Lower Gate: Princess Elowen, heir apparent to Alderreach. Painted from the waist up in a sapphire royal gown, she looks younger than the title above her but entirely at ease beneath the little gold circlet at her brow. This will be her first Royal Progress undertaken without the King and Queen.\n\nThe smaller print explains the custom. Every five years, the royal family travels the realm's roads, hears petitions in the settlements along them, and compares official maps with bridges, shelters, and boundaries as they now stand. Elowen may request route ledgers and temporary safety measures on the roads she personally inspects. Each request must carry a date, named witnesses, and the public Progress seal shown at the foot of the page.\n\nMara reads the limits twice. “A village would open its books for this,” she says. “It might even close a road for her. But the request would have to be seen. People would know who gave it and why.”",
+      text: "The heading gives a title to the name Tasmine mentioned at the Lower Gate: Princess Elowen, heir apparent to Alderreach. This will be her first Royal Progress undertaken without the King and Queen.\n\nThe smaller print explains the custom. Every five years, the royal family travels the realm's roads, hears petitions in the settlements along them, and compares official maps with bridges, shelters, and boundaries as they now stand. Elowen may request route ledgers and temporary safety measures on the roads she personally inspects. Each request must carry a date, named witnesses, and the public Progress seal shown at the foot of the page.\n\nMara reads the limits twice. “A village would open its books for this,” she says. “It might even close a road for her. But the request would have to be seen. People would know who gave it and why.”",
       choices: [
         {
           id: CHAPTER_4_CHOICE_IDS.readRoyalProgress,
@@ -7391,7 +7398,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         contentLayout: "stacked",
         portrait: "book",
         name: "Briarhold Waystation",
-        text: "The westbound ledger remains open to tonight's transfers. Lio's entry is bracketed with four other prisoners beneath a destination none of you had seen before: Briarhold Waystation. The route coordinates place it inside Rainroot, east of Riverwatch, and the final notation orders the whole group moved again before dawn.\n\nThe station's upper signal slit gives one narrow view of the marked ridge. Among the distant gold road lights, several lanterns burn a sickly green behind briar-shaped hoods.",
+        text: "During the fight, someone at the records desk tipped a lamp across the westbound ledger to burn the evidence. Its heavy cover smothered the flame, leaving one corner scorched while tonight's transfers survived. Lio's entry is bracketed with four other prisoners beneath a destination none of you had seen before: Briarhold Waystation. The route coordinates place it inside Rainroot, east of Riverwatch, and the final notation orders the whole group moved again before dawn.\n\nThe station's upper signal slit gives one narrow view of the marked ridge. Among the distant gold road lights, several lanterns burn a sickly green behind briar-shaped hoods.",
         choices: [{ label: "Close the ledger.", effect: () => setDialogue(null) }],
       });
       return;
@@ -7406,7 +7413,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       contentLayout: "stacked",
       portrait: "book",
       name: "Briarhold Waystation",
-      text: "The westbound ledger has been scorched at one corner, but tonight's transfer page survived beneath the heavy cover. Its columns separate people by description, escort, condition, and destination. Five entries share the same bracket. Four are reduced to age, trade, or the place where they were taken. The fifth reads: L.B. — COURIER — ALIVE — REFUSES ROUTE MARKS.\n\nAcross all five lines, a clerk has drawn one arrow to a name none of you have heard before: BRIARHOLD WAYSTATION. The route notation places it deeper inside Rainroot, still east of Riverwatch. A fresh instruction in the margin orders every prisoner moved again before dawn, before the intercepted petitions can be missed and before any warning from this station travels east.\n\nLio was alive when they entered him here. He was transferred with four others to a hidden waystation that expects to be empty by morning.\n\nYou climb the relay's narrow signal stair and force open the upper slit. Cold night air cuts into the room. Far across the dark, the ledger's bearings settle on a low ridge. Honest road lanterns burn gold along its feet. Higher up, several lights glow a sickly green behind briar-shaped hoods.\n\nMara ties Lio's blue knot tighter around her wrist. For a long moment she says nothing. Then she fixes the bearings in her mind. “I am following clever,” she says. Her voice is quiet now, and steady. “But I am still going.”",
+      text: "During the fight, someone at the records desk tipped a lamp across the westbound ledger to burn the evidence. The heavy cover smothered the flame: one corner is scorched, but tonight's transfer page survived beneath it. Its columns separate people by description, escort, condition, and destination. Five entries share the same bracket. Four are reduced to age, trade, or the place where they were taken. The fifth reads: L.B. — COURIER — ALIVE — REFUSES ROUTE MARKS.\n\nAcross all five lines, a clerk has drawn one arrow to a name none of you have heard before: BRIARHOLD WAYSTATION. The route notation places it deeper inside Rainroot, still east of Riverwatch. A fresh instruction in the margin orders every prisoner moved again before dawn, before the intercepted petitions can be missed and before any warning from this station travels east.\n\nLio was alive when they entered him here. He was transferred with four others to a hidden waystation that expects to be empty by morning.\n\nYou climb the relay's narrow signal stair and force open the upper slit. Cold night air cuts into the room. Far across the dark, the ledger's bearings settle on a low ridge. Honest road lanterns burn gold along its feet. Higher up, several lights glow a sickly green behind briar-shaped hoods.\n\nMara ties Lio's blue knot tighter around her wrist. For a long moment she says nothing. Then she fixes the bearings in her mind. “I am following clever,” she says. Her voice is quiet now, and steady. “But I am still going.”",
       choices: [
         {
           id: CHAPTER_4_CHOICE_IDS.finishChapterFour,
@@ -7530,6 +7537,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       sceneId: CHAPTER_4_SCENE_IDS.listeningMileIntro,
       portrait: "◫",
       name: CHAPTER_4_ENTRY_COPY.listeningMileIntro.name,
+      artKey: "listeningMileFirstHood",
+      size: "wide",
+      contentLayout: "stacked",
       text: CHAPTER_4_ENTRY_COPY.listeningMileIntro.text,
       choices: [
         { id: CHAPTER_4_CHOICE_IDS.beginListeningMile, label: "Listen at the wall hood.", variant: "primary", effect: openListeningMileStationOne },
@@ -7613,6 +7623,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       sceneId: CHAPTER_4_SCENE_IDS.lowerGateArrival,
       portrait: "🜨",
       name: CHAPTER_4_ENTRY_COPY.lowerGate.name,
+      artKey: "lowerGateSmithy",
+      size: "wide",
+      contentLayout: "stacked",
       text: CHAPTER_4_ENTRY_COPY.lowerGate.text,
       choices: [
         {
@@ -8072,46 +8085,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
                   ? "Bramblecross understands the shape of the threat. Westroot is the next lead."
                   : "You found the deeper route. Bring what you discovered back to Hollis and Enna."}
             </div>
-            {flags.chapterThreeClear && !flags.chapterFourClear ? (
-              <div className="mt-2 flex flex-wrap gap-2">
-                {!flags.chapterFourStarted || !flags.gatewrightMet ? (
-                  <Button
-                    data-choice-id={CHAPTER_4_CHOICE_IDS.beginChapter}
-                    className="bg-amber-500/20"
-                    onClick={beginChapter4Entry}
-                  >
-                    {flags.chapterFourStarted ? "Resume the Lower Gate" : "Begin Chapter 4 Graybox"}
-                  </Button>
-                ) : (
-                  <>
-                    {region === "westrootHub" ? (
-                      <Button onClick={() => openChapter4GatewrightDialogue()}>
-                        Visit Tasmine Rootbrace
-                      </Button>
-                    ) : null}
-                    <Button
-                      className="bg-amber-500/15"
-                      onClick={CHAPTER_4_TUNNEL_REGIONS.has(region)
-                        ? () => setFoldedMapGrayboxOpen(true)
-                        : openChapter4FoldedMapBriefing}
-                    >
-                      {CHAPTER_4_TUNNEL_REGIONS.has(region)
-                        ? "Review Carried Folded Map"
-                        : flags.foldedMapDecoded
-                          ? "Review Folded Map"
-                          : "Open Folded Map"}
-                    </Button>
-                    {flags.foldedMapDecoded && !CHAPTER_4_TUNNEL_REGIONS.has(region) ? (
-                      <Button
-                        data-choice-id={CHAPTER_4_CHOICE_IDS.enterUnderway}
-                        className="bg-emerald-500/20"
-                        onClick={enterChapter4Underway}
-                      >
-                        {flags.underwayEntered ? "Return to the Underway" : "Enter the Underway"}
-                      </Button>
-                    ) : null}
-                  </>
-                )}
+            {flags.chapterThreeClear && !flags.chapterFourClear && region === "westrootHub" ? (
+              <div className="mt-2 text-xs font-semibold text-amber-100/70">
+                Lower Gate and Tasmine's smithy: lower-right edge of the Westroot map.
               </div>
             ) : null}
           </div>
@@ -8330,9 +8306,13 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           flags={flags}
           setFlags={setFlags}
           close={() => setFoldedMapGrayboxOpen(false)}
+          onEnterUnderway={() => {
+            setFoldedMapGrayboxOpen(false);
+            enterChapter4Underway();
+          }}
           onTraceOutcome={(outcome) => {
             if (outcome === "true-route") {
-              setToast("Old Keeper Road recorded. Enter the Underway from the Chapter 4 banner.");
+              setToast("Old Keeper Road confirmed. Open the Lower Gate here when ready.");
             } else if (outcome === "false-shortcut") {
               setToast("Survey Shortcut rejected; refold the map to find the real road.");
             } else {
@@ -8372,7 +8352,10 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         <ShopModal
           shop={activeShop}
           player={player}
-          close={() => setShopOpen(false)}
+          close={() => {
+            setShopOpen(false);
+            if (shopMode === "gatewright") openChapter4GatewrightDialogue();
+          }}
           buyItem={buyItem}
           sellItem={sellItem}
           shopMode={shopMode}

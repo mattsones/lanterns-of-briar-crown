@@ -54,7 +54,7 @@ test("the title screen loads the canonical Chapter 4-ready fixture", async ({ pa
   await page.getByRole("button", { name: "Review Chapter 3 Complete Save" }).click();
 
   await expect(page.getByRole("heading", { name: MAPS.westrootHub.name })).toBeVisible();
-  await expect(page.getByText(/Goal: Chapter 3 Complete/)).toBeVisible();
+  await expect(page.getByText("Goal: Walk to the Lower Gate", { exact: true })).toBeVisible();
   await expect(page.getByText("Loaded Chapter 3 Complete - Chapter 4 Ready.")).toBeVisible();
 });
 
@@ -400,9 +400,10 @@ test("Chapter 3 real fixture runs uninterrupted through the witnessed Westroot e
   await expect(page.getByText(/checkpoint cup identifies that courier as Lio/)).toBeVisible();
   await expect(page.getByText("Westroot's witnessed record:")).toHaveCount(0);
   await expect(page.getByText("BRINDLE PASSED. BREATHING. BOUND WEST.")).toHaveCount(0);
-  await page.getByRole("button", { name: "Finish Chapter 3 for now." }).click();
-  await expect(page.getByText("Goal: Chapter 3 Complete: The Hidden Root", { exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Begin Chapter 4 Graybox" })).toBeVisible();
+  await page.getByRole("button", { name: "Stay in Westroot a little longer." }).click();
+  await expect(page.getByText("Goal: Walk to the Lower Gate", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Begin Chapter 4 Graybox" })).toHaveCount(0);
+  await expect(page.getByText(/lower-right edge of the Westroot map/)).toBeVisible();
 });
 
 test("Split Hall simmers before the Hold Bell and does not repeat on walk-through", async ({ page }) => {
@@ -656,11 +657,11 @@ test("the user Chapter 3 save clearly identifies the endpoint and preserves its 
   await page.goto("/");
   await page.getByRole("button", { name: "Continue Checkpoint" }).click();
 
-  await expect(page.getByText("Goal: Chapter 3 Complete: The Hidden Root", { exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Begin Chapter 4 Graybox" })).toBeVisible();
+  await expect(page.getByText("Goal: Walk to the Lower Gate", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Begin Chapter 4 Graybox" })).toHaveCount(0);
   await expect(
     page.getByLabel("Adventure status").getByText(
-      "Chapter 3 is complete. The Mossback baker in Rootmarket may still have heard something about Lio before you leave.",
+      "Tasmine Rootbrace's smithy and the sealed Underway entrance are at the lower-right edge of Westroot. Bring her the recovered tag and route evidence.",
       { exact: true },
     ),
   ).toBeVisible();
