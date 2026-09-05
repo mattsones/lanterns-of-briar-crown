@@ -51,10 +51,12 @@ async function navigateWestroot(page, start, target, { holdOpen = false } = {}) 
 test("the title screen loads the canonical Chapter 4-ready fixture", async ({ page }) => {
   await page.addInitScript(() => window.localStorage.clear());
   await page.goto("/");
-  await page.getByRole("button", { name: "Review Chapter 3 Complete Save" }).click();
+  await page.getByRole("button", { name: "Begin Chapter 4 Playtest" }).click();
 
   await expect(page.getByRole("heading", { name: MAPS.westrootHub.name })).toBeVisible();
-  await expect(page.getByText("Goal: Walk to the Lower Gate", { exact: true })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "The Westward Record" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Continue with Bramwell and Noma to the Lower Gate." })).toBeVisible();
+  await expect(page.getByText("Goal: Meet Tasmine at the Lower Gate", { exact: true })).toBeVisible();
   await expect(page.getByText("Loaded Chapter 3 Complete - Chapter 4 Ready.")).toBeVisible();
 });
 
@@ -400,10 +402,13 @@ test("Chapter 3 real fixture runs uninterrupted through the witnessed Westroot e
   await expect(page.getByText(/checkpoint cup identifies that courier as Lio/)).toBeVisible();
   await expect(page.getByText("Westroot's witnessed record:")).toHaveCount(0);
   await expect(page.getByText("BRINDLE PASSED. BREATHING. BOUND WEST.")).toHaveCount(0);
-  await page.getByRole("button", { name: "Stay in Westroot a little longer." }).click();
-  await expect(page.getByText("Goal: Walk to the Lower Gate", { exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Begin Chapter 4 Graybox" })).toHaveCount(0);
-  await expect(page.getByText(/lower-right edge of the Westroot map/)).toBeVisible();
+  await page.getByRole("button", { name: "Continue with Bramwell and Noma to the Lower Gate." }).click();
+  await expect(page.getByRole("dialog", { name: "Westroot Lower Gate" })).toBeVisible();
+  await expect(page.getByText("Goal: Meet Tasmine at the Lower Gate", { exact: true })).toBeVisible();
+  await expect(page.getByTestId("dialogue-scene-image")).toHaveAttribute(
+    "src",
+    /lower-gate-smithy-scene-v01/,
+  );
 });
 
 test("Split Hall simmers before the Hold Bell and does not repeat on walk-through", async ({ page }) => {
@@ -657,11 +662,11 @@ test("the user Chapter 3 save clearly identifies the endpoint and preserves its 
   await page.goto("/");
   await page.getByRole("button", { name: "Continue Checkpoint" }).click();
 
-  await expect(page.getByText("Goal: Walk to the Lower Gate", { exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Begin Chapter 4 Graybox" })).toHaveCount(0);
+  await expect(page.getByText("Goal: Meet Tasmine at the Lower Gate", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: /graybox/i })).toHaveCount(0);
   await expect(
     page.getByLabel("Adventure status").getByText(
-      "Tasmine Rootbrace's smithy and the sealed Underway entrance are at the lower-right edge of Westroot. Bring her the recovered tag and route evidence.",
+      "Bramwell and Noma are walking with you to Tasmine Rootbrace's smithy at Westroot's lower-right gate.",
       { exact: true },
     ),
   ).toBeVisible();
@@ -677,4 +682,32 @@ test("the user Chapter 3 save clearly identifies the endpoint and preserves its 
   await navigateWestroot(page, { x: 3, y: 6 }, { x: 3, y: 3 });
   await navigateWestroot(page, { x: 3, y: 3 }, { x: 3, y: 6 });
   await expect(page.getByRole("dialog")).toHaveCount(0);
+});
+
+test("Rootmarket sells regional provisions and returns to the market conversation", async ({ page }) => {
+  const payload = buildChapter3CargoCheckpoint();
+  payload.position = { x: 3, y: 6 };
+  payload.player.gold = 100;
+  payload.flags.rootmarketVisited = true;
+  payload.visited = {
+    westrootHub: buildVisitedMap("westrootHub", 3, 6, 10),
+  };
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: payload },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await page.getByRole("button", { name: "Browse the provision stalls." }).click();
+
+  const shop = page.getByTestId("shop-modal");
+  await expect(shop).toHaveAttribute("data-shop-mode", "rootmarket");
+  await expect(shop.getByText("Rootmarket Provisions", { exact: true })).toBeVisible();
+  await expect(shop.locator('[data-shop-buy-item="trail_snack"]')).toBeVisible();
+  await expect(shop.locator('[data-shop-buy-item="bubbleburst_tonic"]')).toBeVisible();
+  await expect(shop.locator('[data-shop-buy-item="healing_fizzpop"]')).toHaveCount(0);
+  await shop.getByRole("button", { name: "Close" }).click();
+  await expect(page.getByRole("dialog", { name: "Rootmarket" })).toBeVisible();
 });

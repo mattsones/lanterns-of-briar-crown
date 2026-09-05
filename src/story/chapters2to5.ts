@@ -93,10 +93,12 @@ export const CHAPTER_STORY_PLANS: Record<Exclude<ChapterId, 1>, ChapterStoryPlan
     id: 4,
     title: "The Riddle Road",
     promise:
-      "Use Edden's folded-map language to follow the old way deeper, find Lio's message, and identify Briarhold Waystation as the rescue target.",
+      "Use Lio's twice-folded clue and the Survey Station shutters to follow the old way deeper, find his message, and identify Briarhold Waystation as the rescue target.",
     requiredEndFlags: [
       "chapterFourClear",
       "foldedMapDecoded",
+      "rootwaterBridgeCrossed",
+      "underwayWildlifeCleared",
       "lioMessageFound",
       "royalProgressLearned",
       "briarRelayCleared",
@@ -104,8 +106,9 @@ export const CHAPTER_STORY_PLANS: Record<Exclude<ChapterId, 1>, ChapterStoryPlan
       "briarholdLeadFound",
     ],
     coreBeats: [
-      "Receive or recover Edden's folded-map clue",
-      "Cross the Underway and Listening Mile",
+      "Find Lio's twice-folded scratch at the abandoned Survey Station",
+      "Open the captors' Old Keeper Road shutter and cross Rootwater Bridge",
+      "Cross the later Underway detour and Listening Mile",
       "Help the captive porter side thread",
       "Find Lio's message: do not follow angry, follow clever",
       "Discover a Briar relay post and cell roles",

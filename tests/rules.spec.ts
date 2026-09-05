@@ -680,6 +680,17 @@ test("Westroot map NPC markers follow the story's physical staging", () => {
     { id: "bramwell", x: 1, y: 4 },
     { id: "noma", x: 3, y: 0 },
     { id: "lume", x: 3, y: 6 },
+    { id: "tasmine", x: 7, y: 0 },
+  ]);
+
+  expect(getWestrootMapNpcTokens({
+    ...resolved,
+    chapterFourStarted: true,
+  })).toMatchObject([
+    { id: "bramwell", x: 7, y: 0 },
+    { id: "noma", x: 7, y: 0 },
+    { id: "lume", x: 3, y: 6 },
+    { id: "tasmine", x: 7, y: 0 },
   ]);
 });
 
@@ -933,6 +944,8 @@ test("Chapter 4 executable contract is complete and keeps optional routes option
   expect(CHAPTER_4_CONTRACT.entry.fixture).toBe("/saves/chapter-3-complete.json");
   expect(CHAPTER_4_CONTRACT.entry.requiredFlags).toContain("chapterThreeClear");
   expect(CHAPTER_4_CONTRACT.requiredEndFlags).toContain("briarholdLeadFound");
+  expect(CHAPTER_4_CONTRACT.requiredEndFlags).toContain("rootwaterBridgeCrossed");
+  expect(CHAPTER_4_CONTRACT.requiredEndFlags).toContain("underwayWildlifeCleared");
   expect(CHAPTER_4_CONTRACT.requiredEndFlags).not.toContain("captivePorterHelped");
   expect(CHAPTER_4_OPTIONAL_FLAGS).toContain("captivePorterHelped");
   expect(CHAPTER_4_OPTIONAL_FLAGS).toEqual(expect.arrayContaining([
@@ -985,17 +998,40 @@ test("Chapter 4 entry commits only from a ready save and reaches the required ga
     { ...payload.flags, chapterFourStarted: true, gatewrightMet: true },
     payload.companion,
     payload.region,
+  ).currentMain.id).toBe("ch4-enter");
+  expect(buildQuestJournal(
+    {
+      ...payload.flags,
+      chapterFourStarted: true,
+      gatewrightMet: true,
+      underwayEntered: true,
+    },
+    payload.companion,
+    payload.region,
+  ).currentMain.id).toBe("ch4-descent");
+  expect(buildQuestJournal(
+    {
+      ...payload.flags,
+      chapterFourStarted: true,
+      gatewrightMet: true,
+      underwayEntered: true,
+      surveyStationReached: true,
+    },
+    payload.companion,
+    payload.region,
   ).currentMain.id).toBe("ch4-folded-map");
   expect(buildQuestJournal(
     {
       ...payload.flags,
       chapterFourStarted: true,
       gatewrightMet: true,
+      underwayEntered: true,
+      surveyStationReached: true,
       foldedMapDecoded: true,
     },
     payload.companion,
     payload.region,
-  ).currentMain.id).toBe("ch4-underway");
+  ).currentMain.id).toBe("ch4-rootwater");
 
   const missingEvidence = structuredClone(payload.player);
   delete missingEvidence.inventory.cargo_transfer_tag;
@@ -1011,11 +1047,13 @@ test("Chapter 4 entry commits only from a ready save and reaches the required ga
 test("Chapter 4 save migration infers prerequisite Folded Map state", () => {
   expect(migrateFlags({ foldedMapDecoded: true })).toMatchObject({
     chapterFourStarted: true,
+    surveyStationReached: true,
     foldedMapAttempted: true,
     foldedMapDecoded: true,
   });
   expect(migrateFlags({ foldedMapDeeperSolved: true })).toMatchObject({
     chapterFourStarted: true,
+    surveyStationReached: true,
     foldedMapAttempted: true,
     foldedMapDecoded: true,
     foldedMapDeeperSolved: true,
@@ -1114,6 +1152,28 @@ test("Folded Map state separates mistakes from the complete two-fold route decod
   );
   expect(retiredThirdFold.outcome).toBe("not-a-route");
   expect(retiredThirdFold.flags.foldedMapDeeperSolved).toBeUndefined();
+});
+
+test("regional shops share staples without collapsing into identical catalogs", () => {
+  expect(SHOP_INVENTORIES.brambleSmith).toEqual(expect.arrayContaining([
+    "turnipwood_blade",
+    "pebbleknock_hammer",
+    "kettle_helm",
+    "briar_vest",
+  ]));
+  expect(SHOP_INVENTORIES.brambleSmith.every((id) => !!ITEM_DB[id]?.slot)).toBe(true);
+  expect(SHOP_INVENTORIES.market).not.toEqual(expect.arrayContaining([
+    "turnipwood_blade",
+    "briar_vest",
+    "lantern_pin",
+  ]));
+  expect(SHOP_INVENTORIES.rootmarket).toEqual(expect.arrayContaining([
+    "trail_snack",
+    "fizzberry_handpie",
+    "bubbleburst_tonic",
+  ]));
+  expect(SHOP_INVENTORIES.rootmarket).not.toContain("healing_fizzpop");
+  expect(SHOP_INVENTORIES.market).toContain("healing_fizzpop");
 });
 
 test("Tasmine's full smithy includes three affordable optional weapon patterns without durability", () => {
@@ -1220,6 +1280,12 @@ test("Underway presents a later construction detour choice, applies route pressu
   expect(resolveUnderwayAmbushDiscovery(16)).toEqual({ attempted: true, revealed: true, dc: 16 });
   expect(ENCOUNTERS.underwayAmbush).toEqual(["briar_relay_guard"]);
   expect(ENCOUNTERS.underwayAmbushHard).toEqual(["briar_relay_guard", "seal_forged_sentry"]);
+  expect(ENCOUNTERS.underwayWildlife).toEqual(["tunnel_rat", "tunnel_rat", "root_gnawer"]);
+  expect(ENEMY_DB.tunnel_rat).toMatchObject({ hp: 10, intentA: "Pack Rush", intentB: "Gnawing Lunge" });
+  expect(ENEMY_DB.root_gnawer).toMatchObject({ hp: 22, intentA: "Root-Cracking Bite" });
+  expect(ENEMY_DB.tunnel_rat.artwork.src).toContain("tunnel-rat-v01.webp");
+  expect(ENEMY_DB.root_gnawer.artwork.src).toContain("root-gnawer-v01.webp");
+  expect(BATTLE_REWARDS.underwayWildlife.flagUpdate).toEqual({ underwayWildlifeCleared: true });
   expect(BATTLE_REWARDS.underwayAmbush.flagUpdate).toEqual({ underwayAmbushCleared: true });
   expect(BATTLE_REWARDS.underwayAmbushHard.flagUpdate).toEqual({ underwayAmbushCleared: true });
 });
@@ -1323,6 +1389,11 @@ test("legacy single-map Underway checkpoints migrate onto the expanded tunnel jo
   });
   expect(atOldJunction.region).toBe("underwayConvergence");
   expect(atOldJunction.position).toEqual(MAPS.underwayConvergence.start);
+  expect(atOldJunction.flags.surveyStationReached).toBe(true);
+  expect(atOldJunction.flags.rootwaterApproachSeen).toBe(true);
+  expect(atOldJunction.flags.rootwaterBridgeSeen).toBe(true);
+  expect(atOldJunction.flags.rootwaterBridgeCrossed).toBe(true);
+  expect(atOldJunction.flags.underwayWildlifeCleared).toBe(true);
 
   const atOldMessage = migrateSavePayload({
     ...payload,
@@ -2118,10 +2189,12 @@ test("hand-authored map navigation graphs pass reusable validation", () => {
     "listeningPostTwo",
     "relayApproach",
     "rootCellar",
+    "rootwaterBridge",
     "underway",
     "underwayConvergence",
     "underwayRoute811",
     "underwayRoute817",
+    "underwaySurveyStation",
     "westrootHub",
     "westrootTrail",
   ]);
@@ -2135,11 +2208,75 @@ test("Chapter 4 tunnel lights and nodes follow the painted road bends", () => {
   expect(MAPS.westrootHub.tiles[0][7]).toBe("westroot_lower_gate");
   expect(getNavigationDestination("westrootHub", 6, 5, "right")).toEqual({ x: 7, y: 0 });
   expect(getMapNodePoint("westrootHub", 7, 0, 9, 7)).toEqual({ x: 90.5, y: 74.5 });
-  expect(getMapNodePoint("listeningPostTwo", 7, 2, 10, 5)).toEqual({ x: 75, y: 58 });
+  expect(getMapNodePoint("underwayConvergence", 7, 1, 10, 5)).toEqual({ x: 79, y: 63 });
+  expect(getMapNodePoint("listeningPostOne", 0, 2, 10, 5)).toEqual({ x: 5, y: 57 });
+  expect(getMapNodePoint("listeningPostOne", 1, 2, 10, 5)).toEqual({ x: 15, y: 52 });
+  expect(getMapNodePoint("listeningPostOne", 6, 1, 10, 5)).toEqual({ x: 65, y: 54 });
+  expect(getMapNodePoint("listeningPostOne", 7, 2, 10, 5)).toEqual({ x: 75, y: 58 });
+  expect(getMapNodePoint("listeningPostOne", 8, 1, 10, 5)).toEqual({ x: 85, y: 64 });
+  expect(getMapNodePoint("listeningPostTwo", 0, 2, 10, 5)).toEqual({ x: 5, y: 45 });
+  expect(getMapNodePoint("listeningPostTwo", 1, 1, 10, 5)).toEqual({ x: 15, y: 36 });
+  expect(getMapNodePoint("listeningPostTwo", 4, 2, 10, 5)).toEqual({ x: 45, y: 57 });
+  expect(getMapNodePoint("listeningPostTwo", 7, 2, 10, 5)).toEqual({ x: 75, y: 62 });
+  expect(getMapNodePoint("listeningPostThree", 0, 2, 9, 4)).toEqual({ x: 5, y: 56 });
+  const surveyStationHelperRoute = [
+    [0, 2, { x: 7.8, y: 19.2 }], [1, 2, { x: 13.08, y: 28.17 }],
+    [1, 1, { x: 23.21, y: 32.47 }], [2, 1, { x: 25.78, y: 44.17 }],
+    [2, 2, { x: 17.83, y: 56.88 }], [2, 3, { x: 19.18, y: 70.02 }],
+    [3, 3, { x: 31.25, y: 69.71 }], [4, 3, { x: 39.75, y: 55.57 }],
+    [4, 2, { x: 45.28, y: 38.04 }], [5, 2, { x: 51.96, y: 36.33 }],
+    [5, 1, { x: 54.07, y: 49.24 }], [6, 1, { x: 52.21, y: 68.29 }],
+    [6, 2, { x: 62.61, y: 75.5 }], [7, 2, { x: 75.33, y: 63.65 }],
+    [8, 2, { x: 82.86, y: 53.4 }], [9, 2, { x: 86.4, y: 45.01 }],
+  ] as const;
+  surveyStationHelperRoute.forEach(([x, y, point]) => {
+    expect(getMapNodePoint("underwaySurveyStation", x, y, 10, 5)).toEqual(point);
+  });
+  const surveyStationDirections = [
+    "down", "right", "down", "down", "down", "right", "up", "up",
+    "right", "down", "down", "right", "up", "up", "up",
+  ] as const;
+  surveyStationHelperRoute.slice(0, -1).forEach(([x, y], index) => {
+    const [nextX, nextY] = surveyStationHelperRoute[index + 1];
+    const direction = surveyStationDirections[index];
+    expect(getNavigationDestination("underwaySurveyStation", x, y, "right")).toEqual({
+      x: nextX,
+      y: nextY,
+    });
+    expect(getNavigationDestination("underwaySurveyStation", x, y, direction)).toEqual({
+      x: nextX,
+      y: nextY,
+    });
+  });
+  surveyStationHelperRoute.slice(1).forEach(([x, y], index) => {
+    const [previousX, previousY] = surveyStationHelperRoute[index];
+    expect(getNavigationDestination("underwaySurveyStation", x, y, "left")).toEqual({
+      x: previousX,
+      y: previousY,
+    });
+  });
+  expect(getNavigationDestination("underwaySurveyStation", 4, 3, "down")).toEqual({ x: 3, y: 3 });
+  expect(getNavigationDestination("underwaySurveyStation", 9, 2, "down")).toEqual({ x: 8, y: 2 });
+  expect(getMapVisualConfig("underwaySurveyStation").fogRevealAreas).toContainEqual({
+    id: "waykeeper-station-preview",
+    nodeKeys: ["8,2", "9,2"],
+    minVisitedNodes: 2,
+    x: 86,
+    y: 40,
+    radiusX: 15,
+    radiusY: 23,
+  });
+  expect(getMapNodePoint("rootwaterBridge", 4, 2, 10, 5)).toEqual({ x: 45, y: 50 });
+  expect(getMapVisualConfig("rootwaterBridge").ambientRevealPaths).toEqual([
+    expect.objectContaining({ id: "rootwater-upstream-reveal", darknessOpacity: 0.48 }),
+    expect.objectContaining({ id: "rootwater-downstream-reveal", darknessOpacity: 0.48 }),
+  ]);
   expect(getMapNodePoint("listeningPostTwo", 8, 1, 10, 5)).toEqual({ x: 85, y: 50 });
+  expect(getMapVisualConfig("relayApproach").fogPathWidth).toBe(12);
+  expect(getMapNodePoint("relayApproach", 0, 2, 10, 5)).toEqual({ x: 5, y: 52 });
   expect(getMapNodePoint("relayApproach", 2, 1, 10, 5)).toEqual({ x: 25, y: 55 });
-  expect(getMapNodePoint("relayApproach", 3, 2, 10, 5)).toEqual({ x: 35, y: 37 });
-  expect(getMapNodePoint("relayApproach", 5, 3, 10, 5)).toEqual({ x: 55, y: 56 });
+  expect(getMapNodePoint("relayApproach", 3, 2, 10, 5)).toEqual({ x: 35, y: 53 });
+  expect(getMapNodePoint("relayApproach", 5, 3, 10, 5)).toEqual({ x: 55, y: 45 });
 });
 
 test("reusable game QA checks pass without rendering App", () => {

@@ -4,7 +4,61 @@ This file is the starting point for Codex.
 
 Story-writing work must also follow `docs/story/writing-rules.md`. Singular characters use he/him or she/her; *they/them/their* is reserved for genuinely plural antecedents.
 
-## Latest Handoff — 2026-08-28
+## Latest Handoff — 2026-09-04
+
+The owner completed Chapter 4 and accepted the chapter as good. This closes the Chapter 4 owner-playtest milestone: the full Lower Gate, Folded Map, Rootwater, wildlife, Listening Mile, Relay Post, forged-authority, and Briarhold-reveal path has now received owner signoff.
+
+The owner also completed an uninterrupted playthrough of the entire story through Chapter 4. Chapter 4 is therefore closed as the illustrated release candidate rather than merely as an isolated chapter route. The full process assessment and Chapter 5 recommendations are in `docs/playtest-notes/2026-09-04-chapter-4-completion-retrospective.md`.
+
+The adventure-menu inventory now lets restorative items target either Liam or the active companion outside battle. Each item card uses explicit **Use on Liam** and **Give to [companion]** actions when a companion is traveling with the party. A target already at maximum HP is disabled, capped healing reports the amount actually restored, and a field item can restore a downed companion because 0 HP does not hide the companion target. The existing battle-pouch targeting remains unchanged.
+
+The release-candidate Chapter 1 playthrough also received two stateful presentation fixes. Sending the worried Lantern Road traveler to the discovered camp now removes his roadside portrait, places his portrait at the camp, and keeps the camp's acknowledging dialogue. At the Bramblecross notice board, Ada's missing-crate notice and the cellar reports/copied route order are separate collection actions; each action disappears permanently after its own flag is set, while the other remains available.
+
+The same full playthrough exposed two town-economy gaps. Bramblecross now has a separate equipment shop in the forge-lit southwest building; it carries nearby Hearthhollow weapon and armor patterns but leaves food, restoratives, and ingredients to Willow Market. The Bramblecross gate now opens a route choice instead of automatically committing to the next chapter: Lantern Road back toward Hearthhollow is always available, and the Westroot Trail appears only after the watchhouse briefing reveals it. Once Chapter 2 is complete, that discovered trail remains available for backtracking.
+
+Rootmarket now has a provision-stall shop that returns to the market conversation when closed. Regional catalogs deliberately overlap without becoming identical: Trail Snacks and Fizzberry Handpies travel between settlements, Healing Fizzpop remains a Hearthhollow/Bramblecross staple, and Bubbleburst Tonic is Rootmarket's distinctive restorative.
+
+Final release-candidate verification is green. `npm.cmd run verify` passed the production build, all 51 rules tests, all 35 Chapter 1 tests, all 31 Chapter 2 tests, all 12 Chapter 3 tests, all 15 Chapter 4 tests, and the browser smoke test: 145 automated tests total. The final production asset audit scanned 171 images with every asset within its documented target. The Chapter 1 suite includes focused coverage for field healing, traveler relocation, one-time independent notice-board collection, Bramblecross route choice, and the town smithy.
+
+### Next Best Step
+
+Plan Chapter 5 from the accepted Briarhold reveal. First write its executable vertical-slice contract and spike the Captive Lanterns / false-command boss relationship. Add a scale-correct painted-map contract before commissioning final map art. Establish Bracken Voss, the Thornseal Guard, and the Thornroot Sentry against the existing enemy-cohesion record before producing their portraits.
+
+## Latest Handoff — 2026-09-02
+
+The owner resumed the Chapter 4 playtest from Tasmine's Lower Gate briefing through the westbound Relay approach. The revised Tasmine, Noma, Survey Station, Folded Map clue, shutter, and Rootwater Bridge dialogue flow is accepted. The bridge now keeps a restrained natural river glow, its approach and bridge descriptions occur only once, and every Underway switchback still advances with Right while accepting a painted-direction arrow where appropriate.
+
+Chapter 4 now includes its first clean unaligned-wildlife battle: two Tunnel Rats and one Root Gnawer block the Old Keeper Road before the Posted Detour. Both enemy portraits are integrated, the Root Gnawer is staged in ancient roots without a river or personal lantern, and victory copy treats the animals as territorial without explaining that distinction through rejected-story language. The encounter, save migration, and art record are detailed in `docs/playtest-notes/2026-09-01-chapter-4-rootwater-and-wildlife.md`.
+
+The Posted Detour inspection is deterministic and visibly changes the dialogue. It positively identifies the sign's tree-like device as an old Westroot root-and-road hazard seal, places the new finding first, reports completion, and removes the spent Inspect choice. It does not introduce or deny an interpretation the player has never encountered.
+
+The owner marked movement alignment directly across the Blind Junction, all three Listening Mile maps, and the westbound Relay approach. Those waypoints now follow the painted paving; the Relay approach alone uses a slightly wider path reveal so the adjacent road is not clipped by darkness. Each listening hood now repeats if Liam steps away without listening, but remains silent on later crossings once heard. Old saves infer the two new heard-state flags from downstream progress.
+
+Full implementation details and the exact resume point are recorded in `docs/playtest-notes/2026-09-02-chapter-4-owner-playtest-followup.md`. The production build, all 50 rules tests, and all 14 Chapter 4 browser tests are green after the final changes.
+
+### Next Best Step
+
+Continue the owner playtest from the **Westbound Relay Approach** through the Briar Relay Post, forged-authority comparison, and Briarhold reveal. Do not replay the accepted Lower Gate-through-Listening-Mile stretch unless a regression requires it. After resolving any remaining owner notes, run the full Chapter 4 browser suite and then the deferred uninterrupted Chapters 1–4 release-candidate gate. Chapter 5's illustrated rescue slice follows that milestone.
+
+## Latest Handoff — 2026-08-30
+
+The Chapter 3–4 acceptance seam and Tasmine's smithy received a follow-up pass. **Begin Chapter 4 Playtest** reopens **The Westward Record** instead of dropping the player into Westroot with only a location hint. Committing to Chapter 4 moves Liam directly to the Lower Gate for the existing Bramwell-and-Noma arrival tableau; Westroot remains available afterward. Bramwell, Noma, and Tasmine stage at the gate during the sendoff, and Tasmine remains visibly marked there after Chapter 3 completion.
+
+Tasmine's shop choice is now simply **Visit Tasmine's Smithy**. Every shop uses separate Buy and Sell tabs, purchases show persistent confirmation and updated owned counts, and equipped items can be unequipped from the Sell tab without leaving the shop.
+
+The Folded Map now uses the owner's exact short instruction: **One opaque map, printed differently on each side. Drag any edge inward to fold.** The numbered workflow, Edden clue panel, **Look for agreement**, recorded-state panel, configuration count, folding-table label, and experimentation footer are removed.
+
+The owner then approved moving the puzzle deeper into the Underway. Tasmine opens the Lower Gate first, after correctly stating that Bramwell saw Lio's captors enter Westroot and she saw them leave, but she no longer names or explains the Survey Station before the party discovers it. A new illustrated descent follows fresh wheel tracks to an unmanned waykeeper room that is revealed on the map before entry. At its dusty table, Mara searches underneath and discovers Lio's hook-tail scratch beside a twice-folded rectangle. Three closed route shutters share one selector, so the fold is needed to identify the shutter Lio's captors chose without loudly testing every road. The tempting Survey Shortcut is exposed as a proposed, unopened bore only when that fold is compared with the center selector. There are no explorable wrong branches.
+
+A second new illustrated map carries the party linearly across Rootwater Bridge before the established Underway approach and later construction detour. The river is faintly bioluminescent; a non-glowing road-crew carving and fresh westbound tracks confirm the route. Rootwater adds no puzzle, choice, check, combat, or fixed bridge lantern. The construction detour remains separate and mechanically unchanged. Full details and verification are in `docs/playtest-notes/2026-08-30-chapter-4-transition-and-shop.md`; generation prompts are recorded in `docs/art/prompts/chapter-4-survey-station-and-rootwater.md`.
+
+Verification is green: production build, 50 rules tests, all 11 Chapter 3 browser tests, all 14 Chapter 4 browser tests, a post-polish rerun of the affected Chapter 4 route test, and a 169-image production asset audit. Visible in-app-browser QA covered the full revised seam through Rootwater and its handoff to the existing detour approach.
+
+### Next Best Step
+
+Run a fuller owner playthrough of the revised Chapter 4, beginning at **The Westward Record** and continuing through the Briarhold reveal. Pay particular attention to the direct Lower Gate handoff, Tasmine's smithy flow, the helper-corrected 16-node descent, the live Waykeeper Station discovery, the Folded Map rationale and feedback, Rootwater Bridge, and the later construction detour. If that pacing is accepted, run the phone-width and uninterrupted Chapters 1–4 release-candidate gates.
+
+## Previous Handoff — 2026-08-28
 
 The owner Chapter 4 polish pass is implemented. Chapter 3's closing scene now continues directly to the Lower Gate, while existing Chapter 3-complete saves receive **Walk to the Lower Gate** as their active objective instead of a developer-facing “Begin Chapter 4 Graybox” button. Tasmine's smithy and the sealed Underway entrance are a real inspectable landmark at the lower-right edge of the Westroot map. The Lower Gate arrival uses a new smithy tableau; Tasmine has a dedicated portrait; closing her buy/sell shop returns to her dialogue and its Folded Map action.
 
@@ -110,7 +164,7 @@ Build the Underway traversal and Listening Mile graybox from the decoded Folded 
 
 Chapter 4 pre-production is now executable. `docs/story/chapter-4-vertical-slice-contract.md` owns the readable contract, while `src/story/chapter4.ts` and `src/game/chapter4.ts` own stable IDs, required/optional boundaries, Folded Map outcomes, validation, migration behavior, and the gatewright economy. The captive porter is optional; Rootbread is absent from prerequisites; gatewright access is required while the Hookblade purchase is optional.
 
-The first Folded Map card matcher failed owner acceptance: clicking labeled boxes did not feel like folding, the Crown route was visually pre-condemned, and the cache answer was forced by elimination. The second cross-wing prototype improved the physical action but also failed: four binary flaps still made the answer too easy to exhaust, the transparent layers felt unlike paper, and the silhouette did not read as one map. **Test Folded Map Graybox** now opens the third prototype: one opaque rectangular sheet with distinct route and keeper faces. Each edge drags to quarter, half, or three-quarter landings, creating 54 two-edge configurations. West-half plus south-three-quarter reveals the Old Keeper Road; east-half plus north-half is the persuasive false Construction Detour; ordinary wrong folds are safe; and north-quarter becomes an optional third cache fold after the true route is recorded.
+The first Folded Map card matcher failed owner acceptance: clicking labeled boxes did not feel like folding, the Crown route was visually pre-condemned, and the cache answer was forced by elimination. The second cross-wing prototype improved the physical action but also failed: four binary flaps still made the answer too easy to exhaust, the transparent layers felt unlike paper, and the silhouette did not read as one map. The accepted third prototype now appears in-story at the Survey Station: one opaque rectangular sheet with distinct route and keeper faces. Each edge drags to quarter, half, or three-quarter landings, creating 54 two-edge configurations. West-half plus south-three-quarter reveals the Old Keeper Road; east-half plus north-half is the persuasive false Construction Detour; ordinary wrong folds are safe; and north-quarter becomes an optional third cache fold after the true route is recorded.
 
 `verify:fast`, `verify:chapter4`, and `verify:full` remain available; Chapter 4 has its own browser suite and CI step. The replacement preserves fail-forward pressure, a one-time Lanternwell Drop, review state, stack-aware Back behavior, keyboard access, and phone layout. It remains lazy-loaded outside the initial bundle. The owner accepted the rectangular-sheet interaction direction on 2026-08-02. The acceptance follow-up adds large outcome-specific trace stamps and makes the persuasive straight Construction Detour easier to discover through matching edge marks and clue copy.
 
@@ -2004,6 +2058,17 @@ No runtime dialogue, story flags, map wiring, tests, or production assets change
 The ordered implementation checklist is in `docs/playtest-notes/2026-07-17-current-status.md` under **Next Session — Worldbuilding Implementation Order**.
 
 Begin with Chapter 3 only. Treat `docs/story/chapter-3-player-knowledge-contract.md` as the acceptance contract: Transfer Checkpoint, scheduled convoy versus unscheduled party arrival, Rootbread return interaction, Lio beside rather than inside the crate, scoped holds/reopenings, explicit Bramblecross compact, and Quill carrying the first warning outward. Complete its replacement art and human comprehension playthrough before the non-cosmic pass or Great Survey runtime integration. Do not begin Chapter 4 while those closeout requirements remain open.
+
+## Current Handoff — Chapter 4 Rootwater And Underway Wildlife
+
+Last updated: 2026-09-01
+
+- Raised the accepted artwork-shaped Rootwater river reveal slightly, from `0.52` to `0.48` darkness opacity, without reintroducing a colored overlay.
+- Made the Rootwater approach and bridge dialogues one-shot on backtracking.
+- Added a required, non-Briar wildlife encounter before the Posted Detour: two Tunnel Rats and one Root Gnawer, with a blocking route state, quest step, reward, save migration, map token, and battle integration.
+- Generated and integrated production art for both wildlife types. The selected Root Gnawer is staged only among ancient roots and fitted stone, with no river or physical lantern.
+- Recorded the implementation and Chapters 1–3 wildlife audit in `docs/playtest-notes/2026-09-01-chapter-4-rootwater-and-wildlife.md`; recorded exact built-in ImageGen prompts in `docs/art/prompts/chapter-4-underway-wildlife.md`.
+- Build, 50 rules tests, 14 Chapter 4 playtests, and the 172-image asset audit pass. Live browser QA confirmed the three-card battle layout and both production portraits.
 
 ## Current Handoff — Great Survey V04 Named Political Geography
 

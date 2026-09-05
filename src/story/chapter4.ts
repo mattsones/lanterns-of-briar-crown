@@ -8,6 +8,10 @@ export const CHAPTER_4_SCENE_IDS = {
   gatewrightPurchase: "chapter4.gatewright.purchase",
   foldedMapBriefing: "chapter4.folded-map.briefing",
   underwayArrival: "chapter4.underway.arrival",
+  surveyStation: "chapter4.underway.survey-station",
+  rootwaterApproach: "chapter4.underway.rootwater-approach",
+  rootwaterBridge: "chapter4.underway.rootwater-bridge",
+  underwayWildlife: "chapter4.underway.wildlife",
   underwayRoute: "chapter4.underway.route",
   underwayDetour: "chapter4.underway.detour",
   route811Cache: "chapter4.underway.route-811-cache",
@@ -38,6 +42,10 @@ export const CHAPTER_4_CHOICE_IDS = {
   declineHookblade: "chapter4.gatewright.decline-hookblade",
   returnToWestroot: "chapter4.gatewright.return-westroot",
   continueToMap: "chapter4.gatewright.continue-to-map",
+  continueFromSurvey: "chapter4.folded-map.continue-from-survey",
+  approachRootwater: "chapter4.underway.approach-rootwater",
+  crossRootwater: "chapter4.underway.cross-rootwater",
+  faceUnderwayWildlife: "chapter4.underway.face-wildlife",
   openFoldedMap: "chapter4.folded-map.open",
   backToGatewright: "chapter4.folded-map.back-to-gatewright",
   leftEdge: "folded-map.edge-left",
@@ -87,26 +95,53 @@ export const CHAPTER_4_GATEWRIGHT = {
   pronouns: { subject: "she", object: "her", possessive: "her" },
 } as const;
 
+type Chapter4CompanionPresence = {
+  name: string;
+  objectPronoun: string;
+};
+
+const CHAPTER_4_FOLDED_MAP_BRIEFING_PREFIX =
+  "The descent levels off and opens into a broad stone room built across the road—what looks like an old waykeeper station. Dust lies thick on a waist-high table. Curled notices, route tallies, and stiff map sheets have been left wherever the last clerk dropped them.\n\nBehind the table, three iron route shutters close three different passages. Each bears a different broken road mark. All three lift-bars feed into one counterweight selector beside the table, and with the shutters down there is no way to see which passage carries on. Trying them one at a time would take time—and announce you down every road.\n\nYou begin lifting the least brittle papers. Mara looks over your shoulder, then drops to her knees and crawls beneath the table, feeling along its stone footing.\n\n“Look at this!” Her voice comes from below. She backs out with dust on one cheek and points beneath the table's lip. “I found his mark. Lio was here. And he scratched something else… What's this? It looks like a rectangle, but two of the edges are folded in.”\n\nOn the table you notice a stack of matching maps, each printed differently on its two sides. Their marks break at the paper's edges, just like the marks above the shutters. You look closer, muttering aloud, “This must be a map of the Underway. But how do we know which route they took?”\n\nMara peers down at the map with you. “Lio marked a rectangle, folded twice. Maybe we need to fold one the same way?”";
+
+export function getChapter4FoldedMapBriefingText(
+  companion?: Chapter4CompanionPresence,
+) {
+  const discardedMapDiscovery = companion
+    ? `${companion.name} has been circling the room, and you hear ${companion.objectPronoun} call out suddenly from behind you. “There's a folded map over here on the floor! It looks like someone tried to fold it but must have gotten it wrong. It was crumpled into a ball, like they tossed it aside.”`
+    : "Behind you, a crumpled map sheet rests against the wall. Someone folded it, got the result wrong, crushed it into a ball, and tossed it aside.";
+
+  return `${CHAPTER_4_FOLDED_MAP_BRIEFING_PREFIX}\n\n${discardedMapDiscovery}`;
+}
+
 export const CHAPTER_4_ENTRY_COPY = {
   lowerGate: {
     name: "Westroot Lower Gate",
     text:
-      "Bramwell and Noma walk with you from the Mossgarden to Westroot's Lower Gate. Bramwell carries the recovered transfer tag; Noma carries Edden's bundle of route drawings beside the Witness Stone rubbing. Their argument in Split Hall has softened into the practical rhythm of two people doing the same job from different sides.\n\nBelow the public gate, fitted stone narrows around an iron leaf that has not opened in years. A smithy occupies the last dry chamber before it: racks of road gear, an anvil sunk into the floor, and two old map cases laid open beneath a work lamp. A Stonekin woman looks up from the gate's counterweight housing as Bramwell raises a hand in greeting.",
+      "Bramwell and Noma walk with you from the Mossgarden to Westroot's Lower Gate. Their argument in Split Hall has softened into the practical rhythm of two people doing the same job from different sides.\n\nBelow the public gate, fitted stone narrows around an iron leaf that has not opened in years. A smithy occupies the last dry chamber before it: racks of road gear, an anvil sunk into the floor, and counterweight housings built into the wall. A Stonekin woman looks up from the gate mechanism as Bramwell raises a hand in greeting.",
   },
   gatewrightOffer: {
     name: "Tasmine Rootbrace",
     text:
-      "“Tasmine Rootbrace,” Bramwell says. “She keeps the Lower Gate moving and half our hinges honest.”\n\n“The other half know what they did,” Tasmine says. She accepts the transfer tag from Bramwell, finds its stamp in the Lower Gate ledger, and traces the entry to the route notch used by the captured courier. Noma lays the Witness Stone rubbing beside it, then opens Edden's bundle to the drawings with the same broken contours.\n\nThe records agree on the Old Keeper Road. A newer Survey revision proposes a straighter shortcut, but its dates and terrain marks do not agree. Tasmine taps a fresh circular tucked into the ledger. “Princess Elowen is making her first Royal Progress without the King and Queen this year. Every road office has been told to ready its books. If she reaches Rainroot, I would rather show her an honest disagreement than a tidy lie.”\n\nTasmine sets the stitched working sheet beneath her lamp. “We can settle the route together. Before that, use the smithy. Buy, sell, compare, change your gear—whatever helps. The Underway will still be here when you are ready.”",
+      "“Tasmine Rootbrace,” Bramwell says. “She keeps the Lower Gate moving and half our hinges honest.”\n\n“The other half know what they did,” Tasmine says, with a smirk that turns into a laugh. Bramwell describes the party he saw enter Westroot with a courier under guard. Tasmine nods along, running a finger down her gate ledger.\n\n“Yes, sir! I remember letting them through during the second watch.” She taps the page. “And here's the record of it.”\n\n“Once I raise the gate, the old road turns out of sight almost at once,” Tasmine says. “The Underway has been shut long enough that its records may not agree with its stone. I can tell you those people went down. I cannot tell you where they went after that. Trust fresh tracks. Trust any mark Lio managed to leave.”\n\nShe taps a fresh circular tucked into the ledger. “Princess Elowen is making her first Royal Progress without the King and Queen this year. Every road office has been told to ready its books. If she reaches Rainroot, I would rather show her an honest uncertainty than a tidy lie.”\n\nTasmine nods toward the racks. “Use the smithy first. Buy, sell, compare, change your gear—whatever helps. When you are ready, I will open the gate. After that, follow what they left behind.”",
   },
   foldedMapBriefing: {
-    name: "The Survey Cases",
-    text:
-      "Tasmine turns the stitched working sheet route-side up. The Great Survey revision occupies one face; an older road-crew correction was sewn behind it so workers could compare dates without carrying an archive case underground. Flat, the layers contradict each other. Folded along the charcoal handling marks, their benchmarks can meet.\n\nThe transfer tag proves which Lower Gate route was actually used. The Witness Stone rubbing authenticates the older correction. One sheet in Edden's bundle supplies the physical instruction: “The map lies flat. Two turns find the road. At the road-crew bridge, roots point beyond it.” Mara takes one steadying breath. “We follow clever,” she says. “Show me what agrees.”",
+    name: "An Old Waykeeper Station",
+    text: getChapter4FoldedMapBriefingText(),
   },
   underwayArrival: {
-    name: "The Riddle Road Underway",
+    name: "Below the Lower Gate",
     text:
-      "Tasmine rests the corrected fold beside the Lower Gate's bronze route dial, finds the old keeper notch, and works three counterweight levers in order. Iron settles. Cold air moves through the seam.\n\nBramwell returns the transfer tag. “Right people, right evidence, right road.” Noma hugs Mara, asks the rest of you to bring one another home, and walks back with Bramwell as the gate opens.\n\nYour lantern reaches only a short way into the fitted-stone passage. The Old Keeper Road bends west beyond the light.",
+      "Tasmine works three counterweight levers in order. Iron settles, and cold air moves through the Lower Gate's opening seam. Beyond the iron leaf, fitted stone slopes down and turns out of sight.\n\nBramwell returns the transfer tag to the ledger. Noma hugs Mara, then looks to the rest of you. “Bring one another home,” she says. “Lio is the reason you are going. Do not let finding one person become an excuse for losing another.” Tasmine holds the gate while Bramwell and Noma walk back toward Westroot.\n\nAt the threshold, Mara lifts your lantern toward the floor. Wheel tracks cut through years of dust and disappear around the first bend. A boot has scraped pale stone beside them.\n\n“That's enough of a beginning,” Mara says.",
+  },
+  rootwaterApproach: {
+    name: "Beyond the Old Keeper Road Shutter",
+    text:
+      "The Old Keeper Road shutter opens onto colder air and the sound of moving water somewhere ahead. The road descends past the edge of your lantern light.",
+  },
+  rootwaterBridge: {
+    name: "Rootwater Bridge",
+    text:
+      "You come to a high stone bridge over a natural underground river, faintly blue-green beneath immense roots. A shallow road-crew ring is carved into the bridge stone—the same mark completed by the folded map.\n\nFresh wheel scuffs and several sets of footprints cross it westward. Lio's captors chose this road, and they were not traveling alone.",
   },
   listeningMileIntro: {
     name: "The Listening Mile",
@@ -151,6 +186,8 @@ export const CHAPTER_4_REQUIRED_END_FLAGS: GameFlagKey[] = [
   "chapterFourStarted",
   "gatewrightMet",
   "foldedMapDecoded",
+  "rootwaterBridgeCrossed",
+  "underwayWildlifeCleared",
   "listeningMileAttempted",
   "lioMessageFound",
   "royalProgressLearned",
@@ -192,9 +229,11 @@ export const CHAPTER_4_CONTRACT = {
   },
   route: [
     "Bramwell and Noma's Lower Gate sendoff",
-    "Tasmine's smithy and route records",
-    "Survey Correction Room / Folded Map",
-    "Underway",
+    "Tasmine's smithy and Lower Gate ledger",
+    "Lower Gate descent",
+    "abandoned Survey Station / Folded Map",
+    "Rootwater Bridge",
+    "Underway approach and construction detour",
     "Listening Mile",
     "optional captive porter",
     "Lio's message",
@@ -204,6 +243,8 @@ export const CHAPTER_4_CONTRACT = {
   regions: {
     existingEntry: "westrootHub",
     current: [
+      "underwaySurveyStation",
+      "rootwaterBridge",
       "underway",
       "underwayRoute811",
       "underwayRoute817",
@@ -295,7 +336,7 @@ export const GATEWRIGHT_WEAPON_CONTRACT = {
 
 export const UNDERWAY_CONTRACT = {
   region: "underway",
-  topology: "one mapped approach, a later posted detour choice, and two branches that converge before the Listening Mile",
+  topology: "a survey-station route selection, a linear Rootwater Bridge crossing, one mapped approach, a later posted detour choice, and two branches that converge before the Listening Mile",
   trueRoute: "mapped-gallery",
   pressuredRoute: "maintenance-gallery",
   decision:
@@ -330,13 +371,13 @@ export const LIO_MESSAGE_CONTRACT = {
 
 export const CHAPTER_4_INTERACTION_STATE_MATRIX = {
   foldedMap: {
-    knowledge: "Edden wrote that the map lies flat; Westroot identifies the Survey revision and the older road-crew correction.",
-    availability: "Chapter 3 is complete and the gatewright has made the Lower Gate route available.",
+    knowledge: "The party discovers three closed route shutters sharing one selector. Lio's hook-tail scratch shows that his captors consulted the station map with two edges turned inward; the completed map mark identifies their shutter without noisily opening every road.",
+    availability: "Chapter 3 is complete, Tasmine has opened the Lower Gate, and the party has reached the abandoned survey station.",
     attempt: "Tracing the currently folded configuration sets foldedMapAttempted.",
     result: "foldedMapDecoded",
     laterResolution: "The two-fold Old Keeper Road decode completes the interaction.",
     repeatVisit: "Review recorded alignments without changing the chosen Underway route.",
-    backtracking: "Back unfolds the most recently moved edge before closing the prototype.",
+    backtracking: "Back unfolds the most recently moved edge before returning to the survey table.",
     companion: "Hints may change, but the interaction never requires a conscious companion.",
     failure: "Only committing the persuasive east-half plus north-half Survey Shortcut sets the legacy foldedMapMaintenanceDetour field; ordinary experimentation is free.",
     saveCompatibility: "Decoded saves infer attempt and Chapter 4 start; retired deeper-solve saves still migrate as decoded.",

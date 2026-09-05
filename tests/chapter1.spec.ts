@@ -392,6 +392,44 @@ test("inventory cards stay readable instead of squeezing into narrow columns", a
   expect(secondBox?.y || 0).toBeGreaterThan((firstBox?.y || 0) + (firstBox?.height || 0));
 });
 
+test("field restorative items can heal the active companion without healing Liam", async ({ page }) => {
+  const checkpoint = buildChapterOneClimaxCheckpoint();
+  checkpoint.companion.hp = 8;
+  checkpoint.companion.maxHp = 18;
+  checkpoint.player.inventory.healing_fizzpop = 2;
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByTestId("open-adventure-menu").click();
+  await page.getByRole("button", { name: "Inventory", exact: true }).click();
+
+  const itemCard = page
+    .getByTestId("inventory-item-card")
+    .filter({ hasText: "Healing Fizzpop" });
+  await expect(itemCard).toContainText("x2");
+  await expect(
+    itemCard.getByRole("button", { name: "Use Healing Fizzpop on Liam" }),
+  ).toBeDisabled();
+  await itemCard
+    .getByRole("button", {
+      name: "Give Healing Fizzpop to Rowan Reedshield",
+    })
+    .click();
+
+  await expect(itemCard).toContainText("x1");
+  await expect(
+    itemCard.getByRole("button", {
+      name: "Give Healing Fizzpop to Rowan Reedshield",
+    }),
+  ).toBeDisabled();
+  await page.getByRole("button", { name: "Companion", exact: true }).click();
+  await expect(page.getByText("18/18", { exact: true })).toBeVisible();
+});
+
 test("the exploration shell keeps the map primary and opens menus in a drawer", async ({ page }) => {
   const checkpoint = buildBramblecrossInvestigationCheckpoint();
 
@@ -476,6 +514,31 @@ test("the worried traveler portrait and testimony show that the false seal foole
   ).toBeVisible();
 });
 
+test("the worried traveler moves from the road to the camp after Liam sends him there", async ({ page }) => {
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: buildWorriedTravelerCheckpoint() },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+
+  await expect(page.locator('.map-token[title="Road Traveler"]')).toHaveCount(1);
+  await page.getByTestId("move-right").click();
+  await page
+    .getByRole("button", {
+      name: "I found a camp north of the road. Head there and keep low.",
+    })
+    .click();
+
+  await expect(page.locator('.map-token[title="Road Traveler"]')).toHaveCount(0);
+  await expect(page.getByTestId("map-npc-token-worried-traveler-camp")).toBeVisible();
+  await page.getByTestId("move-up").click();
+  await page.getByTestId("move-up").click();
+  await expect(page.getByRole("dialog", { name: "Road Camp" })).toContainText(
+    "The traveler you guided here sits near the coals",
+  );
+});
+
 test("Bramblecross points the player to the watchhouse and aligns the notice board", async ({ page }) => {
   const mayorCheckpoint = buildBramblecrossInvestigationCheckpoint();
   mayorCheckpoint.position = { x: 4, y: 3 };
@@ -506,12 +569,42 @@ test("Bramblecross points the player to the watchhouse and aligns the notice boa
   await expect(boardDialogue).toBeVisible();
   await expect(boardDialogue).not.toContainText("the seal is copied too cleanly");
 
-  await page.getByRole("button", { name: "Take Ada's crate notice too." }).click();
+  await boardDialogue
+    .getByRole("button", {
+      name: "Collect the cellar notices and copied route order.",
+    })
+    .click();
+
+  boardDialogue = page.getByRole("dialog", { name: "Notice Board" });
+  await expect(boardDialogue).toBeVisible();
+  await expect(boardDialogue).toContainText(
+    "You collect the cellar reports and copied route order for the case.",
+  );
+  await expect(
+    boardDialogue.getByRole("button", {
+      name: "Collect the cellar notices and copied route order.",
+    }),
+  ).toHaveCount(0);
+  await expect(
+    boardDialogue.getByRole("button", { name: "Take Ada's missing-crate notice." }),
+  ).toBeVisible();
+  await boardDialogue
+    .getByRole("button", { name: "Take Ada's missing-crate notice." })
+    .click();
+
   await page.getByRole("button", { name: "Inspect", exact: true }).click();
   boardDialogue = page.getByRole("dialog", { name: "Notice Board" });
-  await expect(boardDialogue).toContainText("cellar warnings and copied route orders");
+  await expect(boardDialogue).toContainText("Two gaps break up the paper storm");
   await expect(
-    page.getByRole("button", { name: "Collect the cellar notices and route order." }),
+    boardDialogue.getByRole("button", {
+      name: "Collect the cellar notices and copied route order.",
+    }),
+  ).toHaveCount(0);
+  await expect(
+    boardDialogue.getByRole("button", { name: "Take Ada's missing-crate notice." }),
+  ).toHaveCount(0);
+  await expect(
+    boardDialogue.getByRole("button", { name: "Step away from the board." }),
   ).toBeVisible();
 });
 
@@ -1071,4 +1164,71 @@ test("the searched pond no longer offers another one-time search", async ({ page
   const pond = page.getByRole("dialog", { name: "Pond Edge" });
   await expect(pond.getByRole("button", { name: "Search the pond edge carefully." })).toHaveCount(0);
   await expect(pond.getByRole("button", { name: "Leave the pond alone." })).toBeVisible();
+});
+
+test("Bramblecross has a separate equipment smithy in the southwest forge", async ({ page }) => {
+  const checkpoint = buildBramblecrossInvestigationCheckpoint();
+  checkpoint.position = { x: 3, y: 7 };
+  checkpoint.player.gold = 100;
+  checkpoint.visited.bramblecross = buildVisitedMap("bramblecross", 3, 7, 10);
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByTestId("move-left").click();
+
+  await expect(page.getByRole("dialog", { name: "Bramblecross Smithy" })).toBeVisible();
+  await page.getByRole("button", { name: "Enter", exact: true }).click();
+  const smithy = page.getByTestId("shop-modal");
+  await expect(smithy).toHaveAttribute("data-shop-mode", "brambleSmith");
+  await expect(smithy.getByText("Bramblecross Smithy", { exact: true })).toBeVisible();
+  await expect(smithy.locator('[data-shop-buy-item="turnipwood_blade"]')).toBeVisible();
+  await expect(smithy.locator('[data-shop-buy-item="briar_vest"]')).toBeVisible();
+  await expect(smithy.locator('[data-shop-buy-item="trail_snack"]')).toHaveCount(0);
+  await expect(smithy.locator('[data-shop-buy-item="healing_fizzpop"]')).toHaveCount(0);
+});
+
+test("the Bramblecross gate offers only known routes and preserves the road home", async ({ page }) => {
+  const checkpoint = buildBramblecrossInvestigationCheckpoint();
+  checkpoint.position = { x: 6, y: 8 };
+  checkpoint.flags.chapterTwoBriefed = false;
+  checkpoint.visited.bramblecross = buildVisitedMap("bramblecross", 6, 8, 10);
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByTestId("move-down").click();
+
+  const gate = page.getByRole("dialog", { name: "Bramblecross Gate" });
+  await expect(gate.getByRole("button", { name: "Take Lantern Road back toward Hearthhollow." })).toBeVisible();
+  await expect(gate.getByRole("button", { name: "Take the Westroot Trail." })).toHaveCount(0);
+  await gate.getByRole("button", { name: "Take Lantern Road back toward Hearthhollow." }).click();
+  await expect(page.getByRole("heading", { name: "Lantern Road" })).toBeVisible();
+});
+
+test("the Bramblecross gate adds Westroot after the route is known", async ({ page }) => {
+  const checkpoint = buildBramblecrossInvestigationCheckpoint();
+  checkpoint.position = { x: 6, y: 8 };
+  checkpoint.flags.chapterTwoBriefed = true;
+  checkpoint.flags.chapterTwoClear = true;
+  checkpoint.visited.bramblecross = buildVisitedMap("bramblecross", 6, 8, 10);
+
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, JSON.stringify(value)),
+    { key: STORAGE_KEY, value: checkpoint },
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue Checkpoint" }).click();
+  await page.getByTestId("move-down").click();
+
+  const gate = page.getByRole("dialog", { name: "Bramblecross Gate" });
+  await expect(gate.getByRole("button", { name: "Take Lantern Road back toward Hearthhollow." })).toBeVisible();
+  await gate.getByRole("button", { name: "Take the Westroot Trail." }).click();
+  await expect(page.getByRole("heading", { name: "Westroot Trail" })).toBeVisible();
 });

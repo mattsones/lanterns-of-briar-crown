@@ -210,6 +210,11 @@ export type GameFlags = {
   foldedMapMaintenanceDetour: boolean;
   foldedMapCacheClaimed: boolean;
   underwayEntered: boolean;
+  surveyStationReached: boolean;
+  rootwaterApproachSeen: boolean;
+  rootwaterBridgeSeen: boolean;
+  rootwaterBridgeCrossed: boolean;
+  underwayWildlifeCleared: boolean;
   underwayDetourNoticeInspected: boolean;
   underwayDetourDecisionMade: boolean;
   underwayDetourFollowed: boolean;
@@ -219,6 +224,8 @@ export type GameFlags = {
   underwayAmbushRevealed: boolean;
   underwayAmbushPrepared: boolean;
   underwayAmbushCleared: boolean;
+  listeningMileFirstHoodHeard: boolean;
+  listeningMileSecondHoodHeard: boolean;
   listeningMileAttempted: boolean;
   listeningMileOutcome: ListeningMileOutcome;
   captivePorterHelped: boolean;

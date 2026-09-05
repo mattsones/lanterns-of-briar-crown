@@ -839,17 +839,17 @@ Later, when Split Hall has become a room full of lists, questions, and people ma
 
 The Witness Stones are still bright.
 
-Noma lays the recovered transfer tag beside an older carved route index and brushes moss from the matching Lower West Gate symbol. The carving has been here for generations; the fresh evidence is the clerk's transfer record.
+Noma lays the recovered transfer tag beside an older carved gate index and brushes moss from the matching Lower Gate symbol. The carving has been here for generations; the fresh evidence is the clerk's transfer record.
 
-The tag records an unnamed courier entering alive under guard and leaving through the Lower West Gate bound west. Lume's checkpoint cup identifies that courier as Lio.
+The tag records an unnamed courier entering alive under guard and leaving through the Lower Gate during second watch. Lume's checkpoint cup identifies that courier as Lio.
 
 Mara reads the two records together, then closes both hands around the blue string at her wrist.
 
-“He got one message through. Now we know which way they took him.”
+“He got one message through. Now we know which gate they used. Not yet which road.”
 
-Noma aligns the transfer notation with Edden's drawing.
+Noma taps the index beyond the gate mark.
 
-“The Lower West Gate opens into the Underway. This notation points toward its keeper-built listening circuit—the Listening Mile. It cannot be followed like an ordinary road map.”
+“The Underway has an old survey station below the entrance. Whatever route they chose, they chose it out of sight down there.”
 
 The westward passage is still dark, but it is no longer an unnamed direction.
 
@@ -863,9 +863,9 @@ Because it has been seen.
 
 ### Chapter 4 handoff
 
-**Next lead:** The Riddle Road / the Underway and Listening Mile.
+**Next lead:** The Riddle Road / the Lower Gate survey station.
 
-The party now needs Edden's folded-map language, Westroot's route memory, and Lio's habit of leaving small useful truths to follow the westward trail.
+The party now needs Tasmine to open the Lower Gate and Lio's habit of leaving small useful truths to identify the deeper route.
 
 ---
 

@@ -860,21 +860,25 @@ Can the party follow truth when lies offer a faster path?
 
 The Underway, Listening Mile, Briar Relay Post, and Briarhold Waystation remain inside Rainroot and east of Riverwatch and the disputed Veyran river march. The route may point west without crossing the international frontier. This preserves the Briar Crown as a domestic Alderreach conspiracy unless a later chapter deliberately chooses a separate Veyran-intelligence thread.
 
-The party already carries Edden's bundle of route drawings from the Chapter 2 briefing; the three-door sheet was only the first page the party understood. Quill may later deliver a small addendum after completing the first witnessed round trip under the new compact, but no same-hour bird or runner should collapse the meaningful travel time between Bramblecross and Westroot.
+The party still carries Edden's Chapter 2 route drawings, but those drawings do not explain or solve the deeper Underway route. No same-hour bird, runner, or newly convenient Edden page should collapse the meaningful travel time between Bramblecross and Westroot.
 
 ## Main Locations
 
 ### Westroot Lower Gate
 
-A guarded old passage that Westroot has not used in years. Bramwell and Noma walk the party there and introduce Tasmine Rootbrace, Westroot's smith and gatewright. Bramwell checks the recovered transfer tag as a friendly route lookup while Noma connects Edden's bundle to the older records. Tasmine operates a full buy/sell smithy before departure; no purchase is required and no durability system is introduced.
+A guarded old passage that Westroot has not used in years. Bramwell and Noma walk the party there and introduce Tasmine Rootbrace, Westroot's smith and gatewright. Bramwell saw Lio's captors enter Westroot, and Tasmine saw the same party leave through the Lower Gate during second watch. That establishes the gate without pretending either witness could see which route shutter the captors selected deeper inside. Tasmine operates a full buy/sell smithy before departure; no purchase is required and no durability system is introduced.
 
 ### The Underway
 
 A linked system of tunnels, maintenance galleries, culverts, old route chambers, roots, and fitted stone beneath the surface roads.
 
-### The Survey Correction Room / Overlay Archive
+### The Abandoned Survey Station
 
-Two old map cases beside Tasmine's workbench contain Great Survey benchmarks, an older road-crew correction, dated route notches, and witnessed annotations. Tasmine stitches the two records into one opaque two-sided working sheet. Different faces reveal different dates and operating conditions; the map does not alter itself.
+Two tunnel turns below the Lower Gate, a continuous descent reaches an unmanned waykeeper station that the party discovers without Tasmine naming it in advance. Three closed route shutters stand behind a dusty table and hide three passages. Their lift-bars share one counterweight selector, and no sightline reveals which road continues; trying every heavy shutter would waste time and announce the party down every route. A stack of matching opaque maps lies among curled notices and tallies, with each sheet printed differently on its two sides. A discarded, crumpled wrong fold on the floor shows that someone tried and rejected one construction. The different faces preserve the Survey revision and older road-crew knowledge; the maps do not alter themselves.
+
+### Rootwater Bridge
+
+The captors' Old Keeper Road shutter opens onto a high old stone bridge over a naturally blue-green underground river. Immense roots cross the cavern and wrap the abutments. The bridge has no fixed road lantern; the party's carried light moves across it. A non-glowing road-crew ring in the stone matches the completed fold, while fresh wheels and several sets of footprints confirm Lio's party continued west. The crossing is an atmospheric route-confirmation beat, not another puzzle, branch, check, combat, or failure state.
 
 ### The Listening Mile
 
@@ -892,54 +896,30 @@ A captured old waystation used by the Briar Crown to relay messages and prisoner
 
 - Mara
 - Bramwell, Noma Greenstill, and Tasmine Rootbrace at the Lower Gate
-- Edden indirectly through sketches sent with the party
 - Briar Crown relay captain
 - captive messenger or porter who saw Lio
 
-## Edden’s Role
+## Edden’s Boundary
 
-The party retains the drawings reviewed with Edden in Chapter 2. Before entering the deeper route, Westroot's records let the party reinterpret marks that previously seemed incomplete. If a new page is needed, Quill brings it only after an explicit travel interval and a completed witnessed exchange with Enna or Hollis.
-
-The drawings include:
-
-- a lantern pointing downward
-- three roots shaped like arrows
-- a crown drawn over a door
-- a little figure labeled “not lost, held”
-- the phrase: “The map lies flat. Fold it.”
+The party retains the drawings reviewed with Edden in Chapter 2, but Edden had no business traveling through Westroot's private Underway and supplies no fold instruction. His evidence remains relevant to finding Westroot and understanding earlier false routes. It does not authenticate the station map or explain its shutter system.
 
 ## Main Puzzle: The Folded Map
 
-The party finds a map that appears to show three possible routes:
+While Liam examines the table's dusty maps and papers, Mara drops beneath it to search for any sign from Lio. She finds his hook-tail mark beside a tiny rectangle with two edges turned inward. Her discovery happens in the room: Lio was here, and the clue records how his captors handled the sheet, not which fold is correct.
 
-1. Fast royal road — direct but false.
-2. Old root path — winding but true.
-3. Broken bridge path — impossible unless the map is folded.
+The player physically folds any edge of one opaque rectangular two-sided map to quarter, half, or three-quarter landing guides. West-half plus south-three-quarter completes the Old Keeper Road mark and surrounding contours. That symbol matches the shutter Lio's captors selected; only then does Mara find fresh grit beneath its sill. East-half plus north-half creates the persuasive straight Survey Shortcut, but checking its mark stops the center selector and exposes a mason's line for a proposed bore that was never opened. Ordinary wrong folds match no station fixture and can be retried at the table.
 
-Edden’s clue says, “The map lies flat. Fold it.”
-
-The player must rotate/fold/interpret the map so two separated lantern marks touch, revealing the true route.
-
-The key fold joins a Great Survey benchmark to an older keeper mark. Neither record is complete alone; the route becomes legible when official measurement and local operational knowledge are compared.
-
-### Simple implementation idea
-
-In game terms, this can be represented as choosing which marks to connect rather than actually building a complex visual folding mechanic.
-
-Required simple puzzle:
-
-- Choose the two lantern marks that belong together.
-- Ignore the crown-marked shortcut.
+The later construction detour remains a separate physical choice well beyond Rootwater Bridge. The Folded Map establishes which original road exists; the detour asks whether that mapped road remains safe today.
 
 ### Companion hints
 
-**Rowan:** “The fast road gives us no shelter, no warning, and no witnesses. That is not a road. That is a trap with better posture.”
+**Rowan:** “Lio showed us two turns. The shutters can tell us whether the result belongs to a road.”
 
-**Tilda:** “A flat map is only one opinion. I prefer maps that admit they have secrets.”
+**Tilda:** “Two edges inward. Then we ask the stone whether the paper is boasting.”
 
-**Moss:** “Fold record to record. Lantern to lantern. Whoever corrected this was not measuring speed.”
+**Moss:** “Fold record to record. Ring to ring. The road they chose has the answer carved above it.”
 
-**Mara:** “Lio folds notes into triangles when he wants me to find them. Try the corners.”
+**Mara:** “He saw two edges turned in. He left us the handling, not the answer.”
 
 ## The Listening Mile
 
@@ -1565,9 +1545,9 @@ The map roles of **Hearthward**, **Lanthorne**, **Coravene**, and the other v05 
 Complete the Chapter 3 human-comprehension signoff and bounded non-cosmic consistency pass before drafting the Chapter 4 executable contract. The Chapter 4 contract should then lock:
 
 - Elowen's final playable name and the one-line Royal Progress setup before her forged name appears;
-- the Survey Correction Room / Overlay Archive and grounded folded-map mechanism;
+- the abandoned Underway Survey Station, Lio's twice-folded clue, physical shutter evidence, and grounded folded-map mechanism;
 - the Underway, relay post, and Briarhold locations east of Riverwatch;
-- the party's existing Edden drawings and any later Quill delivery after explicit travel time;
+- the boundary that keeps Edden's existing drawings relevant to Chapter 2 without using them to solve Westroot's private Underway;
 - a lawful Crownward broadside paired with a secret Briar operational instruction;
 - a crafted-signal explanation for every echo, lantern, shutter, or relayed voice;
 - the Chapter 5 handoff toward genuine institutional access rather than an awakened symbol or older force.

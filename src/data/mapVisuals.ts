@@ -15,6 +15,11 @@ type MapVisualConfig = {
   fogColor?: string;
   fogRadius?: number;
   fogPathWidth?: number;
+  ambientRevealPaths?: Array<{
+    id: string;
+    d: string;
+    darknessOpacity?: number;
+  }>;
   fogRevealAreas?: Array<{
     id: string;
     nodeKeys: string[];
@@ -263,6 +268,39 @@ const WESTROOT_HUB_NAVIGATION_ALIASES: NavConnection[] = [
 const UNDERWAY_NAV_CONNECTIONS = buildRightwardRoute([
   "0,2", "0,1", "1,2", "1,1", "2,2", "2,1", "3,1", "3,2",
   "4,1", "4,2", "5,2", "5,1", "6,2", "6,1", "7,2",
+]);
+
+const UNDERWAY_SURVEY_STATION_PAINTED_CONNECTIONS: NavConnection[] = [
+  { from: "0,2", to: "1,2", direction: "down" },
+  { from: "1,2", to: "1,1", direction: "right" },
+  { from: "1,1", to: "2,1", direction: "down" },
+  { from: "2,1", to: "2,2", direction: "down" },
+  { from: "2,2", to: "2,3", direction: "down" },
+  { from: "2,3", to: "3,3", direction: "right" },
+  { from: "3,3", to: "4,3", direction: "up" },
+  { from: "4,3", to: "4,2", direction: "up" },
+  { from: "4,2", to: "5,2", direction: "right" },
+  { from: "5,2", to: "5,1", direction: "down" },
+  { from: "5,1", to: "6,1", direction: "down" },
+  { from: "6,1", to: "6,2", direction: "right" },
+  { from: "6,2", to: "7,2", direction: "up" },
+  { from: "7,2", to: "8,2", direction: "up" },
+  { from: "8,2", to: "9,2", direction: "up" },
+];
+
+const UNDERWAY_SURVEY_STATION_NAV_CONNECTIONS = UNDERWAY_SURVEY_STATION_PAINTED_CONNECTIONS.map(
+  ({ from, to }) => ({ from, to, direction: "right" as const }),
+);
+
+const UNDERWAY_SURVEY_STATION_NAVIGATION_ALIASES = UNDERWAY_SURVEY_STATION_PAINTED_CONNECTIONS.flatMap(
+  ({ from, to, direction }) => [
+    { from, to, direction },
+    { from: to, to: from, direction: OPPOSITE_DIRECTION[direction] },
+  ],
+);
+
+const ROOTWATER_BRIDGE_NAV_CONNECTIONS = buildRightwardRoute([
+  "0,2", "1,2", "2,2", "3,2", "4,2", "5,2", "6,2", "7,2", "8,2", "9,2",
 ]);
 
 const UNDERWAY_ROUTE_811_NAV_CONNECTIONS = buildRightwardRoute([
@@ -650,6 +688,58 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
       "2,4": { x: 34, y: 78 },
     },
   },
+  underwaySurveyStation: {
+    aspectRatio: "16 / 9", navBounds: { left: 4, top: 8, width: 92, height: 84 },
+    localLantern: true, fogColor: "#000000", fogRadius: 8.5, fogPathWidth: 11.5,
+    fogRevealAreas: [
+      {
+        id: "waykeeper-station-preview",
+        nodeKeys: ["8,2", "9,2"],
+        minVisitedNodes: 2,
+        x: 86,
+        y: 40,
+        radiusX: 15,
+        radiusY: 23,
+      },
+    ],
+    nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
+    navigationLinks: buildNavigationLinks(
+      UNDERWAY_SURVEY_STATION_NAV_CONNECTIONS,
+      UNDERWAY_SURVEY_STATION_NAVIGATION_ALIASES,
+    ),
+    pointOverrides: {
+      "0,2": { x: 7.8, y: 19.2 }, "1,2": { x: 13.08, y: 28.17 }, "1,1": { x: 23.21, y: 32.47 },
+      "2,1": { x: 25.78, y: 44.17 }, "2,2": { x: 17.83, y: 56.88 }, "2,3": { x: 19.18, y: 70.02 },
+      "3,3": { x: 31.25, y: 69.71 }, "4,3": { x: 39.75, y: 55.57 }, "4,2": { x: 45.28, y: 38.04 },
+      "5,2": { x: 51.96, y: 36.33 }, "5,1": { x: 54.07, y: 49.24 }, "6,1": { x: 52.21, y: 68.29 },
+      "6,2": { x: 62.61, y: 75.5 }, "7,2": { x: 75.33, y: 63.65 }, "8,2": { x: 82.86, y: 53.4 },
+      "9,2": { x: 86.4, y: 45.01 },
+    },
+  },
+  rootwaterBridge: {
+    aspectRatio: "16 / 9", navBounds: { left: 4, top: 8, width: 92, height: 84 },
+    localLantern: true, fogColor: "#000000", fogRadius: 7, fogPathWidth: 9,
+    ambientRevealPaths: [
+      {
+        id: "rootwater-upstream-reveal",
+        d: "M43 -5 C44 4 40 15 41 27 C41.5 33 40 36 40 40 L60 40 C60 36 59 33 60 27 C61 15 57 4 57 -5 Z",
+        darknessOpacity: 0.48,
+      },
+      {
+        id: "rootwater-downstream-reveal",
+        d: "M45 57 C43 64 42 72 43 81 C44 90 41 98 40 105 L62 105 C61 98 58 90 59 81 C60 72 57 64 55 57 Z",
+        darknessOpacity: 0.48,
+      },
+    ],
+    nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
+    navigationLinks: buildNavigationLinks(ROOTWATER_BRIDGE_NAV_CONNECTIONS),
+    pointOverrides: {
+      "0,2": { x: 5, y: 39 }, "1,2": { x: 15, y: 42 }, "2,2": { x: 25, y: 45 },
+      "3,2": { x: 35, y: 48 }, "4,2": { x: 45, y: 50 }, "5,2": { x: 55, y: 51 },
+      "6,2": { x: 65, y: 50 }, "7,2": { x: 75, y: 48 }, "8,2": { x: 85, y: 44 },
+      "9,2": { x: 95, y: 39 },
+    },
+  },
   underway: {
     aspectRatio: "16 / 9",
     navBounds: { left: 4, top: 8, width: 92, height: 84 },
@@ -709,7 +799,7 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
     pointOverrides: {
       "0,2": { x: 5, y: 43 }, "1,1": { x: 15, y: 33 }, "2,1": { x: 25, y: 36 },
       "3,2": { x: 35, y: 49 }, "4,3": { x: 45, y: 56 }, "5,2": { x: 57, y: 62 },
-      "6,2": { x: 68, y: 66 }, "7,1": { x: 79, y: 69 }, "8,1": { x: 89, y: 60 },
+      "6,2": { x: 68, y: 66 }, "7,1": { x: 79, y: 63 }, "8,1": { x: 89, y: 60 },
       "9,2": { x: 96, y: 49 },
     },
   },
@@ -719,9 +809,9 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
     nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
     navigationLinks: buildNavigationLinks(LISTENING_POST_ONE_NAV_CONNECTIONS),
     pointOverrides: {
-      "0,2": { x: 5, y: 52 }, "1,2": { x: 15, y: 47 }, "2,1": { x: 25, y: 39 },
+      "0,2": { x: 5, y: 57 }, "1,2": { x: 15, y: 52 }, "2,1": { x: 25, y: 39 },
       "3,1": { x: 35, y: 39 }, "4,2": { x: 45, y: 45 }, "5,2": { x: 55, y: 51 },
-      "6,1": { x: 65, y: 49 }, "7,2": { x: 75, y: 50 }, "8,1": { x: 85, y: 56 },
+      "6,1": { x: 65, y: 54 }, "7,2": { x: 75, y: 58 }, "8,1": { x: 85, y: 64 },
       "9,2": { x: 95, y: 64 },
     },
   },
@@ -731,9 +821,9 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
     nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
     navigationLinks: buildNavigationLinks(LISTENING_POST_TWO_NAV_CONNECTIONS),
     pointOverrides: {
-      "0,2": { x: 5, y: 42 }, "1,1": { x: 15, y: 32 }, "2,1": { x: 25, y: 34 },
-      "3,2": { x: 35, y: 45 }, "4,2": { x: 45, y: 55 }, "5,3": { x: 55, y: 60 },
-      "6,3": { x: 65, y: 60 }, "7,2": { x: 75, y: 58 }, "8,1": { x: 85, y: 50 },
+      "0,2": { x: 5, y: 45 }, "1,1": { x: 15, y: 36 }, "2,1": { x: 25, y: 34 },
+      "3,2": { x: 35, y: 45 }, "4,2": { x: 45, y: 57 }, "5,3": { x: 55, y: 60 },
+      "6,3": { x: 65, y: 60 }, "7,2": { x: 75, y: 62 }, "8,1": { x: 85, y: 50 },
       "9,2": { x: 95, y: 38 },
     },
   },
@@ -743,19 +833,19 @@ export const MAP_VISUALS: Record<string, MapVisualConfig> = {
     nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
     navigationLinks: buildNavigationLinks(LISTENING_POST_THREE_NAV_CONNECTIONS),
     pointOverrides: {
-      "0,2": { x: 5, y: 50 }, "1,2": { x: 16, y: 48 }, "2,1": { x: 27, y: 39 },
+      "0,2": { x: 5, y: 56 }, "1,2": { x: 16, y: 48 }, "2,1": { x: 27, y: 39 },
       "3,1": { x: 38, y: 44 }, "4,2": { x: 49, y: 52 }, "5,2": { x: 60, y: 50 },
       "6,1": { x: 71, y: 44 }, "7,2": { x: 83, y: 55 }, "8,2": { x: 95, y: 63 },
     },
   },
   relayApproach: {
     aspectRatio: "16 / 9", navBounds: { left: 4, top: 8, width: 92, height: 84 },
-    localLantern: true, fogColor: "#000000", fogRadius: 7, fogPathWidth: 9,
+    localLantern: true, fogColor: "#000000", fogRadius: 7, fogPathWidth: 12,
     nodeHitboxSize: "clamp(1.4rem, 4.2%, 2.35rem)",
     navigationLinks: buildNavigationLinks(RELAY_APPROACH_NAV_CONNECTIONS),
     pointOverrides: {
-      "0,2": { x: 5, y: 48 }, "1,1": { x: 15, y: 44 }, "2,1": { x: 25, y: 55 },
-      "3,2": { x: 35, y: 37 }, "4,2": { x: 45, y: 43 }, "5,3": { x: 55, y: 56 },
+      "0,2": { x: 5, y: 52 }, "1,1": { x: 15, y: 44 }, "2,1": { x: 25, y: 55 },
+      "3,2": { x: 35, y: 53 }, "4,2": { x: 45, y: 43 }, "5,3": { x: 55, y: 45 },
       "6,2": { x: 65, y: 50 }, "7,1": { x: 75, y: 49 }, "8,1": { x: 85, y: 49 },
       "9,2": { x: 95, y: 49 },
     },

@@ -64,8 +64,17 @@ export const REQUIRED_GRAPH_LANDMARKS: Record<string, string[]> = {
     "false_map",
     "den_guard",
   ],
-  underway: [
+  underwaySurveyStation: [
     "underway_gate",
+    "survey_station",
+  ],
+  rootwaterBridge: [
+    "rootwater_entry",
+    "rootwater_bridge",
+    "rootwater_exit",
+  ],
+  underway: [
+    "underway_approach_entry",
     "detour_notice",
   ],
   underwayRoute811: [

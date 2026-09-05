@@ -34,6 +34,14 @@ const westrootHubOpenStonesMap = new URL(
   "../../assets/maps/westroot-hub-map-v02-open-stones.webp",
   import.meta.url,
 ).href;
+const underwaySurveyStationMap = new URL(
+  "../../assets/maps/underway-survey-station-map-v01.webp",
+  import.meta.url,
+).href;
+const rootwaterBridgeMap = new URL(
+  "../../assets/maps/rootwater-bridge-map-v01.webp",
+  import.meta.url,
+).href;
 const underwayApproachMap = new URL(
   "../../assets/maps/underway-approach-map-v03.webp",
   import.meta.url,
@@ -502,7 +510,7 @@ export const MAPS = {
       [
         "tree",
         "fenced_yard",
-        "fenced_yard",
+        "bramble_smith_door",
         "road",
         "fenced_yard",
         "fenced_yard",
@@ -731,15 +739,41 @@ export const MAPS = {
       ["wall", "wall", "wall", "rootmarket", "wall", "westroot_path", "westroot_path", "westroot_path", "westroot_path"],
     ],
   },
+  underwaySurveyStation: {
+    name: "Lower Gate Descent",
+    subtitle: "Chapter 4: The abandoned survey station",
+    start: { x: 0, y: 2 },
+    backgroundImage: underwaySurveyStationMap,
+    tiles: [
+      ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+      ["wall", "underway_path", "underway_path", "wall", "wall", "underway_path", "underway_path", "wall", "wall", "wall"],
+      ["underway_gate", "underway_path", "underway_path", "wall", "underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "survey_station"],
+      ["wall", "wall", "underway_path", "underway_path", "underway_path", "wall", "wall", "wall", "wall", "wall"],
+      ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+    ],
+  },
+  rootwaterBridge: {
+    name: "Rootwater Bridge",
+    subtitle: "Chapter 4: The river beneath Rainroot",
+    start: { x: 0, y: 2 },
+    backgroundImage: rootwaterBridgeMap,
+    tiles: [
+      ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+      ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+      ["rootwater_entry", "underway_path", "underway_path", "underway_path", "rootwater_bridge", "underway_path", "underway_path", "underway_path", "underway_path", "rootwater_exit"],
+      ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+      ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+    ],
+  },
   underway: {
     name: "Riddle Road Underway",
-    subtitle: "Chapter 4: The fork beneath Rainroot",
+    subtitle: "Chapter 4: The road beyond Rootwater",
     start: { x: 0, y: 2 },
     backgroundImage: underwayApproachMap,
     tiles: [
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-      ["underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "wall"],
-      ["underway_gate", "underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "detour_notice"],
+      ["underway_path", "underway_path", "underway_path", "underway_path", "underway_wildlife", "underway_path", "underway_path", "wall"],
+      ["underway_approach_entry", "underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "underway_path", "detour_notice"],
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
       ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
     ],
@@ -906,6 +940,12 @@ export const TILE_META = {
     "bg-emerald-700/85",
   ),
   market_door: makeTile("🚪", "Willow Market Door", true, "bg-emerald-500/90"),
+  bramble_smith_door: makeTile(
+    "🚪",
+    "Bramblecross Smithy Door",
+    true,
+    "bg-orange-700/90",
+  ),
   watch_building: makeTile(
     "🏛️",
     "Watchhouse Exterior",
@@ -973,6 +1013,12 @@ Object.assign(TILE_META, {
   cargo_siding: makeTile("▰", "Cargo Siding", false, "bg-rose-950/85"),
   underway_path: makeTile("·", "Underway Passage", false, "bg-slate-700/80"),
   underway_gate: makeTile("▣", "Westroot Lower Gate", false, "bg-stone-700/90"),
+  survey_station: makeTile("⌑", "Waykeeper Survey Station", false, "bg-amber-900/80"),
+  rootwater_entry: makeTile("≈", "Rootwater Approach", false, "bg-cyan-950/90"),
+  rootwater_bridge: makeTile("⌒", "Rootwater Bridge", false, "bg-cyan-900/80"),
+  rootwater_exit: makeTile("→", "Old Keeper Road", false, "bg-slate-800/90"),
+  underway_approach_entry: makeTile("◇", "Old Keeper Road Approach", false, "bg-slate-800/90"),
+  underway_wildlife: makeTile("!", "Root-Gnawer Den", false, "bg-stone-900/90"),
   underway_threshold: makeTile("◇", "Route Dial", false, "bg-amber-900/80"),
   detour_notice: makeTile("↯", "Posted Detour", false, "bg-yellow-950/90"),
   mapped_gallery: makeTile("◇", "Old Keeper Road", false, "bg-amber-800/80"),

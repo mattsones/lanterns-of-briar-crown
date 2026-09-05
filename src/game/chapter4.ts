@@ -92,6 +92,7 @@ export function resolveFoldedMapConfiguration(
 ): { outcome: FoldedMapOutcome; flags: Partial<GameFlags>; message: string } {
   const common: Partial<GameFlags> = {
     chapterFourStarted: true,
+    surveyStationReached: true,
     foldedMapAttempted: true,
   };
 
@@ -100,7 +101,7 @@ export function resolveFoldedMapConfiguration(
       outcome: "true-route",
       flags: { ...common, foldedMapDecoded: true },
       message:
-        "The west edge lands halfway across and the south edge reaches the three-quarter guide. Reverse-side road-crew ink closes the old keeper lantern ring, both contour strokes, and one winding road into the Underway.",
+        "The west edge lands halfway across and the south edge reaches the three-quarter guide. Reverse-side road-crew ink closes the old keeper ring, both contour strokes, and one winding road. The completed mark matches the Old Keeper Road shutter. Mara brushes its sill with two fingers: beneath the dust, fresh grit catches the lantern light.",
     };
   }
 
@@ -113,7 +114,7 @@ export function resolveFoldedMapConfiguration(
         foldedMapMaintenanceDetour: true,
       },
       message:
-        "The east and north half-folds join the newer Survey ticks into a wonderfully straight shortcut. Traced onward, however, its contour runs backward and ends against unbroken stone. The persuasive mistake is recorded, but the paper remains yours to refold.",
+        "The east and north half-folds join the newer Survey ticks into a wonderfully straight shortcut. Its mark matches the center shutter, but its selector stops dead. Mara scrapes dust from the sill and exposes a mason's scored line: this bore was proposed, never opened. The paper remains yours to refold.",
     };
   }
 
@@ -121,13 +122,13 @@ export function resolveFoldedMapConfiguration(
     outcome: "not-a-route",
     flags: common,
     message:
-      "The paper holds this shape, but the evidence does not: a terrain stroke doubles back, a dated tick meets empty paper, or the road stops at a cut edge. Unfold and try another construction.",
+      "The paper holds this shape, but none of the three shutter marks completes the same way: a terrain stroke doubles back, a dated tick meets empty paper, or the road stops at a cut edge. Mara keeps Lio's little folded rectangle beside the sheet while you try again.",
   };
 }
 
 export function getFoldedMapReview(flags: Flags) {
   if (flags.foldedMapDecoded) {
-    return "True route recorded; the Old Keeper Road is ready to follow into the Underway.";
+    return "The Old Keeper Road mark matches the shutter with fresh grit beneath its sill.";
   }
   if (flags.foldedMapMaintenanceDetour) {
     return "Persuasive Survey Shortcut rejected; true route unresolved.";

@@ -87,6 +87,7 @@ const MAP_TOKEN_CONFIG: Record<
   smith_door: { kind: "action" },
   bram_inn_door: { kind: "action" },
   market_door: { kind: "action" },
+  bramble_smith_door: { kind: "action" },
   watch_door: { kind: "action" },
   gate: {
     kind: "threat",
@@ -155,6 +156,18 @@ const MAP_TOKEN_CONFIG: Record<
   },
   underway_gate: { kind: "action" },
   underway_threshold: { kind: "action" },
+  survey_station: { kind: "action" },
+  rootwater_entry: { kind: "action" },
+  rootwater_bridge: { kind: "action" },
+  rootwater_exit: { kind: "action" },
+  underway_approach_entry: { kind: "action" },
+  underway_wildlife: {
+    kind: "threat",
+    artworkSrc: ENEMY_DB.root_gnawer.artwork.src,
+    artworkAlt: ENEMY_DB.root_gnawer.artwork.alt,
+    artworkMode: "enemy",
+    hideWhenSpent: true,
+  },
   detour_notice: { kind: "action" },
   mapped_gallery: { kind: "action" },
   maintenance_hatch: { kind: "action" },
@@ -244,6 +257,7 @@ export function MapStage({
   const usesNavigationGraph = hasNavigationGraph(region);
   const fogMaskId = `map-fog-${region}`;
   const fogBlurId = `${fogMaskId}-blur`;
+  const ambientRevealPaths = visual.ambientRevealPaths || [];
 
   const nodes = map.flatMap((row, y) =>
     row.map((rawTile, x) => {
@@ -395,6 +409,17 @@ export function MapStage({
             >
               <rect width="100" height="100" fill="white" />
               <g filter={`url(#${fogBlurId})`}>
+                {ambientRevealPaths.map((area) => {
+                  const shade = Math.round((area.darknessOpacity ?? 0.55) * 255);
+                  return (
+                    <path
+                      key={`ambient-mask-${area.id}`}
+                      data-testid={area.id}
+                      d={area.d}
+                      fill={`rgb(${shade} ${shade} ${shade})`}
+                    />
+                  );
+                })}
                 {fogRevealAreas.map((area) => (
                   <ellipse
                     key={`fog-area-${area.id}`}

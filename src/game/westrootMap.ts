@@ -21,6 +21,8 @@ type WestrootMapFlags = Pick<
   | "witnessStoneSequenceSolved"
   | "willowCargoExposed"
   | "chapterThreeClear"
+  | "chapterFourStarted"
+  | "underwayEntered"
   | "rootbreadLeadLearned"
   | "rootbreadPromiseKept"
 >;
@@ -36,7 +38,18 @@ export function getWestrootMapNpcTokens(
     !stonesAreGathering &&
     !sidingIsOpening &&
     !flags.chapterThreeClear;
-  const bramwell = stonesAreGathering
+  const chapterFourSendoff = flags.chapterFourStarted && !flags.underwayEntered;
+  const bramwell = chapterFourSendoff
+    ? {
+        id: "bramwell",
+        name: "Bramwell Gatehand",
+        portraitName: "Bramwell Gatehand",
+        x: 7,
+        y: 0,
+        offsetX: -2.4,
+        offsetY: 2.5,
+      }
+    : stonesAreGathering
     ? {
         id: "bramwell",
         name: "Bramwell Gatehand",
@@ -74,8 +87,17 @@ export function getWestrootMapNpcTokens(
             y: 4,
           };
 
-  const noma =
-    beforeHoldBell || flags.chapterThreeClear
+  const noma = chapterFourSendoff
+    ? {
+        id: "noma",
+        name: "Noma Greenstill",
+        portraitName: "Noma Greenstill",
+        x: 7,
+        y: 0,
+        offsetX: 0,
+        offsetY: 2.5,
+      }
+    : beforeHoldBell || flags.chapterThreeClear
       ? {
           id: "noma",
           name: flags.metNoma ? "Noma Greenstill" : "Mossback caretaker",
@@ -194,6 +216,17 @@ export function getWestrootMapNpcTokens(
       portraitName: "Auntie Lume",
       x: 3,
       y: 6,
+    });
+  }
+  if (flags.chapterThreeClear) {
+    tokens.push({
+      id: "tasmine",
+      name: "Tasmine Rootbrace",
+      portraitName: "Tasmine Rootbrace",
+      x: 7,
+      y: 0,
+      offsetX: chapterFourSendoff ? 2.4 : 0,
+      offsetY: chapterFourSendoff ? 2.5 : 0,
     });
   }
   if (flags.rootbreadLeadLearned && !flags.rootbreadPromiseKept) {

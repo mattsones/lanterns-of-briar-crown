@@ -87,6 +87,7 @@ export function QuestTab({ journal }) {
 export function InventoryTab({
   sections,
   player,
+  companion,
   equipItem,
   setTab,
   setEquipmentFocusSlot,
@@ -113,6 +114,7 @@ export function InventoryTab({
                 const isInPouch = Object.values(
                   player.battlePouch || {},
                 ).includes(itemId);
+                const restorative = BATTLE_CONSUMABLES[itemId];
                 return (
                   <div
                     key={itemId}
@@ -177,12 +179,29 @@ export function InventoryTab({
                           </>
                         ) : null}
                         {item.type === "consumable" ||
-                        BATTLE_CONSUMABLES[itemId] ? (
+                        restorative ? (
                           <>
-                            <Button onClick={() => useFieldItem(itemId)}>
-                              Use
+                            <Button
+                              aria-label={`Use ${item.name} on ${player.name}`}
+                              onClick={() => useFieldItem(itemId, "hero")}
+                              disabled={
+                                !!restorative && player.hp >= player.maxHp
+                              }
+                            >
+                              {restorative ? `Use on ${player.name}` : "Use"}
                             </Button>
-                            {BATTLE_CONSUMABLES[itemId] ? (
+                            {restorative?.allyTarget && companion.recruited ? (
+                              <Button
+                                aria-label={`Give ${item.name} to ${companion.name}`}
+                                onClick={() =>
+                                  useFieldItem(itemId, "companion")
+                                }
+                                disabled={companion.hp >= companion.maxHp}
+                              >
+                                Give to {companion.name}
+                              </Button>
+                            ) : null}
+                            {restorative ? (
                               <Button
                                 onClick={() => {
                                   setTab("pouch");

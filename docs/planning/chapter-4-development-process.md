@@ -1,8 +1,10 @@
 # Chapter 4 Development Process
 
-Last updated: 2026-08-02
+Last updated: 2026-09-04
 
-Status: executable contract, pre-production tooling, gatewright economy, and Folded Map interaction direction accepted; the Chapter 4 graybox critical path may begin
+Status: complete; Chapter 4 release candidate accepted after the uninterrupted Chapters 1–4 owner playthrough
+
+The completed-process assessment and Chapter 5 recommendations are recorded in `docs/playtest-notes/2026-09-04-chapter-4-completion-retrospective.md`.
 
 This document turns the Chapter 2 and Chapter 3 development retrospective into the working process for Chapter 4, **The Riddle Road**. It complements the Chapter 4 story direction in `docs/story/chapters-2-5-story-bible.md`; it does not replace the future Chapter 4 story script or vertical-slice contract.
 
@@ -153,7 +155,7 @@ The default interaction rule is to persist attempt, result, and later resolution
 
 ## Phase 2 — Spike The Folded Map
 
-Implementation status: the first answer-card graybox was rejected because it neither felt like folding nor supported real deduction. The second cross-wing graybox improved manipulation but was rejected because four binary flaps still made the solution an elimination exercise, the transparent layers felt unlike paper, and the silhouette did not feel like one map. The third schematic prototype under **Test Folded Map Graybox** uses one opaque rectangular sheet with distinct front and back faces, four draggable edges, three landing depths per edge, 54 two-edge configurations, an evidence-backed Old Keeper Road construction, a persuasive false Survey Shortcut, and many ordinary wrong constructions. The owner accepted this interaction direction on 2026-08-02. Acceptance follow-up added unmistakable result stamps for every traced outcome and clearer matching marks for discovering the straight Survey Shortcut. On 2026-08-20 the owner retired the unrelated optional third-fold Lanternwell cache idea while preserving the complete two-fold puzzle, then separated the false Survey Shortcut from the later physical construction detour. Drag, clean, fail-forward, ordinary-failure, repeat, Back, desktop, and phone behavior are automated.
+Implementation status: the first answer-card graybox was rejected because it neither felt like folding nor supported real deduction. The second cross-wing graybox improved manipulation but was rejected because four binary flaps still made the solution an elimination exercise, the transparent layers felt unlike paper, and the silhouette did not feel like one map. The accepted interaction now appears in-story at the Survey Station reached through **Begin Chapter 4 Playtest**: one opaque rectangular sheet with distinct front and back faces, four draggable edges, three landing depths per edge, 54 two-edge configurations, an evidence-backed Old Keeper Road construction, a persuasive false Survey Shortcut, and many ordinary wrong constructions. The owner accepted this interaction direction on 2026-08-02. Acceptance follow-up added unmistakable result stamps for every traced outcome and clearer matching marks for discovering the straight Survey Shortcut. On 2026-08-20 the owner retired the unrelated optional third-fold Lanternwell cache idea while preserving the complete two-fold puzzle, then separated the false Survey Shortcut from the later physical construction detour. Drag, clean, fail-forward, ordinary-failure, repeat, Back, desktop, and phone behavior are automated.
 
 Build the smallest possible functional version before the full chapter:
 
@@ -166,7 +168,7 @@ Build the smallest possible functional version before the full chapter:
 7. Preserve Back, repeat, keyboard, and review behavior.
 8. Human-test whether manipulation reads as folding and whether the solution reads as deduction rather than elimination.
 
-Do not generate final Wrong Map Room or Folded Map art until this spike is accepted.
+This gate is closed. The accepted interaction now appears at an abandoned Survey Station below the Lower Gate; its in-world setup is documented in the vertical-slice contract.
 
 ## Phase 3 — Add A Chapter-Specific Logic Seam
 
@@ -185,13 +187,14 @@ Implement with placeholder maps, tokens, portraits, and icons:
 
 1. Enter from the Chapter 3-complete fixture.
 2. Pass the Westroot Lower Gate.
-3. Resolve the Folded Map.
-4. Traverse the Underway.
-5. Answer the Listening Mile.
-6. Find the captive porter or preserve that route as optional.
-7. Discover Lio's message.
-8. Clear the Briar Relay Post encounter.
-9. Reveal Briarhold Waystation and set the Chapter 5 handoff.
+3. Descend to the unmanned Survey Station and resolve the Folded Map with Lio's twice-folded clue and the physical shutter marks.
+4. Cross Rootwater Bridge as a linear route-confirmation beat.
+5. Traverse the later Underway approach and construction detour decision.
+6. Answer the Listening Mile.
+7. Find the captive porter or preserve that route as optional.
+8. Discover Lio's message.
+9. Clear the Briar Relay Post encounter.
+10. Reveal Briarhold Waystation and set the Chapter 5 handoff.
 
 Required automated coverage at this milestone:
 
@@ -224,16 +227,16 @@ If one connected Underway map cannot make all planned locations readable, prefer
 
 Before the release candidate:
 
-- [ ] Audit every dialogue for prerequisite knowledge and name/term introduction.
-- [ ] Verify unanswered questions remain available.
-- [ ] Verify converged speeches and rewards do not repeat.
-- [ ] Verify first, repeat, completed, and review states.
-- [ ] Verify Back and Close return to the correct place.
-- [ ] Verify optional content does not make the endpoint look broken.
-- [ ] Verify every major investigation choice has a visible consequence or recap entry.
-- [ ] Play desktop and phone widths.
-- [ ] Run an uninterrupted Chapters 1-4 session.
-- [ ] Run the full automated gate.
+- [x] Audit every dialogue for prerequisite knowledge and name/term introduction.
+- [x] Verify unanswered questions remain available.
+- [x] Verify converged speeches and rewards do not repeat.
+- [x] Verify first, repeat, completed, and review states.
+- [x] Verify Back and Close return to the correct place.
+- [x] Verify optional content does not make the endpoint look broken.
+- [x] Verify every major investigation choice has a visible consequence or recap entry.
+- [x] Play desktop and phone widths.
+- [x] Run an uninterrupted Chapters 1-4 session. **Owner-completed on 2026-09-04.**
+- [x] Run the full automated gate. **Release-candidate gate completed on 2026-09-04.**
 
 ## Tooling Backlog
 
@@ -314,3 +317,5 @@ Chapter 4 reaches release-candidate status when:
 - desktop, phone, and uninterrupted human playtests are recorded;
 - Chapters 1-4 and smoke pass in CI and locally;
 - remaining work is explicitly deferred rather than hidden behind the word "complete."
+
+Current status: complete. The owner accepted the full Chapters 1–4 story playthrough on 2026-09-04. The optional captive porter remains explicitly deferred and is not part of the required Chapter 4 contract.

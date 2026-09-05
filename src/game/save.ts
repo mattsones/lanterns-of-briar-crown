@@ -131,11 +131,29 @@ export function migrateFlags(flags: Flags | Record<string, unknown> = {}): GameF
   if (migrated.foldedMapDecoded) {
     migrated.chapterFourStarted = true;
     migrated.foldedMapAttempted = true;
+    migrated.surveyStationReached = true;
   }
   if (migrated.foldedMapDeeperSolved) {
     migrated.chapterFourStarted = true;
     migrated.foldedMapAttempted = true;
     migrated.foldedMapDecoded = true;
+    migrated.surveyStationReached = true;
+  }
+  if (migrated.rootwaterBridgeCrossed) {
+    migrated.rootwaterApproachSeen = true;
+    migrated.rootwaterBridgeSeen = true;
+  }
+  if (
+    (
+      migrated.underwayDetourDecisionMade ||
+      migrated.underwayAmbushDetectionAttempted ||
+      migrated.underwayAmbushCleared ||
+      migrated.listeningMileAttempted ||
+      migrated.lioMessageFound ||
+      migrated.chapterFourClear
+    )
+  ) {
+    migrated.underwayWildlifeCleared = true;
   }
   if (
     source.underwayDetourDecisionMade === undefined &&
@@ -188,6 +206,10 @@ export function migrateFlags(flags: Flags | Record<string, unknown> = {}): GameF
     migrated.briarRelayCleared = true;
     migrated.briarholdLeadFound = true;
   }
+  if (migrated.listeningMileAttempted) {
+    migrated.listeningMileFirstHoodHeard = true;
+    migrated.listeningMileSecondHoodHeard = true;
+  }
 
   // Chapter 3 saves created before the Hold Bell drama pass have already
   // crossed these story gates if they reached the Witness Stones or beyond.
@@ -225,6 +247,57 @@ export function migrateSavePayload(payload: SavePayload, sourceVersion = SAVE_FI
   const flags = migrateFlags(payload.flags || {});
   let region = normalizeRegionId(payload.region);
   let sourcePosition = payload.position || MAPS[region].start;
+  if (region === "rootwaterBridge") {
+    if (sourceFlags.rootwaterApproachSeen === undefined && sourcePosition.x > 0) {
+      flags.rootwaterApproachSeen = true;
+    }
+    if (sourceFlags.rootwaterBridgeSeen === undefined && sourcePosition.x >= 4) {
+      flags.rootwaterBridgeSeen = true;
+    }
+  }
+  if (
+    sourceFlags.rootwaterBridgeCrossed === undefined &&
+    flags.underwayEntered &&
+    flags.foldedMapDecoded
+  ) {
+    flags.rootwaterBridgeCrossed = true;
+  }
+  if (
+    region === "underway" ||
+    region === "underwayRoute811" ||
+    region === "underwayRoute817" ||
+    region === "underwayConvergence" ||
+    region === "listeningPostOne" ||
+    region === "listeningPostTwo" ||
+    region === "listeningPostThree" ||
+    region === "relayApproach" ||
+    region === "briarRelayPost"
+  ) {
+    flags.surveyStationReached = true;
+    flags.rootwaterApproachSeen = true;
+    flags.rootwaterBridgeSeen = true;
+    flags.rootwaterBridgeCrossed = true;
+  }
+  if (
+    sourceFlags.underwayWildlifeCleared === undefined &&
+    (
+      region === "underwayRoute811" ||
+      region === "underwayRoute817" ||
+      region === "underwayConvergence" ||
+      region === "listeningPostOne" ||
+      region === "listeningPostTwo" ||
+      region === "listeningPostThree" ||
+      region === "relayApproach" ||
+      region === "briarRelayPost" ||
+      (
+        region === "underway" &&
+        new Set(["4,1", "4,2", "5,2", "5,1", "6,2", "6,1", "7,2"])
+          .has(`${sourcePosition.x},${sourcePosition.y}`)
+      )
+    )
+  ) {
+    flags.underwayWildlifeCleared = true;
+  }
   if (region === "underway") {
     const oldX = typeof sourcePosition.x === "number" ? sourcePosition.x : 0;
     if (flags.lioMessageFound || flags.listeningMileAttempted) {
@@ -248,6 +321,35 @@ export function migrateSavePayload(payload: SavePayload, sourceVersion = SAVE_FI
     } else if (oldX === 3 && sourcePosition.y === 2) {
       sourcePosition = { x: 7, y: 2 };
     }
+  }
+  if (
+    sourceFlags.listeningMileFirstHoodHeard === undefined &&
+    (
+      region === "listeningPostTwo" ||
+      region === "listeningPostThree" ||
+      region === "relayApproach" ||
+      region === "briarRelayPost" ||
+      (
+        region === "listeningPostOne" &&
+        new Set(["7,2", "8,1", "9,2"]).has(`${sourcePosition.x},${sourcePosition.y}`)
+      )
+    )
+  ) {
+    flags.listeningMileFirstHoodHeard = true;
+  }
+  if (
+    sourceFlags.listeningMileSecondHoodHeard === undefined &&
+    (
+      region === "listeningPostThree" ||
+      region === "relayApproach" ||
+      region === "briarRelayPost" ||
+      (
+        region === "listeningPostTwo" &&
+        new Set(["7,2", "8,1", "9,2"]).has(`${sourcePosition.x},${sourcePosition.y}`)
+      )
+    )
+  ) {
+    flags.listeningMileSecondHoodHeard = true;
   }
   if (
     sourceFlags.reportedSatchelToElder === undefined &&

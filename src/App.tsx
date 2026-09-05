@@ -150,6 +150,7 @@ import {
   CHAPTER_4_SCENE_IDS,
   GATEWRIGHT_WEAPON_CONTRACTS,
   LIO_MESSAGE_CONTRACT,
+  getChapter4FoldedMapBriefingText,
 } from "./story/chapter4";
 
 const QuestTab = React.lazy(() =>
@@ -202,6 +203,8 @@ const FoldedMapGraybox = React.lazy(() =>
 );
 
 const CHAPTER_4_TUNNEL_REGIONS = new Set([
+  "underwaySurveyStation",
+  "rootwaterBridge",
   "underway",
   "underwayRoute811",
   "underwayRoute817",
@@ -280,6 +283,7 @@ const WESTROOT_STORY_POSITIONS = {
   witnessStones: { x: 4, y: 1 },
   splitHallApproach: { x: 6, y: 1 },
   cargoSidingApproach: { x: 7, y: 2 },
+  lowerGate: { x: 7, y: 0 },
 } satisfies Record<string, Position>;
 const crownDenDistantScratchingIcon = new URL(
   "../assets/icons/ui/crown-den-distant-scratching-icon-v01.png",
@@ -546,6 +550,8 @@ export default function LiamsGamePrototype() {
       return "westroot_path";
     if (tileRegion === "westrootHub" && tile === "westroot_lower_gate" && !flags.chapterThreeClear)
       return "westroot_path";
+    if (tileRegion === "underway" && tile === "underway_wildlife" && flags.underwayWildlifeCleared)
+      return "underway_path";
     if (tileRegion === "underwayConvergence" && tile === "underway_ambush") {
       if (flags.underwayAmbushCleared || !flags.underwayAmbushRevealed) return "underway_path";
     }
@@ -637,6 +643,7 @@ export default function LiamsGamePrototype() {
       ) return true;
     }
     if (region === "underway") {
+      if (tile === "underway_wildlife" && flags.underwayWildlifeCleared) return true;
       if (tile === "detour_notice" && flags.underwayDetourDecisionMade) return true;
     }
     if (region === "underwayRoute811" && tile === "waykeeper_cache" && flags.underway811CacheFound)
@@ -690,6 +697,9 @@ export default function LiamsGamePrototype() {
       if (tile === "cargo_siding" && !flags.witnessStoneSequenceSolved) return "hidden";
       if (tile === "cargo_siding" && flags.willowCargoExposed) return "spent";
       if (tile === "witness_stones" && flags.witnessStoneSequenceSolved) return "spent";
+    }
+    if (tileRegion === "underway" && tile === "underway_wildlife") {
+      if (flags.underwayWildlifeCleared) return "spent";
     }
     if (tileRegion === "underwayConvergence" && tile === "underway_ambush") {
       if (flags.underwayAmbushCleared) return "spent";
@@ -1101,6 +1111,16 @@ export default function LiamsGamePrototype() {
         },
         "brambleMarket",
       );
+    if (tile === "bramble_smith_door")
+      return openEnterPrompt(
+        "Bramblecross Smithy",
+        "Step into the forge-lit smithy? The southwest workshop rings with hammer blows, and roadworthy arms and armor line the wall beside the anvil.",
+        () => {
+          setShopMode("brambleSmith");
+          setShopOpen(true);
+        },
+        "brambleSmithy",
+      );
     if (tile === "watch_door")
       return openEnterPrompt(
         "Watchhouse",
@@ -1141,6 +1161,14 @@ export default function LiamsGamePrototype() {
       saveModalMode
     )
       return;
+    if (
+      region === "underway" &&
+      currentMap[position.y]?.[position.x] === "underway_wildlife" &&
+      !flags.underwayWildlifeCleared
+    ) {
+      openUnderwayWildlifeDialogue();
+      return;
+    }
     if (
       region === "underwayConvergence" &&
       currentMap[position.y]?.[position.x] === "underway_ambush" &&
@@ -1776,47 +1804,68 @@ Deep breath. Am I really ready for this?`,
       ],
     });
   };
-  const openBoardDialogue = () => {
-    const boardText = flags.boardQuestCompleted
-      ? "The Bramblecross notice board is still crowded, but Ada's increasingly urgent spice-crate notice has been taken down. The cellar warnings and false route orders remain pinned for anyone with enough patience to read fear in official handwriting."
-      : flags.boardQuestAccepted
-        ? "The Bramblecross notice board still rustles with cellar warnings and copied route orders. Ada's crate notice is gone from the corner because it is already folded in your pack."
-        : flags.readBoard
-          ? "The Bramblecross notice board looks a little less like a paper storm now that you know which warnings matter. You have already noted the cellar reports and forged route order. Near the bottom, Ada Willowmarket's missing crate notice still waits in a cramped, increasingly angry hand."
+  const openBoardDialogue = (assumedFlags = {}, feedback = "") => {
+    const viewFlags = { ...flags, ...assumedFlags };
+    const hasAdaCrateNotice =
+      viewFlags.boardQuestAccepted || viewFlags.boardQuestCompleted;
+    const boardText = viewFlags.readBoard && hasAdaCrateNotice
+      ? viewFlags.boardQuestCompleted
+        ? "Two gaps break up the paper storm on the Bramblecross notice board. You already collected the cellar reports and copied route order, and Ada's missing-crate notice is gone now that the crate has been accounted for. The remaining notices rustle in the square's crosswind."
+        : "Two gaps break up the paper storm on the Bramblecross notice board. The cellar reports and copied route order are in your case notes, while Ada's missing-crate notice is folded separately in your pack. The remaining notices rustle in the square's crosswind."
+      : viewFlags.readBoard
+        ? "The Bramblecross notice board looks a little less like a paper storm. You already collected the cellar reports and copied route order. Near the bottom, Ada Willowmarket's missing-crate notice still waits in a cramped, increasingly angry hand."
+        : hasAdaCrateNotice
+          ? viewFlags.boardQuestCompleted
+            ? "Ada's missing-crate notice is gone now that the crate has been accounted for. The board still holds a cluster of cellar warnings and a copied route order worth collecting for the case."
+            : "Ada's missing-crate notice is already folded in your pack. The board still holds a cluster of cellar warnings and a copied route order worth collecting for the case."
           : 'The Bramblecross notice board is crowded enough to look like a paper storm nailed to wood. One notice reports missing cellar porters. Another warns of odd knocking beneath the old root storage rooms. A third insists all road traffic should wait for "updated crown direction." Near the bottom, Ada Willowmarket has pinned a practical little note about a missing spice crate, written in an increasingly less practical hand.';
-    const boardChoices = [
-      {
-        label: flags.readBoard
-          ? "Review the collected cellar notices and route order."
-          : "Collect the cellar notices and route order.",
+    const boardChoices = [];
+    if (!viewFlags.readBoard) {
+      boardChoices.push({
+        label: "Collect the cellar notices and copied route order.",
         effect: () => {
           setFlags((f) => ({ ...f, readBoard: true }));
-          setDialogue(null);
-          setToast(
-            flags.readBoard
-              ? "You review the cellar reports and route order."
-              : "You collect the cellar reports and route order for review.",
-          );
+          if (!hasAdaCrateNotice) {
+            openBoardDialogue(
+              { ...assumedFlags, readBoard: true },
+              "You collect the cellar reports and copied route order for the case.",
+            );
+          } else {
+            setDialogue(null);
+            setToast("You collect the cellar reports and copied route order for the case.");
+          }
         },
-      },
-    ];
-    if (!flags.boardQuestAccepted && !flags.boardQuestCompleted) {
+      });
+    }
+    if (!hasAdaCrateNotice) {
       boardChoices.push({
-        label: "Take Ada's crate notice too.",
+        label: "Take Ada's missing-crate notice.",
         effect: () => {
           setFlags((f) => ({
             ...f,
             boardQuestAccepted: true,
           }));
-          setDialogue(null);
-          setToast("Ada's missing crate is now in your side quests.");
+          if (!viewFlags.readBoard) {
+            openBoardDialogue(
+              { ...assumedFlags, boardQuestAccepted: true },
+              "You fold Ada's missing-crate notice into your pack. The side quest is now active.",
+            );
+          } else {
+            setDialogue(null);
+            setToast("Ada's missing crate is now in your side quests.");
+          }
         },
       });
     }
+    boardChoices.push({
+      label: "Step away from the board.",
+      effect: () => setDialogue(null),
+    });
     setDialogue({
       name: "Notice Board",
       portrait: "📜",
       text: boardText,
+      feedback,
       choices: boardChoices,
     });
   };
@@ -3175,6 +3224,50 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       "Westroot Trail",
       "You step onto the old Westroot Trail.",
     );
+  };
+
+  const openBramblecrossGateDialogue = () => {
+    const westrootRouteKnown = !!flags.chapterTwoBriefed;
+    setDialogue({
+      portrait: "🏘️",
+      mapVignette: "brambleGate",
+      name: "Bramblecross Gate",
+      text: westrootRouteKnown
+        ? flags.chapterTwoClear
+          ? "Beyond the gate, Lantern Road leads back toward Hearthhollow while the Westroot Trail turns into the old country west of town. Both roads are open to you."
+          : "Beyond the gate, Lantern Road leads back toward Hearthhollow. The newly revealed Westroot Trail leaves the road west of town, following the route Enna and Hollis described."
+        : "Beyond the gate, Lantern Road leads back toward Hearthhollow. No other safe route out of Bramblecross is known to you yet.",
+      choices: [
+        {
+          label: "Take Lantern Road back toward Hearthhollow.",
+          effect: () =>
+            travelToRegion(
+              "lanternRoad",
+              { x: 11, y: 7 },
+              player.checkpointLabel,
+              "You head back onto Lantern Road toward Hearthhollow.",
+            ),
+        },
+        westrootRouteKnown
+          ? {
+              label: "Take the Westroot Trail.",
+              effect: () => {
+                if (flags.chapterTwoClear) {
+                  travelToRegion(
+                    "westrootTrail",
+                    MAPS.westrootTrail.start,
+                    player.checkpointLabel,
+                    "You take the familiar Westroot Trail.",
+                  );
+                  return;
+                }
+                openWestrootDeparture();
+              },
+            }
+          : null,
+        { label: "Stay in Bramblecross.", effect: () => setDialogue(null) },
+      ].filter(Boolean),
+    });
   };
 
   const openWestrootCutDialogue = () => {
@@ -4905,6 +4998,12 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     });
   };
 
+  const openRootmarketShop = () => {
+    setDialogue(null);
+    setShopMode("rootmarket");
+    setShopOpen(true);
+  };
+
   const openRootmarketDialogue = (assumedFlags = {}) => {
     if (routeUnintroducedPartyToBramwell()) return;
     const viewFlags = { ...flags, ...assumedFlags };
@@ -4947,6 +5046,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
             !viewFlags.westrootHoldBellRung && !viewFlags.rootmarketVoicesHeard
               ? { label: "Listen to the argument.", effect: openRootmarketAmbientDialogue }
               : null,
+            { label: "Browse the provision stalls.", effect: openRootmarketShop },
             { label: "Leave Rootmarket.", effect: () => setDialogue(null) },
           ].filter(Boolean),
     });
@@ -5419,7 +5519,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     });
   };
 
-  const openChapterThreeClosing = () =>
+  const openChapterThreeClosing = (viewFlags = flags, viewPlayer = player) =>
     setDialogue({
       portrait: "✿",
       name: CHAPTER_3_SCENE_COPY.closing.name,
@@ -5430,11 +5530,11 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       },
       contentLayout: "stacked",
       text: `${CHAPTER_3_SCENE_COPY.closing.text}\n\n${
-        flags.rootbreadPromiseKept
+        viewFlags.rootbreadPromiseKept
           ? "Chapter 3 is complete. Bramwell and Noma are ready to walk with you to the Lower Gate, where Tasmine Rootbrace keeps the sealed road into the Underway."
-          : flags.rootbreadLeadLearned
+          : viewFlags.rootbreadLeadLearned
             ? "Chapter 3's main story is complete. One optional lead remains at the Transfer Checkpoint, but Bramwell and Noma can take you to the Lower Gate whenever you are ready."
-            : flags.metAuntieLume
+            : viewFlags.metAuntieLume
               ? "Chapter 3's main story is complete. Lume may still know whether anyone in Westroot saw a sign of Lio, or you can continue now to the Lower Gate."
               : "Chapter 3's main story is complete. The Mossback baker in Rootmarket may still have heard something about Lio, or you can continue now to the Lower Gate."
       }`,
@@ -5443,7 +5543,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           id: CHAPTER_4_CHOICE_IDS.beginChapter,
           label: "Continue with Bramwell and Noma to the Lower Gate.",
           variant: "primary",
-          effect: () => beginChapter4Entry(),
+          effect: () => beginChapter4Entry(viewPlayer, viewFlags),
         },
         { label: "Stay in Westroot a little longer.", variant: "quiet", effect: () => setDialogue(null) },
       ],
@@ -5451,8 +5551,14 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     });
 
   const completeChapterThree = (contactChoice: BramblecrossContactChoice) => {
-    setFlags((f) => ({ ...f, westrootTrustEarned: true, chapterThreeClear: true }));
-    setPlayer((p) => ({ ...p, xp: p.xp + 16 }));
+    const completedFlags = {
+      ...flags,
+      westrootTrustEarned: true,
+      chapterThreeClear: true,
+    };
+    const completedPlayer = { ...player, xp: player.xp + 16 };
+    setFlags(completedFlags);
+    setPlayer(completedPlayer);
     announce("Westroot restores its first Bramblecross compact. Chapter 3 complete. XP +16");
     setDialogue({
       portrait: "▤",
@@ -5466,7 +5572,12 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         getSplitHallResolution(contactChoice),
         "resolution",
       ),
-      choices: [{ label: "Visit Noma in the Mossgarden.", effect: openChapterThreeClosing }],
+      choices: [
+        {
+          label: "Visit Noma in the Mossgarden.",
+          effect: () => openChapterThreeClosing(completedFlags, completedPlayer),
+        },
+      ],
       size: "wide",
     });
   };
@@ -5962,15 +6073,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         });
     }
     if (region === "bramblecross") {
-      if (tile === "town_gate" && flags.chapterReported && !flags.chapterTwoClear)
-        openWestrootDeparture();
-      else if (tile === "town_gate")
-        travelToRegion(
-          "lanternRoad",
-          { x: 11, y: 7 },
-          player.checkpointLabel,
-          "You head back onto Lantern Road.",
-        );
+      if (tile === "town_gate") openBramblecrossGateDialogue();
       if (tile === "mayor")
         setDialogue({
           portrait: "👑",
@@ -6066,23 +6169,43 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         else openChapter4GatewrightDialogue();
       }
     }
-    if (region === "underway") {
+    if (region === "underwaySurveyStation") {
       if (tile === "underway_gate") {
         setDialogue({
           sceneId: CHAPTER_4_SCENE_IDS.underwayArrival,
           portrait: "▣",
           name: "Westroot Lower Gate",
-          text: "The opened gate remains behind you. Tasmine's route dial is fixed at the recorded Old Keeper Road alignment, and Westroot can still receive the party if you turn back.",
+          text: "The opened Lower Gate remains at the top of the descent. Tasmine can still receive the party if you turn back before opening a route shutter.",
           choices: [
             {
               id: CHAPTER_4_CHOICE_IDS.returnToWestroot,
               label: "Return through the Lower Gate to Westroot.",
               effect: () => travelToRegion("westrootHub", MAPS.westrootHub.start, player.checkpointLabel, "You return to Westroot through the Lower Gate."),
             },
-            { label: "Stay in the Underway.", effect: () => setDialogue(null) },
+            { label: "Continue down to the waykeeper station.", effect: () => setDialogue(null) },
           ],
         });
       }
+      if (tile === "survey_station") openChapter4FoldedMapBriefing();
+    }
+    if (region === "rootwaterBridge") {
+      if (tile === "rootwater_entry" && !flags.rootwaterApproachSeen) openRootwaterApproachDialogue();
+      if (tile === "rootwater_bridge" && !flags.rootwaterBridgeSeen) openRootwaterBridgeDialogue();
+      if (tile === "rootwater_exit") {
+        setFlags((current) => ({
+          ...current,
+          rootwaterApproachSeen: true,
+          rootwaterBridgeSeen: true,
+          rootwaterBridgeCrossed: true,
+        }));
+        travelToRegion("underway", MAPS.underway.start, "Riddle Road Underway", "The faint river glow falls behind as the Old Keeper Road continues west.");
+      }
+    }
+    if (region === "underway") {
+      if (tile === "underway_approach_entry") {
+        setToast("Rootwater fades behind you. The Old Keeper Road continues toward a posted closure deeper inside the Underway.");
+      }
+      if (tile === "underway_wildlife") openUnderwayWildlifeDialogue();
       if (tile === "detour_notice") openUnderwayDetourDialogue();
     }
     if (region === "underwayRoute811") {
@@ -6112,15 +6235,15 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       }
     }
     if (region === "listeningPostOne") {
-      if (tile === "listening_post_one") openListeningMileDialogue();
+      if (tile === "listening_post_one" && !flags.listeningMileFirstHoodHeard) openListeningMileDialogue();
       if (tile === "listening_mile_exit") travelToRegion("listeningPostTwo", MAPS.listeningPostTwo.start, "Listening Mile: Second Hood", "The first hood falls behind as the party follows the tunnel deeper west.");
     }
     if (region === "listeningPostTwo") {
-      if (tile === "listening_post_two") openListeningMileStationTwo();
+      if (tile === "listening_post_two" && !flags.listeningMileSecondHoodHeard) openListeningMileStationTwo();
       if (tile === "listening_mile_exit") travelToRegion("listeningPostThree", MAPS.listeningPostThree.start, "Listening Mile: Third Hood", "The boot sounds lead onward into a third separate tunnel stretch.");
     }
     if (region === "listeningPostThree") {
-      if (tile === "listening_post_three") finishListeningMile();
+      if (tile === "listening_post_three" && !flags.listeningMileAttempted) finishListeningMile();
       if (tile === "lio_message_plate") openLioMessageDialogue();
     }
     if (region === "relayApproach") {
@@ -6156,6 +6279,14 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     const isCurrentNode = position.x === x && position.y === y;
     const isConnectedNode = areMapNodesConnected(region, position, { x, y });
     if (isConnectedNode) {
+      if (
+        region === "underway" &&
+        currentMap[position.y]?.[position.x] === "underway_wildlife" &&
+        !flags.underwayWildlifeCleared
+      ) {
+        openUnderwayWildlifeDialogue();
+        return;
+      }
       if (
         region === "underwayConvergence" &&
         currentMap[position.y]?.[position.x] === "underway_ambush" &&
@@ -6697,12 +6828,40 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     setPlayer((p) => ({ ...p, equipment: { ...p.equipment, [slot]: null } }));
     setToast(`Removed ${name}.`);
   };
-  const useFieldItem = (itemId) => {
-    const heal = BATTLE_CONSUMABLES[itemId]?.heal || 0;
+  const useFieldItem = (itemId, target = "hero") => {
+    const restorative = BATTLE_CONSUMABLES[itemId];
+    const heal = restorative?.heal || 0;
     if (!heal || !hasItem(player, itemId)) return;
+
+    if (target === "companion") {
+      if (!restorative.allyTarget || !companion.recruited) return;
+      if (companion.hp >= companion.maxHp) {
+        setToast(`${companion.name} is already at full HP.`);
+        return;
+      }
+      const restoredHp = Math.min(heal, companion.maxHp - companion.hp);
+      removeItem(setPlayer, itemId, 1);
+      setCompanion((current) => ({
+        ...current,
+        hp: Math.min(current.maxHp, current.hp + heal),
+      }));
+      setToast(
+        `${player.name} gives ${ITEM_DB[itemId].name} to ${companion.name}. HP +${restoredHp}.`,
+      );
+      return;
+    }
+
+    if (player.hp >= player.maxHp) {
+      setToast(`${player.name} is already at full HP.`);
+      return;
+    }
+    const restoredHp = Math.min(heal, player.maxHp - player.hp);
     removeItem(setPlayer, itemId, 1);
-    setPlayer((p) => ({ ...p, hp: Math.min(p.maxHp, p.hp + heal) }));
-    setToast(`Used ${ITEM_DB[itemId].name}. HP +${heal}.`);
+    setPlayer((current) => ({
+      ...current,
+      hp: Math.min(current.maxHp, current.hp + heal),
+    }));
+    setToast(`Used ${ITEM_DB[itemId].name}. HP +${restoredHp}.`);
   };
   const assignBattlePouchItem = (slot, itemId) => {
     if (!BATTLE_CONSUMABLES[itemId]) return;
@@ -6776,6 +6935,16 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     if (sellable <= 0) return setToast("Unequip it before selling.");
     removeItem(setPlayer, itemId, 1);
     setPlayer((p) => ({ ...p, gold: p.gold + getSellPrice(itemId) }));
+    setToast(`Sold ${ITEM_DB[itemId].name} for ${getSellPrice(itemId)} gold.`);
+  };
+  const unequipItemForSale = (itemId) => {
+    const equippedSlot = Object.entries(player.equipment).find(([, equippedId]) => equippedId === itemId)?.[0];
+    if (!equippedSlot) return setToast(`${ITEM_DB[itemId]?.name || "That item"} is not equipped.`);
+    setPlayer((current) => ({
+      ...current,
+      equipment: { ...current.equipment, [equippedSlot]: null },
+    }));
+    setToast(`Unequipped ${ITEM_DB[itemId].name}. It can now be sold here.`);
   };
   const setActiveCompanion = (id) => {
     const opt = COMPANION_OPTIONS[id];
@@ -6955,9 +7124,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       return;
     }
 
-    const inspectedText = viewFlags.underwayDetourNoticeInspected
-      ? "\n\nThe bronze closure plate belongs to this road and carries a real old Westroot hazard stamp. Its holding cord is much newer than the dust around the frame. Fresh boot traffic enters the construction detour, while the Old Keeper Road answers with an occasional deep stone groan. Both passages carry a different warning."
-      : "";
+    const detourOverview = "Well inside the Underway, a bronze closure board has been pulled across the Old Keeper Road. Its stamped arrow sends westbound travelers down a construction detour. Dusty boot marks follow the detour, and somewhere beyond the blocked old arch, stone shifts with a low grinding sound.";
+    const detourDecision = "The Folded Map establishes where the Old Keeper Road leads; it cannot tell you whether that road is safe today. A posted closure should protect travelers from exactly this kind of danger—but somebody hostile has been using these passages.";
+    const inspectionResult = "Upon closer inspection, the tree-like device inside the circle appears to be an old Westroot root-and-road hazard seal. It is stamped into the original bronze, and its wear matches the plate. The holding cord is much newer than the dust around the frame. Fresh boot traffic enters the construction detour, while the Old Keeper Road answers with an occasional deep stone groan. Both passages carry a different warning.";
     const chooseRoute = (followDetour: boolean) => {
       const decision = resolveUnderwayDetour(followDetour);
       setFlags((current) => ({ ...current, ...decision }));
@@ -6974,11 +7143,18 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     setDialogue({
       sceneId: CHAPTER_4_SCENE_IDS.underwayDetour,
       portrait: "↯",
-      name: "A Posted Detour",
+      name: viewFlags.underwayDetourNoticeInspected
+        ? "The Closure Plate, Up Close"
+        : "A Posted Detour",
       artKey: "underwayPostedDetour",
       size: "wide",
       contentLayout: "stacked",
-      text: `Well inside the Underway, a bronze closure board has been pulled across the Old Keeper Road. Its stamped arrow sends westbound travelers down a construction detour. Dusty boot marks follow the detour, and somewhere beyond the blocked old arch, stone shifts with a low grinding sound.\n\nThe Folded Map establishes where the Old Keeper Road leads; it cannot tell you whether that road is safe today. A posted closure should protect travelers from exactly this kind of danger—but somebody hostile has been using these passages.${inspectedText}`,
+      text: viewFlags.underwayDetourNoticeInspected
+        ? `${inspectionResult}\n\n${detourOverview}\n\n${detourDecision}`
+        : `${detourOverview}\n\n${detourDecision}`,
+      feedback: viewFlags.underwayDetourNoticeInspected
+        ? "Inspection complete: the bronze plate is genuinely old; the cord putting it back into service is recent."
+        : undefined,
       choices: [
         !viewFlags.underwayDetourNoticeInspected
           ? {
@@ -7011,19 +7187,8 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
   };
 
   const enterChapter4Underway = () => {
-    if (!flags.foldedMapDecoded) {
-      setToast("Decode the Folded Map before entering the Underway.");
-      return;
-    }
     setFlags((current) => ({ ...current, underwayEntered: true }));
-    setPlayer((current) => ({
-      ...current,
-      inventory: {
-        ...current.inventory,
-        folded_map_scrap: Math.max(1, current.inventory.folded_map_scrap || 0),
-      },
-    }));
-    travelToRegion("underway", MAPS.underway.start, "Riddle Road Underway", "Tasmine opens the Old Keeper Road into the Underway.");
+    travelToRegion("underwaySurveyStation", MAPS.underwaySurveyStation.start, "Lower Gate Descent", "Tasmine opens the Lower Gate into the Underway.");
     setDialogue({
       sceneId: CHAPTER_4_SCENE_IDS.underwayArrival,
       portrait: "▣",
@@ -7032,9 +7197,92 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       choices: [
         {
           id: CHAPTER_4_CHOICE_IDS.enterUnderway,
-          label: "Set out along the Old Keeper Road.",
+          label: "Follow the tracks into the Underway.",
           variant: "primary",
           effect: () => setDialogue(null),
+        },
+      ],
+    });
+  };
+
+  const openRootwaterApproachDialogue = () => {
+    if (flags.rootwaterApproachSeen) return;
+    setFlags((current) => ({ ...current, rootwaterApproachSeen: true }));
+    setDialogue({
+      sceneId: CHAPTER_4_SCENE_IDS.rootwaterApproach,
+      portrait: "≈",
+      name: CHAPTER_4_ENTRY_COPY.rootwaterApproach.name,
+      text: CHAPTER_4_ENTRY_COPY.rootwaterApproach.text,
+      choices: [
+        {
+          id: CHAPTER_4_CHOICE_IDS.approachRootwater,
+          label: "Follow the descent toward the water.",
+          variant: "primary",
+          effect: () => setDialogue(null),
+        },
+      ],
+    });
+  };
+
+  const openRootwaterBridgeDialogue = () => {
+    if (flags.rootwaterBridgeSeen) return;
+    setFlags((current) => ({ ...current, rootwaterBridgeSeen: true }));
+    setDialogue({
+      sceneId: CHAPTER_4_SCENE_IDS.rootwaterBridge,
+      portrait: "≈",
+      name: CHAPTER_4_ENTRY_COPY.rootwaterBridge.name,
+      text: CHAPTER_4_ENTRY_COPY.rootwaterBridge.text,
+      choices: [
+        {
+          id: CHAPTER_4_CHOICE_IDS.crossRootwater,
+          label: "Continue across Rootwater Bridge.",
+          variant: "primary",
+          effect: () => {
+            setDialogue(null);
+            setToast("Rootwater glows faintly below the parapet. Wheel scuffs and several sets of footprints continue west.");
+          },
+        },
+      ],
+    });
+  };
+
+  const continueFromSurveyStation = () => {
+    if (!flags.foldedMapDecoded) {
+      setToast("The route shutters remain unreadable while the map is unresolved.");
+      return;
+    }
+    setPlayer((current) => ({
+      ...current,
+      inventory: {
+        ...current.inventory,
+        folded_map_scrap: Math.max(1, current.inventory.folded_map_scrap || 0),
+      },
+    }));
+    travelToRegion("rootwaterBridge", MAPS.rootwaterBridge.start, "Rootwater Bridge", "The Old Keeper Road shutter opens onto the sound of an underground river.");
+    openRootwaterApproachDialogue();
+  };
+
+  const openUnderwayWildlifeDialogue = () => {
+    if (flags.underwayWildlifeCleared) {
+      setToast("The root den is quiet, and the Old Keeper Road is clear.");
+      return;
+    }
+    setDialogue({
+      sceneId: CHAPTER_4_SCENE_IDS.underwayWildlife,
+      portrait: "🐀",
+      name: "A Den Across the Road",
+      text: "Loose root bark litters the old road. Two tunnel rats spill from a drainage seam, teeth clicking as they spread across the stones. Behind them, a Root Gnawer as broad as a cart axle heaves out beside a freshly chewed hollow in the ancient roots.\n\nThere are no collars, thorns, or false marks on them. They are wild animals defending a den—and they have made the road their ground.",
+      choices: [
+        {
+          id: CHAPTER_4_CHOICE_IDS.faceUnderwayWildlife,
+          label: "Drive the animals back from the road.",
+          variant: "primary",
+          effect: () => {
+            setDialogue(null);
+            startBattle(buildEncounterEnemies("underwayWildlife"), "underwayWildlife", {
+              openingLog: "The tunnel rats rush low while the Root Gnawer braces between the party and its den.",
+            });
+          },
         },
       ],
     });
@@ -7506,7 +7754,10 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         id: CHAPTER_4_CHOICE_IDS.isolateSignal,
         label: "Leave the hood and continue west through the dark.",
         variant: "primary",
-        effect: () => setDialogue(null),
+        effect: () => {
+          setFlags((current) => ({ ...current, listeningMileSecondHoodHeard: true }));
+          setDialogue(null);
+        },
       },
       { label: "Step back from the hood.", variant: "quiet", effect: () => setDialogue(null) },
     ],
@@ -7542,22 +7793,40 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       contentLayout: "stacked",
       text: CHAPTER_4_ENTRY_COPY.listeningMileIntro.text,
       choices: [
-        { id: CHAPTER_4_CHOICE_IDS.beginListeningMile, label: "Listen at the wall hood.", variant: "primary", effect: openListeningMileStationOne },
+        {
+          id: CHAPTER_4_CHOICE_IDS.beginListeningMile,
+          label: "Listen at the wall hood.",
+          variant: "primary",
+          effect: () => {
+            setFlags((current) => ({ ...current, listeningMileFirstHoodHeard: true }));
+            openListeningMileStationOne();
+          },
+        },
         { label: "Step back from the hood.", variant: "quiet", effect: () => setDialogue(null) },
       ],
     });
   };
 
   const openChapter4FoldedMapBriefing = () => {
+    setFlags((current) => ({ ...current, surveyStationReached: true }));
     setDialogue({
-      sceneId: CHAPTER_4_SCENE_IDS.foldedMapBriefing,
+      sceneId: CHAPTER_4_SCENE_IDS.surveyStation,
       portrait: "🗺️",
       name: CHAPTER_4_ENTRY_COPY.foldedMapBriefing.name,
-      text: CHAPTER_4_ENTRY_COPY.foldedMapBriefing.text,
+      text: getChapter4FoldedMapBriefingText(
+        companionIsConscious
+          ? {
+              name: companion.name,
+              objectPronoun: companionPronouns.object,
+            }
+          : undefined,
+      ),
       choices: [
         {
           id: CHAPTER_4_CHOICE_IDS.openFoldedMap,
-          label: flags.foldedMapDecoded ? "Review the recorded fold." : "Unfold the map under Tasmine's lamp.",
+          label: flags.foldedMapDecoded
+            ? "Review the fold beside the route shutters."
+            : "Try to recreate the twice-folded map Lio's captors used.",
           variant: "primary",
           effect: () => {
             setDialogue(null);
@@ -7566,9 +7835,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         },
         {
           id: CHAPTER_4_CHOICE_IDS.backToGatewright,
-          label: "Ask Tasmine about the Lower Gate again.",
+          label: "Step away from the survey table.",
           variant: "quiet",
-          effect: () => openChapter4GatewrightDialogue(),
+          effect: () => setDialogue(null),
         },
       ],
     });
@@ -7591,15 +7860,14 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       choices: [
         {
           id: CHAPTER_4_CHOICE_IDS.openSmithy,
-          label: "Visit Tasmine's smithy — buy and sell gear.",
-          requirement: "Five Westroot patterns • selling available • equip from inventory",
+          label: "Visit Tasmine's Smithy",
           effect: openTasmineSmithy,
         },
         {
           id: CHAPTER_4_CHOICE_IDS.continueToMap,
-          label: "Compare Edden's drawings with the route records.",
+          label: "Open the Lower Gate.",
           variant: "primary",
-          effect: openChapter4FoldedMapBriefing,
+          effect: enterChapter4Underway,
         },
         {
           id: CHAPTER_4_CHOICE_IDS.returnToWestroot,
@@ -7611,13 +7879,22 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     });
   };
 
-  const beginChapter4Entry = () => {
-    const entry = beginChapter4(player, flags);
+  const beginChapter4Entry = (entryPlayer = player, entryFlags = flags) => {
+    const entry = beginChapter4(entryPlayer, entryFlags);
     if (!entry.started) {
       setToast(entry.errors[0] || "This save is not ready to begin Chapter 4.");
       return;
     }
     setFlags((current) => ({ ...current, ...entry.flags }));
+    previousPositionByRegionRef.current.westrootHub = undefined;
+    setRegion("westrootHub");
+    setPosition(WESTROOT_STORY_POSITIONS.lowerGate);
+    revealArea(
+      "westrootHub",
+      WESTROOT_STORY_POSITIONS.lowerGate.x,
+      WESTROOT_STORY_POSITIONS.lowerGate.y,
+      1,
+    );
     setToast("Chapter 4 begins at Westroot's Lower Gate.");
     setDialogue({
       sceneId: CHAPTER_4_SCENE_IDS.lowerGateArrival,
@@ -7696,10 +7973,10 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       const imported = parseDiskSaveText(await response.text());
       applyLoadedPayload(imported.payload, `Loaded ${imported.name}.`);
       setSaveModalMode(null);
-      return true;
+      return imported.payload;
     } catch (error) {
       setToast(error?.message || fallbackMessage);
-      return false;
+      return null;
     }
   };
   const loadChapter2PlaytestSave = () =>
@@ -7714,14 +7991,19 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       "Chapter 2 complete save is missing.",
       "Chapter 2 complete save could not be loaded.",
     );
-  const loadChapter3CompleteSave = () =>
-    loadCheckedInSave(
+  const loadChapter3CompleteSave = async (showClosing = true) => {
+    const payload = await loadCheckedInSave(
       CHAPTER_3_COMPLETE_SAVE_PATH,
       "Chapter 3 complete save is missing.",
       "Chapter 3 complete save could not be loaded.",
     );
-  const beginFoldedMapGraybox = async () => {
-    if (await loadChapter3CompleteSave()) setFoldedMapGrayboxOpen(true);
+    if (payload && showClosing) {
+      openChapterThreeClosing(
+        { ...buildDefaultFlags(), ...(payload.flags || {}) },
+        normalizePlayerData(payload.player),
+      );
+    }
+    return !!payload;
   };
   const saveToSlot = (slotId) => {
     const name =
@@ -7788,11 +8070,8 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
               <Button onClick={loadChapter2CompleteSave}>
                 Begin Chapter 3 Playtest
               </Button>
-              <Button onClick={loadChapter3CompleteSave}>
-                Review Chapter 3 Complete Save
-              </Button>
-              <Button className="bg-amber-500/20" onClick={beginFoldedMapGraybox}>
-                Test Folded Map Graybox
+              <Button onClick={() => loadChapter3CompleteSave()}>
+                Begin Chapter 4 Playtest
               </Button>
             </div>
           </div>
@@ -7810,7 +8089,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
             importFromDisk={importSaveFromDisk}
             loadChapter2PlaytestSave={loadChapter2PlaytestSave}
             loadChapter2CompleteSave={loadChapter2CompleteSave}
-            loadChapter3CompleteSave={loadChapter3CompleteSave}
+            loadChapter3CompleteSave={() => loadChapter3CompleteSave()}
             loadCheckpoint={() => {
               loadGame();
               setSaveModalMode(null);
@@ -7958,9 +8237,13 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
   const activeShop =
     shopMode === "market"
       ? { title: "Willow Market", inventory: SHOP_INVENTORIES.market }
-      : shopMode === "gatewright"
-        ? { title: "Tasmine Rootbrace's Smithy", inventory: SHOP_INVENTORIES.gatewright }
-        : { title: "Smith Orin's Shop", inventory: SHOP_INVENTORIES.smith };
+      : shopMode === "brambleSmith"
+        ? { title: "Bramblecross Smithy", inventory: SHOP_INVENTORIES.brambleSmith }
+        : shopMode === "rootmarket"
+          ? { title: "Rootmarket Provisions", inventory: SHOP_INVENTORIES.rootmarket }
+          : shopMode === "gatewright"
+            ? { title: "Tasmine Rootbrace's Smithy", inventory: SHOP_INVENTORIES.gatewright }
+            : { title: "Smith Orin's Shop", inventory: SHOP_INVENTORIES.smith };
   const mapBackgroundImage =
     region === "rootCellar" &&
     flags.beatCellarBoss &&
@@ -8027,14 +8310,18 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
                       ? "Chapter 4 complete: The Riddle Road"
                       : flags.lioMessageFound
                         ? region === "briarRelayPost"
-                          ? "Chapter 4 Relay Post graybox: The Riddle Road"
+                          ? "Chapter 4 Relay Post: The Riddle Road"
                           : "Chapter 4 westbound trail: The Riddle Road"
                       : flags.listeningMileAttempted
-                        ? "Chapter 4 Underway graybox complete: The Riddle Road"
+                        ? "Chapter 4 Underway complete: The Riddle Road"
                         : flags.underwayEntered
-                          ? "Chapter 4 Underway graybox: The Riddle Road"
-                          : flags.foldedMapDecoded
-                            ? "Chapter 4 graybox entry complete: The Riddle Road"
+                          ? flags.rootwaterBridgeCrossed
+                            ? "Chapter 4 Underway: The Riddle Road"
+                            : flags.foldedMapDecoded
+                              ? "Chapter 4 Rootwater crossing: The Riddle Road"
+                              : flags.surveyStationReached
+                                ? "Chapter 4 Waykeeper Station: The Riddle Road"
+                                : "Chapter 4 Lower Gate descent: The Riddle Road"
                       : "Chapter 4: The Riddle Road"
                     : "Chapter 3 complete: The Hidden Root"
                   : chapterProgress.currentChapterId >= 3
@@ -8061,14 +8348,20 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
                         : flags.underwayAmbushCleared
                           ? "The blind junction is clear. Use the Listening Mile to follow the road ahead and look for Lio's trail."
                           : flags.underwayEntered
-                            ? flags.underwayDetourDecisionMade
-                              ? "Follow the chosen branch, survive the concealed junction, and reach the Listening Mile."
-                              : "Follow the Old Keeper Road until the road itself gives you a reason to choose."
-                            : flags.foldedMapDecoded
-                              ? "The Lower Gate is open and the Old Keeper Road is recorded. Enter the Underway."
+                            ? flags.rootwaterBridgeCrossed
+                              ? flags.underwayDetourDecisionMade
+                                ? "Follow the chosen branch, survive the concealed junction, and reach the Listening Mile."
+                                : flags.underwayWildlifeCleared
+                                  ? "Follow the Old Keeper Road until the road itself gives you a reason to choose."
+                                  : "Drive the tunnel rats and their Root Gnawer back from the Old Keeper Road."
+                              : flags.foldedMapDecoded
+                                ? "The Old Keeper Road shutter is open. Follow Lio's trail across Rootwater Bridge."
+                                : flags.surveyStationReached
+                                  ? "Lio left a twice-folded clue beneath the waykeeper table. Use it to identify the shutter his captors chose."
+                                  : "Follow the fresh tracks and boot scrapes beyond the Lower Gate."
                       : flags.gatewrightMet
-                        ? "Tasmine's smithy and the Survey cases are open. Prepare, then resolve the Folded Map."
-                        : "Walk to the Lower Gate with Bramwell and Noma and meet Tasmine Rootbrace."
+                        ? "Tasmine's smithy is open. Prepare, then ask her to open the Lower Gate."
+                        : "Bramwell and Noma have brought you to the Lower Gate. Meet Tasmine Rootbrace."
                     : flags.rootbreadPromiseKept
                       ? "Westroot's compact is restored. Commit to the Lower Gate when you are ready to begin Chapter 4."
                       : flags.rootbreadLeadLearned
@@ -8112,7 +8405,20 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
                 getStoryTile={getStoryTile}
                 getTokenState={getMapTokenState}
                 npcTokens={
-                  region === "westrootHub"
+                  region === "lanternRoad" && flags.helpedTraveler
+                    ? [
+                        {
+                          id: "worried-traveler-camp",
+                          name: "Worried Traveler at Road Camp",
+                          portraitName: "Worried Road Traveler",
+                          x: 6,
+                          y: 4,
+                          offsetX: 2.4,
+                          offsetY: -2.2,
+                          portraitFocus: { x: 53, y: 24, scale: 1.75 },
+                        },
+                      ]
+                    : region === "westrootHub"
                     ? getWestrootMapNpcTokens(flags)
                     : []
                 }
@@ -8198,6 +8504,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
             <InventoryTab
               sections={inventorySections}
               player={player}
+              companion={companion}
               equipItem={equipItem}
               setTab={setTab}
               setEquipmentFocusSlot={setEquipmentFocusSlot}
@@ -8287,7 +8594,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           importFromDisk={importSaveFromDisk}
           loadChapter2PlaytestSave={loadChapter2PlaytestSave}
           loadChapter2CompleteSave={loadChapter2CompleteSave}
-          loadChapter3CompleteSave={loadChapter3CompleteSave}
+          loadChapter3CompleteSave={() => loadChapter3CompleteSave()}
           loadCheckpoint={() => {
             loadGame();
             setSaveModalMode(null);
@@ -8306,17 +8613,17 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           flags={flags}
           setFlags={setFlags}
           close={() => setFoldedMapGrayboxOpen(false)}
-          onEnterUnderway={() => {
+          onContinue={() => {
             setFoldedMapGrayboxOpen(false);
-            enterChapter4Underway();
+            continueFromSurveyStation();
           }}
           onTraceOutcome={(outcome) => {
             if (outcome === "true-route") {
-              setToast("Old Keeper Road confirmed. Open the Lower Gate here when ready.");
+              setToast("Mara finds fresh grit beneath the Old Keeper Road shutter.");
             } else if (outcome === "false-shortcut") {
-              setToast("Survey Shortcut rejected; refold the map to find the real road.");
+              setToast("The center selector stops at a proposed bore that was never opened.");
             } else {
-              setToast("That fold does not produce a continuous route.");
+              setToast("That fold matches no route shutter in the station.");
             }
           }}
         />
@@ -8355,9 +8662,12 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           close={() => {
             setShopOpen(false);
             if (shopMode === "gatewright") openChapter4GatewrightDialogue();
+            if (shopMode === "rootmarket")
+              openRootmarketDialogue({ ...flags, rootmarketVisited: true });
           }}
           buyItem={buyItem}
           sellItem={sellItem}
+          unequipItemForSale={unequipItemForSale}
           shopMode={shopMode}
           flags={flags}
         />

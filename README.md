@@ -4,7 +4,7 @@ A storybook fantasy adventure prototype about Hearthhollow, Lantern Road, Brambl
 
 ## Current Status
 
-Chapters 1-3 have automated playable paths in the React/TypeScript prototype. Chapter 3 is closed as a release candidate. Chapter 4 now has a playable graybox route from the canonical Chapter 3 save through Bramwell and Noma's Lower Gate sendoff, Tasmine Rootbrace's regional smithy, the accepted Folded Map, the posted Underway detour, the concealed ambush, and Lio's quickly hidden trail marker in the Listening Mile. Lio's written message is the next critical-path milestone.
+Chapters 1–4 have automated playable paths in the React/TypeScript prototype. Chapter 4 is an illustrated release candidate with owner signoff after an uninterrupted playthrough of the complete story so far. Its route runs from Bramwell and Noma's Lower Gate sendoff through Tasmine Rootbrace's smithy, the Folded Map, Rootwater Bridge, the Underway and Listening Mile, Lio's message, the Briar Relay Post, and the Briarhold reveal.
 
 Current features include:
 
@@ -19,8 +19,8 @@ Current features include:
 - Chapter 1 story arc through the Root Cellar and report-back scene
 - Chapter 2 Westroot Trail, Three-Door Hollow, Crown Door Den, and clean/messy Roadwatcher outcomes
 - Chapter 3 Rootmarket, Hold Bell, Witness Stones, Cargo Siding, Split Hall, and Rootbread Promise routes
-- Chapter 4 graybox entry through the Lower Gate, optional Gatewright Hookblade offer, and Folded Map route decode
-- painted Chapter 1-3 maps, portrait integration, scene art, and custom item icons with fallback-safe presentation
+- Chapter 4 Lower Gate, Survey Station, Rootwater, Underway, Listening Mile, Relay Post, and Briarhold handoff
+- painted Chapter 1–4 maps, portrait integration, scene art, and custom item icons with fallback-safe presentation
 
 ## Chapter 1
 
@@ -38,10 +38,10 @@ Chapter arc:
 
 1. **Chapter 2: The Westroot Trail** - playable through the Three-Sign Hollow, Crown Door Den, Roadwatcher consequences, and First Westroot Gate.
 2. **Chapter 3: The Hidden Root** - release-candidate route through Westroot and its Willow-sealed cargo resolution, with human-playthrough signoff and a checked-in Chapter 4-ready fixture.
-3. **Chapter 4: The Riddle Road** - graybox entry playable through the Folded Map; the Underway, Listening Mile, Lio's message, and Briarhold lead remain in development.
+3. **Chapter 4: The Riddle Road** - illustrated release candidate through the Folded Map, Underway, Listening Mile, Lio's message, Relay Post, and Briarhold lead, with full-story owner signoff.
 4. **Chapter 5: Briarhold Waystation** - planned rescue of Lio and reveal of the Briar Crown cell structure.
 
-Implementation should move in vertical slices: executable chapter contract, central-interaction graybox, data and placeholder map, critical path, automated QA, human playthrough, then production art and release-candidate QA. The Chapter 4 process is documented in [`docs/planning/chapter-4-development-process.md`](docs/planning/chapter-4-development-process.md).
+Implementation should move in vertical slices: executable chapter contract, central-interaction graybox, scale-correct map contract, data and placeholder map, critical path, automated QA, human playthrough, production art, painted-map alignment QA, and release-candidate QA. The completed Chapter 4 process and its retrospective are documented in [`docs/planning/chapter-4-development-process.md`](docs/planning/chapter-4-development-process.md) and [`docs/playtest-notes/2026-09-04-chapter-4-completion-retrospective.md`](docs/playtest-notes/2026-09-04-chapter-4-completion-retrospective.md).
 
 ## Run Locally
 
@@ -132,9 +132,9 @@ Visual direction:
 
 ## Short-Term Roadmap
 
-1. Start the next session with the documented human feel-check of the lantern-dark Underway and travel spacing between its three Listening Mile posts.
-2. After that review, build Lio's hidden message and immediate aftermath without beginning the Briar Relay Post early.
-3. Preserve the Lower Gate/Gatewright entry seam and the accepted interaction's opaque two-sided sheet, discoverable 817 false route, unmistakable trace results, and optional third fold.
-4. Keep the uninterrupted human Chapters 1-3 session on the Chapter 4 release-candidate checklist.
-5. Continue the staged `src/App.tsx` extraction and address the slightly-over-500-KB main bundle as focused technical work.
-6. Continue the source-art, optimized-runtime, and fallback-safe asset workflow as later chapters land.
+1. Write the Chapter 5 executable vertical-slice contract from the accepted Briarhold handoff.
+2. Spike the Captive Lanterns interaction together with Bracken Voss's false-command boss mechanic before final art.
+3. Approve a scale-correct movement, trigger, control, fog, and lantern overlay for each Chapter 5 map before and after painting.
+4. Preserve Mara's non-combat role, make Lio visibly active before rescue, and keep Bracken's escape from diminishing the rescue victory.
+5. Continue staged `src/App.tsx` extraction only through focused Chapter 5 logic seams, not a broad rewrite.
+6. Continue the source-art, optimized-runtime, and fallback-safe asset workflow as Chapter 5 lands.

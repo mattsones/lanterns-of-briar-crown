@@ -34,6 +34,14 @@ const crownWhispererArtwork = new URL(
   "../../assets/portraits/enemies/crown-whisperer-v02.webp",
   import.meta.url,
 ).href;
+const tunnelRatArtwork = new URL(
+  "../../assets/portraits/enemies/tunnel-rat-v01.webp",
+  import.meta.url,
+).href;
+const rootGnawerArtwork = new URL(
+  "../../assets/portraits/enemies/root-gnawer-v01.webp",
+  import.meta.url,
+).href;
 
 export const ENEMY_DB = {
   bramble_boar: {
@@ -78,6 +86,30 @@ export const ENEMY_DB = {
     attackA: { count: 2, sides: 4, bonus: 1 },
     attackB: { count: 1, sides: 8, bonus: 2 },
     effectB: { heroGuardBypass: 2 },
+  },
+  tunnel_rat: {
+    name: "Tunnel Rat",
+    artwork: { src: tunnelRatArtwork, alt: "Portrait of a Tunnel Rat in the Underway" },
+    icon: "🐀",
+    hp: 10,
+    intentA: "Pack Rush",
+    intentB: "Gnawing Lunge",
+    attackA: { count: 1, sides: 4, bonus: 1 },
+    attackB: { count: 1, sides: 6, bonus: 1 },
+    effectA: { heroAttackPenalty: 1, shakenNarration: "darts between boots and loose stone" },
+    effectB: { heroGuardBypass: 1 },
+  },
+  root_gnawer: {
+    name: "Root Gnawer",
+    artwork: { src: rootGnawerArtwork, alt: "Portrait of the Root Gnawer in its ancient-root den" },
+    icon: "🐀",
+    hp: 22,
+    intentA: "Root-Cracking Bite",
+    intentB: "Denward Shoulder",
+    attackA: { count: 1, sides: 8, bonus: 1 },
+    attackB: { count: 1, sides: 6, bonus: 2 },
+    effectA: { heroGuardBypass: 2 },
+    effectB: { guardSelf: 3, guardAlly: 2, guardNarration: "shoulders the smaller rats back toward the den" },
   },
   briar_knot_warden: {
     name: "Briar Knot Warden",
@@ -219,6 +251,7 @@ export const ENCOUNTERS = {
   crownDenHound: ["thorn_collared_hound"],
   crownDenGuard: ["false_sign_scratcher", "thorn_collared_hound", "false_sign_scratcher"],
   westrootCargo: ["briar_cargo_runner", "seal_forged_sentry"],
+  underwayWildlife: ["tunnel_rat", "tunnel_rat", "root_gnawer"],
   underwayAmbush: ["briar_relay_guard"],
   underwayAmbushHard: ["briar_relay_guard", "seal_forged_sentry"],
   briarRelay: ["briar_relay_guard", "seal_forged_sentry", "crown_whisperer"],

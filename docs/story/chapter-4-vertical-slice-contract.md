@@ -1,8 +1,8 @@
 # Chapter 4 Vertical-Slice Contract
 
-Last updated: 2026-08-13
+Last updated: 2026-09-04
 
-Status: executable contract complete; the required Chapter 4 graybox route is playable through the Briar Relay Post, forged-authority evidence, Briarhold reveal, and Chapter 5 handoff
+Status: release candidate complete and owner-accepted after the uninterrupted Chapters 1–4 playthrough
 
 ## Chapter Promise
 
@@ -14,7 +14,7 @@ Follow corroborated route evidence instead of counterfeit speed, find Lio's own 
 - Do not require the Rootbread Promise, Rootbread Charm, or captive porter thread.
 - Do not introduce weapon durability or require a return to Hearthhollow.
 - Do not reveal the Briar Crown's entire hierarchy.
-- Do not commission final Folded Map or Underway art before the graybox interaction is accepted.
+- Do not turn the Survey Station or Rootwater Bridge into another route branch, failure state, or combat gate.
 
 The executable source of truth is `src/story/chapter4.ts`; pure transitions and validation live in `src/game/chapter4.ts`.
 
@@ -25,26 +25,36 @@ The executable source of truth is `src/story/chapter4.ts`; pure transitions and 
 - Chapter 3 required ending: trust earned, Witness Stones renewed, false Willow cargo exposed, Chapter 3 clear
 - Required carried evidence: Edden's drawing, Witness Stone Rubbing, Cargo Transfer Tag
 - Rootbread completion: canonical in the fixture, absent from every Chapter 4 prerequisite
-- Chapter 4 starts only when the player commits to a Chapter 4 interaction; loading the fixture alone does not mutate its ending state
+- Loading the Chapter 3-complete review fixture reopens **The Westward Record**; Chapter 4 starts only when the player commits to continue with Bramwell and Noma
 
 ## Critical Path
 
-Implementation status: steps 1–5 and 7–10 are playable. Step 6 remains optional future content.
+Implementation status: every required step is playable. Step 8 remains optional future content.
 
-1. Walk to the Lower Gate with Bramwell and Noma and receive a friendly introduction to Tasmine Rootbrace.
+1. Continue from the Chapter 3 closing with Bramwell and Noma; move directly to the Lower Gate and receive a friendly introduction to Tasmine Rootbrace. Westroot remains available afterward.
 2. Visit Tasmine's full buy/sell smithy; every purchase remains optional.
-3. Compare the Great Survey layer and the older road-crew correction in the Folded Map interaction.
-4. Enter the Underway on the decoded Old Keeper Road, then decide at a later posted closure whether to stay with the map or trust current safety guidance into a construction detour that is not part of the Folded Map.
-5. Travel through the lantern-dark Listening Mile, using three separate acoustic hoods to follow westbound road sounds and find Lio's quickly hidden courier knot.
-6. Optionally help the captive porter.
-7. Find Lio's message.
-8. Clear the Briar Relay Post.
-9. Read Elowen's name in the forged-authority evidence.
-10. Identify Briarhold Waystation and stop at the explicit Chapter 5 handoff.
+3. Enter the Lower Gate before solving the map, descend through two tunnel turns, and reach the unmanned waykeeper Survey Station.
+4. Use Lio's hook-tail scratch of a twice-folded rectangle, the two-sided station map, and the physical route shutters to identify the usable Old Keeper Road. The false Survey Shortcut corresponds to an unfinished bore, not an explorable dead end.
+5. Cross Rootwater Bridge as a linear atmospheric confirmation beat. The faintly luminous underground river, matching road-crew mark, and fresh westbound tracks confirm the route without adding a puzzle or choice.
+6. Continue into the existing Underway approach, then decide at a later posted closure whether to stay with the map or trust current safety guidance into a construction detour that is not part of the Folded Map.
+7. Travel through the lantern-dark Listening Mile, using three separate acoustic hoods to follow westbound road sounds and find Lio's quickly hidden courier knot.
+8. Optionally help the captive porter.
+9. Find Lio's message.
+10. Clear the Briar Relay Post.
+11. Read Elowen's name in the forged-authority evidence.
+12. Identify Briarhold Waystation and stop at the explicit Chapter 5 handoff.
 
 ## Folded Map Mechanical Contract
 
-The prototype is available from the title screen through **Test Folded Map Graybox** and can be reopened from the Chapter 3 completion banner. It uses schematic vectors and paper textures so interaction can be judged without production art.
+The Folded Map appears in-story at the abandoned Survey Station below the Lower Gate. Use **Begin Chapter 4 Playtest** from the title screen to reach it through the chapter's normal opening.
+
+Story setup:
+
+- Bramwell saw Lio's captors enter Westroot and Tasmine saw the same party leave through the Lower Gate, so neither character pretends not to know the initial route.
+- Their knowledge ends at the gate. Tasmine does not announce the station before the party discovers it; she sends them after fresh tracks and any mark Lio managed to leave.
+- Lio saw the captors consult the station maps with two edges turned inward and scratched a small twice-folded rectangle beside his hook-tail mark beneath the table. A stack of matching two-sided sheets remains on the table, while a discarded, crumpled wrong fold shows that someone tried and rejected at least one construction without giving away the answer.
+- Three closed route shutters hide three passages and share one counterweight selector. Nothing visible on arrival identifies the continuing road, and trying every heavy shutter would waste time and advertise the party down every route.
+- The completed map symbol identifies the shutter Lio's captors selected. The persuasive Survey Shortcut only reveals itself as a planned, unopened bore when its otherwise-convincing mark is checked against the center selector; it does not create an explorable branch.
 
 Required route solve:
 
@@ -76,6 +86,7 @@ Back behavior:
 | Concern | State/decision |
 |---|---|
 | Started | `chapterFourStarted` |
+| Survey Station reached | `surveyStationReached` |
 | Attempted | `foldedMapAttempted` |
 | First mistake | `foldedMapFirstAttemptMistake` |
 | Persuasive Survey Shortcut found | `foldedMapMaintenanceDetour` (legacy save field) |
@@ -98,9 +109,11 @@ Attempt and result remain separate through `listeningMileAttempted` and the `mar
 
 ## Underway Graybox Contract
 
-The expanded Underway graybox uses a sequence of focused navigation graphs with local lantern visibility. Black covers each map outside the hero and the immediately connected passage segments; explored tunnel does not remain lit after the party moves away. Every visual curve is still a logically rightward step, so Right always advances and Left retreats.
+The expanded Underway graybox uses a sequence of focused navigation graphs with local lantern visibility. Black covers each map outside the hero and the immediately connected passage segments; explored tunnel does not remain lit after the party moves away. Right always advances and Left retreats along the Lower Gate descent, while Up and Down also work as aliases wherever a painted switchback makes them visually appropriate. Later long tunnel stretches retain the simpler Right-to-advance, Left-to-retreat convention where their roads remain broadly linear.
 
-The first map contains only the Lower Gate approach and a legitimate-looking closure board near its far-right edge. The choice replaces that map with exactly one long route map: the winding, fitted-stone Old Keeper Road or a newly posted construction detour. The detour does not appear in the Folded Map. The unused route is never visible beside the chosen route. Both route maps end at a third, separate blind-junction map where the tunnels converge. Inspecting the original closure plate still reveals a real old hazard stamp, a newer holding cord, fresh traffic into the construction detour, and stone movement beyond the Old Keeper Road without making either choice obviously wrong.
+The first new map combines the short Lower Gate descent with the abandoned Survey Station. The station receives a dedicated lantern reveal while it is still the next adjacent node, so the player sees the room before stepping onto it and opening its discovery dialogue. Its three shutter arches are background fixtures rather than branch nodes, preventing failed folds from creating dead-end tunnel maps. Solving the station map leaves one action: opening the Old Keeper Road shutter. That opens the second new map, Rootwater Bridge. The bridge is one uninterrupted crossing above a naturally blue-green underground river. It contains no fixed bridge lantern, route choice, check, combat, or fail state; the party's moving lantern supplies warm light while the river's own cool luminescence remains visible beyond it. Crossing sets `rootwaterBridgeCrossed` and leads into the established approach map.
+
+After Rootwater, the approach map contains only the continuing Old Keeper Road and a legitimate-looking closure board near its far-right edge. The choice replaces that map with exactly one long route map: the winding, fitted-stone Old Keeper Road or a newly posted construction detour. The detour does not appear in the Folded Map. The unused route is never visible beside the chosen route. Both route maps end at a third, separate blind-junction map where the tunnels converge. Inspecting the original closure plate still reveals a real old hazard stamp, a newer holding cord, fresh traffic into the construction detour, and stone movement beyond the Old Keeper Road without making either choice obviously wrong.
 
 Each mutually exclusive route now contains its own discovery before the blind junction. The Old Keeper Road opens an abandoned keeper niche containing the unique Old Waykeeper Helm. The construction detour exposes a live signal rig connected to the ambush ahead; jamming and tracing it guarantees that the enemy position is revealed and the prepared opening is available.
 
@@ -136,6 +149,7 @@ Required flags:
 - `chapterFourStarted`
 - `gatewrightMet`
 - `foldedMapDecoded`
+- `rootwaterBridgeCrossed`
 - `listeningMileAttempted`
 - `lioMessageFound`
 - `royalProgressLearned`
@@ -159,7 +173,7 @@ Optional flags, never ending gates:
 
 ## Owner Acceptance Record
 
-Before full Chapter 4 story implementation, play **Test Folded Map Graybox** and decide:
+When reviewing the Chapter 4 route, use **Begin Chapter 4 Playtest** and play to the Survey Station before deciding:
 
 > Does dragging the edges of one opaque two-sided sheet to different landing points feel like folding a map, and does the correct construction reveal itself through visible evidence rather than color, labels, or elimination?
 

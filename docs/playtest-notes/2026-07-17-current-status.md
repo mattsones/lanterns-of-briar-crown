@@ -1,8 +1,17 @@
-# Current Project Status — 2026-08-20
+# Current Project Status — 2026-09-04
 
 Stable branch: `main`; current handoff branch: `codex/chapter-4-graybox-entry`
 
-## August 20 Chapter 4 Continuation
+## September 4 Chapter 4 Completion
+
+- The owner completed an uninterrupted playthrough of the entire story through the Chapter 4 Briarhold reveal and accepted Chapter 4 as complete.
+- The illustrated Chapter 4 release candidate includes the Lower Gate, Tasmine's smithy, Survey Station Folded Map, Rootwater Bridge, territorial Underway wildlife, the posted detour, concealed ambush, three Listening Mile hoods, Lio's message, Relay Post battle, forged-authority evidence, and Chapter 5 handoff.
+- The optional captive porter remains deliberately deferred and does not block the accepted ending.
+- The completion retrospective is `docs/playtest-notes/2026-09-04-chapter-4-completion-retrospective.md`. Its main conclusion is that grayboxing successfully de-risked the central interaction and simplified art production, but Chapter 5 needs a separate painted-map contract gate for node, control, trigger, fog, and lantern alignment.
+- Chapter-start fixtures are consistently labeled **Begin Chapter 2 Playtest**, **Begin Chapter 3 Playtest**, and **Begin Chapter 4 Playtest**. The obsolete title-screen Folded Map shortcut and player-facing graybox status language are removed.
+- Final `npm.cmd run verify` passed the production build and 145 automated tests: 51 rules, 35 Chapter 1, 31 Chapter 2, 12 Chapter 3, 15 Chapter 4, and 1 smoke test. The production audit scanned 171 images with every asset within target.
+
+## Accepted Chapter 4 Record
 
 - The owner accepted the lantern-dark Underway play experience. The modern-road appearance of the placeholder image beneath the fog and the seams between movement/dialogue steps are deferred polish findings.
 - Tasmine now name-drops Princess Elowen's first independent Royal Progress during the Lower Gate ledger briefing. The later Relay broadside adds her portrait and lawful authority; the forged use of her name remains a separate discovery after the fight.
@@ -14,18 +23,20 @@ Stable branch: `main`; current handoff branch: `codex/chapter-4-graybox-entry`
 - The construction detour appears as a nearly straight modern cut, while the Old Keeper Road follows a more winding older line. “Construction detour” is ordinary lowercase description, not a route name.
 - The two-fold Folded Map puzzle remains intact. Only the unrelated optional third-fold Lanternwell cache, its interface marks, reward copy, and award path were retired.
 - The Folded Map's persuasive false result is now a Survey Shortcut: a misleading office revision entirely separate from the construction detour introduced later by the physical closure board.
+- The Folded Map has moved below the Lower Gate to an unmanned waykeeper Survey Station that the party discovers on the descent. Mara finds Lio's twice-folded scratch beneath the dusty table. Three closed shutters share one selector, so the true symbol identifies the captors' road; the Survey Shortcut is exposed as an unopened bore only when its selector is tested.
+- A new linear Rootwater Bridge map follows the station. Its naturally blue-green river, non-glowing road-crew carving, and fresh westbound tracks provide atmosphere and route confirmation without adding a branch, puzzle, check, combat, or fixed lantern.
 
 This is the concise pickup document for the current illustrated prototype. Historical implementation notes remain in `docs/codex-handoff.md`; the detailed dialogue-art inventory remains in `docs/planning/dialog-stock-icon-replacement-plan.md`.
 
 ## Playable State
 
-- Chapters 1, 2, and 3 have automated playable paths.
+- Chapters 1–4 have automated playable paths.
 - Chapter 1 remains the protected baseline and now includes the full queued human-playtest polish pass.
 - Chapter 2 is complete through the Westroot gate and retains clean, standard, and messy puzzle outcomes.
 - Chapter 3 is closed as a release candidate after an owner-played human run through Rootmarket, the Rootbread Promise, Witness Stones, Cargo Siding, Split Hall, and the Chapter 4 handoff.
-- The uninterrupted human Chapters 1–3 run was not performed and is explicitly deferred to the Chapter 4 release-candidate cycle.
-- Chapter 4 now has a playable graybox route from the canonical Chapter 3-complete fixture through Bramwell and Noma's Lower Gate sendoff, Tasmine Rootbrace's full buy/sell smithy, Survey Correction Room briefing, accepted and visually polished Folded Map, lantern-dark Underway, posted detour decision, concealed ambush, and three traveled Listening Mile posts.
-- The playable endpoint is the Chapter 5 handoff after the Relay Post fight, forged-order evidence, and Briarhold prisoner ledger. The captive porter remains optional future content.
+- The uninterrupted human Chapters 1–4 run was completed and accepted on 2026-09-04.
+- Chapter 4 is an illustrated release candidate from the canonical Chapter 3-complete fixture through the Briarhold reveal.
+- The playable endpoint is the Chapter 5 handoff after the Relay Post fight, forged-order evidence, and Briarhold prisoner ledger. The captive porter remains explicitly deferred optional content.
 
 ## Current UX
 
@@ -45,15 +56,15 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 
 ## Recent Playtest And Story Decisions
 
-- The Underway graybox uses separate focused maps: approach/fork, either the winding Old Keeper Road or the nearly straight construction detour, convergence/ambush, one map per listening hood, and a final Relay approach. The unused route is never shown beside the chosen route; every visual path still advances with Right.
+- The Underway graybox uses separate focused maps: Lower Gate descent/Survey Station, Rootwater Bridge, approach/closure, either the winding Old Keeper Road or the nearly straight construction detour, convergence/ambush, one map per listening hood, and a final Relay approach. The unused route is never shown beside the chosen route; every visual path still advances with Right.
 - Both Underway routes meet a concealed ambush. The Old Keeper Road faces one relay guard; choosing the posted construction detour adds a Seal-Forged Sentry. A hidden Instinct DC 16 check reveals no marker or failure copy on an ordinary miss; exceptional success exposes a physical signal cord, reveals the enemy marker, and allows the party to start first with 4 guard.
 - Every tunnel map is black outside a local lantern halo. Only the hero and immediately connected passage segments remain visible; traveled tunnel returns to darkness. The three Listening Mile hoods now have substantial separate travel maps.
 - Tasmine's five-item regional smithy uses the full buy/sell interface. It stocks the optional 32-gold Hookblade, 30-gold Passage Pike, 34-gold Counterweight Maul, 29-gold Ironroot Ribplate, and 23-gold Low-Arch Roothelm. It carries no Orin gear, cloak, charm, or general supplies. Story evidence cannot be sold, nothing auto-equips, and the Underway never checks a purchase.
-- The Folded Map story bridge uses the Cargo Transfer Tag, Witness Stone rubbing, and Edden's existing bundle. The folding table, flap boundaries, crease shadows, bridge-completed route, and trace results remain visible; the retired optional third-fold cache relationship does not.
-- The next human focus is the Relay fight, forged-authority evidence, Briarhold reveal, and Chapter 5 handoff.
+- The Folded Map story bridge now uses Lio's twice-folded scratch and the physical route shutters at the Survey Station. The Cargo Transfer Tag establishes the gate crossing but no longer selects a deeper road; the Witness Stone rubbing and Edden's bundle no longer explain the puzzle.
+- The next work is Chapter 5 planning from the accepted Briarhold handoff, using the Chapter 4 retrospective's interaction and painted-map gates.
 - The automated Underway/Listening Mile graybox record is `docs/playtest-notes/2026-08-09-chapter-4-underway-listening-mile-graybox.md`.
-- Tasmine Rootbrace is Westroot's Stonekin smith and gatewright. Bramwell and Noma introduce her in a friendly Lower Gate scene; Bramwell performs the route-tag check as a practical lookup rather than an adversarial test. The canonical 78-gold fixture reaches the map with or without buying anything.
-- Chapter 4 begins only when the player commits through the Westroot completion banner; merely loading the Chapter 3-complete fixture preserves its ending state. Main objectives now advance through Lower Gate, Folded Map, and an explicit Underway-next endpoint.
+- Tasmine Rootbrace is Westroot's Stonekin smith and gatewright. Bramwell and Noma introduce her in a friendly Lower Gate scene. Bramwell's sighting establishes the captors' entrance, Tasmine's sighting establishes their departure, and both admit that the deeper station shutter remained out of view. The canonical 78-gold fixture reaches the map with or without buying anything.
+- Chapter 4 begins only when the player commits through the Westroot completion scene; merely loading the Chapter 3-complete fixture preserves its ending state. Main objectives now advance through Lower Gate, Survey Station, Rootwater Bridge, and the later Underway detour.
 - Desktop and 430px manual browser passes covered the entry, purchase, Survey briefing, keyboard map solve, true-route result, Back behavior, repeat review, and endpoint. The pass fixed a Folded Map keyboard event leak, Chapter 3 header carryover, and stale Latest Update feedback. See `docs/playtest-notes/2026-08-04-chapter-4-graybox-entry.md`.
 - The accepted Folded Map prototype uses one opaque two-sided rectangular sheet. Each of four draggable edges can land at the quarter, half, or three-quarter guide, producing 54 two-edge configurations. West-half plus south-three-quarter aligns the Survey and keeper evidence into the true Old Keeper Road; east-half plus north-half creates the persuasive false Survey Shortcut; other constructions are safe experiments. Ordinary failure, false route, and true route retain unmistakable result stamps. The interaction allows at most two active folds; Back unfolds the latest edge before closing, and repeat review is preserved.
 - Westroot's gatewright is a required early encounter, but the 32-gold Rare Gatewright Hookblade purchase is optional. It improves on the Pebbleknock Hammer, does not auto-equip, introduces no durability, and is affordable from the 78-gold canonical save.
@@ -116,7 +127,7 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 
 ## Next Best Step
 
-Begin Chapter 4 production-art integration against the accepted graybox, starting with the Underway maps under the lantern mask. Polish movement/dialogue seams during integration, then run desktop, phone, and uninterrupted Chapters 1-4 release-candidate QA.
+Run a fuller owner playthrough of revised Chapter 4 from the Chapter 3 ending through the Briarhold reveal. Include the direct Lower Gate transition, Tasmine's revised smithy, the helper-corrected descent and Waykeeper Station reveal, the Folded Map table scene, Rootwater Bridge, and the later construction detour. If accepted, run phone-width and uninterrupted Chapters 1–4 release-candidate QA.
 
 ## Production Art Status
 
@@ -258,4 +269,4 @@ npm.cmd run build
 npm.cmd run test:rules
 ```
 
-Use **Review Chapter 3 Complete Save** and then **Begin Chapter 4 Graybox** for the real entry slice. **Test Folded Map Graybox** remains the focused interaction hook. The canonical entry fixture is `public/saves/chapter-3-complete.json`; the playable route now continues through the Underway and Listening Mile to Lio's hidden-message milestone.
+Use **Begin Chapter 4 Playtest** for the real entry slice. The canonical entry fixture is `public/saves/chapter-3-complete.json`; the playable route continues through the Survey Station Folded Map, the Underway, and the Listening Mile to Lio's hidden-message milestone.

@@ -111,6 +111,14 @@ export const BATTLE_REWARDS = {
     name: "Cargo Siding Cleared",
     text: "The Seal-Forged Sentry collapses into wet wax, snapped cord, and paper that has forgotten how to stand up. You disarm the Briar Cargo Runner and drive him to one knee. The fight is won, but he is not bound: he flings crown-red powder toward the lantern and bolts for the narrow service passage.",
   },
+  underwayWildlife: {
+    item: "trail_snack",
+    gold: 0,
+    xp: 16,
+    flagUpdate: { underwayWildlifeCleared: true },
+    name: "Root Den Passed",
+    text: "The Root Gnawer wheels back into its root hollow, and the smaller rats scatter after it. Beneath a gnawed waykeeper satchel, you salvage one sealed trail packet; then the old road falls quiet again.",
+  },
   underwayAmbush: {
     item: "trail_snack",
     gold: 12,

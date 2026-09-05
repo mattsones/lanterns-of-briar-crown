@@ -212,6 +212,14 @@ const MAP_INTERACTION_VIGNETTES: Record<string, MapInteractionVignetteConfig> = 
     focusY: 26,
     zoom: 220,
   },
+  brambleSmithy: {
+    src: MAPS.bramblecross.backgroundImage,
+    alt: "Painted map detail of the forge-lit Bramblecross smithy",
+    fallback: "Bramblecross Smithy",
+    focusX: 20,
+    focusY: 68,
+    zoom: 220,
+  },
   brambleGate: {
     src: MAPS.bramblecross.backgroundImage,
     alt: "Painted map detail of the main gate into Bramblecross",
@@ -867,9 +875,19 @@ function ShopkeeperPortrait({ shopMode, flags }) {
           : "Ada Willowmarket"
         : null;
   const portrait = portraitName ? getDialoguePortrait(portraitName) : null;
+  const fallback =
+    shopMode === "smith"
+      ? "O"
+      : shopMode === "gatewright"
+        ? "T"
+        : shopMode === "market"
+          ? "A"
+          : shopMode === "brambleSmith"
+            ? "⚒️"
+            : "🧺";
   return (
     <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-black/20 text-3xl">
-      <span aria-hidden="true">{shopMode === "smith" ? "O" : shopMode === "gatewright" ? "T" : "A"}</span>
+      <span aria-hidden="true">{fallback}</span>
       {portrait ? <img
           src={portrait.src}
           alt={portrait.alt}
@@ -882,12 +900,168 @@ function ShopkeeperPortrait({ shopMode, flags }) {
   );
 }
 
-export function ShopModal({ shop, player, close, buyItem, sellItem, shopMode, flags }) {
-  return <div data-testid="shop-modal" data-shop-mode={shopMode} className="fixed inset-0 z-30 overflow-y-auto bg-black/50 p-4"><div className="mx-auto my-8 max-w-3xl rounded-[2rem] border border-white/10 bg-slate-900 p-5"><div className="mb-4 flex justify-between gap-4"><div className="flex min-w-0 items-center gap-4"><ShopkeeperPortrait shopMode={shopMode} flags={flags} /><div><div className="text-2xl font-semibold">{shop.title}</div><div className="text-sm text-yellow-300">Gold: {player.gold}</div>{shopMode === "smith" && flags.elderGavePurse && !flags.smithStarterDiscountUsed ? <div className="text-sm text-emerald-300">Starter discount available.</div> : null}</div></div><Button onClick={close}>Close</Button></div><div className="grid gap-5 lg:grid-cols-2"><div><div className="mb-2 text-sm font-semibold text-emerald-300">Buy</div><div className="grid gap-3">{shop.inventory.map((id) => { const item = ITEM_DB[id]; const discount = shopMode === "smith" && item?.slot && flags.elderGavePurse && !flags.smithStarterDiscountUsed ? 4 : shopMode === "market" && flags.marketDiscount ? 2 : 0; const cost = Math.max(1, getBuyPrice(id) - discount); return <div key={id} data-shop-buy-item={id} className="rounded-2xl border border-white/10 bg-white/5 p-3"><div className="flex justify-between gap-3"><div className="flex min-w-0 items-start gap-3"><ItemIcon item={item} size="sm" /><div className="min-w-0"><div className="font-medium">{item.name}</div><div className="mt-1 text-xs text-white/70">{item.description}</div>{getItemHighlights(item).slice(0, 2).map((line) => <div key={line} className="mt-1 text-[11px] text-emerald-300/90">{line}</div>)}</div></div><Button onClick={() => buyItem(id)} disabled={player.gold < cost}>Buy • {cost}g</Button></div></div>; })}</div></div><div><div className="mb-2 text-sm font-semibold text-amber-300">Sell</div><div className="grid gap-3">{(Object.entries(player.inventory) as [string, number][]).filter(([id, c]) => c > 0 && ITEM_DB[id]?.type !== "story").map(([id, count]) => {
-          const equippedCount = getEquippedCount(player, id);
-          const sellableCount = count - equippedCount;
-          return <div key={id} data-shop-sell-item={id} className="rounded-2xl border border-white/10 bg-white/5 p-3"><div className="flex justify-between gap-3"><div className="flex min-w-0 items-center gap-2"><ItemIcon item={ITEM_DB[id]} size="sm" /><span>{ITEM_DB[id]?.name} <span className="text-xs text-white/60">x{count}</span>{equippedCount > 0 ? <span className="mt-1 block text-xs text-amber-200">{sellableCount > 0 ? `${equippedCount} equipped • ${sellableCount} available to sell` : "Equipped — unequip it before selling"}</span> : null}</span></div><Button onClick={() => sellItem(id)} disabled={sellableCount <= 0}>{sellableCount > 0 ? `Sell • ${getSellPrice(id)}g` : "Equipped"}</Button></div></div>;
-        })}</div></div></div></div></div>;
+export function ShopModal({
+  shop,
+  player,
+  close,
+  buyItem,
+  sellItem,
+  unequipItemForSale,
+  shopMode,
+  flags,
+}) {
+  const [activeTab, setActiveTab] = useState<"buy" | "sell">("buy");
+  const [transactionFeedback, setTransactionFeedback] = useState("");
+  const sellableInventory = (Object.entries(player.inventory) as [string, number][])
+    .filter(([id, count]) => count > 0 && ITEM_DB[id]?.type !== "story");
+
+  return (
+    <div
+      data-testid="shop-modal"
+      data-shop-mode={shopMode}
+      className="fixed inset-0 z-30 overflow-y-auto bg-black/50 p-4"
+    >
+      <div className="mx-auto my-8 max-w-3xl rounded-[2rem] border border-white/10 bg-slate-900 p-5">
+        <div className="mb-4 flex justify-between gap-4">
+          <div className="flex min-w-0 items-center gap-4">
+            <ShopkeeperPortrait shopMode={shopMode} flags={flags} />
+            <div>
+              <div className="text-2xl font-semibold">{shop.title}</div>
+              <div className="text-sm text-yellow-300">Gold: {player.gold}</div>
+              {shopMode === "smith" && flags.elderGavePurse && !flags.smithStarterDiscountUsed ? (
+                <div className="text-sm text-emerald-300">Starter discount available.</div>
+              ) : null}
+            </div>
+          </div>
+          <Button onClick={close}>Close</Button>
+        </div>
+
+        <div className="mb-4 grid grid-cols-2 gap-2" role="tablist" aria-label="Shop actions">
+          <Button
+            role="tab"
+            aria-selected={activeTab === "buy"}
+            className={activeTab === "buy" ? "border-emerald-200/45 bg-emerald-500/25 text-emerald-50" : ""}
+            onClick={() => setActiveTab("buy")}
+          >
+            Buy
+          </Button>
+          <Button
+            role="tab"
+            aria-selected={activeTab === "sell"}
+            className={activeTab === "sell" ? "border-amber-200/45 bg-amber-500/25 text-amber-50" : ""}
+            onClick={() => setActiveTab("sell")}
+          >
+            Sell
+          </Button>
+        </div>
+
+        {transactionFeedback ? (
+          <div
+            data-testid="shop-feedback"
+            role="status"
+            aria-live="polite"
+            className="mb-4 rounded-2xl border border-emerald-200/25 bg-emerald-400/10 px-4 py-3 text-sm font-medium text-emerald-100"
+          >
+            {transactionFeedback}
+          </div>
+        ) : null}
+
+        {activeTab === "buy" ? (
+          <div role="tabpanel" aria-label="Buy">
+            <div className="grid gap-3">
+              {shop.inventory.map((id) => {
+                const item = ITEM_DB[id];
+                const discount = shopMode === "smith" && item?.slot && flags.elderGavePurse && !flags.smithStarterDiscountUsed
+                  ? 4
+                  : shopMode === "market" && flags.marketDiscount
+                    ? 2
+                    : 0;
+                const cost = Math.max(1, getBuyPrice(id) - discount);
+                const ownedCount = player.inventory[id] || 0;
+                return (
+                  <div key={id} data-shop-buy-item={id} className="rounded-2xl border border-white/10 bg-white/5 p-3">
+                    <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
+                      <div className="flex min-w-0 items-start gap-3">
+                        <ItemIcon item={item} size="sm" />
+                        <div className="min-w-0">
+                          <div className="font-medium">
+                            {item.name}
+                            {ownedCount > 0 ? <span className="ml-2 text-xs font-normal text-white/55">Owned ×{ownedCount}</span> : null}
+                          </div>
+                          <div className="mt-1 text-xs text-white/70">{item.description}</div>
+                          {getItemHighlights(item).slice(0, 2).map((line) => (
+                            <div key={line} className="mt-1 text-[11px] text-emerald-300/90">{line}</div>
+                          ))}
+                        </div>
+                      </div>
+                      <Button
+                        onClick={() => {
+                          buyItem(id);
+                          setTransactionFeedback(`Purchased ${item.name} for ${cost} gold. Owned: ${ownedCount + 1}.`);
+                        }}
+                        disabled={player.gold < cost}
+                      >
+                        Buy • {cost}g
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          <div role="tabpanel" aria-label="Sell">
+            <div className="grid gap-3">
+              {sellableInventory.map(([id, count]) => {
+                const item = ITEM_DB[id];
+                const equippedCount = getEquippedCount(player, id);
+                const sellableCount = count - equippedCount;
+                const sellPrice = getSellPrice(id);
+                return (
+                  <div key={id} data-shop-sell-item={id} className="rounded-2xl border border-white/10 bg-white/5 p-3">
+                    <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+                      <div className="flex min-w-0 items-center gap-2">
+                        <ItemIcon item={item} size="sm" />
+                        <span>
+                          {item?.name} <span className="text-xs text-white/60">×{count}</span>
+                          {equippedCount > 0 ? (
+                            <span className="mt-1 block text-xs text-amber-200">
+                              {sellableCount > 0
+                                ? `${equippedCount} equipped • ${sellableCount} available to sell`
+                                : "Equipped — you can remove it here before selling"}
+                            </span>
+                          ) : null}
+                        </span>
+                      </div>
+                      {sellableCount > 0 ? (
+                        <Button
+                          onClick={() => {
+                            sellItem(id);
+                            setTransactionFeedback(`Sold ${item.name} for ${sellPrice} gold. Remaining: ${count - 1}.`);
+                          }}
+                        >
+                          Sell • {sellPrice}g
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={() => {
+                            unequipItemForSale(id);
+                            setTransactionFeedback(`${item.name} is unequipped and ready to sell.`);
+                          }}
+                        >
+                          Unequip here
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 export function CraftModal({ player, close, craftRecipe, context = "potionShed" }) {
   const isRoadCamp = context === "roadCamp";
@@ -1130,5 +1304,5 @@ export function SaveModal({
   const fileButtonClass =
     "inline-flex cursor-pointer items-center rounded-2xl border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/20";
 
-  return <div className="fixed inset-0 z-[70] overflow-y-auto bg-black/60 p-4"><div className="mx-auto my-8 max-w-4xl rounded-[2rem] border border-white/10 bg-slate-900 p-5"><div className="mb-4 flex justify-between"><div><div className="text-2xl font-semibold">{isSave ? "Save Slots" : "Load Save Slot"}</div><div className="text-sm text-white/70">Multiple named saves for testing branches.</div></div><Button onClick={close}>Close</Button></div><div className="mb-3 grid gap-3 md:grid-cols-2">{isSave ? <div className="rounded-3xl border border-emerald-300/20 bg-emerald-400/10 p-4"><div className="mb-3 text-sm uppercase tracking-wide text-emerald-200/80">Disk Save</div><Button onClick={exportToDisk} disabled={!exportToDisk}>Save Current to Disk</Button></div> : null}<div className="rounded-3xl border border-sky-300/20 bg-sky-400/10 p-4"><div className="mb-3 text-sm uppercase tracking-wide text-sky-200/80">Disk Load</div><div className="flex flex-wrap gap-2"><label className={fileButtonClass}>Load From Disk<input type="file" accept="application/json,.json" className="sr-only" onChange={importFromDisk} /></label><Button onClick={loadChapter2PlaytestSave}>Load Chapter 2 Playtest Save</Button><Button onClick={loadChapter2CompleteSave}>Load Chapter 3 Ready Save</Button><Button onClick={loadChapter3CompleteSave}>Load Chapter 4 Ready Save</Button>{!isSave ? <Button onClick={loadCheckpoint}>Load Latest Checkpoint</Button> : null}</div></div></div><div className="grid gap-3">{slots.map((slot) => <div key={slot.id} className="rounded-3xl border border-white/10 bg-white/5 p-4"><div className="flex flex-wrap justify-between gap-3"><div><div className="text-sm uppercase tracking-wide text-white/50">Slot {slot.id}</div><div className="mt-1 text-lg font-semibold">{slot.name || `Empty Slot ${slot.id}`}</div><div className="mt-1 text-xs text-white/50">{formatSaveTimestamp(slot.updatedAt)}</div></div>{isSave ? <Button onClick={() => save(slot.id)}>{slot.payload ? "Overwrite" : "Save Here"}</Button> : <Button onClick={() => load(slot.id)} disabled={!slot.payload}>Load</Button>}</div>{isSave ? <input className="mt-3 w-full rounded-2xl border border-white/10 bg-black/20 px-3 py-2 text-white outline-none" value={drafts[slot.id] || ""} placeholder="Save name" onChange={(e) => setDrafts((p) => ({ ...p, [slot.id]: e.target.value }))} /> : null}</div>)}</div></div></div>;
+  return <div className="fixed inset-0 z-[70] overflow-y-auto bg-black/60 p-4"><div className="mx-auto my-8 max-w-4xl rounded-[2rem] border border-white/10 bg-slate-900 p-5"><div className="mb-4 flex justify-between"><div><div className="text-2xl font-semibold">{isSave ? "Save Slots" : "Load Save Slot"}</div><div className="text-sm text-white/70">Multiple named saves for testing branches.</div></div><Button onClick={close}>Close</Button></div><div className="mb-3 grid gap-3 md:grid-cols-2">{isSave ? <div className="rounded-3xl border border-emerald-300/20 bg-emerald-400/10 p-4"><div className="mb-3 text-sm uppercase tracking-wide text-emerald-200/80">Disk Save</div><Button onClick={exportToDisk} disabled={!exportToDisk}>Save Current to Disk</Button></div> : null}<div className="rounded-3xl border border-sky-300/20 bg-sky-400/10 p-4"><div className="mb-3 text-sm uppercase tracking-wide text-sky-200/80">Disk Load</div><div className="flex flex-wrap gap-2"><label className={fileButtonClass}>Load From Disk<input type="file" accept="application/json,.json" className="sr-only" onChange={importFromDisk} /></label><Button onClick={loadChapter2PlaytestSave}>Begin Chapter 2 Playtest</Button><Button onClick={loadChapter2CompleteSave}>Begin Chapter 3 Playtest</Button><Button onClick={loadChapter3CompleteSave}>Begin Chapter 4 Playtest</Button>{!isSave ? <Button onClick={loadCheckpoint}>Load Latest Checkpoint</Button> : null}</div></div></div><div className="grid gap-3">{slots.map((slot) => <div key={slot.id} className="rounded-3xl border border-white/10 bg-white/5 p-4"><div className="flex flex-wrap justify-between gap-3"><div><div className="text-sm uppercase tracking-wide text-white/50">Slot {slot.id}</div><div className="mt-1 text-lg font-semibold">{slot.name || `Empty Slot ${slot.id}`}</div><div className="mt-1 text-xs text-white/50">{formatSaveTimestamp(slot.updatedAt)}</div></div>{isSave ? <Button onClick={() => save(slot.id)}>{slot.payload ? "Overwrite" : "Save Here"}</Button> : <Button onClick={() => load(slot.id)} disabled={!slot.payload}>Load</Button>}</div>{isSave ? <input className="mt-3 w-full rounded-2xl border border-white/10 bg-black/20 px-3 py-2 text-white outline-none" value={drafts[slot.id] || ""} placeholder="Save name" onChange={(e) => setDrafts((p) => ({ ...p, [slot.id]: e.target.value }))} /> : null}</div>)}</div></div></div>;
 }

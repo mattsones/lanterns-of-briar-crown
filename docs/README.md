@@ -5,7 +5,7 @@ The documentation is grouped by purpose. `codex-handoff.md` stays at the root be
 ## Start Here
 
 1. [`playtest-notes/2026-07-17-current-status.md`](playtest-notes/2026-07-17-current-status.md) — concise current-state pickup; the filename is historical, but the document title and contents carry the current update date.
-2. [`planning/chapter-4-development-process.md`](planning/chapter-4-development-process.md) — Chapter 2-3 retrospective, Chapter 4 gates, execution phases, and tooling backlog.
+2. [`playtest-notes/2026-09-04-chapter-4-completion-retrospective.md`](playtest-notes/2026-09-04-chapter-4-completion-retrospective.md) — Chapter 4 process assessment and the recommended Chapter 5 development gates.
 3. [`codex-handoff.md`](codex-handoff.md) — chronological implementation history and latest handoff.
 4. [`story/`](story/) — canonical chapter scripts and the Chapters 2–5 story bible.
 5. [`planning/`](planning/) — repository, refactor, UX, and chapter implementation plans.
@@ -63,7 +63,7 @@ These documents define the implemented Chapter 3 story foundation and its pendin
 ## Active Planning Documents
 
 - [`planning/refactor-roadmap.md`](planning/refactor-roadmap.md) — staged architecture and chapter roadmap.
-- [`planning/chapter-4-development-process.md`](planning/chapter-4-development-process.md) — approved process for closing Chapter 3 and building Chapter 4.
+- [`planning/chapter-4-development-process.md`](planning/chapter-4-development-process.md) — completed process record for closing Chapter 3 and building Chapter 4.
 - [`planning/gameplay-ux-redesign-plan.md`](planning/gameplay-ux-redesign-plan.md) — implemented map-first and responsive-shell decisions.
 
 `planning/post-chapter-2-technical-hardening.md` is a completed historical plan. Its shipped practices remain active, but it is not the current pickup document.

@@ -53,22 +53,22 @@ const TRACE_PRESENTATION: Record<FoldedMapOutcome, {
 }> = {
   "true-route": {
     icon: "✓",
-    title: "TRUE ROUTE FOUND",
-    summary: "UNDERWAY DECODED · The continuous road-crew route is now recorded.",
+    title: "CAPTORS' SHUTTER FOUND",
+    summary: "OLD KEEPER ROAD · The completed mark matches their chosen shutter.",
     panelClass: "border-emerald-300/70 bg-emerald-400/15 text-emerald-50 shadow-[0_0_34px_rgba(52,211,153,0.24)]",
     stampClass: "border-emerald-200/70 bg-emerald-950/95 text-emerald-50 shadow-[0_0_38px_rgba(52,211,153,0.38)]",
   },
   "false-shortcut": {
     icon: "!",
-    title: "TEMPTING ROUTE REJECTED",
-    summary: "SURVEY SHORTCUT · Straight and convincing, but the terrain runs backward.",
+    title: "SEALED SURVEY BORE",
+    summary: "SURVEY SHORTCUT · The planned road ends in unbroken stone.",
     panelClass: "border-amber-300/60 bg-amber-400/15 text-amber-50 shadow-[0_0_28px_rgba(251,191,36,0.18)]",
     stampClass: "border-amber-200/70 bg-amber-950/95 text-amber-50 shadow-[0_0_32px_rgba(251,191,36,0.28)]",
   },
   "not-a-route": {
     icon: "×",
-    title: "NO CONTINUOUS ROUTE",
-    summary: "The marks disagree. Nothing has been committed; refold freely.",
+    title: "NO SHUTTER MARK",
+    summary: "The marks disagree with every route fixture in the station.",
     panelClass: "border-slate-300/30 bg-slate-300/10 text-slate-100",
     stampClass: "border-slate-300/50 bg-slate-950/95 text-slate-100",
   },
@@ -316,6 +316,7 @@ function FoldedSheet({
   onPreview,
   onSnap,
   onNudge,
+  locked,
 }: {
   configuration: FoldedMapConfiguration;
   previewDepths: Record<FoldedMapEdge, number>;
@@ -327,6 +328,7 @@ function FoldedSheet({
   onPreview: (edge: FoldedMapEdge, depth: number) => void;
   onSnap: (edge: FoldedMapEdge, landing: FoldedMapLanding | null) => void;
   onNudge: (edge: FoldedMapEdge) => void;
+  locked: boolean;
 }) {
   const depths = previewDepths;
   const leftCut = depths.left * SHEET_WIDTH / 2;
@@ -353,13 +355,11 @@ function FoldedSheet({
       className="relative mx-auto w-full max-w-[1000px] overflow-visible rounded-2xl border border-amber-100/10 bg-[#33291c] shadow-inner"
       style={{
         aspectRatio: `${SHEET_WIDTH} / ${SHEET_HEIGHT}`,
-        backgroundImage: "radial-gradient(circle at center, rgba(255,244,194,.09) 0 1px, transparent 1.5px)",
-        backgroundSize: "18px 18px",
+        backgroundImage:
+          "linear-gradient(90deg, transparent 0 49.7%, rgba(34,20,11,.55) 49.8% 50.2%, transparent 50.3%), repeating-linear-gradient(4deg, rgba(255,231,170,.025) 0 2px, rgba(23,13,8,.08) 3px 9px), linear-gradient(145deg, #4b3421, #2a1b12 58%, #3b2819)",
+        boxShadow: "inset 0 0 0 2px rgba(239,196,117,.08), inset 0 18px 34px rgba(255,214,139,.035), inset 0 -24px 40px rgba(10,6,3,.35)",
       }}
     >
-      <div className="pointer-events-none absolute bottom-2 right-3 z-10 rounded bg-[#211b14]/80 px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.16em] text-amber-100/45">
-        Folding table · dashed frame is the flat sheet
-      </div>
       <svg viewBox={`0 0 ${SHEET_WIDTH} ${SHEET_HEIGHT}`} className="absolute inset-0 h-full w-full overflow-visible" aria-label={`${configuration.side} face of one rectangular paper map`}>
         <SheetDefinitions />
         <defs>
@@ -433,7 +433,7 @@ function FoldedSheet({
         }) : null}
       </svg>
 
-      {FOLDED_MAP_EDGES.map(({ id }) => (
+      {!locked ? FOLDED_MAP_EDGES.map(({ id }) => (
         <EdgeHandle
           key={id}
               edge={id}
@@ -449,17 +449,17 @@ function FoldedSheet({
           onSnap={(landing) => onSnap(id, landing)}
           onNudge={() => onNudge(id)}
         />
-      ))}
+      )) : null}
     </div>
   );
 }
 
-export function FoldedMapGraybox({ flags, setFlags, close, onTraceOutcome, onEnterUnderway }: {
+export function FoldedMapGraybox({ flags, setFlags, close, onTraceOutcome, onContinue }: {
   flags: GameFlags;
   setFlags: Dispatch<SetStateAction<GameFlags>>;
   close: () => void;
   onTraceOutcome?: (outcome: FoldedMapOutcome) => void;
-  onEnterUnderway?: () => void;
+  onContinue?: () => void;
 }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const [configuration, setConfiguration] = useState<FoldedMapConfiguration>({
@@ -473,12 +473,13 @@ export function FoldedMapGraybox({ flags, setFlags, close, onTraceOutcome, onEnt
   const [feedback, setFeedback] = useState(
     flags.foldedMapAttempted
       ? getFoldedMapReview(flags)
-      : "Inspect either face while the sheet is flat. Then drag an edge inward and release it near a quarter guide.",
+      : "Mara sets Lio's scratched rectangle beside the sheet. “Two edges folded in,” she says. “Let's see what he saw.”",
   );
 
   const foldCount = getFoldedMapFoldCount(configuration);
   const maxFolds = 2;
   const tracePresentation = traceOutcome ? TRACE_PRESENTATION[traceOutcome] : null;
+  const solved = !!flags.foldedMapDecoded;
 
   const beginEdgeDrag = (edge: FoldedMapEdge) => {
     if (configuration.folds[edge] === null && foldCount >= maxFolds) {
@@ -571,18 +572,18 @@ export function FoldedMapGraybox({ flags, setFlags, close, onTraceOutcome, onEnt
       >
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200/70">Westroot Lower Gate · Survey working sheet</div>
+            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200/70">Dusty waykeeper table · three shutter marks</div>
             <h2 id="folded-map-title" className="mt-1 font-serif text-2xl font-semibold sm:text-3xl">The Folded Map</h2>
-            <p className="mt-2 max-w-4xl text-sm leading-6 text-white/65">One opaque map, printed differently on each side. Drag any edge inward; its landing snaps to the ¼, ½, or ¾ guide, and the fold reveals only the opposite face.</p>
+            <p className="mt-2 max-w-4xl text-sm leading-6 text-white/65">One opaque map, printed differently on each side. Drag any edge inward to fold.</p>
           </div>
-          <Button data-choice-id={CHAPTER_4_CHOICE_IDS.close} onClick={close}>Close</Button>
+          {!solved ? <Button data-choice-id={CHAPTER_4_CHOICE_IDS.close} onClick={close}>Close</Button> : null}
         </div>
 
         <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_21rem]">
           <div className={`relative rounded-3xl border bg-[#211b14] p-3 transition-all sm:p-5 ${tracePresentation ? tracePresentation.panelClass : "border-amber-100/15"}`}>
             <div className="mb-4 flex flex-wrap items-center justify-between gap-2 text-xs text-amber-50/65">
-              <span>One sheet · two faces · 54 two-fold configurations</span>
-              <span data-testid="fold-count">{foldCount}/{maxFolds} folds active · {configuration.side} face up</span>
+              <span>{configuration.side === "front" ? "Survey face" : "Road-crew face"} up</span>
+              <span data-testid="fold-count">{foldCount}/{maxFolds} folds</span>
             </div>
             <div className="relative">
               <FoldedSheet
@@ -596,6 +597,7 @@ export function FoldedMapGraybox({ flags, setFlags, close, onTraceOutcome, onEnt
                 onPreview={previewEdge}
                 onSnap={snapEdge}
                 onNudge={(edge) => setFeedback(`Drag the ${EDGE_META[edge].label} inward. Pressing the handle alone does not choose a fold.`)}
+                locked={solved}
               />
               {tracePresentation ? (
                 <div
@@ -613,11 +615,6 @@ export function FoldedMapGraybox({ flags, setFlags, close, onTraceOutcome, onEnt
           </div>
 
           <aside className="space-y-3">
-            <div className="rounded-3xl border border-amber-200/20 bg-amber-300/10 p-4 text-xs font-semibold leading-5 text-amber-50/80">
-              <div>1. Fold exactly two edges.</div>
-              <div>2. Align the benchmark, contours, and road.</div>
-              <div>3. Check the route against the evidence.</div>
-            </div>
             <div
               role="status"
               aria-live="assertive"
@@ -633,33 +630,23 @@ export function FoldedMapGraybox({ flags, setFlags, close, onTraceOutcome, onEnt
               ) : null}
               <div>{feedback}</div>
             </div>
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-4 text-sm leading-6 text-white/70">
-              <div className="font-semibold text-white">Edden's clue</div>
-              <div className="mt-1">“The map lies flat. Two turns find the road.”</div>
-              <div className="mt-4 font-semibold text-white">Look for agreement</div>
-              <ul className="mt-1 list-inside list-disc space-y-1 text-xs text-white/55">
-                <li>the Survey lantern benchmark and an older road-crew ring</li>
-                <li>two contour strokes meeting without reversal</li>
-                <li>one road continuing into the Underway</li>
-                <li>the Survey Shortcut is strikingly straight</li>
-              </ul>
-              <div className="mt-4 font-semibold text-white">Recorded state</div>
-              <div className="mt-1">{getFoldedMapReview(flags)}</div>
-            </div>
-            <Button data-choice-id={CHAPTER_4_CHOICE_IDS.flipMap} onClick={flipMap} disabled={foldCount > 0} className="w-full">Turn the flat map over</Button>
-            <Button data-choice-id={CHAPTER_4_CHOICE_IDS.traceRoute} onClick={traceRoute} className="w-full border-emerald-200/50 bg-emerald-500/35 text-emerald-50">Check this route against the evidence</Button>
-            {flags.foldedMapDecoded && onEnterUnderway ? (
+            {solved && onContinue ? (
               <Button
-                data-choice-id={CHAPTER_4_CHOICE_IDS.enterUnderway}
-                onClick={onEnterUnderway}
+                data-choice-id={CHAPTER_4_CHOICE_IDS.continueFromSurvey}
+                onClick={onContinue}
                 className="w-full border-amber-200/60 bg-amber-400/30 text-amber-50"
               >
-                Open the Lower Gate and enter the Underway
+                Open the Old Keeper Road shutter
               </Button>
             ) : null}
-            <Button data-choice-id={CHAPTER_4_CHOICE_IDS.resetFolds} onClick={unfoldAll} className="w-full">Unfold the whole sheet</Button>
-            <Button data-choice-id={CHAPTER_4_CHOICE_IDS.back} onClick={goBack} className="w-full">{foldOrder.length ? "Back: open latest fold" : "Back to Westroot"}</Button>
-            <div className="px-2 text-center text-[11px] leading-4 text-white/35">Experimentation is safe. Checking a route records the result; a confirmed road can be entered here.</div>
+            {!solved ? (
+              <>
+                <Button data-choice-id={CHAPTER_4_CHOICE_IDS.flipMap} onClick={flipMap} disabled={foldCount > 0} className="w-full">Turn the flat map over</Button>
+                <Button data-choice-id={CHAPTER_4_CHOICE_IDS.traceRoute} onClick={traceRoute} className="w-full border-emerald-200/50 bg-emerald-500/35 text-emerald-50">Compare this fold with the shutter marks</Button>
+                <Button data-choice-id={CHAPTER_4_CHOICE_IDS.resetFolds} onClick={unfoldAll} className="w-full">Unfold the whole sheet</Button>
+                <Button data-choice-id={CHAPTER_4_CHOICE_IDS.back} onClick={goBack} className="w-full">{foldOrder.length ? "Back: open latest fold" : "Back to the survey table"}</Button>
+              </>
+            ) : null}
           </aside>
         </div>
       </section>
