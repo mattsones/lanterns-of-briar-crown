@@ -2,7 +2,7 @@
 
 Date opened: 2026-09-04
 
-Status: owner planning in progress; decisions are recorded one at a time before the executable vertical-slice contract is written
+Status: owner decisions accepted on 2026-09-05; consolidated in [the executable vertical-slice contract](../story/chapter-5-vertical-slice-contract.md). Earlier provisional bullets below are resolved by the later settled decisions and that contract.
 
 ## Settled Decisions
 
@@ -78,7 +78,7 @@ Status: owner planning in progress; decisions are recorded one at a time before 
 - The quieter route requires discoveries from all three interior wings rather than treating the wings as unrelated optional bonuses.
 - The False Ledger Room contains a locked desk drawer. The player does not initially know what it contains; opening it reveals a spare key for the guarded inner entrance.
 - The Thornseal Workshop contains a small tool, spring, shim, or similar piece that is not the drawer's actual key but gives Mara what she needs to pick or bypass the ordinary desk lock.
-- The Captive Lantern Hall provides a way to draw the inner guards away from their post. The exact signal, distraction, and relationship to the lantern-order puzzle remain to be decided.
+- The Captive Lantern Hall provides the Front Gate Alert signal that draws the inner guards away, as settled below in Captive Lantern Signal Center.
 - Individual guards and workers can be avoided, quietly bypassed, or overcome. Being discovered or choosing open combat raises the visible alert state instead of causing an instant infiltration failure.
 - The quiet solution is an intelligible causal chain: obtain the improvised lock tool, open the ledger drawer, take the spare key, create the lantern-based distraction, and enter the inner room without sounding a general alarm.
 
@@ -139,7 +139,7 @@ Status: owner planning in progress; decisions are recorded one at a time before 
 - A quiet infiltration produces the smallest support roster. Suspicion can leave one or more Thornseal Guards with Bracken, while an alerted facility produces the largest and most prepared encounter.
 - Successfully removing the lone investigating guard through a silent ambush must reduce the later guard presence in a visible way.
 - Openly clearing the original door detail does not erase the alert consequence; alarms can bring remaining personnel from elsewhere in Briarhold to support Bracken.
-- Exact support counts, duplicate-guard use, HP, and starting effects will be settled during the boss combat graybox. The contract-level rule is that quieter play produces fewer or less-prepared supports and Bracken always retains at least one ally.
+- Support counts are settled below in Exact Boss Support Baseline. HP and effect timing remain combat graybox tuning; quieter play produces fewer supports and Bracken always retains the Sentry.
 
 ### First Sight Of Lio
 
@@ -216,8 +216,8 @@ Status: owner planning in progress; decisions are recorded one at a time before 
 
 - The fifth ledger prisoner, already transferred west before the party captures Briarhold, is a route examiner attached to Princess Elowen's Royal Progress.
 - The examiner traveled ahead of the Progress to compare official maps, reports, and route orders against conditions witnessed in local communities.
-- They discovered that observations from Elowen's Progress were being altered before reaching or leaving the royal road offices. A higher-ranking Briar Crown operation therefore had them removed from Briarhold and sent farther west.
-- Lio is the party's primary source for the examiner's identity. The two were held together briefly before the examiner's transfer, allowing Lio to learn their name, role, and the essential fact that they had discovered altered reports.
+- The examiner discovered that observations from Elowen's Progress were being altered before reaching or leaving the royal road offices. A higher-ranking Briar Crown operation therefore had the examiner removed from Briarhold and sent farther west.
+- Lio is the party's primary source for the examiner's identity. The two were held together briefly before the transfer, allowing Lio to learn the examiner's name, role, and discovery of altered reports. The contract assigns Celia Venn, female, she/her for authoring.
 - Lio does not know the full political structure or the identity of the insider. The surviving transfer ledger, genuine office materials, and Westroot clerk's procedural knowledge corroborate his account.
 - At the Bramblecross evidence meeting, these facts show that the conspiracy is intercepting Elowen's inquiry, isolating her from accurate information, and issuing commands in her name.
 - The next arc therefore points toward reaching Elowen and uncovering the political machinery around her, with rescuing the known examiner as an immediate human stake. It is not framed simply as pursuing Bracken or chasing an anonymous transfer row.
@@ -355,9 +355,9 @@ Status: owner planning in progress; decisions are recorded one at a time before 
 - Lock navigable paths, interaction nodes, and player-token alignment before art generation.
 - Generate final maps from the accepted scale masters, then visually test each map as soon as it is integrated rather than postponing all alignment review until the full chapter is painted.
 
-## Current Open Decision
+## Planning Closeout
 
-Owner-level Chapter 5 planning questions were accepted on 2026-09-05. The next step is to convert these decisions into the executable Chapter 5 vertical-slice contract, with exact names, prose, balance values, map coordinates, and art compositions handled during contract drafting and graybox production.
+Owner-level Chapter 5 planning questions were accepted on 2026-09-05. The executable Chapter 5 vertical-slice contract now records the entry fixture, pure consequence rules, required ending, repeat/save requirements, and implementation defaults. The next step is the playable Captive Lanterns / Bracken / carriage-rescue spike, including runtime persistence. Final prose, balance, map coordinates, and art compositions remain production work.
 
 ## Post-Chapter 5 Backlog
 

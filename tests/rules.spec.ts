@@ -1843,7 +1843,9 @@ test("chapters two through five have story and art contracts", () => {
   });
 
   expect(CHAPTER_STORY_PLANS[2].keyLines).toContain("Back first. Old side listens behind.");
-  expect(CHAPTER_STORY_PLANS[5].keyLines).toContain("It was not supposed to wake yet.");
+  expect(CHAPTER_STORY_PLANS[5].keyLines).toContain("So are we.");
+  expect(CHAPTER_STORY_PLANS[5].requiredEndFlags).not.toContain("livingBriarMarkSeen");
+  expect(CHAPTER_STORY_PLANS[5].requiredEndFlags).not.toContain("captiveLanternsRestored");
 });
 
 test("art backlog tracks full illustrated prototype scope", () => {

@@ -39,7 +39,7 @@ Chapter arc:
 1. **Chapter 2: The Westroot Trail** - playable through the Three-Sign Hollow, Crown Door Den, Roadwatcher consequences, and First Westroot Gate.
 2. **Chapter 3: The Hidden Root** - release-candidate route through Westroot and its Willow-sealed cargo resolution, with human-playthrough signoff and a checked-in Chapter 4-ready fixture.
 3. **Chapter 4: The Riddle Road** - illustrated release candidate through the Folded Map, Underway, Listening Mile, Lio's message, Relay Post, and Briarhold lead, with full-story owner signoff.
-4. **Chapter 5: Briarhold Waystation** - planned rescue of Lio and reveal of the Briar Crown cell structure.
+4. **Chapter 5: Briarhold Waystation** - accepted planning, [executable contract](docs/story/chapter-5-vertical-slice-contract.md), tested pure consequences, and a Chapter 4-complete entry fixture are established. The playable lantern/boss/rescue spike is next.
 
 Implementation should move in vertical slices: executable chapter contract, central-interaction graybox, scale-correct map contract, data and placeholder map, critical path, automated QA, human playthrough, production art, painted-map alignment QA, and release-candidate QA. The completed Chapter 4 process and its retrospective are documented in [`docs/planning/chapter-4-development-process.md`](docs/planning/chapter-4-development-process.md) and [`docs/playtest-notes/2026-09-04-chapter-4-completion-retrospective.md`](docs/playtest-notes/2026-09-04-chapter-4-completion-retrospective.md).
 
@@ -132,8 +132,8 @@ Visual direction:
 
 ## Short-Term Roadmap
 
-1. Write the Chapter 5 executable vertical-slice contract from the accepted Briarhold handoff.
-2. Spike the Captive Lanterns interaction together with Bracken Voss's false-command boss mechanic before final art.
+1. Follow the [Chapter 5 executable contract](docs/story/chapter-5-vertical-slice-contract.md) and its checked-in `public/saves/chapter-4-complete.json` entry fixture.
+2. Build the Captive Lanterns / Bracken / carriage-rescue interaction spike, wire its persisted state, and run a short owner playtest before expanding the full graybox.
 3. Approve a scale-correct movement, trigger, control, fog, and lantern overlay for each Chapter 5 map before and after painting.
 4. Preserve Mara's non-combat role, make Lio visibly active before rescue, and keep Bracken's escape from diminishing the rescue victory.
 5. Continue staged `src/App.tsx` extraction only through focused Chapter 5 logic seams, not a broad rewrite.

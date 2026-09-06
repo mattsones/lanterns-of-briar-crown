@@ -119,6 +119,19 @@ test("title offers standardized chapter playtest starts without graybox shortcut
   await expect(page.getByRole("button", { name: /graybox/i })).toHaveCount(0);
 });
 
+test("Chapter 5 ready disk fixture reopens the accepted Chapter 4 ledger without replaying combat", async ({ page }) => {
+  await page.addInitScript(() => window.localStorage.clear());
+  await page.goto("/");
+  await page.getByRole("button", { name: "Load Save Slot" }).click();
+  await page.locator('input[type="file"]').setInputFiles("public/saves/chapter-4-complete.json");
+  await expect(page.getByRole("heading", { name: "Briar Relay Post", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.briarholdReveal)).toContainText("Lio's entry is bracketed with four other prisoners");
+  await expect(scene(page, CHAPTER_4_SCENE_IDS.briarholdReveal)).toContainText("before dawn");
+  await page.getByRole("button", { name: "Close the ledger." }).click();
+  await expect(page.getByRole("heading", { name: "Briar Relay Post", exact: true })).toBeVisible();
+});
+
 test("real Chapter 3 fixture reaches the Folded Map through the required Gatewright encounter", async ({ page }) => {
   test.slow();
   await beginChapter4AtGatewright(page);

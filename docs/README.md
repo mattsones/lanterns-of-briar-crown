@@ -4,6 +4,8 @@ The documentation is grouped by purpose. `codex-handoff.md` stays at the root be
 
 ## Start Here
 
+Chapter 5's active implementation brief is [the executable vertical-slice contract](story/chapter-5-vertical-slice-contract.md), backed by [the accepted planning decisions](planning/chapter-5-planning-decisions.md). Its next gate is the playable lantern/boss/carriage-rescue spike.
+
 1. [`playtest-notes/2026-07-17-current-status.md`](playtest-notes/2026-07-17-current-status.md) — concise current-state pickup; the filename is historical, but the document title and contents carry the current update date.
 2. [`playtest-notes/2026-09-04-chapter-4-completion-retrospective.md`](playtest-notes/2026-09-04-chapter-4-completion-retrospective.md) — Chapter 4 process assessment and the recommended Chapter 5 development gates.
 3. [`codex-handoff.md`](codex-handoff.md) — chronological implementation history and latest handoff.

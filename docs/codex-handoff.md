@@ -4,7 +4,23 @@ This file is the starting point for Codex.
 
 Story-writing work must also follow `docs/story/writing-rules.md`. Singular characters use he/him or she/her; *they/them/their* is reserved for genuinely plural antecedents.
 
-## Latest Handoff — 2026-09-04
+## Latest Handoff — 2026-09-05
+
+The accepted Chapter 4 branch is merged and pushed to `main` at `5b1c4d3`. Chapter 5 work now lives on `codex/chapter-5-vertical-slice`, with the owner's accepted decisions preserved in `docs/planning/chapter-5-planning-decisions.md`.
+
+The Chapter 5 executable contract is established in `docs/story/chapter-5-vertical-slice-contract.md`, with typed metadata in `src/story/chapter5.ts`, pure consequence and readiness rules in `src/game/chapter5.ts`, and the checked-in `public/saves/chapter-4-complete.json` entry fixture. The contract covers interlocked wings and direct entry, monotonic alerts, 64 pane arrangements, invalid-signal responses, boss support and lantern counterplay, the untimed carriage rescue, all four present captives, evidence preservation, the optional tusker route, and the Bramblecross ending. It also records scene repeat/load behavior, authoring defaults, checkpoint requirements, and map/art gates.
+
+The Chapter 5 story-bible section and story-plan metadata now follow the accepted political ending, replacing obsolete lantern-order, magical-voice, living-mark, and return-through-Westroot alternatives. The unused `livingBriarMarkSeen` save field remains tolerated for compatibility but is no longer a Chapter 5 completion requirement. Lantern restoration is an optional advantage, not an end-state gate.
+
+This is a contract milestone, not a playable Chapter 5. The pure `BriarholdState` and `Chapter5Outcome` models are not yet wired into runtime persistence or UI. The existing playable endpoint remains the accepted Chapter 4 Briarhold reveal; no new title-screen playtest button or final artwork has been added.
+
+Verification: `npm.cmd run verify` passed the production build, 66 rules tests (including 15 new Chapter 5 contract tests), 35 Chapter 1 tests, 31 Chapter 2 tests, 12 Chapter 3 tests, 16 Chapter 4 tests (including the new disk-fixture boundary test), and smoke: 161 tests total. The asset audit scanned 171 production images. An initial full run timed out in the existing downed-companion Chapter 1 test with the title screen in its failure snapshot; that test passed unchanged in isolation and in the subsequent complete gate. No Chapter 1 behavior was changed.
+
+### Next Best Step
+
+Build a small playable Captive Lanterns / Bracken / carriage-rescue spike from the new fixture. Include the workshop–drawer–signal dependency, all alert responses, boss support/counterplay, actual saved state, and desktop/phone keyboard and Back behavior. Run a short owner interaction test before expanding the full Chapter 5 graybox. Finished maps follow the complete accepted graybox and scale masters.
+
+## Previous Handoff — 2026-09-04
 
 The owner completed Chapter 4 and accepted the chapter as good. This closes the Chapter 4 owner-playtest milestone: the full Lower Gate, Folded Map, Rootwater, wildlife, Listening Mile, Relay Post, forged-authority, and Briarhold-reveal path has now received owner signoff.
 

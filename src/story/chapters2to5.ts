@@ -1,4 +1,5 @@
 import type { ChapterId } from "../game/types";
+import { CHAPTER_5_CONTRACT } from "./chapter5";
 
 export type ChapterStoryPlan = {
   id: Exclude<ChapterId, 1>;
@@ -131,38 +132,33 @@ export const CHAPTER_STORY_PLANS: Record<Exclude<ChapterId, 1>, ChapterStoryPlan
   5: {
     id: 5,
     title: "Briarhold Waystation",
-    promise:
-      "Rescue Lio, break the local Briar Crown cell, reveal the faction's method, and hint that the mark itself may be older than the people using it.",
-    requiredEndFlags: [
-      "chapterFiveClear",
-      "captiveLanternsRestored",
-      "lioRescued",
-      "brackenEscaped",
-      "briarCrownFactionRevealed",
-      "livingBriarMarkSeen",
-    ],
+    promise: CHAPTER_5_CONTRACT.promise,
+    requiredEndFlags: [...CHAPTER_5_CONTRACT.requiredEndFlags],
     coreBeats: [
       "Infiltrate Briarhold Waystation",
       "Investigate false ledgers and thornseal workshop",
-      "Solve the captive lanterns puzzle",
+      "Use the workshop shim, ledger key, and lantern signal for quieter entry, or fight through",
       "Find Lio resisting before rescue",
       "Fight Bracken Voss and cell guards",
-      "Let Lio and Mara reunite",
-      "Reveal the Briar Crown faction structure",
-      "Show Bracken escaping and the Briar Crown mark moving by itself",
+      "Stop Lio's transfer carriage while the wounded Bracken escapes with his routing cipher",
+      "Rescue all four remaining captives and preserve the original evidence",
+      "Let Lio and Mara reunite and hear the transferred examiner's account",
+      "Return east overland, with an optional territorial tusker encounter",
+      "Celebrate the Bramblecross homecoming before Enna's private case-wall reading",
+      "Prove genuine office access and follow the examiner's transfer toward Elowen's Lanthorne hearing",
     ],
     keyLines: [
       "Fear can move people, but it cannot guide them home.",
       "You told me not to follow angry.",
-      "Tell my father the road did not betray him. Someone taught it to speak with my name.",
-      "It was not supposed to wake yet.",
+      "He is still out there.",
+      "So are we.",
     ],
     artTargets: {
-      maps: ["briarhold-waystation"],
-      portraits: ["lio-brindle", "bracken-voss", "briar-thornbinder"],
+      maps: CHAPTER_5_CONTRACT.maps.map((map) => map.id),
+      portraits: ["lio-brindle", "bracken-voss", "westroot-clerk", "cellar-porter", "rainroot-road-warden", "rainroot-woodsman", "briar-sealwright"],
       enemies: ["bracken-voss", "thornseal-guard", "thornroot-sentry"],
       items: ["true-seal-fragment", "briar-chain-link", "lios-courier-knot"],
-      symbols: ["captive-lantern-order", "living-briar-crown-mark"],
+      symbols: ["fixed-signal-chart", "signal-pane-marks", "genuine-office-handling-marks", "true-brake-markings"],
     },
   },
 };

@@ -14,7 +14,7 @@
     "playtest:chapter2": "playwright test tests/chapter2.spec.ts",
     "playtest:chapter3": "playwright test tests/chapter3.spec.ts",
     "playtest:chapter4": "playwright test tests/chapter4.spec.ts",
-    "test:rules": "playwright test tests/rules.spec.ts",
+    "test:rules": "playwright test tests/rules.spec.ts tests/chapter5-contract.rules.spec.ts",
     "verify:fast": "npm run audit:assets -- --limit=10 && npm run build && npm run test:rules",
     "verify:chapter4": "npm run verify:fast && npm run playtest:chapter4",
     "verify:full": "npm run verify:fast && npm run playtest:chapter1 && npm run playtest:chapter2 && npm run playtest:chapter3 && npm run playtest:chapter4 && npm run playtest:smoke",

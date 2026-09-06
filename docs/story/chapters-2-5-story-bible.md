@@ -1022,363 +1022,83 @@ Mara holds Lio’s scratched message and whispers:
 
 # Chapter 5 — Briarhold Waystation
 
-## Working Title
+Status: owner decisions accepted September 5, 2026; executable contract established. The playable interaction spike is next.
 
-**Chapter 5: Briarhold Waystation**
-
-Alternate titles:
-
-- **The Crown Beneath the Roots**
-- **The Courier and the Crown**
-- **The Briar Crown Cell**
-
-Recommended title: **Briarhold Waystation**
+Detailed authority: [Chapter 5 vertical-slice contract](chapter-5-vertical-slice-contract.md) and [accepted planning decisions](../planning/chapter-5-planning-decisions.md). This section replaces the earlier speculative lantern-order, magical-voice, escort, and return-route alternatives.
 
 ## Chapter Promise
 
-The party infiltrates and confronts a Briar Crown faction cell, rescues Lio in a boss-battle climax, and learns what the Briar Crown is at the operational level. The cell leader escapes, and genuine office material proves that the network reaches into the Alderreach institutions it counterfeits.
+The party infiltrates Briarhold, rescues Lio and the three other captives still there, and defeats Bracken Voss's local command. Bracken escapes wounded while the heroes stop Lio's transfer carriage. Original office material proves that the Briar Crown has genuine institutional access. A long overland return ends with relief and investigative closure in Bramblecross.
 
-## Main Question
+The rescue is the mechanical and emotional climax. The unresolved political lead points toward Lanthorne, where Princess Elowen is due to hold a Royal Progress hearing. Elowen remains free; her itinerary, reports, and public authority are being manipulated around her. The senior insider remains unidentified.
 
-Can the party rescue Lio before the Briar Crown moves him out of Briarhold and farther west toward the defended river march?
+## Opening And Party
 
-## Emotional Question
+Begin at the captured Briar Relay the same night Chapter 4 ends. The before-dawn transfer threat allows a brief first-aid and surveillance stop at an abandoned roadworkers' overlook, not a full night's sleep.
 
-After Lio is rescued, will justice become vengeance?
+The party consists of the hero, the established chosen companion, and Mara. Bramwell, Noma, and Tasmine remain at the Lower Gate. Quill waits with Bramblecross's leadership. Existing absent/downed-companion saves remain supported without automatic recruitment.
 
-## Main Locations
+Mara participates in investigation and ordinary lock work but never fights or becomes an enemy target. After rescue Lio remains a recovering story companion, with no combat roster slot.
 
-### Briarhold Outer Approach
+## Maps And Infiltration
 
-Hidden entrance disguised as a sealed waystation or collapsed root cellar. Briarhold remains on the Alderreach side of the disputed march, east of Riverwatch; reaching it does not make the cell a Veyran operation.
+The Outer Approach includes the ridge, overlook, receiving gate, and service culvert. The player physically reaches the selected entrance after observing it. The central hub joins three short wings and a guarded inner door; a separate Crown Table/cell map holds the climax.
 
-### False Ledger Room
+- The longer service culvert is reliable and enters Quiet. Environmental evidence reveals it without a required successful check.
+- Slipping through supply traffic uses Precision or Heart. Success enters Quiet; failure enters Suspicious.
+- Attacking receiving guards enters Alerted, with the consequence stated before commitment.
 
-Records of false orders, cargo movements, prisoner transfers, and forged royal instructions.
+Quiet, Suspicious, and Alerted are persistent, visibly labeled states. Authored sight/noise nodes and explicit choices support tile movement. No real-time patrol simulation or permanent rescue failure is required.
 
-### Thornseal Workshop
+The quieter inner-entry chain links every wing: find the workshop shim, let Mara open the ledger desk's locked drawer and discover a spare key, then transmit a Front Gate Alert to draw the inner guards away. The alternative is an open fight for the door detail's duty key, producing Alerted. Every route reaches the mandatory first sight of Lio.
 
-Where false crown seals, stolen market marks, and route-scratching tools are made.
+## Wing Discoveries
 
-### Captive Lantern Hall
+The False Ledger Room holds a coerced Westroot route-record clerk under a knowing Briar records officer. The fixed signal chart is secured beneath the desk glass and remains reviewable; it cannot be collected. The drawer's contents are unknown before opening.
 
-Old Lantern Road chamber where true lanterns are covered, dimmed, or chained.
+The Thornseal Workshop contains a complicit sealwright and a deceived ordinary laborer. The party may warn or persuade the laborer away and bypass, subdue, or fight the sealwright. The shim and a separate Sentry-repair intervention have distinct purposes.
 
-### Holding Cells / Rootbound Alcoves
+The Captive Lantern Hall is normally empty. Three fixed mechanical signal lanterns each accept one of four colored panes with distinct non-color marks. Four standard codes appear on the chart; most of the 64 arrangements are meaningless. Only pulling the shutters transmits a code.
 
-Where Lio and perhaps others are held.
+Front Gate Alert diverts inner guards while the facility is Quiet or Suspicious. Command Center Recall sends guards toward Bracken and triggers Alerted. The first meaningless transmission draws one investigating guard and offers hide, direct assault, or a harder silent nonlethal ambush. Successful hiding preserves all personnel at Suspicious; successful silent ambush removes one guard at Suspicious. Failures and open combat produce Alerted. A second meaningless signal always alerts the facility and never supplies another lone guard. The investigating guard has no inner key.
 
-### Boss Chamber: The Crown Table
+Restoring the physical gold-light channel weakens Bracken's False Order and reveals the true carriage brake beneath his false plate. It remains useful at Alerted, when guards will no longer obey the diversion. This is crafted machinery and physical light, with no speaking magical network or repeated Witness Stones ethic puzzle.
 
-A room with an old round waystation table carved with route lines. The Briar Crown cell has covered parts of it with false seal-cloth and thorn chains.
+## Lio, Bracken, And The Carriage
 
-## Major NPCs
+Through a mandatory inspection grille, the party sees Lio deliberately copying wrong courier shorthand while working against the carriage mechanism. Mara nearly calls out; the hero or companion keeps her quiet. Lio recognizes her without exposing the party.
 
-### Lio Brindle
+Bracken Voss is the directly fought cellmaster: calm, controlled, and convinced that command produces safety. A Thornroot Sentry always supports him. Quiet adds no guard; Suspicious adds one Thornseal Guard; Alerted adds two. A successful earlier silent ambush removes one applicable guard, never the Sentry. Openly clearing the original door detail does not cancel alarm reinforcements.
 
-Captive courier, still resisting.
+Mara enters the Crown Table room and stays visibly behind a substantial entrance console, outside the combat line and targeting system. When defeated, Bracken releases Lio's sloping-rail transfer carriage and opens its westbound shutter. Mara supplies the sibling warning; Lio jams the mechanism; the hero and companion catch the carriage, set the brake, and free him in three untimed steps.
 
-### Mara Brindle
+Gold restoration identifies the true brake immediately. Without it, a visible check can impose a bounded hero injury while still completing the rescue. Lio cannot be killed by a failed input. The heroes' choice to save him is authored; no menu permits abandonment. Bracken escapes wounded through a narrow personnel passage with the master routing cipher, preventing immediate exposure of the whole network.
 
-Non-combat guest. Must be kept out of direct battle, but emotionally present.
+## Reunion And All Five Prisoner Rows
 
-### Briar Crown Cell Leader
+Mara reaches Lio as soon as the carriage is stopped. Their first exchange is brief; Lio reminds the party that others remain. The adjoining cells open through a straightforward control, without another post-climax puzzle.
 
-Working title: **Veyr Thorncall** or **Captain Bracken Voss**.
+Four people must leave Briarhold safely: Lio, a missing Bramblecross cellar porter, the Westroot clerk, and a Rainroot road warden. A direct-route player returns for the clerk if the Ledger Room was bypassed. The Chapter 5 porter closes a Chapter 1 thread and is distinct from the deferred optional Chapter 4 porter.
 
-Recommended placeholder: **Bracken Voss**.
+The fifth prisoner was already transferred: Celia Venn, a route examiner attached to Elowen's Progress. Lio briefly shared captivity with her and learned that observations from the Progress were being altered. The warden identifies the initial western route; the transfer document points toward Lanthorne. Neither witness can name the senior insider.
 
-Bracken Voss is calm, controlled, and convinced that fear is useful. He does not think of himself as a villain. He believes roads have become too free, too messy, too vulnerable to panic. He thinks command creates safety.
+Once everyone is safe, Lio and Mara have their fuller exchange. Lio is angry at Bracken's escape and feels responsible for Celia's transfer. Mara acknowledges the remaining danger while refusing to let him pursue it alone. Each chosen companion responds in a distinct voice.
 
-### Secondary antagonist
+## Evidence And The Overland Return
 
-A thornbinder, seal-forger, or route-confuser who can be defeated/captured while Bracken escapes.
+The party preserves the transfer ledger, the genuine office instruction with criminal content, false-seal evidence, and Celia's transfer record. The Westroot clerk authenticates office stock and internal handling marks on site. Enna later combines that narrow authentication with the original papers and firsthand accounts. The True Seal Fragment and Briar Chain Link are evidence rewards, not a replacement for the documents.
 
-## Antagonist Philosophy
+Leave Briarhold as night gives way to morning and travel east through Rainroot woods and wilds. One short playable map compresses a clearly long journey with dialogue waypoints; the party does not retrace Westroot or discover an unexplained direct public road.
 
-Bracken Voss believes the old Lantern Road failed because it trusted ordinary people too much.
+A practical woodsman supplies news and directions. He once saw Elowen at a public Progress stop but never spoke with her or learned her plans. His observed impression makes the contradictory orders suspicious without proving their source.
 
-He might say:
+He warns about two territorial Rainroot tuskers feeding in a root hollow. The player chooses the shorter route through their territory or the longer safe detour. Both reconverge before the same political and character conversation. During any battle, Lio helps Mara and the rescued prisoners reach cover. The animals are unaligned local wildlife and carry no evidence.
 
-> “A warning sign can be ignored. A command cannot.”
+## Bramblecross Ending
 
-Or:
+A modest public homecoming restores the missing porter to town and reunites Lio with Enna and Hollis. A separate private evidence meeting includes Mayor Anwen and Quill. The chapter first resolves its personal rescue promise, then establishes the wider political danger.
 
-> “Truth is slow. Fear moves quickly. We use what works.”
-
-The hero’s answer should be rooted in Chapter 1’s theme:
-
-> “Fear can move people, but it cannot guide them home.”
-
-## Infiltration Structure
-
-Chapter 5 can have a semi-dungeon structure:
-
-1. Find the hidden entrance.
-2. Avoid or fight Briar Crown guards.
-3. Discover false ledgers.
-4. Find proof of Princess Elowen’s forged authority.
-5. Free smaller captives or disable thorn mechanisms.
-6. Reach Lio.
-7. Boss battle.
-8. Bracken escapes.
-9. Lio and Mara reunite.
-10. Final institutional-compromise hint.
-
-## Main Puzzle: The Captive Lanterns
-
-The party finds a hall of lanterns, each covered by a different false mark.
-
-To open the way to Lio, the player must uncover the lanterns in the right order based on the old road ethic.
-
-Possible order:
-
-1. Witness — reveal what is true.
-2. Warning — name the danger.
-3. Shelter — protect the vulnerable.
-4. Way — show the next step.
-
-This echoes Chapter 3 but in a higher-stakes setting.
-
-### Simple puzzle
-
-Choose which lantern to uncover first. Correct choices weaken the boss or unlock a safer route.
-
-### Optional deeper puzzle
-
-Uncover all lanterns in the old order to gain a powerful temporary blessing for the boss fight:
-
-**Lantern Keeper’s Ward:** Uncovering the lanterns in the keeper's intended safety order activates an old crafted ward. Once during the boss battle, the hero or companion can resist a fear/control effect.
-
-### Companion hints
-
-**Rowan:** “Start with witness. A shield raised for a lie protects the wrong thing.”
-
-**Tilda:** “They covered the truth first. That means they are most afraid of it.”
-
-**Moss:** “Lanterns do not fight darkness by shouting. They reveal what is there.”
-
-**Mara:** “Lio would say to light the one nearest the door, so the next person can get out.”
-
-## Lio Before Rescue
-
-Lio should be seen resisting before he is rescued.
-
-Possibilities:
-
-- He refuses to copy a route mark.
-- He gives the Briar Crown wrong courier shorthand.
-- He scratches a warning into the underside of a table.
-- He protects another captive by claiming he alone knows the route.
-
-This establishes him as active, brave, and toughened.
-
-### Sample first sight of Lio
-
-> Lio Brindle stands inside the rootbound alcove with his hands tied but his chin lifted. His courier coat is torn, and one sleeve has been cut short for bandaging. He looks tired in the way a candle looks tired after burning all night: smaller, maybe, but still fire.  
->  
-> A Briar Crown guard shoves a slate toward him.  
->  
-> “Mark the true route.”  
->  
-> Lio looks at the slate, then at the guard.  
->  
-> “That is a drawing of a confused beetle,” he says. “So unless the beetle has royal business, I can’t help you.”
-
-Mara, seeing him, nearly runs forward. The hero or companion stops her gently.
-
-## Boss Battle
-
-### Boss setup
-
-Bracken Voss discovers the party during the rescue. He is not alone. He uses thornbound constructs, guards, altered seals, signal shutters, and other crafted route-control devices.
-
-The boss battle should feel like rescuing Lio from the machinery of false authority.
-
-### Possible boss name
-
-**Bracken Voss, Briar Crown Cellmaster**
-
-### Boss fight structure
-
-Enemies:
-
-- Bracken Voss, Cellmaster
-- Thornseal Guard
-- Crownbound Hound or Thornroot Sentry
-
-Special mechanic:
-
-Bracken attempts to “misdirect” the party with false command effects.
-
-Possible combat effect:
-
-**False Order:** Next hero attack has reduced accuracy unless the player has restored captive lanterns.
-
-**Commanding Seal:** One enemy gains Guard unless a lantern blessing breaks it.
-
-**Road Confused:** Randomly delays companion action unless countered by a true-road item or puzzle reward.
-
-### Lio’s non-combat contribution
-
-During the battle, Lio can help once from captivity by kicking over a lantern, shouting a warning, or loosening a thorn chain.
-
-This should not make him a combat companion yet, but it shows courage.
-
-Possible battle moment:
-
-> Lio twists against the rope and slams his shoulder into the lantern hook. Gold light spills across the floor, revealing the true route mark under Bracken’s seal.
-
-Effect: Bracken loses a defensive buff.
-
-### Mara’s non-combat contribution
-
-Mara should not enter the fight, but she can contribute before or after.
-
-During the boss battle, she might be kept behind a stone arch with a Westroot adult, calling out one critical sibling clue:
-
-> “Lio! Left knot! Like the pear-roll string!”
-
-This helps him free one hand or disrupt a mechanism.
-
-Use sparingly. Mara should feel brave, not endangered for cheap tension.
-
-## Boss Outcome
-
-The party defeats the immediate threat and frees Lio, but Bracken Voss escapes through an emergency route with one or two important documents.
-
-This drives Lio’s anger.
-
-Bracken’s escape should feel frustrating but not like player failure. The party saved Lio and exposed the cell. The escape sets up the next arc.
-
-### Bracken escape line
-
-> “You have rescued one courier,” Bracken says, backing toward the thorn-marked door. “Very noble. Very small. The roads are larger than your kindness.”
-
-Or:
-
-> “Truth walks slowly,” Bracken says. “We are already ahead of it.”
-
-Then he escapes through a prepared route mechanism that collapses or seals the passage behind him.
-
-## Lio and Mara Reunion
-
-This should be the emotional heart of Chapter 5.
-
-Mara reaches Lio after the battle. He tries to act fine. She sees through it.
-
-Sample scene:
-
-> Mara reaches him at a run and stops one step short, as if afraid touching him might prove he is not real.  
->  
-> Lio gives her a crooked smile. “You ate my pear roll, didn’t you?”  
->  
-> Mara makes a sound halfway between a laugh and a sob and crashes into him.  
->  
-> “I saved the string,” she says into his torn coat.  
->  
-> Lio closes his eyes. “Good. That was the important part.”
-
-## Lio’s Anger
-
-After the reunion, Lio sees Bracken escaped.
-
-His tone hardens.
-
-> “He got away.”
-
-Mara says they found him. Lio says there are others. There will be more false orders. More couriers. More sisters waiting at doors.
-
-This is understandable. The player should not be asked to condemn him. But the story should show that his anger needs guiding.
-
-### Lio line
-
-> “I know their marks now. I know their voices. I know how they tie knots. We can find them. We can make them afraid.”
-
-### Mara response
-
-> “I want them stopped too. But I do not want you turning into another road that only knows how to warn people away.”
-
-Or:
-
-> “You told me not to follow angry.”
-
-Lio is quiet. He remembers the message he left.
-
-This plants his healing arc.
-
-## Chapter 5 Reveal: What the Briar Crown Is
-
-In the false ledger room or after the boss, a knowledgeable Westroot clerk makes the immediate operational reading. The party preserves the original papers and later carries them through the guarded compact to Enna for the wider case analysis.
-
-The party learns:
-
-- The Briar Crown is organized into cells.
-- This cell was assigned to confuse Lantern Road, open Westroot, recover Willow seal access, and move Lio.
-- They forge royal orders to hijack trust in the true crown.
-- They use stolen civic trust: market seals, watch ledgers, route markers, courier habits.
-- They believe command is safer than truth.
-
-This is enough for the player to understand the Briar Crown as a faction.
-
-## Princess Clue
-
-The party finds a sealed order bearing Princess Elowen’s name.
-
-But Lio says something is wrong.
-
-Any voice clue here must be a stored or relayed crafted signal with a physical channel and an earlier sender, not unexplained real-time speech across the road network.
-
-Possible clue:
-
-> “They kept saying her name like a password,” Lio says. “But one of them slipped. Said, ‘The princess never gave the order, but she opened the question.’ I do not know what that means.”
-
-Or:
-
-> “I heard a girl’s voice through the lanternwell. Not Mara. Older. She said, ‘If this bears my name, then someone has made every station repeat the same lie.’”
-
-This can be the first uncertain communications hint that the princess is actively involved or being isolated somewhere along the route system.
-
-Recommended version:
-
-Lio remembers hearing a recorded or relayed voice through a crafted lanternwell signal channel. The mechanism carries a message; it does not create a supernatural connection between speakers:
-
-> “Tell my father I did not issue the order. Someone is making the roads carry my name.”
-
-He does not know who said it. The companion recognizes the implication.
-
-## Larger Hint: The Cell Has Institutional Support
-
-After Bracken escapes, the party recovers a surviving instruction from the false ledger room. Its order is criminal, but its paper, correction marks, or private seal reference are genuine.
-
-A knowledgeable Westroot clerk identifies the genuine office material on site. Enna confirms the wider implication after the evidence reaches Bramblecross.
-
-> “This part is not forged,” they say. “It came from the office that decides what the real version should look like.”
-
-The heroes know what the Briar Crown faction is. They now also know that its access reaches above Bracken's cell.
-
-## Chapter 5 End State
-
-- Lio is rescued.
-- Mara and Lio reunite.
-- Lio is tougher, angrier, and determined.
-- Mara begins helping Lio resist vengeance.
-- The Briar Crown is revealed as a faction/cell network.
-- The cell leader escapes.
-- Princess Elowen’s name becomes a major future lead.
-- Genuine office material proves that the cell has institutional support above Bracken.
-
-## Closing Image
-
-After the return journey through Westroot, the party reaches Bramblecross with Lio alive and the original office papers intact.
-
-The hidden road is safer than it was, but not fully healed.
-
-Back at Briarhold Waystation, a gold lantern burns again, no longer covered.
-
-Mara sits beside Lio, shoulder pressed against his arm so he cannot quite stand up and chase vengeance yet.
-
-At the Bramblecross case wall, Lio stares at the westward route where Bracken escaped.
+At the case wall, Lio says:
 
 > “He is still out there.”
 
@@ -1386,11 +1106,15 @@ Mara answers:
 
 > “So are we.”
 
-Then Enna folds the genuine office paper around the false order.
+Enna's deduction establishes that genuine institutional access supports the criminal orders. The known examiner and Elowen's Lanthorne hearing provide the next lead. No senior villain is prematurely identified, and no magical mark awakens.
 
-The forgery is defeated.
+## Required End State And Production Gate
 
-The access that made it possible is not.
+Lio and all three present captives are safe; Bracken's command is defeated and he has escaped wounded; the siblings reunite; the originals and examiner's account are secured; the overland return, public homecoming, and private case-wall reading are complete. Lantern restoration and tusker combat remain optional advantages.
+
+The normal player reaches level 5 after the rescue, with one-time progression/rewards and no major weapon competing with the emotional climax. Lio's possible combat role begins no earlier than a future Chapter 6 decision.
+
+The next production step is the linked lantern/boss/carriage interaction spike with actual persistence and a short owner playtest. Complete the full graybox before finished map art. Approve scale-correct movement and lighting masters, then verify each painting immediately on integration. The contract defines first/incomplete/completed/backtracking/loaded-save behavior for every major surface.
 
 ---
 
@@ -1517,7 +1241,7 @@ Piece of evidence tying the Briar Crown’s forgeries to royal trust.
 A darker counterpart to the Warden Chain, possibly later purified or studied.
 
 **Lio’s Courier Knot**  
-Story item from Lio/Mara reunion. Symbol of rescued truth and sibling bond.
+Already recovered in Chapter 4 at the Listening Mile and kept by Mara. The Chapter 5 reunion recalls it without awarding a duplicate.
 
 ---
 
@@ -1525,12 +1249,12 @@ Story item from Lio/Mara reunion. Symbol of rescued truth and sibling bond.
 
 The map roles of **Hearthward**, **Lanthorne**, **Coravene**, and the other v05 seats are settled planning direction. That does not automatically place every name in playable dialogue. The following choices remain genuinely open:
 
-1. Confirm **Elowen** as the final playable name before the Chapter 4 executable contract, and decide when Hearthward, Lanthorne, and the wider map names first enter dialogue.
+1. Elowen's playable name and first independent Royal Progress are established in Chapter 4. Chapter 5's accepted ending introduces the Lanthorne lead; timing of other wider map names remains a later writing choice.
 2. Define the Chamber of Compacts' membership and exact relationship to the wider royal council before it becomes a playable institution.
 3. What are the final names of the Crownward claimant and the Deputy Roadwarden or Survey official who runs Briar operations? Is **Crownward League** the final public name?
 4. How soon after the Chapter 5 evidence should the party meet Elowen in person or in disguise?
 5. Does the Moonmark Counselor of Songs travel with Elowen or remain at court?
-6. Should Lio become a recurring ally, a courier-network contact, or a future temporary guest?
+6. Lio remains a recovering non-combat story companion through Chapter 5. Decide his later mechanical role no earlier than Chapter 6.
 7. Should Mara eventually become a formal non-combat companion with a puzzle/support interface?
 8. What did the old Lantern Road require from official roadwardens?
 9. How publicly is the royal family connected to the Lantern Compact and Great Survey?
@@ -1542,12 +1266,4 @@ The map roles of **Hearthward**, **Lanthorne**, **Coravene**, and the other v05 
 
 # Recommended Next Writing Step
 
-Complete the Chapter 3 human-comprehension signoff and bounded non-cosmic consistency pass before drafting the Chapter 4 executable contract. The Chapter 4 contract should then lock:
-
-- Elowen's final playable name and the one-line Royal Progress setup before her forged name appears;
-- the abandoned Underway Survey Station, Lio's twice-folded clue, physical shutter evidence, and grounded folded-map mechanism;
-- the Underway, relay post, and Briarhold locations east of Riverwatch;
-- the boundary that keeps Edden's existing drawings relevant to Chapter 2 without using them to solve Westroot's private Underway;
-- a lawful Crownward broadside paired with a secret Briar operational instruction;
-- a crafted-signal explanation for every echo, lantern, shutter, or relayed voice;
-- the Chapter 5 handoff toward genuine institutional access rather than an awakened symbol or older force.
+Chapters 1–4 have full-story owner signoff. Follow [the Chapter 5 executable contract](chapter-5-vertical-slice-contract.md): build the linked lantern/boss/carriage-rescue spike with runtime persistence and a short owner playtest, then expand the complete graybox. Draft the full companion-specific manuscript against the accepted physical interaction and knowledge order. Finished map art follows accepted scale masters and the complete graybox.

@@ -1,6 +1,15 @@
-# Current Project Status — 2026-09-04
+# Current Project Status — 2026-09-05
 
-Stable branch: `main`; current handoff branch: `codex/chapter-4-graybox-entry`
+Stable branch: `main`; current handoff branch: `codex/chapter-5-vertical-slice`
+
+## September 5 Chapter 5 Contract
+
+- Accepted Chapter 4 work is merged and pushed to `main` at `5b1c4d3`. Chapter 5 planning is preserved on the new branch.
+- `docs/story/chapter-5-vertical-slice-contract.md` consolidates the accepted story, routes, alert consequences, prisoners, ending, repeat/save rules, and map/art gates.
+- `src/story/chapter5.ts` and `src/game/chapter5.ts` supply typed contract data and pure executable consequences. `public/saves/chapter-4-complete.json` is the checked-in starting fixture.
+- The old Chapter 5 story-bible and story-plan ideas are reconciled: colored mechanical signals, the carriage rescue, four required captives, eastbound overland return, and the institutional-access/Lanthorne ending.
+- The pure model is not yet wired to runtime saves or UI. The live playable endpoint remains the Chapter 4 Briarhold reveal. Next: build and human-test the small lantern/boss/carriage-rescue spike, including persistence, before the full graybox and finished art.
+- The final `npm.cmd run verify` is green: build, 66 rules, 35 Chapter 1, 31 Chapter 2, 12 Chapter 3, 16 Chapter 4, and 1 smoke test (161 total), plus the 171-image asset audit. The new fixture also passes real disk import at the Relay ledger.
 
 ## September 4 Chapter 4 Completion
 
@@ -61,7 +70,7 @@ The implementation and decisions are documented in `docs/planning/gameplay-ux-re
 - Every tunnel map is black outside a local lantern halo. Only the hero and immediately connected passage segments remain visible; traveled tunnel returns to darkness. The three Listening Mile hoods now have substantial separate travel maps.
 - Tasmine's five-item regional smithy uses the full buy/sell interface. It stocks the optional 32-gold Hookblade, 30-gold Passage Pike, 34-gold Counterweight Maul, 29-gold Ironroot Ribplate, and 23-gold Low-Arch Roothelm. It carries no Orin gear, cloak, charm, or general supplies. Story evidence cannot be sold, nothing auto-equips, and the Underway never checks a purchase.
 - The Folded Map story bridge now uses Lio's twice-folded scratch and the physical route shutters at the Survey Station. The Cargo Transfer Tag establishes the gate crossing but no longer selects a deeper road; the Witness Stone rubbing and Edden's bundle no longer explain the puzzle.
-- The next work is Chapter 5 planning from the accepted Briarhold handoff, using the Chapter 4 retrospective's interaction and painted-map gates.
+- Chapter 5 planning and its executable contract are established. The next work is the linked lantern/boss/carriage-rescue spike with persistence, using the Chapter 4 retrospective's interaction and painted-map gates.
 - The automated Underway/Listening Mile graybox record is `docs/playtest-notes/2026-08-09-chapter-4-underway-listening-mile-graybox.md`.
 - Tasmine Rootbrace is Westroot's Stonekin smith and gatewright. Bramwell and Noma introduce her in a friendly Lower Gate scene. Bramwell's sighting establishes the captors' entrance, Tasmine's sighting establishes their departure, and both admit that the deeper station shutter remained out of view. The canonical 78-gold fixture reaches the map with or without buying anything.
 - Chapter 4 begins only when the player commits through the Westroot completion scene; merely loading the Chapter 3-complete fixture preserves its ending state. Main objectives now advance through Lower Gate, Survey Station, Rootwater Bridge, and the later Underway detour.
