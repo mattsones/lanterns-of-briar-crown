@@ -1,6 +1,36 @@
-# Current Project Status — 2026-09-05
+# Current Project Status — 2026-10-15
 
 Stable branch: `main`; current handoff branch: `codex/chapter-5-vertical-slice`
+
+## October 15 Full Chapter Five Greybox
+
+The owner authorized expansion after the accepted puzzle/fight and asks for descriptive, immersive prose. The full schematic route is playable through every present captive, four original evidence bundles, the safe reunion/examiner account, both wilderness routes, and the public/private Bramblecross ending. Old carriage checkpoints continue with the new work unearned. Completion waits for Enna's final deduction. See [the full-greybox record](2026-10-15-chapter-5-full-greybox.md) for controls, rewards, state, verification, and owner test route. Final Chapter 5 maps/art remain after the full-route owner review and approved scale masters.
+
+The full local gate passed 199 checks (80 rules, 35 Chapter 1, 31 Chapter 2, 12 Chapter 3, 16 Chapter 4, 24 Chapter 5, one smoke), a production build, and the 171-image audit. Final prose passed the affected gates again; desktop and phone visuals were reviewed. The final phone graph spacing passed build and direct UI QA. The test server is on 5185.
+
+## October 12 Guide Lamp And Bracken Prose
+
+- The signal room now shows an oil guide lamp with amber glass, a reflector, and a shutter jammed by woody briar stems. Its worn open stop establishes the previous operation. Clearing the hinge sends ordinary lamplight down a shaft into the inner room.
+- The Crown Table scene establishes cover once, shows the actual guards, and describes Bracken's visible hesitation toward the lit opening. The duplicate numeric roster/counterplay paragraph and advance attack/repair explanations are removed. Combat feedback retains the observed False Order counter; the brake scene follows the lit metal rod physically.
+- Existing action IDs, save phases, panes, rosters, damage/status effects, Sentry repair, and rescue checks are preserved. The writing rules record sentence-opening numbers and enemy knowledge order. See `2026-10-12-chapter-5-lamp-and-bracken-prose.md`.
+- The owner's follow-up closes the workshop action's loop: the Sentry's tug finds a slack feed at the entrance, then its first eligible damaged repair attempt fails visibly. A new two-turn browser case checks the failed attempt, unchanged HP, and once-only feedback; the existing intact-feed repair case remains.
+- Build, 71 rules, and smoke passed. The existing 16 Chapter 5 cases passed the full preview run; the new repair-feedback case passed a focused rerun after its HP expectation was corrected to include Rowan's damage. The preview was stopped afterward and development remains on 5185.
+- The next owner follow-up adds a saved Precision DC 12 officer ambush with conscious Tilda +2. Success is quiet; a miss allows a cry and raises awareness one level, recalling diverted guards at Alerted. Both paths secure the officer and keep desk/captive access. Legacy access is preserved, and reload cannot reroll the check. The build, all 72 rules, and all 20 Chapter 5 browser tests passed, including failure paths and companion boundaries. The preview was stopped afterward; development remains on 5185.
+
+## October 11 Chapter 5 Interaction Slice
+
+- **Begin Chapter 5 Playtest** opens a playable same-night approach, three-wing lantern/key loop, alert-dependent Bracken confrontation, and untimed carriage rescue from the checked-in Chapter 4-complete fixture.
+- Versioned runtime saves preserve partial panes, awareness, personnel, checks, frozen boss profile, pending confrontation, party resources, and rescue progress. The level-5 milestone uses normal growth choices and is awarded once.
+- The endpoint is Lio's immediate reunion. The full captive/evidence cleanup, return, and Bramblecross ending remain pending; `chapterFiveClear` stays false. Provisional personnel actions will expand with the full graybox.
+- The owner accepted the mechanics and requested significantly richer, immersive narrative. The expanded runtime manuscript in `src/story/chapter5Narrative.ts` adds environmental description, physical infiltration actions, alert-aware revisits, distinct companion voices, and fuller first-sight/rescue/reunion scenes. Next: narrative review, then complete graybox before final art. See `2026-10-11-chapter-5-interaction-spike.md`.
+- Full verification passed: 171-image asset audit, production build, and 178 tests (69 rules, 35 Chapter 1, 31 Chapter 2, 12 Chapter 3, 16 Chapter 4, 14 Chapter 5, 1 smoke). Use `LIAMS_GAME_PORT=5185` when another project owns the default dev-server port.
+- The later narrative revision passed build, 69 rules, and all 14 Chapter 5 browser checks again, with desktop/phone prose review. A separate production preview isolated the checks from an unexplained live-dev page reload.
+- The subsequent owner spatial-knowledge correction separates landing/hub scenes and stages the records encounter: cover, temporary distraction, quiet officer restraint, desk access, clerk release/key clue. The new officer/clerk phases are persisted; desk details remain hidden from cover. Backing out of the distraction returns the officer and preserves monotonic suspicion.
+- That staged-room revision passed build, 71 rules, 15 Chapter 5 browser checks, and development-mode smoke, with desktop/phone phase review.
+- The next workshop correction establishes a concealed storage recess behind a cooling rack. The party warns the laborer from cover and reaches the bench only after both workers leave; the shim, name, and coupling are hidden until then. Discovery and action outcomes describe disrupting Briar machinery without predicting a confrontation. The existing saved bench-access and combat benefit are preserved.
+- That workshop correction passed the production build, 71 rules tests, and all 16 Chapter 5 browser checks, including a new knowledge/access/persistence case with Moss. The preview was stopped after checks; the owner server remains on 5185.
+- A subsequent chapter-wide prose audit removes unnecessary denials addressed to earlier drafts, including both desk/officer examples. Room states, companion lines, action/movement outcomes, signals, combat copy, quests, and authored key lines were reviewed. The physical scene now carries those facts; current choice/consequence warnings remain. The owner's perspective guidance is saved in the story writing rules.
+- That prose cleanup passed the build, 71 rules, and all 16 Chapter 5 browser tests. The production preview was stopped; development remains on 5185. Saved last-outcome strings update with the next action, while room prose reflects the edits immediately.
 
 ## September 5 Chapter 5 Contract
 
@@ -39,13 +69,13 @@ This is the concise pickup document for the current illustrated prototype. Histo
 
 ## Playable State
 
-- Chapters 1–4 have automated playable paths.
+- Chapters 1–5 have automated playable paths; Chapter 5 is a full schematic greybox.
 - Chapter 1 remains the protected baseline and now includes the full queued human-playtest polish pass.
 - Chapter 2 is complete through the Westroot gate and retains clean, standard, and messy puzzle outcomes.
 - Chapter 3 is closed as a release candidate after an owner-played human run through Rootmarket, the Rootbread Promise, Witness Stones, Cargo Siding, Split Hall, and the Chapter 4 handoff.
 - The uninterrupted human Chapters 1–4 run was completed and accepted on 2026-09-04.
 - Chapter 4 is an illustrated release candidate from the canonical Chapter 3-complete fixture through the Briarhold reveal.
-- The playable endpoint is the Chapter 5 handoff after the Relay Post fight, forged-order evidence, and Briarhold prisoner ledger. The captive porter remains explicitly deferred optional content.
+- The playable endpoint is Enna's private Chapter 5 case-wall meeting in Bramblecross. Orren closes the Chapter 1 missing-porter thread; the separate optional Chapter 4 porter remains deferred.
 
 ## Current UX
 

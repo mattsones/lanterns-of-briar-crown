@@ -1062,7 +1062,7 @@ The Captive Lantern Hall is normally empty. Three fixed mechanical signal lanter
 
 Front Gate Alert diverts inner guards while the facility is Quiet or Suspicious. Command Center Recall sends guards toward Bracken and triggers Alerted. The first meaningless transmission draws one investigating guard and offers hide, direct assault, or a harder silent nonlethal ambush. Successful hiding preserves all personnel at Suspicious; successful silent ambush removes one guard at Suspicious. Failures and open combat produce Alerted. A second meaningless signal always alerts the facility and never supplies another lone guard. The investigating guard has no inner key.
 
-Restoring the physical gold-light channel weakens Bracken's False Order and reveals the true carriage brake beneath his false plate. It remains useful at Alerted, when guards will no longer obey the diversion. This is crafted machinery and physical light, with no speaking magical network or repeated Witness Stones ethic puzzle.
+Beside the signal racks sits an older oil guide lamp with fixed amber glass and a brass reflector. Woody briar stems have jammed its shutter nearly shut; clearing them lets it rest open against its worn stop and cast warm light down a sloping shaft into the inner room. The light makes old brass floor guides readable beside Bracken's painted arrow boards and reveals the brake rod below the carriage's false labels. It remains useful at Alerted, when guards ignore the diversion. The boss introduction shows Bracken's glance toward the lit opening and a hesitant gesture; the player learns his named attacks and the lamp's combat benefit through the fight itself.
 
 ## Lio, Bracken, And The Carriage
 
@@ -1114,7 +1114,7 @@ Lio and all three present captives are safe; Bracken's command is defeated and h
 
 The normal player reaches level 5 after the rescue, with one-time progression/rewards and no major weapon competing with the emotional climax. Lio's possible combat role begins no earlier than a future Chapter 6 decision.
 
-The next production step is the linked lantern/boss/carriage interaction spike with actual persistence and a short owner playtest. Complete the full graybox before finished map art. Approve scale-correct movement and lighting masters, then verify each painting immediately on integration. The contract defines first/incomplete/completed/backtracking/loaded-save behavior for every major surface.
+The owner accepted the linked lantern/boss/carriage mechanics and authorized the full schematic greybox, implemented on October 15 through the private Bramblecross ending. Review the complete route with the owner before finished map art. Approve scale-correct movement and lighting masters, then verify each painting immediately on integration. The contract defines first/incomplete/completed/backtracking/loaded-save behavior for every major surface.
 
 ---
 
@@ -1266,4 +1266,4 @@ The map roles of **Hearthward**, **Lanthorne**, **Coravene**, and the other v05 
 
 # Recommended Next Writing Step
 
-Chapters 1–4 have full-story owner signoff. Follow [the Chapter 5 executable contract](chapter-5-vertical-slice-contract.md): build the linked lantern/boss/carriage-rescue spike with runtime persistence and a short owner playtest, then expand the complete graybox. Draft the full companion-specific manuscript against the accepted physical interaction and knowledge order. Finished map art follows accepted scale masters and the complete graybox.
+Chapters 1–4 have full-story owner signoff. Chapter 5 now has the complete schematic greybox and companion-specific manuscript through the Bramblecross ending. Follow [the full-greybox record](../playtest-notes/2026-10-15-chapter-5-full-greybox.md) for the owner route test. Preserve the accepted physical interactions and knowledge order. Finished map art follows full-route owner review and accepted scale/lighting masters.

@@ -2,18 +2,19 @@
 
 Date: 2026-09-05
 
-Status: executable contract established; interaction spike and playable chapter still pending.
+Status: full schematic greybox implemented on 2026-10-15 after owner acceptance of the central puzzles/fight. Complete route awaits owner playthrough; scale masters and production paintings follow. See [the full-greybox record](../playtest-notes/2026-10-15-chapter-5-full-greybox.md).
 
 ## Authority And Scope
 
 The owner accepted the story and play decisions in [Chapter 5 Planning Decisions](../planning/chapter-5-planning-decisions.md) on September 5. This contract consolidates those decisions and supplies bounded implementation defaults. It does not require another planning questionnaire.
 
 - `src/story/chapter5.ts` owns typed entry requirements, planned rooms, evidence, signal codes, skill-check defaults, and stable scene IDs.
+- `src/story/chapter5Narrative.ts` owns the playable slice's room and action prose, state-aware revisits, alert presentation, and specific companion reactions.
 - `src/game/chapter5.ts` owns executable readiness, infiltration consequences, boss-profile derivation, carriage steps, and departure/completion validation.
 - `tests/chapter5-contract.rules.spec.ts` exercises those rules through the standard rules gate.
-- The isolated `BriarholdState` and `Chapter5Outcome` models are preparation for the spike. They are **not yet persisted by the live game**, and their unit tests do not establish a playable chapter.
+- `BriarholdState` is now persisted inside the versioned `SavePayload.chapter5` interaction block in `src/game/chapter5Runtime.ts`. `Chapter5Outcome` is derived from the persisted aftermath state in `chapter5Progress.ts`; the expanded browser suite exercises the full playable route.
 
-Production integration remains a separate slice. The live playable endpoint remains the accepted Chapter 4 Briarhold reveal. No Chapter 5 title-screen start is added until its opening is playable.
+The complete schematic Chapter 5 greybox is playable from **Begin Chapter 5 Playtest**, the captured Relay ledger, and existing Chapter 5 checkpoints. The endpoint is Enna’s private Bramblecross case wall. `chapter5Aftermath.ts` supplies the new descriptive prose and companion beats. Production art remains a separate milestone.
 
 ## Chapter Promise And Boundaries
 
@@ -81,15 +82,19 @@ The direct key-taking fight, explicit assault responses, second invalid signal, 
 
 | Wing | Immediate discovery | Intervention and later effect |
 |---|---|---|
-| False Ledger Room | A captive Westroot clerk works under a knowing Briar records officer; standard signal chart is secured beneath the desk glass | Resolve the officer through distraction, nonlethal subdual, or combat; Mara uses the workshop shim to open the ordinary locked drawer and reveal the spare key; free the clerk and preserve original papers |
-| Thornseal Workshop | A knowing sealwright, a deceived laborer, and practical forgery apparatus | Warn/persuade the laborer away; bypass, subdue, or fight the sealwright; obtain the shim; separately disconnect the Sentry repair linkage |
-| Captive Lantern Hall | Normally empty signal room with pane racks, three fixed lanterns, transmission shutters, and a covered gold-light channel | Send the correct diversion; restore the gold channel to counter False Order and reveal the true carriage brake |
+| False Ledger Room | Observe a cuffed captive and records officer from cover; chart and drawer details are visible only after reaching the desk | A distraction creates an opening for a Precision DC 12 ambush/restraint check. Success stays quiet; a miss lets him cry out before being secured, raising awareness one level. Then reach the desk and release the clerk, earning her spare-key clue. Mara still needs the workshop shim for the drawer. Officer combat and full paper preservation remain graybox work. |
+| Thornseal Workshop | Observe the sealwright and laborer from a storage recess behind a cooling rack; small tools and mechanism fittings are hidden until bench access | In the current slice, quietly warn the laborer from cover; the sealwright follows him outside, allowing the party to cross to the bench. Only there discover the shim and brace-feed coupling; describe disconnection as disrupting Briar machinery without predicting a confrontation. Other sealwright resolutions remain graybox work. |
+| Captive Lantern Hall | Normally empty signal room with pane racks, three fixed lanterns, transmission shutters, and an older oil guide lamp behind a loose cover | Send the correct diversion; inspect the guide lamp, clear the woody briar stems jamming its shutter, and raise it to illuminate the inner room and brake linkage |
 
-The drawer's contents are unknown until it opens. The signal chart is fixed, always reviewable when the room is accessible, and never an inventory item or remotely available puzzle answer panel. An early locked-drawer visit does not consume the later shim action. The shim is retained, not consumed on a failed check.
+The drawer's contents are unknown until it opens or the freed clerk explains that she saw the officer place a spare inner-door key inside. This earned clue follows the owner's October 11 spatial-knowledge correction; it does not remove the drawer's tool requirement. The signal chart is fixed, reviewable only after reaching the desk, and never an inventory item or remotely available puzzle answer panel. An early locked-drawer visit does not consume the later shim action. The shim is retained, not consumed on a failed check.
+
+The current Ledger Room sequence is **enter under cover → distract the officer → attempt the ambush/restraint → reach the desk → release the clerk**. Her cuff and chain are visible from the crates; her name, origin, and key clue are learned when she is freed. A distraction alone leaves him able to return. Back/Escape before restraint resets the opening and leaves alert at least Suspicious; he finds no missing prisoner because desk access and release have not yet occurred. Under the owner's October 12 follow-up, the distracted officer's restraint now uses one **Precision DC 12** check, with the existing conscious-Tilda +2 silent-ambush bonus. Success secures him quietly and preserves awareness. On a miss he cries out before the hero finishes the nonlethal restraint: Quiet becomes Suspicious, Suspicious becomes Alerted, and Alerted stays Alerted. A general alert recalls any diverted guards. Both outcomes secure the officer and permit desk/captive access; the cost of a miss is the lost quiet, not a repeated roll or a blocked rescue. Save the complete roll in `checks.ledgerOfficer`; Back/reload cannot repeat it. Earlier secured-desk saves keep earned access without an invented check. Officer combat and other alternatives remain full-graybox work. The released clerk waits in the sheltered records alcove until group departure; freeing her does not end the chapter.
+
+Workshop knowledge follows the same physical-access rule: wait outside the doorway until both workers face the press, enter the screened storage recess, observe through the cooling rack, warn the laborer when he collects a tray, and cross the aisle only after both workers leave through the outer service door. `workshopResolved` already persists that bench access; no new save phase or timer is needed. Dessa's name, the shim, the coupling label, and the removable pin appear only at the bench. Companion observations from cover cannot reveal the mechanism or anticipate its later combat effect. Taking the shim and disconnecting the feed remain independent actions, with the existing one-repair prevention unchanged.
 
 The quiet chain is **workshop shim → ledger drawer/spare key + Front Gate Alert → inner entrance**. The order of discovering rooms is free; the drawer's physical tool dependency is not. The player may revisit the chart. The diversion stays effective while the player prepares, without an invisible countdown; another transmitted work code or a general alarm recalls the detail. Once opened, the inner door does not magically relock.
 
-Restoring the gold channel is a separate physical intervention in the Lantern Hall, available at every alert level. Its exact manipulation and feedback are part of the upcoming interaction spike. Gold restoration cannot depend on guards believing a diversion after Alerted. The workshop's bounded default is preventing one Sentry repair, rather than changing the already-agreed support counts.
+Restoring the guide lamp is a separate physical intervention in the Lantern Hall, available at every alert level. A loose cover conceals the oil lamp's shutter hinge; woody briar stems have wedged the shutter nearly closed, and wear on its old stop shows where it once rested open. Clearing the stems and lifting the shutter lets fixed amber glass and a brass reflector send ordinary lamplight down a sloping shaft into the inner room. It lights brass floor guides beside the false painted arrow boards and makes the brake rod visible below its cover. This replaces the opaque gold-channel prose under the owner's October 12 direction; existing `goldChannelUncovered` / `lanternsRestored` save flags and effects remain. The intervention works independently of the colored signal shutters and guard belief at Alerted. The workshop still prevents one Sentry repair.
 
 ## Lantern Interaction Defaults For The Spike
 
@@ -109,7 +114,7 @@ Arranging panes has no consequence. Only the explicit shutter-pull transmits. Em
 
 ## Checks And Companion Benefits
 
-Use the existing d20 skill check and derived stats; show roll, stat bonus, DC, and consequence. Starting DCs are 12 for receiving-gate Precision/Heart, 12 for Instinct concealment, 15 for Precision silent ambush, and 12 for identifying the unlit brake. Difficulty numbers are graybox tuning values. No separate Stealth stat or new animated dice UI is required.
+Use the existing d20 skill check and derived stats; show roll, stat bonus, DC, and consequence. Starting DCs are 12 for receiving-gate Precision/Heart, 12 for Instinct concealment, 15 for the investigating guard's Precision silent ambush, 12 for the distracted records officer's Precision restraint, and 12 for identifying the unlit brake. Difficulty numbers are graybox tuning values. No separate Stealth stat or new animated dice UI is required.
 
 - Rowan can contain one authored wing encounter, protects Mara, and has concise, steady tactical dialogue. Persist the expended benefit.
 - Tilda improves concealment and the silent ambush. Initial tuning: +2 to those two checks when conscious. Her humor notices lies and openings without trivializing captivity.
@@ -128,7 +133,9 @@ Every major movement—approach, hub, wings, first sight, confrontation, rescue,
 
 A successful silent ambush subtracts one guard from the applicable roster, with a floor of zero guards. The Sentry is always present. Openly defeating the original door detail does not remove general-alert support: remaining station personnel answer the alarm. Removing the investigating guard in an open fight reduces the earlier door detail; it does not also grant the silent bonus to the boss roster.
 
-Start with the existing enemy-cohesion HP and damage values (Bracken 44, Guard 28, Sentry 32). Gold restoration changes Bracken's **False Order** Shaken penalty from 2 to 0, with explicit narration and visible true route lines. It does not erase his attack damage or every other enemy effect. The disabled workshop linkage prevents the Sentry's one repair opportunity. Repair amount and timing remain spike tuning; the complete four-enemy battle must be reviewed at real card sizes.
+Start with the existing enemy-cohesion HP and damage values (Bracken 44, Guard 28, Sentry 32). Guide-lamp restoration changes Bracken's **False Order** Shaken penalty from 2 to 0; illumination makes the physical floor guides readable beside his misleading boards. It does not erase his attack damage or every other enemy effect. Before combat, show only Bracken's observable glance and hesitation, the room, and its occupants. Remove the duplicated numerical roster/counterplay paragraph from the introductory scene; combat cards establish the count when the fight begins. Named attacks, penalties, and repair rules belong in combat feedback after an observed action. The disabled workshop linkage prevents the Sentry's one repair opportunity. Initial repair tuning remains one up-to-6-HP restoration; the complete four-enemy battle must be reviewed at real card sizes.
+
+The owner's October 12 follow-up requires a visible workshop payoff. When the feed is disconnected, the Sentry's tug draws its cord away slack at the entrance and leaves an arm-binding gap exposed. After it first takes damage and reaches the normal repair opportunity, combat describes its failed effort to draw a fresh brace while the damaged joint stays split. Mark that opportunity accounted for with the existing repair-used battle field so the failure report appears once. The intact feed heals at the established time; the disconnected feed provides no HP.
 
 Freeze the selected boss roster and counterplay on battle start. Combat victory must resolve surviving supports as defeated or withdrawing before the rescue takes over; reducing Bracken alone to 0 HP cannot leave an active enemy attacking a rescue overlay. Bracken's defeat is real. He withdraws wounded, releases the carriage brake, and leaves with the master routing cipher.
 
@@ -192,7 +199,7 @@ Knowledge-changing actions put the new finding first, show a clear result, then 
 
 ## Persistence And Checkpoints Before The Spike Is Accepted
 
-Keep chapter-specific pure helpers; do not refactor the global dialogue engine. The next slice must wire the relevant model fields into typed persisted state and defaults in one bounded change, with disk-save round-trip and partial-load tests before accepting the interaction. Until that wiring lands, the pure model must not be advertised as save-safe runtime play.
+Keep chapter-specific pure helpers; do not refactor the global dialogue engine. The October 11 interaction slice wires relevant fields into typed persisted state and defaults, with disk-save round-trip and partial-load checks. Extend this same bounded boundary when the full outcome model reaches runtime; pure full-chapter tests do not establish a completed save-safe chapter.
 
 - A missing Chapter 5 state block in an older Chapter 4 save begins unstarted. Never infer quiet infiltration, a free recovery, a defeated guard, or a successful rescue from unrelated flags.
 - `livingBriarMarkSeen` remains a tolerated legacy field; no new story or prerequisite reads it.
@@ -212,8 +219,8 @@ Bracken, the Thornseal Guard, and the Thornroot Sentry must match [the enemy-coh
 
 ## Acceptance Sequence And Coverage
 
-1. **Contract established:** starting fixture, isolated pure consequences, required outcomes, scene matrix, and obsolete-plan reconciliation pass automated rules/build checks. This is the current milestone.
-2. **Interaction spike:** a short playable workshop/desk/lantern/door loop, alert-dependent boss, and carriage rescue, with stable hooks and actual persistence. Owner tests whether codes, false command, and brake feedback are understandable. No finished art needed.
+1. **Contract established:** starting fixture, isolated pure consequences, required outcomes, scene matrix, and obsolete-plan reconciliation pass automated rules/build checks. Established September 5.
+2. **Interaction spike:** a short playable workshop/desk/lantern/door loop, alert-dependent boss, and carriage rescue, with stable hooks and actual persistence. Implemented and mechanically accepted October 11. The owner's request for significantly fuller infiltration prose is implemented and awaits narrative review. No finished art needed.
 3. **Complete graybox:** all three entry routes, all alert outcomes, every wing order, required cleanup, companion-specific beats, both return routes, and Bramblecross ending. Human route test before final maps.
 4. **Map masters and production:** schematic acceptance, source-art generation, immediate painted-map alignment checks, and production asset audit.
 5. **Release candidate:** desktop/phone review, uninterrupted Chapters 1–5 human playthrough, shared-system polish, full automated gate, and explicit deferrals.

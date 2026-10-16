@@ -36,8 +36,8 @@ export function validateChapter5ReadyPayload(payload: SavePayload) {
   return errors;
 }
 
-// A pure contract model for the spike. Runtime persistence is added with the UI;
-// do not pretend this object is already part of SavePayload or GameFlags.
+// Pure infiltration rules. chapter5Runtime persists this model alongside the
+// interaction phase, check results, and frozen boss profile in SavePayload.
 export type BriarholdState = {
   entry: BriarholdEntry | null;
   alert: BriarholdAlert;

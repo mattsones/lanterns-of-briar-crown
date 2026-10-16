@@ -1154,6 +1154,7 @@ function EnemyPortrait({ enemy, className = "ml-auto aspect-[4/3] w-full max-w-6
 }
 
 export function BattleModal({ battle, player, companion, heroSkills, heroAttack, finishBattle, battleItemsOpen, setBattleItemsOpen, useBattleConsumable, selectTarget }) {
+  const chapter5Battle = battle.rewardKey?.startsWith("ch5-");
   const modalRef = useModalAccessibility();
   const livingEnemies = battle.enemies.filter((enemy) => enemy.hp > 0);
   const selectedEnemy =
@@ -1215,13 +1216,13 @@ export function BattleModal({ battle, player, companion, heroSkills, heroAttack,
 
           <section aria-labelledby="enemy-side-title" className="order-1 rounded-3xl border border-orange-200/15 bg-orange-950/15 p-3">
             <h3 id="enemy-side-title" className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-orange-200/80">Enemy side • select a target</h3>
-            <div className="grid gap-2 sm:grid-cols-2">
+            <div className={chapter5Battle ? "grid grid-cols-2 gap-2 lg:grid-cols-4" : "grid gap-2 sm:grid-cols-2"}>
               {battle.enemies.map((enemy) => {
                 const selected = enemy.battleId === selectedEnemy?.battleId && enemy.hp > 0;
                 const defeated = enemy.hp <= 0;
                 return (
                   <button key={enemy.battleId} type="button" onClick={() => selectTarget(enemy.battleId)} disabled={defeated || battle.finished} aria-pressed={selected} className={`relative rounded-2xl border p-3 text-left transition ${selected ? "border-amber-300 bg-amber-400/10 ring-2 ring-amber-300/30" : "border-white/10 bg-black/20 hover:border-orange-200/35"} ${defeated ? "opacity-45 grayscale" : ""}`}>
-                    <EnemyPortrait enemy={enemy} className="aspect-[4/3] w-full" />
+                    <EnemyPortrait enemy={enemy} className={chapter5Battle ? "h-16 w-full sm:h-20" : "aspect-[4/3] w-full"} />
                     <div className="mt-2 flex items-start justify-between gap-2">
                       <div className="font-semibold">{enemy.name}</div>
                       {selected ? <span className="rounded-full bg-amber-300/20 px-2 py-1 text-[10px] uppercase tracking-wide text-amber-100">Target</span> : null}

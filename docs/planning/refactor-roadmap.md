@@ -284,7 +284,7 @@ Keep this pass small and playable. It should reduce Chapter 3 risk, not become a
 Current status:
 
 - Chapters 1–4 have production art, automated coverage, and owner signoff after the uninterrupted September 4 story playthrough. Chapter 4 is integrated into `main`.
-- Chapter 5 has accepted planning, an executable contract, pure consequence tests, and a Chapter 4-complete entry fixture. Its playable interaction spike and runtime persistence are next; see `docs/story/chapter-5-vertical-slice-contract.md`.
+- Chapter 5 now has a complete persisted schematic greybox through Enna's private Bramblecross ending. `chapter5Runtime.ts` / `chapter5Progress.ts` keep the logic bounded; `chapter5Narrative.ts` / `chapter5Aftermath.ts` own state-aware immersive prose. The accepted puzzles/fight are preserved. Owner full-route review and scale/lighting masters precede finished art. See `docs/playtest-notes/2026-10-15-chapter-5-full-greybox.md`.
 
 Use `docs/planning/chapter-4-development-process.md` as the required process for closing Chapter 3 and starting Chapter 4. It adds an interaction-state matrix, a Folded Map graybox gate, explicit human-QA milestones, and tooling prerequisites to the general vertical-slice order below.
 

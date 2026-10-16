@@ -53,3 +53,9 @@ Guard uses the strongest current value rather than stacking indefinitely. Multip
 - Custom narration and ally-only Guard receive focused assertions.
 - The affected Chapter 1-4 browser suites must pass before this pass is considered integrated.
 - New Chapter 5 portraits should be reviewed against this record before promotion.
+
+## October 15 Chapter Five Greybox Extension
+
+The optional Rainroot Tusker extends the roster to sixteen archetypes. It uses a fallback boar icon pending art, 26 HP, Rooting Brace (1d6+2, average 5.5, self Guard 3), and Tusk Sweep (2d4+1, average 6, bypass 2). Two adults defend a rooting hollow and withdraw after defeat. They carry no faction marks, evidence, or money. Eight hero XP is awarded once for clearing the crossing. The safe high trail preserves all character and political content.
+
+The optional records-officer and Dessa fights reuse the Thornseal Guard's 28-HP/dice profile during greybox, with specific fallback icons, names, intent labels, and self-defense narration. They grant no duplicate route reward. Boss-only lamp/feed effects are preserved. Ordinary-loadout checks cover the accepted quiet boss and optional level-five tuskers; broader balance remains part of owner route review.

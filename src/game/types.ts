@@ -321,6 +321,7 @@ export type GuestNpc = {
 };
 
 export type SavePayload = {
+  chapter5?: import("./chapter5Runtime").Chapter5SaveState;
   screen: string;
   chapterId?: ChapterId;
   player: Player;

@@ -1,7 +1,7 @@
 import type { GameFlagKey } from "../game/types";
 import { CHAPTER_4_REQUIRED_END_FLAGS } from "./chapter4";
 
-// Contract data for the next graybox; these planned rooms are not live map IDs yet.
+// The full schematic graybox uses these landmarks; painted map IDs await scale approval.
 export const CHAPTER_5_CONTRACT = {
   id: 5,
   title: "Briarhold Waystation",
@@ -27,7 +27,7 @@ export const CHAPTER_5_CONTRACT = {
   requiredRescues: ["lio", "cellar-porter", "westroot-clerk", "road-warden"],
   requiredEvidence: ["transfer-ledger", "genuine-office-instruction", "false-seals", "examiner-transfer-record"],
   requiredItems: ["true_seal_fragment", "briar_chain_link"],
-  enemies: ["bracken_voss", "thornseal_guard", "thornroot_sentry"],
+  enemies: ["bracken_voss", "thornseal_guard", "thornroot_sentry", "rainroot_tusker"],
   optionalOutcomes: ["quiet-entry", "lantern-restoration", "workshop-intervention", "silent-ambush", "tusker-victory"],
   guestRules: { maraFights: false, lioFights: false, guestsCanBeTargeted: false },
 } as const;
@@ -60,12 +60,14 @@ export const CHAPTER_5_CHECKS = {
   receivingHeart: { stat: "Heart", dc: 12 },
   hide: { stat: "Instinct", dc: 12 },
   silentAmbush: { stat: "Precision", dc: 15 },
+  ledgerAmbush: { stat: "Precision", dc: 12 },
   unlitBrake: { stat: "Instinct", dc: 12 },
 } as const;
 
 export const CHAPTER_5_SCENE_IDS = {
   opening: "ch5-relay-departure",
   overlook: "ch5-overlook-shelter",
+  landing: "ch5-service-landing",
   hub: "ch5-briarhold-hub",
   ledger: "ch5-false-ledger",
   workshop: "ch5-thornseal-workshop",

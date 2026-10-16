@@ -227,6 +227,13 @@ export const ENEMY_DB = {
     effectA: { guardSelf: 4, guardAlly: 4, guardNarration: "locks shield and ledger into one defended line" },
     effectB: { heroGuardBypass: 2 },
   },
+  rainroot_tusker: {
+    name: "Rainroot Tusker", icon: "🐗", hp: 26,
+    intentA: "Rooting Brace", intentB: "Tusk Sweep",
+    attackA: { count: 1, sides: 6, bonus: 2 }, attackB: { count: 2, sides: 4, bonus: 1 },
+    effectA: { guardSelf: 3, guardNarration: "digs its feet into the root bed and lowers its heavy head" },
+    effectB: { heroGuardBypass: 2 },
+  },
   thornroot_sentry: {
     name: "Thornroot Sentry",
     icon: "🌿",

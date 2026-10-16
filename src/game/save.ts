@@ -1,4 +1,5 @@
 import { MAPS } from "../data/maps";
+import { normalizeChapter5Save } from "./chapter5Runtime";
 import { DEFAULT_APPEARANCE_ID } from "../data/character";
 import { getChapterProgress } from "./chapterProgress";
 import {
@@ -393,6 +394,7 @@ export function migrateSavePayload(payload: SavePayload, sourceVersion = SAVE_FI
 
   return {
     ...payload,
+    chapter5: normalizeChapter5Save(payload.chapter5),
     screen: payload.screen || "play",
     chapterId,
     player,

@@ -6,6 +6,10 @@ import {
   MobileAdventureBar,
 } from "./components/AdventureShell";
 import { MapStage } from "./components/MapStage";
+import { Chapter5Spike } from "./components/Chapter5Spike";
+import { buildChapter5BattleEnemies, buildChapter5SaveState, finishChapter5Battle, getChapter5AreaName, type Chapter5Resources, type Chapter5SaveState } from "./game/chapter5Runtime";
+import { applyChapter5ProgressRewards, isChapter5Complete } from "./game/chapter5Progress";
+import { getChapter5EntryErrors } from "./game/chapter5";
 import { Button, ItemIcon, Meter, Panel, StatBadge } from "./components/ui";
 import { getBattleReward } from "./data/battleRewards";
 import {
@@ -500,6 +504,9 @@ export default function LiamsGamePrototype() {
   const [saveModalMode, setSaveModalMode] = useState(null);
   const [levelUpPending, setLevelUpPending] = useState(null);
   const [foldedMapGrayboxOpen, setFoldedMapGrayboxOpen] = useState(false);
+  const [chapter5, setChapter5] = useState(buildChapter5SaveState);
+  const chapter5Ref = useRef(chapter5);
+  chapter5Ref.current = chapter5;
 
   useEffect(() => {
     if (!companion.id) return;
@@ -530,8 +537,8 @@ export default function LiamsGamePrototype() {
     [player],
   );
   const questJournal = useMemo(
-    () => buildQuestJournal(flags, companion, region),
-    [flags, companion, region],
+    () => buildQuestJournal(flags, companion, region, chapter5),
+    [flags, companion, region, chapter5],
   );
   const chapterProgress = useMemo(() => getChapterProgress(flags), [flags]);
   const heroXpTarget = getHeroXpTarget(player?.level || 1);
@@ -812,6 +819,7 @@ export default function LiamsGamePrototype() {
       companion: companionSnapshot,
       companionRoster: companionRosterSnapshot,
       guestNpc: getActiveGuestNpc(flags),
+      chapter5,
       flags,
       quest,
       toast: payloadToast,
@@ -826,6 +834,30 @@ export default function LiamsGamePrototype() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     setPlayer((prev) => ({ ...prev, checkpointLabel: label }));
     setToast(`Checkpoint reached: ${label}`);
+  };
+  const commitChapter5 = (next: Chapter5SaveState, resources: Chapter5Resources = {}) => {
+    const nextPlayer = { ...applyChapter5ProgressRewards(chapter5Ref.current, next, resources.player || player), checkpointLabel: getChapter5AreaName(next) };
+    const nextCompanion = resources.companion || companion;
+    const nextFlags = { ...flags, chapterFiveStarted: next.started,
+      captiveLanternsRestored: next.briarhold.lanternsRestored,
+      lioRescued: next.carriageStage === "rescued", brackenEscaped: next.brackenDefeated,
+      briarCrownFactionRevealed: next.caseWallEvidenceRead, chapterFiveClear: isChapter5Complete(next) };
+    chapter5Ref.current = next;
+    setChapter5(next);
+    setPlayer(nextPlayer);
+    if (resources.companion) setCompanion(nextCompanion);
+    setFlags(nextFlags);
+    const nextRegion = next.returnedToBramblecross ? "bramblecross" : region;
+    const nextPosition = next.returnedToBramblecross ? MAPS.bramblecross.start : position;
+    if (next.returnedToBramblecross) { setRegion(nextRegion); setPosition(nextPosition); }
+    const payload = { ...buildCurrentSavePayload(next.feedback || "Chapter Five checkpoint.", nextPlayer, nextCompanion), chapter5: next, flags: nextFlags, chapterId: 5, region: nextRegion, position: nextPosition };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+  };
+  const beginChapter5 = () => {
+    const errors = getChapter5EntryErrors(player, flags);
+    if (errors.length) { setToast(errors[0]); return; }
+    setDialogue(null);
+    commitChapter5({ ...buildChapter5SaveState(), started: true });
   };
   const applyLoadedPayload = (rawPayload, toastMessage) => {
     const payload = getSavePayload(rawPayload);
@@ -862,6 +894,7 @@ export default function LiamsGamePrototype() {
     setCompanion(nextCompanion);
     setCompanionRoster(nextCompanionRoster);
     setFlags(nextFlags);
+    setChapter5(payload.chapter5 || buildChapter5SaveState());
     setQuest(nextQuest);
     setLevelUpPending(null);
     setDialogue(null);
@@ -894,6 +927,17 @@ export default function LiamsGamePrototype() {
   const chooseHeroGrowth = (growth) => {
     const target = getHeroXpTarget(player?.level || 1);
     if (!target || !growth) return setLevelUpPending(null);
+    if (chapter5.started) {
+      const nextMaxHp = player.maxHp + 4;
+      commitChapter5(chapter5Ref.current, { player: {
+        ...player, level: player.level + 1, xp: Math.max(0, player.xp - target),
+        maxHp: nextMaxHp, hp: Math.min(nextMaxHp, player.hp + 4),
+        baseStats: addBonuses(player.baseStats, growth.bonuses),
+      } });
+      setLevelUpPending(null);
+      setToast(`Level up! ${growth.name} growth chosen. Max HP +4 • Current HP +4 • ${formatBonuses(growth.bonuses)}`);
+      return;
+    }
     setPlayer((p) => {
       const nextMaxHp = (p.maxHp || 0) + 4;
       return {
@@ -912,6 +956,7 @@ export default function LiamsGamePrototype() {
   };
 
   const startGame = () => {
+    setChapter5(buildChapter5SaveState());
     const hero = buildPlayer(createForm);
     setPlayer(hero);
     previousPositionByRegionRef.current = {};
@@ -1289,6 +1334,7 @@ export default function LiamsGamePrototype() {
         return;
       }
       if (adventureMenuOpen) return;
+      if (chapter5.started) return;
       const keyMap: Record<string, [number, number]> = {
         ArrowUp: [0, -1],
         w: [0, -1],
@@ -1340,6 +1386,7 @@ export default function LiamsGamePrototype() {
     adventureMenuOpen,
     flags,
     companion,
+    chapter5.started,
   ]);
 
   useEffect(() => {
@@ -6357,7 +6404,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
   const startBattle = (
     enemies,
     rewardKey,
-    options: { heroStarts?: boolean; heroGuard?: number; openingLog?: string | null } = {},
+    options: { heroStarts?: boolean; heroGuard?: number; openingLog?: string | null; chapter5Profile?: Chapter5SaveState["bossProfile"] } = {},
   ) => {
     const battleEnemies = prepareBattleEnemies(enemies);
     const firstEnemy = battleEnemies[0];
@@ -6379,6 +6426,8 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       heroAttackPenalty: 0,
       cooldowns: {},
       finished: false,
+      chapter5Profile: options.chapter5Profile,
+      sentryRepairUsed: false,
       log: [
         `${battleEnemies.length} ${battleEnemies.length === 1 ? "enemy squares" : "enemies square"} up across the field.`,
         options.openingLog,
@@ -6388,7 +6437,26 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
       ].filter(Boolean),
     });
     if (!heroStarts) window.setTimeout(() => enemyTurn(), 350);
-    saveGame(getRegionCheckpointLabel(region));
+    if (!rewardKey.startsWith("ch5-")) saveGame(getRegionCheckpointLabel(region));
+  };
+  const startChapter5Battle = (next: Chapter5SaveState) => {
+    commitChapter5(next);
+    startBattle(buildChapter5BattleEnemies(next), `ch5-${next.pendingBattle}`, {
+      chapter5Profile: next.pendingBattle === "boss" ? next.bossProfile : null,
+      openingLog: next.pendingBattle === "boss"
+        ? "You step out of the alcove with your weapon ready. Bracken sweeps a ledger off the table to clear his reach, and the Sentry plants its roots across the paving. Behind them, Lio draws his tally close as Mara watches from the console's shelter."
+        : next.pendingBattle === "tuskers"
+          ? "Lio leads Mara and the rescued party behind the fallen trunk while you face the hollow. Both tuskers lower their heads and stamp in the torn earth, holding the crossing."
+          : next.pendingBattle === "officer"
+            ? "You leave the crates and force the officer away from the captive's chair. Mara stays behind the copying bench as he shouts for help and reaches for his weapon."
+            : next.pendingBattle === "workshop"
+              ? "You step into the aisle between Dessa and the laborer. He retreats through the service door while Mara shelters behind the cooling rack; Dessa lifts her hammer and cries out to the inner guards."
+        : next.pendingBattle === "gate"
+          ? "You leave the wagon's cover and confront the receiving guards. Mara draws back behind its loaded bed as a guard strikes the alarm bell; the station knows you are here before the first blow."
+          : next.pendingBattle === "investigator"
+            ? "You step onto the platform to meet the investigating guard openly, keeping Mara behind the shutter frames. His shout carries down the stair and brings an answering alarm from the inner post."
+            : "You cross the inner post's lamplight with your weapon ready. Mara stays behind the stone pier while the door guard shouts for the command room to prepare; taking this key will be an open fight.",
+    });
   };
   const pushBattleLog = (text) =>
     setBattle((prev) =>
@@ -6638,6 +6706,19 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           return `${enemy.name} uses ${enemy.intent} for ${damage} damage${targetHero ? "" : ` to ${companion.name}`}${bypassedGuard ? `, bypassing ${bypassedGuard} Guard` : ""}.`;
         });
         const intentEffects = resolveEnemyIntentEffects(prev.enemies);
+        const sentry = intentEffects.enemies.find((enemy) => enemy.name === "Thornroot Sentry" && enemy.hp > 0 && enemy.hp < enemy.maxHp);
+        const repairAttempt = !!prev.chapter5Profile && !prev.sentryRepairUsed && !!sentry;
+        const repairs = repairAttempt && prev.chapter5Profile.sentryRepairAvailable;
+        if (repairs) {
+          const restored = Math.min(6, sentry.maxHp - sentry.hp);
+          intentEffects.enemies = intentEffects.enemies.map((enemy) => enemy.battleId === sentry.battleId ? { ...enemy, hp: enemy.hp + restored } : enemy);
+          intentEffects.logs.push(`The workshop linkage repairs the Thornroot Sentry for ${restored} HP, then exhausts its spare braces.`);
+        } else if (repairAttempt) {
+          intentEffects.logs.push("The Thornroot Sentry pulls at the workshop cord, trying to draw a fresh brace into place. The disconnected feed hangs slack; its damaged joint stays split.");
+        }
+        if (prev.chapter5Profile?.falseOrderPenalty === 0 && livingEnemies.some((enemy) => enemy.name === "Bracken Voss" && enemy.intent === "False Order")) {
+          intentEffects.logs.push("Bracken snaps an order toward the wrong passage, but the lamp lights the worn brass guide beside your foot. You hold your ground. False Order adds no Shaken penalty.");
+        }
         if (totalHeroDamage)
           setPlayer((p) => ({ ...p, hp: Math.max(0, p.hp - totalHeroDamage) }));
         if (totalCompanionDamage)
@@ -6648,6 +6729,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         return {
           ...prev,
           turn: "hero",
+          sentryRepairUsed: prev.sentryRepairUsed || repairAttempt,
           heroGuard: 0,
           heroAttackPenalty: Math.max(
             prev.heroAttackPenalty || 0,
@@ -6667,6 +6749,12 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     if (!battle) return;
     const victory =
       battle.turn === "victory" || getLivingEnemies(battle.enemies).length === 0;
+    if (battle.rewardKey.startsWith("ch5-") && victory) {
+      commitChapter5(finishChapter5Battle(chapter5Ref.current));
+      setBattle(null);
+      setBattleItemsOpen(false);
+      return;
+    }
     if (victory) {
       let companionReward = null;
       if (companionIsConscious && flags.companionChoice) {
@@ -7647,7 +7735,10 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         portrait: "book",
         name: "Briarhold Waystation",
         text: "During the fight, someone at the records desk tipped a lamp across the westbound ledger to burn the evidence. Its heavy cover smothered the flame, leaving one corner scorched while tonight's transfers survived. Lio's entry is bracketed with four other prisoners beneath a destination none of you had seen before: Briarhold Waystation. The route coordinates place it inside Rainroot, east of Riverwatch, and the final notation orders the whole group moved again before dawn.\n\nThe station's upper signal slit gives one narrow view of the marked ridge. Among the distant gold road lights, several lanterns burn a sickly green behind briar-shaped hoods.",
-        choices: [{ label: "Close the ledger.", effect: () => setDialogue(null) }],
+        choices: [
+          { id: "ch5-begin", label: "Follow the ridge toward Briarhold", effect: beginChapter5 },
+          { label: "Close the ledger.", effect: () => setDialogue(null) },
+        ],
       });
       return;
     }
@@ -8005,6 +8096,9 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
     }
     return !!payload;
   };
+  const loadChapter5PlaytestSave = () => loadCheckedInSave(
+    "/saves/chapter-4-complete.json", "Chapter 5 entry save is missing.", "Chapter 5 entry save could not be loaded.",
+  );
   const saveToSlot = (slotId) => {
     const name =
       (saveNameDrafts[slotId] || "").trim() ||
@@ -8073,6 +8167,16 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
               <Button onClick={() => loadChapter3CompleteSave()}>
                 Begin Chapter 4 Playtest
               </Button>
+              <Button onClick={async () => {
+                const payload = await loadChapter5PlaytestSave();
+                if (payload) {
+                  const next = { ...buildChapter5SaveState(), started: true };
+                  const nextFlags = { ...buildDefaultFlags(), ...payload.flags, chapterFiveStarted: true };
+                  setChapter5(next);
+                  setFlags(nextFlags);
+                  localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...payload, chapter5: next, flags: nextFlags }));
+                }
+              }}>Begin Chapter 5 Playtest</Button>
             </div>
           </div>
         </div>
@@ -8272,8 +8376,8 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           <div>
             <h1 className="text-xl font-bold sm:text-3xl">Lanterns of Briar Crown</h1>
             <div className="mt-0.5 text-xs text-white/65 sm:mt-1 sm:text-sm">
-              <span className="sm:hidden">{currentRegionInfo.name}</span>
-              <span className="hidden sm:inline">Prototype slice • {currentRegionInfo.name} • {flags.chapterFourStarted ? "Chapter 4: The Riddle Road" : currentRegionInfo.subtitle}</span>
+              <span className="sm:hidden">{chapter5.started ? getChapter5AreaName(chapter5) : currentRegionInfo.name}</span>
+              <span className="hidden sm:inline">Prototype slice • {chapter5.started ? `${getChapter5AreaName(chapter5)} • Chapter 5` : `${currentRegionInfo.name} • ${flags.chapterFourStarted ? "Chapter 4: The Riddle Road" : currentRegionInfo.subtitle}`}</span>
             </div>
           </div>
           <div className="hidden flex-wrap gap-2 sm:flex">
@@ -8300,7 +8404,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
             text={getCrownDenAlertText(crownDenAlertLevel)}
           />
         ) : null}
-        {flags.chapterOneClear ? (
+        {flags.chapterOneClear && !chapter5.started ? (
           <div className="mb-3 rounded-3xl border border-emerald-300/20 bg-emerald-400/10 px-3 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm">
             <div className="font-semibold text-emerald-200">
               {chapterProgress.currentChapterId >= 2
@@ -8387,14 +8491,18 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         ) : null}
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_19rem] xl:grid-cols-[minmax(0,1fr)_20rem]">
           <Panel
-            title={currentRegionInfo.name}
+            title={chapter5.started ? getChapter5AreaName(chapter5) : currentRegionInfo.name}
             right={
               <div className="hidden max-w-[24rem] truncate text-right text-xs text-white/60 sm:block">
                 Goal: {questJournal.currentMain.title}
               </div>
             }
           >
-            <div className="map-stage-shell">
+            {chapter5.started ? <Chapter5Spike
+              state={chapter5} player={player} companion={companion} stats={derivedStats}
+              blocked={!!(battle || dialogue || adventureMenuOpen || saveModalMode || levelUpPending || shopOpen || craftOpen || interiorScene)}
+              commit={commitChapter5} startBattle={startChapter5Battle}
+            /> : <div className="map-stage-shell">
               <MapStage
                 region={region}
                 map={currentMap}
@@ -8449,7 +8557,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
                   <Button aria-label="Move down" data-testid="move-down" onClick={() => movePlayer(0, 1)}>↓</Button>
                 </div>
               </div>
-            </div>
+            </div>}
           </Panel>
           <AdventureStatusRail
             player={player}

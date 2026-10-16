@@ -4,6 +4,10 @@ Date opened: 2026-09-04
 
 Status: owner decisions accepted on 2026-09-05; consolidated in [the executable vertical-slice contract](../story/chapter-5-vertical-slice-contract.md). Earlier provisional bullets below are resolved by the later settled decisions and that contract.
 
+## October 15 Implementation
+
+The owner accepted the puzzles/fight and authorized the full descriptive greybox. The complete schematic chapter now runs through all captives/originals, the safe reunion and Celia account, both return routes, and the public/private Bramblecross ending. See [the full-greybox record](../playtest-notes/2026-10-15-chapter-5-full-greybox.md). The next gate is owner full-route playthrough before scale/lighting masters and final art.
+
 ## Settled Decisions
 
 ### Climax And Ending
@@ -76,7 +80,7 @@ Status: owner decisions accepted on 2026-09-05; consolidated in [the executable 
 - The Crown Table and holding-cell entrance is both locked and guarded.
 - The player can attack the entrance guards and take their key. This is a valid direct route, but it immediately makes Briarhold **Alerted** and causes the remaining cell to prepare for the party.
 - The quieter route requires discoveries from all three interior wings rather than treating the wings as unrelated optional bonuses.
-- The False Ledger Room contains a locked desk drawer. The player does not initially know what it contains; opening it reveals a spare key for the guarded inner entrance.
+- The False Ledger Room contains a locked desk drawer. The player does not initially know what it contains. Under the owner's October 11 spatial-knowledge refinement, freeing the clerk can earn a clue that the drawer holds a spare key; opening it with the workshop tool still supplies the actual key for the guarded inner entrance. Chart and drawer details become visible only after reaching the desk.
 - The Thornseal Workshop contains a small tool, spring, shim, or similar piece that is not the drawer's actual key but gives Mara what she needs to pick or bypass the ordinary desk lock.
 - The Captive Lantern Hall provides the Front Gate Alert signal that draws the inner guards away, as settled below in Captive Lantern Signal Center.
 - Individual guards and workers can be avoided, quietly bypassed, or overcome. Being discovered or choosing open combat raises the visible alert state instead of causing an instant infiltration failure.
@@ -91,7 +95,7 @@ Status: owner decisions accepted on 2026-09-05; consolidated in [the executable 
 - Other valid codes have different operational meanings, including at least one dangerous command-center recall that would send guards toward Bracken. Many pane arrangements are not meaningful signals at all.
 - An invalid arrangement causes one guard to enter the signal room and investigate who is operating the equipment.
 - Color remains the dominant presentation, but each pane also needs a distinct etched mark, edge shape, or frame notch so the puzzle is readable without relying on color perception alone.
-- Restored gold light also reaches the Crown Table and reveals true route lines beneath Bracken's false seals. This visibly weakens or counters his false-command mechanic during the boss battle.
+- Restoring the old guide lamp also lights the Crown Table room and makes its original brass floor guides visible beside Bracken's painted arrow boards. Under the owner's October 12 refinement, fixed amber glass and a brass reflector send ordinary oil-lamp light down a sloping shaft. Woody briar stems have jammed a shutter that previously rested open; clearing the hinge and raising the shutter restores the light. The boss introduction shows Bracken glance toward it and hesitate; named attacks and exact effects are explained only through combat feedback. The accepted False Order counter remains unchanged.
 - The loud key-taking route and the quiet tool–drawer–signal route remain valid alternatives. The latter rewards investigating all three wings.
 
 ### Fixed Signal Reference
@@ -265,7 +269,7 @@ Status: owner decisions accepted on 2026-09-05; consolidated in [the executable 
 
 ### Central Hub And Stealth Presentation
 
-- The party enters Briarhold from a shadowed service landing that gives an immediate view of the False Ledger Room, Thornseal Workshop, Captive Lantern Hall, and heavily guarded inner door.
+- The party enters Briarhold at a recessed service landing, with route-specific arrival and immediate cover. Stepping from the landing into the shadowed hub gives the survey of the False Ledger Room, Thornseal Workshop, Captive Lantern Hall, and heavily guarded inner door. The two spaces have distinct descriptions.
 - The first view clearly communicates the three wings, the rescue objective beyond the inner door, nearby patrol or worker risk, and the current alert state.
 - Stealth remains compatible with tile-based movement. It uses authored sightline and noise nodes, visible guard positions, and explicit choice or check dialogues rather than real-time moving-guard simulation.
 
@@ -278,8 +282,10 @@ Status: owner decisions accepted on 2026-09-05; consolidated in [the executable 
 ### Wing Occupants And Resolutions
 
 - In the False Ledger Room, the captive Westroot route-record clerk works under a Briar records officer's supervision. The party may distract or quietly incapacitate the officer, or fight openly. Freeing the clerk provides the immediate procedural reading and later authentication of genuine office material.
+- The owner's October 12 follow-up adds a Precision DC 12 check to the current distracted-officer ambush, with conscious Tilda's existing +2. Success binds him quietly; on a miss he cries out before the restraint is completed. That raises awareness one level, up to Alerted, and recalls diverted guards on general alert. Both results permit desk access once he is secured. The saved check cannot be rerolled by Back/reload; older earned desk access is retained.
 - In the Thornseal Workshop, a knowingly complicit sealwright works alongside a deceived ordinary laborer. The laborer can be warned or persuaded away; the sealwright can be bypassed, subdued, or fought.
 - The workshop contains the shim Mara needs for the locked desk drawer and a separate intervention that prevents a later reinforcement or Thornroot Sentry repair.
+- The owner's October 11 workshop correction requires an explicit concealed entry and hiding place. The playable slice starts in a storage recess screened by a cooling rack; only the workers and general stamping activity can be observed there. Warning the laborer draws both workers outside before the party reaches the bench. The shim and mechanism details are learned at that point, and disconnection is described as disrupting Briar machinery rather than predicting a confrontation.
 - The Captive Lantern Hall is normally unoccupied until a wrong signal draws an investigating guard or the alert state changes its response.
 
 ### Captive Release Placement
@@ -357,7 +363,7 @@ Status: owner decisions accepted on 2026-09-05; consolidated in [the executable 
 
 ## Planning Closeout
 
-Owner-level Chapter 5 planning questions were accepted on 2026-09-05. The executable Chapter 5 vertical-slice contract now records the entry fixture, pure consequence rules, required ending, repeat/save requirements, and implementation defaults. The next step is the playable Captive Lanterns / Bracken / carriage-rescue spike, including runtime persistence. Final prose, balance, map coordinates, and art compositions remain production work.
+Owner-level Chapter 5 planning questions were accepted on 2026-09-05. The executable Chapter 5 vertical-slice contract now records the entry fixture, pure consequence rules, required ending, repeat/save requirements, and implementation defaults. The accepted central interaction has since expanded into the complete persisted schematic greybox on October 15. The next step is owner full-route review, followed by scale/lighting masters and production art. Final balance and painted compositions remain production work.
 
 ## Post-Chapter 5 Backlog
 
