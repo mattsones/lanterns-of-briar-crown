@@ -56,6 +56,7 @@ export const CAPTIVE_LANTERN_SIGNALS = [
 export type LanternSignal = typeof CAPTIVE_LANTERN_SIGNALS[number]["id"] | "meaningless";
 
 export const CHAPTER_5_CHECKS = {
+  culvertGrate: { stat: "Might", dc: 12 },
   receivingPrecision: { stat: "Precision", dc: 12 },
   receivingHeart: { stat: "Heart", dc: 12 },
   hide: { stat: "Instinct", dc: 12 },

@@ -7,7 +7,7 @@ import {
 } from "./components/AdventureShell";
 import { MapStage } from "./components/MapStage";
 import { Chapter5Spike } from "./components/Chapter5Spike";
-import { buildChapter5BattleEnemies, buildChapter5SaveState, finishChapter5Battle, getChapter5AreaName, type Chapter5Resources, type Chapter5SaveState } from "./game/chapter5Runtime";
+import { buildChapter5BattleEnemies, buildChapter5SaveState, finishChapter5Battle, getChapter5AreaName, rememberChapter5Scene, type Chapter5Resources, type Chapter5SaveState } from "./game/chapter5Runtime";
 import { applyChapter5ProgressRewards, isChapter5Complete } from "./game/chapter5Progress";
 import { getChapter5EntryErrors } from "./game/chapter5";
 import { Button, ItemIcon, Meter, Panel, StatBadge } from "./components/ui";
@@ -836,8 +836,9 @@ export default function LiamsGamePrototype() {
     setToast(`Checkpoint reached: ${label}`);
   };
   const commitChapter5 = (next: Chapter5SaveState, resources: Chapter5Resources = {}) => {
-    const nextPlayer = { ...applyChapter5ProgressRewards(chapter5Ref.current, next, resources.player || player), checkpointLabel: getChapter5AreaName(next) };
     const nextCompanion = resources.companion || companion;
+    next = rememberChapter5Scene(next, nextCompanion, chapter5Ref.current);
+    const nextPlayer = { ...applyChapter5ProgressRewards(chapter5Ref.current, next, resources.player || player), checkpointLabel: getChapter5AreaName(next) };
     const nextFlags = { ...flags, chapterFiveStarted: next.started,
       captiveLanternsRestored: next.briarhold.lanternsRestored,
       lioRescued: next.carriageStage === "rescued", brackenEscaped: next.brackenDefeated,

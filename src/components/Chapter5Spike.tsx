@@ -1,15 +1,15 @@
 import { useEffect, useRef } from "react";
 import { Button, ChoiceButton } from "./ui";
-import { advanceCarriageRescue, canOpenBriarholdInnerDoor, enterBriarhold, getBriarholdBossProfile, openBriarholdDrawer, resolveInvestigatingGuard, transmitLanternSignal } from "../game/chapter5";
-import { CH5_NODES, abandonLedgerDistraction, chapter5MilestoneXp, distractLedgerOfficer, freeLedgerClerk, getChapter5Edges, moveChapter5, secureLedgerOfficer, type Chapter5BattleKind, type Chapter5Node, type Chapter5Resources, type Chapter5SaveState } from "../game/chapter5Runtime";
+import { advanceCarriageRescue, canOpenBriarholdInnerDoor, enterBriarhold, getBriarholdBossProfile, openBriarholdDrawer, resolveInvestigatingGuard } from "../game/chapter5";
+import { CH5_NODES, abandonLedgerDistraction, chapter5MilestoneXp, distractLedgerOfficer, enterChapter5Culvert, freeLedgerClerk, getChapter5Edges, getChapter5AreaName, leaveChapter5GuideLampClosed, moveChapter5, resolveChapter5HubPassage, restoreChapter5GuideLamp, secureLedgerOfficer, transmitChapter5Signal, tryChapter5CulvertGrate, type Chapter5BattleKind, type Chapter5Node, type Chapter5Resources, type Chapter5SaveState } from "../game/chapter5Runtime";
 import { resolveSkillCheck } from "../game/dice";
 import { isCompanionConscious } from "../game/companions";
-import { CAPTIVE_LANTERN_PANES, CAPTIVE_LANTERN_SIGNALS, CHAPTER_5_CHECKS, CHAPTER_5_SCENE_IDS, type LanternArrangement } from "../story/chapter5";
-import { CHAPTER_5_ACTION_NARRATIVE as narrative, chapter5CompanionBeat, getChapter5BrakeNarrative, getChapter5EntryNarrative, getChapter5GuardNarrative, getChapter5SceneParagraphs, getChapter5SignalNarrative } from "../story/chapter5Narrative";
+import { CAPTIVE_LANTERN_PANES, CAPTIVE_LANTERN_SIGNALS, CHAPTER_5_CHECKS, CHAPTER_5_SCENE_IDS } from "../story/chapter5";
+import { CHAPTER_5_ACTION_NARRATIVE as narrative, chapter5CompanionBeat, getChapter5BrakeNarrative, getChapter5EntryNarrative, getChapter5GuardNarrative, getChapter5SceneParagraphs } from "../story/chapter5Narrative";
 import type { Companion, Player, StatBlock } from "../game/types";
-import { acceptOfficerSurrender, bypassChapter5Feed, collectChapter5Evidence, departChapter5Briarhold, finishChapter5CaseWall, freeChapter5CellCaptive, hearChapter5Examiner, hearChapter5ReturnTalk, hearChapter5Woodsman, isChapter5CleanupReady, openChapter5Cells, packChapter5Supplies, readChapter5CaseWall, resolveChapter5Workshop, reuniteChapter5Siblings, seeChapter5Homecoming } from "../game/chapter5Progress";
-import { getChapter5AreaName } from "../game/chapter5Runtime";
+import { acceptOfficerSurrender, bypassChapter5Feed, collectChapter5Evidence, departChapter5Briarhold, finishChapter5CaseWall, freeChapter5CellCaptive, freeChapter5WorkshopCaptive, hearChapter5Examiner, hearChapter5ReturnTalk, hearChapter5Woodsman, isChapter5CleanupReady, isChapter5WorkshopSecure, openChapter5Cells, packChapter5Supplies, readChapter5CaseWall, resolveChapter5Workshop, reuniteChapter5Siblings, seeChapter5Homecoming } from "../game/chapter5Progress";
 import { CHAPTER_5_AFTERMATH, getChapter5FullOutcome } from "../story/chapter5Aftermath";
+import { getChapter5Landmark, hasChapter5Visited } from "../story/chapter5Knowledge";
 
 type Props = {
   state: Chapter5SaveState;
@@ -27,6 +27,8 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
   const stateRef = useRef(state);
   stateRef.current = state;
   const sceneRef = useRef<HTMLDivElement>(null);
+  const feedbackRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
   const change = (update: (current: Chapter5SaveState) => Chapter5SaveState, resources?: Chapter5Resources) => {
     if (blocked) return;
     const next = update(stateRef.current);
@@ -34,20 +36,25 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
     stateRef.current = next;
     commit(next, resources);
   };
-  const close = () => change((s) => s.briarhold.investigatorPending || (s.view === "grille" && !s.lioSeen) ||
+  const close = () => change((s) => s.briarhold.investigatorPending || s.hubInterlude || (s.view === "grille" && !s.lioSeen) ||
     (s.brackenDefeated && s.carriageStage !== "rescued") ? s : { ...abandonLedgerDistraction(s), view: null });
   const inspect = () => change((s) => ({ ...s, view: s.briarhold.investigatorPending ? "investigator" : s.node }));
   const edges = getChapter5Edges(state);
+  const landmark = (node: Chapter5Node) => getChapter5Landmark(state, node) || CH5_NODES[node];
   const nodes = [...new Set(edges.flat())];
   const move = (dx: number, dy: number) => change((s) => {
     const current = CH5_NODES[s.node];
     const target = getChapter5Edges(s).flat().find((id) => CH5_NODES[id].x === current.x + dx && CH5_NODES[id].y === current.y + dy);
-    return target ? moveChapter5(s, target) : s;
+    return target ? moveChapter5(s, target, companion) : s;
   });
 
   useEffect(() => {
-    if (!blocked && state.view) sceneRef.current?.focus({ preventScroll: true });
-  }, [state.view, blocked]);
+    if (blocked) return;
+    if (state.view) {
+      sceneRef.current?.focus({ preventScroll: true });
+      (feedbackRef.current || sceneRef.current)?.scrollIntoView({ block: "start" });
+    } else mapRef.current?.scrollIntoView({ block: "nearest" });
+  }, [state.view, blocked, state.goldChannelUncovered, state.briarhold.lanternsRestored]);
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
       if (blocked || event.defaultPrevented) return;
@@ -94,7 +101,7 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
       briarhold: resolveInvestigatingGuard(s.briarhold, response, check.success),
       feedback: getChapter5GuardNarrative(response, check) };
   });
-  const enter = (route: "culvert" | "receiving-gate", stat?: string) => change((s) => {
+  const enter = (route: "receiving-gate", stat: string) => change((s) => {
     if (s.briarhold.entry) return s;
     const check = stat ? roll(stat, 12) : null;
     return { ...s, node: "landing", view: "landing", briarhold: enterBriarhold(s.briarhold, route, check?.success),
@@ -137,26 +144,26 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
   const mapTop = Math.min(...nodes.map(id => CH5_NODES[id].y)) - .55;
   const mapWidth = Math.max(...nodes.map(id => CH5_NODES[id].x)) - mapLeft + .6;
   const mapHeight = Math.max(...nodes.map(id => CH5_NODES[id].y)) - mapTop + .75;
-  const chooseRoute = (node: "detour" | "hollow") => change(s => moveChapter5({ ...s, view: null }, node));
+  const chooseRoute = (node: "detour" | "hollow") => change(s => moveChapter5({ ...s, view: null }, node, companion));
 
   return <div data-testid="chapter5-spike" data-ch5-node={state.node} data-ch5-area={getChapter5AreaName(state)} data-alert={b.alert} className="space-y-4">
     <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-black/25 p-3">
-      <span className="font-semibold">{CH5_NODES[state.node].label}</span>
+      <span className="font-semibold">{landmark(state.node).label}</span>
       {state.departed ? <span className="text-amber-100">{getChapter5AreaName(state)}</span> : <span data-testid="ch5-alert" className={b.alert === "alerted" ? "text-rose-200" : "text-amber-100"}>Alert: {b.alert[0].toUpperCase() + b.alert.slice(1)}</span>}
     </div>
     {state.carriageStage === "rescued" ? <p data-testid="ch5-rescued-party" className="text-sm text-amber-100/80">Together: Mara · Lio{state.clerkFreed ? " · Sella" : ""}{state.porterFreed ? " · Orren" : ""}{state.wardenFreed ? " · Hesta" : ""}</p> : null}
-    <div className={view ? "hidden md:block" : ""}>
+    <div ref={mapRef} className={view ? "hidden md:block" : ""}>
       <div className="relative h-80 rounded-2xl border border-amber-100/15 bg-slate-950 sm:h-72" aria-label="Briarhold paths">
         <svg className="absolute h-full w-full" viewBox={`${mapLeft} ${mapTop} ${mapWidth} ${mapHeight}`} preserveAspectRatio="none" aria-hidden="true">
           {edges.map(([a, c]) => <line key={`${a}-${c}`} x1={CH5_NODES[a].x} y1={CH5_NODES[a].y} x2={CH5_NODES[c].x} y2={CH5_NODES[c].y} stroke="#ac9671" strokeWidth="0.035" />)}
         </svg>
-        {nodes.map((id) => <button key={id} data-ch5-map-node={id} title={CH5_NODES[id].label} aria-label={`${id === state.node ? "Inspect" : "Move to"} ${CH5_NODES[id].label}`}
+        {nodes.map((id) => <button key={id} data-ch5-map-node={id} title={landmark(id).label} aria-label={`${id === state.node ? "Inspect" : "Move to"} ${landmark(id).label}`}
           aria-current={id === state.node ? "location" : undefined} disabled={blocked || !!view || !!state.pendingBattle || id !== state.node && !adjacent(id)}
           style={{ left: `${(CH5_NODES[id].x - mapLeft) / mapWidth * 100}%`, top: `${(CH5_NODES[id].y - mapTop) / mapHeight * 100}%` }}
           className={`absolute grid h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-xl border text-xl ${id === state.node ? "border-amber-200 bg-amber-950 ring-2 ring-amber-200/40" : "border-slate-600 bg-slate-900"} disabled:cursor-default`}
-          onClick={() => id === state.node ? inspect() : change((s) => moveChapter5(s, id))}>
-          {id === state.node ? "🧑‍🦱" : CH5_NODES[id].icon}
-          <span aria-hidden="true" className="absolute top-full mt-1 w-12 text-center text-[10px] leading-3 text-amber-50/80 sm:w-16">{CH5_NODES[id].label}</span>
+          onClick={() => id === state.node ? inspect() : change((s) => moveChapter5(s, id, companion))}>
+          {id === state.node ? "🧑‍🦱" : landmark(id).icon}
+          <span aria-hidden="true" className="absolute top-full mt-1 w-12 text-center text-[10px] leading-3 text-amber-50/80 sm:w-16">{landmark(id).label}</span>
         </button>)}
       </div>
       <div className="mt-3 flex flex-wrap justify-center gap-2" aria-label="Briarhold movement controls">
@@ -168,12 +175,16 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
       </div>
       <p className="mt-2 text-center text-xs text-white/60">Arrow keys / WASD to move · E to inspect · M for inventory and equipment</p>
     </div>
-    {state.feedback ? <div data-testid="ch5-feedback" role="status" className="space-y-3 rounded-xl border border-amber-200/20 bg-amber-950/30 p-3 text-sm leading-7">{state.feedback.split("\n\n").map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div> : null}
+    {state.feedback ? <div ref={feedbackRef} data-testid="ch5-feedback" role="status" className="space-y-3 rounded-xl border border-amber-200/20 bg-amber-950/30 p-3 text-sm leading-7">{state.feedback.split("\n\n").map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div> : null}
     {state.pendingBattle && !blocked ? action("resume-battle", "Resume the fight", () => startBattle(stateRef.current)) : null}
-    {view && !state.pendingBattle ? <div ref={sceneRef} tabIndex={-1} role="dialog" aria-label={view === "opening" ? "The same night" : view === "investigator" ? "An investigating guard" : CH5_NODES[view]?.label}
+    {view && !state.pendingBattle ? <div ref={sceneRef} tabIndex={-1} role="dialog" aria-label={view === "opening" ? "The same night" : view === "investigator" ? "An investigating guard" : landmark(view).label}
       data-scene-id={sceneId} className="space-y-4 rounded-2xl border border-white/15 bg-slate-900 p-4 text-sm leading-7 sm:p-5">
-      {!b.investigatorPending && !(view === "grille" && !state.lioSeen) && !(state.brackenDefeated && state.carriageStage !== "rescued") && view !== "opening" ? action("back", "Back to the path", close) : null}
+      {!b.investigatorPending && !state.hubInterlude && !(view === "grille" && !state.lioSeen) && !(state.brackenDefeated && state.carriageStage !== "rescued") && view !== "opening" ? action("back", "Back to the path", close) : null}
       <div data-testid="ch5-scene-narrative" className="space-y-4">{getChapter5SceneParagraphs(state, companion).map((paragraph, index) => <p key={`${view}-${index}`}>{paragraph}</p>)}</div>
+      {view === "hub" && state.hubInterlude ? <>
+        {action("hub-wait", state.hubInterlude === "lamp" ? "Hold still behind the pier until the lamp moves on" : "Stay behind the rack while the bearers pass", () => change(s => resolveChapter5HubPassage(s, "wait")))}
+        {state.hubInterlude === "load" ? action("hub-cross", "Cross to the wall recess under the noise of the load", () => change(s => resolveChapter5HubPassage(s, "cross"))) : null}
+      </> : null}
       {view === "opening" ? <>
         {action("cross-ridge", "Cross the nighttime ridge to the overlook", () => change((s) => ({ ...s, view: "overlook", feedback: narrative.crossRidge })))}
       </> : null}
@@ -182,19 +193,25 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
           { player: { ...player, hp: player.maxHp }, companion: companion.recruited ? { ...companion, hp: companion.maxHp } : companion })) : null}
       </> : null}
       {view === "culvert" ? <>
-        {action("enter-culvert", "Enter through the culvert — Quiet", () => enter("culvert"))}</> : null}
+        {!state.checks.culvert ? action("open-culvert-grate", "Try to lift the culvert grate", () => change(s => {
+          if (s.checks.culvert) return s;
+          const spec = CHAPTER_5_CHECKS.culvertGrate;
+          return tryChapter5CulvertGrate(s, roll(spec.stat, spec.dc));
+        })) : null}
+        {state.checks.culvert?.success ? action("enter-culvert", "Crawl through the opened grate — Quiet", () => change(enterChapter5Culvert)) : null}</> : null}
       {view === "gate" ? <>
-        {action("enter-precision", "Slip behind the wagon — Precision DC 12", () => enter("receiving-gate", "Precision"))}
-        {action("enter-heart", "Act like authorized workers — Heart DC 12", () => enter("receiving-gate", "Heart"))}
+        {action("enter-precision", "Slip behind the wagon", () => enter("receiving-gate", "Precision"))}
+        {action("enter-heart", "Act like authorized workers", () => enter("receiving-gate", "Heart"))}
         {action("assault-gate", "Attack the receiving guards — Alerted", () => prepareBattle("gate"))}
       </> : null}
       {view === "workshop" ? <>
-        {!state.workshopResolved ? state.carriageStage === "rescued"
+        {!isChapter5WorkshopSecure(state) ? state.carriageStage === "rescued"
           ? action("workshop-surrender", "Secure the sealwright and approach the bench", () => change(s => resolveChapter5Workshop(s, "surrendered"))) : <>
-            {action("resolve-workshop", "Quietly warn the laborer from behind the cooling rack", () => change(s => resolveChapter5Workshop(s, "bypassed", companion)))}
-            {companion.id === "rowan" && isCompanionConscious(companion) && !state.rowanContainmentUsed ? action("contain-dessa", "Have Rowan quietly contain the sealwright", () => change(s => resolveChapter5Workshop(s, "contained", companion))) : null}
-            {action("fight-workshop", "Confront the sealwright openly — Alerted", () => prepareBattle("workshop"))}
+            {state.workshopResolution === null ? action("resolve-workshop", "Quietly warn the laborer from behind the cooling rack", () => change(s => resolveChapter5Workshop(s, "bypassed", companion))) : null}
+            {companion.id === "rowan" && isCompanionConscious(companion) && !state.rowanContainmentUsed ? action("contain-dessa", "Help Rowan seize, bind, and gag the supervisor", () => change(s => resolveChapter5Workshop(s, "contained", companion))) : null}
+            {!state.workshopResolved ? action("fight-workshop", "Confront the sealwright openly — Alerted", () => prepareBattle("workshop")) : null}
           </> : null}
+        {state.porterAtWorkshop && !state.porterFreed && isChapter5WorkshopSecure(state) ? action("free-workshop-porter", "Take the supervisor's key and unlock the laborer's cuff", () => change(freeChapter5WorkshopCaptive)) : null}
         {state.workshopResolved && !b.shimFound ? action("take-shim", "Take the lock shim", () => change((s) => ({ ...s, briarhold: { ...s.briarhold, shimFound: true }, feedback: narrative.takeShim }))) : null}
         {state.workshopResolved && !b.workshopDisabled && companion.id === "moss" && isCompanionConscious(companion) ? action("moss-feed", "Have Moss bypass the machinery feed", () => change(s => bypassChapter5Feed(s, companion))) : null}
         {state.workshopResolved && !b.workshopDisabled ? action("disable-workshop", "Disconnect the feed to disrupt the Briar machinery", () => change((s) => ({ ...s, briarhold: { ...s.briarhold, workshopDisabled: true }, feedback: narrative.disableWorkshop }))) : null}
@@ -203,7 +220,7 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
       {view === "ledger" ? <>
         {!state.ledgerResolved ? state.carriageStage === "rescued"
           ? action("officer-surrender", "Secure the officer and reach the desk", () => change(acceptOfficerSurrender)) : <>{state.ledgerOfficerDistracted
-          ? action("secure-ledger", "Ambush and bind the officer quietly — Precision DC 12", () => change((s) => {
+          ? action("secure-ledger", "Ambush and bind the officer quietly", () => change((s) => {
             if (!s.ledgerOfficerDistracted || s.ledgerResolved || s.checks.ledgerOfficer) return s;
             const spec = CHAPTER_5_CHECKS.ledgerAmbush;
             return secureLedgerOfficer(s, roll(spec.stat, spec.dc, true));
@@ -239,19 +256,16 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
             </select>
           </label>)}
         </div>
-        {action("transmit", "Pull the transmission shutters", () => change((s) => {
-          if (s.panes.some((pane) => !pane)) return s;
-          const result = transmitLanternSignal(s.briarhold, s.panes as LanternArrangement);
-          if (!result.transmitted) return s;
-          const feedback = getChapter5SignalNarrative(result.signal, result.state);
-          return { ...s, briarhold: result.state, view: result.state.investigatorPending ? "investigator" : "lanterns", feedback };
-        }), state.panes.some((pane) => !pane))}
+        {action("transmit", "Pull the transmission shutters", () => change(transmitChapter5Signal), state.panes.some((pane) => !pane))}
         {!state.goldChannelUncovered ? action("uncover-gold", "Lift the guide lamp's cover", () => change((s) => ({ ...s, goldChannelUncovered: true, feedback: narrative.uncoverGold }))) : null}
-        {state.goldChannelUncovered && !b.lanternsRestored ? action("restore-gold", "Clear the briars and raise the lamp shutter", () => change((s) => ({ ...s, briarhold: { ...s.briarhold, lanternsRestored: true }, feedback: `${narrative.restoreGold}\n\n${chapter5CompanionBeat(companion, "light")}`.trim() }))) : null}
+        {state.goldChannelUncovered && !b.lanternsRestored ? <>
+          {action("restore-gold", "Clear the briars and light the passages", () => change(s => restoreChapter5GuideLamp(s, companion)))}
+          {action("leave-gold-closed", "Leave the shutter closed and keep to the shadows", () => change(leaveChapter5GuideLampClosed))}
+        </> : null}
       </> : null}
       {view === "investigator" ? <>
-        {action("hide", "Hide in the recess — Instinct DC 12", () => respond("hide"))}
-        {action("silent-ambush", "Disarm him silently — Precision DC 15", () => respond("silent-ambush"))}
+        {action("hide", "Hide in the recess", () => respond("hide"))}
+        {action("silent-ambush", "Disarm him silently", () => respond("silent-ambush"))}
         {action("fight-investigator", "Fight the investigating guard — Alerted", () => prepareBattle("investigator"))}
       </> : null}
       {view === "door" ? <>
@@ -266,30 +280,30 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
         {state.carriageStage === "rescued" && !state.evidence.includes("examiner-transfer-record") ? action("take-docket", "Take the separate prisoner transfer docket", () => change(s => collectChapter5Evidence(s, "examiner-transfer-record"))) : null}
       </> : null}
       {view === "carriage" ? <>
-        {state.carriageStage !== "rescued" ? action("rescue-step", { "secure-carriage": "Secure the carriage", "set-brake": b.lanternsRestored ? "Set the true brake" : "Read the linkage and set the brake — Instinct DC 12", "free-lio": "Release Lio's restraints", rescued: "" }[state.carriageStage], rescue) : <>
+        {state.carriageStage !== "rescued" ? action("rescue-step", { "secure-carriage": "Secure the carriage", "set-brake": b.lanternsRestored ? "Set the true brake" : "Read the linkage and set the brake", "free-lio": "Release Lio's restraints", rescued: "" }[state.carriageStage], rescue) : <>
           <div className="rounded-xl border border-emerald-200/25 bg-emerald-950/30 p-3"><strong>Lio is rescued.</strong> Follow the carriage passage to the adjoining cells, gather the surviving originals, and bring everyone to the sheltered service court.</div>
           {action("continue-rescue", "Help the other prisoners", close)}
         </>}
       </> : null}
       {view === "cells" ? <>
         {!state.cellsOpened ? action("open-cells", "Lift the shared cell release bar", () => change(openChapter5Cells)) : <>
-          {!state.porterFreed ? action("free-porter", "Help the man out of the nearer cell", () => change(s => freeChapter5CellCaptive(s, "porter"))) : null}
-          {!state.wardenFreed ? action("free-warden", "Help the roadwarden out of the farther cell", () => change(s => freeChapter5CellCaptive(s, "warden"))) : null}
+          {!state.porterAtWorkshop && !state.porterFreed ? action("free-porter", "Help the man out of the nearer cell", () => change(s => freeChapter5CellCaptive(s, "porter"))) : null}
+          {!state.wardenFreed ? action("free-warden", "Help the woman out of the farther cell", () => change(s => freeChapter5CellCaptive(s, "warden"))) : null}
         </>}
       </> : null}
       {view === "gathering" ? <>
         <div data-testid="ch5-departure-checklist" className="rounded-xl bg-black/25 p-3">
-          <p>{state.clerkFreed ? "✓ Sella safe" : "○ Clerk at the records desk"} · {state.porterFreed ? "✓ Orren safe" : "○ Nearer cell prisoner"} · {state.wardenFreed ? "✓ Hesta safe" : "○ Farther cell prisoner"}</p>
-          {([["transfer-ledger", "Records desk: transfer ledger"], ["genuine-office-instruction", "Records desk: office instruction"], ["false-seals", "Workshop: seal-making materials"], ["examiner-transfer-record", "Crown Table: separate transfer docket"]] as const).map(([id, label]) => <p key={id}>{state.evidence.includes(id) ? "✓" : "○"} {label}</p>)}
+          <p>{state.clerkFreed ? "✓ Sella safe" : hasChapter5Visited(state, "ledger") ? "○ Woman at the records desk" : "○ Search the workrooms for captives"} · {state.porterFreed ? "✓ Orren safe" : state.porterAtWorkshop ? hasChapter5Visited(state, "workshop") ? "○ Chained laborer at the press" : "○ Search the workrooms for captives" : hasChapter5Visited(state, "cells") ? "○ Nearer cell prisoner" : "○ Search the side passage"} · {state.wardenFreed ? "✓ Hesta safe" : hasChapter5Visited(state, "cells") ? "○ Farther cell prisoner" : "○ Check every barred doorway"}</p>
+          {([["transfer-ledger", state.ledgerResolved ? "Records desk: transfer ledger" : "Search the upper workroom for records"], ["genuine-office-instruction", state.ledgerResolved ? "Records desk: loose instruction sheet" : "Gather the surviving paperwork"], ["false-seals", state.workshopResolved ? "Workshop: seal-making materials" : "Search the lower workroom for evidence"], ["examiner-transfer-record", state.evidence.includes("examiner-transfer-record") ? "Route table: prisoner transfer docket" : "Route table: gather the remaining papers"]] as const).map(([id, label]) => <p key={id}>{state.evidence.includes(id) ? "✓" : "○"} {label}</p>)}
         </div>
-        {!state.examinerLeadLearned ? action("hear-examiner", "Hear Lio's account of the fifth prisoner", () => change(hearChapter5Examiner), !isChapter5CleanupReady(state)) : null}
+        {!state.examinerLeadLearned ? action("hear-examiner", "Ask Lio about the other prisoners", () => change(hearChapter5Examiner), !isChapter5CleanupReady(state)) : null}
         {state.examinerLeadLearned ? action("review-examiner", "Recall Lio's account of Celia Venn", () => change(s => ({ ...s, feedback: CHAPTER_5_AFTERMATH.examiner }))) : null}
         {state.examinerLeadLearned && !state.siblingsReunited ? action("reunite-siblings", "Give Mara and Lio time together", () => change(s => reuniteChapter5Siblings(s, companion))) : null}
         {state.siblingsReunited ? action("review-reunion", "Recall the siblings' reunion", () => change(s => ({ ...s, feedback: getChapter5FullOutcome("reunion", companion) }))) : null}
         {isChapter5CleanupReady(state) && !state.suppliesClaimed ? action("pack-supplies", "Pack the road stores for everyone", () => change(packChapter5Supplies)) : null}
         {action("depart", "Leave Briarhold at dawn — take the eastern trails home", () => change(s => departChapter5Briarhold(s, companion)), !state.siblingsReunited || !state.examinerLeadLearned || !isChapter5CleanupReady(state))}
       </> : null}
-      {view === "woodsman" && !state.woodsmanHeard ? action("hear-woodsman", "Rest with Garrick and ask about the trails", () => change(s => hearChapter5Woodsman(s, companion))) : null}
+      {view === "woodsman" && !state.woodsmanHeard ? action("hear-woodsman", "Rest with the woodsman and ask about the trails", () => change(s => hearChapter5Woodsman(s, companion))) : null}
       {view === "woodsman" && state.woodsmanHeard ? action("review-woodsman", "Recall Garrick's account and trail warning", () => change(s => ({ ...s, feedback: getChapter5FullOutcome("woodsman", companion) }))) : null}
       {view === "fork" ? <>
         {action("safe-detour", "Take the longer high-ground trail around the tuskers", () => chooseRoute("detour"))}

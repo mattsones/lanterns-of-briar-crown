@@ -18,9 +18,9 @@ function gather() {
   s = progress.collectChapter5Evidence(s, "genuine-office-instruction");
   s = progress.resolveChapter5Workshop(at(s, "workshop"), "surrendered");
   s = progress.collectChapter5Evidence(s, "false-seals");
+  s = progress.freeChapter5WorkshopCaptive(s);
   s = progress.collectChapter5Evidence(at(s, "crown"), "examiner-transfer-record");
   s = progress.openChapter5Cells(at(s, "cells"));
-  s = progress.freeChapter5CellCaptive(s, "porter");
   return at(progress.freeChapter5CellCaptive(s, "warden"), "gathering");
 }
 function depart() {
@@ -85,17 +85,54 @@ test("conscious companion interventions are optional, once-only, and never grant
   expect(progress.bypassChapter5Feed(bypassed, moss)).toBe(bypassed);
   expect(normalizeChapter5Save(bypassed)).toEqual(bypassed);
 });
+
+test("warning the chained worker buys one visit to the bench; his rescue requires securing the supervisor", () => {
+  const before = { ...rescued(), brackenDefeated: false, carriageStage: "secure-carriage" as const,
+    milestoneAwarded: false, node: "workshop" as const, view: "workshop" as const, hubPassages: 3 };
+  const warned = progress.resolveChapter5Workshop(before, "bypassed");
+  expect(progress.freeChapter5WorkshopCaptive(warned)).toBe(warned);
+  expect(progress.resolveChapter5Workshop(warned, "bypassed")).toBe(warned);
+  const gathered = progress.collectChapter5Evidence(warned, "false-seals");
+  const left = moveChapter5({ ...gathered, view: null }, "hub");
+  expect(left).toMatchObject({ workshopResolved: false, workshopResolution: "bypassed", porterFreed: false });
+  expect(normalizeChapter5Save(left)).toEqual(left);
+  const returned = moveChapter5({ ...left, view: null }, "workshop");
+  expect(returned.view).toBe("workshop");
+  expect(progress.freeChapter5WorkshopCaptive(returned)).toBe(returned);
+  const secured = progress.resolveChapter5Workshop(returned, "contained", fixture().companion);
+  const freed = progress.freeChapter5WorkshopCaptive(secured);
+  expect(freed).toMatchObject({ porterFreed: true, cellsOpened: false, workshopResolution: "contained" });
+  expect(freed.briarhold).toEqual(before.briarhold);
+  expect(progress.freeChapter5WorkshopCaptive(freed)).toBe(freed);
+  expect(normalizeChapter5Save(freed)).toEqual(freed);
+});
+
+test("the worker can be rescued after the boss, and old cell rescues retain their location", () => {
+  const late = progress.resolveChapter5Workshop(at(rescued(), "workshop"), "surrendered");
+  const free = progress.freeChapter5WorkshopCaptive(late);
+  expect(free.porterFreed).toBe(true);
+  expect(progress.freeChapter5CellCaptive(progress.openChapter5Cells(at(late, "cells")), "porter").porterFreed).toBe(false);
+  const old = { ...rescued(), node: "cells" as const, view: "cells" as const, cellsOpened: true };
+  delete (old as Partial<Chapter5SaveState>).porterAtWorkshop;
+  const restored = normalizeChapter5Save(old);
+  expect(restored.porterAtWorkshop).toBe(false);
+  const legacyFree = progress.freeChapter5CellCaptive(restored, "porter");
+  expect(legacyFree.porterFreed).toBe(true);
+  expect(normalizeChapter5Save(legacyFree)).toEqual(legacyFree);
+  const early = { ...rescued(), porterAtWorkshop: undefined };
+  expect(normalizeChapter5Save(early)).toMatchObject({ porterAtWorkshop: true, porterFreed: false });
+});
 test("woodsman warning gates both routes; a player may retreat from the hollow and keep all story", () => {
   let s = { ...depart(), node: "woodsman" as const, view: null };
   expect(moveChapter5(s, "fork").node).toBe("woodsman");
   s = progress.hearChapter5Woodsman(at(s, "woodsman"), fixture().companion) as typeof s;
   let route = moveChapter5(s, "fork");
   route = moveChapter5({ ...route, view: null }, "hollow");
-  expect(moveChapter5(route, "hollowEdge").node).toBe("hollow");
-  route = moveChapter5(route, "fork");
+  expect(moveChapter5({ ...route, view: null }, "hollowEdge").node).toBe("hollow");
+  route = moveChapter5({ ...route, view: null }, "fork");
   route = moveChapter5({ ...route, view: null }, "detour");
-  route = moveChapter5(route, "longTrail");
-  route = moveChapter5(route, "eastRoad");
+  route = moveChapter5({ ...route, view: null }, "longTrail");
+  route = moveChapter5({ ...route, view: null }, "eastRoad");
   expect(route).toMatchObject({ node: "eastRoad", view: "eastRoad", returnRoute: "safe-detour", tuskersDefeated: false });
   expect(moveChapter5({ ...route, view: null }, "townGate").node).toBe("eastRoad");
   route = progress.hearChapter5ReturnTalk(route, fixture().companion);

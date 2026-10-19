@@ -1,6 +1,22 @@
-# Current Project Status — 2026-10-15
+# Current Project Status — 2026-10-18
 
 Stable branch: `main`; current handoff branch: `codex/chapter-5-vertical-slice`
+
+## October 18 Automatic Scenes And Hub Suspense
+
+The latest follow-up gives the workshop supervisor a coordinated, explicit binding/gagging scene and makes its chained worker Orren Pike. Warning him creates one temporary bench opening; returning brings the supervisor back, and releasing him still requires securing her and using her cuff key. New games place Orren at the press while saves already in the old cell rescue retain that layout. Yard cargo, hallway loads, records, and forged notices now all serve the escort departing before first light. See the latest workshop section in [the current record](2026-10-18-chapter-5-automatic-scenes-and-hallway.md).
+
+Chapter 5 now opens new or changed scenes on arrival and skips unchanged revisits, with saved scene history and manual Inspect for rereading. The central hub adds two once-only stealth encounters after the initial survey: the foreman's searching lamp and a timber load crossing the junction. Mara and the conscious selected companion take part through physical action; suspicion and workshop noise alter the experience. Pending choices survive reload and the scripted passages preserve the actual guard/alert state. See [the current record](2026-10-18-chapter-5-automatic-scenes-and-hallway.md).
+
+The culvert follow-up adds one saved Might DC 12 grate lift: success opens a separate quiet crawl-through choice, while failure wedges the entrance shut and leaves the receiving gate available. Revisits/reload preserve the roll, the attempt costs no awareness/resources, and existing parties already inside keep earned access. The current contract, planning decisions, and story bible supersede guaranteed culvert entry.
+
+The subsequent presentation pass removes advance stat/DC/check announcements from Chapter 5 choices and descriptions. Physical action and surroundings establish the choice; selecting it resolves the same check, and result feedback shows the completed roll. The shared story writing rules now record this convention.
+
+The whole-chapter perspective pass now uses earned names across prose, map labels, headings, choices, objectives, and checklists. The hub initially shows a possible office, lower work sounds, and a stair disappearing around a bend. Records/workshop/signal labels become familiar after exploration; existing scene history and legacy earned facts preserve that knowledge. Concealed party speech is whispered or masked by work noise. People and the routing cipher are identified by introductions/readable evidence rather than advance labels.
+
+The guide lamp now offers an explicit light-or-shadow choice, with Mara's whispered explanation and a warning grounded in the visible guard post. Opening with guards present exposes the party and raises Alerted; diverting/defeating them first preserves awareness. Returning guards see the party on the lit stair. The player can leave the shutter closed and revisit it. Existing flags, light benefits, and the dark rescue route are retained; the passage/hub illumination and result focus reflect the choice.
+
+The latest guide-lamp revision passed build, 88 rules, all 32 Chapter 5 cases (31 in the broad run, plus focused light/updated-arrival checks), and a clean smoke run. The iteration also passed the 171-image audit. Desktop/phone occupied and diverted post views were reviewed without overflow or browser errors, alongside earlier hub/companion/grate captures. The test server remains on 5185; the October 18 iteration is uncommitted.
 
 ## October 15 Full Chapter Five Greybox
 

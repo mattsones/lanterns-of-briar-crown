@@ -75,7 +75,7 @@ test("optional Chapter 3 and 4 work and a missing or downed companion cannot blo
   expect(getChapter5EntryErrors(payload.player, payload.flags)).toEqual([]);
 });
 
-test("entry is reliable or fails forward as advertised and cannot be rerolled by re-entry", () => {
+test("entered routes set their declared alert and cannot be rerolled by re-entry", () => {
   expect(enterBriarhold(buildBriarholdState(), "culvert").alert).toBe("quiet");
   expect(enterBriarhold(buildBriarholdState(), "receiving-gate", true).alert).toBe("quiet");
   expect(enterBriarhold(buildBriarholdState(), "receiving-gate", false).alert).toBe("suspicious");

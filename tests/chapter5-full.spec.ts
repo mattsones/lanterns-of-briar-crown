@@ -17,12 +17,18 @@ async function load(page: Page, payload: SavePayload) {
 async function reload(page: Page) { await page.reload(); await page.getByRole("button", { name: "Continue Checkpoint" }).click(); }
 async function go(page: Page, ...nodes: string[]) {
   for (const node of nodes) {
+    if (await a(page, "hub-wait").isVisible() || await a(page, "back").isVisible()) await back(page);
     await page.locator(`[data-ch5-map-node="${node}"]`).click();
     await expect(page.getByTestId("chapter5-spike")).toHaveAttribute("data-ch5-node", node);
   }
 }
-const inspect = (page: Page) => page.getByRole("button", { name: "Inspect", exact: true }).click();
-const back = (page: Page) => a(page, "back").click();
+async function inspect(page: Page) {
+  if (!await page.locator("[data-scene-id]").isVisible()) await page.getByRole("button", { name: "Inspect", exact: true }).click();
+}
+async function back(page: Page) {
+  if (await a(page, "hub-wait").isVisible()) await a(page, "hub-wait").click();
+  await a(page, "back").click();
+}
 async function win(page: Page, ordinary = false) {
   for (let turn = 0; turn < 32; turn++) {
     const claim = page.getByRole("button", { name: "Claim Victory", exact: true });
@@ -49,12 +55,15 @@ async function finishCleanup(page: Page) {
   await a(page, "continue-rescue").click();
   await go(page, "crown"); await inspect(page); await a(page, "take-docket").click();
   await back(page); await go(page, "cells"); await inspect(page);
-  await a(page, "open-cells").click(); await a(page, "free-porter").click(); await a(page, "free-warden").click();
+  await a(page, "open-cells").click();
+  if (await a(page, "free-porter").isVisible()) await a(page, "free-porter").click();
+  await a(page, "free-warden").click();
   await back(page); await go(page, "crown", "grille", "door", "hub", "ledger"); await inspect(page);
   if (await a(page, "officer-surrender").isVisible()) await a(page, "officer-surrender").click();
   for (const id of ["free-clerk", "take-ledger", "take-instruction"]) if (await a(page, id).isVisible()) await a(page, id).click();
   await back(page); await go(page, "hub", "workshop"); await inspect(page);
   if (await a(page, "workshop-surrender").isVisible()) await a(page, "workshop-surrender").click();
+  if (await a(page, "free-workshop-porter").isVisible()) await a(page, "free-workshop-porter").click();
   if (await a(page, "take-seals").isVisible()) await a(page, "take-seals").click();
   await back(page); await go(page, "hub", "landing", "gathering"); await inspect(page);
   await expect(a(page, "depart")).toBeDisabled();
@@ -107,7 +116,8 @@ test("full chapter from the title: ordinary quiet puzzle route, rescue, safe ret
   await page.getByLabel("Companion battle order").selectOption("Defend Me");
   await page.getByRole("button", { name: "Close Adventure Menu", exact: true }).click();
   await a(page, "cross-ridge").click(); await a(page, "recover").click(); await back(page);
-  await go(page, "ridge", "runoff", "culvert"); await inspect(page); await a(page, "enter-culvert").click();
+  await go(page, "ridge", "runoff", "culvert"); await inspect(page);
+  await a(page, "open-culvert-grate").click(); await a(page, "enter-culvert").click();
   await back(page); await go(page, "hub", "ledger"); await inspect(page);
   await a(page, "resolve-ledger").click();
   await page.evaluate(() => { Math.random = () => .99; }); // Exercise the successful quiet check with the actual fixture bonus.
@@ -131,7 +141,7 @@ test("full chapter from the title: ordinary quiet puzzle route, rescue, safe ret
   await reload(page); await expect(a(page, "pack-supplies")).toHaveCount(0);
   await walkToFork(page); await a(page, "safe-detour").click(); await go(page, "longTrail", "eastRoad");
   const done = await finishTown(page);
-  expect(done.chapter5).toMatchObject({ returnRoute: "safe-detour", tuskersDefeated: false, workshopResolution: "bypassed" });
+  expect(done.chapter5).toMatchObject({ returnRoute: "safe-detour", tuskersDefeated: false, workshopResolution: "surrendered" });
   expect(done.player.xp).toBe(33);
   await page.screenshot({ path: "test-results/ch5-full-ending-desktop.png", fullPage: true });
 });
@@ -153,7 +163,7 @@ test("a legacy carriage checkpoint with skipped wings finishes all cleanup witho
   expect(before.chapter5).toMatchObject({ ledgerResolved: true, workshopResolution: "surrendered", checks: {} });
   expect(before.player.gold).toBe(p.player.gold + 12);
   await walkToFork(page);
-  await a(page, "choose-hollow").click(); await inspect(page); await back(page); await go(page, "fork");
+  await a(page, "choose-hollow").click(); await inspect(page); await back(page); await go(page, "fork"); await inspect(page);
   await a(page, "safe-detour").click(); await go(page, "longTrail", "eastRoad");
   const done = await finishTown(page);
   expect(done.player.hp).toBe(p.player.hp);

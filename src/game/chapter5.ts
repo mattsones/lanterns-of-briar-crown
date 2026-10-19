@@ -137,6 +137,11 @@ export function canOpenBriarholdInnerDoor(state: BriarholdState) {
     (state.spareKeyFound && state.guardsDistracted && state.alert !== "alerted");
 }
 
+export function getBriarholdInnerPostGuards(state: BriarholdState, commandBroken = false): number {
+  if (commandBroken || state.doorDetailDefeated || state.guardsDistracted) return 0;
+  return state.investigatorRemoved === "none" ? 2 : 1;
+}
+
 export function getBriarholdBossProfile(state: BriarholdState) {
   const baseline = { quiet: 0, suspicious: 1, alerted: 2 }[state.alert];
   const guards = Math.max(0, baseline - (state.investigatorRemoved === "silent" ? 1 : 0));

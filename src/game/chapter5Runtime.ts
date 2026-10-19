@@ -1,17 +1,19 @@
 import { buildEnemy } from "../data/enemies";
-import { buildBriarholdState, defeatBriarholdDoorDetail, getBriarholdBossProfile, resolveInvestigatingGuard, type BriarholdState, type CarriageStage } from "./chapter5";
+import { buildBriarholdState, canOpenBriarholdInnerDoor, defeatBriarholdDoorDetail, enterBriarhold, getBriarholdBossProfile, getBriarholdInnerPostGuards, resolveInvestigatingGuard, transmitLanternSignal, type BriarholdState, type CarriageStage } from "./chapter5";
 import { getHeroXpTarget } from "./progression";
+import { isCompanionConscious } from "./companions";
 import type { Companion, Player, SkillCheckResult } from "./types";
-import type { LanternPane } from "../story/chapter5";
-import { CHAPTER_5_ACTION_NARRATIVE, getChapter5Arrival, getChapter5BattleAftermath, getChapter5LedgerAmbushNarrative } from "../story/chapter5Narrative";
+import { CHAPTER_5_CHECKS, type LanternArrangement, type LanternPane } from "../story/chapter5";
+import { CHAPTER_5_ACTION_NARRATIVE, getChapter5Arrival, getChapter5BattleAftermath, getChapter5CulvertGrateNarrative, getChapter5EntryNarrative, getChapter5GuideLampOutcome, getChapter5LedgerAmbushNarrative, getChapter5LitSignalOutcome, getChapter5SceneParagraphs, getChapter5SignalNarrative } from "../story/chapter5Narrative";
 import { buildChapter5Progress, isChapter5ProgressValid, isChapter5ReturnCleared, type Chapter5Progress } from "./chapter5Progress";
 import { CHAPTER_5_AFTERMATH, getChapter5FullArrival } from "../story/chapter5Aftermath";
+import { getChapter5HallwayOutcome } from "../story/chapter5Hallway";
 
 export const CH5_NODES = {
   overlook: { x: 0, y: 0, label: "Overlook shelter", icon: "⛺" },
   ridge: { x: 1, y: 0, label: "Ridge path", icon: "🌙" },
   gate: { x: 2, y: 0, label: "Receiving gate", icon: "🚪" },
-  runoff: { x: 1, y: 1, label: "Workshop runoff", icon: "💧" },
+  runoff: { x: 1, y: 1, label: "Runoff trail", icon: "💧" },
   culvert: { x: 2, y: 1, label: "Service culvert", icon: "🕳️" },
   landing: { x: 0, y: 1, label: "Service landing", icon: "🪜" },
   hub: { x: 1, y: 1, label: "Shadowed hub", icon: "🕯️" },
@@ -48,6 +50,9 @@ export type Chapter5SaveState = Chapter5Progress & {
   briarhold: BriarholdState;
   panes: [LanternPane | null, LanternPane | null, LanternPane | null];
   feedback: string;
+  seenScenes: Partial<Record<Chapter5Node, string>>;
+  hubPassages: number;
+  hubInterlude: "lamp" | "load" | null;
   recoveryUsed: boolean;
   ledgerResolved: boolean;
   ledgerOfficerDistracted: boolean;
@@ -59,7 +64,7 @@ export type Chapter5SaveState = Chapter5Progress & {
   brackenDefeated: boolean;
   carriageStage: CarriageStage;
   brakeCheck: SkillCheckResult | null;
-  checks: Partial<Record<"receiving" | "investigator" | "ledgerOfficer", SkillCheckResult>>;
+  checks: Partial<Record<"culvert" | "receiving" | "investigator" | "ledgerOfficer", SkillCheckResult>>;
   milestoneAwarded: boolean;
   pendingBattle: Chapter5BattleKind | null;
   bossProfile: ReturnType<typeof getBriarholdBossProfile> | null;
@@ -69,7 +74,7 @@ export function buildChapter5SaveState(): Chapter5SaveState {
   return {
     ...buildChapter5Progress(),
     version: 1, started: false, node: "overlook", view: "opening", briarhold: buildBriarholdState(),
-    panes: [null, null, null], feedback: "", recoveryUsed: false, ledgerResolved: false,
+    panes: [null, null, null], feedback: "", seenScenes: {}, hubPassages: 0, hubInterlude: null, recoveryUsed: false, ledgerResolved: false,
     ledgerOfficerDistracted: false, clerkFreed: false,
     workshopResolved: false, chartRead: false, goldChannelUncovered: false, lioSeen: false, brackenDefeated: false,
     carriageStage: "secure-carriage", brakeCheck: null, checks: {}, milestoneAwarded: false,
@@ -87,12 +92,23 @@ export function normalizeChapter5Save(value: unknown): Chapter5SaveState {
   const raw = value as Partial<Chapter5SaveState>;
   if (raw.version !== 1) return fail();
   const next = { ...defaults, ...raw, briarhold: { ...defaults.briarhold, ...raw.briarhold } };
+  // Keep a porter already encountered/rescued in the old cell layout there.
+  // Earlier checkpoints receive the new forced-work detail without a rescue grant.
+  if (raw.porterAtWorkshop === undefined) next.porterAtWorkshop = !(raw.cellsOpened || raw.porterFreed || raw.node === "cells" || raw.departed);
   for (const key of Object.keys(defaults)) {
     if (typeof defaults[key] === "boolean" && typeof next[key] !== "boolean") return fail();
   }
   if (!Object.keys(CH5_NODES).includes(next.node) || ![null, "opening", "investigator", ...Object.keys(CH5_NODES)].includes(next.view)) return fail();
   if (typeof next.feedback !== "string" || !Array.isArray(next.panes) || next.panes.length !== 3 ||
     next.panes.some((pane) => ![null, "red", "blue", "green", "amber"].includes(pane))) return fail();
+  if (!next.seenScenes || typeof next.seenScenes !== "object" || Array.isArray(next.seenScenes) ||
+    Object.entries(next.seenScenes).some(([node, key]) => !Object.keys(CH5_NODES).includes(node) ||
+      typeof key !== "string" || !/^scene-v1:[0-9a-f]{8}$/.test(key))) return fail();
+  if (!Number.isInteger(next.hubPassages) || next.hubPassages < 0 || next.hubPassages > 3 ||
+    ![null, "lamp", "load"].includes(next.hubInterlude)) return fail();
+  if (next.hubInterlude && (!next.started || !next.briarhold.entry || next.node !== "hub" || next.brackenDefeated ||
+    next.pendingBattle || next.briarhold.alert === "alerted" || next.briarhold.investigatorPending ||
+    next.hubPassages !== (next.hubInterlude === "lamp" ? 2 : 3))) return fail();
   const b = next.briarhold;
   if (!raw.briarhold || typeof raw.briarhold !== "object" || Array.isArray(raw.briarhold)) return fail();
   for (const key of Object.keys(defaults.briarhold)) {
@@ -111,7 +127,10 @@ export function normalizeChapter5Save(value: unknown): Chapter5SaveState {
     typeof check.success === "boolean" && check.success === (check.total >= check.dc);
   if (next.brakeCheck !== null && !validCheck(next.brakeCheck)) return fail();
   if (!next.checks || typeof next.checks !== "object" || Array.isArray(next.checks) ||
-    Object.entries(next.checks).some(([key, check]) => !["receiving", "investigator", "ledgerOfficer"].includes(key) || !validCheck(check))) return fail();
+    Object.entries(next.checks).some(([key, check]) => !["culvert", "receiving", "investigator", "ledgerOfficer"].includes(key) || !validCheck(check))) return fail();
+  const grateCheck = next.checks.culvert;
+  if (grateCheck && (!next.started || grateCheck.stat !== CHAPTER_5_CHECKS.culvertGrate.stat ||
+    grateCheck.dc !== CHAPTER_5_CHECKS.culvertGrate.dc || b.entry === "culvert" && !grateCheck.success)) return fail();
   if (next.bossProfile !== null) {
     const p = next.bossProfile;
     if (!Array.isArray(p.enemyIds) || p.enemyIds.length < 2 || p.enemyIds.length > 4 ||
@@ -130,6 +149,7 @@ export function normalizeChapter5Save(value: unknown): Chapter5SaveState {
     (next.carriageStage !== "secure-carriage" && !next.brackenDefeated) ||
     (next.milestoneAwarded && next.carriageStage !== "rescued")) return fail();
   if (b.investigatorPending) next.view = "investigator";
+  if (next.hubInterlude) next.view = "hub";
   if (next.node === "landing" && next.view === "hub") next.view = "landing";
   if (next.brackenDefeated && next.carriageStage !== "rescued") {
     next.node = "carriage";
@@ -137,7 +157,48 @@ export function normalizeChapter5Save(value: unknown): Chapter5SaveState {
   }
   if (next.workshopResolved && next.workshopResolution === null) next.workshopResolution = "bypassed";
   if (!isChapter5ProgressValid(next)) return fail();
+  const oldHubArrival = "You move around the end of the landing rail and settle behind the hub's stone pier. The work sounds divide here, letting you pick out the separate passages while remaining beneath the lamps.";
+  if (next.node === "hub" && next.feedback === oldHubArrival) next.feedback = getChapter5Arrival(next, "hub");
   return next;
+}
+
+export function tryChapter5CulvertGrate(state: Chapter5SaveState, check: SkillCheckResult): Chapter5SaveState {
+  if (!state.started || state.briarhold.entry || state.node !== "culvert" || state.view !== "culvert" ||
+    state.checks.culvert || check.stat !== CHAPTER_5_CHECKS.culvertGrate.stat || check.dc !== CHAPTER_5_CHECKS.culvertGrate.dc) return state;
+  return { ...state, checks: { ...state.checks, culvert: check }, feedback: getChapter5CulvertGrateNarrative(check) };
+}
+
+export function enterChapter5Culvert(state: Chapter5SaveState): Chapter5SaveState {
+  if (!state.started || state.briarhold.entry || state.node !== "culvert" || state.view !== "culvert" || !state.checks.culvert?.success) return state;
+  return { ...state, node: "landing", view: "landing", briarhold: enterBriarhold(state.briarhold, "culvert"),
+    feedback: getChapter5EntryNarrative("culvert", null) };
+}
+
+export function restoreChapter5GuideLamp(state: Chapter5SaveState, companion?: Companion): Chapter5SaveState {
+  if (!state.started || !state.briarhold.entry || state.node !== "lanterns" || state.view !== "lanterns" ||
+    !state.goldChannelUncovered || state.briarhold.lanternsRestored || state.pendingBattle || state.briarhold.investigatorPending) return state;
+  const exposed = getBriarholdInnerPostGuards(state.briarhold, state.brackenDefeated) > 0;
+  return { ...state, briarhold: { ...state.briarhold, lanternsRestored: true,
+    alert: exposed ? "alerted" : state.briarhold.alert }, feedback: getChapter5GuideLampOutcome(state, companion) };
+}
+
+export function leaveChapter5GuideLampClosed(state: Chapter5SaveState): Chapter5SaveState {
+  if (!state.started || !state.briarhold.entry || state.node !== "lanterns" || state.view !== "lanterns" ||
+    !state.goldChannelUncovered || state.briarhold.lanternsRestored || state.pendingBattle || state.briarhold.investigatorPending) return state;
+  return { ...state, view: null, feedback: "You ease your hand away from the shutter, leaving the bound stems in its hinge. Only a thin amber line escapes beneath the edge. Mara follows you back toward the stair with one hand on the rail, feeling for the next step before she trusts it with her weight. The passages remain in shadow." };
+}
+
+export function transmitChapter5Signal(state: Chapter5SaveState): Chapter5SaveState {
+  if (!state.started || !state.briarhold.entry || state.node !== "lanterns" || state.view !== "lanterns" ||
+    state.pendingBattle || state.panes.some(pane => !pane)) return state;
+  const result = transmitLanternSignal(state.briarhold, state.panes as LanternArrangement);
+  if (!result.transmitted) return state;
+  const exposed = result.state.lanternsRestored && getBriarholdInnerPostGuards(result.state, state.brackenDefeated) > 0;
+  const briarhold: BriarholdState = exposed
+    ? { ...result.state, alert: "alerted", guardsDistracted: false, investigatorPending: false }
+    : result.state;
+  return { ...state, briarhold, view: briarhold.investigatorPending ? "investigator" : "lanterns",
+    feedback: exposed ? getChapter5LitSignalOutcome(state, result.signal) : getChapter5SignalNarrative(result.signal, briarhold) };
 }
 
 export function distractLedgerOfficer(state: Chapter5SaveState): Chapter5SaveState {
@@ -159,8 +220,8 @@ export function secureLedgerOfficer(state: Chapter5SaveState, check: SkillCheckR
 export function freeLedgerClerk(state: Chapter5SaveState): Chapter5SaveState {
   if (!state.started || !state.briarhold.entry || state.node !== "ledger" || state.view !== "ledger" || !state.ledgerResolved || state.clerkFreed) return state;
   return { ...state, clerkFreed: true, feedback: state.carriageStage === "rescued" ? CHAPTER_5_AFTERMATH.freeClerkAfterRescue : CHAPTER_5_ACTION_NARRATIVE.freeClerk + (state.briarhold.spareKeyFound
-    ? "\n\nShe sees the key beside Mara's wrapped shim and points to it. “That opens the inner door. Watch for the guards at the post.”"
-    : "\n\nShe glances at the lower drawer. “He keeps a spare inner-door key in there. I watched him lock it away.” Mara crouches beside the drawer and studies its narrow join."), };
+    ? "\n\nShe sees the key beside Mara's wrapped shim and points to it. “That opens the inner door,” she whispers. “Watch for the guards at the post.”"
+    : "\n\nShe glances at the lower drawer and whispers, “He keeps a spare inner-door key in there. I watched him lock it away.” Mara crouches beside the drawer and studies its narrow join."), };
 }
 
 export function abandonLedgerDistraction(state: Chapter5SaveState): Chapter5SaveState {
@@ -182,24 +243,64 @@ export function getChapter5Edges(state: Chapter5SaveState): [Chapter5Node, Chapt
     : [["overlook", "ridge"], ["ridge", "gate"], ["ridge", "runoff"], ["runoff", "culvert"]];
 }
 
-export function moveChapter5(state: Chapter5SaveState, destination: Chapter5Node): Chapter5SaveState {
-  if (state.view || state.pendingBattle || state.briarhold.investigatorPending ||
+// Compare the actual description and locally available interactions, rather than
+// reopening every visited room whenever an unrelated chapter flag changes.
+export function getChapter5SceneKey(state: Chapter5SaveState, node: Chapter5Node, companion?: Companion): string {
+  const b = state.briarhold;
+  const opportunities: Partial<Record<Chapter5Node, unknown[]>> = {
+    ledger: [state.chartRead, state.ledgerResolved && !b.spareKeyFound && b.shimFound,
+      state.evidence.includes("transfer-ledger"), state.evidence.includes("genuine-office-instruction")],
+    workshop: [state.porterFreed, state.evidence.includes("false-seals"), !b.workshopDisabled && companion?.id === "moss" && isCompanionConscious(companion)],
+    lanterns: [state.chartRead],
+    door: [canOpenBriarholdInnerDoor(b)],
+    crown: [state.carriageStage === "rescued", state.evidence.includes("examiner-transfer-record")],
+    gathering: [state.clerkFreed, state.porterFreed, state.wardenFreed, [...state.evidence].sort(),
+      state.examinerLeadLearned, state.siblingsReunited, state.suppliesClaimed],
+  };
+  const content = JSON.stringify([getChapter5SceneParagraphs({ ...state, view: node }, companion), opportunities[node]]);
+  let hash = 2166136261;
+  for (let i = 0; i < content.length; i++) hash = Math.imul(hash ^ content.charCodeAt(i), 16777619);
+  return `scene-v1:${(hash >>> 0).toString(16).padStart(8, "0")}`;
+}
+
+// Open scenes count as presented, including their updated state after an action.
+// A continuation that closes the scene also acknowledges its completed phase.
+export function rememberChapter5Scene(state: Chapter5SaveState, companion?: Companion, previous?: Chapter5SaveState): Chapter5SaveState {
+  if (!state.started || state.pendingBattle) return state;
+  const presented = state.view === state.node || state.view === null && previous?.view === state.node && previous.node === state.node;
+  if (!presented) return state;
+  const key = getChapter5SceneKey(state, state.node, companion);
+  return state.seenScenes[state.node] === key ? state : { ...state, seenScenes: { ...state.seenScenes, [state.node]: key } };
+}
+
+export function resolveChapter5HubPassage(state: Chapter5SaveState, response: "wait" | "cross"): Chapter5SaveState {
+  if (state.node !== "hub" || state.view !== "hub" || !state.hubInterlude || state.pendingBattle ||
+    response === "cross" && state.hubInterlude !== "load") return state;
+  return { ...state, hubInterlude: null, feedback: getChapter5HallwayOutcome(state.hubInterlude, response) };
+}
+
+export function moveChapter5(state: Chapter5SaveState, destination: Chapter5Node, companion?: Companion): Chapter5SaveState {
+  if (state.view || state.pendingBattle || state.briarhold.investigatorPending || state.hubInterlude ||
     (state.brackenDefeated && state.carriageStage !== "rescued")) return state;
   if (!getChapter5Edges(state).some(([a, b]) => (a === state.node && b === destination) || (b === state.node && a === destination))) return state;
-  if (destination === "fork" && !state.woodsmanHeard) return { ...state, feedback: "The woodsman points toward the two trails. Listen to his warning before choosing a way through the hollow." };
+  if (destination === "fork" && !state.woodsmanHeard) return { ...state, view: "woodsman", feedback: "The woodsman points toward the two trails. Listen to his warning before choosing a way through the hollow." };
   if ((state.node === "hollow" && destination === "hollowEdge" || state.node === "eastRoad" && destination === "hollowEdge") && !state.tuskersDefeated) return { ...state, feedback: "The tuskers hold the crossing between the two banks. The high trail is back at the fork, beyond the woodsman's clearing." };
   if (destination === "eastRoad" && !isChapter5ReturnCleared(state)) return state;
   if (destination === "townGate" && !state.returnConversationHeard) return { ...state, view: "eastRoad", feedback: "Lio pauses beside the trail as the others catch up. Walk with him before the final stretch into town." };
   if (destination === "watchhouse" && !state.homecomingSeen) return { ...state, view: "square", feedback: "Hollis has come down into the square. Enna is beside him, looking toward the people arriving with you." };
   const returnRoute = destination === "detour" ? "safe-detour" : destination === "hollow" ? "tusker-hollow" : state.returnRoute;
-  if (destination === "townGate") return { ...state, returnedToBramblecross: true, node: destination, view: destination, feedback: getChapter5FullArrival(state, destination) };
   if (destination === "grille" && !state.briarhold.innerDoorOpened) return { ...state, feedback: "You reach the inner post, but the locked door closes off the inspection passage. Mara draws back into the pier's shadow with you; passing farther will require the key and a diversion, or defeating the guards who hold it." };
   if (destination === "carriage" && !state.brackenDefeated) return { ...state, feedback: "You look for a path along the carriage rail, but Bracken and his supports command the floor between you and Lio. Mara stays behind the console while you prepare to break their hold on the room." };
-  if (destination === "grille" && !state.lioSeen) return { ...state, node: destination, view: "grille" };
-  const required = destination === "woodsman" && !state.woodsmanHeard || destination === "fork" ||
-    destination === "eastRoad" && !state.returnConversationHeard || destination === "square" && !state.homecomingSeen;
-  return { ...state, node: destination, returnRoute, view: required ? destination : null,
-    feedback: getChapter5FullArrival(state, destination) || getChapter5Arrival(state, destination) };
+  const hubPassages = destination === "hub" ? Math.min(3, state.hubPassages + 1) : state.hubPassages;
+  const hubInterlude = destination === "hub" && !state.brackenDefeated && state.briarhold.alert !== "alerted" && state.hubPassages < 3
+    ? hubPassages === 2 ? "lamp" : hubPassages === 3 ? "load" : null : null;
+  const next: Chapter5SaveState = { ...state, node: destination, returnRoute, hubPassages, hubInterlude,
+    workshopResolved: state.node === "workshop" && state.workshopResolution === "bypassed" ? false : state.workshopResolved,
+    returnedToBramblecross: state.returnedToBramblecross || destination === "townGate", view: null, feedback: "" };
+  const unread = next.seenScenes[destination] !== getChapter5SceneKey(next, destination, companion);
+  if (!unread && !(destination === "grille" && !state.lioSeen)) return next;
+  return rememberChapter5Scene({ ...next, view: destination,
+    feedback: getChapter5FullArrival(state, destination) || getChapter5Arrival(state, destination) }, companion);
 }
 
 export function buildChapter5BattleEnemies(state: Chapter5SaveState) {
@@ -212,7 +313,7 @@ export function buildChapter5BattleEnemies(state: Chapter5SaveState) {
     const enemy = buildEnemy(id);
     if (state.pendingBattle === "officer" || state.pendingBattle === "workshop") {
       const officer = state.pendingBattle === "officer";
-      enemy.name = officer ? "Records Officer" : "Dessa Flint";
+      enemy.name = officer ? "Records Officer" : "Sealwright";
       enemy.icon = officer ? "🖋️" : "🔨";
       enemy.intentA = officer ? "Desk-side Feint" : "Braced Hammer";
       enemy.intentB = officer ? "Workknife Slash" : "Press Hammer Swing";

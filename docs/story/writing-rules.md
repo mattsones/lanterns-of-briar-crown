@@ -37,7 +37,9 @@ Spell out a number at the beginning of a sentence. Numeric values may remain in 
 
 Keep story prose inside the player's current experience. Describe what the party observes and does, using the knowledge earned so far.
 
+- Give unfamiliar rooms and people observable descriptions before using names or definite functions. Qualify an inference when the party has only partial evidence. A visit, readable mark, introduction, or clear sightline can establish a name for later use; map labels, objectives, and choices must follow the same knowledge boundary.
+- During concealed movement in hostile territory, make the party's dialogue whispered or establish the noise that masks it. Nearby enemies can speak normally; open confrontations and conversations after reaching safety should follow their own circumstances.
 - When revising a scene, remove the mistaken detail rather than adding a denial of it. The current story should stand on its own, without explanations aimed at an earlier draft.
 - Let the physical scene establish cover, locked objects, restraints, and access. Avoid repeating those facts as narratorial reminders of what the player cannot do or could not see earlier.
-- Keep a restriction or warning when it helps the player understand a present choice, hazard, or consequence. Explain relevant checks and changed effects clearly; omit unsolicited reassurance about hypothetical failures, repeat encounters, or rejected story alternatives.
+- Keep a restriction or warning when it helps the player understand a present choice, hazard, or consequence. Describe risks through the physical scene. Resolve skill checks as part of the chosen action; keep stat names, difficulty numbers, dice, and explicit check explanations out of advance prose and choice labels. Result feedback may explain the completed roll and its effects. Omit unsolicited reassurance about hypothetical failures, repeat encounters, or rejected story alternatives.
 - Introduce an enemy through observable behavior. Keep named attacks, exact penalties, and repair rules out of the encounter's introductory story prose; combat feedback can explain an effect once the player sees it happen.

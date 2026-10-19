@@ -2,7 +2,7 @@ import { isCompanionConscious } from "./companions";
 import { getBriarholdDepartureErrors, getChapter5CompletionErrors, type Chapter5Outcome } from "./chapter5";
 import { CHAPTER_5_CONTRACT, type Chapter5Evidence } from "../story/chapter5";
 import { CHAPTER_5_AFTERMATH, getChapter5FullOutcome } from "../story/chapter5Aftermath";
-import { CHAPTER_5_ACTION_NARRATIVE } from "../story/chapter5Narrative";
+import { getChapter5WorkshopDiversion } from "../story/chapter5Narrative";
 import type { Chapter5SaveState } from "./chapter5Runtime";
 import type { Companion, Player } from "./types";
 
@@ -13,6 +13,7 @@ export type Chapter5Progress = {
   mossBypassUsed: boolean;
   cellsOpened: boolean;
   porterFreed: boolean;
+  porterAtWorkshop: boolean;
   wardenFreed: boolean;
   evidence: Chapter5Evidence[];
   examinerLeadLearned: boolean;
@@ -31,7 +32,7 @@ export type Chapter5Progress = {
 
 export function buildChapter5Progress(): Chapter5Progress {
   return { workshopResolution: null, rowanContainmentUsed: false, mossBypassUsed: false,
-    cellsOpened: false, porterFreed: false, wardenFreed: false, evidence: [],
+    cellsOpened: false, porterFreed: false, porterAtWorkshop: true, wardenFreed: false, evidence: [],
     examinerLeadLearned: false, siblingsReunited: false, suppliesClaimed: false,
     departed: false, woodsmanHeard: false, returnRoute: null, tuskersDefeated: false,
     returnConversationHeard: false, returnedToBramblecross: false, homecomingSeen: false,
@@ -59,13 +60,21 @@ export function isChapter5ReturnCleared(s: Chapter5SaveState) {
 const at = (s: Chapter5SaveState, node: Chapter5SaveState["node"]) => s.started && !!s.briarhold.entry && s.node === node && s.view === node && !s.pendingBattle;
 
 export function resolveChapter5Workshop(s: Chapter5SaveState, method: Exclude<WorkshopResolution, "fought" | null>, companion?: Companion): Chapter5SaveState {
-  if (!at(s, "workshop") || s.workshopResolved) return s;
+  if (!at(s, "workshop") || isChapter5WorkshopSecure(s)) return s;
+  if (method === "bypassed" && s.workshopResolution !== null) return s;
   if (method === "contained" && (!isCompanionConscious(companion) || companion.id !== "rowan" || s.rowanContainmentUsed)) return s;
   if (method === "surrendered" && s.carriageStage !== "rescued") return s;
   if (s.brackenDefeated && method !== "surrendered") return s;
   return { ...s, workshopResolved: true, workshopResolution: method,
     rowanContainmentUsed: method === "contained" || s.rowanContainmentUsed,
-    feedback: method === "contained" ? CHAPTER_5_AFTERMATH.containDessa : method === "surrendered" ? CHAPTER_5_AFTERMATH.workshopSurrender : CHAPTER_5_ACTION_NARRATIVE.resolveWorkshop };
+    feedback: method === "contained" ? (s.workshopResolved && s.workshopResolution === "bypassed" ? "You retreat behind the cooling rack and wait for the pair to return from the quenching trough. The woman sets the scrubbed batch beside the press and bends over it. " : "") + CHAPTER_5_AFTERMATH.containDessa : method === "surrendered" ? CHAPTER_5_AFTERMATH.workshopSurrender : getChapter5WorkshopDiversion(s.porterAtWorkshop) };
+}
+export function isChapter5WorkshopSecure(s: Chapter5SaveState) {
+  return s.workshopResolved && s.workshopResolution !== null && ["contained", "fought", "surrendered"].includes(s.workshopResolution);
+}
+export function freeChapter5WorkshopCaptive(s: Chapter5SaveState): Chapter5SaveState {
+  if (!at(s, "workshop") || !s.porterAtWorkshop || s.porterFreed || !isChapter5WorkshopSecure(s)) return s;
+  return { ...s, porterFreed: true, feedback: CHAPTER_5_AFTERMATH.workshopPorter + (s.carriageStage === "rescued" ? " Lio comes to meet him at the doorway and leads him along the sheltered passage to the service court, where Orren sets the water beside the others." : "") };
 }
 export function bypassChapter5Feed(s: Chapter5SaveState, companion: Companion): Chapter5SaveState {
   if (!at(s, "workshop") || !s.workshopResolved || s.briarhold.workshopDisabled || s.mossBypassUsed || !isCompanionConscious(companion) || companion.id !== "moss") return s;
@@ -89,7 +98,7 @@ export function openChapter5Cells(s: Chapter5SaveState): Chapter5SaveState {
 }
 export function freeChapter5CellCaptive(s: Chapter5SaveState, captive: "porter" | "warden"): Chapter5SaveState {
   const field = captive === "porter" ? "porterFreed" : "wardenFreed";
-  return !at(s, "cells") || !s.cellsOpened || s[field] ? s
+  return !at(s, "cells") || !s.cellsOpened || s[field] || captive === "porter" && s.porterAtWorkshop ? s
     : { ...s, [field]: true, feedback: CHAPTER_5_AFTERMATH[captive] };
 }
 export function hearChapter5Examiner(s: Chapter5SaveState): Chapter5SaveState {
@@ -152,10 +161,11 @@ export function isChapter5ProgressValid(s: Chapter5SaveState) {
   if (![null, "bypassed", "contained", "fought", "surrendered"].includes(s.workshopResolution) ||
     ![null, "safe-detour", "tusker-hollow"].includes(s.returnRoute) || !Array.isArray(s.evidence) ||
     new Set(s.evidence).size !== s.evidence.length || s.evidence.some(id => !CHAPTER_5_CONTRACT.requiredEvidence.includes(id))) return false;
-  if (!!s.workshopResolution !== s.workshopResolved || s.rowanContainmentUsed !== (s.workshopResolution === "contained") ||
-    s.mossBypassUsed && (!s.workshopResolved || !s.briarhold.workshopDisabled) ||
-    s.evidence.some(id => id === "false-seals" ? !s.workshopResolved : id === "examiner-transfer-record" ? s.carriageStage !== "rescued" : !s.ledgerResolved) ||
-    s.cellsOpened && s.carriageStage !== "rescued" || (s.porterFreed || s.wardenFreed) && !s.cellsOpened ||
+  if ((s.workshopResolution === "bypassed" ? false : !!s.workshopResolution !== s.workshopResolved) || s.rowanContainmentUsed !== (s.workshopResolution === "contained") ||
+    s.mossBypassUsed && (!s.workshopResolution || !s.briarhold.workshopDisabled) ||
+    s.evidence.some(id => id === "false-seals" ? !s.workshopResolution : id === "examiner-transfer-record" ? s.carriageStage !== "rescued" : !s.ledgerResolved) ||
+    s.cellsOpened && s.carriageStage !== "rescued" || s.wardenFreed && !s.cellsOpened ||
+    s.porterFreed && (s.porterAtWorkshop ? !isChapter5WorkshopSecure(s) : !s.cellsOpened) ||
     (s.examinerLeadLearned || s.suppliesClaimed) && !isChapter5CleanupReady(s) ||
     s.siblingsReunited && (!s.examinerLeadLearned || !isChapter5CleanupReady(s)) ||
     s.departed && getBriarholdDepartureErrors(getChapter5Outcome(s)).length ||

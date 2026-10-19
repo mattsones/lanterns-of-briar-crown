@@ -95,7 +95,7 @@ The owner accepted the puzzles/fight and authorized the full descriptive greybox
 - Other valid codes have different operational meanings, including at least one dangerous command-center recall that would send guards toward Bracken. Many pane arrangements are not meaningful signals at all.
 - An invalid arrangement causes one guard to enter the signal room and investigate who is operating the equipment.
 - Color remains the dominant presentation, but each pane also needs a distinct etched mark, edge shape, or frame notch so the puzzle is readable without relying on color perception alone.
-- Restoring the old guide lamp also lights the Crown Table room and makes its original brass floor guides visible beside Bracken's painted arrow boards. Under the owner's October 12 refinement, fixed amber glass and a brass reflector send ordinary oil-lamp light down a sloping shaft. Woody briar stems have jammed a shutter that previously rested open; clearing the hinge and raising the shutter restores the light. The boss introduction shows Bracken glance toward it and hesitate; named attacks and exact effects are explained only through combat feedback. The accepted False Order counter remains unchanged.
+- Restoring the old guide lamp sends ordinary oil-lamp light through fixed amber glass and a broad reflector into a branching channel over the signal stair/service junction and a deeper shaft into the inner room. Bound briar stems hold its shutter nearly closed. Under the owner's October 18 choice revision, Mara connects the deliberate blockage with opening the station's paths, then warns from the actual sightline: an occupied inner post will see the party on the lit stair. Opening with guards present raises Alerted; diversion/defeat first preserves awareness. Recalling guards to the lit stair also reveals the party. An explicit leave-closed choice preserves shadow and can be revisited. Inner-room floor guides and the brake rod become visible when lit; Bracken's reaction and the accepted False Order counter remain as established, with named effects explained when encountered.
 - The loud key-taking route and the quiet tool–drawer–signal route remain valid alternatives. The latter rewards investigating all three wings.
 
 ### Fixed Signal Reference
@@ -115,8 +115,8 @@ The owner accepted the puzzles/fight and authorized the full descriptive greybox
 - The silent ambush is nonlethal in presentation and is never performed by Mara.
 - The first guard does not carry the spare inner key, so deliberately drawing one guard cannot replace the Ledger Room and Workshop solution.
 - A second wrong signal always makes Briarhold **Alerted**. After one unexplained activation, the guards adapt and no longer send a lone checker. This ends the quiet route but does not fail the puzzle, rescue, or chapter.
-- The interface must state the stakes of each response before commitment and clearly warn, once Briarhold is **Suspicious**, that another wrong signal will trigger a general alert.
-- **Hide** and **Hide and attempt a silent ambush** use visible dice-driven skill checks with their difficulty and consequences shown before the player commits. They use existing character stats rather than introducing a separate Stealth stat.
+- Establish the risk through the guard's approach, light, cover, and voices within calling distance. Once Briarhold is **Suspicious**, the signal feedback still warns that another wrong signal will trigger a general alert.
+- **Hide** and **Hide and attempt a silent ambush** resolve dice-driven skill checks using existing character stats. Under the owner's October 18 presentation revision, prose and choices name the action without announcing a check, stat, or difficulty. Show the completed roll and outcome afterward. This supersedes advance difficulty/consequence explanations; no separate Stealth stat is introduced.
 
 ### Bracken Boss And Escape
 
@@ -133,7 +133,7 @@ The owner accepted the puzzles/fight and authorized the full descriptive greybox
 - Lio actively resists by jamming or slowing the carriage long enough for the party to reach him.
 - The party stops the carriage and frees Lio instead of pursuing Bracken. Bracken escapes wounded through a narrow personnel passage and seals it while the party is occupied.
 - This is an authored moral decision rather than a menu option that allows the player to abandon Lio. The playable action is to stop the carriage and complete the rescue.
-- Restoring the Captive Lantern signal channels carries gold light into the room and reveals the true brake markings beneath Bracken's false control plate, making the rescue cleaner and visually connecting the puzzle to the climax.
+- Opening the separate guide-lamp shutter lights the passage floor and sends amber light into the inner room, revealing the true brake linkage beneath the false labels. Keeping it shuttered preserves cover and the existing unlit rescue route.
 - The imagery deliberately answers the cell's practice of recording and moving people like cargo: the heroes stop the machinery because Lio is a person, not a transfer entry.
 
 ### Alert-Dependent Boss Support
@@ -172,7 +172,7 @@ The owner accepted the puzzles/fight and authorized the full descriptive greybox
 ### Outer Approach Entry Routes
 
 - The Outer Approach offers three explicit ways into Briarhold. The alert consequences are shown before the player commits.
-- **Use the old service culvert:** a longer, reliable infiltration route discovered through environmental evidence such as runoff, discarded workshop material, and footprints disappearing behind roots. Enter Briarhold **Quiet**. An Instinct check may reveal the route sooner but cannot permanently hide it from any character build.
+- **Use the old service culvert:** follow runoff and discarded workshop material to discover the longer approach without a required check. Under the owner's October 18 revision, lifting its rusted, sunken grate takes one saved **Might DC 12** check. Success props it open for a separate crawl-through action and **Quiet** entry; failure wedges it shut, leaving the receiving gate available. The attempt costs no HP, supplies, or awareness, and cannot be rerolled by revisiting or loading. Existing saves already inside preserve access. This replaces the earlier guaranteed culvert entry decision.
 - **Slip through the receiving gate:** a faster route attempted while a supply cart or worker passes. A visible skill check succeeds into **Quiet** and fails forward into **Suspicious**; it does not accidentally create a full alert.
 - **Attack the receiving-gate guards:** guaranteed entry with no skill check, but the player receives a clear warning and knowingly begins Briarhold **Alerted**.
 - Every entry reaches the central hub without bypassing the False Ledger Room, Thornseal Workshop, or Captive Lantern Hall.
@@ -181,6 +181,7 @@ The owner accepted the puzzles/fight and authorized the full descriptive greybox
 ### Briarhold Personnel
 
 - Briarhold contains a deliberate mixture of committed cell members, deceived workers, and coerced labor.
+- The October 18 operational pass ties the visible work to the escort leaving before first light: wagon screens and canvas, dispatch packets for road posts, clean prisoner-transfer copies, and sealed notices claiming Elowen's authority to cross closed roads and surrender witness statements. These are observed through packing, overheard pressure, and bench-level reading. A sample notice joins the existing false-seals bundle; no new required evidence category, captive, named insider, or live timer is added.
 - Thornseal guards and senior cell officers knowingly serve Bracken and protect the operation.
 - A sealwright or route clerk may knowingly assist the forgeries without behaving like a frontline soldier.
 - Ordinary laborers were hired under official-looking road orders and understand only fragments of Briarhold's true purpose.
@@ -271,7 +272,7 @@ The owner accepted the puzzles/fight and authorized the full descriptive greybox
 
 - The party enters Briarhold at a recessed service landing, with route-specific arrival and immediate cover. Stepping from the landing into the shadowed hub gives the survey of the False Ledger Room, Thornseal Workshop, Captive Lantern Hall, and heavily guarded inner door. The two spaces have distinct descriptions.
 - The first view clearly communicates the three wings, the rescue objective beyond the inner door, nearby patrol or worker risk, and the current alert state.
-- Stealth remains compatible with tile-based movement. It uses authored sightline and noise nodes, visible guard positions, and explicit choice or check dialogues rather than real-time moving-guard simulation.
+- Stealth remains compatible with tile-based movement. It uses authored sightline and noise nodes, visible guard positions, and action choices that resolve checks when selected. Roll details appear in the outcome. No real-time moving-guard simulation is introduced.
 
 ### Alert Persistence
 
@@ -285,12 +286,12 @@ The owner accepted the puzzles/fight and authorized the full descriptive greybox
 - The owner's October 12 follow-up adds a Precision DC 12 check to the current distracted-officer ambush, with conscious Tilda's existing +2. Success binds him quietly; on a miss he cries out before the restraint is completed. That raises awareness one level, up to Alerted, and recalls diverted guards on general alert. Both results permit desk access once he is secured. The saved check cannot be rerolled by Back/reload; older earned desk access is retained.
 - In the Thornseal Workshop, a knowingly complicit sealwright works alongside a deceived ordinary laborer. The laborer can be warned or persuaded away; the sealwright can be bypassed, subdued, or fought.
 - The workshop contains the shim Mara needs for the locked desk drawer and a separate intervention that prevents a later reinforcement or Thornroot Sentry repair.
-- The owner's October 11 workshop correction requires an explicit concealed entry and hiding place. The playable slice starts in a storage recess screened by a cooling rack; only the workers and general stamping activity can be observed there. Warning the laborer draws both workers outside before the party reaches the bench. The shim and mechanism details are learned at that point, and disconnection is described as disrupting Briar machinery rather than predicting a confrontation.
+- The owner's October 11 workshop correction requires concealed entry behind the cooling rack and earned bench knowledge. The October 18 revision makes its chained laborer Orren Pike. Warning him buys a single bench visit through a spoiled-batch/quenching-trough diversion; she returns to work with him still captive when the party leaves. Conscious Rowan containment, open combat, or post-Lio surrender secures the supervisor permanently. Binding/gagging is a substantial coordinated scene, and the player separately unlocks Orren's cuff with her belt key. Taking the shim, preserving the seal evidence, and disconnecting the feed remain independent.
 - The Captive Lantern Hall is normally unoccupied until a wrong signal draws an investigating guard or the alert state changes its response.
 
 ### Captive Release Placement
 
-- The missing Bramblecross cellar porter and Rainroot road warden remain in cells adjoining the Crown Table.
+- Under the owner's October 18 workshop revision, the missing cellar porter **Orren Pike** is forced to work cuffed to the seal press; the Rainroot road warden remains in the adjoining cells. The nearer cell now holds a prepared travel bundle. Saves already at/opening the former cell layout, or with Orren freed, retain the older cell rescue.
 - After Bracken's defeat and Lio's carriage rescue, the party releases them through a straightforward control rather than facing another post-climax puzzle.
 - The Westroot clerk may be freed earlier in the Ledger Room. A direct-route player who bypassed that wing must return for the clerk before the chapter permits departure from Briarhold.
 

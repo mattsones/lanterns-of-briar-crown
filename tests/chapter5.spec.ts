@@ -22,11 +22,17 @@ async function importPayload(page: Page, payload: SavePayload) {
   await page.locator('input[type="file"]').setInputFiles({ name: "chapter5-test.json", mimeType: "application/json", buffer: Buffer.from(JSON.stringify(payload)) });
 }
 async function go(page: Page, node: string) {
+  if (await choice(page, "ch5-hub-wait").isVisible() || await choice(page, "ch5-back").isVisible()) await back(page);
   await page.locator(`[data-ch5-map-node="${node}"]`).click();
   await expect(page.getByTestId("chapter5-spike")).toHaveAttribute("data-ch5-node", node);
 }
-async function inspect(page: Page) { await page.getByRole("button", { name: "Inspect", exact: true }).click(); }
-async function back(page: Page) { await choice(page, "ch5-back").click(); }
+async function inspect(page: Page) {
+  if (!await page.locator("[data-scene-id]").isVisible()) await page.getByRole("button", { name: "Inspect", exact: true }).click();
+}
+async function back(page: Page) {
+  if (await choice(page, "ch5-hub-wait").isVisible()) await choice(page, "ch5-hub-wait").click();
+  await choice(page, "ch5-back").click();
+}
 async function panes(page: Page, arrangement: string[]) {
   for (let i = 0; i < 3; i++) await page.getByLabel(`${["Left", "Center", "Right"][i]} lantern pane`).selectOption(arrangement[i]);
 }
@@ -57,6 +63,7 @@ test("real entry, early drawer revisit, fixed chart, pane-only edits, Back, and 
   await expect(choice(page, "ch5-recover")).toHaveCount(0);
   await back(page);
   await go(page, "ridge"); await go(page, "runoff"); await go(page, "culvert"); await inspect(page);
+  await choice(page, "ch5-open-culvert-grate").click();
   await choice(page, "ch5-enter-culvert").click();
   await expect(page.locator('[data-scene-id="ch5-service-landing"]')).toBeVisible();
   const landingText = await page.getByTestId("ch5-scene-narrative").innerText();
@@ -99,7 +106,7 @@ test("real entry, early drawer revisit, fixed chart, pane-only edits, Back, and 
   await page.keyboard.press("Escape");
   await expect(choice(page, "ch5-recognize-lio")).toBeVisible();
   await choice(page, "ch5-recognize-lio").click(); await go(page, "crown"); await inspect(page);
-  await expect(page.getByRole("dialog", { name: "Crown Table" })).not.toContainText(/False Order|Shaken|penalty|repair|opponents answer/);
+  await expect(page.getByRole("dialog", { name: "Route-table chamber" })).not.toContainText(/False Order|Shaken|penalty|repair|opponents answer/);
   await choice(page, "ch5-fight-bracken").click();
   await expect(page.getByRole("dialog", { name: /Battle/ })).toContainText("2 of 2 enemies");
   const data = await saved(page);
@@ -153,7 +160,7 @@ for (const startingAlert of ["quiet", "suspicious"] as const) {
     await load(page, state);
     const heroHp = (await saved(page)).player.hp;
     await choice(page, "ch5-resolve-ledger").click();
-    await expect(choice(page, "ch5-secure-ledger")).toContainText("Precision DC 12");
+    await expect(choice(page, "ch5-secure-ledger")).toHaveText("Ambush and bind the officer quietly");
     await choice(page, "ch5-secure-ledger").click();
     const expectedAlert = startingAlert === "quiet" ? "suspicious" : "alerted";
     await expect(page.getByTestId("ch5-feedback")).toContainText("Help!");
@@ -216,7 +223,7 @@ test("workshop cover conceals bench knowledge until the workers leave, and inter
   await expect(story).not.toContainText(/lock shim|root brace|coupling|Thornroot Sentry|DESSA FLINT|confrontation|repair/i);
 
   await choice(page, "ch5-resolve-workshop").click();
-  await expect(page.getByTestId("ch5-feedback")).toContainText("cross the empty aisle");
+  await expect(page.getByTestId("ch5-feedback")).toContainText("cross to the bench");
   await expect(story).toContainText("DESSA FLINT");
   await expect(story).toContainText("removable pin");
   await expect(story).toContainText("disrupt the Briar machinery");
@@ -231,6 +238,37 @@ test("workshop cover conceals bench knowledge until the workers leave, and inter
   await expect(story).toContainText("disconnected coupling");
   for (const id of ["ch5-resolve-workshop", "ch5-take-shim", "ch5-disable-workshop"]) await expect(choice(page, id)).toHaveCount(0);
   expect((await saved(page)).chapter5.briarhold).toMatchObject({ shimFound: true, workshopDisabled: true });
+});
+
+test("the worker's diversion expires on departure; returning to bind the supervisor enables his separate rescue", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await load(page, spike({ node: "workshop", view: "workshop", hubPassages: 3 }));
+  const before = (await saved(page)).player;
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("chain draws taut");
+  await choice(page, "ch5-resolve-workshop").click();
+  await expect(choice(page, "ch5-free-workshop-porter")).toHaveCount(0);
+  await choice(page, "ch5-take-shim").click(); await choice(page, "ch5-take-seals").click();
+  await expect(page.getByTestId("ch5-feedback")).toContainText("PRINCESS ELOWEN");
+  await go(page, "hub");
+  expect((await saved(page)).chapter5).toMatchObject({ workshopResolved: false, workshopResolution: "bypassed", porterFreed: false });
+  await reload(page); await go(page, "workshop");
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("pair have returned");
+  await expect(choice(page, "ch5-resolve-workshop")).toHaveCount(0);
+  await expect(choice(page, "ch5-free-workshop-porter")).toHaveCount(0);
+  await choice(page, "ch5-contain-dessa").click();
+  await expect(page.getByTestId("ch5-feedback")).toContainText("cloth gag");
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("bound and gagged");
+  await page.screenshot({ path: "test-results/ch5-workshop-restraint-phone.png", fullPage: true });
+  await reload(page); await choice(page, "ch5-free-workshop-porter").click();
+  await expect(page.getByTestId("ch5-feedback")).toContainText("Orren Pike");
+  const savedRescue = await saved(page);
+  expect(savedRescue.chapter5).toMatchObject({ porterFreed: true, cellsOpened: false, workshopResolution: "contained", briarhold: { alert: "quiet", shimFound: true } });
+  expect(savedRescue.player.gold).toBe(before.gold);
+  expect(savedRescue.player.hp).toBe(before.hp);
+  expect(savedRescue.player.xp).toBe(before.xp);
+  await reload(page); await expect(choice(page, "ch5-free-workshop-porter")).toHaveCount(0);
+  expect((await saved(page)).chapter5.evidence).toEqual(["false-seals"]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
 test("invalid transmission blocks departure and reload preserves a silent response and second alarm", async ({ page }) => {
@@ -248,7 +286,7 @@ test("invalid transmission blocks departure and reload preserves a silent respon
   await expect(page.getByTestId("ch5-alert")).toHaveText("Alert: Alerted");
   await expect(choice(page, "ch5-silent-ambush")).toHaveCount(0);
   await panes(page, ["red", "amber", "blue"]); await choice(page, "ch5-transmit").click();
-  await expect(page.getByTestId("ch5-feedback")).toContainText("ignore the diversion");
+  await expect(page.getByTestId("ch5-feedback")).toContainText("The remaining guard holds his post");
   expect((await saved(page)).chapter5.briarhold.invalidSignals).toBe(2);
 });
 
@@ -296,7 +334,7 @@ test("command recall, direct door, four-card boss, saved retry, and unlit rescue
   await expect(page.getByTestId("ch5-alert")).toHaveText("Alert: Alerted");
   await back(page); await go(page, "door"); await inspect(page); await choice(page, "ch5-fight-door").click(); await win(page);
   await back(page); await go(page, "grille"); await choice(page, "ch5-recognize-lio").click(); await go(page, "crown"); await inspect(page);
-  await expect(page.getByRole("dialog", { name: "Crown Table" })).not.toContainText(/False Order|Shaken|penalty|repair|opponents answer/);
+  await expect(page.getByRole("dialog", { name: "Route-table chamber" })).not.toContainText(/False Order|Shaken|penalty|repair|opponents answer/);
   await choice(page, "ch5-fight-bracken").click();
   await expect(page.getByRole("dialog", { name: /Battle/ })).toContainText("4 of 4 enemies");
   await page.screenshot({ path: "test-results/ch5-four-card-desktop.png", fullPage: true });
@@ -444,6 +482,51 @@ test("downed companions receive no stealth bonus and the overlook can restore th
   expect((await saved(page)).chapter5.checks.investigator.label).toContain("Tilda +2");
 });
 
+test("culvert grate success persists before crawling through and opens the quiet landing", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => { Math.random = () => .99; });
+  await load(page, { ...buildChapter5SaveState(), started: true, node: "culvert", view: "culvert" });
+  await expect(choice(page, "ch5-enter-culvert")).toHaveCount(0);
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("heavy iron grate");
+  const before = await saved(page);
+  await choice(page, "ch5-open-culvert-grate").click();
+  await expect(page.getByTestId("ch5-feedback")).toContainText("Might Check:");
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("stone Mara pushed beneath it");
+  expect((await saved(page)).chapter5).toMatchObject({ node: "culvert", checks: { culvert: { stat: "Might", dc: 12, roll: 20, success: true } }, briarhold: { entry: null } });
+  // The first chapter action updates checkpoint metadata, preserving gameplay state.
+  expect((await saved(page)).player).toEqual({ ...before.player, checkpointLabel: "Briarhold Waystation" });
+  await reload(page);
+  await expect(choice(page, "ch5-open-culvert-grate")).toHaveCount(0);
+  await choice(page, "ch5-enter-culvert").click();
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("culvert stair");
+  expect((await saved(page)).chapter5.briarhold).toMatchObject({ entry: "culvert", alert: "quiet" });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+});
+
+test("failed culvert lift stays blocked through reload and revisits, leaving the receiving gate usable", async ({ page }) => {
+  await page.addInitScript(() => { Math.random = () => .01; });
+  await load(page, { ...buildChapter5SaveState(), started: true, node: "culvert", view: "culvert" });
+  const before = await saved(page);
+  await choice(page, "ch5-open-culvert-grate").click();
+  await expect(page.getByTestId("ch5-feedback")).toContainText("The way through is blocked");
+  const failed = (await saved(page)).chapter5.checks.culvert;
+  expect(failed).toMatchObject({ stat: "Might", dc: 12, roll: 1, success: false });
+  await reload(page);
+  await page.evaluate(() => { Math.random = () => .99; });
+  await expect(choice(page, "ch5-open-culvert-grate")).toHaveCount(0);
+  await expect(choice(page, "ch5-enter-culvert")).toHaveCount(0);
+  await go(page, "runoff"); await go(page, "culvert"); await inspect(page);
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("caught beneath the stone lip");
+  await expect(choice(page, "ch5-open-culvert-grate")).toHaveCount(0);
+  await expect(choice(page, "ch5-enter-culvert")).toHaveCount(0);
+  expect((await saved(page)).chapter5).toMatchObject({ checks: { culvert: failed }, briarhold: { entry: null, alert: "quiet" } });
+  expect((await saved(page)).player).toEqual({ ...before.player, checkpointLabel: "Briarhold Waystation" });
+  await go(page, "runoff"); await go(page, "ridge"); await go(page, "gate"); await inspect(page);
+  await choice(page, "ch5-enter-precision").click();
+  expect((await saved(page)).chapter5).toMatchObject({ node: "landing", checks: { culvert: failed, receiving: { success: true } },
+    briarhold: { entry: "receiving-gate", alert: "quiet" } });
+});
+
 for (const success of [true, false]) {
   test(`receiving-gate check ${success ? "succeeds quietly" : "fails forward with suspicion"} and remains saved`, async ({ page }) => {
     await page.addInitScript((random) => { Math.random = () => random; }, success ? .99 : .01);
@@ -468,4 +551,156 @@ test("receiving-gate assault enters after combat and keeps its declared alarm", 
   await expect(page.locator('[data-scene-id="ch5-service-landing"]')).toBeVisible();
   await expect(page.getByTestId("ch5-scene-narrative")).toContainText("defeated gate detail");
   expect((await saved(page)).chapter5).toMatchObject({ node: "landing", pendingBattle: null, briarhold: { entry: "assault", alert: "alerted" } });
+});
+
+test("guide lamp choice preserves darkness or exposes the party to the occupied post, including after reload", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await load(page, spike({ node: "lanterns", view: "lanterns" }));
+  await choice(page, "ch5-uncover-gold").click();
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("Anything the Briars want shut");
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("That light will show us on the stairs");
+  await expect(page.getByTestId("ch5-scene-narrative")).not.toContainText(/False Order|Shaken|DC 12/);
+  const inspectionBox = await page.getByTestId("ch5-feedback").boundingBox();
+  expect(inspectionBox.y).toBeGreaterThanOrEqual(-1); expect(inspectionBox.y).toBeLessThan(844);
+  const before = await saved(page);
+  await choice(page, "ch5-leave-gold-closed").click();
+  expect((await saved(page)).chapter5).toMatchObject({ view: null, goldChannelUncovered: true,
+    briarhold: { lanternsRestored: false, alert: "quiet" } });
+  await reload(page); await inspect(page);
+  await choice(page, "ch5-restore-gold").click();
+  await expect(page.getByTestId("ch5-alert")).toHaveText("Alert: Alerted");
+  await expect(page.getByTestId("ch5-feedback")).toContainText("At the lamps!");
+  await expect(page.getByTestId("ch5-feedback")).toContainText("Rowan turns his shield toward the stair");
+  const outcomeBox = await page.getByTestId("ch5-feedback").boundingBox();
+  expect(outcomeBox.y).toBeGreaterThanOrEqual(-1); expect(outcomeBox.y).toBeLessThan(844);
+  const lit = await saved(page);
+  expect(lit.chapter5).toMatchObject({ view: "lanterns", pendingBattle: null,
+    briarhold: { lanternsRestored: true, guardsDistracted: false, investigatorRemoved: "none" } });
+  expect(lit.player).toEqual({ ...before.player, checkpointLabel: "Briarhold Waystation" });
+  expect(lit.companion).toEqual(before.companion);
+  await reload(page);
+  await expect(choice(page, "ch5-restore-gold")).toHaveCount(0);
+  await expect(choice(page, "ch5-leave-gold-closed")).toHaveCount(0);
+  expect((await saved(page)).chapter5.briarhold).toEqual(lit.chapter5.briarhold);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+});
+
+test("moving guards before lighting keeps the route quiet; recalling them to the lit stair reveals the party", async ({ page }) => {
+  await load(page, spike({ node: "lanterns", view: "lanterns", chartRead: true }));
+  await choice(page, "ch5-uncover-gold").click();
+  await panes(page, ["red", "amber", "blue"]); await choice(page, "ch5-transmit").click();
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("Their chairs stand empty");
+  await choice(page, "ch5-restore-gold").click();
+  expect((await saved(page)).chapter5.briarhold).toMatchObject({ alert: "quiet", lanternsRestored: true, guardsDistracted: true });
+  await expect(page.getByTestId("ch5-feedback")).not.toContainText("At the lamps!");
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("If we bring them back");
+  await reload(page);
+  await panes(page, ["green", "green", "blue"]); await choice(page, "ch5-transmit").click();
+  await expect(page.getByTestId("ch5-feedback")).toContainText("comes back from the receiving yard");
+  await expect(page.getByTestId("ch5-alert")).toHaveText("Alert: Alerted");
+  expect((await saved(page)).chapter5.briarhold).toMatchObject({ guardsDistracted: false, investigatorPending: false,
+    investigatorRemoved: "none", invalidSignals: 0 });
+});
+
+test("hub descriptions and map names follow explored rooms across reload", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await load(page, spike({ view: "hub" }));
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("office of some kind");
+  await expect(page.getByTestId("ch5-scene-narrative")).not.toContainText(/records room|signal platform|Crown Table/);
+  await expect(page.locator('[data-ch5-map-node="ledger"]')).toHaveAttribute("title", "Upper workroom");
+  await expect(page.locator('[data-ch5-map-node="lanterns"]')).toHaveAttribute("title", "Narrow stair");
+  await go(page, "ledger");
+  await expect(page.getByRole("dialog", { name: "Records room", exact: true })).toBeVisible();
+  await reload(page);
+  await go(page, "hub");
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("records room");
+  await expect(page.locator('[data-ch5-map-node="ledger"]')).toHaveAttribute("title", "Records room");
+  await expect(page.locator('[data-ch5-map-node="lanterns"]')).toHaveAttribute("title", "Narrow stair");
+  await go(page, "workshop"); await go(page, "lanterns");
+  await expect(page.getByRole("dialog", { name: "Signal platform", exact: true })).toBeVisible();
+  await reload(page);
+  await go(page, "workshop"); await go(page, "hub");
+  if (await choice(page, "ch5-hub-wait").isVisible()) await choice(page, "ch5-hub-wait").click();
+  await inspect(page);
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("signal platform");
+  await expect(page.locator('[data-ch5-map-node="crown"]')).toHaveAttribute("title", "Inner chamber");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+});
+
+test("walking opens new scenes on phone, unchanged saved revisits skip, and Inspect still rereads", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Begin Chapter 5 Playtest", exact: true }).click();
+  await choice(page, "ch5-cross-ridge").click(); await back(page);
+  const before = await saved(page);
+  await page.locator('[data-ch5-map-node="ridge"]').click();
+  await expect(page.getByRole("dialog", { name: "Ridge path", exact: true })).toBeFocused();
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("root bank");
+  const box = await page.getByTestId("ch5-feedback").boundingBox();
+  expect(box.y).toBeGreaterThanOrEqual(-1); expect(box.y).toBeLessThan(844);
+  await page.screenshot({ path: "test-results/ch5-auto-arrival-phone.png", fullPage: true });
+  await page.keyboard.press("Escape"); await page.keyboard.press("s");
+  await expect(page.getByRole("dialog", { name: "Runoff trail", exact: true })).toBeVisible();
+  await page.keyboard.press("Escape"); await page.keyboard.press("w");
+  await expect(page.locator("[data-scene-id]")).toHaveCount(0);
+  await expect(page.getByTestId("ch5-feedback")).toHaveCount(0);
+  await page.keyboard.press("e");
+  await expect(page.getByRole("dialog", { name: "Ridge path", exact: true })).toBeVisible();
+  await reload(page); await page.keyboard.press("Escape"); await page.keyboard.press("s");
+  await expect(page.getByTestId("chapter5-spike")).toHaveAttribute("data-ch5-node", "runoff");
+  await expect(page.locator("[data-scene-id]")).toHaveCount(0);
+  expect((await saved(page)).chapter5.seenScenes.ridge).toMatch(/^scene-v1:/);
+  expect((await saved(page)).player).toEqual(before.player);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test("returning with the shim automatically reopens the desk, while unrelated progress stays quiet", async ({ page }) => {
+  await load(page, spike({ ledgerResolved: true, clerkFreed: true, hubPassages: 3 }));
+  const node = (id: string) => page.locator(`[data-ch5-map-node="${id}"]`);
+  await node("ledger").click();
+  await expect(choice(page, "ch5-open-drawer")).toBeVisible();
+  await back(page); await node("hub").click(); await back(page); await node("workshop").click();
+  await choice(page, "ch5-resolve-workshop").click(); await choice(page, "ch5-take-shim").click();
+  await back(page); await node("hub").click(); await back(page); await node("ledger").click();
+  await expect(page.getByRole("dialog", { name: "Records room", exact: true })).toBeVisible();
+  await choice(page, "ch5-open-drawer").click();
+  await back(page); await node("hub").click();
+  await expect(page.locator("[data-scene-id]")).toHaveCount(0);
+  await node("ledger").click();
+  await expect(page.locator("[data-scene-id]")).toHaveCount(0);
+  await reload(page); await inspect(page);
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("drawer stands open");
+  await expect(choice(page, "ch5-open-drawer")).toHaveCount(0);
+});
+
+test("hub passages build suspense once, resume mid-encounter, and leave battle personnel and alert intact", async ({ page }) => {
+  test.slow();
+  const payload = fixture();
+  payload.chapter5 = spike({ node: "landing", view: null });
+  await importPayload(page, payload);
+  const node = (id: string) => page.locator(`[data-ch5-map-node="${id}"]`);
+  await node("hub").click();
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("square stone pier");
+  await back(page); await node("ledger").click(); await back(page); await node("hub").click();
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("receiving foreman");
+  await expect(choice(page, "ch5-back")).toHaveCount(0);
+  await page.keyboard.press("Escape");
+  await expect(choice(page, "ch5-hub-wait")).toBeVisible();
+  await reload(page);
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("lamp");
+  await choice(page, "ch5-hub-wait").click();
+  await expect(page.getByTestId("ch5-feedback")).toContainText("hatch shuts");
+  await back(page); await node("landing").click(); await back(page); await node("hub").click();
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("long timber case");
+  await expect(page.getByTestId("ch5-scene-narrative")).toContainText("Rowan draws Mara");
+  await page.screenshot({ path: "test-results/ch5-hub-load-desktop.png", fullPage: true });
+  await choice(page, "ch5-hub-cross").click();
+  await expect(page.getByTestId("ch5-feedback")).toContainText("stone strip");
+  await back(page); await node("ledger").click(); await node("hub").click();
+  await expect(page.locator("[data-scene-id]")).toHaveCount(0);
+  await expect(page.getByTestId("ch5-feedback")).toHaveCount(0);
+  const after = await saved(page);
+  expect(after.chapter5).toMatchObject({ hubPassages: 3, hubInterlude: null,
+    briarhold: { alert: "quiet", investigatorRemoved: "none", guardsDistracted: false } });
+  expect(after.player).toEqual({ ...payload.player, checkpointLabel: "Briarhold Waystation" });
 });
