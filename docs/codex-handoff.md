@@ -4,7 +4,13 @@ This file is the starting point for Codex.
 
 Story-writing work must also follow `docs/story/writing-rules.md`. Singular characters use he/him or she/her; *they/them/their* is reserved for genuinely plural antecedents.
 
-## Latest Handoff — 2026-10-18
+## Latest Handoff — 2026-11-11
+
+The owner's Chapter 5 narrative playthrough has resumed. The opening now shows the track to Briarhold's gate before the party stops to collect itself and plan. Mara spots a disused roadworkers' shelter uphill; hand signals establish the route, and the existing continue action is now labeled **Climb silently to the abandoned shelter**. Its outcome describes the quiet climb and arrival under cover. The overlook's unexplained “Mara holds the wrapping steady” sentence is removed. This is a prose/choice-label revision using the existing opening-to-overlook transition, recovery, and save state. Continue the owner playthrough from the shelter before map masters and art.
+
+Verification: production build, all **90 rules**, all **33 Chapter 5 browser cases**, and `git diff --check` passed. Browser checks used the separate 5186 production preview, stopped afterward; the owner's development server remains on 5185. The existing build chunk-size warning remains. Chapter 1–4 regression checks remain deferred as previously requested. At the owner's end-of-night request, preserve these November 11 edits in a commit and push on `codex/chapter-5-vertical-slice`. The full owner playtest is deferred to another session; resume the Chapter 5 narrative/pace review before map masters and art.
+
+## Previous Handoff — 2026-10-18
 
 The latest workshop revision makes the laborer **Orren Pike**, the missing Bramblecross cellar porter, working cuffed to the press. Rowan's conscious, once-only containment is a coordinated rush with the hero and Mara: block the alarm, pin her arms, muffle the attempted shout, bind wrists/ankles, and secure a cloth gag. Releasing Orren is a separate action using the supervisor's cuff key. Warning him instead creates a spoiled-batch diversion to the outer quenching trough. `workshopResolution: "bypassed"` records that attempt; `workshopResolved` grants bench access only until leaving the node. On return the supervisor is working again, the warning cannot repeat, and Orren still needs rescue. Quiet Rowan containment, open combat, or post-Lio surrender secure her permanently. The bench tool/evidence/feed actions remain independent. New `porterAtWorkshop` defaults true; saves already at/opening the old cells or with the porter rescued preserve that older location. Both rescue paths retain the four-present/fifth-transferred accounting and departure gate.
 

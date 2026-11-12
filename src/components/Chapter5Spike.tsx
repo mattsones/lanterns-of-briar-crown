@@ -186,7 +186,7 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
         {state.hubInterlude === "load" ? action("hub-cross", "Cross to the wall recess under the noise of the load", () => change(s => resolveChapter5HubPassage(s, "cross"))) : null}
       </> : null}
       {view === "opening" ? <>
-        {action("cross-ridge", "Cross the nighttime ridge to the overlook", () => change((s) => ({ ...s, view: "overlook", feedback: narrative.crossRidge })))}
+        {action("cross-ridge", "Climb silently to the abandoned shelter", () => change((s) => ({ ...s, view: "overlook", feedback: narrative.crossRidge })))}
       </> : null}
       {view === "overlook" ? <>
         {!state.recoveryUsed ? action("recover", "Give the party first aid (restore HP once)", () => change((s) => s.recoveryUsed ? s : ({ ...s, recoveryUsed: true, feedback: narrative.recover }),
