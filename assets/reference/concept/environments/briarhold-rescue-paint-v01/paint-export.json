@@ -1,0 +1,50 @@
+{
+  "status": "reference candidate; owner review pending",
+  "generator": "built-in imagegen",
+  "modelRevision": 4,
+  "backgrounds": {
+    "closed": {
+      "native": [
+        1448,
+        1086
+      ],
+      "export": [
+        2048,
+        1536
+      ],
+      "bytes": 354282,
+      "quality": 90
+    },
+    "open": {
+      "native": [
+        1448,
+        1086
+      ],
+      "export": [
+        2048,
+        1536
+      ],
+      "bytes": 314832,
+      "quality": 90
+    }
+  },
+  "cart": {
+    "native": [
+      1355,
+      1161
+    ],
+    "export": [
+      448,
+      384
+    ],
+    "transparentPixels": 24895,
+    "opaquePixels": 1482,
+    "worldBounds": [
+      1.4,
+      1.2
+    ],
+    "independentBrakeAndCuff": true
+  },
+  "runtimeRegistered": false,
+  "correction": "Ordinary free-wheeled workcart on uneven stone; no floor tracks, paired guides or brass strips"
+}

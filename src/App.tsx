@@ -8,8 +8,9 @@ import {
 import { MapStage } from "./components/MapStage";
 import { Chapter5Spike } from "./components/Chapter5Spike";
 import { buildChapter5BattleEnemies, buildChapter5SaveState, finishChapter5Battle, getChapter5AreaName, rememberChapter5Scene, type Chapter5Resources, type Chapter5SaveState } from "./game/chapter5Runtime";
-import { applyChapter5ProgressRewards, isChapter5Complete } from "./game/chapter5Progress";
+import { applyChapter5ProgressRewards, applyChapter5Rest, isChapter5Complete } from "./game/chapter5Progress";
 import { getChapter5EntryErrors } from "./game/chapter5";
+import { getBriarholdCompanionGuard, resolveBriarholdBossIntentEffects } from "./game/chapter5Combat";
 import { Button, ItemIcon, Meter, Panel, StatBadge } from "./components/ui";
 import { getBattleReward } from "./data/battleRewards";
 import {
@@ -836,9 +837,10 @@ export default function LiamsGamePrototype() {
     setToast(`Checkpoint reached: ${label}`);
   };
   const commitChapter5 = (next: Chapter5SaveState, resources: Chapter5Resources = {}) => {
-    const nextCompanion = resources.companion || companion;
+    const recovered = applyChapter5Rest(chapter5Ref.current, next, resources.player || player, resources.companion || companion);
+    const nextCompanion = recovered.companion;
     next = rememberChapter5Scene(next, nextCompanion, chapter5Ref.current);
-    const nextPlayer = { ...applyChapter5ProgressRewards(chapter5Ref.current, next, resources.player || player), checkpointLabel: getChapter5AreaName(next) };
+    const nextPlayer = { ...applyChapter5ProgressRewards(chapter5Ref.current, next, recovered.player), checkpointLabel: getChapter5AreaName(next) };
     const nextFlags = { ...flags, chapterFiveStarted: next.started,
       captiveLanternsRestored: next.briarhold.lanternsRestored,
       lioRescued: next.carriageStage === "rescued", brackenEscaped: next.brackenDefeated,
@@ -846,7 +848,7 @@ export default function LiamsGamePrototype() {
     chapter5Ref.current = next;
     setChapter5(next);
     setPlayer(nextPlayer);
-    if (resources.companion) setCompanion(nextCompanion);
+    if (resources.companion || nextCompanion !== companion) setCompanion(nextCompanion);
     setFlags(nextFlags);
     const nextRegion = next.returnedToBramblecross ? "bramblecross" : region;
     const nextPosition = next.returnedToBramblecross ? MAPS.bramblecross.start : position;
@@ -6683,6 +6685,7 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
         if (!livingEnemies.length) return advanceToNextEnemyOrVictory(prev);
         let totalHeroDamage = 0;
         let totalCompanionDamage = 0;
+        const companionGuard = getBriarholdCompanionGuard(companion, prev.heroGuard || 0, !!prev.chapter5Profile);
         const attackLogs = livingEnemies.map((enemy) => {
           const attack = resolveRoll(
             enemy.currentAttackSpec || { count: 1, sides: 6, bonus: 2 },
@@ -6693,20 +6696,21 @@ ${success ? CHAPTER_1_STORY.rootCellar.briarCrownStudySuccess : CHAPTER_1_STORY.
           const targetHero = !companionStanding || Math.random() < 0.7;
           const guardBypass = enemy.currentEffect?.heroGuardBypass || 0;
           const effectiveHeroGuard = Math.max(0, (prev.heroGuard || 0) - guardBypass);
+          const effectiveCompanionGuard = Math.max(0, companionGuard - guardBypass);
           const damage = targetHero
             ? Math.max(
                 1,
                 base - Math.floor(derivedStats.Guard / 3) - effectiveHeroGuard,
               )
-            : Math.max(1, base - 2);
+            : Math.max(1, base - 2 - effectiveCompanionGuard);
           if (targetHero) totalHeroDamage += damage;
           else totalCompanionDamage += damage;
-          const bypassedGuard = targetHero
-            ? Math.min(prev.heroGuard || 0, guardBypass)
-            : 0;
+          const bypassedGuard = Math.min(targetHero ? (prev.heroGuard || 0) : companionGuard, guardBypass);
           return `${enemy.name} uses ${enemy.intent} for ${damage} damage${targetHero ? "" : ` to ${companion.name}`}${bypassedGuard ? `, bypassing ${bypassedGuard} Guard` : ""}.`;
         });
-        const intentEffects = resolveEnemyIntentEffects(prev.enemies);
+        const intentEffects = prev.chapter5Profile
+          ? resolveBriarholdBossIntentEffects(prev.enemies)
+          : resolveEnemyIntentEffects(prev.enemies);
         const sentry = intentEffects.enemies.find((enemy) => enemy.name === "Thornroot Sentry" && enemy.hp > 0 && enemy.hp < enemy.maxHp);
         const repairAttempt = !!prev.chapter5Profile && !prev.sentryRepairUsed && !!sentry;
         const repairs = repairAttempt && prev.chapter5Profile.sentryRepairAvailable;

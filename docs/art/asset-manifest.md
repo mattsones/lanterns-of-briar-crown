@@ -243,6 +243,22 @@ The complete live roster was rechecked at the 4:3 battle-card crop on 2026-08-22
 
 # Immediate Missing Assets
 
+## Scene Coverage And New Reward — November 13 Wrap
+
+[The room and long-narrative scene-art plan](chapter-5-scene-art-plan.md) is now an explicit owner requirement: scenes for most Briarhold interior rooms, changed-state climax/reunion/rest beats, and long narratives across Chapters 1–5. Review existing scene reuse before generating replacements. The new Bracken's Sabre item and Measured Cut skill are implemented with icon fallbacks; bespoke icons and a stateful dropped-weapon overlay remain art work. The service-court rest is implemented and needs its narrative illustration. Neither reward nor party state should be permanently painted into a map.
+
+## Chapter 5 Production Queue — Approved To Begin 2026-11-13
+
+The owner accepted the playable Chapter 5 greybox as ready for artwork. [The production handoff](chapter-5-art-production.md) is the current queue: seven declared maps, Bracken/Guard/Sentry/Tusker encounter art, selected new character portraits, and room/rescue/return scenes. Existing returning-cast portraits, Bramblecross maps, and accepted evidence art should be reused where suitable. The approach/rescue masters and first paintings below are accepted as the composition foundation; runtime integration, remaining map masters/paintings and the room/long-narrative scene queue are next.
+
+[The first Briarhold masters](chapter-5-masters-v01.md) exist under `assets/reference/concept/environments/chapter-5-masters-v01/`: shared layout, six editable SVG/PNG sheets, overview/contact sheet and an offline review page. The approach is 2048×1152; rescue is 2048×1536. The owner accepted their composition/light foundation. Measured desktop/phone frame checks and geometric clearance checks pass, with no Chapter 5 runtime art promoted.
+
+The owner has since accepted those masters and authorized painting. [Approach paint candidate v05](briarhold-approach-paint-v01.md), native sources, all five prompts and a 2048×1152 PNG/WebP reference export are saved under `assets/reference/concept/environments/briarhold-approach-paint-v01/`. It incorporates his wet-runoff/no-path and farther-off-road-shelter corrections; shared geometry is revision 2. The embedded review switches between paint and geometry at desktop/phone scale. The 334,964-byte WebP remains a reference candidate, not a promoted runtime image.
+
+Shared master **revision 3** moved rescue G north/above E so observation precedes exposure at the doorway; current **revision 4** retains that viewpoint and removes the floor strips. Lio, brake and steps retain furniture-clear views, inherited by rescue paint v02. Approach paint v05 is unchanged. Revised grille desktop/phone captures and the previous below-doorway sheet are retained in the master folder.
+
+[Rescue paint v02](briarhold-rescue-paint-v01.md) is now saved under `assets/reference/concept/environments/briarhold-rescue-paint-v01/`: matching closed/open 2048×1536 room exports, separate true-alpha cart, all source prompts/native passes, comparison and alignment sheets. Quality-90 WebPs are 354,282 / 314,832 bytes. Master revision 4 removes all rail-like floor strips at the owner's direction. These remain reference assets; the review switches light variants and moves the cart independently. Bracken loot and post-gathering healing are implemented; their stateful weapon overlay, icons and court-rest scene illustration remain in the art queue.
+
 ## Important NPCs
 
 - Bracken Voss portrait and combat/boss variant

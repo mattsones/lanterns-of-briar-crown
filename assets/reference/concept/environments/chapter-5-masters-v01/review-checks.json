@@ -1,0 +1,74 @@
+{
+  "status": "PASS",
+  "offline": true,
+  "gameSaveAccess": false,
+  "checks": [
+    {
+      "frame": "desktop",
+      "view": "approach",
+      "painted": true,
+      "width": 870,
+      "height": 489.375,
+      "marker": 52,
+      "overflow": false,
+      "backtracking": true,
+      "clean": true
+    },
+    {
+      "frame": "desktop",
+      "view": "rescue",
+      "painted": true,
+      "width": 870,
+      "height": 652.5,
+      "marker": 52,
+      "overflow": false,
+      "backtracking": true,
+      "clean": true
+    },
+    {
+      "frame": "phone390",
+      "view": "approach",
+      "painted": true,
+      "width": 332,
+      "height": 186.75,
+      "marker": 32,
+      "overflow": false,
+      "backtracking": true,
+      "clean": true
+    },
+    {
+      "frame": "phone390",
+      "view": "rescue",
+      "painted": true,
+      "width": 332,
+      "height": 249,
+      "marker": 32,
+      "overflow": false,
+      "backtracking": true,
+      "clean": true
+    },
+    {
+      "frame": "phone430",
+      "view": "approach",
+      "painted": true,
+      "width": 372,
+      "height": 209.25,
+      "marker": 32,
+      "overflow": false,
+      "backtracking": true,
+      "clean": true
+    },
+    {
+      "frame": "phone430",
+      "view": "rescue",
+      "painted": true,
+      "width": 372,
+      "height": 279,
+      "marker": 31.999996185302734,
+      "overflow": false,
+      "backtracking": true,
+      "clean": true
+    }
+  ],
+  "pageErrors": []
+}

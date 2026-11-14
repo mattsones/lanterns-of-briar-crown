@@ -29,6 +29,8 @@ These assignments are canonical for future runtime copy, documentation, tests, a
 
 Write scenes in a descriptive, immersive style. Establish the physical surroundings, then let sustained action and conversation carry the party through them. Vary sentence length; reserve short, clipped sentences for moments that earn that rhythm. Give quiet reunions and long journeys room to unfold through gestures, sensory detail, and changing surroundings, with concrete information earned through the characters' experience.
 
+During immediate danger, use short sentences and plain object names. Establish who is trapped, what is moving toward what, and the consequence of delay. Let simultaneous physical reactions and direct action choices carry the emergency; keep equipment terminology and advance multi-step instructions out of its way.
+
 State the physical action, speaker, location, and consequence before adding figurative language. When a choice changes an outcome, name the causal link in the choice label and the resulting prose.
 
 Spell out a number at the beginning of a sentence. Numeric values may remain in labels, tables, and compact combat/stat displays.

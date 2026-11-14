@@ -2,11 +2,22 @@
 
 Date opened: 2026-09-04
 
-Status: owner decisions accepted on 2026-09-05; consolidated in [the executable vertical-slice contract](../story/chapter-5-vertical-slice-contract.md). Earlier provisional bullets below are resolved by the later settled decisions and that contract.
+Status: owner decisions accepted on 2026-09-05; complete greybox approved for artwork on **2026-11-13**. The approach/rescue masters and first paintings are accepted as the composition foundation, with runtime integration still pending. Bracken's loot and the court recovery are implemented. Next: bounded painted-map integration, the remaining map masters/paintings, and [room and long-narrative scene art](../art/chapter-5-scene-art-plan.md). Decisions are consolidated in [the executable vertical-slice contract](../story/chapter-5-vertical-slice-contract.md). Earlier provisional bullets below are resolved by the later settled decisions and that contract.
+
+<a id="pending-chapter-5-mechanics--owner-notes-november-13"></a>
+## Bracken Loot And Court Recovery — Implemented November 13
+
+At the owner's end-of-night instruction, both previously queued additions are implemented:
+
+- **Bracken's Sabre:** a guaranteed collectible once Lio is safe, beside the route table. Rare weapon, +1 Might / +2 Precision / +2 Guard, granting **Measured Cut** (1d10 + floor((Precision + Guard) / 3) + 1, piercing). It is a defensive/precision sidegrade to the five-point Gatewright rare weapons, with a reference shop value of 34. It is not automatically equipped or added to shop stock. `brackenLootClaimed` prevents repeat collection/reload grants and replacement after sale; the emergency rescue cannot be interrupted for loot.
+- **Service-court recovery:** after Lio, Sella, Orren and Hesta are all safe, one explicit quiet rest restores the hero and recruited active companion to their own max HP, including a downed companion. No restorative items are consumed. `postRescueRested` persists the beat and gates departure; it can happen while remaining originals are still being gathered. Paperwork, Celia's account and sibling reunion still have their own gates.
+- **Legacy saves:** missing fields default unearned. A party already departed in an older save marks the rest spent without receiving healing or retrospective loot on load. Existing inventory, rescue progression and return route remain intact.
+
+Loot and resting people remain stateful presentation layers. [The scene-art queue](../art/chapter-5-scene-art-plan.md) now includes the dropped sabre and the illustrated court rest.
 
 ## October 15 Implementation
 
-The owner accepted the puzzles/fight and authorized the full descriptive greybox. The complete schematic chapter now runs through all captives/originals, the safe reunion and Celia account, both return routes, and the public/private Bramblecross ending. See [the full-greybox record](../playtest-notes/2026-10-15-chapter-5-full-greybox.md). The next gate is owner full-route playthrough before scale/lighting masters and final art.
+The owner accepted the puzzles/fight and authorized the full descriptive greybox. The complete schematic chapter now runs through all captives/originals, the safe reunion and Celia account, both return routes, and the public/private Bramblecross ending. See [the full-greybox record](../playtest-notes/2026-10-15-chapter-5-full-greybox.md). Following the continued playtest and balance correction, the owner accepted Chapter 5 as ready for artwork on **2026-11-13**. The next gate is scale/lighting masters, followed by finished art; see [the production handoff](../art/chapter-5-art-production.md).
 
 ## Settled Decisions
 
@@ -95,7 +106,7 @@ The owner accepted the puzzles/fight and authorized the full descriptive greybox
 - Other valid codes have different operational meanings, including at least one dangerous command-center recall that would send guards toward Bracken. Many pane arrangements are not meaningful signals at all.
 - An invalid arrangement causes one guard to enter the signal room and investigate who is operating the equipment.
 - Color remains the dominant presentation, but each pane also needs a distinct etched mark, edge shape, or frame notch so the puzzle is readable without relying on color perception alone.
-- Restoring the old guide lamp sends ordinary oil-lamp light through fixed amber glass and a broad reflector into a branching channel over the signal stair/service junction and a deeper shaft into the inner room. Bound briar stems hold its shutter nearly closed. Under the owner's October 18 choice revision, Mara connects the deliberate blockage with opening the station's paths, then warns from the actual sightline: an occupied inner post will see the party on the lit stair. Opening with guards present raises Alerted; diversion/defeat first preserves awareness. Recalling guards to the lit stair also reveals the party. An explicit leave-closed choice preserves shadow and can be revisited. Inner-room floor guides and the brake rod become visible when lit; Bracken's reaction and the accepted False Order counter remain as established, with named effects explained when encountered.
+- Restoring the old guide lamp sends ordinary oil-lamp light through fixed amber glass and a broad reflector into a branching channel over the signal stair/service junction and a deeper shaft into the inner room. Bound briar stems hold its shutter nearly closed. Under the owner's October 18 choice revision, Mara connects the deliberate blockage with opening the station's paths, then warns from the actual sightline: an occupied inner post will see the party on the lit stair. Opening with guards present raises Alerted; diversion/defeat first preserves awareness. Recalling guards to the lit stair also reveals the party. An explicit leave-closed choice preserves shadow and can be revisited. The inner room's uneven paving, step edge and brake rod become visible when lit; Bracken's reaction and the accepted False Order counter remain as established, with named effects explained when encountered.
 - The loud key-taking route and the quiet tool–drawer–signal route remain valid alternatives. The latter rewards investigating all three wings.
 
 ### Fixed Signal Reference
@@ -129,14 +140,16 @@ The owner accepted the puzzles/fight and authorized the full descriptive greybox
 ### Prisoner-Transfer Carriage Rescue
 
 - Lio is restrained in a prisoner-transfer carriage on an old sloping route rail during the Crown Table confrontation.
-- When Bracken loses control of the fight, he releases the carriage brake and opens the westbound transfer shutter.
-- Lio actively resists by jamming or slowing the carriage long enough for the party to reach him.
+- Under the owner's November 13 clarity revision, first sight establishes Lio cuffed to a low wooden cart on a slope leading through an open doorway to steep stone loading steps. When Bracken loses control of the fight, he kicks the cart's brake handle up and sends Lio toward those steps to force the party away from pursuit. No extra shutter operation is needed. Player-facing rescue prose calls it a cart and uses short, direct action sentences.
+- Mara screams; Lio struggles with his cuff, then jams a loose wooden bar into the wheel. The hero catches the cart and the conscious companion slows it with his shield, her timber wedge, or his grip. Without an active companion, the hero braces the weight and reaches for the brake one-handed.
 - The party stops the carriage and frees Lio instead of pursuing Bracken. Bracken escapes wounded through a narrow personnel passage and seals it while the party is occupied.
 - This is an authored moral decision rather than a menu option that allows the player to abandon Lio. The playable action is to stop the carriage and complete the rescue.
 - Opening the separate guide-lamp shutter lights the passage floor and sends amber light into the inner room, revealing the true brake linkage beneath the false labels. Keeping it shuttered preserves cover and the existing unlit rescue route.
 - The imagery deliberately answers the cell's practice of recording and moving people like cargo: the heroes stop the machinery because Lio is a person, not a transfer entry.
 
 ### Alert-Dependent Boss Support
+
+The November 13 owner-checkpoint balance correction keeps the full alert-dependent roster and HP. Within this boss fight, unrenewed enemy Guard expires at the next enemy turn; full-strength defensive actions can grant fresh Guard. Conscious Rowan's Shielding Step also grants him 4 Guard after acting, subject to bypass. The owner's exact pending-boss export is preserved as a regression fixture and replayed with varied dice and targets. This follows the earlier one-point attack-bonus reduction and does not change older chapters, rewards, or saved checkpoint shape.
 
 - Bracken is never fought alone. The Crown Table confrontation includes one, two, or three supporting enemies depending on the alert state and the party's earlier choices.
 - A Thornroot Sentry is Bracken's constant support and physically connects the fight to the route-control machinery and false-command mechanic.
@@ -353,7 +366,7 @@ The owner accepted the puzzles/fight and authorized the full descriptive greybox
 
 - Completing the Bracken confrontation and rescue advances the player to level 5.
 - The party gains the **True Seal Fragment** and **Briar Chain Link** as story evidence, plus modest supplies and currency from Briarhold.
-- Chapter 5 does not award a major weapon that competes with Lio's rescue as the climax's emotional reward.
+- The owner's November 13 addition grants Bracken's Sabre through a once-only post-rescue pickup. The court recovery is also a once-only required beat before departure. Lio's rescue remains the emotional climax.
 
 ### Chapter 5 Graybox And Art Process
 
@@ -364,7 +377,7 @@ The owner accepted the puzzles/fight and authorized the full descriptive greybox
 
 ## Planning Closeout
 
-Owner-level Chapter 5 planning questions were accepted on 2026-09-05. The executable Chapter 5 vertical-slice contract now records the entry fixture, pure consequence rules, required ending, repeat/save requirements, and implementation defaults. The accepted central interaction has since expanded into the complete persisted schematic greybox on October 15. The next step is owner full-route review, followed by scale/lighting masters and production art. Final balance and painted compositions remain production work.
+Owner-level Chapter 5 planning questions were accepted on 2026-09-05. The executable Chapter 5 vertical-slice contract records the entry fixture, pure consequence rules, required ending, repeat/save requirements, and implementation defaults. The accepted central interaction expanded into the complete persisted schematic greybox on October 15. The owner accepted readiness for artwork on 2026-11-13 after the narrative and balance playtest. Next: scale/lighting masters and production art. Preserve the accepted story and encounters while settling painted compositions and their navigation/lighting alignment.
 
 ## Post-Chapter 5 Backlog
 

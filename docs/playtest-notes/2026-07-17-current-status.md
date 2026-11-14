@@ -1,6 +1,20 @@
-# Current Project Status — 2026-10-18
+# Current Project Status — 2026-11-13
 
 Stable branch: `main`; current handoff branch: `codex/chapter-5-vertical-slice`
+
+## November 13 Night Wrap
+
+Bracken's Sabre and the post-prisoner-gathering rest/heal pause are implemented, with once-only flags, legacy-save handling, rules coverage and a phone reload regression. Loot is collected beside the route table once Lio is safe; the court recovery fully heals the hero and active recruited companion and is required before leaving.
+
+The owner accepted the first approach/rescue paint compositions. The corrected master has an off-road shelter, wet streambed into the culvert, grille above E, and ordinary cart on stone with no rails. Paintings and state review exist as references; runtime painted-map integration is still next work. [The current handoff](../codex-handoff.md) gives implementation details and verification; [the scene-art plan](../art/chapter-5-scene-art-plan.md) records the owner's requirement for scenes in most Briarhold rooms and long narrative passages across Chapters 1–5.
+
+## November 13 Chapter 5 Approved For Artwork
+
+The owner has accepted Chapter 5's complete playable greybox as ready for artwork after the narrative playtest and boss-balance correction. This supersedes the earlier pending owner-review status below. The accepted climax uses Lio's runaway cart toward the loading steps, the rescue over pursuit, and the immediate reunion; the public welcome quiets when Lio needs to sit.
+
+The latest balance fix gives boss Guard a one-round lifetime unless renewed and lets Rowan's Shielding Step also protect him. The exact owner checkpoint is preserved as a regression fixture. Six varied-roll replays won at 17–34 hero HP using 4–7 saved healing items. Build, 94 rules, all 41 Chapter 5 browser cases, smoke, and desktop/phone review passed.
+
+Next: [Chapter 5 art-production handoff](../art/chapter-5-art-production.md). Prepare the coordinated Briarhold site/floor plan and map scale/lighting masters before final paintings. All seven planned maps and the relevant portraits/scenes are queued; no new Chapter 5 paintings or approved masters are claimed. The older-chapter regressions and uninterrupted illustrated Chapters 1–5 review remain release-candidate gates. The November 13 work is on the existing feature branch and remains uncommitted.
 
 ## October 18 Automatic Scenes And Hub Suspense
 

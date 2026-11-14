@@ -19,7 +19,7 @@ export const CHAPTER_5_CONTRACT = {
     { id: "briarholdLedger", landmarks: ["supervised clerk", "fixed signal chart", "locked desk drawer"] },
     { id: "briarholdWorkshop", landmarks: ["sealwright", "laborer", "lock shim", "Sentry repair linkage"] },
     { id: "briarholdLanternHall", landmarks: ["three signal lanterns", "pane racks", "transmission lever", "gold-light channel", "concealment"] },
-    { id: "briarholdCrownTable", landmarks: ["inspection grille", "Mara's cover", "Crown Table", "transfer carriage and brake", "cells", "personnel escape"] },
+    { id: "briarholdCrownTable", landmarks: ["inspection grille", "Mara's cover", "Crown Table", "Lio's cart and brake", "loading steps", "cells", "personnel escape"] },
     { id: "rainrootReturn", landmarks: ["dawn departure", "distance waypoint", "woodsman", "tusker hollow", "safe detour", "reconvergence"] },
   ],
   endpoint: { region: "bramblecross", scene: "ch5-case-wall", nextDestination: "Lanthorne" },

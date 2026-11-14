@@ -461,6 +461,87 @@ test("the ordinary quiet fixture wins with defensive companion orders and standa
   expect((await saved(page)).player.hp).toBeGreaterThan(0);
 });
 
+test("the ordinary alerted fixture wins without lamp or workshop preparation using at most two healing items", async ({ page }) => {
+  test.slow();
+  await page.addInitScript(() => { Math.random = () => .5; });
+  const payload = fixture();
+  payload.player.hp = payload.player.maxHp;
+  payload.companion.hp = payload.companion.maxHp;
+  payload.companion.command = "Defend Me";
+  payload.chapter5 = spike({ node: "crown", view: "crown", lioSeen: true });
+  payload.chapter5.briarhold = { ...payload.chapter5.briarhold, innerDoorOpened: true, alert: "alerted" };
+  await importPayload(page, payload);
+  await choice(page, "ch5-fight-bracken").click();
+  const dialog = page.getByRole("dialog", { name: /Battle/ });
+  await expect(dialog).toContainText("4 of 4 enemies");
+  let healingItemsUsed = 0;
+  for (let turn = 0; turn < 40; turn++) {
+    const claim = dialog.getByRole("button", { name: "Claim Victory", exact: true });
+    const slam = dialog.getByRole("button", { name: /^Pebbleknock Slam/ });
+    await expect.poll(async () => await claim.isVisible() || await slam.isEnabled()).toBe(true);
+    if (await claim.isVisible()) { await claim.click(); break; }
+    const resolve = dialog.getByRole("button", { name: /^Roadwarden's Resolve/ });
+    const hpText = await dialog.getByText("Hero HP", { exact: true }).locator("..").innerText();
+    const hp = Number(hpText.match(/(\d+)\/\d+/)![1]);
+    if (await resolve.isEnabled()) await resolve.click();
+    else if (hp <= 18 && healingItemsUsed < 2) {
+      await dialog.getByRole("button", { name: "Items", exact: true }).click();
+      await dialog.getByText(/^Healing Fizzpop ×/).locator("..").getByRole("button", { name: "Use on Liam", exact: true }).click();
+      healingItemsUsed++;
+    } else {
+      const sentry = dialog.getByRole("button", { name: /Thornroot Sentry/ });
+      if (await sentry.isEnabled()) await sentry.click();
+      await slam.click();
+    }
+  }
+  await expect(choice(page, "ch5-rescue-step")).toBeVisible();
+  const data = await saved(page);
+  expect(data.player.hp).toBeGreaterThan(0);
+  expect(data.player.baseStats).toEqual(payload.player.baseStats);
+  expect(data.player.equipment).toEqual(payload.player.equipment);
+  expect(data.player.inventory.healing_fizzpop).toBe(payload.player.inventory.healing_fizzpop - healingItemsUsed);
+  expect(data.chapter5.bossProfile).toMatchObject({
+    enemyIds: ["bracken_voss", "thornroot_sentry", "thornseal_guard", "thornseal_guard"],
+    falseOrderPenalty: 2, sentryRepairAvailable: true,
+  });
+});
+
+test("Pebbleknock Slam bypasses five Guard, while Shaken can reduce its minimum HP damage to one", async ({ page }) => {
+  await page.addInitScript(() => { Math.random = () => .01; });
+  const payload = fixture();
+  payload.player.hp = payload.player.maxHp;
+  payload.player.equipment = { ...payload.player.equipment,
+    cloak: "giggleleaf_cloak", trinket1: "rootbread_charm", trinket2: "warden_chain" };
+  payload.companion.hp = payload.companion.maxHp;
+  payload.companion.command = "Defend Me";
+  payload.chapter5 = spike({ node: "crown", view: "crown", lioSeen: true });
+  payload.chapter5.briarhold = { ...payload.chapter5.briarhold,
+    innerDoorOpened: true, alert: "alerted", lanternsRestored: true, workshopDisabled: true };
+  await importPayload(page, payload);
+  await choice(page, "ch5-fight-bracken").click();
+  const dialog = page.getByRole("dialog", { name: /Battle/ });
+  await dialog.getByRole("button", { name: /^Rootbread Respite/ }).click();
+  const rootbind = dialog.getByRole("button", { name: /^Rootbind/ });
+  await expect(rootbind).toBeEnabled();
+  const sentry = dialog.getByRole("button", { name: /Thornroot Sentry/ });
+  await sentry.click();
+  await rootbind.click();
+  const slam = dialog.getByRole("button", { name: /^Pebbleknock Slam/ });
+  await expect(slam).toBeEnabled();
+  await expect(sentry).toContainText("Guard: 5");
+  await expect(dialog.locator("article").first()).not.toContainText("Shaken");
+  const hpMatch = (await sentry.getByText("HP", { exact: true }).locator("..").innerText()).match(/(\d+)\/(\d+)/)!;
+  const hpBefore = Number(hpMatch[1]);
+  const hpMax = Number(hpMatch[2]);
+  expect(hpBefore).toBeGreaterThan(3);
+  await slam.click();
+  await expect(sentry).toContainText(`${hpBefore - 3}/${hpMax}`);
+  await expect(slam).toBeEnabled();
+  await expect(dialog.locator("article").first()).toContainText("Shaken");
+  await slam.click();
+  await expect(sentry).toContainText(`${hpBefore - 4}/${hpMax}`);
+});
+
 test("downed companions receive no stealth bonus and the overlook can restore them once", async ({ page }) => {
   await page.addInitScript(() => { Math.random = () => .45; });
   const payload = fixture();

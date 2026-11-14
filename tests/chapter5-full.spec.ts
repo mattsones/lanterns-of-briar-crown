@@ -54,6 +54,7 @@ function gathered(): Chapter5SaveState {
 async function finishCleanup(page: Page) {
   await a(page, "continue-rescue").click();
   await go(page, "crown"); await inspect(page); await a(page, "take-docket").click();
+  await a(page, "take-bracken-loot").click();
   await back(page); await go(page, "cells"); await inspect(page);
   await a(page, "open-cells").click();
   if (await a(page, "free-porter").isVisible()) await a(page, "free-porter").click();
@@ -71,6 +72,8 @@ async function finishCleanup(page: Page) {
   await expect(page.getByTestId("ch5-feedback")).toContainText("Celia Venn");
   await expect(a(page, "depart")).toBeDisabled();
   await a(page, "reunite-siblings").click(); await a(page, "pack-supplies").click();
+  await expect(a(page, "depart")).toBeDisabled();
+  await a(page, "rest-party").click();
 }
 async function walkToFork(page: Page) {
   await a(page, "depart").click(); await back(page); await go(page, "returnRidge", "woodsman");
@@ -160,16 +163,50 @@ test("a legacy carriage checkpoint with skipped wings finishes all cleanup witho
   await finishCleanup(page);
   await page.screenshot({ path: "test-results/ch5-full-court-phone.png", fullPage: true });
   const before = await saved(page);
-  expect(before.chapter5).toMatchObject({ ledgerResolved: true, workshopResolution: "surrendered", checks: {} });
+  expect(before.chapter5).toMatchObject({ ledgerResolved: true, workshopResolution: "surrendered", postRescueRested: true, checks: {} });
+  expect(before.player.hp).toBe(before.player.maxHp);
+  expect(before.companion.hp).toBe(0); // No traveling companion was recruited in this legacy slot.
   expect(before.player.gold).toBe(p.player.gold + 12);
   await walkToFork(page);
   await a(page, "choose-hollow").click(); await inspect(page); await back(page); await go(page, "fork"); await inspect(page);
   await a(page, "safe-detour").click(); await go(page, "longTrail", "eastRoad");
   const done = await finishTown(page);
-  expect(done.player.hp).toBe(p.player.hp);
+  expect(done.player.hp).toBe(before.player.hp); // The safe return preserves the court recovery.
   expect(done.chapter5.tuskersDefeated).toBe(false);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: "test-results/ch5-full-ending-phone.png", fullPage: true });
+});
+
+test("legacy post-rescue loot and court recovery persist together on phone without equipping or repeating", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const p = fixture();
+  p.chapter5 = { ...gathered(), node: "crown", view: "crown" };
+  delete p.chapter5.brackenLootClaimed; delete p.chapter5.postRescueRested;
+  p.player.hp = 3; p.companion.hp = 0;
+  await load(page, p);
+  await a(page, "take-bracken-loot").click();
+  await expect(page.getByTestId("ch5-feedback")).toContainText("Bracken's Sabre is yours");
+  const looted = await saved(page);
+  expect(looted.player.inventory.brackens_sabre).toBe(1);
+  expect(looted.player.equipment).toEqual(p.player.equipment);
+  expect(looted.player.hp).toBe(3);
+  await reload(page); await expect(a(page, "take-bracken-loot")).toHaveCount(0);
+  await back(page); await go(page, "grille", "door", "hub", "landing", "gathering"); await inspect(page);
+  await expect(a(page, "depart")).toBeDisabled();
+  await a(page, "rest-party").click();
+  await expect(page.getByTestId("ch5-feedback")).toContainText("every prisoner accounted for");
+  const rested = await saved(page);
+  expect(rested).toMatchObject({ chapter5: { brackenLootClaimed: true, postRescueRested: true } });
+  expect(rested.player.hp).toBe(rested.player.maxHp);
+  expect(rested.companion.hp).toBe(rested.companion.maxHp);
+  expect(rested.player.inventory).toEqual(looted.player.inventory);
+  await reload(page);
+  await expect(a(page, "rest-party")).toHaveCount(0);
+  await expect(a(page, "depart")).toBeEnabled();
+  const reloaded = await saved(page);
+  expect(reloaded.player).toEqual(rested.player);
+  expect(reloaded.companion).toEqual(rested.companion);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
 test("optional tuskers use ordinary level-five combat, save a retry, and rejoin the same ending", async ({ page }) => {
@@ -178,7 +215,7 @@ test("optional tuskers use ordinary level-five combat, save a retry, and rejoin 
   await page.addInitScript(() => { Math.random = () => .5; });
   const p = fixture(); p.chapter5 = gathered(); p.player.level = 5; p.player.hp = p.player.maxHp = 54;
   p.companion.command = "Defend Me"; p.companion.hp = p.companion.maxHp;
-  await load(page, p); await a(page, "pack-supplies").click();
+  await load(page, p); await a(page, "pack-supplies").click(); await a(page, "rest-party").click();
   await walkToFork(page); await a(page, "choose-hollow").click(); await inspect(page);
   const before = await saved(page);
   await a(page, "fight-tuskers").click();

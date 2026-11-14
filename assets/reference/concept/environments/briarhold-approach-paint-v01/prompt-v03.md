@@ -1,0 +1,8 @@
+# Briarhold approach shelter clearance v03
+
+Built-in imagegen, 2026-11-13. Edit target: v02. Preserves the back-wall registration correction. Superseded by the owner's runoff/streambed correction in v04.
+
+Use case: precise-object-edit.
+Image 1 is the current Briarhold approach painting. Preserve the complete image pixel composition, especially the now-open gate, unbarred culvert, roads, trees, light, wagon and all station geometry.
+One small correction only: the NORTH/BACK horizontal wall cap of the roofless shelter at upper left still projects into the UI marker clearance. Move ONLY that horizontal back-wall cap approximately 20 image pixels UP, toward the top edge, without moving the left/right shelter walls or any path. In the resulting full canvas, the lowest visible stone/moss edge of that horizontal back-wall cap must be at y=4.4% of image height or above (about 41 pixels on this 941px-tall image). Its approximate horizontal span remains x10–24%. Paint the old cap location and area below it as continuous empty worn earth shelter floor, matching adjacent floor. The shelter's floor must be clear from y4.5% downward until the open south entrance. Join its existing side wall tips subtly. No southward facing high wall face. This is a near-vertical overhead map, so the horizontal wall is a thin overhead mossy cap. Do not add props, rocks or vegetation inside the floor clearance.
+Change absolutely nothing outside that narrow shelter back-wall area. Keep all other colors, details, framing, camera and exact landmark positions unchanged. No text, markers or diagrams. Opaque 16:9 game background.

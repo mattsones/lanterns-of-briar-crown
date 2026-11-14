@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "status": "Draft for owner review; not registered in the game",
+  "units": "metres; east is right, south is down",
+  "triggerBoundary": "Node landing / explicit action; dashed boxes identify anchors, not new proximity triggers",
+  "frames": {
+    "desktop": { "viewport": [1280, 720], "mapWidth": 870, "token": 52 },
+    "phone390": { "viewport": [390, 844], "mapWidth": 332, "token": 32 },
+    "phone430": { "viewport": [430, 932], "mapWidth": 372, "token": 32 }
+  },
+  "marker": { "shadow": 3, "anchorY": 0.7, "bodyRadius": 0.3, "solidClearance": 0.2 },
+  "rooms": [
+    { "id": "landing", "label": ["Service", "landing"], "rect": [29.5, 14, 5, 7], "level": 0, "number": "01" },
+    { "id": "hub", "label": ["Central hub"], "rect": [36, 13, 6, 7], "level": 0, "number": "02" },
+    { "id": "ledger", "label": ["Records"], "rect": [36, 6.5, 6, 5], "level": 2.8, "number": "03" },
+    { "id": "workshop", "label": ["Seal", "workshop"], "rect": [29.5, 24, 7, 6.5], "level": -2, "number": "04" },
+    { "id": "lanterns", "label": ["Signal", "platform"], "rect": [40, 24, 6, 5.5], "level": 3.4, "number": "05" },
+    { "id": "gallery", "label": ["Inner post /", "inspection gallery"], "rect": [42.5, 13, 3, 9.5], "level": 0, "number": "06" },
+    { "id": "crown", "label": ["Crown Table", "room"], "rect": [45.5, 11.5, 14, 10], "level": 0, "number": "07" },
+    { "id": "cells", "label": ["Adjoining cells"], "rect": [56.4, 23, 4.9, 2.2], "level": 0, "number": "08" },
+    { "id": "gathering", "label": ["Sheltered", "service court"], "rect": [22.5, 21, 7, 3], "level": 0, "number": "09" }
+  ],
+  "sitePaths": [
+    { "id": "gate-to-landing", "points": [[29.5,17.3],[32,17.3]], "kind": "walk" },
+    { "id": "landing-hub", "points": [[32,17.3],[39,17.3]], "kind": "walk" },
+    { "id": "hub-ledger", "points": [[39,17.3],[39,9]], "kind": "stairs" },
+    { "id": "hub-workshop", "points": [[39,17.3],[38,22],[34,27]], "kind": "stairs" },
+    { "id": "workshop-platform", "points": [[34,27],[38,27],[42.5,26]], "kind": "stairs" },
+    { "id": "platform-door", "points": [[42.5,26],[42.5,23],[43.5,20],[41.1,17.3]], "kind": "stairs" },
+    { "id": "hub-door", "points": [[39,17.3],[41.1,17.3]], "kind": "walk" },
+    { "id": "culvert-landing", "points": [[29.5,28.2],[31,26],[32,20],[32,17.3]], "kind": "subfloor" },
+    { "id": "landing-court", "points": [[32,17.3],[32,22],[26,22.5]], "kind": "walk" }
+  ],
+  "optics": {
+    "lamp": [43,24],
+    "lampHeight": 4.6,
+    "hubTarget": [39,17.3],
+    "opening": [49,21.5],
+    "openingHeight": 2.8,
+    "brakeTarget": [55.4,19.1],
+    "directFan": [[49,21.5],[58.0,17.0],[58.5,21.2]],
+    "yardSight": [[40,26],[28.0,18.0]],
+    "postSight": [[43,24],[41.1,17.3]],
+    "shelterSight": [[11.25,14.7],[29.5,17.3]],
+    "grilleSight": [[43.9,21.15],[54.8,19.1]]
+  },
+  "approach": {
+    "id": "briarholdApproach",
+    "title": "Outer approach",
+    "source": [2048,1152],
+    "bounds": [0,7.8,46,25.875],
+    "scaleBar": 5,
+    "defaultNode": "ridge",
+    "nodes": [
+      { "id": "overlook", "pin": "O", "label": "Overlook shelter", "point": [8.1,12.9], "anchor": true, "trigger": "One recovery; checkpoint; gate and runoff survey" },
+      { "id": "a01", "label": "Shelter descent", "point": [8.0,17.3] },
+      { "id": "a02", "label": "Fern bend", "point": [13,20] },
+      { "id": "ridge", "pin": "R", "label": "Ridge fork", "point": [17,16.5], "anchor": true, "trigger": "Gate / runoff route becomes a physical fork" },
+      { "id": "a03", "label": "Gate-side cover", "point": [21.3,15.4] },
+      { "id": "gate", "pin": "G", "label": "Receiving gate", "point": [26,16.9], "anchor": true, "trigger": "Slip / blend / assault; explicit entry transition" },
+      { "id": "a04", "label": "Lower root bank", "point": [17.6,19.5] },
+      { "id": "runoff", "pin": "W", "label": "Runoff trail", "point": [18.4,22.3], "anchor": true, "trigger": "Water, wax and cord reveal the lower route" },
+      { "id": "a05", "label": "Below the retaining wall", "point": [19.3,28.3] },
+      { "id": "culvert", "pin": "C", "label": "Culvert stance", "point": [26,28.3], "anchor": true, "trigger": "Saved grate attempt, then separate crawl-through action" }
+    ],
+    "edges": [
+      { "from": "overlook", "to": "a01", "direction": "down" },
+      { "from": "a01", "to": "a02", "direction": "right" },
+      { "from": "a02", "to": "ridge", "direction": "right" },
+      { "from": "ridge", "to": "a03", "direction": "right" },
+      { "from": "a03", "to": "gate", "direction": "right" },
+      { "from": "ridge", "to": "a04", "direction": "down" },
+      { "from": "a04", "to": "runoff", "direction": "down" },
+      { "from": "runoff", "to": "a05", "direction": "down" },
+      { "from": "a05", "to": "culvert", "direction": "right" }
+    ],
+    "portals": [
+      { "from": "gate", "target": "briarholdHub:landing", "point": [29.5,17.3], "condition": "Resolve the receiving approach" },
+      { "from": "culvert", "target": "briarholdHub:landing", "point": [29.5,28.2], "condition": "Grate success, then choose crawl through" }
+    ],
+    "solids": [
+      { "id": "shelter-north-wall", "rect": [4.5,8.7,6.7,0.25], "height": 2.0 },
+      { "id": "shelter-west-wall", "rect": [4.5,8.7,0.25,5.9], "height": 2.0 },
+      { "id": "shelter-south-stub", "rect": [4.5,14.35,0.65,0.25], "height": 1.2 },
+      { "id": "shelter-wall", "rect": [11.0,9.7,0.2,4.9], "height": 2.0 },
+      { "id": "station-wall", "rect": [29.5,7.8,0.4,25.875], "height": 4.0 },
+      { "id": "court-retaining-wall", "rect": [22.5,23.8,7.0,0.2], "height": 2.2 },
+      { "id": "receiving-wagon", "rect": [25.8,19.0,2.4,1.6], "height": 1.8 }
+    ],
+    "fixedLights": [
+      { "id": "gate-lamp", "point": [29.1,16.3], "radius": 8.3, "color": "amber", "height": 2.0, "fan": [[29.1,16.3],[23,11.8],[23,21.0]] },
+      { "id": "low-work-window", "point": [29.4,25.5], "radius": 2.1, "color": "amber", "height": 0.7 }
+    ],
+    "partyRadius": 2.8,
+    "actorPaths": [
+      { "id": "opening-climb", "points": [[2.5,18],[6.8,16],[8.1,12.9]], "label": "Opening: spot shelter, signal, silent climb" },
+      { "id": "wagon-approach", "points": [[26,16.9],[24.8,20.2],[25.3,21.0],[29.5,17.3]], "label": "Receiving action, not a free movement shortcut" }
+    ]
+  },
+  "rescue": {
+    "id": "briarholdCrownTable",
+    "title": "Crown Table and rescue",
+    "source": [2048,1536],
+    "bounds": [42,10.5,20,15],
+    "scaleBar": 2,
+    "defaultNode": "crown",
+    "nodes": [
+      { "id": "r00", "pin": "E", "label": "Gallery entry from inner post", "point": [43.9,17.3], "anchor": false, "trigger": "Return left to the existing inner-post map" },
+      { "id": "r01", "label": "Gallery return bend", "point": [43.9,19.65] },
+      { "id": "grille", "pin": "G", "label": "Inspection grille", "point": [43.9,21.15], "anchor": true, "trigger": "Mandatory first sight of Lio before the confrontation" },
+      { "id": "r02", "label": "Entrance below the console", "point": [47.8,19.65] },
+      { "id": "r03", "label": "South aisle", "point": [49.3,19.65] },
+      { "id": "r04", "label": "Clear of the fallen Sentry", "point": [51.3,19.65] },
+      { "id": "r05", "label": "East bend", "point": [53,18.4] },
+      { "id": "crown", "pin": "T", "label": "Confrontation anchor", "point": [54,16.8], "anchor": true, "trigger": "Existing boss; Mara remains behind the entrance console" },
+      { "id": "carriage", "pin": "L", "label": "Cart-side rescue stance", "point": [52.85,19.1], "anchor": true, "trigger": "Catch cart → brake → cuff; departure remains blocked" },
+      { "id": "r06", "label": "East aisle", "point": [57.8,16.8] },
+      { "id": "cells", "pin": "P", "label": "Cell release / safe threshold", "point": [57.8,21.9], "anchor": true, "trigger": "After rescue: release bar, captive/evidence cleanup" }
+    ],
+    "edges": [
+      { "from": "r00", "to": "r01", "direction": "down" },
+      { "from": "r01", "to": "grille", "direction": "down" },
+      { "from": "r01", "to": "r02", "direction": "right", "gate": "First sight of Lio acknowledged" },
+      { "from": "r02", "to": "r03", "direction": "right" },
+      { "from": "r03", "to": "r04", "direction": "right" },
+      { "from": "r04", "to": "r05", "direction": "right" },
+      { "from": "r05", "to": "crown", "direction": "up" },
+      { "from": "r05", "to": "carriage", "direction": "down", "gate": "Boss victory; authored rescue takes control" },
+      { "from": "crown", "to": "r06", "direction": "right", "gate": "Lio rescued" },
+      { "from": "r06", "to": "cells", "direction": "down", "gate": "Lio rescued" }
+    ],
+    "portals": [ { "from": "r00", "target": "briarholdHub:door", "point": [42,17.3], "condition": "Established inner passage" } ],
+    "solids": [
+      { "id": "west-gallery-upper", "rect": [42.32,13,0.18,2.9], "height": 3.0 },
+      { "id": "west-gallery-lower", "rect": [42.32,18.5,0.18,4.0], "height": 3.0 },
+      { "id": "north-room-wall", "rect": [45.32,11.32,14.36,0.18], "height": 3.4 },
+      { "id": "west-room-upper", "rect": [45.32,11.5,0.18,6.0], "height": 3.4 },
+      { "id": "west-room-grille", "rect": [45.32,20.7,0.18,0.8], "height": 3.4 },
+      { "id": "east-room-upper", "rect": [59.5,11.5,0.18,5.9], "height": 3.4 },
+      { "id": "east-room-lower", "rect": [59.5,19.2,0.18,2.3], "height": 3.4 },
+      { "id": "south-room-west", "rect": [45.32,21.5,8.38,0.18], "height": 3.4 },
+      { "id": "south-room-curb", "rect": [55.9,21.5,0.5,0.18], "height": 1.0 },
+      { "id": "south-room-east", "rect": [59.4,21.5,0.28,0.18], "height": 3.4 },
+      { "id": "route-table", "rect": [49.2,13.9,3.0,2.6], "height": 1.1 },
+      { "id": "mara-console", "rect": [46.0,16.8,2.0,1.0], "height": 1.4 },
+      { "id": "parked-cart", "rect": [54.3,18.5,1.0,1.2], "height": 0.95 },
+      { "id": "cell-barred-front", "rect": [56.4,23.0,4.9,0.10], "height": 2.2 },
+      { "id": "cell-left-wall", "rect": [56.22,23.0,0.18,2.38], "height": 3.0 },
+      { "id": "cell-right-wall", "rect": [61.3,23.0,0.18,2.38], "height": 3.0 },
+      { "id": "cell-divider", "rect": [58.75,23.0,0.2,2.2], "height": 3.0 },
+      { "id": "cell-bottom-wall", "rect": [56.22,25.2,5.26,0.18], "height": 3.0 }
+    ],
+    "fixedLights": [
+      { "id": "green-nw", "point": [47.6,12.8], "radius": 1.65, "color": "green", "height": 1.8 },
+      { "id": "green-ne", "point": [57.4,12.9], "radius": 1.65, "color": "green", "height": 1.8 },
+      { "id": "green-east", "point": [57.2,16.0], "radius": 1.25, "color": "green", "height": 1.8 },
+      { "id": "green-west", "point": [46.4,20.4], "radius": 0.9, "color": "green", "height": 1.8 }
+    ],
+    "partyRadius": 2.9,
+    "cart": { "initial": [54.8,19.1], "released": [54.8,19.9], "caught": [54.8,20.2], "braked": [54.8,20.2], "freed": [54.8,20.2], "size": [1.0,1.2], "stepStart": 21.5, "drop": 2.8 },
+    "actors": {
+      "maraCover": [46.6,18.3], "maraRescue": [54.0,18.9],
+      "companionInitial": [54.4,17.4], "companionBrace": [56.0,20.2],
+      "brackenInitial": [53.5,15.0], "brackenKick": [55.6,18.5],
+      "brackenExit": [59.5,18.3], "heroDecision": [55.7,17.3],
+      "sentryInitial": [52.9,17.0], "sentryFallen": [49.5,17.1],
+      "guardWest": [48.6,15.3], "guardEast": [56.5,14.7],
+      "hesta": [60.1,24.15], "emptyCellBundle": [57.5,24.15]
+    }
+  }
+}

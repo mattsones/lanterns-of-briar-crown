@@ -25,7 +25,7 @@ function gather() {
 }
 function depart() {
   const companion = fixture().companion;
-  return progress.departChapter5Briarhold(progress.reuniteChapter5Siblings(progress.hearChapter5Examiner(gather()), companion), companion);
+  return progress.departChapter5Briarhold(progress.restChapter5Party(progress.reuniteChapter5Siblings(progress.hearChapter5Examiner(gather()), companion)), companion);
 }
 test("legacy carriage checkpoints continue with unearned cleanup and cannot skip safe reunion", () => {
   const raw = rescued();
@@ -43,9 +43,9 @@ test("legacy carriage checkpoints continue with unearned cleanup and cannot skip
   expect(depart().departed).toBe(true);
 });
 test("each prisoner and original matters independently to the departure gate", () => {
-  const complete = progress.reuniteChapter5Siblings(progress.hearChapter5Examiner(gather()), fixture().companion);
+  const complete = progress.restChapter5Party(progress.reuniteChapter5Siblings(progress.hearChapter5Examiner(gather()), fixture().companion));
   expect(getBriarholdDepartureErrors(progress.getChapter5Outcome(complete))).toEqual([]);
-  for (const flag of ["clerkFreed", "porterFreed", "wardenFreed", "siblingsReunited", "examinerLeadLearned"] as const) {
+  for (const flag of ["clerkFreed", "porterFreed", "wardenFreed", "siblingsReunited", "examinerLeadLearned", "postRescueRested"] as const) {
     const missing = { ...complete, [flag]: false };
     expect(progress.departChapter5Briarhold(missing, fixture().companion)).toBe(missing);
   }
@@ -68,6 +68,60 @@ test("originals require physical access, remain distinct inventory items, and re
   expect(progress.applyChapter5ProgressRewards(supplied, supplied, rewarded)).toEqual(rewarded);
   expect(progress.packChapter5Supplies(supplied)).toBe(supplied);
   expect(progress.collectChapter5Evidence(at(supplied, "ledger"), "transfer-ledger").evidence).toHaveLength(4);
+});
+
+test("Bracken's sabre can be collected after rescue and is never awarded twice or restored after sale", () => {
+  const ready = at(rescued(), "crown"), hero = fixture().player;
+  for (const blocked of [at(ready, "carriage"), { ...ready, pendingBattle: "boss" as const },
+    { ...ready, brackenDefeated: false }, { ...ready, carriageStage: "free-lio" as const }, { ...ready, departed: true }])
+    expect(progress.claimChapter5BrackenLoot(blocked)).toBe(blocked);
+  const claimed = progress.claimChapter5BrackenLoot(ready);
+  const awarded = progress.applyChapter5ProgressRewards(ready, claimed, hero);
+  expect(awarded.inventory.brackens_sabre).toBe((hero.inventory.brackens_sabre || 0) + 1);
+  expect(awarded.equipment).toEqual(hero.equipment);
+  expect(progress.claimChapter5BrackenLoot(claimed)).toBe(claimed);
+  const payload = parseDiskSaveText(serializeDiskSave("Bracken's sabre", { ...fixture(), chapter5: claimed, player: awarded })).payload;
+  expect(payload.chapter5.brackenLootClaimed).toBe(true);
+  expect(progress.applyChapter5ProgressRewards(payload.chapter5, payload.chapter5, payload.player)).toEqual(payload.player);
+  const sold = { ...awarded, inventory: { ...awarded.inventory, brackens_sabre: 0 } };
+  expect(progress.applyChapter5ProgressRewards(claimed, claimed, sold).inventory.brackens_sabre).toBe(0);
+});
+
+test("court rest waits for every captive, revives the active companion and cannot heal twice", () => {
+  const before = gather(), hero = { ...fixture().player, hp: 2 }, companion = { ...fixture().companion, hp: 0 };
+  for (const blocked of [at(before, "landing"), { ...before, pendingBattle: "tuskers" as const },
+    ...["clerkFreed", "porterFreed", "wardenFreed"].map(field => ({ ...before, [field]: false })), { ...before, departed: true }])
+    expect(progress.restChapter5Party(blocked)).toBe(blocked);
+  // People can rest while the remaining paperwork is still being gathered.
+  expect(progress.restChapter5Party({ ...before, evidence: [] }).postRescueRested).toBe(true);
+  const rested = progress.restChapter5Party(before);
+  const healed = progress.applyChapter5Rest(before, rested, hero, companion);
+  expect(healed.player.hp).toBe(hero.maxHp);
+  expect(healed.companion.hp).toBe(companion.maxHp);
+  expect(healed.player.inventory).toEqual(hero.inventory);
+  expect(progress.restChapter5Party(rested)).toBe(rested);
+  expect(progress.applyChapter5Rest(rested, rested, hero, companion)).toEqual({ player: hero, companion });
+  const absent = { ...companion, recruited: false };
+  expect(progress.applyChapter5Rest(before, rested, hero, absent).companion).toBe(absent);
+  const readyToLeave = progress.reuniteChapter5Siblings(progress.hearChapter5Examiner(before), companion);
+  expect(progress.departChapter5Briarhold(readyToLeave, companion)).toBe(readyToLeave);
+  expect(progress.departChapter5Briarhold(progress.restChapter5Party(readyToLeave), companion).departed).toBe(true);
+});
+
+test("new reward/rest fields preserve unearned checkpoints and migrate departed legacy parties without gifts", () => {
+  const oldCourt = { ...gather() };
+  delete oldCourt.brackenLootClaimed; delete oldCourt.postRescueRested;
+  expect(normalizeChapter5Save(oldCourt)).toMatchObject({ brackenLootClaimed: false, postRescueRested: false });
+  const oldRoad = { ...depart() };
+  delete oldRoad.brackenLootClaimed; delete oldRoad.postRescueRested;
+  const migrated = normalizeChapter5Save(oldRoad);
+  expect(migrated).toMatchObject({ departed: true, brackenLootClaimed: false, postRescueRested: true });
+  const hero = { ...fixture().player, hp: 2 }, companion = { ...fixture().companion, hp: 0 };
+  expect(progress.applyChapter5Rest(migrated, migrated, hero, companion)).toEqual({ player: hero, companion });
+  expect(progress.applyChapter5ProgressRewards(migrated, migrated, hero).inventory.brackens_sabre || 0).toBe(0);
+  for (const invalid of [{ ...rescued(), postRescueRested: true }, { ...rescued(), carriageStage: "free-lio", brackenLootClaimed: true },
+    { ...gather(), postRescueRested: "yes" }, { ...gather(), brackenLootClaimed: 1 }])
+    expect(() => normalizeChapter5Save(invalid)).toThrow(/Chapter 5/);
 });
 test("conscious companion interventions are optional, once-only, and never grant feed access from cover", () => {
   const before: Chapter5SaveState = { ...rescued(), brackenDefeated: false, carriageStage: "secure-carriage", milestoneAwarded: false, node: "workshop", view: "workshop" };

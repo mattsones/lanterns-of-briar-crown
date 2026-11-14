@@ -1,0 +1,2 @@
+# Keep the owner's exported regression checkpoint byte-for-byte on Windows too.
+tests/fixtures/chapter5-alerted-owner.json -text

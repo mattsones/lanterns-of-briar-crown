@@ -12,7 +12,7 @@ type CompanionBeat = "approach" | "entry" | "workshop" | "ledger" | "light" | "l
 
 export function chapter5CompanionBeat(companion: Companion | undefined, beat: CompanionBeat): string {
   if (!isCompanionConscious(companion)) return beat === "secure"
-    ? "You plant your shoulder against the iron frame while Mara stays beside Lio, keeping his hands clear of the wheel."
+    ? "You brace one boot against a stone and take the cart's weight on your shoulder. Mara keeps Lio's free hand clear of the wheel. You have one hand left for the brake."
     : "";
   const lines = {
     rowan: {
@@ -24,7 +24,7 @@ export function chapter5CompanionBeat(companion: Companion | undefined, beat: Co
       "light-exposed": "Rowan turns his shield toward the stair, fitting its rim against the lamp housing beside Mara. “Stay behind this,” he whispers. He plants his boots against the foot of the rack while the voices below grow louder.",
       grille: "Rowan notices Mara leaning toward the opening and steadies her with a hand at her shoulder. He keeps his voice low enough that it barely reaches you. “He sees us. Give him a moment to choose his next move.”",
       crown: "Rowan moves to your left, turning his shield toward the sentry's knotted arms. “Stay there, Mara,” he whispers, keeping his eyes on the table. He sets his boots at the edge of the alcove, ready to cover your first step into the room.",
-      secure: "Rowan catches the far side of the carriage before its weight can turn across your knees. His boots slide a handspan on the rail bed; he sets them again against the stone brace. “I have this side. Find the brake.”",
+      secure: "Rowan drives the rim of his shield against the wheel. Iron scrapes over stone. He drops to one knee and holds. “The brake! Pull it!”",
       reunion: "Rowan retrieves his shield without taking his eyes off Bracken's escape passage. When Mara looks up, he gives her a small nod. “Your brother is here. Take a breath. I will watch the door.”",
     },
     tilda: {
@@ -36,7 +36,7 @@ export function chapter5CompanionBeat(companion: Companion | undefined, beat: Co
       "light-exposed": "Tilda lowers herself beside the rack and points to the iron housing between you and the stair. “Keep that between us and him,” she whispers. She draws Mara's loose sleeve behind its edge while watching the guard's weapon below.",
       grille: "Tilda watches Lio alter a mark beneath the guard's elbow and draws a quiet breath through her nose. “Wrong shorthand, in exactly the useful place,” she whispers. She touches Mara's wrist before Mara can lift the blue knot too high. “He is still making trouble. Let him know we noticed.”",
       crown: "Tilda edges alongside you, easing her weapon free beneath the alcove's shadow. “A very grand place to lose an argument,” she murmurs. Her eyes stay on Bracken's hand as he slides it along the table's edge.",
-      secure: "Tilda wedges her shoulder beneath the carriage's side rail, using the low axle housing to keep it from slewing away. “You may complain about my manners after we stop this,” she tells Lio through gritted teeth. “For now, keep that wheel jammed.”",
+      secure: "Tilda snatches a fallen timber and shoves it beneath the wheel. She stamps her boot against it as the wood starts to slide. “I've got it! Get the brake!”",
       reunion: "Tilda starts to say something when the restraint opens, then sees Mara's face and lets the words go. She collects the loose iron before it can trip either sibling and sets it well aside. Only then does she glance toward the empty passage. “One escaped captain. One rescued brother. I know which count matters.”",
     },
     moss: {
@@ -46,9 +46,9 @@ export function chapter5CompanionBeat(companion: Companion | undefined, beat: Co
       ledger: "Moss keeps a hand beneath the loose lid of the nearest crate so it cannot rock while you crouch beside it. He follows the short chain from the woman's wrist to the desk. “She cannot leave that seat,” he whispers. “If we draw him toward the receiving tally, we will have room to get between them.”",
       light: "Moss rubs a flake of rust from the shutter's old stop, where years of use have polished a shallow notch. “It used to rest open here,” he whispers. He follows the reflector's angle toward the shaft. “A guide lamp. Built to send its light down there. Those stems had wedged it nearly shut.”",
       "light-exposed": "Moss braces the nearest shutter frame against its stone footing so it will hold Mara's weight as she crouches behind it. “Keep close to the iron,” he whispers, following the guard's movement through the opening.",
-      grille: "Moss follows the movement of Lio's hand, then the rail to which the altered tally points. “He has sent that carriage toward a blocked line,” he whispers. “He is still choosing where it goes.”",
+      grille: "Moss watches Lio cover the changed mark with his hand. “He is giving them the wrong directions,” he whispers. “Even with that cuff on him.”",
       crown: "Moss steps beside you and watches the Sentry turn on its bound root joints. “Watch those braces,” he murmurs. One tightens as the creature settles its weight, and he shifts his own stance to follow the movement.",
-      secure: "Moss braces one foot against a dressed stone beside the rail and catches the carriage frame with both hands. “Let it lean toward me,” he calls. “This footing will hold while you set the brake.”",
+      secure: "Moss grabs the back of the cart with both hands. His boots skid. He catches a heel against a paving stone and hauls backward. “Now! While I'm holding it!”",
       reunion: "Moss lifts a broken length of thorn cord away from Mara's feet and makes room beside the carriage. He waits until Lio can stand without gripping the rail before offering his arm. “There is room for both of you on the road home,” he says.",
     },
   };
@@ -251,16 +251,17 @@ export function getChapter5SceneParagraphs(state: Chapter5SaveState, companion?:
     ]; break;
     case "grille": paragraphs = state.lioSeen ? [
       state.brackenDefeated
-        ? "Through the inspection grille, you can see the broken command fittings around the route table and the passage Bracken used to escape. The carriage rail remains visible beyond the table; you have already shown Lio that his sister is here."
+        ? "Through the inspection grille, you can see the broken fittings around the route table and the door Bracken used to escape. Beyond the table lies the sloping floor where Lio's cart stood; you have already shown him that his sister is here."
         : "Lio keeps his head bent over the tally board, but his gaze lifts toward the grille whenever the room gives him a moment. He already knows you are here. Mara stays below the slit, resisting the urge to answer every glance, while you study the approach to the route table.",
     ] : [
-      "You put your eye to the grille and find a room wider than the passages that led here. An old route table occupies its center, its surface crowded with seal plates and green-marked instructions. Beyond it, a wheeled transfer carriage sits on a sloping rail. Lio is restrained beside its tally board, close enough to work but unable to leave the frame.",
-      "For a moment Mara cannot seem to draw breath. Her hand closes around your sleeve as Lio shifts beneath the lamp: thinner than she remembers, with a scrape along his cheek, but moving under his own strength. When the man at the route table turns to check a stack of instructions, Lio rubs out a route mark and replaces it with shorthand that points toward a blocked siding. He keeps the change small, hiding it beneath the next entry before anyone looks back toward the carriage.",
+      "You put your eye to the grille and find a room wider than the passages that led here. An old route table occupies its center, its surface crowded with seal plates and green-marked instructions. Beyond it, Lio sits on a low wooden cart with a writing board across his knees. One wrist is cuffed to its side. The floor slopes toward an open doorway, where a steep flight of stone steps descends into darkness. A brake beside the seat holds the cart in place.",
+      "For a moment Mara cannot seem to draw breath. Her hand closes around your sleeve as Lio shifts beneath the lamp: thinner than she remembers, with a scrape along his cheek, but moving under his own strength. When the man at the route table turns to check a stack of instructions, Lio rubs out a route mark and replaces it with different shorthand. He hides the change beneath the next entry before anyone looks back toward the cart.",
       "Mara leans toward the slit, his name nearly on her lips. Before she can speak, Lio looks up and sees her. His fingers pause against the tally board; then he places one across his mouth. Mara lowers herself into shadow and lifts the blue knot just high enough for him to see. He gives the smallest nod, bends over his work again, and leaves the false route intact.",
       chapter5CompanionBeat(companion, "grille"),
     ]; break;
     case "crown": paragraphs = state.brackenDefeated ? [
       "The route table's green instruction plates lie scattered among the broken fittings. The Thornroot Sentry has collapsed, and the remaining guards have either fallen out of the fight or abandoned the room. Bracken's personnel passage has closed behind his wounded escape, leaving a streak of blood beside its latch.",
+      ...(!state.brackenLootClaimed ? ["His sabre lies beneath the route table where it fell during the fight. Its steel edge catches the lamplight beneath a broken instruction board."] : []),
     ] : [
       "You ease into an alcove beside the old stone console, where Mara crouches below the lip with Lio's blue knot gripped in her hand. Across the room, the man you watched through the grille stands at the old route table amid open ledgers and stacks of sealed instructions. Ink stains his cuffs; a weapon hangs close beneath the edge of his coat. Beside him stands a tall figure built from bound roots, its knotted arms braced against the floor. It shifts its weight with a dry creak.",
       b.alert === "quiet"
@@ -268,36 +269,36 @@ export function getChapter5SceneParagraphs(state: Chapter5SaveState, companion?:
         : b.alert === "suspicious"
           ? `The man's ledger lies open beneath a pen he has set aside. He studies the entrance with a crease between his brows, turning a sealed plate slowly against the table. ${b.investigatorRemoved === "silent" ? "The root-bound sentry leans forward as your shadow reaches the floor." : "A guard beside him raises his shield and takes a step toward the passage."}`
           : `The man has pushed the ledgers aside and spread his sealed plates within reach. ${b.investigatorRemoved === "silent" ? "A guard stands at his shoulder, weapon drawn." : "Two guards hold opposite sides of the table, their weapons drawn."} As you reach the alcove, the root-bound sentry turns toward you and drags one foot across the stone.`,
-      "“Captain Bracken Voss,” the man says, holding the sealed plate against his ink-stained cuff. His eyes pass over the console's edge, searching the alcove behind you. “You have come a long way from the public road. Put down the weapon. We can enter this as a misunderstanding.” Beyond his shoulder, Lio tightens his grip on the carriage tally and watches the space between you and the table.",
+      "“Captain Bracken Voss,” the man says, holding the sealed plate against his ink-stained cuff. His eyes pass over the console's edge, searching the alcove behind you. “You have come a long way from the public road. Put down the weapon. We can enter this as a misunderstanding.” Beyond his shoulder, Lio tightens his grip on the writing board and watches the space between you and the table.",
       b.workshopDisabled
         ? "The Sentry tugs at the feed cord running into the workshop wall. It comes away slack, dragging across the paving. A gap in the bindings around one arm stays open as the creature settles its weight. Mara follows the cord with her eyes, then gives you a quick nod."
         : "",
       b.lanternsRestored
-        ? "Warm gold lamplight filters through a high opening in the wall, falling across the table and the worn brass guides set into the paving. Green arrows painted on loose boards point across those older markings. Bracken glances toward the opening, then starts to gesture with his seal toward one of the boards. His hand pauses. He lowers the plate and shifts behind the table, his eyes returning to your feet."
+        ? "Warm gold lamplight filters through a high opening in the wall. It picks out the uneven paving and the stone lip above the loading steps. Green arrows painted on loose boards point across the joints between the stones. Bracken glances toward the opening, then starts to gesture with his seal toward one of the boards. His hand pauses. He lowers the plate and shifts behind the table, his eyes returning to your feet."
         : "Green-glass lamps leave the room's lower corners in shadow. Painted arrow boards lean against the table and cover stretches of the old paving. Bracken turns his sealed plate toward you, then looks down at the space between your boots and the nearest board.",
       chapter5CompanionBeat(companion, "crown"),
     ]; break;
     case "carriage":
       if (state.carriageStage === "secure-carriage") paragraphs = [
-        "The carriage creeps down the old transfer rail toward the raised westbound shutter. Lio strains against his restraint, forcing the edge of his tally board toward the nearest wheel, but it cannot take the weight for long. Mara calls to him from beside you, keeping her voice steady enough for him to hear through the noise of the broken machinery.",
-        "There is room to reach the frame before it clears the stone brace. First secure the wheel and catch the carriage, then set its brake, then release Lio's restraint. Mara points toward the nearest wheel as Lio forces the tally board farther between its spokes.",
+        "The cart gathers speed. Beyond the open doorway, the stairs fall steeply into darkness. Lio grips the side with his free hand and wrenches at his cuff. The iron holds.",
+        "“The wheel!” Mara shouts, pointing to a loose wooden bar beside his seat. Lio grabs for it. You can reach the cart before it reaches the steps.",
       ];
       else if (state.carriageStage === "set-brake") paragraphs = [
-        "The jammed wheel holds against the rail while you keep the carriage braced. Lio has stopped fighting the restraint long enough to move his fingers clear of the mechanism. Mara stays where he can see her, telling him what you are doing before each movement.",
+        "The wooden bar bends against the wheel. The cart shudders under your hands. Mara catches Lio's free hand. “Stay with me!”",
         b.lanternsRestored
-          ? "The guide lamp's light falls through the high wall opening and across the carriage controls. Beneath the edge of a painted arrow board, you can see a brass rod running from one handle straight to the brake shoe. The other rods double back into the housing. You follow the visible rod and reach for its handle."
-          : "Several handles are marked with arrows that disagree with the rods beneath them. You lean close to follow the fittings into the shadow beneath the housing, keeping your forearm clear of the joints as they shift under the carriage's weight. Somewhere below your hand, a rod runs back toward the wheel; the painted arrows point toward handles whose linkages disappear in the opposite direction.",
+          ? "Amber light falls across the handles beside the seat. A brass rod runs from one of them straight to the wheel. There is the brake. You reach for it."
+          : "Two handles jut out beside the seat. A painted arrow points toward one, but the rods beneath it disappear into shadow. You reach past the wheel to find which handle works the brake.",
       ];
       else if (state.carriageStage === "free-lio") paragraphs = [
-        "The brake shoe bites firmly into the rail. When you ease the pressure on the frame, the carriage stays where you have set it, and Lio lets his shoulders drop for the first time since you entered the room. Mara reaches him along the safe side of the wheel, touching his hand before she looks down at the restraint.",
-        "The cuff is held by a plain release pin behind the seat. With the machinery stopped, you can lift it without reaching between moving parts. Mara steadies Lio as he prepares to stand, waiting for you to open the last piece of iron that keeps him here.",
+        "The cart is still. You ease your weight off it. The brake holds. Mara climbs beside Lio and takes his face between her hands. He is shaking.",
+        "His wrist is still cuffed to the cart. You find the pin holding the cuff shut, just behind the seat. Lio holds his arm steady while Mara helps him turn toward you.",
       ];
       else paragraphs = [
         "Mara stays beside Lio after the restraint has opened, one arm around his back while he tests his weight on the floor. Up close, the marks of captivity are harder to overlook: a sleeve rubbed thin against the cuff, ink worked into his fingers, the careful way he draws breath before moving. She brushes a strand of hair out of his eyes as though they were standing in the doorway at home, then pulls him close again.",
         "Lio looks from his sister to you. “I kept thinking someone would notice the routes,” he says. His voice catches, and he has to swallow before he can continue. Mara loosens her hold enough to show him the blue knot. “We did.” For a while he holds that little loop of cord between his stained fingers, feeling the familiar weave without trying to say anything else.",
         state.porterFreed && state.wardenFreed
-          ? "Lio looks along the passage to the open cells. Their release bar rests against the wall, and the voices of the people you brought out carry from the sheltered court. He takes Mara's hand before you return to the others, leaving the stopped carriage and its opened restraint beside the rail."
-          : "Lio looks along the service passages, turning carefully while he keeps Mara's hand in his. “There are others here,” he tells you. “They took some of us out to work. We have to bring everyone back.” The broken Sentry lies between the table and the rail, and Bracken's surviving commands have lost their guards. For the first time since entering Briarhold, you can plan the next move with Lio standing beside you.",
+          ? "Lio looks along the passage to the open cells. Their release bar rests against the wall, and the voices of the people you brought out carry from the sheltered court. He takes Mara's hand before you return to the others, leaving the stopped cart and its opened cuff behind."
+          : "Lio looks along the service passages, turning carefully while he keeps Mara's hand in his. “There are others here,” he tells you. “They took some of us out to work. We have to bring everyone back.” The broken Sentry lies between the table and the cart, and Bracken's surviving commands have lost their guards. For the first time since entering Briarhold, you can plan the next move with Lio standing beside you.",
         chapter5CompanionBeat(companion, "reunion"),
       ];
       break;
@@ -408,17 +409,17 @@ export function getChapter5SignalNarrative(signal: string, state: BriarholdState
 }
 
 export function getChapter5BattleAftermath(kind: Chapter5BattleKind): string {
-  if (kind === "boss") return "The Thornroot Sentry gives way across the table's broken fittings, scattering green instruction plates over the floor. Wounded, Bracken catches himself against the command console, leaving a dark smear along its edge. He gathers a packet of engraved plates from the scattered instructions. “The routing cipher!” Lio calls from the carriage. Bracken tucks it inside his coat and pulls a release beside the westbound shutter.\n\nThe carriage brake lifts. Lio's frame begins to move down the rail, and Mara turns toward him before Bracken has reached the side passage. You have a clear sight of the escaping captain for a moment, but Lio is still fastened to the moving assembly. You go to the carriage. Behind you, Bracken forces his passage shut. The broken Sentry sprawls beside the rail as Mara points toward Lio's wheel, already reaching for the carriage frame.";
+  if (kind === "boss") return "The Sentry crashes to the floor. Bracken staggers back, blood running down his sleeve. He snatches a packet of engraved plates from the table. “The routing cipher!” Lio shouts.\n\nYou move to cut Bracken off. He looks straight at you, then kicks the cart's brake handle up. The cart lurches downhill. Lio is still cuffed to it. Ahead of him, the open doorway leads straight onto the stone steps.\n\n“LIO!” Mara screams. Lio claws at the cuff. He cannot jump clear. Bracken limps toward the side door. You can reach him or the cart. If you chase him, Lio goes down the stairs.\n\nYou turn toward Lio. Bracken slams the door behind him.";
   if (kind === "door") return "You take the duty key from the fallen guard's belt while Mara watches the junction, then turn it in the inner lock. The door opens onto a thick-walled passage. Answering footsteps carry from somewhere beyond its first bend.";
   if (kind === "gate") return "The receiving guards fall out of the fight, leaving the wagon's path into the station clear. Its driver backs away from the scattered tally boards while Mara follows you through the gate and behind the service wall. The alarm has carried ahead of the party; you reach the landing with Briarhold Alerted.";
   return "The investigating guard lies disarmed on the platform, his weapon beyond his reach. Mara checks the stairs while you listen to the answering calls farther inside. A door opens beyond the inner post, and hurried boots cross the passage behind it.";
 }
 
 export function getChapter5BrakeNarrative(lit: boolean, check: SkillCheckResult | null, injury: number): string {
-  if (lit) return "In the guide lamp's light, you follow the brass rod from its handle to the brake shoe. You draw the handle down until the shoe grips the rail, then ease your shoulder away from the frame to test the hold. The carriage stays still. Lio looks toward Mara and lets his hand fall away from the jammed wheel.";
+  if (lit) return "You grab the handle and haul it down. Metal shrieks against the wheel. The cart jerks to a stop, a few feet short of the stairs. You hold a moment longer. It stays still. “It's stopped,” you tell Mara. “I've got it.”";
   return `${check.success
-    ? "You trace the control rods past the false arrows and find where the real brake shoe bears against the rail. Keeping your hand clear of the crossed linkage, you bring the correct handle down until the carriage takes its own weight."
-    : `You follow a painted arrow to a handle whose rod doubles back beneath the housing. When you test it, the false linkage snaps across your arm${injury ? ` (${injury} HP)` : ""}. You pull clear and read the exposed fittings instead, finding the true brake and setting it before easing your hold.`}\n\nThe brake is secure and Lio is unharmed. Mara checks that his fingers are clear while you make certain the frame cannot move again. ${checkSummary(check)}.`;
+    ? "You feel beneath the seat. One rod runs straight to the wheel. You grab its handle and haul it down. Metal grinds. The cart stops."
+    : `You pull the handle beneath the painted arrow. It snaps back and strikes your arm${injury ? ` (${injury} HP)` : ""}. Pain shoots to your shoulder. “Here!” Lio points beneath the seat. You find the second handle and wrench it down. The brake catches.`}\n\nThe cart stops short of the stairs. You keep hold until you are sure it will stay. Mara reaches for Lio. ${checkSummary(check)}.`;
 }
 
 export function getChapter5Arrival(state: Chapter5SaveState, destination: Chapter5Node): string {
@@ -431,8 +432,8 @@ export function getChapter5Arrival(state: Chapter5SaveState, destination: Chapte
     ledger: state.carriageStage === "rescued" && !state.ledgerResolved ? "You follow the upper passage with Lio beside Mara. Behind the open partition, an officer is gathering pages from a desk while a woman beside him watches the doorway." : state.ledgerResolved ? "You return along the records passage and check the officer's bindings behind the partition before reaching the desk. The shaded lamp lights the writing surface, with the storage alcove sheltered beside the doorway." : "You follow the scratch of a pen through the upper doorway, then slip behind a stack of storage crates beside an unused copying bench. From that cover, you can watch the officer and the woman at his desk without crossing the lamplit aisle.",
     workshop: state.carriageStage === "rescued" && !state.workshopResolved ? "The workshop has fallen quiet. You approach its doorway with Lio and Mara, finding the sealwright beside a travelling bag at the silent press." : state.workshopResolved ? `You pass the workshop partition and return to the workbench. ${state.workshopResolution === "bypassed" ? "The workers have gone down the outer steps, beyond the service door." : "The sealwright remains secured beside the pier."} The tools and mechanical feed are within reach.` : "You descend the narrow service stair and stop outside the workshop doorway. When both workers lean over the press, you slip into the storage recess just inside the threshold and crouch behind its cooling rack, keeping Mara close against the screened side of the rack.",
     lanterns: "You climb the narrow stair with a hand beneath the rail to keep it from shaking. The warm lamp housings appear above the platform edge, their shutters waiting beside the view of the receiving yard.",
-    crown: state.brackenDefeated ? "You return past the inspection grille to the broken command fittings around the route table. The empty personnel passage lies beyond it, while the way back to the carriage remains clear." : "You pass the inspection grille and approach the broad entrance console, keeping Mara on its sheltered side. Beyond it, the route table occupies the center of the room, with the carriage rail visible farther in.",
-    carriage: state.carriageStage === "rescued" ? `You return to the transfer rail with Mara and Lio. The wheel and brake hold securely. ${state.cellsOpened ? "Along the adjoining passage, both cell doors stand open beside the lowered release bar." : "Lio turns toward the barred side passage and listens before stepping away from the rail."}` : "You cross the broken command markings toward the transfer rail. Mara follows close to the stopped machinery, looking for Lio beside the carriage frame.",
+    crown: state.brackenDefeated ? "You return past the inspection grille to the broken fittings around the route table. Bracken's closed escape door lies beyond it, while the way back to the cart remains clear." : "You pass the inspection grille and approach the broad entrance console, keeping Mara on its sheltered side. Beyond it, the route table occupies the center of the room, with Lio's cart visible farther in.",
+    carriage: state.carriageStage === "rescued" ? `You return to the stopped cart with Mara and Lio. The brake holds securely. ${state.cellsOpened ? "Along the adjoining passage, both cell doors stand open beside the lowered release bar." : "Lio turns toward the barred side passage and listens before stepping away from the cart."}` : "You cross the broken floor markings toward Lio's cart. Mara runs beside you, watching her brother struggle with his cuff.",
   };
   if (routes[destination]) return routes[destination];
   if (destination === "hub") return state.brackenDefeated

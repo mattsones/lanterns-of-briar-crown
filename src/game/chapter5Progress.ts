@@ -19,6 +19,8 @@ export type Chapter5Progress = {
   examinerLeadLearned: boolean;
   siblingsReunited: boolean;
   suppliesClaimed: boolean;
+  brackenLootClaimed: boolean;
+  postRescueRested: boolean;
   departed: boolean;
   woodsmanHeard: boolean;
   returnRoute: "safe-detour" | "tusker-hollow" | null;
@@ -33,7 +35,7 @@ export type Chapter5Progress = {
 export function buildChapter5Progress(): Chapter5Progress {
   return { workshopResolution: null, rowanContainmentUsed: false, mossBypassUsed: false,
     cellsOpened: false, porterFreed: false, porterAtWorkshop: true, wardenFreed: false, evidence: [],
-    examinerLeadLearned: false, siblingsReunited: false, suppliesClaimed: false,
+    examinerLeadLearned: false, siblingsReunited: false, suppliesClaimed: false, brackenLootClaimed: false, postRescueRested: false,
     departed: false, woodsmanHeard: false, returnRoute: null, tuskersDefeated: false,
     returnConversationHeard: false, returnedToBramblecross: false, homecomingSeen: false,
     caseWallEvidenceRead: false, caseWallComplete: false };
@@ -52,6 +54,9 @@ export function getChapter5Outcome(s: Chapter5SaveState): Chapter5Outcome {
 }
 export function isChapter5CleanupReady(s: Chapter5SaveState) {
   return getChapter5Outcome(s).rescued.length === 4 && CHAPTER_5_CONTRACT.requiredEvidence.every(id => s.evidence.includes(id));
+}
+export function areChapter5CaptivesGathered(s: Chapter5SaveState) {
+  return s.carriageStage === "rescued" && s.clerkFreed && s.porterFreed && s.wardenFreed;
 }
 export function isChapter5Complete(s: Chapter5SaveState) { return getChapter5CompletionErrors(getChapter5Outcome(s)).length === 0; }
 export function isChapter5ReturnCleared(s: Chapter5SaveState) {
@@ -113,8 +118,21 @@ export function packChapter5Supplies(s: Chapter5SaveState): Chapter5SaveState {
   return !at(s, "gathering") || !isChapter5CleanupReady(s) || s.suppliesClaimed ? s
     : { ...s, suppliesClaimed: true, feedback: CHAPTER_5_AFTERMATH.supplies };
 }
+export const CHAPTER_5_BRACKEN_LOOT = "brackens_sabre" as const;
+export function claimChapter5BrackenLoot(s: Chapter5SaveState): Chapter5SaveState {
+  return !at(s, "crown") || !s.brackenDefeated || s.carriageStage !== "rescued" || s.brackenLootClaimed || s.departed ? s
+    : { ...s, brackenLootClaimed: true, feedback: CHAPTER_5_AFTERMATH.brackenLoot };
+}
+export function restChapter5Party(s: Chapter5SaveState): Chapter5SaveState {
+  return !at(s, "gathering") || !areChapter5CaptivesGathered(s) || s.postRescueRested || s.departed ? s
+    : { ...s, postRescueRested: true, feedback: CHAPTER_5_AFTERMATH.rest };
+}
+export function applyChapter5Rest(previous: Chapter5SaveState, next: Chapter5SaveState, player: Player, companion: Companion) {
+  if (previous.postRescueRested || !next.postRescueRested || !areChapter5CaptivesGathered(next)) return { player, companion };
+  return { player: { ...player, hp: player.maxHp }, companion: companion.recruited ? { ...companion, hp: companion.maxHp } : companion };
+}
 export function departChapter5Briarhold(s: Chapter5SaveState, companion: Companion): Chapter5SaveState {
-  return !at(s, "gathering") || s.departed || getBriarholdDepartureErrors(getChapter5Outcome(s)).length ? s
+  return !at(s, "gathering") || s.departed || !s.postRescueRested || getBriarholdDepartureErrors(getChapter5Outcome(s)).length ? s
     : { ...s, departed: true, node: "dawn", view: "dawn", feedback: getChapter5FullOutcome("depart", companion) };
 }
 export function hearChapter5Woodsman(s: Chapter5SaveState, companion: Companion): Chapter5SaveState {
@@ -145,6 +163,8 @@ export const CHAPTER_5_EVIDENCE_ITEMS = {
 } as const;
 export function applyChapter5ProgressRewards(previous: Chapter5SaveState, next: Chapter5SaveState, player: Player): Player {
   const inventory = { ...player.inventory };
+  if (next.brackenLootClaimed && !previous.brackenLootClaimed && next.brackenDefeated && next.carriageStage === "rescued")
+    inventory[CHAPTER_5_BRACKEN_LOOT] = (inventory[CHAPTER_5_BRACKEN_LOOT] || 0) + 1;
   for (const id of next.evidence) inventory[CHAPTER_5_EVIDENCE_ITEMS[id]] = Math.max(1, inventory[CHAPTER_5_EVIDENCE_ITEMS[id]] || 0);
   if (next.evidence.includes("false-seals")) inventory.true_seal_fragment = Math.max(1, inventory.true_seal_fragment || 0);
   if (next.carriageStage === "rescued") inventory.briar_chain_link = Math.max(1, inventory.briar_chain_link || 0);
@@ -165,10 +185,12 @@ export function isChapter5ProgressValid(s: Chapter5SaveState) {
     s.mossBypassUsed && (!s.workshopResolution || !s.briarhold.workshopDisabled) ||
     s.evidence.some(id => id === "false-seals" ? !s.workshopResolution : id === "examiner-transfer-record" ? s.carriageStage !== "rescued" : !s.ledgerResolved) ||
     s.cellsOpened && s.carriageStage !== "rescued" || s.wardenFreed && !s.cellsOpened ||
+    s.brackenLootClaimed && (!s.brackenDefeated || s.carriageStage !== "rescued") ||
+    s.postRescueRested && !areChapter5CaptivesGathered(s) ||
     s.porterFreed && (s.porterAtWorkshop ? !isChapter5WorkshopSecure(s) : !s.cellsOpened) ||
     (s.examinerLeadLearned || s.suppliesClaimed) && !isChapter5CleanupReady(s) ||
     s.siblingsReunited && (!s.examinerLeadLearned || !isChapter5CleanupReady(s)) ||
-    s.departed && getBriarholdDepartureErrors(getChapter5Outcome(s)).length ||
+    s.departed && (!s.postRescueRested || getBriarholdDepartureErrors(getChapter5Outcome(s)).length) ||
     !s.departed && (s.woodsmanHeard || s.returnRoute || s.tuskersDefeated || s.returnConversationHeard || s.returnedToBramblecross) ||
     s.returnRoute && !s.woodsmanHeard || s.tuskersDefeated && !s.returnRoute ||
     s.returnConversationHeard && !isChapter5ReturnCleared(s) || s.returnedToBramblecross && !s.returnConversationHeard ||

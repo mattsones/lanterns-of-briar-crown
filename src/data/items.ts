@@ -23,6 +23,7 @@ export const ITEM_DB = {
   old_hatchet: { id: "old_hatchet", name: "Old Hatchet", rarity: "Common", slot: "weapon", description: "A familiar village hatchet that has split wood, trimmed roots, and somehow become yours.", bonuses: { Might: 1 }, skills: ["scrappy_chop"], icon: "🪓" },
   turnipwood_blade: { id: "turnipwood_blade", name: "Turnipwood Blade", rarity: "Uncommon", slot: "weapon", description: "A surprisingly respectable sword carved from enchanted rootwood.", bonuses: { Might: 1, Precision: 1 }, skills: ["rootcut_lunge"], icon: "🗡️" },
   pebbleknock_hammer: { id: "pebbleknock_hammer", name: "Pebbleknock Hammer", rarity: "Uncommon", slot: "weapon", description: "A squat hammer with an extremely satisfying thunk.", bonuses: { Might: 2, Grit: 1 }, skills: ["pebbleknock_slam"], icon: "🔨" },
+  brackens_sabre: { id: "brackens_sabre", name: "Bracken's Sabre", rarity: "Rare", slot: "weapon", description: "A well-balanced steel officer's blade, recovered beside the route table after Bracken's flight. Its close guard and narrow point favor a steady hand.", bonuses: { Might: 1, Precision: 2, Guard: 2 }, skills: ["measured_cut"], icon: "⚔️" },
   gatewright_hookblade: { id: "gatewright_hookblade", name: "Gatewright Hookblade", rarity: "Rare", slot: "weapon", description: "A Westroot gatewright's short hooked blade, balanced for clearing roots, catching shields, and working in narrow tunnels.", bonuses: { Might: 2, Precision: 2, Craft: 1 }, skills: ["keeper_gatehook"], icon: "⚒️" },
   gatewright_passage_pike: { id: "gatewright_passage_pike", name: "Gatewright Passage Pike", rarity: "Rare", slot: "weapon", description: "A short Westroot pike with a sighting notch for cramped galleries, culverts, and enemies who mistake distance for safety.", bonuses: { Precision: 2, Instinct: 2, Guard: 1 }, skills: ["sightline_thrust"], icon: "🔱" },
   gatewright_counterweight_maul: { id: "gatewright_counterweight_maul", name: "Gatewright Counterweight Maul", rarity: "Rare", slot: "weapon", description: "A compact maul patterned after a gate counterweight: slow to commit, difficult to argue with, and made for breaking a held line.", bonuses: { Might: 3, Grit: 2 }, skills: ["counterweight_drop"], icon: "🔨" },
@@ -54,6 +55,7 @@ export const BATTLE_CONSUMABLES = {
 
 export const SHOP_PRICES = {
   old_hatchet: 6, turnipwood_blade: 12, pebbleknock_hammer: 19, kettle_helm: 10, briar_vest: 16, giggleleaf_cloak: 17,
+  brackens_sabre: 34,
   friendmaker_cloak: 14, stormbell_charm: 18, lantern_pin: 15, warden_chain: 26, healing_fizzpop: 7, trail_snack: 5,
   gatewright_hookblade: 32, gatewright_passage_pike: 30, gatewright_counterweight_maul: 34, ironroot_ribplate: 29, low_arch_roothelm: 23, old_waykeeper_helm: 28, fizzberry_handpie: 9, bubbleburst_tonic: 6, moonmint: 4, bubblecap: 4,
 };

@@ -1,0 +1,10 @@
+# Briarhold rescue room — open-guide light variant v01
+
+Built-in imagegen, 2026-11-13. Edit target: closed-guide paint v01. Light placement: revision 3 open-guide master. Changes light only; cart and actors remain separate overlays.
+
+Use case: lighting-weather.
+Asset: matching OPEN-guide lighting background for the same Briarhold rescue room, 4:3.
+Image 1 is the EXACT edit target, the painted CLOSED-guide room. Image 2 is the approved OPEN-guide light-footprint diagram only, not a style reference.
+Change ONLY the ordinary amber guide light entering the high south-wall slot. Preserve Image 1's entire room, framing, camera, all walls/openings, inspection grille above E, green lamps and green pools, table/chart, entrance console, brass strips, cells and stairs in EXACTLY the same positions and proportions. No added or removed object. The open/closed images must register under the same map overlay.
+The amber shaft enters through the existing narrow high slot at (35%,73.3%) on the SOUTH wall, NOT from a ceiling, north window or any green lamp. Cast a broad but bounded warm amber fan diagonally UP AND RIGHT across the lower-right room. Use Image 2 geometry: triangle vertices (35%,73.3%),(80%,43.3%),(82.5%,71.3%). Direct light is soft-edged painterly oil light, not a hard vector triangle, laser or magic beam. Its strongest useful illumination reaches the EMPTY cart/brake space near (64–68%,57–65%). The two flush brass floor guide strips at x60.5% and67.5%, y50–72%, become clearly warm and readable. Add a little soft reflected warm bounce immediately around that floor area, without lighting the whole room orange. The first loading-step edge may catch a restrained warm glint; the stairs descend into darkness.
+The external ordinary guide lamp remains outside this crop; do not paint a lamp in the slot. Keep the other four green-glass work lights unchanged and distinct. Keep the upper room and inspection gallery predominantly cool. No cart, people, cuffs, actor shadows, text, arrows, marker, border, grid or UI. No change in any geometry or camera. Same 4:3 full canvas, ideally same 1448 x1086 native dimensions / 2048 x1536 export composition.

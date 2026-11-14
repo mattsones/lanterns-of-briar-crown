@@ -4,7 +4,7 @@ The documentation is grouped by purpose. `codex-handoff.md` stays at the root be
 
 ## Start Here
 
-Chapter 5's active implementation brief is [the executable vertical-slice contract](story/chapter-5-vertical-slice-contract.md), backed by [the accepted planning decisions](planning/chapter-5-planning-decisions.md). Its next gate is the playable lantern/boss/carriage-rescue spike.
+Chapter 5's accepted greybox follows [the executable vertical-slice contract](story/chapter-5-vertical-slice-contract.md), backed by [the accepted planning decisions](planning/chapter-5-planning-decisions.md). Bracken's Sabre and the once-only post-gathering rest/heal beat are implemented. Next: integrate the accepted [approach](art/briarhold-approach-paint-v01.md) and [rescue-room](art/briarhold-rescue-paint-v01.md) art, finish remaining maps, and follow [the room/long-narrative scene-art plan](art/chapter-5-scene-art-plan.md).
 
 1. [`playtest-notes/2026-07-17-current-status.md`](playtest-notes/2026-07-17-current-status.md) — concise current-state pickup; the filename is historical, but the document title and contents carry the current update date.
 2. [`playtest-notes/2026-09-04-chapter-4-completion-retrospective.md`](playtest-notes/2026-09-04-chapter-4-completion-retrospective.md) — Chapter 4 process assessment and the recommended Chapter 5 development gates.
@@ -64,6 +64,11 @@ These documents define the implemented Chapter 3 story foundation and its pendin
 
 ## Active Planning Documents
 
+- [`art/chapter-5-art-production.md`](art/chapter-5-art-production.md) — owner-approved greybox handoff to map scale/lighting masters and Chapter 5 art production.
+- [`art/chapter-5-masters-v01.md`](art/chapter-5-masters-v01.md) — first Briarhold site plan, approach/rescue scale and lighting sheets, editable geometry and interactive review.
+- [`art/briarhold-approach-paint-v01.md`](art/briarhold-approach-paint-v01.md) — approach painting candidate, owner runoff/shelter corrections, full prompts and painted-map alignment review.
+- [`art/briarhold-rescue-paint-v01.md`](art/briarhold-rescue-paint-v01.md) — closed/open rescue-room paintings, track-free floor, movable cart, full prompts and alignment review.
+- [`art/chapter-5-scene-art-plan.md`](art/chapter-5-scene-art-plan.md) — most Briarhold interior rooms plus long narrative beats throughout Chapters 1–5, with reuse and state/cast requirements.
 - [`planning/refactor-roadmap.md`](planning/refactor-roadmap.md) — staged architecture and chapter roadmap.
 - [`planning/chapter-4-development-process.md`](planning/chapter-4-development-process.md) — completed process record for closing Chapter 3 and building Chapter 4.
 - [`planning/gameplay-ux-redesign-plan.md`](planning/gameplay-ux-redesign-plan.md) — implemented map-first and responsive-shell decisions.

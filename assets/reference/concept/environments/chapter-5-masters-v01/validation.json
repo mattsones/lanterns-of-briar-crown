@@ -1,0 +1,83 @@
+{
+  "status": "PASS",
+  "modelRevision": 4,
+  "samplingMetres": 0.025,
+  "markerIncludesShadow": true,
+  "frames": {
+    "desktop": {
+      "viewport": [
+        1280,
+        720
+      ],
+      "mapWidth": 870,
+      "token": 52
+    },
+    "phone390": {
+      "viewport": [
+        390,
+        844
+      ],
+      "mapWidth": 332,
+      "token": 32
+    },
+    "phone430": {
+      "viewport": [
+        430,
+        932
+      ],
+      "mapWidth": 372,
+      "token": 32
+    }
+  },
+  "clearance": [
+    {
+      "map": "approach",
+      "frame": "desktop",
+      "minimumMarkerGapMetres": 1.117,
+      "at": "initial: a03→gate / receiving-wagon"
+    },
+    {
+      "map": "approach",
+      "frame": "phone390",
+      "minimumMarkerGapMetres": 0.263,
+      "at": "initial: overlook→a01 / shelter-south-stub"
+    },
+    {
+      "map": "approach",
+      "frame": "phone430",
+      "minimumMarkerGapMetres": 0.542,
+      "at": "initial: a03→gate / receiving-wagon"
+    },
+    {
+      "map": "rescue",
+      "frame": "desktop",
+      "minimumMarkerGapMetres": 0.615,
+      "at": "initial: r05→crown / parked-cart"
+    },
+    {
+      "map": "rescue",
+      "frame": "phone390",
+      "minimumMarkerGapMetres": 0.215,
+      "at": "initial: r05→crown / parked-cart"
+    },
+    {
+      "map": "rescue",
+      "frame": "phone430",
+      "minimumMarkerGapMetres": 0.316,
+      "at": "initial: r05→crown / parked-cart"
+    }
+  ],
+  "checks": [
+    "unique bidirectional arrow aliases",
+    "world/export aspect",
+    "anchor triggers and crop bounds",
+    "full movement-edge marker and human clearance",
+    "both entrances rejoin at landing",
+    "grille above entry without crossing doorway",
+    "all three grille views through aperture, clear of furniture",
+    "first sight before door approach",
+    "cart stopping distance",
+    "low party-light cart occlusion"
+  ],
+  "failures": []
+}

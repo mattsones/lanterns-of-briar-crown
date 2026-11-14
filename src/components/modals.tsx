@@ -12,6 +12,7 @@ import {
   isCompanionConscious,
 } from "../game/companions";
 import { describeEnemyIntentEffect } from "../game/battle";
+import { getBriarholdCompanionGuard } from "../game/chapter5Combat";
 import { checkSummary, resolveSkillCheck } from "../game/dice";
 import { canCraftRecipe, formatIngredients, gainItem, getBuyPrice, getEquippedCount, getItemHighlights, getSellPrice } from "../game/inventory";
 import { formatSaveTimestamp } from "../game/save";
@@ -1208,6 +1209,7 @@ export function BattleModal({ battle, player, companion, heroSkills, heroAttack,
                     <div className="truncate text-lg font-semibold">{companion.name}</div>
                     <div className="text-xs text-white/55">{companion.role}</div>
                     <div className="mt-2"><Meter value={companion.hp} max={companion.maxHp} label="Companion HP" colorClass="bg-rose-400" /></div>
+                    {getBriarholdCompanionGuard(companion, battle.heroGuard || 0, !!battle.chapter5Profile) > 0 ? <div className="mt-2 text-xs text-sky-100">Guard 4 · Shielding Step</div> : null}
                   </div>
                 </article>
               ) : null}
@@ -1229,7 +1231,7 @@ export function BattleModal({ battle, player, companion, heroSkills, heroAttack,
                       {defeated ? <span className="text-xs text-white/50">Defeated</span> : null}
                     </div>
                     <div className="mt-2"><Meter value={enemy.hp} max={enemy.maxHp} label="HP" colorClass="bg-orange-400" /></div>
-                    {enemy.guard > 0 ? <div className="mt-2 rounded-xl bg-sky-300/10 px-3 py-2 text-xs text-sky-100">Guard: {enemy.guard}</div> : null}
+                    {enemy.guard > 0 ? <div className="mt-2 rounded-xl bg-sky-300/10 px-3 py-2 text-xs text-sky-100">Guard: {enemy.guard}{battle.chapter5Profile ? " · this round" : ""}</div> : null}
                     <div className="mt-2 rounded-xl bg-white/5 px-3 py-2 text-xs text-white/65">Intent: <span className="text-orange-100">{enemy.intent}</span></div>
                     {describeEnemyIntentEffect(enemy) ? <div className="mt-1 px-3 text-xs text-amber-100/75">{describeEnemyIntentEffect(enemy)}</div> : null}
                   </button>
@@ -1269,7 +1271,8 @@ export function BattleModal({ battle, player, companion, heroSkills, heroAttack,
                 })}
               </div>
             ) : null}
-            {companion.recruited ? <div className="mt-4 text-xs text-white/60">Companion command: <span className="text-white">{companion.command}</span> • {getCompanionCommandHint(companion)}</div> : null}
+            {companion.recruited ? <div className="mt-4 text-xs text-white/60">Companion command: <span className="text-white">{companion.command}</span> • {getCompanionCommandHint(companion)}{battle.chapter5Profile && companion.id === "rowan" && companion.command === "Defend Me" ? " In this fight, Shielding Step also gives Rowan 4 Guard." : ""}</div> : null}
+            {battle.chapter5Profile ? <p className="mt-2 text-xs text-amber-100/70">Enemy Guard lasts until the next enemy turn. A new defensive action can renew it.</p> : null}
           </section>
 
           <details className="rounded-3xl border border-white/10 bg-black/20 p-4">

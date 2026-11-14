@@ -7,7 +7,7 @@ import { isCompanionConscious } from "../game/companions";
 import { CAPTIVE_LANTERN_PANES, CAPTIVE_LANTERN_SIGNALS, CHAPTER_5_CHECKS, CHAPTER_5_SCENE_IDS } from "../story/chapter5";
 import { CHAPTER_5_ACTION_NARRATIVE as narrative, chapter5CompanionBeat, getChapter5BrakeNarrative, getChapter5EntryNarrative, getChapter5GuardNarrative, getChapter5SceneParagraphs } from "../story/chapter5Narrative";
 import type { Companion, Player, StatBlock } from "../game/types";
-import { acceptOfficerSurrender, bypassChapter5Feed, collectChapter5Evidence, departChapter5Briarhold, finishChapter5CaseWall, freeChapter5CellCaptive, freeChapter5WorkshopCaptive, hearChapter5Examiner, hearChapter5ReturnTalk, hearChapter5Woodsman, isChapter5CleanupReady, isChapter5WorkshopSecure, openChapter5Cells, packChapter5Supplies, readChapter5CaseWall, resolveChapter5Workshop, reuniteChapter5Siblings, seeChapter5Homecoming } from "../game/chapter5Progress";
+import { acceptOfficerSurrender, areChapter5CaptivesGathered, bypassChapter5Feed, claimChapter5BrackenLoot, collectChapter5Evidence, departChapter5Briarhold, finishChapter5CaseWall, freeChapter5CellCaptive, freeChapter5WorkshopCaptive, hearChapter5Examiner, hearChapter5ReturnTalk, hearChapter5Woodsman, isChapter5CleanupReady, isChapter5WorkshopSecure, openChapter5Cells, packChapter5Supplies, readChapter5CaseWall, resolveChapter5Workshop, restChapter5Party, reuniteChapter5Siblings, seeChapter5Homecoming } from "../game/chapter5Progress";
 import { CHAPTER_5_AFTERMATH, getChapter5FullOutcome } from "../story/chapter5Aftermath";
 import { getChapter5Landmark, hasChapter5Visited } from "../story/chapter5Knowledge";
 
@@ -120,7 +120,7 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
       ...current, carriageStage: result.stage, brakeCheck: check,
       milestoneAwarded: completed || current.milestoneAwarded,
       feedback: completed ? "You lift the release pin and guide the cuff away from Lio's wrist. Mara reaches him before the iron has finished settling against the seat, holding him so tightly that he has to laugh once, breathlessly, against her shoulder. “Still you,” she whispers. His free hand closes around the back of her coat. “Still me.” You step clear of the frame, giving them room while keeping the empty passage in view." :
-        s.carriageStage === "secure-carriage" ? `Mara calls, “Lio, wheel first!” He breaks a tally bar against the seat and drives its thick end into the spokes. The wheel catches hard enough to pull him against the restraint. You reach the frame before it can wrench the bar loose, bracing its weight against the rail bed. ${chapter5CompanionBeat(companion, "secure")}` :
+        s.carriageStage === "secure-carriage" ? `Lio drives the wooden bar through the wheel. The bar cracks. The cart jolts, yanking him against the cuff. You catch its side and dig your boots into the floor. ${chapter5CompanionBeat(companion, "secure")} Mara runs to her brother.` :
           getChapter5BrakeNarrative(s.briarhold.lanternsRestored, check, injury),
     }, { player: { ...player, hp: player.hp - injury,
       xp: completed && !s.milestoneAwarded ? chapter5MilestoneXp(player) : player.xp } });
@@ -277,10 +277,11 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
       </> : null}
       {view === "crown" ? <>
         {!state.brackenDefeated ? action("fight-bracken", "Confront Bracken and his supports", () => prepareBattle("boss"), !state.lioSeen) : null}
+        {state.carriageStage === "rescued" && !state.brackenLootClaimed ? action("take-bracken-loot", "Take Bracken's fallen sabre", () => change(claimChapter5BrackenLoot)) : null}
         {state.carriageStage === "rescued" && !state.evidence.includes("examiner-transfer-record") ? action("take-docket", "Take the separate prisoner transfer docket", () => change(s => collectChapter5Evidence(s, "examiner-transfer-record"))) : null}
       </> : null}
       {view === "carriage" ? <>
-        {state.carriageStage !== "rescued" ? action("rescue-step", { "secure-carriage": "Secure the carriage", "set-brake": b.lanternsRestored ? "Set the true brake" : "Read the linkage and set the brake", "free-lio": "Release Lio's restraints", rescued: "" }[state.carriageStage], rescue) : <>
+        {state.carriageStage !== "rescued" ? action("rescue-step", { "secure-carriage": "Save Lio — catch the cart", "set-brake": "Pull the brake", "free-lio": "Open Lio's cuff", rescued: "" }[state.carriageStage], rescue) : <>
           <div className="rounded-xl border border-emerald-200/25 bg-emerald-950/30 p-3"><strong>Lio is rescued.</strong> Follow the carriage passage to the adjoining cells, gather the surviving originals, and bring everyone to the sheltered service court.</div>
           {action("continue-rescue", "Help the other prisoners", close)}
         </>}
@@ -293,6 +294,7 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
       </> : null}
       {view === "gathering" ? <>
         <div data-testid="ch5-departure-checklist" className="rounded-xl bg-black/25 p-3">
+          <p>{state.postRescueRested ? "✓ Party rested and wounds treated" : "○ Rest and treat the party's wounds before departure"}</p>
           <p>{state.clerkFreed ? "✓ Sella safe" : hasChapter5Visited(state, "ledger") ? "○ Woman at the records desk" : "○ Search the workrooms for captives"} · {state.porterFreed ? "✓ Orren safe" : state.porterAtWorkshop ? hasChapter5Visited(state, "workshop") ? "○ Chained laborer at the press" : "○ Search the workrooms for captives" : hasChapter5Visited(state, "cells") ? "○ Nearer cell prisoner" : "○ Search the side passage"} · {state.wardenFreed ? "✓ Hesta safe" : hasChapter5Visited(state, "cells") ? "○ Farther cell prisoner" : "○ Check every barred doorway"}</p>
           {([["transfer-ledger", state.ledgerResolved ? "Records desk: transfer ledger" : "Search the upper workroom for records"], ["genuine-office-instruction", state.ledgerResolved ? "Records desk: loose instruction sheet" : "Gather the surviving paperwork"], ["false-seals", state.workshopResolved ? "Workshop: seal-making materials" : "Search the lower workroom for evidence"], ["examiner-transfer-record", state.evidence.includes("examiner-transfer-record") ? "Route table: prisoner transfer docket" : "Route table: gather the remaining papers"]] as const).map(([id, label]) => <p key={id}>{state.evidence.includes(id) ? "✓" : "○"} {label}</p>)}
         </div>
@@ -301,7 +303,8 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
         {state.examinerLeadLearned && !state.siblingsReunited ? action("reunite-siblings", "Give Mara and Lio time together", () => change(s => reuniteChapter5Siblings(s, companion))) : null}
         {state.siblingsReunited ? action("review-reunion", "Recall the siblings' reunion", () => change(s => ({ ...s, feedback: getChapter5FullOutcome("reunion", companion) }))) : null}
         {isChapter5CleanupReady(state) && !state.suppliesClaimed ? action("pack-supplies", "Pack the road stores for everyone", () => change(packChapter5Supplies)) : null}
-        {action("depart", "Leave Briarhold at dawn — take the eastern trails home", () => change(s => departChapter5Briarhold(s, companion)), !state.siblingsReunited || !state.examinerLeadLearned || !isChapter5CleanupReady(state))}
+        {!state.postRescueRested ? action("rest-party", "Rest together and tend everyone's wounds — restore party HP", () => change(restChapter5Party), !areChapter5CaptivesGathered(state)) : null}
+        {action("depart", "Leave Briarhold at dawn — take the eastern trails home", () => change(s => departChapter5Briarhold(s, companion)), !state.postRescueRested || !state.siblingsReunited || !state.examinerLeadLearned || !isChapter5CleanupReady(state))}
       </> : null}
       {view === "woodsman" && !state.woodsmanHeard ? action("hear-woodsman", "Rest with the woodsman and ask about the trails", () => change(s => hearChapter5Woodsman(s, companion))) : null}
       {view === "woodsman" && state.woodsmanHeard ? action("review-woodsman", "Recall Garrick's account and trail warning", () => change(s => ({ ...s, feedback: getChapter5FullOutcome("woodsman", companion) }))) : null}

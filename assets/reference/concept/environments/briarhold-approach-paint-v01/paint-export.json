@@ -1,0 +1,22 @@
+{
+  "status": "reference candidate; awaiting owner art review",
+  "generator": "built-in imagegen",
+  "selectedPass": "v05",
+  "ownerCorrections": [
+    "Natural wet runoff, no maintained trail",
+    "Shelter farther off road with unmarked uphill scramble"
+  ],
+  "native": {
+    "width": 1672,
+    "height": 941
+  },
+  "export": {
+    "width": 2048,
+    "height": 1152,
+    "webpBytes": 334964,
+    "quality": 90
+  },
+  "normalization": "Full-image resize, no crop; native aspect differs from 16:9 by approximately 0.05%. No new image detail is created by export.",
+  "runtimeRegistered": false,
+  "modelRevision": 2
+}

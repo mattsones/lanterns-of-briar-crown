@@ -7,11 +7,56 @@ import type { BriarholdAlert } from "../src/story/chapter5";
 import type { SkillCheckResult } from "../src/game/types";
 import { getChapter5Landmark } from "../src/story/chapter5Knowledge";
 import { getChapter5SceneParagraphs } from "../src/story/chapter5Narrative";
+import { buildEnemy, ENEMY_DB } from "../src/data/enemies";
+import { damageBattleEnemy, prepareBattleEnemies, resolveEnemyIntentEffects, rotateEnemyIntent } from "../src/game/battle";
+import { getBriarholdCompanionGuard, resolveBriarholdBossIntentEffects } from "../src/game/chapter5Combat";
 
 const payload = () => parseDiskSaveText(readFileSync("public/saves/chapter-4-complete.json", "utf8")).payload;
 const officerCheck = (success: boolean): SkillCheckResult => ({ stat: "Precision", dc: 12,
   roll: success ? 16 : 1, bonus: 2, total: success ? 18 : 3, success,
   label: `Precision Check: ${success ? 16 : 1} + 2 = ${success ? 18 : 3} vs 12` });
+
+test("Briarhold formation Guard expires unless renewed, leaving alternating openings", () => {
+  const enemies = prepareBattleEnemies(["bracken_voss", "thornroot_sentry", "thornseal_guard", "thornseal_guard"].map(buildEnemy));
+  const before = JSON.parse(JSON.stringify(enemies));
+  const first = resolveBriarholdBossIntentEffects(enemies);
+  expect(first.enemies.map(enemy => enemy.guard)).toEqual([4, 0, 4, 4]);
+  const second = resolveBriarholdBossIntentEffects(first.enemies.map(rotateEnemyIntent));
+  expect(second.enemies.map(enemy => enemy.guard)).toEqual([5, 5, 0, 0]);
+  const third = resolveBriarholdBossIntentEffects(second.enemies.map(rotateEnemyIntent));
+  expect(third.enemies.map(enemy => enemy.guard)).toEqual([4, 0, 4, 4]);
+  expect(third.enemies.map(enemy => enemy.hp)).toEqual(before.map(enemy => enemy.hp));
+  expect(enemies).toEqual(before);
+});
+
+test("ordinary enemy Guard retains its existing pool behavior", () => {
+  const enemies = prepareBattleEnemies(["bracken_voss", "thornroot_sentry", "thornseal_guard", "thornseal_guard"].map(buildEnemy));
+  const first = resolveEnemyIntentEffects(enemies);
+  const second = resolveEnemyIntentEffects(first.enemies.map(rotateEnemyIntent));
+  const third = resolveEnemyIntentEffects(second.enemies.map(rotateEnemyIntent));
+  expect(third.enemies.map(enemy => enemy.guard)).toEqual([5, 5, 4, 4]);
+});
+
+test("breaking Briarhold Guard clears the current shield while a new defensive action can renew it", () => {
+  const enemies = prepareBattleEnemies(["bracken_voss", "thornroot_sentry"].map(buildEnemy)).map(rotateEnemyIntent);
+  const defended = resolveBriarholdBossIntentEffects(enemies).enemies;
+  const broken = damageBattleEnemy(defended, defended[0].battleId, 3, { guardBreak: true });
+  expect(broken[0]).toMatchObject({ hp: ENEMY_DB.bracken_voss.hp - 3, guard: 0 });
+  expect(resolveBriarholdBossIntentEffects(broken).enemies[0].guard).toBe(5);
+});
+
+test("Rowan's boss-fight self-protection requires a conscious Shielding Step and does not copy stronger hero Guard", () => {
+  const rowan = { ...payload().companion, command: "Defend Me", hp: 22 };
+  expect(getBriarholdCompanionGuard(rowan, 4, true)).toBe(4);
+  expect(getBriarholdCompanionGuard(rowan, 7, true)).toBe(4);
+  expect(getBriarholdCompanionGuard(rowan, 0, true)).toBe(0);
+  expect(getBriarholdCompanionGuard(rowan, 4, false)).toBe(0);
+  expect(getBriarholdCompanionGuard({ ...rowan, hp: 0 }, 4, true)).toBe(0);
+  expect(getBriarholdCompanionGuard({ ...rowan, recruited: false }, 4, true)).toBe(0);
+  expect(getBriarholdCompanionGuard({ ...rowan, command: "Attack Freely" }, 4, true)).toBe(0);
+  expect(getBriarholdCompanionGuard({ ...rowan, id: "tilda" }, 4, true)).toBe(0);
+  expect(getBriarholdCompanionGuard(undefined, 4, true)).toBe(0);
+});
 
 test("opening the guide lamp exposes the party to guards at the post, preserves personnel, and cannot repeat", () => {
   for (const alert of ["quiet", "suspicious", "alerted"] as const) for (const removed of ["none", "silent", "open"] as const) {
@@ -228,7 +273,7 @@ test("frozen boss profile changes False Order alone and milestone keeps earned X
   s.bossProfile = getBriarholdBossProfile(s.briarhold);
   const enemies = buildChapter5BattleEnemies(s);
   expect(enemies[0].effectA.heroAttackPenalty).toBe(0);
-  expect(enemies[0].attackA).toEqual({ count: 2, sides: 6, bonus: 3 });
+  expect(enemies[0].attackA).toEqual(ENEMY_DB.bracken_voss.attackA);
   expect(enemies[1].effectA.heroAttackPenalty).toBe(2);
   const hero = payload().player;
   expect(chapter5MilestoneXp(hero)).toBe(198);

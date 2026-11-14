@@ -1,6 +1,7 @@
 export const SKILL_DB = {
   scrappy_chop: { id: "scrappy_chop", name: "Scrappy Chop", kind: "attack", count: 1, sides: 6, stats: ["Might"], baseBonus: 1, bonusVs: ["Briar", "Thorn", "Root"], description: "A familiar hatchet swing. +2 damage against thorn, briar, or root enemies." },
   rootcut_lunge: { id: "rootcut_lunge", name: "Rootcut Lunge", kind: "attack", count: 1, sides: 8, stats: ["Precision"], baseBonus: 1, description: "A cleaner, more precise blade strike guided by footwork." },
+  measured_cut: { id: "measured_cut", name: "Measured Cut", kind: "attack", count: 1, sides: 10, stats: ["Precision", "Guard"], divisor: 3, baseBonus: 1, pierce: true, description: "Keep a guarded stance and place a controlled sabre cut through an opening. Pierces enemy Guard." },
   pebbleknock_slam: { id: "pebbleknock_slam", name: "Pebbleknock Slam", kind: "attack", count: 1, sides: 10, stats: ["Might"], baseBonus: 0, guardBreak: true, description: "A heavy hammer blow that breaks the enemy's guard for this hit." },
   keeper_gatehook: { id: "keeper_gatehook", name: "Passage Gatehook", kind: "attack", count: 1, sides: 10, stats: ["Might", "Precision"], divisor: 3, baseBonus: 1, guardBreak: true, description: "Catch a guard, root, or shield edge and turn a cramped passage into an advantage." },
   sightline_thrust: { id: "sightline_thrust", name: "Sightline Thrust", kind: "attack", count: 1, sides: 10, stats: ["Precision", "Instinct"], divisor: 3, baseBonus: 1, pierce: true, description: "Use the pike's sighting notch to find a clean line through cover and guard." },

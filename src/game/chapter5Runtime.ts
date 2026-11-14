@@ -23,7 +23,7 @@ export const CH5_NODES = {
   door: { x: 2, y: 1, label: "Guarded inner door", icon: "🔒" },
   grille: { x: 3, y: 1, label: "Inspection grille", icon: "👁️" },
   crown: { x: 4, y: 1, label: "Crown Table", icon: "♜" },
-  carriage: { x: 4, y: 2, label: "Transfer carriage", icon: "⚙️" },
+  carriage: { x: 4, y: 2, label: "Lio's cart", icon: "⚙️" },
   cells: { x: 5, y: 1, label: "Adjoining cells", icon: "🗝️" },
   gathering: { x: 0, y: 2, label: "Sheltered service court", icon: "🫂" },
   dawn: { x: 0, y: 1, label: "Dawn departure", icon: "🌅" },
@@ -95,6 +95,9 @@ export function normalizeChapter5Save(value: unknown): Chapter5SaveState {
   // Keep a porter already encountered/rescued in the old cell layout there.
   // Earlier checkpoints receive the new forced-work detail without a rescue grant.
   if (raw.porterAtWorkshop === undefined) next.porterAtWorkshop = !(raw.cellsOpened || raw.porterFreed || raw.node === "cells" || raw.departed);
+  // An older party already on its return journey must not be sent back to rest.
+  // Mark the beat spent without healing or granting retrospective loot on load.
+  if (raw.postRescueRested === undefined && raw.departed === true) next.postRescueRested = true;
   for (const key of Object.keys(defaults)) {
     if (typeof defaults[key] === "boolean" && typeof next[key] !== "boolean") return fail();
   }

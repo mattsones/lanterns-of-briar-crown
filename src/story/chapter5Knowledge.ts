@@ -24,7 +24,7 @@ export function getChapter5Landmark(s: Chapter5SaveState, node: Chapter5Node): {
     lanterns: ["Narrow stair", "Signal platform", "🏮"],
     grille: ["Inner passage", "Inspection grille", "👁️"],
     crown: ["Inner chamber", "Route-table chamber", "♜"],
-    carriage: ["Rail passage", "Transfer carriage", "⚙️"],
+    carriage: ["Lower passage", "Lio's cart", "⚙️"],
     cells: ["Side passage", "Adjoining cells", "🗝️"],
     woodsman: ["Timber clearing", "Woodsman's clearing", "🪵"],
     hollow: ["Lower trail", "Tusker hollow", "🐗"],

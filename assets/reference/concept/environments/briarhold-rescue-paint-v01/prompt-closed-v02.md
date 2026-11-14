@@ -1,0 +1,8 @@
+# Owner correction: remove floor tracks — closed light
+
+Built-in imagegen, 2026-11-13. Edit target: closed-guide v01. Current candidate removes rail-like brass floor strips entirely; ordinary workcart on worn stone beside steps.
+
+Use case: precise-object-edit.
+Image 1 is the CLOSED-guide Briarhold rescue-room painting. Owner correction: REMOVE THE TWO CART TRACKS / BRASS RAIL-LIKE STRIPS. This is an ordinary wheeled workcart on an old stone service landing beside loading steps, NOT a cart running on rails.
+Change only the two thin long gold/brass lines at x60.5% and67.5%, running y46–73.3% toward the stairway. Remove them COMPLETELY, including both raised-looking ends and any long straight groove/shadow beneath them. Fill those narrow areas with seamlessly matching irregular worn stone flagstones, mortar joints and subtle uneven-floor wear. No paired wheel ruts, grooves, inset tracks, guide strips, rails, lines or constructed ramp remain. A plain slightly uneven stone floor reaches the head of the stairs. Bracken creates the danger by releasing an ordinary parked cart; the building has no built-in track-to-stairs system.
+Preserve EVERY other feature of the image exactly: room framing, north-up overhead camera, grille above the left entry, table and console positions and props, all four green work lamps, separate east exit, loading steps, cell shells and all other stone texture. Preserve this closed guide-lamp lighting state exactly: no amber fan; the high south-wall slot stays dark, green work-light pools unchanged. Do not move, resize or add any object, shadow, wall, doorway or light source. No people, cart, text, arrows, grid, symbols, tokens or UI. Same 4:3 canvas and pixel-aligned geometry, delicate painted detail, avoid blurring.
