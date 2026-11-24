@@ -1,0 +1,52 @@
+{
+  "date": "2026-11-19",
+  "scope": "Standalone v02 review; no game integration",
+  "guard": "thornseal-guard-portrait-v02.webp",
+  "frames": [
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "portraitHeights": [
+        80,
+        80,
+        80,
+        80
+      ],
+      "columns": 4,
+      "pageErrors": 0,
+      "horizontalOverflow": false
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "portraitHeights": [
+        64,
+        64,
+        64,
+        64
+      ],
+      "columns": 2,
+      "pageErrors": 0,
+      "horizontalOverflow": false
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "portraitHeights": [
+        64,
+        64,
+        64,
+        64
+      ],
+      "columns": 2,
+      "pageErrors": 0,
+      "horizontalOverflow": false
+    }
+  ]
+}

@@ -4,7 +4,9 @@ The documentation is grouped by purpose. `codex-handoff.md` stays at the root be
 
 ## Start Here
 
-Chapter 5's accepted greybox follows [the executable vertical-slice contract](story/chapter-5-vertical-slice-contract.md), backed by [the accepted planning decisions](planning/chapter-5-planning-decisions.md). Bracken's Sabre and the once-only post-gathering rest/heal beat are implemented. Next: integrate the accepted [approach](art/briarhold-approach-paint-v01.md) and [rescue-room](art/briarhold-rescue-paint-v01.md) art, finish remaining maps, and follow [the room/long-narrative scene-art plan](art/chapter-5-scene-art-plan.md).
+Chapter 5's accepted route follows [the executable vertical-slice contract](story/chapter-5-vertical-slice-contract.md), backed by [the accepted planning decisions](planning/chapter-5-planning-decisions.md). Bracken's Sabre and the once-only post-gathering rest/heal beat are implemented. The [approach and rescue-room paintings are now integrated](art/chapter-5-painted-map-integration.md), with master-aligned movement and saved state overlays. Next: owner map playtest, remaining map masters/paintings, and [room/long-narrative scene art](art/chapter-5-scene-art-plan.md).
+
+The latest gameplay refinement [lets movement leave ordinary scenes directly](playtest-notes/2026-11-20-chapter-5-direct-movement.md), removing the repeated Back button. [Four Chapter 5 portrait designs are owner-accepted](art/chapter-5-enemy-portraits-v01.md) and await role-aware runtime integration; the review also identifies the separate earlier Seal-Forged Sentry.
 
 1. [`playtest-notes/2026-07-17-current-status.md`](playtest-notes/2026-07-17-current-status.md) — concise current-state pickup; the filename is historical, but the document title and contents carry the current update date.
 2. [`playtest-notes/2026-09-04-chapter-4-completion-retrospective.md`](playtest-notes/2026-09-04-chapter-4-completion-retrospective.md) — Chapter 4 process assessment and the recommended Chapter 5 development gates.

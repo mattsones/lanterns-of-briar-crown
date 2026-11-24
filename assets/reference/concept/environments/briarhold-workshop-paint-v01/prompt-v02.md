@@ -1,0 +1,5 @@
+# Briarhold workshop v02
+
+Built-in image generation.
+
+Use case: precise-object-edit. Make two small corrections to this exact square true-overhead workshop painting. Remove the freestanding round stool and round bucket immediately to the RIGHT of the large hand press (centers about x 28.5%, y 45% and y 54%). Restore plain continuous worn flagstones there, flush with surrounding paving. Two workers will stand on those spots in game, so there must be no object or raised detail there. Also shorten the iron wall lantern arm at the foot of the upper stair to a small hook, with the amber globe closer to the same west wall and its warm pool still lighting the central walking crossing. Use a visible bolted plate. Preserve absolutely everything else, including both stairs, the stone well trough, west window, stove, prep bench, hand press, stamp chest, low tray shelf, vertical cooling rack, pack bench and small root coupling. Keep all floor silhouettes, square crop, station placements, direction of stairs, open passages and other textures. No text, figures or annotations.

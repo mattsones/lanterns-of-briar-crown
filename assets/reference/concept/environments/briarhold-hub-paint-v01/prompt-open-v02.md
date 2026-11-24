@@ -1,0 +1,5 @@
+# Briarhold hub, guide open
+
+Built-in image generation.
+
+Use case: lighting-weather. Edit image 1 to create a paired lighting state. Keep its exact overhead map, stone texture, crop, geometry, props and all three lanterns plus their wall mounts. In particular preserve the continuous iron attachment on the green guard-bay lantern at upper right and the curved wall-mounted arm for the amber lantern by the lower stair. Use image 2 only as the lighting reference: add the soft amber guide light where it falls around the upper stair junction, the bend below it, and very faintly at the lower end of the guard bay. Keep the actual lamp sconces and their local illumination precisely as in image 1. Make no edits to walls, trajectories, furniture, lights, or stairs. Outside the added guide-light pool, reproduce image 1. Inside it, preserve every feature and apply just a warm, soft pool on masonry, with no painted beam in the air, no text or linework. Keep verified 4:3 pixel framing for a seamless switch between lighting states.

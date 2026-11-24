@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-19",
+  "generator": "built-in image_gen",
+  "intent": "Targeted elite guard heritage revision",
+  "canonicalDecision": { "bracken": "Hearthvale", "eliteThornsealDetail": "Hearthvale", "ordinaryLocalGuards": "Rainroot" },
+  "editTarget": "thornseal-guard-concept-v01.png",
+  "supportingHeritageReference": "assets/portraits/player/human-hearthvale-male-v01.png",
+  "nativeOutput": "C:/Users/15855/.codex/generated_images/01a1bc8c-2791-7bd3-94c0-6a9485ddc40d/exec-869fcd7a-ee86-44ff-bc8e-f773f1b97c6c.png",
+  "workspaceCopy": "thornseal-guard-concept-v02.png",
+  "prompt": "thornseal-guard-prompt-v02.md",
+  "preview": "thornseal-guard-portrait-v02.webp",
+  "review": "enemy-portrait-review-v02.html",
+  "preserved": "Uniform, equipment, shield, ledger case, pose, composition, room and practical lighting",
+  "previousVersionRetained": true,
+  "runtimeRegistered": false,
+  "selectionNote": "Guard v02 replaces v01 for the elite role; a separate ordinary Rainroot guard design is still required. Shared guard combat profiles must not determine heritage or globally select the elite portrait."
+}

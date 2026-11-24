@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Button, ChoiceButton } from "./ui";
 import { advanceCarriageRescue, canOpenBriarholdInnerDoor, enterBriarhold, getBriarholdBossProfile, openBriarholdDrawer, resolveInvestigatingGuard } from "../game/chapter5";
-import { CH5_NODES, abandonLedgerDistraction, chapter5MilestoneXp, distractLedgerOfficer, enterChapter5Culvert, freeLedgerClerk, getChapter5Edges, getChapter5AreaName, leaveChapter5GuideLampClosed, moveChapter5, resolveChapter5HubPassage, restoreChapter5GuideLamp, secureLedgerOfficer, transmitChapter5Signal, tryChapter5CulvertGrate, type Chapter5BattleKind, type Chapter5Node, type Chapter5Resources, type Chapter5SaveState } from "../game/chapter5Runtime";
+import { CH5_NODES, canLeaveChapter5Scene, chapter5MilestoneXp, distractLedgerOfficer, enterChapter5Culvert, freeLedgerClerk, getChapter5Edges, getChapter5AreaName, leaveChapter5GuideLampClosed, leaveChapter5Scene, resolveChapter5HubPassage, restoreChapter5GuideLamp, secureLedgerOfficer, transmitChapter5Signal, tryChapter5CulvertGrate, type Chapter5BattleKind, type Chapter5Node, type Chapter5Resources, type Chapter5SaveState } from "../game/chapter5Runtime";
 import { resolveSkillCheck } from "../game/dice";
 import { isCompanionConscious } from "../game/companions";
 import { CAPTIVE_LANTERN_PANES, CAPTIVE_LANTERN_SIGNALS, CHAPTER_5_CHECKS, CHAPTER_5_SCENE_IDS } from "../story/chapter5";
@@ -10,6 +10,9 @@ import type { Companion, Player, StatBlock } from "../game/types";
 import { acceptOfficerSurrender, areChapter5CaptivesGathered, bypassChapter5Feed, claimChapter5BrackenLoot, collectChapter5Evidence, departChapter5Briarhold, finishChapter5CaseWall, freeChapter5CellCaptive, freeChapter5WorkshopCaptive, hearChapter5Examiner, hearChapter5ReturnTalk, hearChapter5Woodsman, isChapter5CleanupReady, isChapter5WorkshopSecure, openChapter5Cells, packChapter5Supplies, readChapter5CaseWall, resolveChapter5Workshop, restChapter5Party, reuniteChapter5Siblings, seeChapter5Homecoming } from "../game/chapter5Progress";
 import { CHAPTER_5_AFTERMATH, getChapter5FullOutcome } from "../story/chapter5Aftermath";
 import { getChapter5Landmark, hasChapter5Visited } from "../story/chapter5Knowledge";
+import { getChapter5PaintedLayout } from "../data/chapter5Maps";
+import { getChapter5MapNeighbors, moveChapter5OnMap, walkChapter5MapTo } from "../game/chapter5Map";
+import { Chapter5PaintedMap } from "./Chapter5PaintedMap";
 
 type Props = {
   state: Chapter5SaveState;
@@ -36,16 +39,17 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
     stateRef.current = next;
     commit(next, resources);
   };
-  const close = () => change((s) => s.briarhold.investigatorPending || s.hubInterlude || (s.view === "grille" && !s.lioSeen) ||
-    (s.brackenDefeated && s.carriageStage !== "rescued") ? s : { ...abandonLedgerDistraction(s), view: null });
-  const inspect = () => change((s) => ({ ...s, view: s.briarhold.investigatorPending ? "investigator" : s.node }));
+  const close = () => change(s => leaveChapter5Scene(s, companion));
+  const inspect = () => change((s) => s.mapWaypoint ? s : ({ ...s, view: s.briarhold.investigatorPending ? "investigator" : s.node }));
   const edges = getChapter5Edges(state);
   const landmark = (node: Chapter5Node) => getChapter5Landmark(state, node) || CH5_NODES[node];
   const nodes = [...new Set(edges.flat())];
   const move = (dx: number, dy: number) => change((s) => {
+    if (getChapter5PaintedLayout(s)) return moveChapter5OnMap(s, dx < 0 ? "left" : dx > 0 ? "right" : dy < 0 ? "up" : "down", companion);
     const current = CH5_NODES[s.node];
-    const target = getChapter5Edges(s).flat().find((id) => CH5_NODES[id].x === current.x + dx && CH5_NODES[id].y === current.y + dy);
-    return target ? moveChapter5(s, target, companion) : s;
+    const target = getChapter5Edges(s).flatMap(([a, b]) => a === s.node ? [b] : b === s.node ? [a] : [])
+      .find(id => CH5_NODES[id].x === current.x + dx && CH5_NODES[id].y === current.y + dy);
+    return target ? walkChapter5MapTo(s, target === "ledger" ? "l00" : target === "workshop" && s.node === "hub" ? "w00" : target, companion) : s;
   });
 
   useEffect(() => {
@@ -61,7 +65,7 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
       const target = event.target as HTMLElement;
       if (event.key === "Escape") { event.preventDefault(); close(); return; }
       if (target.matches("input, textarea, select") || target.isContentEditable) return;
-      if (stateRef.current.view || stateRef.current.pendingBattle) return;
+      if (!canLeaveChapter5Scene(stateRef.current)) return;
       const direction = { ArrowUp: [0, -1], w: [0, -1], ArrowDown: [0, 1], s: [0, 1], ArrowLeft: [-1, 0], a: [-1, 0], ArrowRight: [1, 0], d: [1, 0] }[event.key];
       if (direction) { event.preventDefault(); move(direction[0], direction[1]); }
       else if (event.key.toLowerCase() === "e" || (event.key === "Enter" && target.tagName !== "BUTTON")) { event.preventDefault(); inspect(); }
@@ -128,6 +132,19 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
 
   const b = state.briarhold;
   const view = state.view;
+  const painted = getChapter5PaintedLayout(state);
+  const mapNeighbors = getChapter5MapNeighbors(state);
+  const locationLabel = view === "opening" ? "The road below Briarhold" : state.mapWaypoint ? painted?.nodes[state.mapWaypoint]?.label : landmark(state.node).label;
+  const canLeave = canLeaveChapter5Scene(state);
+  const moveDisabled = (direction: "up" | "down" | "left" | "right") => {
+    if (blocked || !canLeave) return true;
+    if (painted) return !mapNeighbors.some(n => n.direction === direction);
+    const [dx, dy] = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[direction];
+    return !edges.some(([a, b]) => {
+      const target = a === state.node ? b : b === state.node ? a : null;
+      return target && CH5_NODES[target].x === CH5_NODES[state.node].x + dx && CH5_NODES[target].y === CH5_NODES[state.node].y + dy;
+    });
+  };
   const sceneId = view === "opening" ? CHAPTER_5_SCENE_IDS.opening : view === "investigator" ? CHAPTER_5_SCENE_IDS.investigation :
     view === "ledger" ? CHAPTER_5_SCENE_IDS.ledger : view === "workshop" ? CHAPTER_5_SCENE_IDS.workshop :
     view === "lanterns" ? CHAPTER_5_SCENE_IDS.lanterns : view === "grille" ? CHAPTER_5_SCENE_IDS.firstLio :
@@ -144,42 +161,45 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
   const mapTop = Math.min(...nodes.map(id => CH5_NODES[id].y)) - .55;
   const mapWidth = Math.max(...nodes.map(id => CH5_NODES[id].x)) - mapLeft + .6;
   const mapHeight = Math.max(...nodes.map(id => CH5_NODES[id].y)) - mapTop + .75;
-  const chooseRoute = (node: "detour" | "hollow") => change(s => moveChapter5({ ...s, view: null }, node, companion));
+  const chooseRoute = (node: "detour" | "hollow") => change(s => walkChapter5MapTo(s, node, companion));
+  const movementControls = <div className="mt-3 space-y-2">
+    <div className="flex flex-wrap justify-center gap-2" aria-label="Briarhold movement controls">
+      <Button aria-label="Move up" disabled={moveDisabled("up")} onClick={() => move(0, -1)}>↑</Button>
+      <Button aria-label="Move left" disabled={moveDisabled("left")} onClick={() => move(-1, 0)}>←</Button>
+      <Button disabled={blocked || !!view || !canLeave || !!state.mapWaypoint} onClick={inspect}>Inspect</Button>
+      <Button aria-label="Move right" disabled={moveDisabled("right")} onClick={() => move(1, 0)}>→</Button>
+      <Button aria-label="Move down" disabled={moveDisabled("down")} onClick={() => move(0, 1)}>↓</Button>
+    </div>
+    <p className="text-center text-xs text-white/60">Arrow keys / WASD to walk · E to inspect · M for inventory and equipment</p>
+  </div>;
 
   return <div data-testid="chapter5-spike" data-ch5-node={state.node} data-ch5-area={getChapter5AreaName(state)} data-alert={b.alert} className="space-y-4">
     <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-black/25 p-3">
-      <span className="font-semibold">{landmark(state.node).label}</span>
+      <span className="font-semibold">{locationLabel}</span>
       {state.departed ? <span className="text-amber-100">{getChapter5AreaName(state)}</span> : <span data-testid="ch5-alert" className={b.alert === "alerted" ? "text-rose-200" : "text-amber-100"}>Alert: {b.alert[0].toUpperCase() + b.alert.slice(1)}</span>}
     </div>
     {state.carriageStage === "rescued" ? <p data-testid="ch5-rescued-party" className="text-sm text-amber-100/80">Together: Mara · Lio{state.clerkFreed ? " · Sella" : ""}{state.porterFreed ? " · Orren" : ""}{state.wardenFreed ? " · Hesta" : ""}</p> : null}
-    <div ref={mapRef} className={view ? "hidden md:block" : ""}>
-      <div className="relative h-80 rounded-2xl border border-amber-100/15 bg-slate-950 sm:h-72" aria-label="Briarhold paths">
+    <div ref={mapRef} className={view && !canLeave && !painted ? "hidden md:block" : ""}>
+      {painted ? <Chapter5PaintedMap state={state} player={player} companion={companion} blocked={blocked} onInspect={inspect}
+        onChoose={point => change(s => walkChapter5MapTo(s, point, companion))} /> : <div className="relative h-80 rounded-2xl border border-amber-100/15 bg-slate-950 sm:h-72" aria-label="Briarhold paths">
         <svg className="absolute h-full w-full" viewBox={`${mapLeft} ${mapTop} ${mapWidth} ${mapHeight}`} preserveAspectRatio="none" aria-hidden="true">
           {edges.map(([a, c]) => <line key={`${a}-${c}`} x1={CH5_NODES[a].x} y1={CH5_NODES[a].y} x2={CH5_NODES[c].x} y2={CH5_NODES[c].y} stroke="#ac9671" strokeWidth="0.035" />)}
         </svg>
         {nodes.map((id) => <button key={id} data-ch5-map-node={id} title={landmark(id).label} aria-label={`${id === state.node ? "Inspect" : "Move to"} ${landmark(id).label}`}
-          aria-current={id === state.node ? "location" : undefined} disabled={blocked || !!view || !!state.pendingBattle || id !== state.node && !adjacent(id)}
+          aria-current={id === state.node ? "location" : undefined} disabled={blocked || !canLeave || id !== state.node && !adjacent(id)}
           style={{ left: `${(CH5_NODES[id].x - mapLeft) / mapWidth * 100}%`, top: `${(CH5_NODES[id].y - mapTop) / mapHeight * 100}%` }}
           className={`absolute grid h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-xl border text-xl ${id === state.node ? "border-amber-200 bg-amber-950 ring-2 ring-amber-200/40" : "border-slate-600 bg-slate-900"} disabled:cursor-default`}
-          onClick={() => id === state.node ? inspect() : change((s) => moveChapter5(s, id, companion))}>
+          onClick={() => id === state.node ? inspect() : change((s) => walkChapter5MapTo(s, id, companion))}>
           {id === state.node ? "🧑‍🦱" : landmark(id).icon}
           <span aria-hidden="true" className="absolute top-full mt-1 w-12 text-center text-[10px] leading-3 text-amber-50/80 sm:w-16">{landmark(id).label}</span>
         </button>)}
-      </div>
-      <div className="mt-3 flex flex-wrap justify-center gap-2" aria-label="Briarhold movement controls">
-        <Button aria-label="Move up" disabled={blocked || !!view || !!state.pendingBattle} onClick={() => move(0, -1)}>↑</Button>
-        <Button aria-label="Move left" disabled={blocked || !!view || !!state.pendingBattle} onClick={() => move(-1, 0)}>←</Button>
-        <Button disabled={blocked || !!view || !!state.pendingBattle} onClick={inspect}>Inspect</Button>
-        <Button aria-label="Move right" disabled={blocked || !!view || !!state.pendingBattle} onClick={() => move(1, 0)}>→</Button>
-        <Button aria-label="Move down" disabled={blocked || !!view || !!state.pendingBattle} onClick={() => move(0, 1)}>↓</Button>
-      </div>
-      <p className="mt-2 text-center text-xs text-white/60">Arrow keys / WASD to move · E to inspect · M for inventory and equipment</p>
+      </div>}
+      {!view ? movementControls : null}
     </div>
     {state.feedback ? <div ref={feedbackRef} data-testid="ch5-feedback" role="status" className="space-y-3 rounded-xl border border-amber-200/20 bg-amber-950/30 p-3 text-sm leading-7">{state.feedback.split("\n\n").map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div> : null}
     {state.pendingBattle && !blocked ? action("resume-battle", "Resume the fight", () => startBattle(stateRef.current)) : null}
     {view && !state.pendingBattle ? <div ref={sceneRef} tabIndex={-1} role="dialog" aria-label={view === "opening" ? "The same night" : view === "investigator" ? "An investigating guard" : landmark(view).label}
       data-scene-id={sceneId} className="space-y-4 rounded-2xl border border-white/15 bg-slate-900 p-4 text-sm leading-7 sm:p-5">
-      {!b.investigatorPending && !state.hubInterlude && !(view === "grille" && !state.lioSeen) && !(state.brackenDefeated && state.carriageStage !== "rescued") && view !== "opening" ? action("back", "Back to the path", close) : null}
       <div data-testid="ch5-scene-narrative" className="space-y-4">{getChapter5SceneParagraphs(state, companion).map((paragraph, index) => <p key={`${view}-${index}`}>{paragraph}</p>)}</div>
       {view === "hub" && state.hubInterlude ? <>
         {action("hub-wait", state.hubInterlude === "lamp" ? "Hold still behind the pier until the lamp moves on" : "Stay behind the rack while the bearers pass", () => change(s => resolveChapter5HubPassage(s, "wait")))}
@@ -324,6 +344,7 @@ export function Chapter5Spike({ state, player, companion, stats, blocked, commit
         {state.caseWallComplete ? action("review-ending", "Recall the closing conversation", () => change(s => ({ ...s, feedback: getChapter5FullOutcome("closing", companion) }))) : null}
         {state.caseWallComplete ? <p data-testid="ch5-complete" className="rounded-xl bg-emerald-950/40 p-3 font-semibold text-emerald-100">Chapter Five complete · Briarhold Waystation<br />Next lead: Celia Venn and Elowen's hearing in Lanthorne.</p> : null}
       </> : null}
+      {canLeave ? movementControls : null}
     </div> : null}
   </div>;
 }

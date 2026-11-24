@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-20",
+  "change": "Ordinary scenes can be left through map/direction/keyboard movement without a Back button",
+  "build": "passed",
+  "rulesPassed": 104,
+  "chapter5CasesPassed": 58,
+  "smokePassed": 1,
+  "productionAssetAuditCount": 175,
+  "gameCapture": "ch5-walk-without-back-phone.png",
+  "phoneViewport": [390, 844],
+  "phoneHorizontalOverflow": false,
+  "protected": ["opening", "investigator", "hub stealth", "first Lio sight", "pending battle", "rescue emergency"],
+  "notes": "Full Chapter 5 checks used stable production preview. First smoke was interrupted by a Vite reload during review-file edits; stable-files rerun passed. No owner save was advanced. No full older-chapter gate claimed."
+}

@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-19",
+  "status": "owner-accepted designs; awaiting runtime integration",
+  "generator": "built-in image_gen",
+  "entries": [
+    {
+      "id": "bracken-voss",
+      "source": "bracken-voss-concept-v01.png",
+      "sourceWidth": 1254,
+      "sourceHeight": 1254,
+      "preview": "bracken-voss-portrait-v01.webp",
+      "previewBytes": 171530
+    },
+    {
+      "id": "thornroot-sentry",
+      "source": "thornroot-sentry-concept-v01.png",
+      "sourceWidth": 1254,
+      "sourceHeight": 1254,
+      "preview": "thornroot-sentry-portrait-v01.webp",
+      "previewBytes": 277122
+    },
+    {
+      "id": "thornseal-guard",
+      "source": "thornseal-guard-concept-v02.png",
+      "sourceWidth": 1254,
+      "sourceHeight": 1254,
+      "preview": "thornseal-guard-portrait-v02.webp",
+      "previewBytes": 181248
+    },
+    {
+      "id": "rainroot-local-guard",
+      "source": "rainroot-local-guard-concept-v01.png",
+      "sourceWidth": 1254,
+      "sourceHeight": 1254,
+      "preview": "rainroot-local-guard-portrait-v01.webp",
+      "previewBytes": 223420
+    }
+  ]
+}

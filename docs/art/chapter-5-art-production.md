@@ -1,5 +1,17 @@
 # Chapter 5 Art Production
 
+[Current remaining art and batch review](chapter-5-remaining-art.md). The workshop painting is playable, and the signal platform is next in the map queue.
+
+**November 20 interior layout review:** [Four new interior masters](chapter-5-interior-masters-v01.md) now group the remaining schematic into main-floor hub/landing/court, upper records, lower workshop and raised signal-platform crops. With the existing rescue painting this makes **five interior gameplay maps**, separate from approach/return and narrative scene illustrations. The standalone reference review includes shared floor plan, paired stair landings, navigation/clearance and lighting/state sheets at desktop and both phone sizes. The [hub closed/open pair v03](briarhold-hub-paint-v02.md) is now in the art review. The approved [records room v06](briarhold-records-paint-v02.md) is playable. The [workshop v02](briarhold-workshop-paint-v02.md) is in the walkable art review.
+
+**Current portrait update:** the owner accepts all four [v03 review designs](chapter-5-enemy-portraits-v01.md): Bracken, Thornroot Sentry, Hearthvale elite guard v02 and the newly generated ordinary Rainroot guard v01. They await role-aware runtime portrait binding. The existing Seal-Forged Sentry's Chapter 3/4 paper-and-wax art remains its own production asset; the new root/timber Sentry is the separate Chapter 5 support.
+
+**November 19 canonical casting:** Bracken and his elite Thornseal detail are Hearthvale humans; ordinary local guards are Rainroot humans. [Elite guard v02](chapter-5-enemy-portraits-v01.md) updates the face/complexion/hair to the established Hearthvale reference while retaining uniform, shield, ledger case, pose and room. V01 remains historical; a distinct ordinary Rainroot guard asset is still needed. Bind art by personnel role/encounter context when promoting it, because several fights currently share the same guard mechanics template.
+
+**November 18 portrait batch:** [Bracken, Thornseal Guard and Thornroot Sentry candidate v01 portraits](chapter-5-enemy-portraits-v01.md) are generated, with full prompts/native sources and desktop/phone battle-card review. They remain reference candidates and are not in the running game. Review their designs before using them as the cast reference for confrontation scenes or promoting their portrait derivatives.
+
+**November 18 runtime update:** the accepted approach v05 and paired rescue-room v02 paintings are now [integrated into the game](chapter-5-painted-map-integration.md), with measured walking points, frame sizing and state overlays. Next is owner map review, the remaining five map masters/paintings, cast/enemy art and the room/long-narrative scene queue. The November 13 production sequence below is retained as provenance; its reference-only status is superseded for these two maps.
+
 Status: the owner accepted the playable Chapter 5 greybox for artwork on **2026-11-13**, following the narrative playtest and the exact-checkpoint boss-balance correction, then accepted the first Briarhold scale/lighting masters and authorized approach painting. Finished art/runtime promotion remains pending.
 
 **Update:** the owner subsequently accepted the first Briarhold masters and authorized approach painting. [Paint candidate v05](briarhold-approach-paint-v01.md) is now in the offline review. His two painting corrections are authoritative: natural wet runoff into the culvert, no maintained lower trail; abandoned shelter farther off the road across an unmarked uphill scramble. The master pack's revision 2 matches those changes. Finished art/runtime promotion remains pending.
@@ -82,9 +94,10 @@ Required checks include first arrival, a mid-path step, every junction, backtrac
 
 | Asset | Direction and reuse |
 |---|---|
-| Bracken Voss portrait/combat crop | Ink-stained cuffs, practical road-office authority, controlled expression, weapon close under his coat. A local cellmaster controlling records and machinery. Match the existing enemy-cohesion direction. |
-| Thornseal Guard | Living disciplined guard, shield and ledger/official-work language. Distinct from the earlier paper-and-wax Seal-Forged Sentry. |
-| Thornroot Sentry | Bound-root construct, braced joints, mechanical feed connection. Its damaged brace and disconnected-feed payoff must match the room. |
+| Bracken Voss portrait/combat crop | Hearthvale human heritage. Ink-stained cuffs, practical road-office authority, controlled expression, weapon close under his coat. A regional cellmaster controlling records and machinery. Match the existing enemy-cohesion direction. |
+| Elite Thornseal Guard | Hearthvale human heritage, part of Bracken's imported elite detail. Living disciplined guard, shield and ledger/official-work language; v02 is owner-accepted. Distinct from the earlier paper-and-wax Seal-Forged Sentry. |
+| Ordinary local guard | Rainroot human heritage; locally recruited station personnel. Local guard v01 with round buckler/spear is owner-accepted. Select by role rather than globally reusing the Hearthvale elite portrait for `thornseal_guard`. |
+| Thornroot Sentry | Root/timber portrait v01 is owner-accepted. Bound-root construct, braced joints, mechanical feed connection. Its damaged brace and disconnected-feed payoff must match the room. Keep the earlier Chapter 3/4 Seal-Forged Sentry as its own enemy/art. |
 | Rainroot Tusker | Natural territorial animal. No faction uniform, magical corruption, or carried evidence. Two animals share the encounter. |
 | Orren Pike, Sella Reedmere, Hesta Brookward | Establish adult identities and costume references from their current roles before portrait generation. Keep each recognizable at release, gathering, and homecoming. |
 | Dessa and Garrick | Use their observed work and current introductions; names remain earned in the game. Dessa is the press supervisor/sealwright; Garrick is the practical woodsman. |

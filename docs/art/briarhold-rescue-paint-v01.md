@@ -1,5 +1,7 @@
 # Briarhold rescue room — painted candidate v02
 
+**Runtime update, November 18:** the selected closed/open v02 derivatives and separate cart are now [integrated into the game](chapter-5-painted-map-integration.md). This document retains the November 13 generation/reference provenance below; its earlier reference-only runtime status is superseded.
+
 Produced **2026-11-13** using the **built-in imagegen tool**, from the owner-accepted grille-above-E layout. Current candidate is the paired **closed/open v02** room backgrounds plus a separate true-alpha painted ordinary cart. During painting the owner rejected the rail-like floor strips: they are removed from both paintings, the master renderer and current story references. The cart runs freely over the uneven stone landing. Bracken creates the danger; the building has no track-to-stair system.
 
 ## Review and saved artwork

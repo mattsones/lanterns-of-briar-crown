@@ -243,6 +243,24 @@ The complete live roster was rechecked at the 4:3 battle-card crop on 2026-08-22
 
 # Immediate Missing Assets
 
+## Accepted Briarhold Portrait Set And Sentry Continuity — November 20
+
+The owner accepts the [four-design v03 set](chapter-5-enemy-portraits-v01.md): Bracken v01, Thornroot Sentry v01, elite Hearthvale guard v02 and ordinary Rainroot guard v01. The new local guard has a native 1254×1254 PNG, optimized 1200×1200 WebP (223,420 bytes), exact prompt and generation record under `assets/reference/concepts/chapter-5-enemies/`. Three standalone review frames pass with all twelve image instances decoded and no errors/overflow. Role-aware runtime promotion remains next; these reference images are still excluded from the production audit.
+
+The earlier `assets/portraits/enemies/seal-forged-sentry-v01.webp` remains the registered Chapter 3/4 paper/wax Sentry. It is shown beside the new Chapter 5 Thornroot Sentry in the review. Preserve both; shared “Sentry” naming does not make them one enemy or interchangeable art.
+
+## Hearthvale Elite Guard Revision — November 19
+
+The owner fixed Bracken and the elite Thornseal detail as Hearthvale humans, ordinary local guards as Rainroot humans. [Elite guard v02](chapter-5-enemy-portraits-v01.md) is saved in `assets/reference/concepts/chapter-5-enemies/` as a native 1254×1254 PNG plus a 1200×1200 WebP (181,248 bytes), exact edit prompt and provenance. It supersedes v01 for the elite role, preserving the original kit and composition. The v02 offline review combines it with Bracken/Sentry v01. Ordinary Rainroot guards still need a separate design and role-aware runtime binding; these candidates are not production imports yet.
+
+## Briarhold Boss Portrait Candidates — November 18
+
+[The first Bracken/Guard/Sentry portrait set](chapter-5-enemy-portraits-v01.md) is saved under `assets/reference/concepts/chapter-5-enemies/`, including native PNGs, exact prompts, 1200×1200 reference WebPs (171,530 / 219,086 / 277,122 bytes), provenance and a standalone small-card review. These are unregistered candidates, so they do not change the current 175-image production audit or running battle. Desktop and both phone review frames pass; owner identity/style review and runtime promotion remain next.
+
+## Briarhold Maps Promoted — November 18
+
+[The approach/rescue integration](chapter-5-painted-map-integration.md) now registers `briarholdApproach` and `briarholdCrownTable` in the Chapter 5 map adapter. Runtime files: `assets/maps/briarhold-approach-v05.webp` (2048×1152, 334,964 bytes), `briarhold-rescue-closed-v02.webp` and `briarhold-rescue-open-v02.webp` (2048×1536, 354,282 / 314,832 bytes). `assets/icons/map-tokens/briarhold-rescue-cart-v01.webp` is the already prepared 448×384 alpha derivative (75,568 bytes), selected over the 380 KB PNG to retain transparent painted detail within budget. Sources/prompts remain under reference. Footsteps, light variants, grate/cart/cuff, people, fallen Sentry, loot and cells remain independent state layers. This supersedes the reference-only runtime status in the November 13 production history below; the remaining map and narrative-scene queues are still open.
+
 ## Scene Coverage And New Reward — November 13 Wrap
 
 [The room and long-narrative scene-art plan](chapter-5-scene-art-plan.md) is now an explicit owner requirement: scenes for most Briarhold interior rooms, changed-state climax/reunion/rest beats, and long narratives across Chapters 1–5. Review existing scene reuse before generating replacements. The new Bracken's Sabre item and Measured Cut skill are implemented with icon fallbacks; bespoke icons and a stateful dropped-weapon overlay remain art work. The service-court rest is implemented and needs its narrative illustration. Neither reward nor party state should be permanently painted into a map.

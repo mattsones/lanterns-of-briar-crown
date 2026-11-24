@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-18",
+  "scope": "Playable approach v05 and rescue-room v02 integration",
+  "masterRevision": 4,
+  "frames": [
+    { "viewport": [1280, 720], "mapWidth": 870, "heroDiameter": 52 },
+    { "viewport": [390, 844], "mapWidth": 332, "heroDiameter": 32 },
+    { "viewport": [430, 932], "mapWidth": 372, "heroDiameter": 32 }
+  ],
+  "aspectRatios": { "briarholdApproach": "16:9", "briarholdCrownTable": "4:3" },
+  "exactFrameCasesPassed": 6,
+  "newBrowserCasesPassed": 14,
+  "newRulesCasesPassed": 5,
+  "pageErrors": 0,
+  "horizontalOverflow": false,
+  "cartAlphaRange": [0, 255],
+  "fullGateClaimed": false,
+  "humanIllustratedPlaythroughPending": true,
+  "verification": "Build, 102 rules, 56 Chapter 5 cases (55 broad plus updated phone case focused), development smoke and 175-image asset audit passed.",
+  "notes": "Backgrounds use existing painted light values without an additional night mask. Captures are from the built game in isolated browser contexts; no owner save was advanced. Chapter 5 actor/enemy icons remain fallbacks pending bespoke art."
+}

@@ -1,0 +1,383 @@
+{
+  "ready": [
+    {
+      "id": "orren-pike",
+      "kind": "portrait",
+      "native": "orren-pike-v01.png",
+      "preview": "orren-pike-v01.webp",
+      "promptFile": "prompt-orren-pike.md",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "sella-reedmere",
+      "kind": "portrait",
+      "native": "sella-reedmere-v01.png",
+      "preview": "sella-reedmere-v01.webp",
+      "promptFile": "prompt-sella-reedmere.md",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "hesta-brookward",
+      "kind": "portrait",
+      "native": "hesta-brookward-v01.png",
+      "preview": "hesta-brookward-v01.webp",
+      "promptFile": "prompt-hesta-brookward.md",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "dessa-flint",
+      "kind": "portrait",
+      "native": "dessa-flint-v01.png",
+      "preview": "dessa-flint-v01.webp",
+      "promptFile": "prompt-dessa-flint.md",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "garrick-reed",
+      "kind": "portrait",
+      "native": "garrick-reed-v01.png",
+      "preview": "garrick-reed-v01.webp",
+      "promptFile": "prompt-garrick-reed.md",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "records-officer",
+      "kind": "portrait",
+      "native": "records-officer-v01.png",
+      "preview": "records-officer-v01.webp",
+      "promptFile": "prompt-records-officer.md",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "lio-recovering",
+      "kind": "portrait",
+      "native": "lio-recovering-v01.png",
+      "preview": "lio-recovering-v01.webp",
+      "promptFile": "prompt-lio-recovering.md",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "rainroot-tusker",
+      "kind": "portrait",
+      "native": "rainroot-tusker-v01.png",
+      "preview": "rainroot-tusker-v01.webp",
+      "promptFile": "prompt-rainroot-tusker.md",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "brackens-sabre",
+      "kind": "icon",
+      "native": "brackens-sabre-v01.png",
+      "preview": "brackens-sabre-v01.webp",
+      "promptFile": "prompt-brackens-sabre.md",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "measured-cut",
+      "kind": "icon",
+      "native": "measured-cut-v02.png",
+      "preview": "measured-cut-v02.webp",
+      "promptFile": "prompt-measured-cut-v02.md",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "true-seal-fragment",
+      "kind": "icon",
+      "native": "true-seal-fragment-v01.png",
+      "preview": "true-seal-fragment-v01.webp",
+      "promptFile": "prompt-true-seal-fragment.md",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "briar-chain-link",
+      "kind": "icon",
+      "native": "briar-chain-link-v01.png",
+      "preview": "briar-chain-link-v01.webp",
+      "promptFile": "prompt-briar-chain-link.md",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "briarhold-transfer-ledger",
+      "kind": "icon",
+      "native": "briarhold-transfer-ledger-v01.png",
+      "preview": "briarhold-transfer-ledger-v01.webp",
+      "promptFile": "prompt-briarhold-transfer-ledger.md",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "briarhold-office-instruction",
+      "kind": "icon",
+      "native": "briarhold-office-instruction-v01.png",
+      "preview": "briarhold-office-instruction-v01.webp",
+      "promptFile": "prompt-briarhold-office-instruction.md",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "briarhold-seal-evidence",
+      "kind": "icon",
+      "native": "briarhold-seal-evidence-v01.png",
+      "preview": "briarhold-seal-evidence-v01.webp",
+      "promptFile": "prompt-briarhold-seal-evidence.md",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "examiner-transfer-record",
+      "kind": "icon",
+      "native": "examiner-transfer-record-v02.png",
+      "preview": "examiner-transfer-record-v02.webp",
+      "promptFile": "prompt-examiner-transfer-record-v02.md",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "workshop-shim",
+      "kind": "icon",
+      "native": "workshop-shim-v01.png",
+      "preview": "workshop-shim-v01.webp",
+      "promptFile": "prompt-workshop-shim.md",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "inner-door-spare-key",
+      "kind": "icon",
+      "native": "inner-door-spare-key-v01.png",
+      "preview": "inner-door-spare-key-v01.webp",
+      "promptFile": "prompt-inner-door-spare-key.md",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "id": "same-night-approach",
+      "kind": "scene",
+      "native": "same-night-approach-v02.png",
+      "preview": "same-night-approach-v02.webp",
+      "promptFile": "prompt-same-night-approach-v02.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "service-landing",
+      "kind": "scene",
+      "native": "service-landing-v01.png",
+      "preview": "service-landing-v01.webp",
+      "promptFile": "prompt-service-landing.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "hub-searching-lamp",
+      "kind": "scene",
+      "native": "hub-searching-lamp-v01.png",
+      "preview": "hub-searching-lamp-v01.webp",
+      "promptFile": "prompt-hub-searching-lamp.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "hub-timber-passage",
+      "kind": "scene",
+      "native": "hub-timber-passage-v01.png",
+      "preview": "hub-timber-passage-v01.webp",
+      "promptFile": "prompt-hub-timber-passage.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "upper-records-room",
+      "kind": "scene",
+      "native": "upper-records-room-v01.png",
+      "preview": "upper-records-room-v01.webp",
+      "promptFile": "prompt-upper-records-room.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "records-clerk-released",
+      "kind": "scene",
+      "native": "records-clerk-released-v01.png",
+      "preview": "records-clerk-released-v01.webp",
+      "promptFile": "prompt-records-clerk-released.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "lower-seal-workshop",
+      "kind": "scene",
+      "native": "lower-seal-workshop-v01.png",
+      "preview": "lower-seal-workshop-v01.webp",
+      "promptFile": "prompt-lower-seal-workshop.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "workshop-diversion",
+      "kind": "scene",
+      "native": "workshop-diversion-v01.png",
+      "preview": "workshop-diversion-v01.webp",
+      "promptFile": "prompt-workshop-diversion.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "workshop-porter-released",
+      "kind": "scene",
+      "native": "workshop-porter-released-v01.png",
+      "preview": "workshop-porter-released-v01.webp",
+      "promptFile": "prompt-workshop-porter-released.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "signal-platform",
+      "kind": "scene",
+      "native": "signal-platform-v01.png",
+      "preview": "signal-platform-v01.webp",
+      "promptFile": "prompt-signal-platform.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "bound-guide-shutter",
+      "kind": "scene",
+      "native": "bound-guide-shutter-v02.png",
+      "preview": "bound-guide-shutter-v02.webp",
+      "promptFile": "prompt-bound-guide-shutter-v02.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "first-grille-sight",
+      "kind": "scene",
+      "native": "first-grille-sight-v01.png",
+      "preview": "first-grille-sight-v01.webp",
+      "promptFile": "prompt-first-grille-sight.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "crown-table",
+      "kind": "scene",
+      "native": "crown-table-v01.png",
+      "preview": "crown-table-v01.webp",
+      "promptFile": "prompt-crown-table.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "cart-rescue",
+      "kind": "scene",
+      "native": "cart-rescue-v01.png",
+      "preview": "cart-rescue-v01.webp",
+      "promptFile": "prompt-cart-rescue.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "immediate-reunion",
+      "kind": "scene",
+      "native": "immediate-reunion-v01.png",
+      "preview": "immediate-reunion-v01.webp",
+      "promptFile": "prompt-immediate-reunion.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "adjoining-cells",
+      "kind": "scene",
+      "native": "adjoining-cells-v01.png",
+      "preview": "adjoining-cells-v01.webp",
+      "promptFile": "prompt-adjoining-cells.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "service-court-rest",
+      "kind": "scene",
+      "native": "service-court-rest-v01.png",
+      "preview": "service-court-rest-v01.webp",
+      "promptFile": "prompt-service-court-rest.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "dawn-departure",
+      "kind": "scene",
+      "native": "dawn-departure-v01.png",
+      "preview": "dawn-departure-v01.webp",
+      "promptFile": "prompt-dawn-departure.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "garrick-clearing",
+      "kind": "scene",
+      "native": "garrick-clearing-v01.png",
+      "preview": "garrick-clearing-v01.webp",
+      "promptFile": "prompt-garrick-clearing.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "high-fir-trail",
+      "kind": "scene",
+      "native": "high-fir-trail-v02.png",
+      "preview": "high-fir-trail-v02.webp",
+      "promptFile": "prompt-high-fir-trail-v02.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "tusker-hollow",
+      "kind": "scene",
+      "native": "tusker-hollow-v01.png",
+      "preview": "tusker-hollow-v01.webp",
+      "promptFile": "prompt-tusker-hollow.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "return-bridge",
+      "kind": "scene",
+      "native": "return-bridge-v01.png",
+      "preview": "return-bridge-v01.webp",
+      "promptFile": "prompt-return-bridge.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "bramblecross-welcome",
+      "kind": "scene",
+      "native": "bramblecross-welcome-v02.png",
+      "preview": "bramblecross-welcome-v02.webp",
+      "promptFile": "prompt-bramblecross-welcome-v02.md",
+      "width": 1672,
+      "height": 941
+    },
+    {
+      "id": "private-case-reading",
+      "kind": "scene",
+      "native": "private-case-reading-v01.png",
+      "preview": "private-case-reading-v01.webp",
+      "promptFile": "prompt-private-case-reading.md",
+      "width": 1672,
+      "height": 941
+    }
+  ],
+  "issues": []
+}

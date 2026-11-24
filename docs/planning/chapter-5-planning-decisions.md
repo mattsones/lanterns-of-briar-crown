@@ -2,7 +2,15 @@
 
 Date opened: 2026-09-04
 
-Status: owner decisions accepted on 2026-09-05; complete greybox approved for artwork on **2026-11-13**. The approach/rescue masters and first paintings are accepted as the composition foundation, with runtime integration still pending. Bracken's loot and the court recovery are implemented. Next: bounded painted-map integration, the remaining map masters/paintings, and [room and long-narrative scene art](../art/chapter-5-scene-art-plan.md). Decisions are consolidated in [the executable vertical-slice contract](../story/chapter-5-vertical-slice-contract.md). Earlier provisional bullets below are resolved by the later settled decisions and that contract.
+Status: owner decisions accepted on 2026-09-05; complete greybox approved for artwork on **2026-11-13**. Bracken's loot and the court recovery are implemented. On **2026-11-18**, the accepted approach/rescue paintings are [integrated into the game](../art/chapter-5-painted-map-integration.md), preserving story gates and saves while adding measured walking points. Next: owner map review, remaining map masters/paintings, and [room and long-narrative scene art](../art/chapter-5-scene-art-plan.md). Decisions are consolidated in [the executable vertical-slice contract](../story/chapter-5-vertical-slice-contract.md). Earlier provisional bullets below are resolved by the later settled decisions and that contract.
+
+## Bracken And Guard Heritages — Owner Decision November 19
+
+- Bracken Voss and his elite Thornseal guard detail have **Hearthvale human heritage**. They form an imported command cadre in Rainroot, connected through the faction's Hearthvale patronage network.
+- Ordinary locally recruited guards have **Rainroot human heritage**. Future portraits and room scenes should distinguish the two groups through established human heritage references and their equipment/role, with variation among individuals.
+- Bracken remains a regional cellmaster below the operational architect. No noble title, named family or royal blood relationship is established by this decision.
+- Guard mechanics currently reuse `thornseal_guard` across encounters, including ordinary station personnel and some workroom fights. When art is promoted, select the elite/local portrait by actual personnel role and encounter context; preserve identity through reassignments and avoid giving every reused profile the elite portrait. This art/lore decision changes no combat numbers, guard counts, saved state or earned removals.
+- [Elite guard v02](../art/chapter-5-enemy-portraits-v01.md) revises the earlier provisional face toward the Hearthvale reference. V01 is retained as history; it is not automatically the local Rainroot guard design.
 
 <a id="pending-chapter-5-mechanics--owner-notes-november-13"></a>
 ## Bracken Loot And Court Recovery — Implemented November 13

@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-20",
+  "scope": "Accepted portrait designs and comparison to existing Seal-Forged Sentry; standalone reference review",
+  "frames": [
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "decodedImages": 12,
+      "pageErrors": 0,
+      "horizontalOverflow": false
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "decodedImages": 12,
+      "pageErrors": 0,
+      "horizontalOverflow": false
+    },
+    {
+      "viewport": [
+        430,
+        932
+      ],
+      "decodedImages": 12,
+      "pageErrors": 0,
+      "horizontalOverflow": false
+    }
+  ]
+}

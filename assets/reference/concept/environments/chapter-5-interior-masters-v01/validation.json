@@ -1,0 +1,117 @@
+{
+  "status": "PASS",
+  "date": "2026-11-22",
+  "revision": 7,
+  "samplingMetres": 0.025,
+  "checks": [
+    "all movement edges sampled at <= 0.025 m",
+    "32/52 px token plus 3 px shadow and -70% anchor",
+    "0.2 m wall/prop stand-off",
+    "human footprint inside drawn floor",
+    "unique reciprocal arrow aliases",
+    "paired same-coordinate crop transitions",
+    "guard corridor return screens records approach",
+    "signal crossing exposed and controls screened from posted guards",
+    "records crates and workshop rack screen initial crouching cover",
+    "existing rescue entry and topology preserved"
+  ],
+  "metrics": [
+    {
+      "map": "hub",
+      "frame": "desktop",
+      "minimumGapMetres": 0.63,
+      "at": "h05 → h06 / court-south",
+      "cropGapMetres": 1.104,
+      "physicalGapMetres": 0.8
+    },
+    {
+      "map": "hub",
+      "frame": "phone390",
+      "minimumGapMetres": 0.205,
+      "at": "h03 → hubWorkshop / corridor-south",
+      "cropGapMetres": 0.417,
+      "physicalGapMetres": 0.8
+    },
+    {
+      "map": "hub",
+      "frame": "phone430",
+      "minimumGapMetres": 0.32,
+      "at": "h03 → hubWorkshop / corridor-south",
+      "cropGapMetres": 0.598,
+      "physicalGapMetres": 0.8
+    },
+    {
+      "map": "ledger",
+      "frame": "desktop",
+      "minimumGapMetres": 0.376,
+      "at": "l01 → ledger / records-south-west",
+      "cropGapMetres": 1.227,
+      "physicalGapMetres": 0.29
+    },
+    {
+      "map": "ledger",
+      "frame": "phone390",
+      "minimumGapMetres": 0.21,
+      "at": "l01 → ledger / records-south-west",
+      "cropGapMetres": 0.988,
+      "physicalGapMetres": 0.29
+    },
+    {
+      "map": "ledger",
+      "frame": "phone430",
+      "minimumGapMetres": 0.251,
+      "at": "l01 → ledger / records-south-west",
+      "cropGapMetres": 1.049,
+      "physicalGapMetres": 0.29
+    },
+    {
+      "map": "workshop",
+      "frame": "desktop",
+      "minimumGapMetres": 0.5,
+      "at": "workshopCrossing → workshop / cooling-rack",
+      "cropGapMetres": 0.5,
+      "physicalGapMetres": 0.55
+    },
+    {
+      "map": "workshop",
+      "frame": "phone390",
+      "minimumGapMetres": 0.213,
+      "at": "workshopCrossing → workshop / cooling-rack",
+      "cropGapMetres": 0.213,
+      "physicalGapMetres": 0.55
+    },
+    {
+      "map": "workshop",
+      "frame": "phone430",
+      "minimumGapMetres": 0.287,
+      "at": "workshopCrossing → workshop / cooling-rack",
+      "cropGapMetres": 0.287,
+      "physicalGapMetres": 0.55
+    },
+    {
+      "map": "lanterns",
+      "frame": "desktop",
+      "minimumGapMetres": 0.549,
+      "at": "signalCrossing → s02 / platform-return-east",
+      "cropGapMetres": 1.7,
+      "physicalGapMetres": 0.65
+    },
+    {
+      "map": "lanterns",
+      "frame": "phone390",
+      "minimumGapMetres": 0.23,
+      "at": "signalCrossing → s02 / platform-return-east",
+      "cropGapMetres": 1.413,
+      "physicalGapMetres": 0.65
+    },
+    {
+      "map": "lanterns",
+      "frame": "phone430",
+      "minimumGapMetres": 0.313,
+      "at": "signalCrossing → s02 / platform-return-east",
+      "cropGapMetres": 1.487,
+      "physicalGapMetres": 0.65
+    }
+  ],
+  "failures": []
+}

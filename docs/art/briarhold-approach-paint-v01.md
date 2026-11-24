@@ -1,5 +1,7 @@
 # Briarhold approach — first painted candidate
 
+**Runtime update, November 18:** the selected v05 derivative is now [integrated into the game](chapter-5-painted-map-integration.md). This document retains the November 13 generation/reference provenance below; its earlier reference-only runtime status is superseded.
+
 Produced 2026-11-13 with the **built-in imagegen tool** against the owner-approved site/approach/lighting foundation. Current candidate: **paint v05**. The owner reviewed the generated work during this session and corrected two physical details: the culvert approach is wet natural runoff, not a maintained path; the abandoned shelter should sit farther off the road. Those corrections are implemented in the painting and in revision 2 of the shared master geometry. No runtime map or gameplay is changed.
 
 ## Review and saved files

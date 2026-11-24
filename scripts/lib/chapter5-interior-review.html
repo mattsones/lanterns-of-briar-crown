@@ -1,0 +1,70 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Briarhold interior navigation masters</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#e9e2cf;color:#293f35;font:16px/1.5 system-ui,sans-serif}main{max-width:1100px;margin:24px auto;padding:0 20px}h1{font:700 28px Georgia,serif;margin:0 0 8px}h2{font:700 21px Georgia,serif;margin:18px 0 8px}p{margin:8px 0 16px}.intro{max-width:80ch}.tabs,.toolbar,.walk,.portals{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}button,select{min-height:44px;padding:8px 12px;border:1px solid #7a8a78;border-radius:8px;background:#f8f3e6;color:#293f35;font:inherit}button{cursor:pointer}button[aria-pressed=true]{background:#31594c;color:#fff6df}label{display:inline-flex;align-items:center;gap:6px;min-height:44px}input{width:18px;height:18px}#stage{width:min(var(--map-width,870px),calc(100vw - 58px));margin:18px auto;position:relative;line-height:0;background:#a1ad98;border-radius:12px;overflow:hidden;box-shadow:0 2px 9px #263f3522}#stage svg,#stage img{width:100%;height:auto;display:block}#inspector{background:#f7f1df;border:1px solid #b2b59e;border-radius:12px;padding:16px;max-width:870px;margin:16px auto}.small{font-size:14px;color:#576d5e}.position-control{max-width:100%}#node{max-width:100%;min-width:0}#legend{display:flex;flex-wrap:wrap;gap:12px;font-size:14px}details{background:#f2ebd9;padding:12px;border-radius:8px;margin:12px 0}summary{cursor:pointer;min-height:32px}ul{padding-left:22px}#aliases span{display:inline-block;background:#e4e8dc;margin:3px;padding:5px 8px;border-radius:6px}button:disabled{opacity:.45;cursor:default}@media(max-width:600px){main{margin:18px auto}h1{font-size:24px}.toolbar{gap:4px 12px}.tabs button{flex:1 1 28%}.walk button{flex:1}#inspector{padding:12px}}
+[hidden]{display:none !important}
+</style></head><body><main>
+<h1>Briarhold: one building, five interior maps</h1>
+<p><a href="briarhold-west-wall-review-v02.html#plan">Compare the floor plan with the painted exterior and side sections</a> · <a href="briarhold-west-wall-review-v02.html#workshop">Workshop workflow study</a>.</p>
+<p class="intro">Four new navigation / scale / lighting proposals join the existing rescue painting. Main floor includes the landing, hub, inner post and sheltered court. Records, workshop and signal platform use closer square views. North stays up across every map.</p>
+<p class="small">Layout review only. This page does not load the game, read a save, or change the running playtest. Room names and actor labels here are production notes; the game still earns its labels through observation.</p>
+<nav class="tabs" aria-label="Map"><button data-map="overview">Whole building</button><button data-map="hub">Main floor</button><button data-map="ledger">Records</button><button data-map="workshop">Workshop</button><button data-map="lanterns">Signals</button><button data-map="rescue">Existing rescue</button></nav>
+<div class="toolbar"><label>Frame <select id="frame"><option value="desktop">1280 desktop · 870 px map</option><option value="phone390">390 phone · 332 px map</option><option value="phone430">430 phone · 372 px map</option></select></label><label>State <select id="state"><option value="occupied">Occupied / first visit</option><option value="diverted">Temporary diversion</option><option value="cleared">Workers secured / captives freed</option><option value="gathered">Party gathered in court</option><option value="search">Hub searching lamp</option><option value="timber">Hub timber passage</option></select></label></div>
+<div class="toolbar"><label id="interior-paint-option" hidden><input id="interior-paint" type="checkbox"><span id="interior-paint-label">Painted hub</span></label><label><input id="paths" type="checkbox" checked>Routes and action anchors</label><label><input id="labels" type="checkbox" checked>Draft labels</label><label><input id="light" type="checkbox">Night lighting</label><label><input id="party" type="checkbox" checked>Party light</label><label><input id="guide" type="checkbox">Amber guide open</label><label><input id="clearance" type="checkbox">Marker clearance</label><label><input id="actors" type="checkbox" checked>State actors</label><button id="clean">Clean composition</button></div>
+<div id="legend"><span>Teal: walk / stair route</span><span>Rust: authored gate / map threshold</span><span>Gold: separate high amber light channel</span></div>
+<div id="stage"></div>
+<section id="inspector"><h2 id="map-title"></h2><p id="description"></p><label class="position-control">Inspect position <select id="node"></select></label><p id="trigger"></p><div id="aliases"></div><div class="walk"><button data-direction="up">↑</button><button data-direction="left">←</button><button data-direction="down">↓</button><button data-direction="right">→</button></div><div id="portals" class="portals"></div><p class="small">Arrow keys move along the draft centerlines. Crop-transition buttons appear at paired landings. This inspection tool lets you examine gated routes; it does not implement or bypass game events.</p><details open><summary>Paint and state requirements</summary><ul id="inventory"></ul></details></section>
+<details><summary>Architecture refinements and review boundaries</summary><ul id="refinements"></ul><p>Hub = 4:3; the three room maps = square. All production sources are 2048 px wide. The party pin uses the current 52 px desktop / 32 px phone sizes and −70% vertical anchor. Sampled geometric checks include its 3 px shadow, 0.2 m wall/prop stand-off, forward routes and backtracking. This is schematic clearance; each eventual painting must be rechecked beneath the same overlay.</p><p>Keep the existing rescue grille north of entry, the free-wheeled cart, the separate eastern escape, and ordinary stone loading steps. No floor rails or mysterious tracks. Room scene illustrations will be separate assets from these navigation maps.</p></details>
+</main><script>
+/* UTILITIES */
+/* DRAWING */
+const model=/* MODEL */;
+const foundation=/* FOUNDATION */;
+const rescue=/* RESCUE */;
+const hubPaint=/* HUB PAINT */;
+const recordsPaint=/* RECORDS PAINT */;
+const workshopPaint=/* WORKSHOP PAINT */;
+const $=id=>document.getElementById(id);
+const params=new URLSearchParams(location.search);let key=params.get('map')||'overview';
+if(!['overview','rescue',...model.maps.map(m=>m.key)].includes(key))key='overview';
+$('interior-paint').checked=params.get('paint')==='1';
+let currentNode=model.maps.find(m=>m.key===key)?.defaultNode||'hub';
+const isPhone=innerWidth<600;$('frame').value=isPhone?(innerWidth<410?'phone390':'phone430'):'desktop';$('labels').checked=!isPhone;
+function current(){return model.maps.find(m=>m.key===key);}
+function options(){return Object.fromEntries(['paths','labels','light','party','guide','clearance','actors'].map(id=>[id,$(id).checked]).concat([['node',currentNode],['frame',$('frame').value],['state',$('state').value]]));}
+function selectMap(next,node){key=next;currentNode=node||current()?.defaultNode||'hub';draw();}
+function walk(direction){const m=current();if(!m)return;const edge=neighbors(m,currentNode).find(e=>e.direction===direction);if(edge){currentNode=edge.target;draw();}}
+function draw(){
+  const m=current(),frame=model.frames[$('frame').value];$('interior-paint-option').hidden=!['hub','ledger','workshop'].includes(key);$('interior-paint-label').textContent=key==='hub'?'Painted hub':'Painted '+(m?.shortTitle.toLowerCase()||'');$('stage').style.setProperty('--map-width',frame.mapWidth+'px');
+  for(const b of document.querySelectorAll('[data-map]'))b.setAttribute('aria-pressed',String(b.dataset.map===key));
+  $('node').disabled=!m;for(const b of document.querySelectorAll('[data-direction]'))b.disabled=!m;
+  if(key==='overview'){
+    $('stage').innerHTML=drawOverview(model,foundation);$('map-title').textContent='One connected floor plan';$('description').textContent='Five interior views, four new paintings. Colored routes distinguish the main floor and the three zoomed rooms; the rescue map is already painted. Floor levels distinguish a crossing on a plan from a doorway.';
+  }else if(key==='rescue'){
+    $('stage').innerHTML='<img id="accepted-rescue" alt="Existing approved rescue room painting" src="'+rescue[$('guide').checked?'open':'closed']+'">';$('map-title').textContent='Existing rescue painting · unchanged';$('description').textContent='The hub inner post joins the west inspection gallery. Look north through the grille first, then return to the entry and follow the lower aisle. This preview is the fixed background; cart, people, cuff, brake and cell states remain separate in the game.';
+  }else{
+    const paintedMaps={hub:hubPaint[$('guide').checked?'open':'closed'],ledger:recordsPaint,workshop:workshopPaint};
+    const painting=$('interior-paint').checked?paintedMaps[key]:undefined;
+    $('stage').innerHTML=drawInterior(model,key,{...options(),painting});$('map-title').textContent=m.title+' · '+(m.level>0?'+':'')+m.level.toFixed(1)+' m';$('description').textContent=m.description;
+  }
+  $('node').innerHTML=m?m.nodes.map(n=>'<option value="'+n.id+'">'+escapeText(n.label)+'</option>').join(''):'';if(m)$('node').value=currentNode;
+  const n=m?.nodes.find(n=>n.id===currentNode);$('trigger').textContent=n?.trigger||'Intermediate walking point; no new roll, scene, recovery or reward.';
+  $('aliases').innerHTML=m?neighbors(m,currentNode).map(e=>'<span>'+({up:'↑',down:'↓',left:'←',right:'→'}[e.direction])+' '+escapeText(m.nodes.find(n=>n.id===e.target).label)+(e.gate?' · '+escapeText(e.gate):'')+'</span>').join(''):'';
+  $('portals').innerHTML='';
+  if(m)for(const p of m.portals.filter(p=>p.from===currentNode)){
+    const [target,id]=p.target.split(':');if(!model.maps.some(m=>m.key===target&&m.nodes.some(n=>n.id===id))&&target!=='rescue')continue;
+    const button=document.createElement('button');button.textContent=p.label;button.title=p.condition;button.onclick=()=>selectMap(target,id);$('portals').append(button);
+  }
+  if(key==='rescue'){const b=document.createElement('button');b.textContent='Return to inner guard post';b.onclick=()=>selectMap('hub','door');$('portals').append(b);}
+  $('inventory').innerHTML=(m?.stateInventory||['Existing rescue art is retained. This sheet does not replace the accepted painting or change its state layers.']).map(t=>'<li>'+escapeText(t)+'</li>').join('');
+  $('refinements').innerHTML=model.refinements.map(t=>'<li>'+escapeText(t)+'</li>').join('');
+  for(const b of document.querySelectorAll('#stage [data-node]'))b.onclick=()=>{currentNode=b.dataset.node;draw();};
+  window.reviewState={key,node:currentNode,frame:$('frame').value,options:options()};
+}
+for(const b of document.querySelectorAll('[data-map]'))b.onclick=()=>selectMap(b.dataset.map);
+for(const b of document.querySelectorAll('[data-direction]'))b.onclick=()=>walk(b.dataset.direction);
+for(const id of ['frame','state','paths','labels','light','party','guide','clearance','actors','interior-paint'])$(id).onchange=draw;
+$('node').onchange=()=>{currentNode=$('node').value;draw();};
+$('clean').onclick=()=>{for(const id of ['paths','labels','clearance'])$(id).checked=false;draw();};
+addEventListener('keydown',e=>{if(['SELECT','INPUT','TEXTAREA'].includes(e.target.tagName))return;const d={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right'}[e.key];if(d){e.preventDefault();walk(d);}});
+draw();
+</script></body></html>

@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Briarhold · West wall and interior plan</title>
+<style>
+  :root { color-scheme: light; --ink:#243632; --muted:#52645d; --paper:#fbf8ef; --line:#d8d1c1; --gate:#935410; --water:#3c657e; --court:#4b6945; }
+  * { box-sizing:border-box; }
+  html { background:#ede9dd; }
+  body { max-width:1120px; margin:auto; padding:clamp(16px,4vw,46px); font:16px/1.55 system-ui,sans-serif; color:var(--ink); }
+  h1,h2,p { margin:0; }
+  h1 { font:600 clamp(2.15rem,5vw,3.65rem)/1.05 Georgia,serif; margin:0 0 14px; }
+  h2 { font:600 1.75rem/1.2 Georgia,serif; }
+  a { color:#254e5d; }
+  nav { display:flex; gap:10px 24px; flex-wrap:wrap; margin-top:20px; }
+  section { margin-top:26px; background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:clamp(12px,3vw,26px); }
+  section > p { margin:8px 0 14px; color:var(--muted); }
+  figure { margin:0; }
+  .drawing { overflow-x:auto; border-radius:8px; background:#f2eee1; }
+  .drawing:focus-visible { outline:2px solid var(--water); outline-offset:2px; }
+  svg { display:block; width:100%; height:auto; }
+  .technical svg { min-width:680px; }
+  figcaption { margin-top:12px; color:var(--muted); }
+  .drawing text { fill:var(--ink); font-family:system-ui,sans-serif; font-size:13px; }
+  .drawing .small { font-size:11px; }
+  .drawing .label { font-weight:650; }
+  .drawing .wall { stroke:#415248; stroke-width:5; fill:none; }
+  .drawing .room { stroke:#68776a; stroke-width:1.5; }
+  .drawing .gate-route { stroke:var(--gate); fill:none; stroke-width:3; }
+  .drawing .crawl { stroke:var(--water); fill:none; stroke-width:3; stroke-dasharray:7 5; }
+  .drawing .court-route { stroke:var(--court); fill:none; stroke-width:3; }
+  .drawing .datum { stroke:#9b9484; stroke-dasharray:4 5; }
+  .drawing .badge circle { fill:#263a34; stroke:#ffefd0; stroke-width:1.7; }
+  .drawing .badge text { fill:#fff5df; font-size:13px; font-weight:700; text-anchor:middle; dominant-baseline:central; }
+  .features { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); gap:12px 22px; margin:16px 0 0; padding-left:24px; }
+  .features li::marker { font-weight:700; }
+  .arrival-toggle { margin:0 0 14px; accent-color:#935410; }
+  .arrival-toggle:not(:checked) ~ .drawing .arrival-overlay,
+  .arrival-toggle:checked ~ .drawing .workflow-overlay { display:none; }
+  .arrival-notes { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); gap:10px 20px; margin:14px 0 0; padding:0; list-style:none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Briarhold’s west wall</h1>
+  <p>Revised floor plan and side sections for review before painting. The west wall and its openings follow the v05 approach painting.</p>
+  <nav aria-label="Review views"><a href="#exterior">Painted approach</a><a href="#plan">Revised floor plan</a><a href="#section">Side sections</a><a href="#workshop">Workshop workflow</a><a href="briarhold-interior-review-v01.html">Walkable review</a></nav>
+</header>
+
+<section id="exterior">
+  <h2>Painted approach</h2>
+  <p>Four landmarks carry through to the drawings below. The court sits on the terrace above the runoff, behind the low stone wall.</p>
+  <figure>
+    <div class="drawing">
+      <svg viewBox="615 265 1120 775" role="img" aria-label="Crop of the painted west wall with markers on the receiving gate, low window, culvert and walled terrace">
+        <image href="../briarhold-approach-paint-v01/briarhold-approach-paint-v05-2048.webp" x="0" y="0" width="2048" height="1152"/>
+        <g stroke="#ffefd0" stroke-width="3" fill="none">
+          <path d="M1490 376 1434 400 1340 442 M1477 770 1405 775 1290 797 M1465 956 1380 948 1304 951 M925 656 1018 668 1120 667"/>
+        </g>
+        <g class="badge">
+          <g transform="translate(1490 376)"><circle r="19"/><text>1</text></g>
+          <g transform="translate(1477 770)"><circle r="19"/><text>2</text></g>
+          <g transform="translate(1465 956)"><circle r="19"/><text>3</text></g>
+          <g transform="translate(925 656)"><circle r="19"/><text>4</text></g>
+        </g>
+      </svg>
+    </div>
+    <figcaption>Receiving gate (1), low work window (2), culvert (3), and the proposed sheltered court on the existing terrace (4).</figcaption>
+  </figure>
+</section>
+
+<section id="plan">
+  <h2>Revised floor plan</h2>
+  <p>North is up. The hub branches north to records and south into a narrow corridor. Around the bend, the corridor opens onto the guard post outside the locked inspection door.</p>
+  <figure>
+    <div class="drawing technical" tabindex="0" aria-label="Scrollable floor plan">
+      <svg viewBox="0 0 800 528" role="img" aria-label="North-up floor plan with a continuous west façade, gate to landing, window to lower workshop, a north stair to records, a narrow south corridor to the guard post, and an underfloor culvert turning north to the landing">
+        <defs>
+          <pattern id="paving" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0v9" stroke="#a2a88e" opacity=".45"/></pattern>
+          <marker id="door-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 8 4 0 8z" fill="#935410"/></marker>
+          <marker id="water-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 8 4 0 8z" fill="#3c657e"/></marker>
+          <marker id="records-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 8 4 0 8z" fill="#266e65"/></marker>
+          <marker id="court-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 8 4 0 8z" fill="#4b6945"/></marker>
+        </defs>
+        <rect x="216" y="70" width="264" height="410" fill="#e8e3d4"/>
+        <path d="M25 270 Q60 221 103 230 T204 240" fill="none" stroke="#d9bf94" stroke-width="23"/>
+        <path d="M29 363 Q73 380 97 402 T209 414" fill="none" stroke="#bcced0" stroke-width="16"/>
+        <rect x="104" y="299" width="112" height="45" fill="#dce4cf" stroke="#68776a" stroke-width="1.5"/>
+        <rect x="104" y="299" width="112" height="45" fill="url(#paving)"/>
+        <path d="M104 300V344H216" fill="none" stroke="#7d7969" stroke-width="5"/>
+        <g fill="#e9dac3" class="room">
+          <rect x="216" y="187" width="80" height="112"/>
+          <path d="M256 211H320V171H375V273H394V221H424V305H349V263H320V269H256Z"/>
+          <rect x="424" y="155" width="48" height="168"/>
+          <rect x="472" y="147" width="224" height="160"/>
+          <rect x="646" y="331" width="78" height="35"/>
+        </g>
+        <path d="M230 261H274V331H216V307H230Z" fill="#e9dac3" stroke="#68776a" stroke-width="1.5"/>
+        <g fill="#dddccf" class="room">
+          <rect x="216" y="347" width="112" height="104"/>
+          <path d="M328 377H382V413H328Z"/>
+          <rect x="235" y="451" width="50" height="32" fill="#e8e3d4"/>
+        </g>
+        <g fill="#eadfcd" class="room">
+          <rect x="320" y="67" width="96" height="80"/>
+          <path d="M330 147H365V189H330Z"/>
+          <path d="M382 347H512V435H382Z"/>
+          <path d="M394 305H418V347H394Z"/>
+        </g>
+        <path d="M216 70V226 M216 253V305 M216 331V363 M216 380V405 M216 423V480" class="wall"/>
+        <path d="M216 363v17" stroke="#b07a35" stroke-width="4"/>
+        <path d="M216 405v18" stroke="#3c657e" stroke-width="4"/>
+        <path d="M171 240H254" class="gate-route" marker-end="url(#door-arrow)"/>
+        <path d="M254 240H347V155" stroke="#266e65" stroke-width="3" fill="none" marker-end="url(#records-arrow)"/>
+        <path d="M209 414H248Q258 414 258 402V280" class="crawl" marker-end="url(#water-arrow)"/>
+        <path d="M258 280v-30" class="crawl" marker-end="url(#water-arrow)"/>
+        <path d="M271 264V321H178" class="court-route" marker-end="url(#court-arrow)"/>
+        <g stroke="#898a79" stroke-width="2" fill="none">
+          <path d="M331 261 331 285 306 304 306 347 M406 307v40 M360 397h23"/>
+          <path d="M331 156h15m4 0h14m-33 7h15m4 0h14m-33 7h15m4 0h14m-33 7h15m4 0h14 M395 312h21m-21 8h21m-21 8h21m-21 8h21"/>
+        </g>
+        <g id="inner-post-route" aria-label="Narrow corridor, guard bay and inspection door">
+          <path id="hub-east-return" d="M375 171V273H394V221H424" class="wall" stroke-width="3"/>
+          <path d="M349 263v42h45" class="wall" stroke-width="3"/>
+          <path d="M347 240H361V288H405V241H446" fill="none" stroke="#935410" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#door-arrow)"/>
+          <g id="posted-guards" fill="#9b5f47">
+            <circle cx="406" cy="260" r="3.3"/>
+            <circle cx="417" cy="273" r="3.3"/>
+          </g>
+          <path d="M424 233v17" stroke="#935410" stroke-width="4"/>
+          <path d="M472 183v16" stroke="#52645d" stroke-width="3" stroke-dasharray="2 2"/>
+          <path d="M420 268 479 274h12M424 232l56-13h11M474 191l27-23h10M365 304v13h-14" stroke="#68776a" fill="none"/>
+          <g class="small">
+            <text x="495" y="278">Guard post</text>
+            <text x="495" y="223">Locked inner door</text>
+            <text x="515" y="172">Inspection grille</text>
+            <text x="333" y="328" text-anchor="middle">Narrow corridor</text>
+          </g>
+        </g>
+        <g class="label">
+          <text x="58" y="221">Receiving road</text><text x="28" y="401">Wet runoff</text>
+          <text x="113" y="315">Sheltered court</text>
+          <text x="223" y="211">Service</text><text x="223" y="226">landing 0 m</text>
+          <text x="341" y="225" text-anchor="end">Hub</text>
+          <text x="368" y="99" text-anchor="middle">Records</text><text x="368" y="118" text-anchor="middle">+2.8 m</text>
+          <text x="269" y="400">Seal workshop</text><text x="269" y="418">−2.0 m</text>
+          <text x="430" y="377" text-anchor="middle">Signal</text><text x="430" y="394" text-anchor="middle">platform</text><text x="430" y="413" text-anchor="middle">+3.4 m</text>
+          <text x="489" y="188">Rescue room 0 m</text><text x="662" y="353">Cells</text>
+        </g>
+        <g class="small">
+
+          <text x="450" y="309" transform="rotate(-90 450 309)">Gallery</text>
+          <text x="111" y="359">Retaining wall</text><text x="273" y="368">Crawl below</text><text x="273" y="382">workshop</text>
+          <path d="M265 375h10" stroke="#3c657e"/><text x="238" y="469">Trough</text>
+          <text x="115" y="124">West façade</text><path d="M183 120H215" stroke="#68776a"/>
+          <text x="265" y="282">Culvert stair</text>
+          <text x="610" y="431">0</text><text x="686" y="431">5 m</text><path d="M613 439h80m-80-4v8m80-8v8" stroke="#52645d"/>
+        </g>
+        <g class="badge">
+          <g transform="translate(216 239)"><circle r="11"/><text>1</text></g>
+          <g transform="translate(216 372)"><circle r="11"/><text>2</text></g>
+          <g transform="translate(216 414)"><circle r="11"/><text>3</text></g>
+          <g transform="translate(155 331)"><circle r="11"/><text>4</text></g>
+        </g>
+        <path d="M67 129V88l-6 10m6-10 6 10" stroke="#415248" stroke-width="2" fill="none"/><text x="62" y="80" class="label">N</text>
+      </svg>
+    </div>
+    <figcaption>Teal leads to records. The dashed amber route turns south from the hub, then east into the guard bay. Beyond the locked inner door is the inspection gallery, with the grille on the rescue-room wall. The bend keeps the posted guards’ sightline off the records approach.</figcaption>
+  </figure>
+</section>
+
+<section id="section">
+  <h2>Side sections</h2>
+  <p>Three cuts through the same west wall, read from north to south. Heights are relative to the landing. The dashed court profile sits north of the window cut. The back leg of the culvert is unfolded to show the turn and the rise.</p>
+  <figure>
+    <div class="drawing technical" tabindex="0" aria-label="Scrollable side sections">
+      <svg viewBox="0 0 800 604" role="img" aria-label="Three west-to-east sections through the gate, terrace and work window, and culvert, sharing the same finished landing height">
+        <defs>
+          <pattern id="earth" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(40)"><path d="M0 0v8" stroke="#bdb39e" stroke-width="2"/></pattern>
+          <marker id="section-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 8 4 0 8z" fill="#3c657e"/></marker>
+        </defs>
+        <text x="80" y="34" class="label">WEST · APPROACH</text>
+        <text x="347" y="34" class="label">WEST WALL</text>
+        <text x="488" y="34" class="label">EAST · INSIDE</text>
+        <path d="M383 45V568" class="datum"/>
+        <g>
+          <path d="M80 141H720" class="datum"/>
+          <path d="M80 151 149 141H722V167H80Z" fill="url(#earth)"/>
+          <path d="M80 151 149 141H722 M378 54v27h14v-27" class="wall"/>
+          <path d="M383 81H672V141H383Z" fill="#e9dac3" stroke="#68776a" stroke-width="1.5"/>
+          <path d="M383 141V83" stroke="#935410" stroke-width="2" stroke-dasharray="4 3"/>
+          <path d="M258 126H470" class="gate-route"/>
+          <text x="159" y="123">Receiving road</text>
+          <text x="490" y="116" class="label">Service landing · 0 m</text>
+          <text x="737" y="145" class="small">0 m</text>
+          <g class="badge" transform="translate(383 104)"><circle r="11"/><text>1</text></g>
+        </g>
+        <path d="M65 191H744" stroke="#d8d1c1"/>
+        <g>
+          <path d="M80 283H722" class="datum"/>
+          <path d="M74 352 133 351 196 336H383V331H722V362H74Z" fill="url(#earth)"/>
+          <path d="M74 352 133 351 196 336H383 M383 211V300 M383 318V331H722" class="wall"/>
+          <path d="M383 275H648V331H383V318" fill="#e9dac3" stroke="#68776a" stroke-width="1.5"/>
+          <path d="M383 274V300 M383 318V331" class="wall"/>
+          <path d="M383 300v18" stroke="#b07a35" stroke-width="4"/>
+          <path d="M238 336V283H383" fill="none" stroke="#657c58" stroke-width="3" stroke-dasharray="6 5"/>
+          <text x="245" y="269" class="label">Court terrace · 0 m</text>
+          <text x="111" y="309">Retaining wall</text><path d="M201 307h34" stroke="#68776a"/>
+          <text x="438" y="307" class="label">Seal workshop · −2.0 m</text>
+          <text x="430" y="349" class="small">Proposed window sill at −1.5 m</text>
+          <text x="737" y="287" class="small">0 m</text>
+          <g class="badge" transform="translate(383 309)"><circle r="11"/><text>2</text></g>
+          <g class="badge" transform="translate(282 298)"><circle r="11"/><text>4</text></g>
+        </g>
+        <path d="M65 382H744" stroke="#d8d1c1"/>
+        <g>
+          <path d="M80 449H722" class="datum"/>
+          <path d="M74 543 178 543 252 539H383V449H722V569H74Z" fill="url(#earth)"/>
+          <path d="M75 543 178 543 252 539H383 M383 405V518 M383 540v29" class="wall"/>
+          <path d="M383 496H491" stroke="#68776a" stroke-width="4"/>
+          <path d="M383 518H512L603 432H671V449H613L529 541H383Z" fill="#f7f0e1" stroke="#68776a" stroke-width="1.5"/>
+          <path d="M319 533H513L607 442H653" class="crawl" marker-end="url(#section-arrow)"/>
+          <path d="M613 449H722" class="wall"/>
+          <path d="M512 467v90" class="datum"/>
+          <text x="90" y="529">Runoff and grate</text>
+          <text x="394" y="513" class="small">Below workshop</text>
+          <rect x="532" y="550" width="211" height="21" rx="3" fill="#f2eee1"/><text x="539" y="565" class="small">Turn north, then rise to landing</text>
+          <text x="606" y="424" class="label">Service landing</text>
+          <text x="737" y="453" class="small">0 m</text>
+          <text x="737" y="542" class="small">≈ −4 m</text>
+          <g class="badge" transform="translate(383 529)"><circle r="11"/><text>3</text></g>
+        </g>
+      </svg>
+    </div>
+    <ol class="features">
+      <li><strong>Gate.</strong> A recessed opening leads east from the road into the service landing.</li>
+      <li><strong>Window.</strong> A low opening lights the lower seal workshop. The sill height is provisional.</li>
+      <li><strong>Culvert.</strong> The grate opens into a crawl under the workshop. The route turns north and rises into the same landing as the gate.</li>
+      <li><strong>Court.</strong> A screened terrace beside the receiving apron connects to the landing through a side passage. Its retaining wall sits above the runoff.</li>
+    </ol>
+  </figure>
+</section>
+<section id="workshop">
+  <h2>Workshop workflow study</h2>
+  <p>A two-person seal shop built around a single pass of the work. The hot work stays along the north end. The rack projects out from the south wall, and inspection and packing move to the lower east wall.</p>
+  <figure>
+    <input type="checkbox" class="arrival-toggle" id="show-workshop-arrival" checked>
+    <label for="show-workshop-arrival">Show the party’s arrival</label>
+    <div class="drawing technical" tabindex="0" aria-label="Scrollable workshop workflow plan">
+      <svg viewBox="0 0 800 493" role="img" aria-label="Workshop concept with the stove and press in the northwest, a tray rack projecting from the south wall, a pack bench on the lower east wall, and dispatch beside the north stair">
+        <defs>
+          <marker id="workflow-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 8 4 0 8z" fill="#266e65"/></marker>
+          <marker id="workshop-sneak-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 8 4 0 8z" fill="#935410"/></marker>
+          <marker id="workshop-facing-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 8 4 0 8z" fill="#5c4b3c"/></marker>
+        </defs>
+        <path d="M88 89V49l-6 10m6-10 6 10" stroke="#415248" stroke-width="2" fill="none"/>
+        <text x="83" y="42" class="label">N</text>
+        <rect x="164" y="83" width="471" height="302" fill="#e9dac3"/>
+        <ellipse class="arrival-overlay" cx="421" cy="217" rx="111" ry="85" fill="#f6db91" opacity=".55"/>
+        <path d="M164 83H502 M559 83H635V163 M635 207V385H361 M318 385H164V165 M164 130V83" class="wall"/>
+        <path d="M164 130v35" stroke="#9c733a" stroke-width="3"/>
+        <path d="M164 147H145l-15-14H47" fill="none" stroke="#68776a"/>
+        <text x="47" y="121" class="small">Low work window</text>
+        <g fill="#e0d7c3" stroke="#737d6c">
+          <path d="M502 83V43H559V83"/>
+          <path d="M635 163H685V207H635"/>
+          <path d="M318 385V427H361V385"/>
+          <path d="M503 52h55m-55 9h55m-55 9h55M645 164v42m9-42v42m9-42v42m9-42v42M319 396h41m-41 10h41m-41 10h41" fill="none"/>
+        </g>
+        <text x="530" y="30" text-anchor="middle" class="label">Service stair</text>
+        <text x="646" y="224" class="small">Signal stair</text>
+        <text x="376" y="419" class="small">Outer wash yard</text>
+        <rect x="380" y="431" width="114" height="26" rx="3" fill="#b7c6c0" stroke="#6f7971"/>
+        <text x="437" y="448" text-anchor="middle" class="small">Tool-wash trough</text>
+        <g stroke="#65776a" stroke-width="1.3">
+          <rect x="311" y="99" width="146" height="45" rx="3" fill="#f2e9d5"/>
+          <rect x="174" y="98" width="96" height="57" rx="3" fill="#e7c69c"/>
+          <rect x="174" y="196" width="104" height="76" rx="3" fill="#dfb489"/>
+          <rect x="176" y="279" width="75" height="24" rx="3" fill="#d7ba97"/><rect x="417" y="296" width="42" height="89" rx="3" fill="#d8e2cb"/>
+          <rect x="170" y="355" width="76" height="23" rx="3" fill="#d7ba97"/>
+          <rect x="538" y="281" width="85" height="89" rx="3" fill="#f2e9d5"/>
+          <rect x="566" y="97" width="56" height="50" rx="3" fill="#d8e2cb"/>
+        </g>
+        <g class="label" text-anchor="middle">
+          <text x="384" y="118">1 · Prepare packets</text>
+          <text x="222" y="123">2 · Warm</text><text x="222" y="139">the wax</text>
+          <text x="225" y="226">3 · Stamp</text><text x="225" y="244">at the press</text>
+          <text x="407" y="318" text-anchor="end">4 · Let seals set</text>
+          <text x="580" y="318">5 · Inspect</text><text x="580" y="335">and pack</text>
+        </g>
+        <g class="small" text-anchor="middle">
+          <text x="384" y="134">Paper and fastenings</text>
+          <text x="208" y="370">Empty trays</text>
+          <text x="213" y="295">Stamp chest</text><text x="407" y="335" text-anchor="end">Tray rack</text>
+          <text x="496" y="370">Cover</text>
+          <text x="594" y="117">Dispatch</text><text x="594" y="132">crate</text>
+        </g>
+        <g class="workflow-overlay" fill="none" stroke="#266e65" stroke-width="2.6" marker-end="url(#workflow-arrow)">
+          <path d="M530 87V154H424"/>
+          <path d="M360 150H285L268 131"/>
+          <path d="M288 134V223"/>
+          <path d="M282 260 311 284H410"/>
+          <path d="M445 274H522"/>
+          <path d="M577 273V155"/>
+        </g>
+        <path d="M340 375V345" stroke="#8a9384" stroke-width="2" stroke-dasharray="4 4"/>
+        <text x="390" y="236" text-anchor="middle" class="label workflow-overlay">Clear working aisle</text>
+        <text x="390" y="255" text-anchor="middle" class="small workflow-overlay">Pass trays without crossing the press</text>
+        <path d="M465 342h64v43h-64z" fill="#567153" fill-opacity=".1" stroke="#68776a" stroke-dasharray="4 4"/>
+        <g class="arrival-overlay" aria-label="Orren and Dessa face the press while the party crosses from the stair toward the rack">
+          <path d="M531 82V119L503 171 486 235 493 312V351" fill="none" stroke="#935410" stroke-width="3" stroke-dasharray="6 5" marker-end="url(#workshop-sneak-arrow)"/>
+          <path d="M291 241 279 236 M288 201 278 211" fill="none" stroke="#5c4b3c" stroke-width="2" marker-end="url(#workshop-facing-arrow)"/>
+          <circle cx="300" cy="244" r="8" fill="#765745" stroke="#fff0d9" stroke-width="1.5"/>
+          <circle cx="296" cy="194" r="8" fill="#765745" stroke="#fff0d9" stroke-width="1.5"/>
+          <text x="312" y="248" class="small">Orren · press lever</text>
+          <text x="308" y="193" class="small">Dessa · checks impression</text>
+          <text x="474" y="219" text-anchor="end" class="small">Lamplit crossing</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption>The low west window sits above the wax stove. The press and stamp chest follow it down the west wall, with empty trays and cleaning cloths stored by the wash-yard door. The rack runs perpendicular to the south wall and gives the party a sheltered pocket on its east side. Once the seals set, the packets move to the lower east wall for inspection and packing. The outside trough serves cleanup.</figcaption>
+    <ul class="arrival-notes">
+      <li><strong>At the press.</strong> Orren stands on the aisle side, facing the window as he works the lever. Dessa stands at his shoulder, looking down at the impression.</li>
+      <li><strong>Across the light.</strong> Wait on the stair until both lean over the press. On successive strokes, the party crosses one at a time. Each lands behind the east face of the rack before the next leaves.</li>
+    </ul>
+  </figure>
+  <p>Softened wax impressed with an engraved matrix is the historical starting point. This is a workflow and cover study. <a href="briarhold-interior-review-v01.html?map=workshop">Walk the route in the technical review</a>. <a href="https://cdn.nationalarchives.gov.uk/documents/education/medieval-seals.pdf">The National Archives guide to medieval seals</a></p>
+</section>
+</body>
+</html>

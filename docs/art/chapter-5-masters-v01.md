@@ -1,5 +1,7 @@
 # Briarhold layout and scale / lighting masters v01
 
+**Runtime update, November 18:** the revision-4 approach/rescue geometry is now the source for [the playable painted-map adapter](chapter-5-painted-map-integration.md), with additive saved intermediate footsteps. The offline master review remains a reference inspection tool. Its creation-time reference-only statements below are historical for these two maps.
+
 Masters produced **2026-11-13** against the owner-accepted Chapter 5 greybox, then accepted as the foundation for painting. These editable technical compositions establish architecture, dimensions, proposed intermediate travel nodes and the 4:3 rescue crop. Production navigation/frame integration remains outstanding. The later track-removal correction updates one matching prose paragraph; runtime maps, checkpoints and combat behavior are unchanged.
 
 **Current revision 4 / rescue painting:** [closed/open room candidate v02](briarhold-rescue-paint-v01.md) uses the accepted grille-above-E arrangement. The owner rejected rail-like floor strips during painting, so the current master has ordinary uneven stone paving and a freely wheeled cart beside the steps. Guide light reveals the floor, step edge and brake, with no cart track. One matching runtime prose sentence was updated; no mechanics changed.

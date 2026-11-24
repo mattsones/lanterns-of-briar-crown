@@ -1,0 +1,2126 @@
+{
+  "version": 1,
+  "revision": 7,
+  "date": "2026-11-22",
+  "status": "Interior navigation / scale / lighting proposal; awaiting owner layout review before painting",
+  "units": "metres; east right, south down; roofs removed; floor levels relative to service landing",
+  "foundation": "chapter-5-masters-v01/layout.json revision 4; accepted approach v05 and rescue v02 remain unchanged",
+  "frames": {
+    "desktop": {
+      "viewport": [
+        1280,
+        720
+      ],
+      "mapWidth": 870,
+      "token": 52
+    },
+    "phone390": {
+      "viewport": [
+        390,
+        844
+      ],
+      "mapWidth": 332,
+      "token": 32
+    },
+    "phone430": {
+      "viewport": [
+        430,
+        932
+      ],
+      "mapWidth": 372,
+      "token": 32
+    }
+  },
+  "marker": {
+    "shadow": 3,
+    "anchorY": 0.7,
+    "bodyRadius": 0.3,
+    "solidClearance": 0.2
+  },
+  "narrativeLocks": [
+    "opening acknowledgement",
+    "hub searching lamp / timber passage",
+    "pending investigator or battle",
+    "first grille sight",
+    "unfinished cart rescue",
+    "all captives, reunion and court rest before departure"
+  ],
+  "topology": [
+    [
+      "landing",
+      "hub"
+    ],
+    [
+      "hub",
+      "ledger"
+    ],
+    [
+      "hub",
+      "workshop"
+    ],
+    [
+      "workshop",
+      "lanterns"
+    ],
+    [
+      "lanterns",
+      "door"
+    ],
+    [
+      "hub",
+      "door"
+    ],
+    [
+      "door",
+      "grille"
+    ],
+    [
+      "grille",
+      "crown"
+    ],
+    [
+      "crown",
+      "carriage"
+    ],
+    [
+      "crown",
+      "cells"
+    ],
+    [
+      "landing",
+      "gathering"
+    ]
+  ],
+  "guide": {
+    "lamp": [
+      43,
+      24
+    ],
+    "height": 4.6,
+    "hubTarget": [
+      37.7,
+      17.3
+    ],
+    "rescueOpening": [
+      49,
+      21.5
+    ],
+    "openingHeight": 2.8,
+    "brake": [
+      55.4,
+      19.1
+    ],
+    "note": "Two fixed straight high-level branches from an ordinary oil lamp; wall slots and reflection, never a walkable passage."
+  },
+  "refinements": [
+    "The site plan was a circulation plan, not a narrow-corridor token master. Main circulation is widened to 3.2–3.6m in this proposal; original room footprints/levels remain.",
+    "The lower workshop stair opens directly off the covered service passage, before the pier.",
+    "The records stair branches north from the hub. A separate south corridor bends into the guard bay just outside the locked inspection door.",
+    "The spare records desk faces east along the west side. Turn left from the stair into the deeper pocket behind the crates at its south end.",
+    "The platform return flight stays west of the inspection gallery wall and joins the inner post. It does not cut diagonally through that wall.",
+    "The signal platform extends two metres east. The crosswalk passes the guard stair’s sightline; the solid stair cheek screens the operating position farther east.",
+    "The west wall holds the wax stove below the work window, then the press and stamp chest. A low shelf holds empty trays beside the wash-yard door.",
+    "The workshop stair opens onto a lamplit crossing. Wait for both seal workers to face the press, then cross to the east side of the south cooling rack.",
+    "The workshop descent and platform return have a solid divider. There is no new hub-to-platform doorway.",
+    "The court stance moves 0.4m south within the existing court to fit the phone marker. Court footprint remains 22.5,21 / 7×3m.",
+    "Portals change crop at a landing; room and hub crops share the same metre-space handoff point. Passage art beyond a seam is context, not an extra selectable room."
+  ],
+  "maps": [
+    {
+      "key": "hub",
+      "id": "briarholdHub",
+      "title": "Landing, hub and sheltered court",
+      "shortTitle": "Main floor",
+      "source": [
+        2048,
+        1536
+      ],
+      "bounds": [
+        21.5,
+        11.5,
+        22,
+        16.5
+      ],
+      "defaultNode": "hub",
+      "level": 0,
+      "description": "Gate and culvert meet at the same landing. Take the north stair to records or follow the south corridor around the masonry corner to the guard bay. The signal stair returns separately into the bay.",
+      "floors": [
+        {
+          "rect": [
+            29.5,
+            14,
+            5,
+            7
+          ],
+          "level": 0,
+          "material": "stone"
+        },
+        {
+          "rect": [
+            32,
+            15.5,
+            7,
+            3.6
+          ],
+          "level": 0,
+          "material": "stone"
+        },
+        {
+          "rect": [
+            34.8,
+            13,
+            5.1,
+            6.2
+          ],
+          "level": 0,
+          "material": "stone"
+        },
+        {
+          "rect": [
+            36.15,
+            11.5,
+            3.2,
+            4.5
+          ],
+          "level": 0,
+          "material": "stairs-up"
+        },
+        {
+          "rect": [
+            33.7,
+            18.1,
+            3,
+            5.7
+          ],
+          "level": 0,
+          "material": "stairs-down"
+        },
+        {
+          "rect": [
+            36.7,
+            17.3,
+            3.2,
+            5.35
+          ],
+          "level": 0,
+          "material": "stone"
+        },
+        {
+          "rect": [
+            39.9,
+            18.95,
+            3.2,
+            3.7
+          ],
+          "level": 0,
+          "material": "stone"
+        },
+        {
+          "rect": [
+            39.9,
+            15.38,
+            3.2,
+            3.57
+          ],
+          "level": 0,
+          "material": "stone"
+        },
+        {
+          "rect": [
+            39.6,
+            22.65,
+            3.5,
+            1.65
+          ],
+          "level": 0,
+          "material": "stairs-up"
+        },
+        {
+          "rect": [
+            30.4,
+            19.1,
+            3.2,
+            5
+          ],
+          "level": 0,
+          "material": "stone"
+        },
+        {
+          "rect": [
+            27,
+            21.3,
+            6,
+            2.7
+          ],
+          "level": 0,
+          "material": "stone"
+        },
+        {
+          "rect": [
+            22.5,
+            21,
+            7,
+            3
+          ],
+          "level": 0,
+          "material": "court"
+        }
+      ],
+      "props": [
+        {
+          "id": "hub-pier",
+          "label": "Square stone pier",
+          "rect": [
+            34.9,
+            14,
+            0.9,
+            1.1
+          ],
+          "kind": "stone",
+          "height": 3
+        },
+        {
+          "id": "tally-rack",
+          "label": "Empty tally rack",
+          "rect": [
+            34.95,
+            13.1,
+            0.85,
+            0.65
+          ],
+          "kind": "wood",
+          "height": 1.7
+        },
+        {
+          "id": "landing-crates",
+          "label": "Road stores",
+          "rect": [
+            30,
+            14.4,
+            1.4,
+            0.8
+          ],
+          "kind": "wood",
+          "height": 1.2
+        },
+        {
+          "id": "court-cistern",
+          "label": "Covered water cistern",
+          "rect": [
+            23.1,
+            21.3,
+            1.3,
+            1.6
+          ],
+          "kind": "stone",
+          "height": 1
+        },
+        {
+          "id": "court-stores",
+          "label": "Blankets / road stores",
+          "rect": [
+            23.1,
+            23.3,
+            1.3,
+            0.45
+          ],
+          "kind": "wood",
+          "height": 1.2
+        },
+        {
+          "id": "guard-chairs",
+          "label": "Guard chairs",
+          "rect": [
+            42.73,
+            15.51,
+            0.35,
+            0.3
+          ],
+          "kind": "wood",
+          "height": 1.2
+        }
+      ],
+      "solids": [
+        {
+          "id": "landing-west-upper",
+          "rect": [
+            29.3,
+            13.8,
+            0.2,
+            1.7
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "landing-west-lower",
+          "rect": [
+            29.3,
+            19.2,
+            0.2,
+            1.8
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "landing-north",
+          "rect": [
+            29.3,
+            13.8,
+            5.4,
+            0.2
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "landing-east-upper",
+          "rect": [
+            34.5,
+            13.8,
+            0.2,
+            1.5
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "landing-south-west",
+          "rect": [
+            29.3,
+            20.7,
+            1.1,
+            0.2
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "hub-north-west",
+          "rect": [
+            34.8,
+            12.8,
+            1.35,
+            0.2
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "hub-north-east",
+          "rect": [
+            39.35,
+            12.8,
+            0.8,
+            0.2
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "records-stair-west",
+          "rect": [
+            35.95,
+            11.5,
+            0.2,
+            1.5
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "records-stair-east",
+          "rect": [
+            39.35,
+            11.5,
+            0.2,
+            1.5
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "guard-corridor-return",
+          "rect": [
+            39.9,
+            13,
+            0.22,
+            5.95
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "guard-bay-north",
+          "rect": [
+            40.12,
+            15.18,
+            2.98,
+            0.2
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "guard-bay-east-upper",
+          "rect": [
+            43.1,
+            15.3,
+            0.2,
+            0.75
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "guard-bay-east-lower",
+          "rect": [
+            43.1,
+            18.9,
+            0.2,
+            5.4
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "corridor-workshop-divider",
+          "rect": [
+            36.7,
+            19.85,
+            0.22,
+            2.8
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "corridor-south",
+          "rect": [
+            36.48,
+            22.65,
+            3.1,
+            0.2
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "court-stair-divider",
+          "rect": [
+            33.5,
+            20.8,
+            0.2,
+            3.5
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "court-north",
+          "rect": [
+            22.3,
+            20.8,
+            7.4,
+            0.2
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "court-west",
+          "rect": [
+            22.3,
+            20.8,
+            0.2,
+            3.4
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "court-south",
+          "rect": [
+            22.3,
+            24,
+            7.4,
+            0.2
+          ],
+          "height": 2.8
+        }
+      ],
+      "nodes": [
+        {
+          "id": "landing",
+          "label": "Service landing",
+          "point": [
+            32,
+            17.3
+          ],
+          "trigger": "Both resolved exterior entrances arrive here; culvert stair rises from below."
+        },
+        {
+          "id": "h01",
+          "label": "Covered service passage",
+          "point": [
+            35,
+            17.3
+          ]
+        },
+        {
+          "id": "hub",
+          "label": "Shelter behind pier",
+          "point": [
+            37.7,
+            17.3
+          ],
+          "trigger": "First survey and authored searching-lamp / timber-load interruptions; descriptions earn room names."
+        },
+        {
+          "id": "h02",
+          "label": "Upper stair",
+          "point": [
+            37.7,
+            15.4
+          ]
+        },
+        {
+          "id": "hubRecords",
+          "label": "Upper workroom landing",
+          "point": [
+            37.7,
+            13.6
+          ]
+        },
+        {
+          "id": "h03",
+          "label": "Lower stair turn",
+          "point": [
+            35.18,
+            19.45
+          ]
+        },
+        {
+          "id": "hubWorkshop",
+          "label": "Lower workroom landing",
+          "point": [
+            35.18,
+            22.4
+          ]
+        },
+        {
+          "id": "guardCorridor",
+          "label": "Narrow south corridor",
+          "point": [
+            38.39,
+            17.3
+          ]
+        },
+        {
+          "id": "guardBend",
+          "label": "Turn into guard bay",
+          "point": [
+            38.39,
+            21
+          ]
+        },
+        {
+          "id": "guardBay",
+          "label": "Guard bay",
+          "point": [
+            41.61,
+            21
+          ]
+        },
+        {
+          "id": "door",
+          "label": "Locked inner door",
+          "point": [
+            41.61,
+            17.3
+          ],
+          "trigger": "Existing diversion/combat and spare-key gate; opening the guide lamp exposes an occupied post."
+        },
+        {
+          "id": "hubSignal",
+          "label": "Platform return landing",
+          "point": [
+            41.61,
+            22.65
+          ]
+        },
+        {
+          "id": "courtApproach",
+          "label": "Court approach by culvert stair",
+          "point": [
+            32,
+            20
+          ]
+        },
+        {
+          "id": "h05",
+          "label": "Court passage",
+          "point": [
+            32,
+            22.9
+          ]
+        },
+        {
+          "id": "h06",
+          "label": "Court threshold",
+          "point": [
+            29.6,
+            22.9
+          ]
+        },
+        {
+          "id": "gathering",
+          "label": "Sheltered court",
+          "point": [
+            26,
+            22.9
+          ],
+          "trigger": "After Lio: gather four captives, reunion, one rest/heal, departure requirements."
+        }
+      ],
+      "edges": [
+        {
+          "from": "landing",
+          "to": "h01",
+          "direction": "right"
+        },
+        {
+          "from": "h01",
+          "to": "hub",
+          "direction": "right"
+        },
+        {
+          "from": "hub",
+          "to": "h02",
+          "direction": "up"
+        },
+        {
+          "from": "h02",
+          "to": "hubRecords",
+          "direction": "up"
+        },
+        {
+          "from": "h01",
+          "to": "h03",
+          "direction": "down"
+        },
+        {
+          "from": "h03",
+          "to": "hubWorkshop",
+          "direction": "down"
+        },
+        {
+          "from": "hub",
+          "to": "guardCorridor",
+          "direction": "right"
+        },
+        {
+          "from": "guardCorridor",
+          "to": "guardBend",
+          "direction": "down"
+        },
+        {
+          "from": "guardBend",
+          "to": "guardBay",
+          "direction": "right"
+        },
+        {
+          "from": "guardBay",
+          "to": "door",
+          "direction": "up"
+        },
+        {
+          "from": "guardBay",
+          "to": "hubSignal",
+          "direction": "down"
+        },
+        {
+          "from": "landing",
+          "to": "courtApproach",
+          "direction": "down",
+          "gate": "Lio rescued before gathering"
+        },
+        {
+          "from": "courtApproach",
+          "to": "h05",
+          "direction": "down"
+        },
+        {
+          "from": "h05",
+          "to": "h06",
+          "direction": "left"
+        },
+        {
+          "from": "h06",
+          "to": "gathering",
+          "direction": "left"
+        }
+      ],
+      "portals": [
+        {
+          "from": "hubRecords",
+          "target": "ledger:recordsHub",
+          "label": "Up to upper workroom",
+          "point": [
+            37.7,
+            13.6
+          ],
+          "condition": "Ordinary walking; existing scene locks apply"
+        },
+        {
+          "from": "hubWorkshop",
+          "target": "workshop:workshopHub",
+          "label": "Down to lower workroom",
+          "point": [
+            35.18,
+            22.4
+          ],
+          "condition": "Ordinary walking; existing scene locks apply"
+        },
+        {
+          "from": "hubSignal",
+          "target": "lanterns:signalHub",
+          "label": "Up to signal platform",
+          "point": [
+            41.61,
+            22.65
+          ],
+          "condition": "Existing door–lanterns route only; not a hub shortcut"
+        },
+        {
+          "from": "door",
+          "target": "rescue:r00",
+          "label": "Through inner door to inspection gallery",
+          "point": [
+            43.1,
+            17.3
+          ],
+          "condition": "Resolve existing guard and lock gate; land at accepted rescue entry r00 (43.9,17.3)."
+        },
+        {
+          "from": "landing",
+          "target": "approach:gate",
+          "label": "Receiving entrance",
+          "point": [
+            29.5,
+            17.3
+          ],
+          "condition": "Context for prior entry; no new escape/backtracking action"
+        },
+        {
+          "from": "landing",
+          "target": "approach:culvert",
+          "label": "Culvert stair below floor",
+          "point": [
+            32,
+            20
+          ],
+          "condition": "Context for prior entry; no new hub–workshop connection"
+        }
+      ],
+      "fixedLights": [
+        {
+          "point": [
+            29.7,
+            16.4
+          ],
+          "radius": 3,
+          "color": "amber"
+        },
+        {
+          "point": [
+            37.7,
+            12.3
+          ],
+          "radius": 2.3,
+          "color": "amber"
+        },
+        {
+          "point": [
+            34.05,
+            23.1
+          ],
+          "radius": 2.3,
+          "color": "amber"
+        },
+        {
+          "point": [
+            41.5,
+            15.8
+          ],
+          "radius": 1.6,
+          "color": "green"
+        }
+      ],
+      "guideFan": [
+        [
+          41.2,
+          20.3
+        ],
+        [
+          36.5,
+          14.4
+        ],
+        [
+          41.7,
+          13.6
+        ]
+      ],
+      "partyRadius": 3,
+      "actors": [
+        {
+          "id": "post-one",
+          "label": "Local guard",
+          "point": [
+            42.3,
+            17.65
+          ],
+          "states": [
+            "occupied"
+          ]
+        },
+        {
+          "id": "post-two",
+          "label": "Local guard",
+          "point": [
+            42.45,
+            18.35
+          ],
+          "states": [
+            "occupied"
+          ]
+        },
+        {
+          "id": "foreman",
+          "label": "Searching lamp",
+          "point": [
+            34.8,
+            17.1
+          ],
+          "states": [
+            "search"
+          ]
+        },
+        {
+          "id": "bearer",
+          "label": "Timber load",
+          "point": [
+            35,
+            17.3
+          ],
+          "states": [
+            "timber"
+          ]
+        },
+        {
+          "id": "rest-party",
+          "label": "Four captives + party",
+          "point": [
+            27.5,
+            21.7
+          ],
+          "states": [
+            "gathered"
+          ]
+        }
+      ],
+      "stateInventory": [
+        "Stationary stone pier/rack provide cover; keep the whole crossing aisle clear.",
+        "Moving searching lamp and long timber load are mutually exclusive authored overlays.",
+        "Guard chairs stay; guard actors leave when distracted/defeated.",
+        "Guide closed/open paired backgrounds; low party halo is a separate preview layer.",
+        "No prisoners baked into the court. Cistern/stores stay; party gathering, reunion/rest and used-rest marker are overlays."
+      ]
+    },
+    {
+      "key": "ledger",
+      "id": "briarholdLedger",
+      "title": "Upper records room",
+      "shortTitle": "Records",
+      "source": [
+        2048,
+        2048
+      ],
+      "bounds": [
+        34.5,
+        5.5,
+        10,
+        10
+      ],
+      "defaultNode": "ledger",
+      "level": 2.8,
+      "description": "From the raised threshold, make a longer left turn into the pocket behind the crates at the spare desk’s south end. The desk/locked drawer remains a precise UI interaction after the officer is secured.",
+      "floors": [
+        {
+          "rect": [
+            36,
+            6.5,
+            6,
+            5
+          ],
+          "level": 2.8,
+          "material": "boards"
+        },
+        {
+          "rect": [
+            36.15,
+            11.5,
+            3.2,
+            3
+          ],
+          "level": 2.8,
+          "material": "stairs-down"
+        },
+        {
+          "rect": [
+            35.5,
+            7.2,
+            1.3,
+            2
+          ],
+          "level": 2.8,
+          "material": "boards"
+        },
+        {
+          "rect": [
+            35.26,
+            8.45,
+            1,
+            3.87
+          ],
+          "level": 2.8,
+          "material": "boards"
+        }
+      ],
+      "props": [
+        {
+          "id": "records-desk",
+          "label": "Glass-topped writing desk",
+          "rect": [
+            39.2,
+            6.9,
+            2.1,
+            1
+          ],
+          "kind": "wood",
+          "height": 1.2
+        },
+        {
+          "id": "record-crates",
+          "label": "Crate cover",
+          "rect": [
+            35.57,
+            10.38,
+            1.17,
+            0.36
+          ],
+          "kind": "wood",
+          "height": 0.95
+        },
+        {
+          "id": "records-supply-crate",
+          "label": "Working desk supply crate",
+          "rect": [
+            41.48,
+            7.79,
+            0.48,
+            0.67
+          ],
+          "kind": "wood",
+          "height": 1.2
+        },
+        {
+          "id": "copying-bench",
+          "label": "Spare glass-topped desk",
+          "rect": [
+            35.53,
+            8.28,
+            1,
+            2.1
+          ],
+          "kind": "wood",
+          "height": 1.08
+        },
+        {
+          "id": "spare-desk-chair",
+          "label": "Spare desk chair",
+          "rect": [
+            36.53,
+            9.05,
+            0.23,
+            0.46
+          ],
+          "kind": "wood",
+          "height": 0.8
+        },
+        {
+          "id": "records-desk-chair",
+          "label": "Working desk chair",
+          "rect": [
+            40.08,
+            7.94,
+            0.43,
+            0.34
+          ],
+          "kind": "wood",
+          "height": 0.8
+        },
+        {
+          "id": "tally-board",
+          "label": "Receiving tally / side turn",
+          "rect": [
+            35.55,
+            7.43,
+            0.35,
+            0.62
+          ],
+          "kind": "wood",
+          "height": 1.2
+        },
+        {
+          "id": "record-cabinet",
+          "label": "Records shelves",
+          "rect": [
+            41.35,
+            9.1,
+            0.45,
+            1.8
+          ],
+          "kind": "wood",
+          "height": 1.2
+        }
+      ],
+      "solids": [
+        {
+          "id": "records-north",
+          "rect": [
+            35.8,
+            6.3,
+            6.4,
+            0.2
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "records-west-top",
+          "rect": [
+            35.8,
+            6.3,
+            0.2,
+            0.9
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "records-pocket-return",
+          "rect": [
+            35.06,
+            8.25,
+            0.44,
+            0.2
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "records-west-bottom",
+          "rect": [
+            35.06,
+            8.25,
+            0.2,
+            4.27
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "records-east",
+          "rect": [
+            42,
+            6.3,
+            0.2,
+            5.4
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "records-south-west",
+          "rect": [
+            35.06,
+            12.32,
+            1.09,
+            0.2
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "records-south-east",
+          "rect": [
+            39.35,
+            11.5,
+            2.85,
+            0.2
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "records-stair-west",
+          "rect": [
+            35.95,
+            12.32,
+            0.2,
+            2.18
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "records-stair-east",
+          "rect": [
+            39.35,
+            11.5,
+            0.2,
+            3
+          ],
+          "height": 2.8
+        }
+      ],
+      "nodes": [
+        {
+          "id": "recordsHub",
+          "label": "Stair to main floor",
+          "point": [
+            37.7,
+            13.6
+          ]
+        },
+        {
+          "id": "l01",
+          "label": "Inside the records doorway",
+          "point": [
+            37.7,
+            11.73
+          ]
+        },
+        {
+          "id": "ledger",
+          "label": "Crouch behind spare desk crates",
+          "point": [
+            36.06,
+            11.73
+          ],
+          "trigger": "Initial officer/clerk scene; tally diversion is temporary; separate secure/free/chart/drawer/evidence actions."
+        }
+      ],
+      "edges": [
+        {
+          "from": "recordsHub",
+          "to": "l01",
+          "direction": "up"
+        },
+        {
+          "from": "l01",
+          "to": "ledger",
+          "direction": "left"
+        }
+      ],
+      "portals": [
+        {
+          "from": "recordsHub",
+          "target": "hub:hubRecords",
+          "label": "Down to main floor",
+          "point": [
+            37.7,
+            13.6
+          ],
+          "condition": "Ordinary walking; existing scene locks apply"
+        }
+      ],
+      "fixedLights": [
+        {
+          "point": [
+            40.4,
+            7.6
+          ],
+          "radius": 2.4,
+          "color": "amber"
+        }
+      ],
+      "partyRadius": 2.6,
+      "actors": [
+        {
+          "id": "clerk",
+          "label": "Clerk (cuffed)",
+          "point": [
+            40.7,
+            8.4
+          ],
+          "states": [
+            "occupied"
+          ]
+        },
+        {
+          "id": "officer",
+          "label": "Records officer",
+          "point": [
+            37.62,
+            7.72
+          ],
+          "states": [
+            "occupied"
+          ]
+        },
+        {
+          "id": "officer-tally",
+          "label": "Officer checks tally",
+          "point": [
+            36.15,
+            8.25
+          ],
+          "states": [
+            "diverted"
+          ]
+        },
+        {
+          "id": "bound-officer",
+          "label": "Secured officer",
+          "point": [
+            36.26,
+            7.8
+          ],
+          "states": [
+            "cleared"
+          ]
+        },
+        {
+          "id": "freed-clerk",
+          "label": "Clerk waits in cover",
+          "point": [
+            35.61,
+            11.32
+          ],
+          "states": [
+            "cleared"
+          ]
+        }
+      ],
+      "stateInventory": [
+        "Keep exact chart symbols/document writing in UI; blank plausible paperwork in paint.",
+        "Officer at desk / tally turn / bound behind partition are exclusive overlays.",
+        "Cuffed clerk, open cuff, and waiting clerk are exclusive; remove her when gathered.",
+        "Closed/open drawer, originals, key and evidence pickups are independent UI/prop overlays."
+      ]
+    },
+    {
+      "key": "workshop",
+      "id": "briarholdWorkshop",
+      "title": "Lower seal workshop",
+      "shortTitle": "Workshop",
+      "source": [
+        2048,
+        2048
+      ],
+      "bounds": [
+        28,
+        21,
+        12,
+        12
+      ],
+      "defaultNode": "workshop",
+      "level": -2,
+      "description": "The wax stove sits below the west window. The press and stamp chest continue south along that wall. From the north stair, wait for both workers to face the press, then cross the lamplit aisle to the east side of the south cooling rack. Backtrack to the crossing for the separate signal stair.",
+      "floors": [
+        {
+          "rect": [
+            29.5,
+            24,
+            7,
+            6.5
+          ],
+          "level": -2,
+          "material": "stone"
+        },
+        {
+          "rect": [
+            33.7,
+            21.2,
+            3,
+            4.6
+          ],
+          "level": -2,
+          "material": "stairs-up"
+        },
+        {
+          "rect": [
+            35.1,
+            25.9,
+            4.9,
+            2.2
+          ],
+          "level": -2,
+          "material": "stairs-up"
+        },
+        {
+          "rect": [
+            30.7,
+            30.5,
+            3.1,
+            2.5
+          ],
+          "level": -2,
+          "material": "yard"
+        }
+      ],
+      "props": [
+        {
+          "id": "prep-bench",
+          "label": "Short packet preparation bench",
+          "rect": [
+            31.7,
+            24.34,
+            2.04,
+            0.92
+          ],
+          "kind": "wood",
+          "height": 1.2
+        },
+        {
+          "id": "wax-stove",
+          "label": "Wax stove",
+          "rect": [
+            29.64,
+            24.42,
+            1.42,
+            1.3
+          ],
+          "kind": "iron",
+          "height": 1.4
+        },
+        {
+          "id": "hand-press",
+          "label": "Hand press / cuff anchor",
+          "rect": [
+            29.64,
+            26.43,
+            1.54,
+            1.58
+          ],
+          "kind": "iron",
+          "height": 1.5
+        },
+        {
+          "id": "tool-bench",
+          "label": "Stamp chest / shim",
+          "rect": [
+            29.67,
+            28.22,
+            1.14,
+            0.53
+          ],
+          "kind": "wood",
+          "height": 1.2
+        },
+        {
+          "id": "cooling-rack",
+          "label": "Cooling rack",
+          "rect": [
+            33,
+            28.35,
+            0.65,
+            2.15
+          ],
+          "kind": "wood",
+          "height": 1.7
+        },
+        {
+          "id": "pack-bench",
+          "label": "Inspection and packing bench",
+          "rect": [
+            35.56,
+            28.92,
+            0.86,
+            1.35
+          ],
+          "kind": "wood",
+          "height": 1.2
+        },
+        {
+          "id": "feed-machine",
+          "label": "Root-brace feed / removable coupling",
+          "rect": [
+            35.68,
+            28.22,
+            0.55,
+            0.51
+          ],
+          "kind": "iron",
+          "height": 0.8
+        },
+        {
+          "id": "empty-tray-shelf",
+          "label": "Empty trays and cleaning cloths",
+          "rect": [
+            29.58,
+            29.87,
+            1.08,
+            0.49
+          ],
+          "kind": "wood",
+          "height": 0.75
+        },
+        {
+          "id": "quenching-trough",
+          "label": "Outdoor quenching trough",
+          "rect": [
+            31,
+            31.45,
+            2,
+            0.7
+          ],
+          "kind": "water",
+          "height": 0.7
+        }
+      ],
+      "solids": [
+        {
+          "id": "workshop-upper-west",
+          "rect": [
+            33.5,
+            20.8,
+            0.2,
+            3.5
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "workshop-upper-east",
+          "rect": [
+            36.7,
+            21.2,
+            0.22,
+            2.6
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "workshop-west-upper",
+          "rect": [
+            29.3,
+            23.8,
+            0.2,
+            1.35
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "workshop-window",
+          "rect": [
+            29.3,
+            25.15,
+            0.2,
+            0.7
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "workshop-west-lower",
+          "rect": [
+            29.3,
+            25.85,
+            0.2,
+            4.85
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "workshop-north-left",
+          "rect": [
+            29.3,
+            23.8,
+            3.8,
+            0.2
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "workshop-east-top",
+          "rect": [
+            36.5,
+            24,
+            0.2,
+            1.85
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "workshop-east-bottom",
+          "rect": [
+            36.5,
+            28.1,
+            0.2,
+            2.6
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "workshop-south-left",
+          "rect": [
+            29.3,
+            30.5,
+            1.4,
+            0.2
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "workshop-south-right",
+          "rect": [
+            33.8,
+            30.5,
+            2.9,
+            0.2
+          ],
+          "height": 2.8
+        }
+      ],
+      "nodes": [
+        {
+          "id": "workshopHub",
+          "label": "Stair back to main floor",
+          "point": [
+            35.18,
+            22.4
+          ]
+        },
+        {
+          "id": "w01",
+          "label": "Wait at the stair foot",
+          "point": [
+            34.7,
+            24.8
+          ],
+          "trigger": "Wait for Orren to work the lever and Dessa to lean over the impression."
+        },
+        {
+          "id": "workshopCrossing",
+          "label": "Lamplit workshop crossing",
+          "point": [
+            34.68,
+            27
+          ],
+          "trigger": "Cross one at a time while both workers face the press and its strokes cover the sound."
+        },
+        {
+          "id": "workshop",
+          "label": "Cover east of cooling rack",
+          "point": [
+            34.55,
+            29.65
+          ],
+          "trigger": "Watch the press from behind the rack. Warning the laborer, securing the overseer, and unlocking the cuff are distinct actions in the story."
+        },
+        {
+          "id": "w02",
+          "label": "Signal stair foot",
+          "point": [
+            37,
+            27
+          ]
+        },
+        {
+          "id": "workshopSignal",
+          "label": "Ascending signal stair landing",
+          "point": [
+            39.1,
+            27
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "from": "workshopHub",
+          "to": "w01",
+          "direction": "down"
+        },
+        {
+          "from": "w01",
+          "to": "workshopCrossing",
+          "direction": "down",
+          "gate": "Cross during the press strokes"
+        },
+        {
+          "from": "workshopCrossing",
+          "to": "workshop",
+          "direction": "down"
+        },
+        {
+          "from": "workshopCrossing",
+          "to": "w02",
+          "direction": "right"
+        },
+        {
+          "from": "w02",
+          "to": "workshopSignal",
+          "direction": "right"
+        }
+      ],
+      "portals": [
+        {
+          "from": "workshopHub",
+          "target": "hub:hubWorkshop",
+          "label": "Up to main floor",
+          "point": [
+            35.18,
+            22.4
+          ],
+          "condition": "Ordinary walking; existing scene locks apply"
+        },
+        {
+          "from": "workshopSignal",
+          "target": "lanterns:signalWorkshop",
+          "label": "Up to signal platform",
+          "point": [
+            39.1,
+            27
+          ],
+          "condition": "Ordinary walking; existing scene locks apply"
+        },
+        {
+          "from": "workshop",
+          "target": "workshop:outer-trough",
+          "label": "Outer quenching door",
+          "point": [
+            32.3,
+            30.5
+          ],
+          "condition": "Authored temporary diversion only; not an escape or the safe gathering court"
+        }
+      ],
+      "fixedLights": [
+        {
+          "point": [
+            29.68,
+            25.5
+          ],
+          "radius": 1.9,
+          "color": "amber"
+        },
+        {
+          "point": [
+            34.33,
+            26.02
+          ],
+          "radius": 2.35,
+          "color": "amber"
+        }
+      ],
+      "partyRadius": 2.6,
+      "actors": [
+        {
+          "id": "orren",
+          "label": "Laborer cuffed to press",
+          "point": [
+            31.52,
+            27.48
+          ],
+          "states": [
+            "occupied"
+          ]
+        },
+        {
+          "id": "dessa",
+          "label": "Supervisor / alarm cord",
+          "point": [
+            31.46,
+            26.61
+          ],
+          "states": [
+            "occupied"
+          ]
+        },
+        {
+          "id": "orren-trough",
+          "label": "Laborer at trough",
+          "point": [
+            31.3,
+            31
+          ],
+          "states": [
+            "diverted"
+          ]
+        },
+        {
+          "id": "dessa-trough",
+          "label": "Supervisor at trough",
+          "point": [
+            33.2,
+            31.1
+          ],
+          "states": [
+            "diverted"
+          ]
+        },
+        {
+          "id": "dessa-bound",
+          "label": "Supervisor secured",
+          "point": [
+            31.19,
+            28.91
+          ],
+          "states": [
+            "cleared"
+          ]
+        },
+        {
+          "id": "orren-cover",
+          "label": "Freed laborer waits",
+          "point": [
+            34.19,
+            29.97
+          ],
+          "states": [
+            "cleared"
+          ]
+        }
+      ],
+      "stateInventory": [
+        "Alarm cord, cuff/chain and key are exact overlays, not permanent paint marks.",
+        "Press/rack/bench/stove are fixed; neither workers nor green construct glow baked in.",
+        "Temporary trough diversion returns workers; cleared state instead binds supervisor and frees laborer.",
+        "Shim pickup, seals/original papers and root-brace coupling disruption remain independent.",
+        "No tracks to stairs; feed is a waist-level mechanical root-brace line, not floor rails."
+      ]
+    },
+    {
+      "key": "lanterns",
+      "id": "briarholdLanternHall",
+      "title": "Raised signal operating platform",
+      "shortTitle": "Signal platform",
+      "source": [
+        2048,
+        2048
+      ],
+      "bounds": [
+        37,
+        19.5,
+        12,
+        12
+      ],
+      "defaultNode": "lanterns",
+      "level": 3.4,
+      "description": "Cross the open stair sightline to reach the signal lamps in the extended east bay. The stair cheek screens you while you stand at the lamps. The separate amber guide lamp still serves the hub and rescue room.",
+      "floors": [
+        {
+          "rect": [
+            40,
+            24,
+            8,
+            5.5
+          ],
+          "level": 3.4,
+          "material": "boards"
+        },
+        {
+          "rect": [
+            38.4,
+            25.9,
+            3,
+            2.2
+          ],
+          "level": 3.4,
+          "material": "stairs-down"
+        },
+        {
+          "rect": [
+            39.6,
+            18.8,
+            3.2,
+            5.5
+          ],
+          "level": 3.4,
+          "material": "stairs-down"
+        }
+      ],
+      "props": [
+        {
+          "id": "signal-racks",
+          "label": "Three signal lamp housings",
+          "rect": [
+            47.3,
+            25.1,
+            0.55,
+            3.2
+          ],
+          "kind": "iron",
+          "height": 1.5
+        },
+        {
+          "id": "pane-rack",
+          "label": "Unselected pane storage",
+          "rect": [
+            40.2,
+            28.6,
+            2,
+            0.5
+          ],
+          "kind": "wood",
+          "height": 1.2
+        },
+        {
+          "id": "guide-lamp",
+          "label": "Separate amber guide lamp / bound shutter",
+          "rect": [
+            42.8,
+            23.7,
+            0.4,
+            0.3
+          ],
+          "kind": "iron",
+          "height": 1.2
+        },
+        {
+          "id": "transmission-control",
+          "label": "Transmission chain / lever",
+          "rect": [
+            46.25,
+            27.28,
+            0.43,
+            0.45
+          ],
+          "kind": "iron",
+          "height": 1
+        },
+        {
+          "id": "rail-west",
+          "label": "Yard-side safety rail",
+          "rect": [
+            39.85,
+            24.2,
+            0.15,
+            1.65
+          ],
+          "kind": "wood",
+          "height": 1.05
+        },
+        {
+          "id": "rail-south",
+          "label": "Platform safety rail",
+          "rect": [
+            39.85,
+            29.5,
+            8.3,
+            0.15
+          ],
+          "kind": "wood",
+          "height": 1.05
+        }
+      ],
+      "solids": [
+        {
+          "id": "platform-east",
+          "rect": [
+            48,
+            23.8,
+            0.2,
+            5.9
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "platform-north-east",
+          "rect": [
+            43.6,
+            23.8,
+            4.6,
+            0.2
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "platform-return-west",
+          "rect": [
+            39.3,
+            20.4,
+            0.3,
+            3.9
+          ],
+          "height": 2.8
+        },
+        {
+          "id": "platform-return-east",
+          "rect": [
+            42.9,
+            18.8,
+            0.2,
+            5.5
+          ],
+          "height": 2.8
+        }
+      ],
+      "nodes": [
+        {
+          "id": "signalWorkshop",
+          "label": "Stair down to workshop",
+          "point": [
+            39.1,
+            27
+          ]
+        },
+        {
+          "id": "s01",
+          "label": "Platform stair head",
+          "point": [
+            40.6,
+            27
+          ]
+        },
+        {
+          "id": "signalCrossing",
+          "label": "Cross the stair sightline",
+          "point": [
+            42.5,
+            26
+          ],
+          "trigger": "A guard looking up the return stair can see this stretch of floor."
+        },
+        {
+          "id": "lanterns",
+          "label": "Sheltered signal controls",
+          "point": [
+            46.35,
+            26
+          ],
+          "trigger": "Operate the signal panes from behind the stair wall. The amber guide shutter is separate."
+        },
+        {
+          "id": "s02",
+          "label": "Return stair turn",
+          "point": [
+            41.5,
+            23.5
+          ]
+        },
+        {
+          "id": "signalHub",
+          "label": "Stair to inner guard post",
+          "point": [
+            41.61,
+            22.65
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "from": "signalWorkshop",
+          "to": "s01",
+          "direction": "right"
+        },
+        {
+          "from": "s01",
+          "to": "signalCrossing",
+          "direction": "right",
+          "gate": "Exposed if a guard looks up the stair"
+        },
+        {
+          "from": "signalCrossing",
+          "to": "lanterns",
+          "direction": "right"
+        },
+        {
+          "from": "signalCrossing",
+          "to": "s02",
+          "direction": "up"
+        },
+        {
+          "from": "s02",
+          "to": "signalHub",
+          "direction": "up"
+        }
+      ],
+      "portals": [
+        {
+          "from": "signalWorkshop",
+          "target": "workshop:workshopSignal",
+          "label": "Down to workshop",
+          "point": [
+            39.1,
+            27
+          ],
+          "condition": "Ordinary walking; existing scene locks apply"
+        },
+        {
+          "from": "signalHub",
+          "target": "hub:hubSignal",
+          "label": "Down to inner guard post",
+          "point": [
+            41.61,
+            22.65
+          ],
+          "condition": "Ordinary walking; existing scene locks apply"
+        }
+      ],
+      "fixedLights": [
+        {
+          "point": [
+            47.575,
+            25.6
+          ],
+          "radius": 1.55,
+          "color": "amber"
+        },
+        {
+          "point": [
+            47.575,
+            26.7
+          ],
+          "radius": 1.55,
+          "color": "amber"
+        },
+        {
+          "point": [
+            47.575,
+            27.8
+          ],
+          "radius": 1.55,
+          "color": "amber"
+        }
+      ],
+      "guideFan": [
+        [
+          43,
+          24
+        ],
+        [
+          40.5,
+          23.2
+        ],
+        [
+          41.2,
+          21
+        ]
+      ],
+      "partyRadius": 2.6,
+      "sightlines": [
+        {
+          "label": "Outward view: receiving yard",
+          "points": [
+            [
+              40,
+              26
+            ],
+            [
+              37.2,
+              24.1
+            ]
+          ]
+        },
+        {
+          "label": "Guard sightline through stair opening",
+          "points": [
+            [
+              42.3,
+              17.65
+            ],
+            [
+              42.5,
+              26
+            ]
+          ]
+        }
+      ],
+      "actors": [],
+      "stateInventory": [
+        "Three lamp housings are fixed; panes, exact red-triangle / blue-circle / green-square / amber-star marks and shutter selection are overlays/UI.",
+        "Transmission is explicit; no painted correct answer or invented fourth signal lantern.",
+        "The amber guide lamp is a separate fourth physical lamp, not a selectable signal pane.",
+        "Guide hinge binding / open shutter and ordinary amber beams are state layers or paired backgrounds.",
+        "Do not paint a permanent guard, party or magical energy beam onto this platform."
+      ]
+    }
+  ]
+}

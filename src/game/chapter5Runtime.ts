@@ -8,12 +8,13 @@ import { CHAPTER_5_ACTION_NARRATIVE, getChapter5Arrival, getChapter5BattleAfterm
 import { buildChapter5Progress, isChapter5ProgressValid, isChapter5ReturnCleared, type Chapter5Progress } from "./chapter5Progress";
 import { CHAPTER_5_AFTERMATH, getChapter5FullArrival } from "../story/chapter5Aftermath";
 import { getChapter5HallwayOutcome } from "../story/chapter5Hallway";
+import { isChapter5MapPositionValid, type Chapter5MapWaypoint } from "../data/chapter5Maps";
 
 export const CH5_NODES = {
   overlook: { x: 0, y: 0, label: "Overlook shelter", icon: "⛺" },
   ridge: { x: 1, y: 0, label: "Ridge path", icon: "🌙" },
   gate: { x: 2, y: 0, label: "Receiving gate", icon: "🚪" },
-  runoff: { x: 1, y: 1, label: "Runoff trail", icon: "💧" },
+  runoff: { x: 1, y: 1, label: "Runoff streambed", icon: "💧" },
   culvert: { x: 2, y: 1, label: "Service culvert", icon: "🕳️" },
   landing: { x: 0, y: 1, label: "Service landing", icon: "🪜" },
   hub: { x: 1, y: 1, label: "Shadowed hub", icon: "🕯️" },
@@ -46,6 +47,7 @@ export type Chapter5SaveState = Chapter5Progress & {
   version: 1;
   started: boolean;
   node: Chapter5Node;
+  mapWaypoint: Chapter5MapWaypoint | null;
   view: Chapter5View;
   briarhold: BriarholdState;
   panes: [LanternPane | null, LanternPane | null, LanternPane | null];
@@ -73,7 +75,7 @@ export type Chapter5SaveState = Chapter5Progress & {
 export function buildChapter5SaveState(): Chapter5SaveState {
   return {
     ...buildChapter5Progress(),
-    version: 1, started: false, node: "overlook", view: "opening", briarhold: buildBriarholdState(),
+    version: 1, started: false, node: "overlook", mapWaypoint: null, view: "opening", briarhold: buildBriarholdState(),
     panes: [null, null, null], feedback: "", seenScenes: {}, hubPassages: 0, hubInterlude: null, recoveryUsed: false, ledgerResolved: false,
     ledgerOfficerDistracted: false, clerkFreed: false,
     workshopResolved: false, chartRead: false, goldChannelUncovered: false, lioSeen: false, brackenDefeated: false,
@@ -159,7 +161,7 @@ export function normalizeChapter5Save(value: unknown): Chapter5SaveState {
     next.view = "carriage";
   }
   if (next.workshopResolved && next.workshopResolution === null) next.workshopResolution = "bypassed";
-  if (!isChapter5ProgressValid(next)) return fail();
+  if (!isChapter5ProgressValid(next) || !isChapter5MapPositionValid(next)) return fail();
   const oldHubArrival = "You move around the end of the landing rail and settle behind the hub's stone pier. The work sounds divide here, letting you pick out the separate passages while remaining beneath the lamps.";
   if (next.node === "hub" && next.feedback === oldHubArrival) next.feedback = getChapter5Arrival(next, "hub");
   return next;
@@ -276,6 +278,18 @@ export function rememberChapter5Scene(state: Chapter5SaveState, companion?: Comp
   return state.seenScenes[state.node] === key ? state : { ...state, seenScenes: { ...state.seenScenes, [state.node]: key } };
 }
 
+export function canLeaveChapter5Scene(state: Chapter5SaveState) {
+  return !state.pendingBattle && !state.briarhold.investigatorPending && !state.hubInterlude && state.view !== "opening" &&
+    !(state.view === "grille" && !state.lioSeen) && !(state.brackenDefeated && state.carriageStage !== "rescued");
+}
+
+// Walking away acknowledges the visible scene and applies its existing departure
+// consequences. Critical authored choices remain locked until their own action.
+export function leaveChapter5Scene(state: Chapter5SaveState, companion?: Companion): Chapter5SaveState {
+  if (!state.view || !canLeaveChapter5Scene(state)) return state;
+  return { ...abandonLedgerDistraction(rememberChapter5Scene(state, companion)), view: null };
+}
+
 export function resolveChapter5HubPassage(state: Chapter5SaveState, response: "wait" | "cross"): Chapter5SaveState {
   if (state.node !== "hub" || state.view !== "hub" || !state.hubInterlude || state.pendingBattle ||
     response === "cross" && state.hubInterlude !== "load") return state;
@@ -297,7 +311,7 @@ export function moveChapter5(state: Chapter5SaveState, destination: Chapter5Node
   const hubPassages = destination === "hub" ? Math.min(3, state.hubPassages + 1) : state.hubPassages;
   const hubInterlude = destination === "hub" && !state.brackenDefeated && state.briarhold.alert !== "alerted" && state.hubPassages < 3
     ? hubPassages === 2 ? "lamp" : hubPassages === 3 ? "load" : null : null;
-  const next: Chapter5SaveState = { ...state, node: destination, returnRoute, hubPassages, hubInterlude,
+  const next: Chapter5SaveState = { ...state, node: destination, mapWaypoint: null, returnRoute, hubPassages, hubInterlude,
     workshopResolved: state.node === "workshop" && state.workshopResolution === "bypassed" ? false : state.workshopResolved,
     returnedToBramblecross: state.returnedToBramblecross || destination === "townGate", view: null, feedback: "" };
   const unread = next.seenScenes[destination] !== getChapter5SceneKey(next, destination, companion);

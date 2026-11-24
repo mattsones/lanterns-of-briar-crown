@@ -22,7 +22,7 @@ async function importPayload(page: Page, payload: SavePayload) {
   await page.locator('input[type="file"]').setInputFiles({ name: "chapter5-test.json", mimeType: "application/json", buffer: Buffer.from(JSON.stringify(payload)) });
 }
 async function go(page: Page, node: string) {
-  if (await choice(page, "ch5-hub-wait").isVisible() || await choice(page, "ch5-back").isVisible()) await back(page);
+  if (await choice(page, "ch5-hub-wait").isVisible()) await back(page);
   await page.locator(`[data-ch5-map-node="${node}"]`).click();
   await expect(page.getByTestId("chapter5-spike")).toHaveAttribute("data-ch5-node", node);
 }
@@ -31,7 +31,7 @@ async function inspect(page: Page) {
 }
 async function back(page: Page) {
   if (await choice(page, "ch5-hub-wait").isVisible()) await choice(page, "ch5-hub-wait").click();
-  await choice(page, "ch5-back").click();
+  await page.keyboard.press("Escape");
 }
 async function panes(page: Page, arrangement: string[]) {
   for (let i = 0; i < 3; i++) await page.getByLabel(`${["Left", "Center", "Right"][i]} lantern pane`).selectOption(arrangement[i]);
@@ -51,6 +51,67 @@ async function win(page: Page) {
   }
   throw new Error("Confrontation did not reach victory.");
 }
+
+test("phone exploration walks directly between scenes without a return button and preserves departure consequences", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await load(page, spike({ node: "landing", view: "landing" }));
+  await expect(page.getByRole("button", { name: "Back to the path", exact: true })).toHaveCount(0);
+  await page.getByRole("button", { name: "Move right", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "Shadowed hub", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Move up", exact: true }).click();
+  await expect(page.getByTestId("ch5-painted-map")).toHaveAttribute("data-map-id", "briarholdLedger");
+  await expect(page.getByTestId("ch5-painted-map")).toHaveAttribute("data-map-position", "l00");
+  await reload(page);
+  await page.getByRole("button", { name: "Move up", exact: true }).click();
+  await expect(page.getByTestId("ch5-painted-map")).toHaveAttribute("data-map-position", "l01");
+  await expect(choice(page, "ch5-resolve-ledger")).toHaveCount(0);
+  await page.getByRole("button", { name: "Move left", exact: true }).click();
+  await choice(page, "ch5-resolve-ledger").click();
+  await page.getByRole("button", { name: "Move right", exact: true }).click();
+  await page.getByRole("button", { name: "Move down", exact: true }).click();
+  await page.getByRole("button", { name: "Move down", exact: true }).click();
+  const moved = await saved(page);
+  expect(moved.chapter5).toMatchObject({ node: "hub", ledgerOfficerDistracted: false, hubInterlude: "lamp", briarhold: { alert: "suspicious" } });
+  expect(moved.chapter5.seenScenes.ledger).toMatch(/^scene-v1:/);
+  await expect(page.locator('[data-ch5-map-node="workshop"]')).toBeDisabled();
+  await choice(page, "ch5-hub-wait").click();
+  const down = page.getByRole("button", { name: "Move down", exact: true });
+  await down.click();
+  await expect(page.getByTestId("ch5-painted-map")).toHaveAttribute("data-map-id", "briarholdWorkshop");
+  await expect(page.getByTestId("ch5-painted-map")).toHaveAttribute("data-map-position", "w00");
+  await down.click();
+  await down.click();
+  await expect(page.getByRole("button", { name: "Move right", exact: true })).toBeDisabled();
+  await down.click();
+  await expect(page.getByTestId("chapter5-spike")).toHaveAttribute("data-ch5-node", "workshop");
+  await expect(page.getByLabel("Briarhold lower workroom")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Move up", exact: true })).toBeEnabled();
+  expect((await saved(page)).chapter5.briarhold.alert).toBe("suspicious");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: "test-results/ch5-walk-without-back-phone.png", fullPage: true });
+});
+
+test("direct movement and Escape still wait for the opening, first sight and rescue decisions", async ({ page }) => {
+  await page.goto("/"); await page.getByRole("button", { name: "Begin Chapter 5 Playtest", exact: true }).click();
+  await page.keyboard.press("Escape"); await page.keyboard.press("s");
+  await expect(choice(page, "ch5-cross-ridge")).toBeVisible();
+  await expect(page.locator('[data-ch5-map-node="ridge"]')).toBeDisabled();
+  const b = { ...spike().briarhold, innerDoorOpened: true };
+  await load(page, spike({ node: "grille", view: "grille", briarhold: b }));
+  await page.keyboard.press("Escape"); await page.keyboard.press("s");
+  await expect(choice(page, "ch5-recognize-lio")).toBeVisible();
+  await expect(page.locator('[data-ch5-map-node="crown"]')).toBeDisabled();
+  await choice(page, "ch5-recognize-lio").click();
+  await page.getByRole("button", { name: "Move down", exact: true }).click();
+  await expect(page.getByTestId("ch5-painted-map")).toHaveAttribute("data-map-position", "r00");
+  await load(page, spike({ node: "carriage", view: "carriage", lioSeen: true, brackenDefeated: true, briarhold: b }));
+  await page.keyboard.press("Escape"); await page.keyboard.press("a");
+  await expect(choice(page, "ch5-rescue-step")).toBeVisible();
+  await expect(page.locator('[data-ch5-map-node="crown"]')).toBeDisabled();
+  await choice(page, "ch5-rescue-step").click();
+  expect((await saved(page)).chapter5.carriageStage).toBe("set-brake");
+  await expect(page.locator('[data-ch5-map-node="crown"]')).toBeDisabled();
+});
 
 test("real entry, early drawer revisit, fixed chart, pane-only edits, Back, and quiet door chain", async ({ page }) => {
   test.slow();
@@ -211,11 +272,11 @@ test("workshop cover conceals bench knowledge until the workers leave, and inter
   payload.companion = { ...payload.companion, id: "moss", name: "Moss", recruited: true };
   await importPayload(page, payload);
   await go(page, "workshop");
-  await expect(page.getByTestId("ch5-feedback")).toContainText("storage recess");
+  await expect(page.getByTestId("ch5-feedback")).toContainText("cross the lit aisle on successive strokes");
   await inspect(page);
   const story = page.getByTestId("ch5-scene-narrative");
   await expect(story).toContainText("cooling rack");
-  await expect(story).toContainText("lamplit aisle");
+  await expect(story).toContainText("press to cover a whisper across the aisle");
   await expect(story).not.toContainText(/lock shim|root brace|coupling|Thornroot Sentry|DESSA FLINT|confrontation|repair/i);
   await expect(choice(page, "ch5-take-shim")).toHaveCount(0);
   await expect(choice(page, "ch5-disable-workshop")).toHaveCount(0);
@@ -721,13 +782,16 @@ test("walking opens new scenes on phone, unchanged saved revisits skip, and Insp
   expect(box.y).toBeGreaterThanOrEqual(-1); expect(box.y).toBeLessThan(844);
   await page.screenshot({ path: "test-results/ch5-auto-arrival-phone.png", fullPage: true });
   await page.keyboard.press("Escape"); await page.keyboard.press("s");
-  await expect(page.getByRole("dialog", { name: "Runoff trail", exact: true })).toBeVisible();
-  await page.keyboard.press("Escape"); await page.keyboard.press("w");
+  await expect(page.getByTestId("ch5-painted-map")).toHaveAttribute("data-map-position", "a04");
+  await expect(page.locator("[data-scene-id]")).toHaveCount(0);
+  await page.keyboard.press("s");
+  await expect(page.getByRole("dialog", { name: "Runoff streambed", exact: true })).toBeVisible();
+  await page.keyboard.press("Escape"); await page.keyboard.press("w"); await page.keyboard.press("w");
   await expect(page.locator("[data-scene-id]")).toHaveCount(0);
   await expect(page.getByTestId("ch5-feedback")).toHaveCount(0);
   await page.keyboard.press("e");
   await expect(page.getByRole("dialog", { name: "Ridge path", exact: true })).toBeVisible();
-  await reload(page); await page.keyboard.press("Escape"); await page.keyboard.press("s");
+  await reload(page); await page.keyboard.press("Escape"); await page.keyboard.press("s"); await page.keyboard.press("s");
   await expect(page.getByTestId("chapter5-spike")).toHaveAttribute("data-ch5-node", "runoff");
   await expect(page.locator("[data-scene-id]")).toHaveCount(0);
   expect((await saved(page)).chapter5.seenScenes.ridge).toMatch(/^scene-v1:/);

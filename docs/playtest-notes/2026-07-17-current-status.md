@@ -1,6 +1,16 @@
-# Current Project Status — 2026-11-13
+# Current Project Status — 2026-11-20
 
 Stable branch: `main`; current handoff branch: `codex/chapter-5-vertical-slice`
+
+## November 20 Direct Movement And Accepted Portraits
+
+The routine Back-to-path buttons are removed from Chapter 5. Movement acknowledges and leaves ordinary scenes directly; phone maps and scene-end direction controls remain available. Critical authored choices and existing departure consequences are preserved. The full Chapter 5 route passes with the revised controls; see [the movement record](2026-11-20-chapter-5-direct-movement.md) and [current handoff](../codex-handoff.md) for final verification and server state.
+
+The owner accepts Bracken, Thornroot Sentry, Hearthvale elite guard v02 and the new ordinary Rainroot guard v01. [The four-design review](../art/chapter-5-enemy-portraits-v01.md) retains all native outputs/prompts and includes the earlier Seal-Forged Sentry for comparison. That paper/wax enemy remains registered in Chapters 3/4; the root/timber Sentry is the separately defined Chapter 5 support. Role-aware portrait integration remains next.
+
+## November 18 Painted Approach And Rescue
+
+The accepted approach v05 and paired rescue v02 paintings now render in the game with master-aligned node movement, a saved intermediate waypoint, the original progression gates and stateful grate/cart/cuff/people/loot/cell overlays. Desktop and phone framing use the approved crops and hero sizes. Other Briarhold rooms and the return still await their maps; narrative scene art remains a separate priority. See [the integration record](../art/chapter-5-painted-map-integration.md) and [latest handoff](../codex-handoff.md) for verification, server and next steps.
 
 ## November 13 Night Wrap
 

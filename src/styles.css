@@ -1,5 +1,56 @@
 @import "tailwindcss";
 
+.ch5-painted-frame {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: radial-gradient(ellipse at 60% 40%, #35423a, #111b20 75%);
+  box-shadow: 0 0 0 1px rgb(253 230 138 / .18);
+}
+.ch5-map-background, .ch5-map-overlays {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.ch5-map-background { object-fit: fill; }
+.ch5-map-overlays { z-index: 1; }
+.ch5-map-stop {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  border-radius: 50%;
+}
+.ch5-map-stop > span {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #bdae8b;
+  border-radius: 50%;
+  background: rgb(15 25 28 / .85);
+  font-size: 13px;
+  opacity: .6;
+}
+.ch5-map-stop--waypoint { z-index: 2; }
+.ch5-map-stop--waypoint > span { width: 7px; height: 7px; font-size: 0; background: #dfc794; }
+.ch5-map-stop.is-available > span { opacity: 1; box-shadow: 0 0 0 2px rgb(16 26 29 / .75); }
+.ch5-map-stop:disabled { pointer-events: none; cursor: default; }
+.ch5-map-stop:focus-visible { outline: 2px solid #f8da93; outline-offset: -3px; }
+.ch5-map-stop.is-available:hover > span { border-color: #fff1be; background: #5b4a2d; }
+.ch5-hero-token { pointer-events: none; transition: none !important; }
+.ch5-map-exit { padding: .5rem .65rem; border: 1px solid rgb(253 230 138 / .25); border-radius: .6rem; }
+.ch5-map-exit:disabled { opacity: .4; }
+.ch5-map-exit:focus-visible { outline: 2px solid #f8da93; }
+
 :root {
   color-scheme: dark;
   font-family:

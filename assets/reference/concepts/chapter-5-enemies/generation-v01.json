@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-18",
+  "generator": "built-in image_gen",
+  "status": "First-pass reference candidates; not owner-approved identities or runtime assets",
+  "sourceDirectory": "C:/Users/15855/.codex/generated_images/01a1bc8c-2791-7bd3-94c0-6a9485ddc40d",
+  "images": [
+    {
+      "id": "bracken-voss",
+      "nativeOutput": "exec-0f18d0e4-834a-45ea-a54d-e687be80ff62.png",
+      "workspaceCopy": "bracken-voss-concept-v01.png",
+      "prompt": "bracken-voss-prompt-v01.md"
+    },
+    {
+      "id": "thornseal-guard",
+      "nativeOutput": "exec-d5957bac-a77a-41a4-8a72-5c23be6cadc3.png",
+      "workspaceCopy": "thornseal-guard-concept-v01.png",
+      "prompt": "thornseal-guard-prompt-v01.md"
+    },
+    {
+      "id": "thornroot-sentry",
+      "nativeOutput": "exec-5ed4ccc8-27f0-43e3-b81e-6288f38a06d4.png",
+      "workspaceCopy": "thornroot-sentry-concept-v01.png",
+      "prompt": "thornroot-sentry-prompt-v01.md"
+    }
+  ],
+  "export": "Full square compositions resized to 1200px reference WebP at quality 86; no crop or semantic image edit",
+  "runtimeChanged": false,
+  "next": "Review identity/style and small battle-card readability, then promote selected derivatives with existing fallbacks; continue remaining room masters and narrative-scene production."
+}

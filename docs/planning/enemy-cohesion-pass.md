@@ -1,5 +1,7 @@
 # Enemy Art and Combat Cohesion Pass
 
+**November 20 portrait continuation:** the owner accepts the Chapter 5 Bracken/Thornroot Sentry/elite Hearthvale guard/ordinary Rainroot guard designs in [the current review](../art/chapter-5-enemy-portraits-v01.md). They await role-aware runtime binding. The existing Seal-Forged Sentry's paper/wax design remains the separate Chapter 3/4 enemy; the new Thornroot Sentry is a braced root/timber construct for Chapter 5. This art continuation does not change the combat decisions/numbers recorded below.
+
 Status: complete and integrated on 2026-08-22.
 
 The owner authorized an autonomous roster-wide review after the Chapter 4 enemy production work. Every enemy was evaluated as one combined character-design and combat-design problem: portrait finish at the live battle-card crop, name, silhouette, equipment, location, HP, damage profile, intent names, and implemented effects.

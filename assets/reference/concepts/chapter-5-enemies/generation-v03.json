@@ -1,0 +1,19 @@
+{
+  "generatedDate": "2026-11-19",
+  "generator": "built-in image_gen",
+  "asset": "Ordinary Rainroot local guard",
+  "nativeOutput": "C:/Users/15855/.codex/generated_images/01a1bc8c-2791-7bd3-94c0-6a9485ddc40d/exec-906c9533-9a63-446a-a51c-5139bed239cc.png",
+  "workspaceCopy": "rainroot-local-guard-concept-v01.png",
+  "prompt": "rainroot-local-guard-prompt-v01.md",
+  "preview": "rainroot-local-guard-portrait-v01.webp",
+  "nativeSize": [1254, 1254],
+  "previewSize": [1200, 1200],
+  "previewBytes": 223420,
+  "ownerAccepted": true,
+  "acceptedSet": { "bracken-voss": "v01", "thornroot-sentry": "v01", "thornseal-guard": "v02", "rainroot-local-guard": "v01" },
+  "runtimeRegistered": false,
+  "existingSentry": "assets/portraits/enemies/seal-forged-sentry-v01.webp",
+  "sentryDistinction": "Existing Seal-Forged Sentry: Chapters 3/4 paper-and-wax construct. New Thornroot Sentry: separate Chapter 5 root/timber support. Preserve both identities and assets.",
+  "review": "enemy-portrait-review-v03.html",
+  "validation": "review-checks-v03.json"
+}

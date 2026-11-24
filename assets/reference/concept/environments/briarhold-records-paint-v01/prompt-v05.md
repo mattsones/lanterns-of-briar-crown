@@ -1,0 +1,5 @@
+# Briarhold records room v05
+
+Built-in image generation.
+
+Use case: precise-object-edit. Edit only the small southwest entry pocket behind the unlit desk in this exact 1254-square overhead map. Give this nook a little more depth to the SOUTH: extend the bottom west corner of the wood floor down by about 60 pixels. For reference the wall segment runs from x about 75 to x about 175 at y 755; move that short horizontal segment straight down to about y 815. Extend the west room wall down to meet it. Carry the wood floor into this addition and keep it entirely clear. The stair remains in the same place and same width. Beside the TOP LEFT of the stair, keep the pocket open to the entry, without a stone divider until the new lower pocket wall at y 815. Keep the right edge of the stair and all other stone boundary in place. Make no changes to the two desks, their two chairs, the unlit spare lamp, crates, shelves, tally nook, light pools or exact square crop. No text, characters, annotations or new furniture.

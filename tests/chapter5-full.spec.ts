@@ -17,7 +17,7 @@ async function load(page: Page, payload: SavePayload) {
 async function reload(page: Page) { await page.reload(); await page.getByRole("button", { name: "Continue Checkpoint" }).click(); }
 async function go(page: Page, ...nodes: string[]) {
   for (const node of nodes) {
-    if (await a(page, "hub-wait").isVisible() || await a(page, "back").isVisible()) await back(page);
+    if (await a(page, "hub-wait").isVisible()) await back(page);
     await page.locator(`[data-ch5-map-node="${node}"]`).click();
     await expect(page.getByTestId("chapter5-spike")).toHaveAttribute("data-ch5-node", node);
   }
@@ -27,7 +27,7 @@ async function inspect(page: Page) {
 }
 async function back(page: Page) {
   if (await a(page, "hub-wait").isVisible()) await a(page, "hub-wait").click();
-  await a(page, "back").click();
+  await page.keyboard.press("Escape");
 }
 async function win(page: Page, ordinary = false) {
   for (let turn = 0; turn < 32; turn++) {

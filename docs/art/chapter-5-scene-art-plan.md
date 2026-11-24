@@ -2,6 +2,8 @@
 
 Owner direction, **2026-11-13**: map art alone is not enough. Plan scene art for **most interior rooms in Briarhold** and for **long narrative passages**, including outside the station. Briarhold remains the station's current name. This is the next production queue, not a claim that these scenes are already painted or integrated.
 
+**Current casting:** Bracken and his elite Thornseal detail have Hearthvale human heritage; ordinary local guards have Rainroot human heritage. Use [the owner-accepted Bracken, Sentry, elite guard v02 and ordinary Rainroot guard v01 designs](chapter-5-enemy-portraits-v01.md) as references for their respective scenes. Keep individual identity consistent when duties change; the shared combat template is not a casting reference. The earlier paper/wax Seal-Forged Sentry remains a separate Chapter 3/4 design.
+
 ## What to make next
 
 Room maps explain movement. Narrative scenes establish a viewpoint, people and the emotional beat. Do not stretch a top-down map into the only illustration for a long conversation. Give each substantial multi-paragraph scene an appropriate image, reusing a room establishing scene when it still tells the truth and making a changed-state variant when the action or cast changes materially. Short routine revisits can reuse art.
@@ -27,7 +29,7 @@ Priority is the grille first sight, rescue/reunion and service-court rest, then 
 
 ## Integration and production checklist
 
-1. Finish the bounded painted-map integration for the accepted approach and rescue compositions. Preserve the off-road shelter, wet runoff, grille above E, ordinary cart, separate escape door and guide-light states. Remaining hub/records/workshop/platform/return maps still need their own masters/paint.
+1. The bounded [approach/rescue painted-map integration](chapter-5-painted-map-integration.md) is implemented November 18. Owner playtest its off-road shelter, wet runoff, grille above E, ordinary cart, separate escape door and guide-light states. Remaining hub/records/workshop/platform/return maps still need their own masters/paint.
 2. Establish missing cast references for Bracken, Orren, Sella, Hesta and Dessa before producing repeated faces across scenes. Reuse established Mara, Lio, companion and Bramblecross references. Do not bake a particular player ancestry or an absent/downed companion into every generic room scene; choose framing or bounded variants accordingly.
 3. Inventory every current Chapter 5 narrative state and stable scene ID against this table. Add scene-art bindings to the narrative UI without changing story/choice/save behavior, preserving the text and icon fallback while assets arrive. Keep the scene list and state inventory inspectable.
 4. Produce and integrate one scene at a time. Check desktop and both phone frames for faces, staging, crop and readable accompanying prose. Keep exact writing, symbols and puzzle solutions in the UI.
