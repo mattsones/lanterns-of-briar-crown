@@ -12,9 +12,9 @@
     {
       "id": "sella-reedmere",
       "kind": "portrait",
-      "native": "sella-reedmere-v01.png",
-      "preview": "sella-reedmere-v01.webp",
-      "promptFile": "prompt-sella-reedmere.md",
+      "native": "sella-reedmere-v03.png",
+      "preview": "sella-reedmere-v03.webp",
+      "promptFile": "prompt-sella-reedmere-v03.md",
       "width": 1254,
       "height": 1254
     },
@@ -30,27 +30,27 @@
     {
       "id": "dessa-flint",
       "kind": "portrait",
-      "native": "dessa-flint-v01.png",
-      "preview": "dessa-flint-v01.webp",
-      "promptFile": "prompt-dessa-flint.md",
+      "native": "dessa-flint-v03.png",
+      "preview": "dessa-flint-v03.webp",
+      "promptFile": "prompt-dessa-flint-v03.md",
       "width": 1254,
       "height": 1254
     },
     {
       "id": "garrick-reed",
       "kind": "portrait",
-      "native": "garrick-reed-v01.png",
-      "preview": "garrick-reed-v01.webp",
-      "promptFile": "prompt-garrick-reed.md",
+      "native": "garrick-reed-v02.png",
+      "preview": "garrick-reed-v02.webp",
+      "promptFile": "prompt-garrick-reed-v02.md",
       "width": 1254,
       "height": 1254
     },
     {
       "id": "records-officer",
       "kind": "portrait",
-      "native": "records-officer-v01.png",
-      "preview": "records-officer-v01.webp",
-      "promptFile": "prompt-records-officer.md",
+      "native": "records-officer-v02.png",
+      "preview": "records-officer-v02.webp",
+      "promptFile": "prompt-records-officer-v02.md",
       "width": 1254,
       "height": 1254
     },
@@ -93,9 +93,9 @@
     {
       "id": "true-seal-fragment",
       "kind": "icon",
-      "native": "true-seal-fragment-v01.png",
-      "preview": "true-seal-fragment-v01.webp",
-      "promptFile": "prompt-true-seal-fragment.md",
+      "native": "true-seal-fragment-v05.png",
+      "preview": "true-seal-fragment-v05.webp",
+      "promptFile": "prompt-true-seal-fragment-v05.md",
       "width": 1254,
       "height": 1254
     },
@@ -111,9 +111,9 @@
     {
       "id": "briarhold-transfer-ledger",
       "kind": "icon",
-      "native": "briarhold-transfer-ledger-v01.png",
-      "preview": "briarhold-transfer-ledger-v01.webp",
-      "promptFile": "prompt-briarhold-transfer-ledger.md",
+      "native": "briarhold-transfer-ledger-v02.png",
+      "preview": "briarhold-transfer-ledger-v02.webp",
+      "promptFile": "prompt-briarhold-transfer-ledger-v02.md",
       "width": 1254,
       "height": 1254
     },
@@ -129,9 +129,9 @@
     {
       "id": "briarhold-seal-evidence",
       "kind": "icon",
-      "native": "briarhold-seal-evidence-v01.png",
-      "preview": "briarhold-seal-evidence-v01.webp",
-      "promptFile": "prompt-briarhold-seal-evidence.md",
+      "native": "briarhold-seal-evidence-v02.png",
+      "preview": "briarhold-seal-evidence-v02.webp",
+      "promptFile": "prompt-briarhold-seal-evidence-v02.md",
       "width": 1254,
       "height": 1254
     },
@@ -192,45 +192,45 @@
     {
       "id": "hub-timber-passage",
       "kind": "scene",
-      "native": "hub-timber-passage-v01.png",
-      "preview": "hub-timber-passage-v01.webp",
-      "promptFile": "prompt-hub-timber-passage.md",
+      "native": "hub-timber-passage-v02.png",
+      "preview": "hub-timber-passage-v02.webp",
+      "promptFile": "prompt-hub-timber-passage-v02.md",
       "width": 1672,
       "height": 941
     },
     {
       "id": "upper-records-room",
       "kind": "scene",
-      "native": "upper-records-room-v01.png",
-      "preview": "upper-records-room-v01.webp",
-      "promptFile": "prompt-upper-records-room.md",
+      "native": "upper-records-room-v02.png",
+      "preview": "upper-records-room-v02.webp",
+      "promptFile": "prompt-upper-records-room-v02.md",
       "width": 1672,
       "height": 941
     },
     {
       "id": "records-clerk-released",
       "kind": "scene",
-      "native": "records-clerk-released-v01.png",
-      "preview": "records-clerk-released-v01.webp",
-      "promptFile": "prompt-records-clerk-released.md",
+      "native": "records-clerk-released-v03.png",
+      "preview": "records-clerk-released-v03.webp",
+      "promptFile": "prompt-records-clerk-released-v03.md",
       "width": 1672,
       "height": 941
     },
     {
       "id": "lower-seal-workshop",
       "kind": "scene",
-      "native": "lower-seal-workshop-v01.png",
-      "preview": "lower-seal-workshop-v01.webp",
-      "promptFile": "prompt-lower-seal-workshop.md",
+      "native": "lower-seal-workshop-v02.png",
+      "preview": "lower-seal-workshop-v02.webp",
+      "promptFile": "prompt-lower-seal-workshop-v02.md",
       "width": 1672,
       "height": 941
     },
     {
       "id": "workshop-diversion",
       "kind": "scene",
-      "native": "workshop-diversion-v01.png",
-      "preview": "workshop-diversion-v01.webp",
-      "promptFile": "prompt-workshop-diversion.md",
+      "native": "workshop-diversion-v02.png",
+      "preview": "workshop-diversion-v02.webp",
+      "promptFile": "prompt-workshop-diversion-v02.md",
       "width": 1672,
       "height": 941
     },
@@ -309,9 +309,9 @@
     {
       "id": "service-court-rest",
       "kind": "scene",
-      "native": "service-court-rest-v01.png",
-      "preview": "service-court-rest-v01.webp",
-      "promptFile": "prompt-service-court-rest.md",
+      "native": "service-court-rest-v02.png",
+      "preview": "service-court-rest-v02.webp",
+      "promptFile": "prompt-service-court-rest-v02.md",
       "width": 1672,
       "height": 941
     },
@@ -327,9 +327,9 @@
     {
       "id": "garrick-clearing",
       "kind": "scene",
-      "native": "garrick-clearing-v01.png",
-      "preview": "garrick-clearing-v01.webp",
-      "promptFile": "prompt-garrick-clearing.md",
+      "native": "garrick-clearing-v02.png",
+      "preview": "garrick-clearing-v02.webp",
+      "promptFile": "prompt-garrick-clearing-v02.md",
       "width": 1672,
       "height": 941
     },
@@ -363,18 +363,18 @@
     {
       "id": "bramblecross-welcome",
       "kind": "scene",
-      "native": "bramblecross-welcome-v02.png",
-      "preview": "bramblecross-welcome-v02.webp",
-      "promptFile": "prompt-bramblecross-welcome-v02.md",
+      "native": "bramblecross-welcome-v03.png",
+      "preview": "bramblecross-welcome-v03.webp",
+      "promptFile": "prompt-bramblecross-welcome-v03.md",
       "width": 1672,
       "height": 941
     },
     {
       "id": "private-case-reading",
       "kind": "scene",
-      "native": "private-case-reading-v01.png",
-      "preview": "private-case-reading-v01.webp",
-      "promptFile": "prompt-private-case-reading.md",
+      "native": "private-case-reading-v02.png",
+      "preview": "private-case-reading-v02.webp",
+      "promptFile": "prompt-private-case-reading-v02.md",
       "width": 1672,
       "height": 941
     }

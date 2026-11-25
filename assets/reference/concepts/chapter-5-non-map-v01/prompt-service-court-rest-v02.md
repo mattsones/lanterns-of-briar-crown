@@ -1,0 +1,5 @@
+# Service Court Rest v02
+
+Built-in image generation edit of `service-court-rest-v01.png`, using `sella-reedmere-v03.png` and `lio-recovering-v01.png` as the continuity reference.
+
+Edit image 1, the existing wide Chapter 5 storybook painting. Update the seated woman at lower right folding a strip of cloth to match approved Sella Reedmere in reference 2: distinctly deep neutral-warm brown face, neck, and hands, dark pinned hair, softly broad cheekbones, muted blue-green dress and cream collar. In the left pair, retain Mara and match exhausted Lio to recovery reference 3 while he holds his cup. Keep exactly the same five people, keeping Hesta in the center with her ankle wrapped and Orren at the cistern at the back. Preserve scene layout, but change obvious bright exterior daytime to dim blue predawn outside the court and practical lantern light inside, since the party departs later at dawn. Keep all five figures legible. Keep the painterly texture and 16:9 framing. No text or extra figures.

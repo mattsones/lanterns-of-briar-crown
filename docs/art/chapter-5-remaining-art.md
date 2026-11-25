@@ -27,6 +27,50 @@
 | Rescue scenes | First grille sight, Crown Table confrontation, cart at the loading steps, Mara and Lio’s reunion, Hesta’s cell, service-court rest |
 | Return and ending scenes | Dawn departure, Garrick’s clearing, high fir trail, tusker hollow, bridge conversation, Bramblecross welcome, private case reading |
 
+### Owner review decisions
+
+| Piece | Decision |
+|---|---|
+| 1. Orren Pike portrait v01 | Accepted as shown on November 24, 2026. |
+| 2. Sella Reedmere portrait v03 | Accepted on November 24, 2026, after the complexion revisions. |
+| 3. Hesta Brookward portrait v01 | Accepted as shown on November 24, 2026. |
+| 4. Dessa Flint portrait v03 | Accepted on November 24, 2026, after the build and proportion revisions. |
+| 5. Garrick Reed portrait v02 | Accepted on November 24, 2026, after the complexion revision. |
+| 6. Records officer portrait v02 | Accepted on November 24, 2026, after comparison with Bracken. |
+| 7. Recovering Lio Brindle portrait v01 | Accepted on November 24, 2026, after comparison with Lio’s pre-rescue portrait and Edden. |
+| 8. Rainroot Tusker portrait v01 | Accepted as shown on November 24, 2026, after comparison with the Chapter 1 Bramble Boar. |
+| 9. Bracken’s Sabre icon v01 | Accepted as shown on November 24, 2026. |
+| 10. Measured Cut icon v02 | Keep the revised artwork on file. Combat action buttons stay text-only for now. |
+| 11. True Seal Fragment icon v05 | Accepted on November 24, 2026. V05 aligns the turned walnut handle with the center of the engraved face and retains the small rim chip. The die is an official royal stamp stolen by someone high up in the Briar faction. |
+| 12. Briar Chain Link icon v01 | Accepted as shown on November 24, 2026. |
+| 13. Briarhold Transfer Ledger icon v02 | Accepted on November 24, 2026, after simplifying the binding. |
+| 14. Briarhold Office Instruction icon v01 | Keep as shown. The wax closure represents an internal office seal, separate from Elowen’s Public Progress Seal. |
+| 15. Briarhold Seal Evidence icon v02 | Accepted on November 24, 2026. It shows the approved royal die and a raised, right-reading wax impression with the corresponding rim flaw. |
+| 16. Separate Prisoner Transfer Record icon v02 | Accepted as shown on November 24, 2026. |
+| 17. Workshop Shim icon v01 | Accepted as shown on November 24, 2026. |
+| 18. Spare Inner-Door Key icon v01 | Accepted as shown on November 24, 2026. |
+| 19. Same-Night Approach scene v02 | Accepted as shown on November 24, 2026. |
+| 20. Sheltered Landing scene v01 | Accepted as shown on November 24, 2026. |
+| 21. Searching Lamp scene v01 | Accepted as shown on November 24, 2026. |
+| 22. Timber Carriers scene v02 | Accepted on November 24, 2026, after matching Searching Lamp’s viewpoint and showing the canvas and hinge inside the case. |
+| 23. Records Room from Cover scene v02 | Accepted on November 24, 2026. Uses the approved cast and the view from behind the spare desk crates, with Sella facing the north wall and cuffed to the desk. |
+| 24. Sella Released scene v03 | Accepted on November 24, 2026. Sella and Mara stand by the lit working desk immediately after the cuff opens. |
+
+### Continuity check for pieces 25–42
+
+Owner review resumes at **25. Working Seal Press**. All 18 remaining candidates were checked against the approved cast and current evidence art. All 18 still await owner review.
+
+| Piece | Candidate update |
+|---|---|
+| 25. Working Seal Press v02 | Matches Dessa’s approved face, neck, shoulders and muscular arms. Orren is still cuffed at the press. |
+| 26. Wash-Yard Diversion v02 | Carries Dessa’s approved build into the trough scene with Orren. |
+| 35. Service-Court Rest v02 | Matches Sella’s approved complexion and Lio’s recovery look, with predawn light before the party leaves. |
+| 37. Garrick’s Clearing v02 | Matches Garrick’s approved complexion, with his graying beard and patched cape. |
+| 41. Bramblecross Welcome v03 | Keeps Lio seated beside Mara and replaces the second Lio-like figure in the background with a distinct local villager. |
+| 42. Private Case Reading v02 | Brings the ledger, die and wax evidence, and blue-cord docket into line with the approved icons. |
+
+The other candidates passed this continuity check as shown. Review the signal-platform illustrations alongside the future map painting for architectural fit.
+
 ## After art review
 
 - Accept or revise the new character designs before promoting the scenes that reuse them. Bind approved elite and ordinary guards by encounter role. Preserve the earlier paper-and-wax Seal-Forged Sentry.

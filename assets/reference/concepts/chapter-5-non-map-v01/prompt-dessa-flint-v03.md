@@ -1,0 +1,5 @@
+# Dessa Flint v03
+
+Built-in image generation edit of `dessa-flint-v02.png`.
+
+Edit image 1, the square hand-painted dialogue portrait of Dessa Flint, a muscular adult sealwright. Refine the head, neck, collar, and upper shoulder junction so the anatomy feels like one naturally strong person. Her current neck looks long and abruptly attached to a wide torso. Bring the jaw subtly closer to the collar, broaden the lower neck a little, and smoothly carry it into gently rising trapezius contours under the shirt. Raise the opening of the shirt subtly and soften the sharp cords of the exposed neck. Give the head a small increase in visual scale relative to the shoulders and a slightly fuller lower cheek and jaw if needed for balance. Keep her recognizable stern expression, eyes, cheek mark, tied auburn hair, full muscular forearms and strong shoulders, work-worn hands holding wax, wax-stained leather apron, stamp handles, earthy workshop background and warm brushwork. Keep the proportions grounded in a strong manual worker. No posing, extra objects, text, or border.

@@ -1,0 +1,5 @@
+# Private Case Reading v02
+
+Built-in image generation edit of `private-case-reading-v01.png`, using `briarhold-seal-evidence-v02.png`, `briarhold-transfer-ledger-v02.png`, and `examiner-transfer-record-v02.png` as the continuity reference.
+
+Edit image 1, the existing wide Chapter 5 storybook painting. Preserve all four established people, their faces, gestures, and the watchhouse architecture. Change only the evidence props on the table. At lower left show the plain, worn russet leather ledger with cloth tab from image 3, no brass corners. Keep the pale folded office instruction with a simple red wax closure near center. Immediately to its right show the approved evidence bundle from image 2: linen, dark turned walnut stamp with gilt alder pommel, bronze plate, and red test wax showing raised crown, rays and branches. Make the distinct creased docket with blue cord from image 4 visible on the right. Preserve composition and legibility of the four separate clues; no new text. Keep 16:9 and the original painterly style.

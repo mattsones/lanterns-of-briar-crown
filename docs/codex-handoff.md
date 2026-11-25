@@ -4,7 +4,11 @@ This file is the starting point for Codex.
 
 Story-writing work must also follow `docs/story/writing-rules.md`. Singular characters use he/him or she/her; *they/them/their* is reserved for genuinely plural antecedents.
 
-## Latest Handoff — 2026-11-23
+## Latest Handoff — 2026-11-24
+
+**Resume Chapter 5 non-map art review at piece 25, Working Seal Press v02.** Pieces 1–24 have owner decisions, through Sella Released v03. Keep Measured Cut v02 on file and combat buttons text-only for now. The continuity pass checked pieces 25–42 and revised six scenes. All 18 still await the owner's image-by-image review. [Review decisions and revised candidates](art/chapter-5-remaining-art.md) · [Art review gallery](../assets/reference/concepts/chapter-5-non-map-v01/review.html)
+
+## Handoff — 2026-11-23
 
 **Next map: paint the signal platform.** Use the approved square layout for guide-closed and guide-open paintings. Keep the crossing exposed to the guard stair, the eastern operating controls screened, and the separate amber guide lamp distinct from the three signal lamps. Check both paintings against the same walkable overlay at desktop and both phone sizes. The finished hub pair still needs runtime registration. Rainroot return needs a scale and navigation master before painting. [Remaining art checklist](art/chapter-5-remaining-art.md)
 
